@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+   <title>Fishing Mini-Game</title>
+   <style>
+     :root {
+       font-size: 1.2rem;
+       --gold: #daac17;
+       --gold-light: #fae791;
+       --gold-dark: #97740a;
+       --parchment: #2C2614; /* Very dark, for backgrounds that were light */
+       --parchment-dark: #1E1C12; /* Even darker */
+       --ink: #c7a81d;         /* Light gold/yellow, for text on dark backgrounds */
+       --ink2: #8f770d;        /* Darker gold/yellow */
+       --accent: #b47018;      /* Brownish orange */
+      --shadow: rgba(0, 0, 0, 0.5);
+      --blue-100: #3a4a5f; /* Darker blueish */
+      --blue-200: #2c3a4f;
+      --blue-700: var(--accent); /* Using new accent for "blue" highlights */
+      --blue-800: #b47018; /* Darker accent */
+      --emerald-50: #1a2e29; /* Dark green */
+      --emerald-200: #2a4a3f;
+      --emerald-700: #5a8b4c; /* Muted green */
+      --sky-50: var(--parchment-dark);
+      --sky-200: var(--parchment);
+      --sky-700: var(--accent);
+      --yellow-300: var(--gold-light);
+      --amber-300: var(--gold);
+      --orange-400: var(--accent);
+      --yellow-500: var(--gold);
+      --yellow-900: var(--gold-dark);
+      --yellow-800: #af8e15; /* Slightly different dark gold */
+      --yellow-700: var(--ink2);
+      --indigo-700: #8868a2; /* Muted purple */
+      --gray-100: #12100e; /* Very dark gray for main page background */
+      --gray-200: #1f1c19;
+      --gray-300: #3a3529;
+      --gray-400: #615a4a;
+      --gray-500: #8f8670;
+      --gray-600: #ab9f82;
+      --gray-700: #c2b9a5;
+    }
+
+    body {
+      font-family: 'Cormorant Garamond', serif;
+      margin: 0;
+      padding: 20px; /* User specified */
+      background-color: #2c2619; /* User specified */
+      background-image: url('https://www.transparenttextures.com/patterns/dark-wood.png'); /* User specified */
+      color: var(--ink); /* User specified */
+      line-height: 1.6; /* User specified */
+      display: flex; /* For centering game */
+      justify-content: center; /* For centering game */
+      align-items: flex-start; /* Align to top */
+      min-height: 100vh;
+    }
+
+   .tooltip-container {
+    	 position: relative;
+    	 display: inline-block;
+   }
+   .region-badge {
+      display: inline-block;
+      background-color: var(--gold-dark);
+      color: var(--gold-light); /* Changed for better contrast on new dark gold */
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      margin-top: 8px;
+      margin-bottom: 8px;
+    }
+   .tooltip-text {
+    	 visibility: hidden;
+    	 width: 280px;
+    	 background-color: var(--parchment-dark); /* Themed */
+    	 color: var(--ink); /* Themed */
+    	 text-align: left;
+    	 border-radius: 6px;
+    	 padding: 8px 12px;
+    	 position: absolute;
+    	 z-index: 10;
+    	 bottom: 125%;
+    	 left: 50%;
+    	 margin-left: -140px;
+    	 opacity: 0;
+    	 transition: opacity 0.3s, visibility 0.3s;
+    	 font-size: 0.8rem;
+    	 line-height: 1.4;
+    	 box-shadow: 0 2px 10px var(--shadow); /* Themed shadow */
+   }
+   .tooltip-text::after {
+    	 content: "";
+    	 position: absolute;
+    	 top: 100%;
+    	 left: 50%;
+    	 margin-left: -5px;
+    	 border-width: 5px;
+    	 border-style: solid;
+    	 border-color: var(--parchment-dark) transparent transparent transparent; /* Themed */
+   }
+   .tooltip-container .tooltip-icon:hover + .tooltip-text,
+   .tooltip-container .tooltip-icon:focus + .tooltip-text,
+   .tooltip-container:hover .tooltip-text {
+    	 visibility: visible;
+    	 opacity: 1;
+   }
+   /* Ensure images in catalogue don't break layout */
+   #catalogue-list img { object-fit: cover; }
+   .tab-button {
+    	 transition: background-color 0.3s ease, color 0.3s ease;
+   }
+  </style>
+  <style id="fishing-specific-styles">
+  /* Styles for the fishing minigame elements, using CSS variables */
+  #fishing-section {
+    font-family: 'Cormorant Garamond', serif; /* Ensure font consistency */
+  }
+
+  #fishing-section * {
+   box-sizing: border-box !important;
+  }
+
+  #fishing-section .w-full {
+   width: 100% !important;
+  }
+
+  #fishing-section .max-w-3xl {
+   max-width: 48rem !important; /* 768px */
+  }
+
+  /* With new theme, "bg-white" now uses dark --parchment */
+  #fishing-section .bg-white {
+   background-color: var(--parchment) !important;
+  }
+
+  #fishing-section .shadow-2xl {
+   box-shadow: 0 25px 50px -12px var(--shadow) !important;
+  }
+
+  #fishing-section .rounded-xl {
+   border-radius: 0.75rem !important;
+  }
+   #fishing-section .rounded-lg {
+   border-radius: 0.5rem !important;
+  }
+   #fishing-section .rounded-md {
+   border-radius: 0.375rem !important;
+  }
+   #fishing-section .rounded-t-lg {
+   border-top-left-radius: 0.5rem !important;
+   border-top-right-radius: 0.5rem !important;
+  }
+
+  #fishing-section .p-6 {
+   padding: 1.5rem !important;
+  }
+
+  #fishing-section .md\:p-8 {
+   padding: 2rem !important;
+  }
+   @media (min-width: 768px) { /* Manual media query for md: */
+    #fishing-section .md\:p-8 {
+      padding: 2rem !important;
+    }
+  }
+
+
+  #fishing-section .mx-auto {
+   margin-left: auto !important;
+   margin-right: auto !important;
+  }
+
+  #fishing-section .mb-6 { margin-bottom: 1.5rem !important; }
+  #fishing-section .mb-4 { margin-bottom: 1rem !important; }
+  #fishing-section .mb-3 { margin-bottom: 0.75rem !important; }
+  #fishing-section .mb-2 { margin-bottom: 0.5rem !important; }
+  #fishing-section .mb-1 { margin-bottom: 0.25rem !important; }
+  #fishing-section .mt-1 { margin-top: 0.25rem !important; }
+  #fishing-section .mt-2 { margin-top: 0.5rem !important; }
+  #fishing-section .mt-4 { margin-top: 1rem !important; }
+  #fishing-section .ml-1 { margin-left: 0.25rem !important; }
+  #fishing-section .ml-4 { margin-left: 1rem !important; }
+  #fishing-section .mr-2 { margin-right: 0.5rem !important; }
+
+
+  #fishing-section .text-center { text-align: center !important; }
+  #fishing-section .flex { display: flex !important; }
+  #fishing-section .items-center { align-items: center !important; }
+  #fishing-section .justify-between { justify-content: space-between !important; }
+  #fishing-section .block { display: block !important; }
+  #fishing-section .inline-block { display: inline-block !important; }
+
+
+  #fishing-section .border-b { border-bottom-width: 1px !important; }
+  #fishing-section .border { border-width: 1px !important; }
+  #fishing-section .border-2 { border-width: 2px !important; }
+
+  /* Border colors will use new theme variables */
+  #fishing-section .border-gray-300 { border-color: var(--gold) !important; }
+  #fishing-section .border-gray-200 { border-color: var(--gold-light) !important; }
+
+
+  #fishing-section .py-3 { padding-top: 0.75rem !important; padding-bottom: 0.75rem !important; }
+  #fishing-section .px-6 { padding-left: 1.5rem !important; padding-right: 1.5rem !important; }
+  #fishing-section .px-4 { padding-left: 1rem !important; padding-right: 1rem !important; }
+  #fishing-section .px-2\.5 { padding-left: 0.625rem !important; padding-right: 0.625rem !important; }
+  #fishing-section .py-0\.5 { padding-top: 0.125rem !important; padding-bottom: 0.125rem !important; }
+  #fishing-section .p-4 { padding: 1rem !important; }
+  #fishing-section .p-3 { padding: 0.75rem !important; }
+  #fishing-section .p-2 { padding: 0.5rem !important; }
+
+
+  #fishing-section .font-semibold { font-weight: 600 !important; }
+  #fishing-section .font-bold { font-weight: 700 !important; }
+  #fishing-section .italic { font-style: italic !important; }
+
+  /* Text colors will use new theme variables */
+  /* --ink is light gold, --ink2 is darker gold */
+  #fishing-section .text-gray-700 { color: var(--ink) !important; opacity: 0.9; } /* Was --ink2 */
+  #fishing-section .text-gray-600 { color: var(--ink) !important; opacity: 0.7; }
+  #fishing-section .text-gray-500 { color: var(--ink) !important; opacity: 0.5; }
+  #fishing-section .text-gray-400 { color: var(--ink2) !important; opacity: 0.6; }
+  /* text-white will use the new --parchment (dark), so it's for text on light backgrounds if any */
+  /* For text on dark backgrounds, we should use --ink or --gold-light */
+  #fishing-section .text-white { color: var(--gold-light) !important; } /* Changed from --parchment to --gold-light for dark theme */
+
+  #fishing-section .text-blue-700 { color: var(--accent) !important; }
+  #fishing-section .text-sky-700 { color: var(--accent) !important; }
+  #fishing-section .text-emerald-700 { color: var(--gold-dark) !important; }
+  #fishing-section .text-indigo-700 { color: var(--accent) !important; }
+  #fishing-section .text-yellow-900 { color: var(--gold-dark) !important; }
+  #fishing-section .text-yellow-800 { color: var(--gold-dark) !important; opacity: 0.9; }
+  #fishing-section .text-yellow-700 { color: var(--gold-dark) !important; opacity: 0.8; }
+  #fishing-section .text-blue-600 { color: var(--accent) !important; }
+  #fishing-section .text-green-500 { color: #66bb6a !important; } /* Adjusted green for dark theme */
+  #fishing-section .text-green-600 { color: #4caf50 !important; }
+  #fishing-section .text-red-500 { color: #ef5350 !important; } /* Adjusted red for dark theme */
+  #fishing-section .text-red-600 { color: #e53935 !important; }
+  #fishing-section .text-yellow-500 { color: var(--gold) !important; }
+
+
+  /* Backgrounds will use new theme variables */
+  #fishing-section .bg-gray-200 { background-color: var(--parchment-dark) !important; }
+  #fishing-section .bg-sky-50 { background-color: var(--parchment-dark) !important; }
+  #fishing-section .bg-emerald-50 { background-color: #1A2520 !important; } /* Darker, distinct from parchment-dark */
+  #fishing-section .bg-blue-600 { background-color: var(--accent) !important; }
+  #fishing-section .hover\:bg-blue-500:hover { background-color: var(--accent) !important; filter: brightness(1.2); } /* Brighter for dark theme hover */
+  #fishing-section .hover\:bg-blue-700:hover { background-color: var(--accent) !important; filter: brightness(1.3); }
+
+
+  #fishing-section .focus\:outline-none:focus { outline: 2px solid transparent !important; outline-offset: 2px !important; }
+  /* hover:text-white now uses --gold-light due to .text-white change */
+  #fishing-section .hover\:text-white:hover { color: var(--gold-light) !important; }
+
+
+  #fishing-section .grid { display: grid !important; }
+  #fishing-section .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)) !important; }
+   @media (min-width: 768px) {
+    #fishing-section .md\:grid-cols-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+  }
+  #fishing-section .gap-6 { gap: 1.5rem !important; }
+  #fishing-section .space-y-4 > * + * { margin-top: 1rem !important; }
+  #fishing-section .space-y-3 > * + * { margin-top: 0.75rem !important; }
+  #fishing-section .space-y-1 > * + * { margin-top: 0.25rem !important; }
+
+
+  #fishing-section .border-sky-200 { border-color: var(--accent) !important; opacity: 0.7; }
+  #fishing-section .border-emerald-200 { border-color: var(--gold) !important; opacity: 0.7; }
+
+
+  #fishing-section .text-xl { font-size: 1.25rem !important; line-height: 1.75rem !important; }
+  #fishing-section .text-lg { font-size: 1.125rem !important; line-height: 1.75rem !important; }
+  #fishing-section .text-sm { font-size: 0.875rem !important; line-height: 1.25rem !important; }
+  #fishing-section .text-xs { font-size: 0.75rem !important; line-height: 1rem !important; }
+  #fishing-section .text-3xl { font-size: 1.875rem !important; line-height: 2.25rem !important; }
+   @media (min-width: 640px) {
+    #fishing-section .sm\:text-4xl {
+      font-size: 2.25rem !important;
+      line-height: 2.5rem !important;
+    }
+  }
+
+
+  #fishing-section .shadow-sm { box-shadow: 0 1px 2px 0 var(--shadow) !important; }
+  #fishing-section .shadow-md { box-shadow: 0 4px 6px -1px var(--shadow), 0 2px 4px -1px var(--shadow) !important; }
+  #fishing-section .shadow-lg { box-shadow: 0 10px 15px -3px var(--shadow), 0 4px 6px -2px var(--shadow) !important; }
+
+
+  #fishing-section .focus\:ring-blue-500:focus {
+   --tw-ring-color: var(--accent) !important;
+   box-shadow: 0 0 0 3px var(--tw-ring-color) !important;
+  }
+   #fishing-section .focus\:border-blue-500:focus {
+    border-color: var(--accent) !important;
+  }
+  #fishing-section .focus\:ring-2:focus {
+    box-shadow: 0 0 0 2px var(--accent) !important;
+  }
+
+
+  #fishing-section .tooltip-icon {
+    width: 1rem; height: 1rem; margin-left: 0.25rem; color: var(--ink2); /* Themed */
+  }
+  #fishing-section .cursor-help { cursor: help !important; }
+
+
+  #fishing-section button,
+  #fishing-section select,
+  #fishing-section input {
+   background-color: var(--parchment-dark) !important; /* Darker background for inputs */
+   color: var(--ink) !important;
+   border: 1px solid var(--gold-dark) !important; /* Darker gold border */
+     padding: 0.5rem;
+     border-radius: 0.375rem;
+  }
+  #fishing-section input[type="number"] {
+    padding: 0.5rem !important;
+  }
+
+  #fishing-section button:hover {
+   background-color: var(--gold-dark) !important; /* Dark gold hover */
+   color: var(--gold-light) !important; /* Light gold text on hover */
+     filter: brightness(1.1);
+  }
+  #fishing-section button#cast-button {
+    background-color: var(--accent) !important;
+    color: var(--parchment) !important; /* This is now dark, should be light for contrast */
+    /* Overriding color for cast button specifically for better contrast */
+    color: var(--gold-light) !important;
+    font-weight: 600 !important;
+    padding-top: 0.75rem !important;
+    padding-bottom: 0.75rem !important;
+    transition: background-color 0.15s ease-in-out, transform 0.15s ease-in-out !important;
+  }
+  #fishing-section button#cast-button:hover {
+    background-color: var(--accent) !important;
+    filter: brightness(1.2) !important; /* Brighter hover for dark theme */
+    transform: scale(1.05) !important;
+  }
+
+
+  #fishing-section #fishing-log {
+   background-color: var(--parchment-dark) !important; /* Darker log background */
+   color: var(--ink) !important; /* Light text */
+   border: 1px solid var(--gold-dark) !important;
+     height: 12rem;
+     overflow-y: auto;
+     padding: 0.75rem;
+     border-radius: 0.375rem;
+  }
+
+  #fishing-section #caught-fish-display {
+   background: linear-gradient(to right, var(--gold-dark), var(--gold), var(--gold-dark)) !important;
+   color: var(--parchment) !important; /* Dark text on gold gradient, might need adjustment */
+     /* Overriding color for better contrast on gold gradient */
+     color: #1E1C12 !important; /* Very dark text */
+   border: 2px solid var(--gold) !important;
+     padding: 1.5rem;
+     margin-top: 1.5rem;
+     text-align: center;
+  }
+  #fishing-section #caught-fish-display.hidden { display: none !important; }
+  #fishing-section #fish-image {
+    margin-left: auto; margin-right: auto; margin-bottom: 1rem;
+    border-radius: 0.5rem; box-shadow: 0 2px 4px var(--shadow);
+    border: 2px solid var(--gold-light); /* Light gold border for image */
+    width: 12rem;
+    height: 9rem;
+    object-fit: cover;
+  }
+  /* Titles and text within caught-fish-display, ensuring they are dark on the gold background */
+  #fishing-section #caught-fish-display h3 { color: var(--parchment-dark) !important; }
+  #fishing-section #caught-fish-display #fish-name { color: var(--parchment-dark) !important; font-weight: bold; }
+  #fishing-section #caught-fish-display #fish-value { color: var(--parchment-dark) !important; opacity: 0.9;}
+  #fishing-section #caught-fish-display #fish-properties { color: var(--parchment-dark) !important; opacity: 0.8;}
+
+
+  #fishing-section #catalogue-list {
+    max-height: 60vh !important;
+    overflow-y: auto !important;
+    padding-right: 0.5rem !important;
+  }
+  #fishing-section #catalogue-list li {
+   background-color: var(--parchment-dark) !important; /* Darker list items */
+   border: 1px solid var(--gold-dark) !important;
+     padding: 0.75rem;
+     margin-bottom: 0.5rem;
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+  }
+
+  #fishing-section #catalogue-list h4 {
+   color: var(--accent) !important;
+     font-size: 1.125rem;
+     font-weight: 600;
+  }
+
+  #fishing-section #catalogue-list p {
+   color: var(--ink) !important; /* Light text for details */
+     font-size: 0.875rem;
+  }
+   #fishing-section #catalogue-list img {
+    border-radius: 0.375rem;
+    width: 5rem;
+    height: 3.75rem;
+    object-fit: cover;
+    margin-left: 1rem;
+  }
+  #fishing-section #catalogue-content.hidden { display: none !important; }
+
+
+  #fishing-section #region-select {
+    background-color: var(--gold) !important; /* Gold for select */
+    border-color: var(--gold-dark) !important;
+    color: var(--parchment-dark) !important; /* Dark text on gold */
+    font-weight: bold !important;
+  }
+
+  #fishing-section #region-select option {
+    background-color: var(--parchment-dark) !important; /* Dark background for options */
+    color: var(--ink) !important; /* Light text for options */
+  }
+
+  #fishing-section .region-badge {
+    display: inline-block !important;
+    background-color: var(--accent) !important;
+    color: var(--gold-light) !important; /* Light gold text on accent */
+    padding: 2px 6px !important;
+    border-radius: 12px !important;
+    font-size: 0.75rem !important;
+    margin-top: 5px !important;
+    font-weight: 600 !important;
+    margin-right: 0.5rem !important;
+  }
+  #fishing-section #caught-fish-display .region-badge { /* Ensure specificity */
+    background-color: var(--accent) !important;
+    color: var(--gold-light) !important;
+  }
+
+  /* Tab button styling for dark theme */
+  #fishing-section .tab-button.active {
+    background-color: var(--accent) !important;
+    color: var(--gold-light) !important; /* Light text on active tab */
+    border-bottom-color: transparent !important;
+  }
+  #fishing-section .tab-button:not(.active) {
+    background-color: var(--parchment-dark) !important; /* Dark inactive tab */
+    color: var(--ink2) !important; /* Muted gold text */
+  }
+  #fishing-section .tab-button:not(.active):hover {
+    background-color: var(--gold-dark) !important; /* Dark gold hover */
+    color: var(--gold-light) !important; /* Light gold text */
+  }
+
+</style>
+
+  <body>
+  <div id="fishing-section" class="w-full max-w-3xl bg-white shadow-2xl rounded-xl p-6 md:p-8 mx-auto">
+   <header class="mb-6 text-center">
+    	 <h1 class="text-3xl sm:text-4xl font-bold text-blue-700">Fishing Adventure</h1> <p class="text-sm text-gray-500" id="user-id-display">User ID: Loading...</p> </header>
+
+   <div class="mb-6 flex border-b border-gray-300"> <button id="fishing-tab-button" class="tab-button py-3 px-6 font-semibold rounded-t-lg focus:outline-none">Fishing</button>
+    	 <button id="catalogue-tab-button" class="tab-button py-3 px-6 font-semibold rounded-t-lg focus:outline-none ml-1">Catalogue</button>
+   </div>
+
+   <div id="fishing-content">
+    	 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        	 <div class="space-y-4 p-4 bg-sky-50 rounded-lg border border-sky-200"> <h2 class="text-xl font-semibold text-sky-700 mb-3">Equipment</h2> <div>
+                	 <label for="region-select" class="block text-sm font-medium text-gray-700 mb-1">Region:</label> <select id="region-select" class="w-full p-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"></select>
+                     </div>
+            	 <div>
+                	 <label for="rod-select" class="block text-sm font-medium text-gray-700 mb-1">Rod:</label>
+                	 <select id="rod-select" class="w-full p-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"></select>
+            	 </div>
+            	 <div>
+                	 <label for="lure-select" class="block text-sm font-medium text-gray-700 mb-1">Lure:</label>
+                	 <select id="lure-select" class="w-full p-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"></select>
+            	 </div>
+            	 <div>
+                	 <div class="tooltip-container">
+                    	 <label for="player-bonus" id="player-bonus-label" class="block text-sm font-medium text-gray-700 mb-1 flex items-center cursor-help">
+                        	 Player Bonus
+                        	 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="tooltip-icon w-4 h-4 ml-1 text-gray-400"> <path fill-rule="evenodd" d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-7-4a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM9 9a.75.75 0 0 0 0 1.5h.253a.25.25 0 0 1 .244.304l-.459 2.066A1.75 1.75 0 0 0 10.747 15H11a.75.75 0 0 0 0-1.5h-.253a.25.25 0 0 1-.244-.304l.459-2.066A1.75 1.75 0 0 0 9.253 9H9Z" clip-rule="evenodd" />
+                        	 </svg>
+                    	 </label>
+                    	 <div id="player-bonus-tooltip" class="tooltip-text hidden"> This bonus can be derived from Survival skill, Profession (Fisher), specific training with a fishing rod, or if using a magical fishing rod, you may add your Proficiency bonus or Dexterity modifier (whichever is higher) to the roll.
+                    	 </div>
+                	 </div>
+                	 <input type="number" id="player-bonus" value="0" class="w-full p-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+            	 </div>
+        	 </div>
+
+        	 <div class="space-y-4 p-4 bg-emerald-50 rounded-lg border border-emerald-200"> <h2 class="text-xl font-semibold text-emerald-700 mb-3">Go Fishing!</h2> <button id="cast-button" class="w-full text-white font-semibold py-3 px-4 rounded-lg shadow-md transition duration-150 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+                	 Cast Line
+            	 </button>
+            	 <div id="fishing-log" class="mt-4 p-3 bg-white rounded-md border border-gray-200 h-48 overflow-y-auto text-sm space-y-1"> <p class="text-gray-500">Fishing log will appear here...</p> </div>
+        	 </div>
+    	 </div>
+
+    	 <div id="caught-fish-display" class="hidden mt-6 p-6 rounded-xl shadow-lg text-center border-2">
+        	 <h3 class="text-2xl font-bold mb-3">Fish Caught!</h3>
+        	 <img id="fish-image" src="https://placehold.co/200x150/B47018/FAE791?text=Fish" alt="Caught Fish" class="mx-auto mb-4 rounded-lg shadow-md border-2 w-48 h-36 object-cover">
+        	 <p class="text-xl font-semibold" id="fish-name">Fish Name</p>
+        	 <p class="text-md" id="fish-value">Value: 0gp</p>
+             <p class="text-sm italic mt-2" id="fish-properties">Properties...</p>
+    	 </div>
+   </div>
+
+   <div id="catalogue-content" class="hidden">
+    	 <h2 class="text-2xl font-semibold text-indigo-700 mb-4">Fish Catalogue</h2> <ul id="catalogue-list" class="space-y-3 max-h-[60vh] overflow-y-auto pr-2">
+             <li class="text-gray-500">Loading catalogue...</li> </ul>
+   </div>
+  </div> 
+  </body>
+  <script>
+function initializeFishingMinigame() {
+   // Replaced Firebase with localStorage for simplified integration
+   let userId = 'local-user-' + Math.random().toString(36).substring(2, 9); // Generate a random local ID
+   let dbInitialized = true; // Always initialized since we're using localStorage
+
+   // User ID display
+     const userIdDisplay = document.getElementById('user-id-display');
+     if (userIdDisplay) {
+      userIdDisplay.textContent = 'User ID: ' + userId;
+     }
+
+   // DOM Elements
+   let currentTab = 'fishing';
+   const fishingTabButton = document.getElementById('fishing-tab-button');
+   const catalogueTabButton = document.getElementById('catalogue-tab-button');
+   const fishingContent = document.getElementById('fishing-content');
+   const catalogueContent = document.getElementById('catalogue-content');
+   const rodSelect = document.getElementById('rod-select');
+   const lureSelect = document.getElementById('lure-select');
+   const regionSelect = document.getElementById('region-select');
+   const playerBonusInput = document.getElementById('player-bonus');
+   const castButton = document.getElementById('cast-button');
+   const fishingLog = document.getElementById('fishing-log');
+   const caughtFishDisplay = document.getElementById('caught-fish-display');
+   const fishNameElement = document.getElementById('fish-name');
+   const fishValueElement = document.getElementById('fish-value');
+   const fishImageElement = document.getElementById('fish-image');
+   const fishPropertiesElement = document.getElementById('fish-properties');
+   const catalogueList = document.getElementById('catalogue-list');
+   const playerBonusTooltip = document.getElementById('player-bonus-tooltip');
+   const playerBonusLabel = document.getElementById('player-bonus-label');
+
+   // --- Fish Data ---
+   // Define fishing regions and their fish
+   const fishingRegions = [
+    	 {
+        	 name: "Lake & River",
+        	 description: "Freshwater fishing in the academy's peaceful lakes and winding rivers.",
+        	 fish: [
+            	 { name: "Lake Carp", dc: 10, value: 5, properties: "A tasty fish. If prepared over a fire during a short rest, provides 4HP.", image: "assets/images/fish/lake_carp.png" },
+            	 { name: "Rainbow Carp", dc: 11, value: 5, properties: "A tasty fish. If prepared over a fire during a short rest, provides 4HP.", image: "assets/images/fish/rainbow_carp.png" },
+            	 { name: "Lake Trout", dc: 10, value: 5, properties: "A tasty fish. If prepared over a fire during a short rest, provides 4HP.", image: "assets/images/fish/lake_trout.png" },
+            	 { name: "Black Trout", dc: 12, value: 6, properties: "A tasty fish. If prepared over a fire during a short rest, provides 6HP.", image: "assets/images/fish/black_trout.png" },
+            	 { name: "Softback Turtle", dc: 12, value: 6, properties: "A tasty fish. If prepared over a fire during a short rest, provides 6HP.", image: "assets/images/fish/softback_turtle.png" },
+            	 { name: "Armorshell Turtle", dc: 12, value: 10, properties: "If prepared over a fire during a short rest, provides 4HP & +1 AC for 1d4 hrs.", image: "assets/images/fish/armorshell_turtle.png" },
+            	 { name: "Swordclaw Crab", dc: 14, value: 10, properties: "If prepared over a fire during a short rest, provides 4HP & +1 ATT for 1d4 hrs.", image: "assets/images/fish/swordclaw_crab.png" },
+            	 { name: "Blueclaw Crab", dc: 12, value: 5, properties: "A tasty crustacean. If boiled over a fire during a short rest, provides 4HP.", image: "assets/images/fish/blueclaw_crab.png" },
+            	 { name: "Darkling Trout", dc: 15, value: 5, properties: "Inedible except for Darklings, abominations, and omniphages, provides 2HP.", image: "assets/images/fish/darkling_trout.png" },
+            	 { name: "Lake Mini-Shark", dc: 14, value: 6, properties: "A tasty fish. If prepared over a fire during a short rest, provides 6HP.", image: "assets/images/fish/lake_mini_shark.png" },
+            	 { name: "Lakeopus", dc: 14, value: 5, properties: "", image: "assets/images/fish/lakeopus.png" },
+            	 { name: "Lakeopus Rex", dc: 17, value: 7, properties: "Catching and releasing the Lakeopus Rex allows for the King of the Lake VR boss battle to be unlocked.", image: "assets/images/fish/lakeopus_rex.png" },
+            	 { name: "Tarheel Eel", dc: 12, value: 5, properties: "", image: "assets/images/fish/tarheel_eel.png" },
+            	 { name: "Unisturgeon", dc: 12, value: 5, properties: "", image: "assets/images/fish/unisturgeon.png" },
+            	 { name: "Cavern Cod", dc: 12, value: 5, properties: "A tasty fish. If prepared over a fire during a short rest, provides 6HP.", image: "assets/images/fish/cavern_cod.png" },
+            	 { name: "Deep Swimmer Guppy", dc: 13, value: 5, properties: "", image: "assets/images/fish/deep_swimmer_guppy.png" },
+            	 { name: "Deep Swimmer Gulpy", dc: 14, value: 5, properties: "", image: "assets/images/fish/deep_swimmer_gulpy.png" },
+            	 { name: "Deep Swimmer Gulper", dc: 15, value: 5, properties: "", image: "assets/images/fish/deep_swimmer_gulper.png" },
+            	 { name: "Deep Lurker Dark Gulper", dc: 16, value: 5, properties: "", image: "assets/images/fish/deep_lurker_dark_gulper.png" },
+            	 { name: "Boot", dc: 11, value: 5, properties: "A useless boot, always feels like a fish on the line…", image: "assets/images/fish/old_boot.png" },
+            	 { name: "Fancy Boot", dc: 15, value: 6, properties: "How it remained so nice for so long is anyone's guess…", image: "assets/images/fish/fancy_boot.png" },
+            	 { name: "Magic Boot", dc: 20, value: 1500, properties: "Get two to complete a set and they become a magic item.", image: "assets/images/fish/magic_boot.png" },
+            	 { name: "Empty Can", dc: 10, value: 5, properties: "Damn litterers! Someone needs a spanking!", image: "assets/images/fish/tin_can.png" },
+            	 { name: "Full Can", dc: 10, value: 5, properties: "DM discretion.", image: "assets/images/fish/full_can.png" },
+            	 { name: "Can of Whoopass", dc: 15, value: 100, properties: "+1 ATT and DMG for 1d4 hours, instant potty check.", image: "assets/images/fish/can_of_whoopass.png" },
+            	 { name: "A Whole Trashcan", dc: 14, value: 5, properties: "", image: "assets/images/fish/whole_trashcan.png" },
+            	 { name: "Deactivated Warforged", dc: 25, value: 5, properties: "", image: "assets/images/fish/deactivated_warforged.png" },
+            	 { name: "Broken Good-Rod", dc: 14, value: 5, properties: "A broken magical fishing rod, maybe it can be repaired?", image: "assets/images/fish/broken_good_rod.png" },
+            	 { name: "Functional Good-Rod", dc: 16, value: 5, properties: "A magical fishing rod. Gives +1 to Fishing Checks.", image: "assets/images/fish/functional_good_rod.png" },
+            	 { name: "Merbab (Angy)", dc: 15, value: 5, properties: "Will cast Incontinence on you and flee. DC14 resist.", image: "assets/images/fish/merbab_angy.png" },
+            	 { name: "Merbab (Curious)", dc: 15, value: 5, properties: "Will cast Incontinence on you if you don't have a snack; if fed, +1 to fishing for 1 day.", image: "assets/images/fish/merbab_curious.png" },
+            	 { name: "Jaguar Gar", dc: 13, value: 5, properties: "", image: "assets/images/fish/jaguargar.png" },
+            	 { name: "Trope Eel", dc: 12, value: 5, properties: "", image: "assets/images/fish/tropeeel.png" },
+            	 { name: "River Kaleido", dc: 13, value: 5, properties: "", image: "assets/images/fish/kaleido.png" },
+            	 { name: "Skyflapper", dc: 14, value: 6, properties: "A tasty fish. If prepared over a fire during a short rest, provides 6HP.", image: "assets/images/fish/skyflapper.png" },
+            	 { name: "Drought Trout", dc: 12, value: 5, properties: "", image: "assets/images/fish/drouttrout.png" },
+            	 { name: "Creeken-Rivar Trout", dc: 12, value: 5, properties: "", image: "assets/images/fish/creekenrivartrout.png" },
+            	 { name: "Long Swimmer", dc: 13, value: 5, properties: "", image: "assets/images/fish/longswimmer.png" },
+            	 { name: "Brown Frog", dc: 12, value: 5, properties: "", image: "assets/images/fish/brownfrog.png" },
+            	 { name: "Round Frog", dc: 13, value: 5, properties: "", image: "assets/images/fish/roundfrog.png" },
+            	 { name: "Black-Spot Frog", dc: 14, value: 5, properties: "", image: "assets/images/fish/blackspotfrog.png" },
+            	 { name: "Aquatic Toad", dc: 15, value: 5, properties: "", image: "assets/images/fish/aquatictoad.png" },
+            	 { name: "Darkling Rill-Skitter", dc: 12, value: 10, properties: "A stealthy darkling lurking in shallows, using murky waters to ambush prey.", image: "assets/images/fish/rillskitter.png" },
+            	 { name: "Darkling Blood-Gorger", dc: 14, value: 15, properties: "A parasitic darkling that drains its victim's vitality with a chilling bite.", image: "assets/images/fish/bloodgorger.png" },
+            	 { name: "Darkforme Pike-Maw", dc: 16, value: 20, properties: "A monstrous gar-like predator, attacking with shocking speed.", image: "assets/images/fish/pikemaw.png" },
+            	 { name: "Darkforme Current-Snapper", dc: 17, value: 20, properties: "A turtle-like darkling with iron jaws capable of trapping prey.", image: "assets/images/fish/currentsnapper.png" },
+            	 { name: "Darkling River-Lurk", dc: 13, value: 10, properties: "A slippery shadow-form serpent, striking like a constricting vine.", image: "assets/images/fish/riverlurk.png" },
+            	 { name: "Darkforme Mire-Croaker", dc: 15, value: 20, properties: "A bloated, croaking horror that leaps and snares victims with its tongue.", image: "assets/images/fish/mirecroaker.png" },
+            	 { name: "Darkforme Mud-Gnasher", dc: 16, value: 20, properties: "A territorial ambusher that erupts from muddy riverbeds to attack.", image: "assets/images/fish/mudgnasher.png" },
+            	 { name: "Darkling Pond-Skulker", dc: 12, value: 10, properties: "A mischievous thief that steals bait and causes frustration.", image: "assets/images/fish/pondskulker.png" },
+            	 { name: "Darkling Weed-Tangler", dc: 14, value: 30, properties: "A tangle of dark, grasping river weeds with ensnaring tendrils.", image: "assets/images/fish/darkling_weed_tangler.png" },
+            	 { name: "Darkling Gloom-Newt", dc: 13, value: 30, properties: "A slippery, shadow-coated amphibian that exudes disorienting slime.", image: "assets/images/fish/gloomnewt.png" },
+            	 { name: "Darkforme Current-Drifter", dc: 18, value: 40, properties: "An amorphous darkling, generating electrical bursts in murky waters.", image: "assets/images/fish/currentdrifter.png" },
+            	 { name: "Darkforme Titan-Snapper", dc: 22, value: 500, properties: "A colossal snapping turtle-shaped darkforme that shatters boats. **Creatures over 50 HP may yield treasure—contact the DM or Assistant Game Masters.**", image: "assets/images/fish/titansnapper.png" },
+            	 { name: "Darkforme River Tyrant", dc: 23, value: 750, properties: "An ancient crocodilian terror dominating entire river stretches. **Creatures over 50 HP may yield treasure—contact the DM or Assistant Game Masters.**", image: "assets/images/fish/rivertyrant.png" },
+            	 { name: "Darkforme Abyssal Leviathan", dc: 25, value: 1500, properties: "The deepwater nightmare that consumes everything in its path. **Creatures over 50 HP may yield treasure—contact the DM or Assistant Game Masters.**", image: "assets/images/fish/abyssalleviathan.png" }
+        	 ]
+    	 },
+    	 {
+        	 name: "Coastal Waters",
+        	 description: "Salty shores where the academy's lands meet the ocean.",
+        	 fish: [
+            	 { name: "Striped Bass", dc: 13, value: 8, properties: "A meaty, flavorful fish. If prepared over a fire during a short rest, provides 5HP.", image: "assets/images/fish/striped_bass.png" },
+            	 { name: "Rockfish", dc: 14, value: 9, properties: "When prepared with herbs, grants +1 to Perception checks for 1 hour.", image: "assets/images/fish/rockfish.png" },
+            	 { name: "Salt Crab", dc: 12, value: 7, properties: "Its meat provides 4HP and +1 to Constitution saves for 1 hour when prepared.", image: "assets/images/fish/salt_crab.png" },
+            	 { name: "Pearl Oyster", dc: 16, value: 25, properties: "May contain a pearl worth 10-100 gold (25% chance).", image: "assets/images/fish/pearl_oyster.png" },
+            	 { name: "Anchovy School", dc: 10, value: 4, properties: "A cluster of tiny fish. Good for soup that grants 2HP.", image: "assets/images/fish/anchovy_school.png" },
+            	 { name: "Coastal Jellyfish", dc: 15, value: 12, properties: "Can be processed into a potion of water breathing (requires alchemist tools).", image: "assets/images/fish/coastal_jellyfish.png" },
+            	 { name: "Golden Ray", dc: 17, value: 20, properties: "Its scales shimmer with magic. Grants temporary +2 to Charisma for 1 hour when consumed.", image: "assets/images/fish/golden_ray.png" },
+            	 { name: "Barnacled Chest", dc: 20, value: 50, properties: "A small, waterlogged chest. May contain treasure or just wet sand.", image: "assets/images/fish/barnacled_chest.png" },
+            	 { name: "Darkforme Tide-Lurker", dc: 16, value: 20, properties: "An aquatic darkling that ambushes from tidal pools. Its essence can be used in shadow magic.", image: "assets/images/fish/darkforme_tide_lurker.png" },
+            	 { name: "Saltwater Boot", dc: 11, value: 3, properties: "Just a waterlogged boot... or is it? (25% chance to contain a small trinket)", image: "assets/images/fish/saltwater_boot.png" }
+        	 ]
+    	 },
+    	 {
+        	 name: "Deep Caverns",
+        	 description: "Mysterious underground lakes and rivers beneath the academy.",
+        	 fish: [
+            	 { name: "Blind Cavefish", dc: 14, value: 10, properties: "Grants darkvision for 1 hour when consumed raw.", image: "assets/images/fish/blind_cavefish.png" },
+            	 { name: "Glowfin", dc: 15, value: 12, properties: "Emits light equivalent to a candle for 24 hours after being caught.", image: "assets/images/fish/glowfin.png" },
+            	 { name: "Crystal Eel", dc: 17, value: 18, properties: "Its scales can be ground into magic-enhancing dust worth 20gp to alchemists.", image: "assets/images/fish/crystal_eel.png" },
+            	 { name: "Stone Lobster", dc: 16, value: 15, properties: "Grants +2 to AC for 1 hour when prepared properly.", image: "assets/images/fish/stone_lobster.png" },
+            	 { name: "Deepdweller", dc: 18, value: 25, properties: "A rare fish that grants advantage on Constitution saves for 2 hours when consumed.", image: "assets/images/fish/deepdweller.png" },
+            	 { name: "Cave Leech", dc: 12, value: 8, properties: "Can be used to draw poison from wounds, granting +2 to saving throws against poison for 24 hours.", image: "assets/images/fish/cave_leech.png" },
+            	 { name: "Echofish", dc: 16, value: 15, properties: "When consumed, grants the ability to use echolocation in darkness for 1 hour.", image: "assets/images/fish/echofish.png" },
+            	 { name: "Mineral Turtle", dc: 19, value: 30, properties: "Its shell contains rare minerals that can be processed into a potion of stone skin.", image: "assets/images/fish/mineral_turtle.png" },
+            	 { name: "Darkforme Deep-Hunter", dc: 20, value: 40, properties: "A particularly dangerous aquatic darkling. Its essence can power necrotic spells.", image: "assets/images/fish/darkforme_deep_hunter.png" },
+            	 { name: "Subterranean Treasure Chest", dc: 22, value: 100, properties: "An ancient locked chest. Requires a DC 15 Dexterity check to open. Contents vary.", image: "assets/images/fish/subterranean_treasure_chest.png" }
+        	 ]
+    	 },
+    	 {
+        	 name: "Enchanted Pond",
+        	 description: "Magical waters where arcane energies infuse the aquatic life.",
+        	 fish: [
+            	 { name: "Spellscale", dc: 16, value: 20, properties: "Scales shimmer with arcane energy. Grants +1 to spell attack rolls for 1 hour when consumed.", image: "assets/images/fish/spellscale.png" },
+            	 { name: "Mana Minnow", dc: 12, value: 15, properties: "Restores one 1st-level spell slot when consumed (once per day only).", image: "assets/images/fish/mana_minnow.png" },
+            	 { name: "Phantasmal Carp", dc: 17, value: 25, properties: "Changes color based on nearby magic. Grants advantage on Arcana checks for 1 hour.", image: "assets/images/fish/phantasmal_carp.png" },
+            	 { name: "Wizardwhisker Catfish", dc: 15, value: 18, properties: "Its whiskers can be used as components for divination spells.", image: "assets/images/fish/wizardwhisker_catfish.png" },
+            	 { name: "Arcane Toad", dc: 14, value: 20, properties: "When kissed (ew!), grants the ability to cast Detect Magic once within 24 hours.", image: "assets/images/fish/arcane_toad.png" },
+            	 { name: "Rune Turtle", dc: 18, value: 30, properties: "Its shell is inscribed with magical runes. Can be studied to learn a random cantrip.", image: "assets/images/fish/rune_turtle.png" },
+            	 { name: "Illusory Salmon", dc: 16, value: 22, properties: "Sometimes appears as other fish. Grants a +2 bonus to Illusion spells for 1 hour.", image: "assets/images/fish/illusory_salmon.png" },
+            	 { name: "Familiar Fish", dc: 19, value: 35, properties: "Can be temporarily bound as a water-breathing familiar for 24 hours.", image: "assets/images/fish/familiar_fish.png" },
+            	 { name: "Arcane Anomaly", dc: 22, value: 50, properties: "Not actually a fish, but a concentration of wild magic. Unpredictable effects when caught.", image: "assets/images/fish/arcane_anomaly.png" },
+            	 { name: "Apprentice's Lost Spellbook", dc: 20, value: 45, properties: "A waterproof spellbook containing 1d4 random 1st-level spells.", image: "assets/images/fish/apprentice_lost_spellbook.png" }
+        	 ]
+    	 }
+   ];
+
+     // Define special fish that can only be caught with the Magi-Jig Lure in Lake & River region
+     const magiJigLakeFish = [
+         { name: "Arcane Trout", dc: 14, value: 200, properties: "A fish infused with magical energy. Grants +1 to spell attack rolls for 1 hour when consumed.", image: "assets/images/fish/arcane_trout.png" },
+         { name: "Mana Carp", dc: 15, value: 250, properties: "Shimmering with arcane energy. Restores one 1st-level spell slot when consumed (once per day only).", image: "assets/images/fish/mana_carp.png" },
+         { name: "Spellscale Bass", dc: 16, value: 300, properties: "Scales shimmer with magical patterns. Grants +1 to spell save DCs for 1 hour when prepared properly.", image: "assets/images/fish/spellscale_bass.png" },
+         { name: "Runic Catfish", dc: 17, value: 350, properties: "Mystical runes appear on its skin. Can be used as a component for enhancing enchantment spells.", image: "assets/images/fish/runic_catfish.png" },
+         { name: "Ethereal Eel", dc: 18, value: 400, properties: "Partially phases in and out of reality. Grants the ability to cast Misty Step once when consumed.", image: "assets/images/fish/ethereal_eel.png" },
+         { name: "Wizard's Whiskerfish", dc: 19, value: 450, properties: "Its whiskers can be used as wand components. Increases wand spell damage by 1d4 for one casting.", image: "assets/images/fish/wizards_whiskerfish.png" },
+         { name: "Familiar Fry", dc: 16, value: 300, properties: "A school of tiny, intelligent fish. Can serve as a temporary water-breathing familiar for 24 hours.", image: "assets/images/fish/familiar_fry.png" },
+         { name: "Elemental Sturgeon", dc: 20, value: 500, properties: "Contains essence of elemental magic. Grants resistance to one damage type for 1 hour when consumed.", image: "assets/images/fish/elemental_sturgeon.png" },
+         { name: "Divination Sunfish", dc: 18, value: 400, properties: "Its reflective scales show glimpses of possible futures. Grants advantage on one Wisdom check when consumed.", image: "assets/images/fish/divination_sunfish.png" },
+         { name: "Conjurer's Crab", dc: 17, value: 350, properties: "Can temporarily conjure small objects with its claws. Useful for magical demonstrations.", image: "assets/images/fish/conjurers_crab.png" }
+     ];
+
+   // --- Rods and Lures Data ---
+   const rods = [
+    	 { name: "Standard Rod", bonus: 0 },
+    	 { name: "+1 Rod", bonus: 1 }
+    	 // Add more rods here
+   ];
+
+   const lures = [
+    	 { name: "Standard Lure", bonus: 0 },
+    	 { name: "+1 Lure", bonus: 1 },
+         { name: "Magi-Jig Lure", bonus: 1 }
+    	 // Add more lures here
+   ];
+
+   // Initialize catalogue from localStorage
+   let caughtFishCatalogue = [];
+   loadCatalogue(); // Ensure this is called to populate the catalogue on load
+
+   // --- Functions ---
+   // Populate all the dropdowns
+   function populateDropdowns() {
+        if (!rodSelect || !lureSelect || !regionSelect) {
+            console.error("Dropdown elements not found!");
+            return;
+        }
+    	 rodSelect.innerHTML = ''; // Clear existing options
+    	 lureSelect.innerHTML = ''; // Clear existing options
+    	 regionSelect.innerHTML = ''; // Clear existing options
+
+    	 // Populate regions dropdown
+    	 fishingRegions.forEach((region, index) => {
+        	 const option = document.createElement('option');
+        	 option.value = index;
+        	 option.textContent = region.name;
+        	 regionSelect.appendChild(option);
+    	 });
+
+    	 // Populate rod options
+    	 rods.forEach(rod => {
+        	 const option = document.createElement('option');
+        	 option.value = rod.bonus;
+        	 option.textContent = `${rod.name} (Bonus: ${rod.bonus})`;
+        	 rodSelect.appendChild(option);
+    	 });
+
+    	 // Populate lure options
+    	 lures.forEach(lure => {
+        	 const option = document.createElement('option');
+        	 option.value = lure.bonus;
+        	 option.textContent = `${lure.name} (Bonus: ${lure.bonus})`;
+        	 lureSelect.appendChild(option);
+    	 });
+
+         // Update region description initially
+         updateRegionDescription();
+   }
+
+     function updateRegionDescription() {
+        if (!regionSelect) return;
+        const selectedRegionIndex = parseInt(regionSelect.value);
+        const regionDescriptionPara = regionSelect.parentElement.querySelector('p.region-description-text');
+
+        if (fishingRegions[selectedRegionIndex]) {
+            const descriptionText = fishingRegions[selectedRegionIndex].description;
+            if (regionDescriptionPara) {
+                regionDescriptionPara.textContent = descriptionText;
+            } else {
+                const newDescriptionPara = document.createElement('p');
+                newDescriptionPara.textContent = descriptionText;
+                newDescriptionPara.className = 'text-sm text-gray-600 mt-1 region-description-text'; // text-gray-600 will use themed color
+                regionSelect.parentElement.appendChild(newDescriptionPara);
+            }
+        }
+    }
+
+
+// Creates a weighted list for fish selection based on value (lower value = more common)
+function getWeightedFishList(fishSource) {
+    const weightedList = [];
+    const maxValue = Math.max(...fishSource.map(f => f.value));
+    
+    // Special rare items that should be extremely uncommon
+    const ultraRareItems = [
+        "Deactivated Warforged", 
+        "Magic Boot", 
+        "Functional Good-Rod", 
+        "Broken Good-Rod", 
+        "Barnacled Chest", 
+        "Subterranean Treasure Chest",
+        "Darkforme Titan-Snapper",
+        "Darkforme River Tyrant",
+        "Darkforme Abyssal Leviathan"
+    ];
+    
+    fishSource.forEach(fish => {
+        // Apply extreme rarity modifier for special items
+        let weight = 1;
+        
+        if (ultraRareItems.includes(fish.name)) {
+            // Make these items extremely rare (0.5% chance or less)
+            weight = 1;
+        } else if (fish.value >= 500) {
+            // Very valuable items (1% chance)
+            weight = Math.max(1, Math.floor(maxValue / (fish.value * 5)));
+        } else if (fish.value >= 100) {
+            // Valuable items (5% chance)
+            weight = Math.max(1, Math.floor(maxValue / (fish.value * 2)));
+        } else {
+            // Normal weighting for common items
+            weight = Math.max(1, Math.floor(maxValue / (fish.value || 1)));
+        }
+        
+        // Add fish to weighted list based on calculated weight
+        for (let i = 0; i < weight; i++) {
+            weightedList.push(fish);
+        }
+    });
+    
+    return weightedList;
+}
+
+// Modify this function to add a rare catch check
+function selectRandomFish() {
+    if (!regionSelect || !lureSelect) return null;
+    const selectedRegionIndex = parseInt(regionSelect.value);
+    const isMagiJigSelected = lureSelect.options[lureSelect.selectedIndex].text.includes("Magi-Jig");
+    
+    let fishSourceData;
+    
+    // If Magi-Jig Lure is selected and we're in Lake & River region
+    if (isMagiJigSelected && selectedRegionIndex === 0) {
+        // 70% chance to get a Magi-Jig special fish, 30% chance for regular fish
+        if (Math.random() < 0.7) {
+            fishSourceData = magiJigLakeFish;
+        } else {
+            fishSourceData = fishingRegions[selectedRegionIndex].fish;
+        }
+    } else {
+        fishSourceData = fishingRegions[selectedRegionIndex].fish;
+    }
+    
+    // Ultra-rare items check (approximately 0.5% chance)
+    const ultraRareItems = [
+        "Deactivated Warforged", 
+        "Magic Boot", 
+        "Functional Good-Rod", 
+        "Broken Good-Rod", 
+        "Barnacled Chest", 
+        "Subterranean Treasure Chest",
+        "Darkforme Titan-Snapper",
+        "Darkforme River Tyrant",
+        "Darkforme Abyssal Leviathan"
+    ];
+    
+    // First check if player gets a chance at ultra rare (0.5% base chance)
+    // Higher player bonus slightly increases chance for rare finds
+    const playerBonus = parseInt(playerBonusInput.value) || 0;
+    const rareChance = 0.005 + (playerBonus * 0.0005); // Slight boost with higher bonus
+    
+    if (Math.random() < rareChance) {
+        // Player gets a rare item opportunity!
+        // Find all ultra-rare items in the current region
+        const availableRares = fishSourceData.filter(fish => ultraRareItems.includes(fish.name));
+        
+        if (availableRares.length > 0) {
+            // Return a random rare item from available ones
+            return availableRares[Math.floor(Math.random() * availableRares.length)];
+        }
+    }
+    
+    // Normal weighted selection for common fish
+    const weightedList = getWeightedFishList(fishSourceData);
+    if (weightedList.length === 0) return fishSourceData[Math.floor(Math.random() * fishSourceData.length)];
+    const randomIndex = Math.floor(Math.random() * weightedList.length);
+    return weightedList[randomIndex];
+}
+
+   // D20 dice roll
+   function rollD20() {
+    	 return Math.floor(Math.random() * 20) + 1;
+   }
+
+   // Cast line and attempt to catch fish
+   async function castLine() {
+    	 if (!dbInitialized || !userId) {
+        	 fishingLog.innerHTML = `<p class="text-red-500">Cannot fish: User not authenticated or database not ready. Please wait or refresh.</p>`;
+        	 return;
+    	 }
+         if (!fishingLog || !caughtFishDisplay || !rodSelect || !lureSelect || !playerBonusInput || !fishNameElement || !fishValueElement || !fishImageElement || !fishPropertiesElement) {
+            console.error("One or more critical DOM elements for casting are missing.");
+            if(fishingLog) fishingLog.innerHTML = `<p class="text-red-500">Error: Critical game elements are missing. Cannot cast.</p>`;
+            return;
+        }
+
+    	 fishingLog.innerHTML = '';
+    	 caughtFishDisplay.classList.add('hidden');
+
+    	 const selectedRodBonus = parseInt(rodSelect.value);
+    	 const selectedLureBonus = parseInt(lureSelect.value);
+    	 const playerBonus = parseInt(playerBonusInput.value) || 0;
+
+    	 const targetFish = selectRandomFish();
+    	 if (!targetFish) {
+        	 fishingLog.innerHTML = '<p class="text-red-500">Error: Could not select a fish for the current region.</p>';
+        	 return;
+    	 }
+
+    	 fishingLog.innerHTML += `<p class="text-blue-600 font-semibold">You cast your line hoping to catch a ${targetFish.name} (DC: ${targetFish.dc})...</p>`; // text-blue-600 will use themed color
+
+    	 let successfulRolls = 0;
+    	 let attempts = 0;
+
+    	 for (let i = 1; i <= 3; i++) {
+        	 attempts++;
+        	 const roll = rollD20();
+        	 let totalBonus = selectedRodBonus + playerBonus;
+        	 let attemptLog = `Attempt ${i}: Rolled a ${roll}. `;
+
+        	 if (i === 1) {
+            	 totalBonus += selectedLureBonus;
+            	 attemptLog += `(Lure bonus: +${selectedLureBonus}) `;
+        	 }
+        	 attemptLog += `(Rod bonus: +${selectedRodBonus}, Player bonus: +${playerBonus}) `;
+
+        	 const finalRoll = roll + totalBonus;
+        	 attemptLog += `Total: ${finalRoll} vs DC ${targetFish.dc}. `;
+
+        	 if (i === 1 && roll === 20) {
+            	 attemptLog += `<span class="text-yellow-500 font-bold">Natural 20 on the first roll!</span> Fish caught!`; // text-yellow-500 themed
+            	 fishingLog.innerHTML += `<p>${attemptLog}</p>`;
+            	 successfulRolls = 2;
+            	 break;
+        	 }
+
+        	 if (finalRoll >= targetFish.dc) {
+            	 successfulRolls++;
+            	 attemptLog += `<span class="text-green-500 font-bold">Success!</span>`; // text-green-500 themed
+            	 fishingLog.innerHTML += `<p>${attemptLog}</p>`;
+        	 } else {
+            	 attemptLog += `<span class="text-red-500 font-bold">Fail!</span>`; // text-red-500 themed
+            	 fishingLog.innerHTML += `<p>${attemptLog}</p>`;
+        	 }
+
+        	 if (successfulRolls >= 2) {
+            	 fishingLog.innerHTML += `<p class="text-green-600 font-bold mt-2">Congratulations! You caught the ${targetFish.name}!</p>`; // text-green-600 themed
+            	 break;
+        	 }
+        	 if (attempts - successfulRolls >= 2 && attempts >=2) {
+             	 fishingLog.innerHTML += `<p class="text-red-600 font-bold mt-2">The fish got away...</p>`; // text-red-600 themed
+             	 break;
+        	 }
+    	 }
+
+    	 if (successfulRolls >= 2) {
+        	 const selectedRegionIndex = parseInt(regionSelect.value);
+        	 const regionName = fishingRegions[selectedRegionIndex].name;
+
+        	 fishNameElement.textContent = targetFish.name;
+        	 fishValueElement.textContent = targetFish.value + "gp";
+        	 fishPropertiesElement.textContent = targetFish.properties || "No special properties.";
+
+        	 const existingBadge = caughtFishDisplay.querySelector('.region-badge');
+        	 if (existingBadge) existingBadge.remove();
+
+        	 const regionBadge = document.createElement('span');
+        	 regionBadge.className = 'region-badge';
+        	 regionBadge.textContent = regionName;
+             if (fishPropertiesElement.parentNode) {
+                fishPropertiesElement.parentNode.insertBefore(regionBadge, fishPropertiesElement.nextSibling);
+             }
+
+        	 if (targetFish.image) {
+            	 fishImageElement.src = targetFish.image;
+        	 } else {
+            	 fishImageElement.src = `https://placehold.co/200x150/B47018/FAE791?text=${encodeURIComponent(targetFish.name)}`; // Themed placeholder
+        	 }
+
+        	 fishImageElement.alt = targetFish.name;
+        	 fishImageElement.onerror = () => {
+            	 fishImageElement.src = 'https://placehold.co/200x150/1E1C12/C7A81D?text=Image+Not+Found'; // Themed error placeholder
+            	 fishImageElement.alt = 'Image Not Found';
+        	 };
+        	 caughtFishDisplay.classList.remove('hidden');
+        	 await addToCatalogue(targetFish);
+    	 } else if (attempts < 3 && successfulRolls < 2 && (attempts - successfulRolls < 2 || attempts <2) ) {
+        	 fishingLog.innerHTML += `<p class="text-red-600 font-bold mt-2">The fish got away...</p>`;
+    	 }
+   }
+
+   // Add caught fish to catalogue
+   async function addToCatalogue(fish) {
+    	 if (!dbInitialized || !userId) {
+        	 console.warn("Cannot add to catalogue: User not authenticated or DB not ready.");
+        	 return;
+    	 }
+    	 if (!caughtFishCatalogue.find(f => f.name === fish.name)) {
+        	 caughtFishCatalogue.push({
+            	 name: fish.name,
+            	 value: fish.value,
+            	 properties: fish.properties,
+            	 image: fish.image || null
+        	 });
+        	 caughtFishCatalogue.sort((a, b) => a.name.localeCompare(b.name));
+        	 await saveCatalogue();
+        	 renderCatalogue();
+    	 }
+   }
+
+   // Render fish catalogue display
+   function renderCatalogue() {
+        if (!catalogueList) {
+            console.error("Catalogue list element not found!");
+            return;
+        }
+    	 catalogueList.innerHTML = '';
+    	 if (caughtFishCatalogue.length === 0) {
+        	 catalogueList.innerHTML = '<li class="text-gray-500">No fish caught yet. Go fishing!</li>'; // text-gray-500 themed
+        	 return;
+    	 }
+    	 const sortedCatalogue = [...caughtFishCatalogue].sort((a, b) => a.name.localeCompare(b.name));
+
+    	 sortedCatalogue.forEach(fish => {
+        	 const listItem = document.createElement('li');
+        	 const imgSrc = fish.image ? fish.image : `https://placehold.co/80x60/B47018/FAE791?text=${encodeURIComponent(fish.name)}`; // Themed placeholder
+
+        	 listItem.innerHTML = `
+            	 <div>
+                	 <h4 class="font-semibold text-lg text-blue-700">${fish.name}</h4> <p class="text-sm text-gray-600">Value: ${fish.value}gp</p> ${fish.properties ? `<p class="text-xs text-gray-500 italic mt-1">Properties: ${fish.properties}</p>` : ''} </div>
+            	 <img src="${imgSrc}" alt="${fish.name}" onerror="this.src='https://placehold.co/80x60/1E1C12/C7A81D?text=N/A'; this.alt='Image Error';">
+        	 `;
+        	 catalogueList.appendChild(listItem);
+    	 });
+   }
+
+   // Save catalogue to localStorage
+   async function saveCatalogue() {
+    	 try {
+        	 localStorage.setItem('fishingCatalogue_' + userId, JSON.stringify(caughtFishCatalogue));
+        	 console.log("Catalogue saved to localStorage.");
+        	 return Promise.resolve();
+    	 } catch (error) {
+        	 console.error("Error saving catalogue to localStorage:", error);
+             if(fishingLog) fishingLog.innerHTML += `<p class="text-red-500">Error: Could not save catalogue locally. ${error.message}</p>`;
+        	 return Promise.reject(error);
+    	 }
+   }
+
+   // Load catalogue from localStorage
+   async function loadCatalogue() {
+    	 try {
+        	 const savedCatalogue = localStorage.getItem('fishingCatalogue_' + userId);
+        	 if (savedCatalogue) {
+            	 caughtFishCatalogue = JSON.parse(savedCatalogue);
+            	 caughtFishCatalogue.forEach(fish => {
+                	 if (fish.properties === undefined) fish.properties = "";
+                	 if (fish.image === undefined) {
+                    	 for (const region of fishingRegions) {
+                        	 const matchingFish = region.fish.find(f => f.name === fish.name);
+                        	 if (matchingFish && matchingFish.image) {
+                            	 fish.image = matchingFish.image;
+                            	 break;
+                        	 }
+                    	 }
+                    	 // Also check Magi-Jig specific fish
+                    	 if (!fish.image) {
+                        	 const magiJigFish = magiJigLakeFish.find(f => f.name === fish.name);
+                        	 if (magiJigFish && magiJigFish.image) {
+                            	 fish.image = magiJigFish.image;
+                        	 }
+                    	 }
+                	 }
+            	 });
+            	 console.log("Catalogue loaded from localStorage:", caughtFishCatalogue);
+        	 } else {
+            	 console.log("No catalogue found in localStorage. Starting fresh.");
+            	 caughtFishCatalogue = [];
+        	 }
+        	 renderCatalogue();
+        	 return Promise.resolve();
+    	 } catch (error) {
+        	 console.error("Error loading catalogue from localStorage:", error);
+             if(fishingLog) fishingLog.innerHTML += `<p class="text-red-500">Error: Could not load catalogue. ${error.message}</p>`;
+        	 caughtFishCatalogue = [];
+        	 renderCatalogue();
+        	 return Promise.reject(error);
+    	 }
+   }
+
+   // Switch between fishing and catalogue tabs
+   function switchTab(tabName) {
+        if (!fishingContent || !catalogueContent || !fishingTabButton || !catalogueTabButton) {
+            console.error("Tab switching elements not found!");
+            return;
+        }
+    	 currentTab = tabName;
+    	 if (tabName === 'fishing') {
+        	 fishingContent.classList.remove('hidden');
+        	 catalogueContent.classList.add('hidden');
+        	 fishingTabButton.classList.add('active');
+        	 fishingTabButton.classList.remove('bg-gray-200', 'text-gray-700'); // Old theme classes
+        	 catalogueTabButton.classList.remove('active');
+        	 catalogueTabButton.classList.add('bg-gray-200', 'text-gray-700'); // Fallback, CSS will handle with :not(.active)
+    	 } else if (tabName === 'catalogue') {
+        	 fishingContent.classList.add('hidden');
+        	 catalogueContent.classList.remove('hidden');
+        	 catalogueTabButton.classList.add('active');
+        	 catalogueTabButton.classList.remove('bg-gray-200', 'text-gray-700');
+        	 fishingTabButton.classList.remove('active');
+        	 fishingTabButton.classList.add('bg-gray-200', 'text-gray-700');
+        	 renderCatalogue();
+    	 }
+   }
+
+   // --- Event Listeners ---
+     if (regionSelect) {
+        regionSelect.addEventListener('change', () => {
+            updateRegionDescription();
+            if (fishingLog) {
+                const selectedRegionIndex = parseInt(regionSelect.value);
+                fishingLog.innerHTML = `<p class="text-blue-600 font-semibold">You've changed location to: ${fishingRegions[selectedRegionIndex].name}</p>`;
+            }
+            if (caughtFishDisplay) caughtFishDisplay.classList.add('hidden');
+        });
+    }
+
+    if (castButton) castButton.addEventListener('click', castLine);
+
+    if (fishingTabButton) fishingTabButton.addEventListener('click', () => switchTab('fishing'));
+    if (catalogueTabButton) catalogueTabButton.addEventListener('click', () => switchTab('catalogue'));
+
+    if (playerBonusLabel && playerBonusTooltip) {
+        playerBonusLabel.addEventListener('mouseenter', () => playerBonusTooltip.classList.remove('hidden'));
+        playerBonusLabel.addEventListener('mouseleave', () => playerBonusTooltip.classList.add('hidden'));
+        playerBonusLabel.addEventListener('focus', () => playerBonusTooltip.classList.remove('hidden'));
+        playerBonusLabel.addEventListener('blur', () => playerBonusTooltip.classList.add('hidden'));
+    }
+
+   // --- Initialize UI ---
+   populateDropdowns();
+   switchTab('fishing');
+}
+
+document.addEventListener('DOMContentLoaded', initializeFishingMinigame);
+  </script>
+
+

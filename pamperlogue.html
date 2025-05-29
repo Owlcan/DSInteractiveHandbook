@@ -1,0 +1,3404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diaper Catalog with D&D 5e Buffs</title>
+  <script>
+    // Force modal to be hidden when page loads
+    window.onload = function() {
+      var modal = document.getElementById('cardModalEl');
+      if (modal) {
+        modal.hidden = true;
+        console.log('Modal force hidden on window load');
+      }
+    };
+  </script>
+</head>
+<body>
+<div id="appContainer">
+  <!-- Header section -->
+  <header class="app-header">
+    <h1>Diaper Brands, Prints, and Aesthetics</h1>
+    <h2>with D&D 5e Buffs</h2>
+    <p class="description">An interactive glossary of unique items with magical properties</p>
+  </header>
+
+  <!-- Control panel for filtering and sorting -->
+  <div class="control-panel">
+    <div class="search-container">
+      <input type="text" id="searchInputEl" placeholder="Search by name, buff, or description...">
+    </div>
+    <div class="filter-container">     
+      <label for="rarityFilterEl" class="visually-hidden">Filter by rarity</label>
+      <select id="rarityFilterEl" aria-label="Filter by rarity">
+        <option value="">All Rarities</option>
+        <option value="Mundane">Mundane</option>
+        <option value="Common">Common</option>
+        <option value="Uncommon">Uncommon</option>
+        <option value="Rare">Rare</option>
+        <option value="Very-Rare">Very-Rare</option>
+        <option value="Legendary">Legendary</option>
+        <option value="Cursed">Cursed</option>
+      </select>
+      <label for="sortByEl" class="visually-hidden">Sort items by</label>
+      <select id="sortByEl" aria-label="Sort items by">
+        <option value="name">Sort by Name</option>
+        <option value="price">Sort by Price</option>
+        <option value="rarity">Sort by Rarity</option>
+        <option value="charges">Sort by Charges</option>
+      </select>
+    </div>
+  </div>
+  <!-- Cards container -->
+  <div id="cardsContainerEl" class="cards-container">
+    <!-- Cards will be inserted here via JavaScript -->
+  </div>
+
+  <!-- Modal for expanded view -->
+  <div id="cardModalEl" class="modal" hidden>
+    <div class="modal-content">
+      <span class="close-button" onclick="closeModal()">&times;</span>
+      <div id="modalContentEl"></div>
+    </div>
+  </div>
+
+  <!-- Add new item button and form (hidden by default) -->
+  <div class="add-item-section">
+    <button id="showAddFormBtn" onclick="toggleAddForm()">+ Add New Item</button>
+    <div id="addItemFormEl" class="add-item-form" hidden>
+      <h3>Add New Item</h3>
+      <form id="newItemFormEl" onsubmit="handleAddItem(event)">
+        <div class="form-group">
+          <label for="itemName">Name:</label>
+          <input type="text" id="itemNameEl" required>
+        </div>
+        <div class="form-group">
+          <label for="itemAesthetic">Print/Aesthetic:</label>
+          <textarea id="itemAestheticEl" required></textarea>
+        </div>
+        <div class="form-group">
+          <label for="itemDescription">Description:</label>
+          <textarea id="itemDescriptionEl" required></textarea>
+        </div>
+        <div class="form-group">
+          <label for="itemBuff">D&D 5e Buff:</label>
+          <textarea id="itemBuffEl"></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group half">
+            <label for="itemRarity">Rarity:</label>            <select id="itemRarityEl">
+              <option value="">All Rarities</option>
+              <option value="Mundane">Mundane</option>
+              <option value="Common">Common</option>
+              <option value="Uncommon">Uncommon</option>
+              <option value="Rare">Rare</option>
+              <option value="Very-Rare">Very-Rare</option>
+              <option value="Legendary">Legendary</option>
+              <option value="Cursed">Cursed</option>
+            </select>
+          </div>
+          <div class="form-group half">
+            <label for="itemCharges">Use Charges:</label>
+            <input type="number" id="itemChargesEl" min="1" max="10" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group half">
+            <label for="itemPrice">Price (gp):</label>
+            <input type="number" id="itemPriceEl" min="1" required>
+          </div>
+          <div class="form-group half">
+            <label for="itemNote">Note (optional):</label>
+            <input type="text" id="itemNoteEl">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="itemImageUrl">Image URL:</label>
+          <input type="url" id="itemImageUrlEl" placeholder="https://...">
+        </div>
+        <div class="form-buttons">
+          <button type="submit" class="submit-btn">Add Item</button>
+          <button type="button" onclick="toggleAddForm()" class="cancel-btn">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #2c2619; /* Dark brown background instead of dark blue */
+    color: #e0d0c0; /* Warm beige text instead of blue-white */
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    text-align: left;
+  }
+  
+  .app-header {
+    background: linear-gradient(135deg, #3a2e1a 0%, #30200d 100%); /* Brown gradient */
+    padding: 2rem 1rem;
+    text-align: center;
+    border-bottom: 2px solid #d4af37; /* Gold border instead of blue */
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.3); /* Gold shadow */
+    margin-bottom: 2rem;
+    position: relative;
+  }
+  
+  .app-header h1 {
+    margin: 0;
+    font-size: 2.5rem;
+    color: #ffd700; /* Gold text for header */
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.8); /* Gold text shadow */
+  }
+  
+  .app-header h2 {
+    margin: 0.5rem 0;
+    font-size: 1.5rem;
+    color: #d4b96e; /* Light gold for subheading */
+    font-weight: normal;
+  }
+  
+  .description {
+    max-width: 600px;
+    margin: 1rem auto;
+    color: #c9aa71; /* Muted gold for description text */
+  }
+  
+  .control-panel {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding: 0 1rem;
+  }
+  
+  .search-container {
+    flex: 1;
+    max-width: 500px;
+  }
+  
+  .filter-container {
+    display: flex;
+    gap: 0.5rem;
+  }
+  
+  input, select, textarea {
+    background-color: #3a2e1a; /* Dark brown input background */
+    border: 1px solid #a68a54; /* Golden-brown border */
+    color: #e0d0c0; /* Warm beige text */
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    width: 100%;
+    font-size: 1rem;
+  }
+  
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+  }
+  
+  input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #d4af37; /* Gold border on focus */
+    box-shadow: 0 0 5px rgba(212, 175, 55, 0.5); /* Gold glow */
+  }
+  
+  .cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 0 2rem 2rem;
+  }
+  
+  .card {
+    background: linear-gradient(145deg, #3a2e1a 0%, #2c2215 100%); /* Brown gradient */
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3), 0 0 10px rgba(212, 175, 55, 0.2); /* Gold accent */
+    transition: transform 0.3s, box-shadow 0.3s;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    cursor: pointer;
+  }
+  
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4), 0 0 15px rgba(212, 175, 55, 0.3); /* Gold glow */
+  }
+  
+  .card-header {
+    padding: 1rem;
+    background: linear-gradient(90deg, rgba(100, 80, 45, 0.8) 0%, rgba(150, 120, 60, 0.8) 100%); /* Golden-brown gradient */
+    border-bottom: 1px solid #a68a54; /* Golden-brown border */
+  }
+  
+  .card-title {
+    margin: 0;
+    font-size: 1.3rem;
+    color: #ffd700; /* Gold text */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .card-rarity {
+    font-size: 0.8rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 3px;
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+
+  .card-rarity.Common { background-color: #607D8B; }
+  .card-rarity.Uncommon { background-color: #4CAF50; }
+  .card-rarity.Rare { background-color: #2196F3; }
+  .card-rarity.Very-Rare { background-color: #9C27B0; } /* Purple color for Very-Rare */
+  .card-rarity.Legendary { 
+    background: linear-gradient(124deg, #ff2400, #e81d1d, #e8b71d, #e3e81d, #1de840, #1ddde8, #2b1de8, #dd00f3, #dd00f3);
+    background-size: 1800% 1800%;
+    animation: rainbow 6s ease infinite;
+  }
+  .card-rarity.Cursed { 
+    background: linear-gradient(124deg, #52175c, #BA68C8);
+    background-size: 400% 400%;
+    animation: purple-pulse 3s ease infinite;
+  }
+  
+  @keyframes purple-pulse { 
+    0% { background-position: 0% 50% }
+    50% { background-position: 100% 50% }
+    100% { background-position: 0% 50% }
+  }
+
+  @keyframes rainbow { 
+    0% { background-position: 0% 82% }
+    50% { background-position: 100% 19% }
+    100% { background-position: 0% 82% }
+  }
+  .card-rarity.Mundane { background-color: #9E9E9E; }
+
+  .card-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-bottom: 1px solid #364174;
+  }
+
+  .card-body {
+    padding: 1rem;
+    flex: 1;
+  }
+
+  .card-aesthetic {
+    font-style: italic;
+    color: #a9b5ff;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+
+  .card-description {
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+  }
+
+  .card-buff {
+    background-color: rgba(106, 128, 255, 0.1);
+    padding: 0.7rem;
+    border-radius: 5px;
+    border-left: 3px solid #6a80ff;
+    margin-bottom: 1rem;
+  }
+
+  .card-buff-title {
+    font-weight: bold;
+    color: #a9b5ff;
+    display: block;
+    margin-bottom: 0.3rem;
+  }
+
+  .card-details {
+    display: flex;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    justify-content: space-between;
+    color: #8a9dff;
+  }
+
+  .card-detail-item {
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+  }
+
+  .card-detail-icon {
+    font-size: 0.8rem;
+  }
+
+  /* Modal Styles */
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .modal[hidden] {
+    display: none !important;
+  }
+
+  .modal-content {
+    background: linear-gradient(145deg, #1a203a 0%, #151c33 100%);
+    border-radius: 10px;
+    width: 90%;
+    max-width: 800px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 0 25px rgba(74, 90, 255, 0.5);
+    position: relative;
+  }
+
+  .close-button {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #a9b5ff;
+    z-index: 1;
+  }
+
+  .close-button:hover {
+    color: #fff;
+  }
+
+  .expanded-card {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .expanded-card-header {
+    padding: 2rem;
+    background: linear-gradient(90deg, rgba(45, 55, 100, 0.8) 0%, rgba(60, 80, 150, 0.8) 100%);
+    position: relative;
+  }
+
+  .expanded-card-title {
+    margin: 0;
+    font-size: 2rem;
+    color: #fff;
+  }
+
+  .expanded-card-content {
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+  }
+
+  @media (min-width: 768px) {
+    .expanded-card-content {
+      flex-direction: row;
+      gap: 2rem;
+    }
+  }
+
+  .expanded-card-image-container {
+    flex: 1;
+    min-width: 250px;
+  }
+
+  .expanded-card-image {
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  }
+
+  .expanded-card-details {
+    flex: 2;
+  }
+
+  .expanded-card-section {
+    margin-bottom: 1.5rem;
+  }
+
+  .expanded-card-section-title {
+    color: #a9b5ff;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid #364174;
+    padding-bottom: 0.3rem;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .stat-item {
+    background-color: rgba(106, 128, 255, 0.1);
+    padding: 0.7rem;
+    border-radius: 5px;
+    text-align: center;
+  }
+
+  .stat-value {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #fff;
+  }
+
+  .stat-label {
+    font-size: 0.8rem;
+    color: #8a9dff;
+    text-transform: uppercase;
+  }
+
+  /* Science-Fantasy decorative elements */
+  .app-header::before, .app-header::after {
+    content: "";
+    position: absolute;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #4a5aff, transparent);
+    width: 80%;
+    left: 10%;
+  }
+  
+  .app-header::before {
+    top: 0;
+  }
+  
+  .app-header::after {
+    bottom: 0;
+  }
+
+  /* Add new item form styling */
+  .add-item-section {
+    padding: 1rem 2rem 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #showAddFormBtn {
+    background: linear-gradient(90deg, #4a5aff 0%, #6a80ff 100%);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(74, 90, 255, 0.5);
+    transition: all 0.3s;
+  }
+
+  #showAddFormBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 15px rgba(74, 90, 255, 0.7);
+  }
+
+  .add-item-form {
+    width: 100%;
+    max-width: 800px;
+    background: linear-gradient(145deg, #1a203a 0%, #151c33 100%);
+    border-radius: 10px;
+    padding: 2rem;
+    margin-top: 2rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3), 0 0 10px rgba(74, 90, 255, 0.2);
+  }
+
+  .add-item-form h3 {
+    color: #a9b5ff;
+    margin-top: 0;
+    border-bottom: 1px solid #364174;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
+  }
+
+  .form-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .form-group.half {
+    flex: 1;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 0.3rem;
+    color: #a9b5ff;
+  }
+
+  textarea {
+    min-height: 80px;
+    resize: vertical;
+  }
+
+  .form-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .submit-btn, .cancel-btn {
+    padding: 0.7rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .submit-btn {
+    background: linear-gradient(90deg, #4a5aff 0%, #6a80ff 100%);
+    color: white;
+  }
+
+  .cancel-btn {
+    background: rgba(255, 255, 255, 0.1);
+    color: #e0e0ff;
+  }
+
+  .submit-btn:hover, .cancel-btn:hover {
+    transform: translateY(-2px);
+  }
+
+  /* Loading spinner */
+  .loading-container {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  .loading-spinner {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    border: 3px solid rgba(74, 90, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #4a5aff;
+    animation: spin 1s ease-in-out infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .no-results {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 3rem;
+    color: #8a9dff;
+  }
+</style>
+
+<script>
+  // Item data from the provided list
+  const items = [
+  {
+    "id": 1,
+    "name": "SecuriCare Level 4s",
+    "aesthetic": "A simple medical-style pattern with soft green lines that run up the center of the brief.",
+    "description": "It has four sturdy tapes and is of medium bulk, making it a reliable choice for everyday protection.",
+    "buff": "The wearer has advantage on saving throws against disease.",
+    "rarity": "Uncommon",
+    "charges": 5,
+    "price": 45,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/securicarel4s.jpg"
+  },
+  {
+    "id": 2,
+    "name": "BunbunSkipz",
+    "aesthetic": "A pink and white specialty diaper adorned with cute, stylized cartoon rabbits and a lace-like trim along the pink wings.",
+    "description": "Featuring two heavy-duty extra-strength tapes, it is crafted in a particularly fluffy medium bulk for those who like a blend of charm and durability.",
+    "buff": "The wearer's base walking speed increases by 5 feet.",
+    "rarity": "Common",
+    "charges": 4,
+    "price": 30,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/bunbunskips.jpg"
+  },
+  {
+    "id": 3,
+    "name": "TactiTush Elite",
+    "aesthetic": "This rugged, military-inspired design features a camouflaged pattern in dark olive and beige.",
+    "description": "Equipped with three reinforced side tapes, it’s built for impact resistance and a secure fit, offering a robust solution with a light yet resilient bulk.",
+    "buff": "The wearer has advantage on Dexterity (Stealth) checks made to hide in rocky or urban terrain.",
+    "rarity": "Uncommon",
+    "charges": 6,
+    "price": 80,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/tactitushelite.jpg"
+  },
+  {
+    "id": 4,
+    "name": "ComfortGuardian Plus",
+    "aesthetic": "Designed for ultimate ease, this plush diaper utilizes soothing pastel hues with subtle floral prints.",
+    "description": "Its extra leak-proof barrier is paired with two discreet, extra-reinforced tapes that provide a snug, comfortable hold—ideal for sensitive wearers.",
+    "buff": "Once per long rest, the wearer can use an action to gain temporary hit points equal to their proficiency bonus.",
+    "rarity": "Uncommon",
+    "charges": 5,
+    "price": 50,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/comfortguardianplus.jpg"
+  },
+  {
+    "id": 5,
+    "name": "SwiftShield XD",
+    "aesthetic": "Boasting a sleek, aerodynamic design in silver and midnight blue.",
+    "description": "Reflective, precision-cut tapes ensure a flawless grip, and its minimal bulk champions agility in fast-paced situations.",
+    "buff": "The wearer gains a +2 bonus to initiative rolls.",
+    "rarity": "Uncommon",
+    "charges": 6,
+    "price": 100,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/swiftshieldxd.jpg"
+  },
+  {
+    "id": 6,
+    "name": "PapaNimbus 2000",
+    "aesthetic": "With a futuristic design that shimmers in a dynamic holographic sheen.",
+    "description": "Integrated with lightweight, self-adjusting tapes and designed with slightly increased bulk for high absorbency, it’s perfect for high-energy operations or actions on the fly.",
+    "buff": "Once per day, the wearer can cast Feather Fall on themselves as a reaction.",
+    "rarity": "Uncommon",
+    "charges": 7,
+    "price": 110,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/papanimbus2000.jpg"
+  },
+  {
+    "id": 7,
+    "name": "StabiliSlip Unify",
+    "aesthetic": "A no-nonsense, functional option rendered in neutral tones.",
+    "description": "Sturdy, side-positioned tapes and a reinforced moisture barrier ensure stability and consistent performance, all within a moderate bulk profile suited for varied conditions.",
+    "buff": "The wearer has advantage on saving throws against being knocked prone.",
+    "rarity": "Uncommon",
+    "charges": 6,
+    "price": 75,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/stabilislipunify.jpg"
+  },
+  {
+    "id": 8,
+    "name": "CrinkleCloud Softies",
+    "aesthetic": "An ultra-soft diaper defined by a breezy nebulous pattern in delicate pastel hues.",
+    "description": "Designed for high absorbency with a heavy-duty tape system that ensures a secure, comfortable fit even during prolonged wear.",
+    "buff": "Once per long rest, the wearer can cast Fog Cloud centered on themselves.",
+    "rarity": "Rare",
+    "charges": 7,
+    "price": 120,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/crinklecloudsofties.jpg"
+  },
+  {
+    "id": 9,
+    "name": "SnugSecure Pro",
+    "aesthetic": "A robust, performance-driven diaper featuring a reinforced black fabric accented with subtle metallic highlights.",
+    "description": "Equipped with state-of-the-art tapes, it provides enhanced leak protection and durability for high-intensity situations.",
+    "buff": "The wearer gains a +1 bonus to AC.",
+    "rarity": "Rare",
+    "charges": 8,
+    "price": 175,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/snugsecurepro.jpg"
+  },
+  {
+    "id": 10,
+    "name": "NanoNurse QuickFix",
+    "aesthetic": "Sleek, nanotechnology-infused materials.",
+    "description": "Utilizing nanotechnology-infused materials, this sleek diaper intelligently detects moisture and adapts for rapid absorption. Its lightweight design and precision-fitted tapes make it ideal for quick and efficient use in emergency scenarios.",
+    "buff": "The wearer has resistance to poison damage.",
+    "rarity": "Uncommon",
+    "charges": 6,
+    "price": 90,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/nanonursequickfix.jpg"
+  },
+  {
+    "id": 11,
+    "name": "SoftSplice Comfort",
+    "aesthetic": "A luxurious blend of plush material and chic subtle polka dots.",
+    "description": "With two main secure tapes and a supportive elastic trim, it promotes gentle yet effective protection during everyday activities.",
+    "buff": "The wearer has advantage on Charisma (Persuasion) checks when interacting with friendly creatures.",
+    "rarity": "Common",
+    "charges": 4,
+    "price": 40,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/softsplicecomfort.jpg"
+  },
+  {
+    "id": 12,
+    "name": "DiaperDynamo Max",
+    "aesthetic": "Powerhouse design with visible triple-layer reinforcement, often in bold primary colors or industrial grey.",
+    "description": "Engineered for the most demanding conditions, DiaperDynamo Max is a powerhouse diaper with triple-layer reinforcement and extra bulk for unmatched absorbency. It’s designed to handle extreme use, making it the go-to choice for long-term wear during intensive operations.",
+    "buff": "The wearer's carrying capacity is doubled, and they have advantage on Strength checks made to push, drag, or lift.",
+    "rarity": "Rare",
+    "charges": 9,
+    "price": 180,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/diaperdynamomax.jpg"
+  },
+  {
+    "id": 13,
+    "name": "ComfyCushion Ultra",
+    "aesthetic": "Memory foam-like layers beneath a breathable, soft fabric, often in calming solid colors like lavender or seafoam green.",
+    "description": "Prioritizing comfort above all, ComfyCushion Ultra incorporates memory foam-like layers beneath a breathable, soft fabric. Its double-lock adaptive tape system adjusts to the wearer’s movements, ensuring a snug, cushioned fit without sacrificing mobility.",
+    "buff": "When the wearer takes a short rest, they regain an additional 1d4 hit points.",
+    "rarity": "Uncommon",
+    "charges": 6,
+    "price": 85,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/comfycushionultra.jpg"
+  },
+  {
+    "id": 14,
+    "name": "KuddlePuffs BearyHugs",
+    "aesthetic": "Sky blue with fluffy white clouds and adorable cartoon teddy bears holding honey pots. Pink landing zone with a honey pot pattern.",
+    "description": "Features soft-flex tapes and a plush medium bulk for ultimate cuddle comfort. Extra soft inner lining.",
+    "buff": "The wearer can use the Help action as a bonus action to aid an ally in an attack roll or ability check.",
+    "rarity": "Uncommon",
+    "charges": 5,
+    "price": 75,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/kuddlepuffsbearyhugs.jpg"
+  },
+  {
+    "id": 15,
+    "name": "KuddlePuffs DinoRoar",
+    "aesthetic": "Vibrant green with playful cartoon dinosaurs (T-Rex, Triceratops, Brontosaurus) in various poses. Landing zone features a \"Dino Crossing\" sign.",
+    "description": "Equipped with sturdy \"Claw-Grip\" tapes and a resilient medium bulk for active little adventurers. Reinforced leg gathers.",
+    "buff": "The wearer's unarmed strikes deal an extra 1d4 slashing damage.",
+    "rarity": "Common",
+    "charges": 4,
+    "price": 35,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/kuddlepuffsdinoroar.jpg"
+  },
+  {
+    "id": 16,
+    "name": "KuddlePuffs StarrySlumber",
+    "aesthetic": "Deep indigo with a dense pattern of shimmering silver stars, sleepy crescent moons, and occasional shooting stars. Landing zone is a large, soft yellow moon.",
+    "description": "Four gentle \"Dream-Lock\" tapes ensure a secure fit through the night, with a high-absorbency extra bulk for peaceful sleep. Lavender-scented core.",
+    "buff": "The wearer has advantage on saving throws against being magically put to sleep and against being frightened.",
+    "rarity": "Uncommon",
+    "charges": 7,
+    "price": 115,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/kuddlepuffsstarryslumber.jpg"
+  },
+  {
+    "id": 17,
+    "name": "MediCore Pro Clinical White",
+    "aesthetic": "A classic, no-frills pure white design focused on hygiene and discretion. Subtle embossed logo.",
+    "description": "Features four strong, refastenable tapes and a moderate bulk for reliable, all-day medical-grade protection. Hypoallergenic.",
+    "buff": "The wearer has advantage on Wisdom (Medicine) checks.",
+    "rarity": "Common",
+    "charges": 5,
+    "price": 45,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/medicoreproclinicalwhite.jpg"
+  },
+  {
+    "id": 18,
+    "name": "MediCore Pro ComfortBlue",
+    "aesthetic": "Soft baby blue with a subtle moisture indicator strip that changes from yellow to blue.",
+    "description": "Wide, skin-friendly tapes and a slightly slimmer medium bulk offer comfort for sensitive skin without sacrificing absorbency. pH-balanced top sheet.",
+    "buff": "",
+    "rarity": "Mundane",
+    "charges": 4,
+    "price": 10,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/medicoreprocomfortblue.jpg"
+  },
+  {
+    "id": 19,
+    "name": "MediCore Pro Discreet Beige",
+    "aesthetic": "A plain, matte beige color designed to be inconspicuous under light-colored clothing.",
+    "description": "Features two low-profile, yet secure, tapes and a minimal bulk design for maximum discretion. Odor-lock technology.",
+    "buff": "Creatures have disadvantage on Wisdom (Perception) checks made to notice the wearer based on smell.",
+    "rarity": "Common",
+    "charges": 4,
+    "price": 30,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/medicoreprodiscreetbeige.jpg"
+  },
+  {
+    "id": 20,
+    "name": "ToughTikes Tactical Urban Camo",
+    "aesthetic": "A modern urban camouflage pattern in shades of grey, black, and dark blue.",
+    "description": "Three ultra-strong \"Lock-Down\" tapes and a reinforced outer shell provide high durability with a surprisingly light bulk for maneuverability. Water-resistant outer layer.",
+    "buff": "The wearer has advantage on Dexterity (Stealth) checks made in urban environments.",
+    "rarity": "Uncommon",
+    "charges": 6,
+    "price": 80,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/toughtikestacticalburbancamo.jpg"
+  },
+  {
+    "id": 21,
+    "name": "ToughTikes Tactical Desert Ops",
+    "aesthetic": "A desert camouflage print in tan, brown, and khaki, with a slightly gritty texture.",
+    "description": "Four wide, sand-proof tapes and a rugged, tear-resistant material make it ideal for harsh environments, offering robust medium bulk.",
+    "buff": "The wearer has advantage on Constitution saving throws made to avoid exhaustion due to hot weather.",
+    "rarity": "Uncommon",
+    "charges": 7,
+    "price": 95,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/toughtikestacticaldesertops.jpg"
+  },
+  {
+    "id": 22,
+    "name": "ToughTikes Tactical Jungle Green",
+    "aesthetic": "Deep jungle green with a subtle leaf-vein pattern.",
+    "description": "Equipped with four heavy-duty, quick-release buckle-style tapes and a thick, absorbent core for extended missions. Anti-chafing design. Robust extra bulk.",
+    "buff": "The wearer has advantage on Dexterity (Stealth) checks made in forest or jungle terrain.",
+    "rarity": "Uncommon",
+    "charges": 7,
+    "price": 100,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/toughtikestacticaljunglegreen.jpg"
+  },
+  {
+    "id": 23,
+    "name": "AeroDry Active Racer Red",
+    "aesthetic": "Bright red with sleek silver racing stripes and a dynamic swoosh.",
+    "description": "Two aerodynamic \"Speed-Tab\" tapes and an ultra-minimal bulk design for maximum freedom of movement during sports. Breathable side panels.",
+    "buff": "The wearer can take the Dash action as a bonus action.",
+    "rarity": "Uncommon",
+    "charges": 5,
+    "price": 110,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/aerodryactiveracerred.jpg"
+  },
+  {
+    "id": 24,
+    "name": "AeroDry Active HydroCool",
+    "aesthetic": "Cool aqua blue with a subtle wave pattern and breathable mesh-look side panels.",
+    "description": "Features four moisture-wicking tapes and a lightweight, quick-absorbing core for intense workouts. Cooling sensation technology. Minimal bulk.",
+    "buff": "The wearer gains resistance to fire damage.",
+    "rarity": "Rare",
+    "charges": 6,
+    "price": 125,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/aerodryactivehydrocool.jpg"
+  },
+  {
+    "id": 25,
+    "name": "AeroDry Active Stealth Black",
+    "aesthetic": "Matte black with thin, reflective grey pinstripes.",
+    "description": "Two extra-secure, low-profile tapes and a body-hugging minimal bulk fit for under athletic wear. Anti-odor core.",
+    "buff": "The wearer has advantage on Dexterity (Stealth) checks made in dim light or darkness.",
+    "rarity": "Uncommon",
+    "charges": 5,
+    "price": 90,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/aerodryactivestealthblack.jpg"
+  },
+  {
+    "id": 26,
+    "name": "CloudSoft Serenity",
+    "aesthetic": "Plain pastel lavender with a soft, almost velvety texture. No loud crinkle.",
+    "description": "Features two wide, ultra-soft hook-and-loop tapes and a plush, cloud-like medium bulk. Infused with aloe and vitamin E.",
+    "buff": "The wearer has advantage on saving throws against being charmed.",
+    "rarity": "Uncommon",
+    "charges": 6,
+    "price": 80,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/cloudsoftserenity.jpg"
+  },
+  {
+    "id": 27,
+    "name": "CloudSoft DreamWeaver",
+    "aesthetic": "Pale pink with a delicate white lace print and tiny embroidered-look roses on the wings.",
+    "description": "Four gentle, refastenable tapes and a luxurious, fluffy extra bulk for ultimate nighttime comfort. Silk-like inner lining.",
+    "buff": "When the wearer finishes a long rest, they gain inspiration.",
+    "rarity": "Uncommon",
+    "charges": 7,
+    "price": 100,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/cloudsoftdreamweaver.jpg"
+  },
+  {
+    "id": 28,
+    "name": "CloudSoft Pure White",
+    "aesthetic": "An immaculate, pure white with a subtle quilted pattern.",
+    "description": "Two extra-wide, cushioned tapes for a secure yet gentle fit. Moderate bulk, designed for sensitive skin with maximum softness.",
+    "buff": "",
+    "rarity": "Mundane",
+    "charges": 5,
+    "price": 15,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/cloudsoftpurewhite.jpg"
+  },
+  {
+    "id": 29,
+    "name": "StarSailor Cadets",
+    "aesthetic": "Deep space blue with a vibrant print of cartoon rockets, planets (Saturn, Mars, Earth-like), astronauts, and friendly aliens. Glow-in-the-dark stars.",
+    "description": "Features \"Galaxy-Grip\" tapes. Medium bulk with a comfortable, absorbent core for aspiring space explorers.",
+    "buff": "The wearer knows the Light cantrip.",
+    "rarity": "Common",
+    "charges": 4,
+    "price": 25,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/starsailorcadets.jpg"
+  },
+  {
+    "id": 30,
+    "name": "StarSailor Nebula Nights",
+    "aesthetic": "Swirling nebula pattern in shades of purple, pink, and deep blue, with scattered glitter-effect stars.",
+    "description": "Slightly increased bulk for overnight voyages. Features a special \"Cosmic Comfort\" core.",
+    "buff": "Once per long rest, the wearer can cast Color Spray as a 1st-level spell.",
+    "rarity": "Uncommon",
+    "charges": 7,
+    "price": 120,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/starsailornebulanights.jpg"
+  },
+  {
+    "id": 31,
+    "name": "CritterCaboose Farm Friends",
+    "aesthetic": "Bright yellow background with a repeating pattern of cheerful cartoon farm animals: cows, pigs, sheep, and chickens. Red barn landing zone.",
+    "description": "Sturdy, easy-to-use tapes. Medium bulk, designed for playful days and comfortable naptimes.",
+    "buff": "The wearer has advantage on Wisdom (Animal Handling) checks with farm animals.",
+    "rarity": "Common",
+    "charges": 4,
+    "price": 30,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/crittercaboosefarmfriends.jpg"
+  },
+  {
+    "id": 32,
+    "name": "CritterCaboose Jungle Jamboree",
+    "aesthetic": "Lush green background with cartoon monkeys, lions, elephants, and parrots. A large banana bunch serves as the landing zone.",
+    "description": "Reinforced \"Vine-Lock\" tapes. Resilient medium bulk for wild adventures. Odor-resistant.",
+    "buff": "The wearer has advantage on Strength (Athletics) checks made to climb.",
+    "rarity": "Common",
+    "charges": 5,
+    "price": 40,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/crittercaboosejunglejamboree.png"
+  },
+  {
+    "id": 33,
+    "name": "RetroRumps Groovy Daisy",
+    "aesthetic": "Bright orange and yellow 70s style daisies on a white background. Peace sign landing zone.",
+    "description": "Features classic sticky tapes and a surprisingly absorbent, fluffy medium bulk. For a touch of vintage fun.",
+    "buff": "The wearer has advantage on Charisma (Performance) checks.",
+    "rarity": "Common",
+    "charges": 4,
+    "price": 35,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/retrorumpsgroovydaisy.jpg"
+  },
+  {
+    "id": 34,
+    "name": "RetroRumps Pixel Play",
+    "aesthetic": "Black background with 8-bit style pixel art of classic arcade characters (generic space invaders, pac-dots, cherries). Joystick landing zone.",
+    "description": "Wide, secure tapes. Moderate bulk with a nostalgic crinkle. Perfect for gamers.",
+    "buff": "The wearer gains a +1 bonus to attack rolls with ranged spell attacks.",
+    "rarity": "Uncommon",
+    "charges": 6,
+    "price": 85,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/retrorumpspixelplay.jpg"
+  },
+  {
+    "id": 35,
+    "name": "AquaPaws SplashZone",
+    "aesthetic": "Ocean blue with a pattern of happy cartoon sea creatures: dolphins, fish, crabs, and starfish. A large seashell as the landing zone.",
+    "description": "Specifically designed for water resistance (not full waterproofing for swimming, but high protection). Two extra-sticky, water-resistant tapes. Light bulk.",
+    "buff": "The wearer gains a swimming speed equal to their walking speed for 10 minutes, once per long rest.",
+    "rarity": "Uncommon",
+    "charges": 4,
+    "price": 75,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/aquapawssplashzone.jpg"
+  },
+  {
+    "id": 36,
+    "name": "PuffyPaws Puppy Parade",
+    "aesthetic": "Light blue with a parade of various cartoon puppy breeds (dalmatians, labradors, poodles) wearing colorful collars. A large dog bone as the landing zone.",
+    "description": "Soft, refastenable tapes. Fluffy medium bulk with a \"Stay-Dry\" top layer to keep skin comfortable.",
+    "buff": "The wearer has advantage on Wisdom (Perception) checks that rely on hearing or smell.",
+    "rarity": "Uncommon",
+    "charges": 5,
+    "price": 50,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/puffypawspuppyparade.jpg"
+  },
+  {
+    "id": 37,
+    "name": "PuffyPaws KittenCuddle",
+    "aesthetic": "Soft pink with playful cartoon kittens chasing balls of yarn and butterflies. A large yarn ball as the landing zone.",
+    "description": "Extra-wide, gentle tapes. Plush extra bulk for maximum absorbency and a soft feel. Lightly powder-scented.",
+    "buff": "The wearer has advantage on Dexterity (Acrobatics) checks.",
+    "rarity": "Common",
+    "charges": 6,
+    "price": 45,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/puffypawskittencuddle.jpg"
+  },
+  {
+    "id": 38,
+    "name": "BuildABot Workshop",
+    "aesthetic": "Metallic silver background with colorful cartoon robots, gears, and tools. A \"blueprint\" style landing zone.",
+    "description": "Industrial-look reinforced tapes. Moderate bulk with a durable outer layer for little mechanics.",
+    "buff": "The wearer gains proficiency with tinker's tools.",
+    "rarity": "Uncommon",
+    "charges": 5,
+    "price": 80,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/buildabotworkshop.jpg"
+  },
+  {
+    "id": 39,
+    "name": "EnchantedForest FaeWings",
+    "aesthetic": "Mossy green and twilight purple with shimmering fairy wings, glowing mushrooms, and silhouettes of forest sprites.",
+    "description": "Two delicate but strong \"Leaf-Clasp\" tapes. Light, ethereal bulk with a surprisingly absorbent core. Subtle floral scent.",
+    "buff": "The wearer can cast Druidcraft at will.",
+    "rarity": "Uncommon",
+    "charges": 6,
+    "price": 90,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/enchantedforestfaewings.jpg"
+  },
+  {
+    "id": 40,
+    "name": "SweetTreats SprinkleDay",
+    "aesthetic": "White background covered in a vibrant explosion of colorful candy sprinkles, gummy bears, and lollipops. A large cupcake as the landing zone.",
+    "description": "Four fun, candy-striped tapes. Medium bulk with a sweet, vanilla-like scent. For an extra cheerful day.",
+    "buff": "Once per day, the wearer can use an action to create a nonmagical sweet treat worth 1 cp.",
+    "rarity": "Common",
+    "charges": 4,
+    "price": 25,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/sweettreatssprinkleday.jpg"
+  },
+  {
+    "id": 41,
+    "name": "NightGuard SecureSleep Plain White",
+    "aesthetic": "Simple, thick, plain white design with no prints for maximum discretion under pajamas.",
+    "description": "Four oversized, ultra-secure tapes for overnight use. Extra-high absorbency and robust bulk for total peace of mind. Features tall leak guards.",
+    "buff": "The wearer cannot be surprised while sleeping and awakens if hostile creatures approach within 30 feet.",
+    "rarity": "Rare",
+    "charges": 8,
+    "price": 160,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/nightguardsecuresleepplainwhite.jpg"
+  },
+  {
+    "id": 42,
+    "name": "NightGuard SecureSleep Starry Blue",
+    "aesthetic": "Deep navy blue with a subtle pattern of faint, distant silver stars.",
+    "description": "Oversized, ultra-secure tapes. Extra-high absorbency and robust bulk. Same features as Plain White but with a gentle print.",
+    "buff": "",
+    "rarity": "Mundane",
+    "charges": 7,
+    "price": 15,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/nightguardsecuresleepstarryblue.jpg"
+  },
+  {
+    "id": 43,
+    "name": "TerraGentle Bamboo Bliss",
+    "aesthetic": "Natural beige color with a subtle green bamboo stalk print.",
+    "description": "Made with biodegradable materials and bamboo fibers. Gentle, plant-based tapes. Light-to-medium bulk, hypoallergenic and fragrance-free.",
+    "buff": "The wearer has advantage on saving throws against poison.",
+    "rarity": "Uncommon",
+    "charges": 5,
+    "price": 80,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/terragentlebamboobliss.jpg"
+  },
+  {
+    "id": 44,
+    "name": "TerraGentle Earthly Calm",
+    "aesthetic": "Muted earth tones (soft browns, greens, and creams) in an abstract, flowing pattern resembling natural landscapes.",
+    "description": "Eco-friendly design with secure, compostable tapes and backing. Moderate bulk, focusing on natural comfort and sustainability.",
+    "buff": "The wearer can attempt to hide even when they are only lightly obscured by natural foliage or earth.",
+    "rarity": "Uncommon",
+    "charges": 6,
+    "price": 85,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/terragentleearthlycalm.jpg"
+  },
+  {
+    "id": 45,
+    "name": "RoyalRest Velvet Night",
+    "aesthetic": "Deep burgundy or sapphire blue with a velvet-like finish and subtle gold embroidered-look accents.",
+    "description": "Ornate, strong tapes. Luxurious extra bulk with a quilted inner lining for supreme comfort. Designed for a regal experience.",
+    "buff": "The wearer has advantage on Charisma (Intimidation) checks.",
+    "rarity": "Rare",
+    "charges": 8,
+    "price": 150,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/royalrestvelvetnight.jpg"
+  },
+  {
+    "id": 46,
+    "name": "RoyalRest SilkDay",
+    "aesthetic": "Pearl white or champagne with a delicate damask pattern.",
+    "description": "Discreet, silk-covered tapes. Slim, moderate bulk for elegant daytime wear. Infused with skin-soothing emollients.",
+    "buff": "",
+    "rarity": "Mundane",
+    "charges": 5,
+    "price": 12,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/royalrestsilkday.jpg"
+  },
+  {
+    "id": 47,
+    "name": "ConstructoMax Zone",
+    "aesthetic": "Bright yellow with black and yellow caution stripes, featuring cartoon bulldozers, cranes, and dump trucks. \"Danger: Cute Load\" landing zone.",
+    "description": "Heavy-duty \"WorkSite\" tapes. Robust medium bulk designed to withstand rough and tumble play.",
+    "buff": "The wearer has advantage on Strength checks made to break objects.",
+    "rarity": "Uncommon",
+    "charges": 6,
+    "price": 90,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/constructomaxzone.png"
+  },
+  {
+    "id": 48,
+    "name": "HolidayCheer SnowflakeSnuggle",
+    "aesthetic": "Icy blue and white with a pattern of delicate snowflakes and cute snowmen wearing hats and scarves.",
+    "description": "Fluffy medium bulk with a hint of peppermint scent. Limited edition for winter holidays.",
+    "buff": "The wearer gains resistance to cold damage.",
+    "rarity": "Uncommon",
+    "charges": 5,
+    "price": 100,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/holidaycheersnowflakesnuggle.jpg"
+  },
+  {
+    "id": 49,
+    "name": "HolidayCheer PumpkinPatchPlay",
+    "aesthetic": "Autumn orange with a pattern of smiling jack-o'-lanterns, candy corn, and falling leaves.",
+    "description": "Three spooky-themed black and orange tapes. Medium bulk with a light cinnamon spice scent. Limited edition for fall/Halloween.",
+    "buff": "The wearer can cast Minor Illusion to create a spooky sound or image once per long rest.",
+    "rarity": "Common",
+    "charges": 4,
+    "price": 30,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/holidaycheerpumpkinpatchplay.jpg"
+  },
+  {
+    "id": 50,
+    "name": "UniGuard Basic White",
+    "aesthetic": "A standard, plain white diaper with a simple blue wetness indicator line.",
+    "description": "Reliable tapes. Moderate bulk, designed as an affordable, all-purpose option for everyday needs.",
+    "buff": "",
+    "rarity": "Mundane",
+    "charges": 3,
+    "price": 5,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/unigardbasicwhite.jpg"
+  },
+  {
+    "id": 51,
+    "name": "UniGuard Value Pack Blue",
+    "aesthetic": "Light blue solid color.",
+    "description": "Two sturdy tapes. Medium bulk, offering dependable protection at a budget-friendly price point.",
+    "buff": "",
+    "rarity": "Mundane",
+    "charges": 3,
+    "price": 3,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/uniguardvaluepackblue.jpg"
+  },
+  {
+    "id": 52,
+    "name": "StealthOps Covert Black",
+    "aesthetic": "Pure, matte black with no markings. Designed for ultimate discretion under dark clothing.",
+    "description": "Ultra-thin, yet super-strong, black tapes. Minimal bulk with high-tech absorbent polymers. Noise-dampening outer layer.",
+    "buff": "The wearer's footsteps make no sound.",
+    "rarity": "Rare",
+    "charges": 7,
+    "price": 160,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/stealthopscovertblack.jpg"
+  },
+  {
+    "id": 53,
+    "name": "StealthOps Nightshade Grey",
+    "aesthetic": "Dark charcoal grey with a very subtle carbon fiber texture.",
+    "description": "Three low-profile, secure tapes. Light bulk with excellent absorbency for discreet overnight operations or formal wear.",
+    "buff": "The wearer has advantage on Dexterity (Stealth) checks made in dim light or darkness.",
+    "rarity": "Uncommon",
+    "charges": 6,
+    "price": 95,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/stealthopsnightshadegray.jpg"
+  },
+  {
+    "id": 54,
+    "name": "BabySaurus Prehistoric Prints",
+    "aesthetic": "A mix of earthy tones (browns, greens, oranges) with more detailed and slightly realistic (but still cute) dinosaur illustrations and fossil prints.",
+    "description": "Four \"Fossil-Lock\" tapes. Robust medium bulk with extra absorbency for long explorations.",
+    "buff": "The wearer has advantage on Wisdom (Survival) checks to track large beasts.",
+    "rarity": "Uncommon",
+    "charges": 6,
+    "price": 80,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/babysaurusprehistoricprints.jpg"
+  },
+  {
+    "id": 55,
+    "name": "Lil' Swashbuckler Treasure Trove",
+    "aesthetic": "Cream-colored background resembling an old map, with cartoon pirate ships, treasure chests, parrots, and \"X marks the spot.\" Skull and crossbones landing zone (friendly version).",
+    "description": "Three \"Anchor-Fast\" tapes. Medium bulk designed for high seas adventures and active play.",
+    "buff": "The wearer has advantage on ability checks made to navigate or pilot a water vehicle.",
+    "rarity": "Uncommon",
+    "charges": 5,
+    "price": 75,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/lilswashbucklertreasuretrove.jpg"
+  },
+  {
+    "id": 56,
+    "name": "CosmicCuddles Alien Friends",
+    "aesthetic": "Bright purple with friendly, googly-eyed cartoon aliens in various shapes and colors, UFOs, and swirling galaxies.",
+    "description": "\"Beam-Me-Up\" tapes with a glittery finish. Fluffy medium bulk with a \"Zero-Gravity\" comfort fit.",
+    "buff": "The wearer can understand and be understood by any creature with an Intelligence of 4 or higher that speaks a language, as if under the effects of Comprehend Languages for 1 hour. This can be used once per long rest.",
+    "rarity": "Rare",
+    "charges": 7,
+    "price": 125,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/cosmiccuddlesalienfriends.jpg"
+  },
+  {
+    "id": 57,
+    "name": "Totacare Ultra-Fit, White",
+    "aesthetic": "Clean, medical white with a subtle texture for enhanced grip and comfort. Features a light blue sizing indicator.",
+    "description": "Four strong, refastenable tapes designed for a secure, anatomical fit. Moderate bulk with advanced absorbent core for extended wear.",
+    "buff": "",
+    "rarity": "Mundane",
+    "charges": 5,
+    "price": 10,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/totacareultrafitwhite.jpg"
+  },
+  {
+    "id": 58,
+    "name": "Totacare Ultra-Fit, Eveningware Black",
+    "aesthetic": "Sleek, sophisticated black, designed to be discreet under formal or dark attire.",
+    "description": "Four low-profile, yet highly secure, black tapes. Moderate bulk with the same advanced absorbent core as the white version, ensuring reliable protection with a touch of elegance.",
+    "buff": "The wearer has advantage on Charisma (Deception) checks made to appear unassuming or blend into a crowd.",
+    "rarity": "Common",
+    "charges": 5,
+    "price": 40,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/totacareultrafiteveningwareblack.jpg"
+  },
+  {
+    "id": 59,
+    "name": "DreamyDrifters Cloud Nine",
+    "aesthetic": "Pale sky blue fading into soft white, adorned with fluffy, three-dimensional looking clouds and tiny, sleepy sheep jumping over them.",
+    "description": "Two extra-wide, cushioned \"Cloud-Touch\" tapes. Luxurious extra bulk with a super-soft, breathable outer cover for ultimate nighttime comfort.",
+    "buff": "The wearer can cast Levitate on themselves once per long rest.",
+    "rarity": "Rare",
+    "charges": 8,
+    "price": 155,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/dreamydrifterscloudnine.png"
+  },
+  {
+    "id": 60,
+    "name": "PowerPuff Protectors",
+    "aesthetic": "Bright, bold superhero-themed design with primary colors (red, blue, yellow), lightning bolts, stars, and a generic \"Super Baby\" emblem on the front.",
+    "description": "Three \"Hero-Hold\" tapes with a dynamic design. Medium bulk with reinforced side panels for active little heroes.",
+    "buff": "Once per day, the wearer can use their reaction to add their proficiency bonus to an ally's AC against one attack.",
+    "rarity": "Uncommon",
+    "charges": 6,
+    "price": 90,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/PowerPuffProtectors.jpg"
+  },
+  {
+    "id": 61,
+    "name": "GentleGlider Ultra",
+    "aesthetic": "Elegantly crafted with gently flowing lines and artisan detailing in soft lavender and cream. Luxuriously smooth texture.",
+    "description": "Its luxuriously smooth texture pairs with a carefully positioned pair of robust tapes, delivering an elegant yet effective solution with a low-to-medium bulk.",
+    "buff": "The wearer gains proficiency in one Charisma-based skill of their choice.",
+    "rarity": "Uncommon",
+    "charges": 5,
+    "price": 80,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/gentlegliderultra.jpg"
+  },
+  {
+    "id": 62,
+    "name": "BriteMinder Supreme",
+    "aesthetic": "Refined design with subtle, luminescent motifs that glow in dim light.",
+    "description": "Tailored for the academic elite, BriteMinder Supreme sports extra-durable, finely stitched tapes and balanced moderate bulk offer advanced moisture control for discreet, long-lasting use.",
+    "buff": "The wearer has advantage on Intelligence (Investigation) checks.",
+    "rarity": "Uncommon",
+    "charges": 6,
+    "price": 100,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/briteminder.jpg"
+  },
+  {
+    "id": 63,
+    "name": "ArmoCotton 500",
+    "aesthetic": "Robust fabric with an industrial aesthetic, likely in muted greys, olives, or blacks.",
+    "description": "Engineered for the battlefield, this heavy-duty diaper combines robust fabric with an industrial aesthetic. With a triple-layer reinforcement system and double extra-strong tapes, ArmoCotton 500 is built to endure intense use while providing high absorbency, though it boasts a slightly heavier bulk.",
+    "buff": "The wearer reduces any bludgeoning, piercing, or slashing damage they take from nonmagical weapons by 1.",
+    "rarity": "Rare",
+    "charges": 7,
+    "price": 120,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/ArmoCotton500.jpg"
+  },
+  {
+    "id": 64,
+    "name": "DiapoTech V3",
+    "aesthetic": "High-tech marvel featuring embedded sensors and a sleek digital pattern that indicates usage levels.",
+    "description": "DiapoTech V3 adjusts dynamically with its innovative tape system. Optimized for secure fit and efficient moisture distribution, it maintains a low-to-medium bulk to keep you moving without interruption.",
+    "buff": "The wearer can use an action to learn the current hit points of one creature they can see within 30 feet. This can be used a number of times equal to their proficiency bonus per long rest.",
+    "rarity": "Uncommon",
+    "charges": 6,
+    "price": 85,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/diapotechv3.jpg"
+  },
+  {
+    "id": 65,
+    "name": "PlushPanda Discreet",
+    "aesthetic": "Adorable panda illustrations with an elegant, subtle trim.",
+    "description": "For those who appreciate a playful edge, PlushPanda Discreet pairs adorable panda illustrations with an elegant, subtle trim. Featuring two high-strength yet soft tapes and designed to demonstrate remarkably low bulk, it proves you can have both whimsy and reliability in your undergarments.",
+    "buff": "The wearer has advantage on Dexterity (Stealth) checks when attempting to move silently.",
+    "rarity": "Common",
+    "charges": 4,
+    "price": 35,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/plushpandadiscreet.jpg"
+  },
+  {
+    "id": 66,
+    "name": "EcoSorb Naturals",
+    "aesthetic": "Stylish leafy-green design on biodegradable materials. Simple, organic pattern.",
+    "description": "For the eco-conscious wearer, EcoSorb Naturals offers a sustainable solution crafted from biodegradable materials. Its naturally elastic structure and simple, organic pattern not only provide reliable protection but also promote environmental awareness. (Assumed tapes are integrated or eco-friendly).",
+    "buff": "The wearer can cast Goodberry once per long rest, creating berries that are particularly nourishing.",
+    "rarity": "Common",
+    "charges": 4,
+    "price": 40,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/ecosorbnaturals.jpg"
+  },
+  {
+    "id": 67,
+    "name": "FutureFlex Adapt",
+    "aesthetic": "Minimalist visual design, likely solid neutral or futuristic colors.",
+    "description": "Blending futuristic innovation with everyday convenience, FutureFlex Adapt employs smart fabric technology that dynamically conforms to the wearer's shape. With an adaptive sizing mechanism, this diaper offers a personalized, discreet fit for the modern user. (Tape system implied to be adaptive/integrated).",
+    "buff": "The wearer can use a bonus action to gain a +1 bonus to their AC until the start of their next turn. This can be used a number of times equal to their proficiency bonus per long rest.",
+    "rarity": "Rare",
+    "charges": 7,
+    "price": 150,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/futureflexadapt.jpg"
+  },
+  {
+    "id": 68,
+    "name": "PurePamp P-Guard",
+    "aesthetic": "Streamlined, no-frills design rendered in pristine white.",
+    "description": "A streamlined, no-frills diaper designed strictly for function. Rendered in pristine white with a tape reinforcement system and a compact, low-bulk profile, PurePamp P-Guard is ideal for situations where simplicity and efficiency are paramount.",
+    "buff": "",
+    "rarity": "Mundane",
+    "charges": 3,
+    "price": 8,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/purepamppguard.jpg"
+  },
+  {
+    "id": 69,
+    "name": "CloudNine Cozy – White",
+    "aesthetic": "Solid pure white variant with a minimalistic design.",
+    "description": "A cloud-soft diaper available in a solid pure white variant. It offers extremely gentle absorbency with a minimalistic design featuring a single, central tape and an almost weightless, low-profile bulk—perfect for daily wear.",
+    "buff": "The wearer is immune to the effects of extreme cold (but not cold damage).",
+    "rarity": "Uncommon",
+    "charges": 5,
+    "price": 100,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/cloudninecozywhite.jpg"
+  },
+  {
+    "id": 70,
+    "name": "CloudNine Cozy – Pastel Mix",
+    "aesthetic": "Soothing mix of pastel hues in gentle gradients. Cloud-soft finish.",
+    "description": "A variant of CloudNine Cozy that features a soothing mix of pastel hues in gentle gradients. It utilizes two flexible tapes and maintains that signature cloud-soft finish while adding a touch of visual elegance to everyday comfort.",
+    "buff": "",
+    "rarity": "Mundane",
+    "charges": 4,
+    "price": 10,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/cloudninecozypastelblue.jpg"
+  },
+  {
+    "id": 71,
+    "name": "Diapress Supreme",
+    "aesthetic": "Sleek graphite-gray finish.",
+    "description": "Engineered for advanced precision, Diapress Supreme comes in a sleek graphite-gray finish. It includes four reinforced tapes for maximum security and boasts a slim, streamlined bulk without compromising on performance.",
+    "buff": "The wearer has advantage on one attack roll, ability check, or saving throw they make. This can be used once per long rest.",
+    "rarity": "Rare",
+    "charges": 7,
+    "price": 125,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/diapresssupreme.jpg"
+  },
+  {
+    "id": 72,
+    "name": "EverSeal Secure – Standard",
+    "aesthetic": "Classic diaper design in standard off-white.",
+    "description": "A classic diaper design in standard off-white focused on durability. With two layered tapes for added strength and a firm yet comfortable moderate bulk, EverSeal Secure is perfect for everyday secure use.",
+    "buff": "",
+    "rarity": "Mundane",
+    "charges": 4,
+    "price": 9,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/eversealsecurestandard.jpg"
+  },
+  {
+    "id": 73,
+    "name": "EverSeal Secure – Blue",
+    "aesthetic": "Stylish cool blue finish.",
+    "description": "A modern variant of EverSeal Secure offering a stylish cool blue finish. It features the same reinforced dual-tape system with a sturdy build and moderate bulk to deliver continuous protection with a contemporary flair.",
+    "buff": "",
+    "rarity": "Mundane",
+    "charges": 4,
+    "price": 9,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/eversealsecureblue.jpg"
+  },
+  {
+    "id": 74,
+    "name": "CozyCuddle Solo",
+    "aesthetic": "Plain, understated diaper available solely in soft beige. Minimalist design.",
+    "description": "Its minimalist design emphasizes simplicity and comfort, using two secure tapes coupled with a gentle, low-profile bulk for reliable daily performance.",
+    "buff": "",
+    "rarity": "Mundane",
+    "charges": 3,
+    "price": 7,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/cozycuddlesolo.jpg"
+  },
+  {
+    "id": 75,
+    "name": "QuikFix Preventer",
+    "aesthetic": "Vibrant red design.",
+    "description": "Optimized for rapid changes, QuikFix Preventer boasts a vibrant red design with an innovative quick-release tape system. Crafted in a lightweight bulk, it offers speedy application without sacrificing security.",
+    "buff": "The wearer can use an object interaction to don or doff this diaper as a bonus action.",
+    "rarity": "Common",
+    "charges": 4,
+    "price": 30,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/quickfixpreventer.jpg"
+  },
+  {
+    "id": 76,
+    "name": "Trim Tush Tactics",
+    "aesthetic": "Sports-inspired diaper in sleek black featuring streamlined, aerodynamic lines.",
+    "description": "With two reinforced side tapes ensuring a tight, secure fit, and a light-to-moderate bulk, it’s tailored for active scenarios.",
+    "buff": "The wearer's speed increases by 10 feet if they are not wearing heavy armor.",
+    "rarity": "Uncommon",
+    "charges": 5,
+    "price": 115,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/trimtushtactics.jpg"
+  },
+  {
+    "id": 77,
+    "name": "UltraFresh I-Guard",
+    "aesthetic": "Crisp white diaper highlighting a design focused on hygiene and freshness.",
+    "description": "Equipping three adaptive tapes, UltraFresh I-Guard ensures a form-fitting, low-to-medium bulk optimized for demanding conditions.",
+    "buff": "The wearer has advantage on saving throws against effects that cause the poisoned condition.",
+    "rarity": "Uncommon",
+    "charges": 6,
+    "price": 80,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/ultrafreshiguard.jpg"
+  },
+  {
+    "id": 78,
+    "name": "Daybreak Delicate – Lilac",
+    "aesthetic": "Soft lilac with delicate floral embroidery along the trim.",
+    "description": "An elegantly designed diaper in soft lilac. It comes with a refined two-tape system and a low-to-medium bulk, offering both high absorbency and graceful aesthetics.",
+    "buff": "The wearer can cast Friends cantrip once per long rest.",
+    "rarity": "Common",
+    "charges": 4,
+    "price": 25,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/daybreakdelicatelililac.jpg"
+  },
+  {
+    "id": 79,
+    "name": "Daybreak Delicate – Sky Blue",
+    "aesthetic": "Serene sky blue with subtle patterns.",
+    "description": "A serene variant of Daybreak Delicate in sky blue. Its subtle patterns and tailored fit combine aesthetic appeal with practical performance, complete with two delicately locking tapes.",
+    "buff": "",
+    "rarity": "Mundane",
+    "charges": 4,
+    "price": 8,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/daybreakdelicateskyblue.jpg"
+  },
+  {
+    "id": 80,
+    "name": "All-Weather Shield",
+    "aesthetic": "Utilitarian olive finish.",
+    "description": "Built to excel in any environment, All-Weather Shield features a utilitarian olive finish, extra durable tapes, and a sturdy industrial bulk designed to withstand rough conditions and continuous use.",
+    "buff": "The wearer gains advantage on Constitution saving throws to resist the effects of extreme weather (cold or hot).",
+    "rarity": "Uncommon",
+    "charges": 7,
+    "price": 100,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/allweathershield.jpg"
+  },
+  {
+    "id": 81,
+    "name": "Urban Oasis – Metro Olive",
+    "aesthetic": "Trendy urban diaper in a sleek metro olive hue. Modern, slim design.",
+    "description": "With three precision-engineered tapes and a modern, slim design, Urban Oasis – Metro Olive is perfect for the fast-moving urban warrior.",
+    "buff": "",
+    "rarity": "Mundane",
+    "charges": 5,
+    "price": 12,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/urbanoasismetroolive.jpg"
+  },
+  {
+    "id": 82,
+    "name": "Urban Oasis – City Blue",
+    "aesthetic": "Deep, rich blue tone. Slim, adaptive bulk.",
+    "description": "An alternative variant featuring a deep, rich blue tone. Retaining the high-performance three-tape structure and a slim, adaptive bulk, Urban Oasis – City Blue caters to sophisticated metropolitan needs.",
+    "buff": "",
+    "rarity": "Mundane",
+    "charges": 5,
+    "price": 12,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/urbanoasiscityblue.jpg"
+  },
+  {
+    "id": 83,
+    "name": "CrispSecure Basic",
+    "aesthetic": "Straightforward, plain-style diaper in a sterile white finish.",
+    "description": "CrispSecure Basic emphasizes pure functionality with a single reinforced tape and minimal bulk for uncomplicated, reliable protection.",
+    "buff": "",
+    "rarity": "Mundane",
+    "charges": 3,
+    "price": 6,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/crispsecurebasic.jpg"
+  },
+  {
+    "id": 84,
+    "name": "Guardian Glide",
+    "aesthetic": "Soft gray finish. Subtle refined style.",
+    "description": "Exuding dependable protection, Guardian Glide offers a soft gray finish with consistent performance. Featuring two centrally placed tapes and a moderate bulk, it’s designed to provide both reliability and subtle refined style.",
+    "buff": "When an attacker the wearer can see hits them with an attack, they can use their reaction to halve the attack's damage against them. This can be used once per long rest.",
+    "rarity": "Rare",
+    "charges": 6,
+    "price": 110,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/guardianglide.png"
+  },
+  {
+    "id": 85,
+    "name": "SentrySnug",
+    "aesthetic": "Dark navy finish. Compact yet resilient construction.",
+    "description": "Designed for robust security, SentrySnug sports a dark navy finish and heavy-duty dual tapes. Its compact yet resilient construction makes it an excellent choice for high-demand situations.",
+    "buff": "The wearer gains a +1 bonus to their passive Wisdom (Perception) score.",
+    "rarity": "Uncommon",
+    "charges": 5,
+    "price": 75,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/sentrysnug.png"
+  },
+  {
+    "id": 86,
+    "name": "FlexiFit Elite",
+    "aesthetic": "Sleek silver-gray aesthetic with dynamic stretch.",
+    "description": "A premium diaper that boasts dynamic stretch and adaptive comfort. With a trilayer tape system and adjustable tension settings, FlexiFit Elite delivers futuristic performance at a low-to-medium bulk.",
+    "buff": "The wearer is not slowed by difficult terrain.",
+    "rarity": "Uncommon",
+    "charges": 6,
+    "price": 90,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/flexifitelite.jpg"
+  },
+  {
+    "id": 87,
+    "name": "Harmony Haven",
+    "aesthetic": "Gentle mint-green finish with soft, flowing patterns.",
+    "description": "A design that promotes balance and calm, Harmony Haven comes in a gentle mint-green finish. Its secure dual-tape layout provides a comfortable, minimal bulk perfect for everyday serenity.",
+    "buff": "The wearer has advantage on saving throws against being frightened.",
+    "rarity": "Uncommon",
+    "charges": 5,
+    "price": 80,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/harmonyhaven.jpg"
+  },
+  {
+    "id": 88,
+    "name": "SleekShield Lite",
+    "aesthetic": "Understated charcoal finish. Minimalistic tape system.",
+    "description": "A lightweight option featuring an understated charcoal finish, SleekShield Lite presents a minimalistic tape system and an ultra-light bulk—ideal for quick, agile protection.",
+    "buff": "",
+    "rarity": "Mundane",
+    "charges": 4,
+    "price": 9,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/sleekshieldlite.jpg"
+  },
+  {
+    "id": 89,
+    "name": "MightyMuffle",
+    "aesthetic": "Robust dark maroon design. Notably bulky profile.",
+    "description": "Built for durability and high performance, MightyMuffle sports a robust dark maroon design, a heavy triple-tape assembly, and a notably bulky profile engineered for maximum absorbency under stress.",
+    "buff": "The wearer's hit point maximum increases by an amount equal to their level.",
+    "rarity": "Very-Rare",
+    "charges": 9,
+    "price": 190,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/mightymuffle.jpg"
+  },
+  {
+    "id": 90,
+    "name": "PrismPamp Rainbow – Red",
+    "aesthetic": "Bold red accented with geometric splashes.",
+    "description": "A vibrant entry in the PrismPamp Rainbow series, this diaper comes in a bold red. It uses a dual-tape system and carries a medium-to-heavy bulk for striking performance.",
+    "buff": "The wearer can use an action to cause the diaper to emit bright light in a 10-foot radius and dim light for an additional 10 feet for 1 hour. This effect ends if they dismiss it as an action or if the diaper is removed.",
+    "rarity": "Common",
+    "charges": 5,
+    "price": 40,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/prismpampred.jpg"
+  },
+  {
+    "id": 91,
+    "name": "PrismPamp Rainbow – Green",
+    "aesthetic": "Vivid green with eye-catching geometric accents.",
+    "description": "A playful variant of the PrismPamp Rainbow line, presented in vivid green. It features the same secure dual-tape structure and adaptable medium bulk for active appeal.",
+    "buff": "The wearer can use an action to regain 1d4 hit points. This can be used once per short rest.",
+    "rarity": "Common",
+    "charges": 5,
+    "price": 35,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/prismpampgreen.jpg"
+  },
+  {
+    "id": 92,
+    "name": "PrismPamp Rainbow – Blue",
+    "aesthetic": "Expressive blue variant with vibrant color contrasts.",
+    "description": "An expressive blue variant that delivers vibrant color contrasts, accented by an innovative tape layout and balanced with a moderate, reliable bulk for effective moisture management.",
+    "buff": "The wearer has advantage on Constitution saving throws made to maintain concentration on a spell.",
+    "rarity": "Uncommon",
+    "charges": 6,
+    "price": 80,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/prismpampblue.jpg"
+  },
+  {
+    "id": 93,
+    "name": "PrismPamp Rainbow – Yellow",
+    "aesthetic": "Cheerful yellow radiating energy and optimism.",
+    "description": "A cheerful yellow version. This variant, with its dual-tape design and medium bulk, is designed for those who embrace color with confidence and fun.",
+    "buff": "The wearer has advantage on Charisma (Performance) checks that involve singing or dancing.",
+    "rarity": "Common",
+    "charges": 5,
+    "price": 30,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/prismpampyellow.jpg"
+  },
+  {
+    "id": 94,
+    "name": "NeonNurse Glamor – Glow",
+    "aesthetic": "Vibrant neon finish that radiates a luminous quality.",
+    "description": "An arresting diaper from the NeonNurse Glamor series, this variant glows with a vibrant neon finish. Equipped with a quick-apply tape system and an extremely lightweight bulk, it makes a striking statement.",
+    "buff": "The wearer sheds dim light in a 5-foot radius.",
+    "rarity": "Common",
+    "charges": 4,
+    "price": 25,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/neonnurseglow.jpg"
+  },
+  {
+    "id": 95,
+    "name": "NeonNurse Glamor – Spark",
+    "aesthetic": "Bright, electrifying tone.",
+    "description": "Another variant in the NeonNurse Glamor collection, NeonNurse Glamor – Spark features a bright, electrifying tone with an innovative quick-release mechanism and a moderately increased bulk for added resilience.",
+    "buff": "When the wearer hits with a melee attack, they can choose to deal an extra 1d4 lightning damage. This can be used a number of times equal to their proficiency bonus per long rest.",
+    "rarity": "Uncommon",
+    "charges": 6,
+    "price": 90,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/neonnursespark.jpg"
+  },
+  {
+    "id": 96,
+    "name": "NeonNurse Glamor – Pulse",
+    "aesthetic": "Dynamic neon pattern with rhythmic pulsing accents.",
+    "description": "The Pulse variant offers a dynamic neon pattern. With optimized tape positioning and a low-to-medium bulk, it merges functionality with flashy style.",
+    "buff": "",
+    "rarity": "Common",
+    "charges": 5,
+    "price": 15,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/neonnursepulse.jpg"
+  },
+  {
+    "id": 97,
+    "name": "EverLite Breeze",
+    "aesthetic": "Plain, crisp diaper in a flawless white finish. Clean, ergonomic design.",
+    "description": "EverLite Breeze is all about clean, ergonomic design. It uses a precise, single tape system and an extremely lightweight, barely-there bulk.",
+    "buff": "",
+    "rarity": "Common",
+    "charges": 3,
+    "price": 5,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/everlightbreeze.jpg"
+  },
+  {
+    "id": 98,
+    "name": "Starlight Shea – Pink",
+    "aesthetic": "Soft, gentle pink with subtle glitter accents.",
+    "description": "A variant from the Starlight Shea series in a soft, gentle pink. It features subtle glitter accents with two gentle tapes and a low-to-medium bulk, perfect for a sophisticated and delicate look.",
+    "buff": "The wearer gains a +1 bonus to Charisma ability checks.",
+    "rarity": "Uncommon",
+    "charges": 5,
+    "price": 75,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/starlightsheapink.jpg"
+  },
+  {
+    "id": 99,
+    "name": "Starlight Shea – Blue",
+    "aesthetic": "Deeper blue tones with soft shimmer details.",
+    "description": "The blue variant of Starlight Shea exudes calm sophistication with deeper tones and soft shimmer details. It is secured with two robust tapes and maintains a minimalist bulk for stylish performance.",
+    "buff": "",
+    "rarity": "Common",
+    "charges": 4,
+    "price": 10,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/starlightsheablue.jpg"
+  },
+  {
+    "id": 100,
+    "name": "Fortress Flex",
+    "aesthetic": "Dark, armored finish. Thick, heavily padded bulk.",
+    "description": "A heavy-duty option with a dark, armored finish, Fortress Flex is engineered to withstand extreme conditions. Featuring a robust four-tape closure system and a thick, heavily padded bulk, it thrives under high-stress combat scenarios.",
+    "buff": "When the wearer is hit by a melee attack, they can use their reaction to reduce the damage by 1d4.",
+    "rarity": "Rare",
+    "charges": 8,
+    "price": 150,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/fortressflex.jpg"
+  },
+  {
+    "id": 101,
+    "name": "VitalVault",
+    "aesthetic": "Muted bronze design. Solid construction.",
+    "description": "Crafted for security and stability, VitalVault presents a muted bronze design with layered, locking tapes. Its moderate bulk and solid construction offer dependable everyday protection.",
+    "buff": "The wearer has advantage on saving throws against effects that would steal their possessions.",
+    "rarity": "Uncommon",
+    "charges": 6,
+    "price": 80,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/vitalvault.jpg"
+  },
+  {
+    "id": 102,
+    "name": "Plush Perimeter",
+    "aesthetic": "Velvet-like finish in deep burgundy. Generously cushioned bulk.",
+    "description": "A plush, luxurious diaper boasting a velvet-like finish in deep burgundy. With two extra-reinforced tapes and a generously cushioned bulk, Plush Perimeter delivers supreme comfort and durability.",
+    "buff": "",
+    "rarity": "Common",
+    "charges": 5,
+    "price": 15,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/plushperimeter.jpg"
+  },
+  {
+    "id": 103,
+    "name": "Cloud Classics",
+    "aesthetic": "Timeless, plain-style diaper in pristine white. Minimal design.",
+    "description": "Cloud Classic is celebrated for its minimal design and straightforward functionality. It employs a single, sturdy tape and is engineered with minimal bulk for those who value understated simplicity.",
+    "buff": "",
+    "rarity": "Common",
+    "charges": 3,
+    "price": 5,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/cloudclassic.jpg"
+  },
+  {
+    "id": 104,
+    "name": "Rainbow Rapture – Spectrum",
+    "aesthetic": "Full-spectrum flowing blend of colors in a vibrant, iridescent display.",
+    "description": "A full-spectrum entry in the Rainbow Rapture line, showcasing a flowing blend of colors. With an advanced dual-tape system and a moderate bulk, it stands as a bold testament to colorful innovation.",
+    "buff": "Once per long rest, the wearer can choose one damage type (acid, cold, fire, lightning, or thunder). They gain resistance to that damage type for 1 hour.",
+    "rarity": "Very-Rare",
+    "charges": 9,
+    "price": 200,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/rainbowrapturespectrum.jpg"
+  },
+  {
+    "id": 105,
+    "name": "VividVibe Comfort",
+    "aesthetic": "Striking array of electric hues with a modern design.",
+    "description": "Radiating dynamic energy, VividVibe Comfort comes in a striking array of electric hues. Its dual-tape closure and medium bulk provide both aesthetic flair and dependable performance.",
+    "buff": "",
+    "rarity": "Common",
+    "charges": 5,
+    "price": 13,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/vividvibecomfort.jpg"
+  },
+  {
+    "id": 106,
+    "name": "Zenith Zendor",
+    "aesthetic": "Deep metallic finish with subtle circuit-like designs. Refined, compact bulk.",
+    "description": "A cutting-edge diaper boasting a deep metallic finish. With a triple-tape system and a refined, compact bulk, Zenith Zendor is engineered for efficient, futuristic protection.",
+    "buff": "The wearer can add 1d4 to any Intelligence check they make.",
+    "rarity": "Uncommon",
+    "charges": 6,
+    "price": 85,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/zenithzendor.jpg"
+  },
+  {
+    "id": 107,
+    "name": "Tactile TushTech",
+    "aesthetic": "Modern, high-tech aesthetic in a muted slate tone.",
+    "description": "Combining state-of-the-art materials with ergonomic design, Tactile TushTech offers a modern, high-tech aesthetic. Its dual adaptive tapes and optimized low-to-medium bulk make it perfect for seamless, day-to-day performance.",
+    "buff": "",
+    "rarity": "Common",
+    "charges": 5,
+    "price": 11,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/tactiletushtech.jpg"
+  },
+  {
+    "id": 108,
+    "name": "SyncroShield Prime",
+    "aesthetic": "Futuristic design in neon teal with integrated sensors and adaptive tape system. Streamlined, low-to-medium bulk.",
+    "description": "Optimized for high-speed guardianship, SyncroShield Prime emphasizes synergy between advanced technology and comfort.",
+    "buff": "The wearer cannot be surprised, provided they are not incapacitated.",
+    "rarity": "Rare",
+    "charges": 7,
+    "price": 170,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/synchroshieldprime.jpg"
+  },
+  {
+    "id": 109,
+    "name": "VitaVibe Shield",
+    "aesthetic": "Vibrant orange design with dynamic resilience.",
+    "description": "VitaVibe Shield employs reinforced, high-durability tapes to ensure extra protection while maintaining a comfortable, slightly heavier bulk for situations where robust performance is key.",
+    "buff": "The wearer gains temporary hit points equal to their Constitution modifier (minimum 1) at the start of each of their turns, provided they have at least 1 hit point. These temporary hit points last until the start of their next turn.",
+    "rarity": "Very-Rare",
+    "charges": 8,
+    "price": 190,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/vitavibeshield.jpg"
+  },
+  {
+    "id": 110,
+    "name": "PlushGuardian Classic",
+    "aesthetic": "Timeless design rendered in soft cream, with an elegant, minimalist interface. Sleek, low-profile bulk.",
+    "description": "Combining gentle absorbency with an elegant, minimalist interface. Featuring two reinforced tapes, it delivers dependable, everyday luxury.",
+    "buff": "",
+    "rarity": "Common",
+    "charges": 4,
+    "price": 9,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/plushguardianclassic.jpg"
+  },
+  {
+    "id": 111,
+    "name": "ZapGuard Hyper",
+    "aesthetic": "Bold, electrifying diaper with neon accents and an aerodynamic silhouette. Reduced bulk.",
+    "description": "With triple-lock fasteners and reduced bulk to promote agility, ZapGuard Hyper stands ready for active, high-adrenaline engagements.",
+    "buff": "The wearer's walking speed increases by 10 feet.",
+    "rarity": "Rare",
+    "charges": 6,
+    "price": 150,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/zapguardhyper.jpg"
+  },
+  {
+    "id": 112,
+    "name": "CitiCushion Pro",
+    "aesthetic": "Crisp charcoal finish with an asymmetrical tape configuration. Moderate, optimized bulk.",
+    "description": "Tailored for the urbane warrior, CitiCushion Pro is ideal for comfortable city commuting and modern protection.",
+    "buff": "",
+    "rarity": "Common",
+    "charges": 5,
+    "price": 12,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/citicushionpro.jpg"
+  },
+  {
+    "id": 113,
+    "name": "AuraShield Eclipse",
+    "aesthetic": "Mysterious design in midnight black accented with glowing silver details. Refined medium bulk.",
+    "description": "Comes with a double-tape structure, ensuring stable, enduring protection even in harsh conditions.",
+    "buff": "While in dim light or darkness, the wearer can take the Hide action as a bonus action.",
+    "rarity": "Rare",
+    "charges": 7,
+    "price": 165,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/aurashieldeclipse.jpg"
+  },
+  {
+    "id": 114,
+    "name": "Securipant Ultra",
+    "aesthetic": "Bright white with reflective accents.",
+    "description": "An advanced evolution of the basic SecuriCare line, this version boasts a robust quadruple-tape assembly. Securipant Ultra is engineered for extra security under extreme conditions.",
+    "buff": "The wearer has advantage on saving throws made to avoid or end the grappled or restrained condition on themself.",
+    "rarity": "Uncommon",
+    "charges": 6,
+    "price": 90,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/securipantultra.jpg"
+  },
+  {
+    "id": 115,
+    "name": "Zoetic Zephyr",
+    "aesthetic": "Breezy, light design in soft seafoam green. Elegantly low bulk.",
+    "description": "Emphasizes breathability and minimalism. With two delicate tapes, Zoetic Zephyr is ideal for a casual yet effective protective experience.",
+    "buff": "The wearer can hold their breath for twice as long as normal.",
+    "rarity": "Common",
+    "charges": 4,
+    "price": 25,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/zoeticzephyr.jpg"
+  },
+  {
+    "id": 116,
+    "name": "Nimbus Nurture",
+    "aesthetic": "Soothing, pastel-oriented diaper in variants like mint and lavender, with subtle ornamental tapes. Comfort-focused, low-to-medium bulk.",
+    "description": "Designed to ease everyday wear.",
+    "buff": "The wearer has advantage on saving throws against exhaustion.",
+    "rarity": "Uncommon",
+    "charges": 5,
+    "price": 80,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/nimbusnurture.jpg"
+  },
+  {
+    "id": 117,
+    "name": "Elemental Embrace",
+    "aesthetic": "Striking gradient from fiery red to deep orange, channeling the power of the elements. Moderate bulk.",
+    "description": "Reinforced tapes and an eye-catching aesthetic pair for dynamic protection.",
+    "buff": "When the wearer deals damage with a spell or weapon attack, they can choose to change the damage type to fire. This can be used once per short rest.",
+    "rarity": "Uncommon",
+    "charges": 6,
+    "price": 85,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/elementalembrace.jpg"
+  },
+  {
+    "id": 118,
+    "name": "VeloVerve Swift",
+    "aesthetic": "Light grey base with vibrant blue streaks. Ultra-light bulk.",
+    "description": "Engineered for rapid response, its innovative instant-release tape mechanism makes it perfect for quick, on-the-move applications.",
+    "buff": "",
+    "rarity": "Common",
+    "charges": 4,
+    "price": 10,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/veloverveswift.jpg"
+  },
+  {
+    "id": 119,
+    "name": "Solstice Shield",
+    "aesthetic": "Golden-yellow with sunburst motifs. Resilient, medium bulk.",
+    "description": "Radiating warmth, Solstice Shield provides robust protection with three elegantly positioned tapes, designed for endurance.",
+    "buff": "The wearer is immune to the blinded condition caused by bright light.",
+    "rarity": "Uncommon",
+    "charges": 6,
+    "price": 95,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/solsticeshield.jpg"
+  },
+  {
+    "id": 120,
+    "name": "MystiMesh Regal",
+    "aesthetic": "Deep purple adorned with intricate lattice patterns and reinforced, ornamental tapes. Sumptuous, moderate bulk.",
+    "description": "For those who desire both style and reliability.",
+    "buff": "The wearer can cast Charm Person once per long rest (spell save DC 13).",
+    "rarity": "Rare",
+    "charges": 7,
+    "price": 120,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/mystimeshregal.jpg"
+  },
+  {
+    "id": 121,
+    "name": "PantiPulse Core",
+    "aesthetic": "Sleek metallic finish with digital tape controls and biofeedback indicators. The highest of tech and fashion combined.",
+    "description": "Emphasizes technological sophistication.",
+    "buff": "",
+    "rarity": "Common",
+    "charges": 5,
+    "price": 14,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/pantipulsecore.jpg"
+  },
+  {
+    "id": 122,
+    "name": "GentleGuardian Wave",
+    "aesthetic": "Soft ripples in a calm blue design, inspired by oceanic hues. Featherlight, low-profile bulk.",
+    "description": "With adaptive tapes, it’s all about serene, dependable performance.",
+    "buff": "The wearer can breathe underwater for up to 10 minutes. This can be used once per long rest.",
+    "rarity": "Uncommon",
+    "charges": 4,
+    "price": 75,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/gentleguardianwave.jpg"
+  },
+  {
+    "id": 123,
+    "name": "FortifyFlex Dynamo",
+    "aesthetic": "Steely blue finish accented by futuristic glyphs. Heavy, robust bulk.",
+    "description": "Built with cutting-edge composite materials, its multi-layered composite tapes are engineered for extreme conditions.",
+    "buff": "The wearer gains a +1 bonus to Strength saving throws.",
+    "rarity": "Rare",
+    "charges": 8,
+    "price": 160,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/fortifyflexdynamo.jpg"
+  },
+  {
+    "id": 124,
+    "name": "PristineProtect Elite",
+    "aesthetic": "Glossy, immaculate white diaper enhanced with subtle emerald accents. Streamlined design.",
+    "description": "Emphasizes a dual-tape assembly for supreme hygiene and balanced protection.",
+    "buff": "The wearer has advantage on saving throws against being poisoned.",
+    "rarity": "Uncommon",
+    "charges": 6,
+    "price": 85,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/pristineprotectelite.jpg"
+  },
+  {
+    "id": 125,
+    "name": "Echelon Echo",
+    "aesthetic": "Sophisticated, upscale design with bold black and shimmering silver accents. Moderate bulk.",
+    "description": "Uses a triad of advanced tapes, fashioned for elite urban settings and top-tier reliability.",
+    "buff": null,
+    "rarity": "Common",
+    "charges": 5,
+    "price": 13,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/echelonecho.jpg"
+  },
+  {
+    "id": 126,
+    "name": "Serenity Seal",
+    "aesthetic": "Minimalist diaper in a soft aqua shade. Ultra-light, featherlike bulk.",
+    "description": "Offers twin quick-lock tapes, focused on consistent, unruffled performance.",
+    "buff": null,
+    "rarity": "Common",
+    "charges": 4,
+    "price": 8,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/serenityseal.jpg"
+  },
+  {
+    "id": 127,
+    "name": "HyperHug Velocity",
+    "aesthetic": "Dynamic, action-oriented design in neon pink with crisp white accents. Reduced bulk.",
+    "description": "Optimized with triple-quick-release tapes for ultra-fast transitions and energetic wear.",
+    "buff": "The wearer has advantage on Dexterity (Acrobatics) checks made to tumble or avoid opportunity attacks.",
+    "rarity": "Uncommon",
+    "charges": 5,
+    "price": 80,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/hyperhugvelocity.jpg"
+  },
+  {
+    "id": 128,
+    "name": "PurePulse Prism",
+    "aesthetic": "Vibrant spectrum of rainbow hues in a dynamic gradient wash. Balanced medium bulk.",
+    "description": "Embraces color and innovation. Its decorative dual-tape system pairs for versatile performance.",
+    "buff": null,
+    "rarity": "Common",
+    "charges": 5,
+    "price": 14,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/purepulseprism.jpg"
+  },
+  {
+    "id": 129,
+    "name": "UrbanEdge Fusion",
+    "aesthetic": "Edgy, modern design boasting metallic streaks on a matte black base. Sleek, slim bulk.",
+    "description": "Angular, contemporary tape placements speak to sophisticated, urban functionality.",
+    "buff": "The wearer gains proficiency in one of the following skills: Intimidation or Sleight of Hand.",
+    "rarity": "Uncommon",
+    "charges": 5,
+    "price": 75,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/urbanedgefusion.jpg"
+  },
+  {
+    "id": 130,
+    "name": "AeroAssure Cloud",
+    "aesthetic": "Pale blue, reflecting the softness of cotton clouds, with minimalist tape fixtures. Ultra-lightweight, barely-there bulk.",
+    "description": "Perfect for discreet high-comfort wear.",
+    "buff": null,
+    "rarity": "Common",
+    "charges": 4,
+    "price": 9,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/aeroassurecloud.jpg"
+  },
+  {
+    "id": 131,
+    "name": "TitanTush Turbo",
+    "aesthetic": "Aggressive fiery red design with bold, robust tapes, inspired by industrial aesthetics. Strong, heavy bulk.",
+    "description": "Built for relentless absorbency and high-stress endurance.",
+    "buff": "The wearer has advantage on Strength (Athletics) checks.",
+    "rarity": "Rare",
+    "charges": 9,
+    "price": 170,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/titantushturbo.jpg"
+  },
+  {
+    "id": 132,
+    "name": "Cosmic Cuddle",
+    "aesthetic": "Starry prints in midnight blue and shimmering silver threads. Moderate bulk.",
+    "description": "Inspired by the mysteries of the cosmos. Reinforced with two luminescent tapes, it’s ideal for adventurous spirits.",
+    "buff": "The wearer can cast Dancing Lights at will.",
+    "rarity": "Common",
+    "charges": 5,
+    "price": 45,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/cosmiccuddle.jpg"
+  },
+  {
+    "id": 133,
+    "name": "Verity Velvet",
+    "aesthetic": "Opulent design in sumptuous burgundy, with a luxurious, velvet-like texture and ornate tapes. Plush, high-bulk construction.",
+    "description": "Ensures maximum absorption and comfort.",
+    "buff": "The wearer has advantage on Charisma checks made when interacting with nobility or high-status individuals.",
+    "rarity": "Rare",
+    "charges": 8,
+    "price": 155,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/verityvelvet.jpg"
+  },
+  {
+    "id": 134,
+    "name": "GlideGuard Nexus",
+    "aesthetic": "Icy blue finish with streamlined, low-profile tape fixtures. Ultra-minimalist design and low bulk.",
+    "description": "Focusing on smooth transitions, engineered for optimal maneuverability.",
+    "buff": null,
+    "rarity": "Common",
+    "charges": 4,
+    "price": 8,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/glideguardnexus.jpg"
+  },
+  {
+    "id": 135,
+    "name": "Sterling Shield",
+    "aesthetic": "Premium, silver-finished diaper with an industrial, sleek design. Balanced, medium bulk.",
+    "description": "Features a reinforced triple-tape system for precise, long-lasting performance.",
+    "buff": "Attacks against the wearer made with non-magical metal weapons have a -1 penalty to the attack roll.",
+    "rarity": "Rare",
+    "charges": 7,
+    "price": 115,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/sterlingshield.jpg"
+  },
+  {
+    "id": 136,
+    "name": "Enliven Eclipse",
+    "aesthetic": "Striking, energetic design in deep charcoal accented with neon vibrancy. Stable, slightly heavy bulk.",
+    "description": "Uses a dynamic dual-tape system crafted for quick engagement, delivering extra durability when needed.",
+    "buff": null,
+    "rarity": "Common",
+    "charges": 5,
+    "price": 13,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/enliveneclipse.jpg"
+  },
+  {
+    "id": 137,
+    "name": "InnovaInfuse",
+    "aesthetic": "Dazzles with iridescent hues and state-of-the-art self-adjusting tapes. Smart, adaptive bulk.",
+    "description": "Embracing futuristic aesthetics, ensures next-generation protection that keeps pace with innovation.",
+    "buff": "The wearer can use their reaction to gain advantage on one Intelligence, Wisdom, or Charisma saving throw. This can be used once per long rest.",
+    "rarity": "Very-Rare",
+    "charges": 8,
+    "price": 185,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/InnovaInfuse.jpg"
+  },
+  {
+    "id": 138,
+    "name": "CamoCritters Forest Friends",
+    "aesthetic": "A playful camouflage pattern using shades of green and brown, with cute cartoon squirrels, deer, and foxes peeking out from behind leaves. Acorn and leaf landing zone.",
+    "description": "Features three \"Nature-Grip\" tapes that blend with the pattern. Medium bulk with a soft, breathable outer layer for comfortable outdoor adventures.",
+    "buff": "The wearer can speak with small woodland creatures (squirrels, rabbits, deer) as if under the Speak with Animals spell for 10 minutes, once per day.",
+    "rarity": "Common",
+    "charges": 5,
+    "price": 40,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/camocrittersforestfriends.jpg"
+  },
+  {
+    "id": 139,
+    "name": "CamoCritters Arctic Adventure",
+    "aesthetic": "Winter camouflage in shades of white, light blue, and grey, with adorable cartoon polar bears, penguins, and arctic foxes. Snowflake landing zone.",
+    "description": "Four \"Ice-Lock\" tapes designed for cold conditions. Slightly thicker medium bulk for extra warmth and absorbency during chilly expeditions.",
+    "buff": "The wearer has advantage on Dexterity (Stealth) checks made in snowy or icy terrain.",
+    "rarity": "Uncommon",
+    "charges": 6,
+    "price": 80,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/camocrittersarcticadventure.jpg"
+  },
+  {
+    "id": 140,
+    "name": "RoboPads Circuit City",
+    "aesthetic": "A vibrant cityscape at night with glowing neon circuit board patterns overlaying silhouettes of skyscrapers. Features small, friendly robot faces.",
+    "description": "Two wide, metallic-silver \"Power-Link\" tapes. Sleek, low-to-medium bulk with a fast-absorbing core for high-tech comfort.",
+    "buff": "The wearer has advantage on ability checks made to interact with constructs or understand technology.",
+    "rarity": "Uncommon",
+    "charges": 5,
+    "price": 75,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/circuitcityrobotadventure.jpg"
+  },
+  {
+    "id": 141,
+    "name": "RoboPads GearWorks",
+    "aesthetic": "A pattern of interlocking gears, cogs, and springs in shades of bronze, silver, and gunmetal grey. A central \"Master Cog\" design on the landing zone.",
+    "description": "Three \"Ratchet-Strap\" style tapes. Moderate bulk with a durable, reinforced outer shell for little engineers and tinkerers.",
+    "buff": "The wearer can cast Mending at will.",
+    "rarity": "Common",
+    "charges": 5,
+    "price": 45,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/robopadsgearworks.png"
+  },
+  {
+    "id": 142,
+    "name": "MythicPuffs Dragon Scales",
+    "aesthetic": "Overlapping dragon scales in iridescent shades of emerald green, sapphire blue, or ruby red. A single, stylized dragon eye on the landing zone.",
+    "description": "Four \"Claw-Secure\" tapes. Robust medium bulk with a \"Fireproof-Core\" (high absorbency, not literally fireproof) for legendary protection.",
+    "buff": "The wearer gains resistance to one of the following damage types (chosen when the diaper is donned): acid, cold, fire, lightning, or poison. This lasts until the diaper is removed.",
+    "rarity": "Very-Rare",
+    "charges": 9,
+    "price": 200,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/mythicpuffsdragonscales.png"
+  },
+  {
+    "id": 143,
+    "name": "MythicPuffs Unicorn Dreams",
+    "aesthetic": "Pastel rainbow swirls with glittery stars and silhouettes of graceful unicorns. A golden horn emblem on the landing zone.",
+    "description": "Two wide, shimmering \"Magic-Bond\" tapes. Fluffy extra bulk with an ultra-soft inner lining for enchanting comfort. Lightly scented with vanilla.",
+    "buff": "The wearer is immune to being charmed, and magic cannot put them to sleep.",
+    "rarity": "Very-Rare",
+    "charges": 8,
+    "price": 190,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/mythicpuffsunicorndreams.jpg"
+  },
+  {
+    "id": 144,
+    "name": "DaintyDots Classic Pink",
+    "aesthetic": "Soft baby pink with evenly spaced, tiny white polka dots. A simple pink bow on the landing zone.",
+    "description": "Two delicate, yet secure, white tapes. Light-to-medium bulk for a classic, feminine look with reliable protection.",
+    "buff": null,
+    "rarity": "Common",
+    "charges": 4,
+    "price": 8,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/daintydotsclassicpink.jpg"
+  },
+  {
+    "id": 145,
+    "name": "DaintyDots Powder Blue",
+    "aesthetic": "Pale powder blue with small, white polka dots. A matching blue bow on the landing zone.",
+    "description": "Two gentle white tapes. Light-to-medium bulk, offering a timeless and comfortable option.",
+    "buff": null,
+    "rarity": "Common",
+    "charges": 4,
+    "price": 8,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/daintydotsblue.jpg"
+  },
+  {
+    "id": 146,
+    "name": "AdventureBound Safari Stripes",
+    "aesthetic": "Bold zebra or tiger stripes in classic black and white or orange and black. A paw print landing zone.",
+    "description": "Three \"Jungle-Trek\" tapes. Medium bulk with a durable outer layer for exploring the urban jungle or backyard wilderness.",
+    "buff": "The wearer has advantage on Wisdom (Survival) checks made in grasslands or savanna environments.",
+    "rarity": "Common",
+    "charges": 5,
+    "price": 35,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/adventureboundsafaristripes.jpg"
+  },
+  {
+    "id": 147,
+    "name": "AdventureBound Nautical Knots",
+    "aesthetic": "Navy blue background with a pattern of white sailor knots, anchors, and ship wheels. A captain's wheel on the landing zone.",
+    "description": "Four \"Sea-Dog Secure\" tapes. Moderate bulk with a quick-dry lining for maritime adventures.",
+    "buff": "The wearer has advantage on ability checks related to tying knots and operating sailing vehicles.",
+    "rarity": "Uncommon",
+    "charges": 6,
+    "price": 80,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/adventureboundnauticalknots.jpg"
+  },
+  {
+    "id": 148,
+    "name": "SleepySheep Counting Clouds",
+    "aesthetic": "Soft lavender with a pattern of fluffy white sheep leaping over stylized clouds and crescent moons.",
+    "description": "Two extra-soft, wide \"Dreamland\" tapes. Plush, high-absorbency bulk designed specifically for peaceful, uninterrupted sleep. Chamomile-infused core.",
+    "buff": "If the wearer sleeps in this diaper for the duration of a long rest, they require only 6 hours of sleep to gain the benefits of a long rest.",
+    "rarity": "Uncommon",
+    "charges": 7,
+    "price": 110,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/sleepysheepcountingclouds.jpg"
+  },
+  {
+    "id": 149,
+    "name": "TinyTykes Tool Time",
+    "aesthetic": "Bright blue background with a repeating pattern of cartoon hammers, screwdrivers, wrenches, and saws. A \"Caution: Adorable at Work\" sign on the landing zone.",
+    "description": "Three sturdy \"Fix-It\" tapes. Medium bulk with a reinforced front panel for little builders.",
+    "buff": null,
+    "rarity": "Common",
+    "charges": 4,
+    "price": 9,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/tinytykestooltime.jpg"
+  },
+  {
+    "id": 150,
+    "name": "GamerGear Level Up!",
+    "aesthetic": "Dark background with neon green and blue pixelated game controllers, health bars, and \"Level Up!\" text. A \"Start\" button landing zone.",
+    "description": "Four \"Power-On\" tapes. Moderate bulk with a comfortable fit for long gaming sessions. Features a subtle energy drink scent.",
+    "buff": "Once per long rest, when the wearer makes an attack roll, ability check, or saving throw, they can choose to gain a +10 bonus to the roll after seeing the d20 roll but before knowing the outcome.",
+    "rarity": "Very-Rare",
+    "charges": 8,
+    "price": 195,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/gamergearlevelup.png"
+  },
+  {
+    "id": 151,
+    "name": "GamerGear Critical Hit!",
+    "aesthetic": "Fiery red and orange with pixelated explosion effects, swords, and shields. A \"Critical Hit!\" emblem on the landing zone.",
+    "description": "Three extra-strong \"Boss-Battle\" tapes. Slightly increased medium bulk for intense gameplay and ultimate protection.",
+    "buff": "When the wearer scores a critical hit, they can roll one additional damage die.",
+    "rarity": "Rare",
+    "charges": 7,
+    "price": 160,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/gamergearcriticalhit.jpg"
+  },
+  {
+    "id": 152,
+    "name": "AquaBloom Coral Reef",
+    "aesthetic": "Vibrant turquoise water with colorful coral, anemones, and schools of tiny, cute fish. A clownfish peeking from an anemone on the landing zone.",
+    "description": "Two wide, clear \"Water-Seal\" tapes. Light bulk with a special absorbent gel for quick moisture lock, suitable for poolside lounging (not full submersion).",
+    "buff": null,
+    "rarity": "Common",
+    "charges": 4,
+    "price": 10,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/aquabloomscoralreef.jpg"
+  },
+  {
+    "id": 153,
+    "name": "ForestWhisper Autumn Leaves",
+    "aesthetic": "A warm palette of red, orange, yellow, and brown falling leaves on a cream background.",
+    "description": "Three \"Harvest-Hold\" tapes. Medium bulk with a soft, flannel-like feel for cozy autumn days. Lightly scented with apple spice.",
+    "buff": "The wearer can identify edible plants and berries with a successful DC 10 Wisdom (Survival) check.",
+    "rarity": "Common",
+    "charges": 4,
+    "price": 25,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/forestwhisperautumnleaves.jpg"
+  },
+  {
+    "id": 154,
+    "name": "SpaceCadet Galaxy Quest",
+    "aesthetic": "A swirling galaxy of deep purples, blues, and pinks, with distant planets, nebulae, and tiny silver rocket ships. A \"Mission Control\" badge on the landing zone.",
+    "description": "Four \"Astro-Lock\" tapes with star designs. Medium-to-high bulk for long voyages across the playroom.",
+    "buff": "The wearer does not need to breathe in the vacuum of space for up to 1 hour.",
+    "rarity": "Rare",
+    "charges": 7,
+    "price": 125,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/spacecadetgalaxyquest.png"
+  },
+  {
+    "id": 155,
+    "name": "SweetDreams Teddy Bear Picnic",
+    "aesthetic": "Gingham check pattern (red/white or blue/white) with cute teddy bears, picnic baskets, and tiny sandwiches.",
+    "description": "Two soft, fabric-feel \"Picnic-Blanket\" tapes. Fluffy medium bulk for comfortable daytime wear and naps.",
+    "buff": null,
+    "rarity": "Common",
+    "charges": 4,
+    "price": 9,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/sweetdreamsteddybearpicnic.jpg"
+  },
+  {
+    "id": 156,
+    "name": "PreppyPups Argyle Ace",
+    "aesthetic": "Classic argyle pattern in navy, green, and red, with small Scotty dog or Dachshund silhouettes.",
+    "description": "Two sophisticated \"Clubhouse-Fasten\" tapes. Slim, moderate bulk for a smart, polished look.",
+    "buff": "The wearer gains proficiency in one gaming set of their choice.",
+    "rarity": "Common",
+    "charges": 4,
+    "price": 30,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/preppypupsargyleace.jpg"
+  },
+  {
+    "id": 157,
+    "name": "DoodleDayz Scribble Fun",
+    "aesthetic": "White background covered in colorful, childlike crayon scribbles, stick figures, suns, and houses.",
+    "description": "Four easy-to-use \"Art-Class\" tapes. Medium bulk with a durable outer layer that can even be drawn on with washable markers (for extra fun!).",
+    "buff": null,
+    "rarity": "Common",
+    "charges": 4,
+    "price": 7,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/doodledayzscribblefun%20(1).jpg"
+  },
+  {
+    "id": 158,
+    "name": "DinoMite Volcano Valley",
+    "aesthetic": "A prehistoric landscape with erupting volcanoes (cartoon style), lava flows, and various cute dinosaurs like Pterodactyls and Stegosauruses.",
+    "description": "Three rugged \"Terra-Tapes.\" Robust medium bulk with extra absorbency for explosive playtime.",
+    "buff": "The wearer has resistance to fire damage from environmental sources like lava or hot steam.",
+    "rarity": "Uncommon",
+    "charges": 6,
+    "price": 85,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/dinomitevolcanovalley.jpg"
+  },
+  {
+    "id": 159,
+    "name": "ArcticChill Penguin Playtime",
+    "aesthetic": "Icy blue background with a playful scene of cartoon penguins sliding on their bellies, fishing, and waddling around ice floes.",
+    "description": "Four \"Frosty-Grip\" tapes. Medium bulk with a cooling touch inner lining for a fresh feeling.",
+    "buff": "The wearer is unaffected by difficult terrain caused by ice or snow.",
+    "rarity": "Uncommon",
+    "charges": 5,
+    "price": 75,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/arcticchillpenguinplaytime.jpg"
+  },
+  {
+    "id": 160,
+    "name": "HoneyHive Bee Happy",
+    "aesthetic": "Golden yellow honeycomb pattern with cute, smiling cartoon bees buzzing around. A large, friendly bee face on the landing zone.",
+    "description": "Two \"Sweet-Stick\" tapes. Light to medium bulk with a soft, flexible fit. Light honey scent.",
+    "buff": null,
+    "rarity": "Common",
+    "charges": 4,
+    "price": 8,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/honehivebeehappy.jpg"
+  },
+  {
+    "id": 161,
+    "name": "OceanOdyssey Submarine Voyage",
+    "aesthetic": "Deep blue ocean with cartoon submarines exploring, discovering treasure chests, and encountering friendly whales and octopuses.",
+    "description": "Three \"Pressure-Proof\" tapes. Moderate bulk with enhanced leak guards for deep-sea (playtime) exploration.",
+    "buff": "The wearer can see in dim light within 60 feet of them as if it were bright light, and in darkness as if it were dim light, while underwater.",
+    "rarity": "Uncommon",
+    "charges": 6,
+    "price": 90,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/oceanodysseysubmarinevoyage.jpg"
+  },
+  {
+    "id": 162,
+    "name": "FarmYardFun Tractor Time",
+    "aesthetic": "Green fields with a pattern of red cartoon tractors, hay bales, and smiling scarecrows.",
+    "description": "\"Country-Strong\" tapes. Medium bulk, designed for a hard day's work (of playing).",
+    "buff": null,
+    "rarity": "Common",
+    "charges": 4,
+    "price": 9,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/farmyardfuntractortime.jpg"
+  },
+  {
+    "id": 163,
+    "name": "CloudComfort Angelic White",
+    "aesthetic": "Pure, pristine white with a very subtle embossed feather pattern. Almost invisible landing zone.",
+    "description": "Two ultra-soft, wide \"Feather-Touch\" tapes. Luxurious, plush extra bulk for heavenly comfort and maximum absorbency. Hypoallergenic and unscented.",
+    "buff": "The wearer has advantage on death saving throws.",
+    "rarity": "Rare",
+    "charges": 8,
+    "price": 165,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/cloudcomfortangelicwhite.jpg"
+  },
+  {
+    "id": 164,
+    "name": "RetroRides Classic Cruisers",
+    "aesthetic": "A pattern of vintage 1950s style cartoon cars (convertibles, woody wagons) in pastel colors on a light background.",
+    "description": "Two \"Chrome-Shine\" tapes. Medium bulk with a smooth outer finish for a cool, retro vibe.",
+    "buff": null,
+    "rarity": "Common",
+    "charges": 4,
+    "price": 10,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/retroridesclassiccruisers.jpg"
+  },
+  {
+    "id": 165,
+    "name": "KnightlyKiddos Castle Siege",
+    "aesthetic": "Grey stone castle wall pattern with cute cartoon knights, dragons (friendly ones!), and catapults. A shield emblem on the landing zone.",
+    "description": "Three \"Fortress-Fasten\" tapes. Robust medium bulk for defending the playroom kingdom.",
+    "buff": "The wearer gains a +1 bonus to AC when wielding a shield.",
+    "rarity": "Uncommon",
+    "charges": 6,
+    "price": 80,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/knightlykiddoscastlesiege.jpg"
+  },
+  {
+    "id": 166,
+    "name": "KuddlePuffs DinoRoar Trainers",
+    "aesthetic": "Vibrant green with playful cartoon dinosaurs (T-Rex, Triceratops, Brontosaurus) in various poses. A \"Dino Crossing\" sign design on the front. Stretchy sides with a tear-away feature.",
+    "description": "These pull-up style trainers make potty training an adventure! Easy for little ones to pull up and down, with strong stretchy sides and tear-away seams for quick changes. Resilient medium bulk for active little adventurers, with reinforced leg gathers.",
+    "buff": "The wearer has advantage on Strength (Athletics) checks made to jump.",
+    "rarity": "Common",
+    "charges": 2,
+    "price": 18,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/kuddlepuffsdinoroartrainers.jpg"
+  },
+  {
+    "id": 167,
+    "name": "StepUp Pants Starry Night",
+    "aesthetic": "Deep indigo with a dense pattern of shimmering silver stars and sleepy crescent moons. Features soft, stretchy sides that look like pajama fabric.",
+    "description": "Perfect for nighttime training, these pull-up pants offer high absorbency with a comfortable, underwear-like fit. The stretchy sides ensure a snug feel, while still being easy for kids to manage independently. Medium-plus thickness.",
+    "buff": "The wearer can cast Sleep as a 1st-level spell once per long rest.",
+    "rarity": "Uncommon",
+    "charges": 3,
+    "price": 60,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/stepuppantsstarrynight.jpg"
+  },
+  {
+    "id": 168,
+    "name": "GoGetter Trainers Traffic Jam",
+    "aesthetic": "Bright blue with a fun print of cartoon cars, trucks, buses, and traffic lights. The stretchy sides are designed to look like a road.",
+    "description": "Keep your little one on the move with these easy-to-use training pants. Designed like real underwear with 360° stretchy waistband for a comfortable fit they can pull up themselves. Light-to-medium thickness for daytime.",
+    "buff": null,
+    "rarity": "Common",
+    "charges": 2,
+    "price": 5,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/gogettertrainerstrafficjam.jpg"
+  },
+  {
+    "id": 169,
+    "name": "FreedomFit Pull-Ons Plain White",
+    "aesthetic": "A simple, discreet plain white design with a very subtle embossed texture on the stretchy side panels.",
+    "description": "Offering freedom and confidence, these pull-ons have a super stretchy waistband and sides for an adaptive fit. Tear-away sides for easy removal. Minimal bulk for discretion under clothes.",
+    "buff": null,
+    "rarity": "Common",
+    "charges": 1,
+    "price": 3,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/freedomfitpullonsplainwhite.jpg"
+  },
+  {
+    "id": 170,
+    "name": "ActiveLearners Sporty Stripes",
+    "aesthetic": "Athletic grey with bold racing stripes in red and blue along the stretchy sides. A small \"No. 1\" emblem on the front.",
+    "description": "Designed for active toddlers, these training pants feature a breathable, flexible design that moves with your child. The pull-up style encourages independence, with easy-tear sides for accidents. Light thickness.",
+    "buff": "The wearer's base walking speed increases by 5 feet.",
+    "rarity": "Common",
+    "charges": 2,
+    "price": 15,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/activelearnerssportystripes.jpg"
+  },
+  {
+    "id": 171,
+    "name": "PottyProdigy Pants Alphabet Blocks",
+    "aesthetic": "Cream colored with a pattern of colorful alphabet blocks (A, B, C) and numbers (1, 2, 3). Stretchy sides have a subtle block pattern.",
+    "description": "Make learning fun with these educational-themed pull-up pants. Soft, stretchy sides are easy for little hands to manage, promoting potty training success. Medium thickness with good absorbency.",
+    "buff": "The wearer gains proficiency in one language of their choice.",
+    "rarity": "Uncommon",
+    "charges": 3,
+    "price": 40,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/pottyprodigypantsalphabetblocks.jpg"
+  },
+  {
+    "id": 172,
+    "name": "MyFirstBigPants Puppy Pals",
+    "aesthetic": "Light yellow with a repeating pattern of cute cartoon puppies playing with balls and bones. Stretchy sides are a solid pastel blue.",
+    "description": "Celebrate a big milestone with these adorable first training pants. They feel like underwear but offer reliable protection. Easy pull-on and tear-off design. Medium, comfortable bulk.",
+    "buff": null,
+    "rarity": "Common",
+    "charges": 2,
+    "price": 4,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/myfirstbigpantspuppypals.png"
+  },
+  {
+    "id": 173,
+    "name": "ReadySetGo Briefs Rocket Blast",
+    "aesthetic": "Dark blue with cartoon rockets blasting off amidst stars and planets. The stretchy sides have a \"flame\" pattern.",
+    "description": "Get ready for potty training lift-off! These pull-up briefs are designed for quick changes and independent toddlers, featuring dynamic stretchy sides. Light-to-medium thickness for all-day wear.",
+    "buff": "Once per day, the wearer can use their action to launch 10 feet in any direction without provoking opportunity attacks.",
+    "rarity": "Uncommon",
+    "charges": 2,
+    "price": 55,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/readysetgobriefsrocketblast.jpg"
+  },
+  {
+    "id": 174,
+    "name": "IndiePants Cool Camo",
+    "aesthetic": "Modern urban camouflage in shades of grey and black, with soft, dark grey stretchy sides.",
+    "description": "For independently-minded kids, these pull-up pants offer a cool, grown-up look with the security of training pants. Flexible fit and easy tear-away seams. Light, discreet bulk.",
+    "buff": null,
+    "rarity": "Common",
+    "charges": 1,
+    "price": 6,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/indiepantscoolcamo.jpg"
+  },
+  {
+    "id": 175,
+    "name": "FlexiTrainers Rainbow Ribbons",
+    "aesthetic": "White with a flowing pattern of pastel rainbow ribbons and glittery accents. Stretchy sides are a soft, solid pink.",
+    "description": "These training pants offer ultimate flexibility and comfort, with super-stretchy sides that adapt to every move. Easy to pull on and off. Medium, absorbent thickness.",
+    "buff": "The wearer has advantage on Dexterity saving throws.",
+    "rarity": "Uncommon",
+    "charges": 3,
+    "price": 40,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/flexitrainersrainbowribbons.jpg"
+  },
+  {
+    "id": 176,
+    "name": "EasyStride Pull-ups Ocean Friends",
+    "aesthetic": "Light aqua blue with friendly cartoon sea turtles, dolphins, and colorful fish. Stretchy sides have a wave pattern.",
+    "description": "Make potty training a smooth journey with these easy-to-manage pull-ups. The soft, stretchy waistband provides a comfortable, secure fit. Medium thickness.",
+    "buff": null,
+    "rarity": "Common",
+    "charges": 2,
+    "price": 5,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/easystridepullupsoceanfriends.png"
+  },
+  {
+    "id": 177,
+    "name": "GrowWithMe Pants Forest Critters",
+    "aesthetic": "Soft green with cute cartoon foxes, owls, and squirrels amongst trees and leaves. Stretchy sides are a gentle brown.",
+    "description": "Designed to adapt as your child grows, these pull-up pants feature adjustable stretchy sides for a perfect fit. Reliable protection with an underwear feel. Medium bulk.",
+    "buff": "The wearer can communicate simple ideas with beasts that have an Intelligence of 3 or lower.",
+    "rarity": "Common",
+    "charges": 2,
+    "price": 20,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/growwithmepantsforestcritters.jpg"
+  },
+  {
+    "id": 178,
+    "name": "ConfidentSteps Ballerina Frills",
+    "aesthetic": "Pale pink with delicate ballerina aesthetic and tiny sparkles. Stretchy sides have a ruffled lace-like appearance.",
+    "description": "Encourage confident steps towards potty independence with these elegant training pants. Easy to pull up and down, with a comfortable, secure fit. Light-to-medium, graceful thickness.",
+    "buff": "The wearer has advantage on Charisma (Performance) checks involving dance.",
+    "rarity": "Common",
+    "charges": 2,
+    "price": 18,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/confidentstepsballerinafrills.png"
+  },
+  {
+    "id": 179,
+    "name": "KuddlePuffs Trainers Sleepy Clouds",
+    "aesthetic": "Soft pastel blue with fluffy white sleepy clouds and tiny yellow stars. Stretchy sides are a solid white.",
+    "description": "Gentle pull-up trainers for quiet times and naps. Extra soft materials and stretchy sides provide comfort, while the absorbent core offers good protection. Medium-plus thickness.",
+    "buff": null,
+    "rarity": "Common",
+    "charges": 2,
+    "price": 6,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/kuddlepuffstrainerssleepyclouds.jpg"
+  },
+  {
+    "id": 180,
+    "name": "AeroDry QuickUps Lightning Bolt",
+    "aesthetic": "Electric blue with dynamic yellow lightning bolt patterns. Stretchy sides are a sleek silver.",
+    "description": "For kids on the go, these pull-ups offer a sporty look and feel. Lightweight and breathable with flexible stretchy sides for easy movement and quick changes. Light thickness.",
+    "buff": "The wearer has resistance to lightning damage.",
+    "rarity": "Rare",
+    "charges": 3,
+    "price": 62,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/aerodryeasyups.jpg"
+  },
+  {
+    "id": 181,
+    "name": "TrainEase Day & Night Construction Zone",
+    "aesthetic": "Bright yellow with cartoon bulldozers, cranes, and dump trucks. Stretchy sides feature a \"caution stripe\" pattern. Fades when wet indicator.",
+    "description": "Built tough for round-the-clock training, these pull-ups have a super absorbent core for day or night. Easy-open sides for quick checks and changes. Medium, reliable bulk.",
+    "buff": null,
+    "rarity": "Common",
+    "charges": 2,
+    "price": 5,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/traineasedayandnightconstructionzone.jpg"
+  },
+  {
+    "id": 182,
+    "name": "DreamFit Overnight Underpants Moonbeam Bunnies",
+    "aesthetic": "Soft lavender with a pattern of sleepy bunnies holding stars, against a backdrop of crescent moons. Stretchy sides are a solid, darker lavender.",
+    "description": "Specifically designed for overnight protection, these pull-up underpants have extra absorbency and leak guards. The soft, cloth-like feel and stretchy waistband ensure comfort all night long. Medium-heavy thickness.",
+    "buff": "The wearer is considered proficient in Wisdom (Insight) checks made to discern dreams or omens.",
+    "rarity": "Uncommon",
+    "charges": 3,
+    "price": 45,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/dreamfitovernightunderpantsmoonbeambunnies.jpg"
+  },
+  {
+    "id": 183,
+    "name": "GoGoPants Safari Adventure",
+    "aesthetic": "Khaki green with cartoon lions, elephants, and giraffes. Stretchy sides have a subtle animal print texture (like leopard spots).",
+    "description": "Let your little explorer roam free! These pull-up pants are designed for active play, with a flexible fit and breathable materials. Easy for kids to pull on themselves. Light-to-medium thickness.",
+    "buff": null,
+    "rarity": "Common",
+    "charges": 2,
+    "price": 4,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/gogopantssafariadventure.png"
+  },
+  {
+    "id": 184,
+    "name": "ComfortWear Training Pants Pastel Hearts",
+    "aesthetic": "A mix of soft pastel colors (pink, blue, yellow, green) with a delicate pattern of small white hearts. Stretchy sides are a gentle white.",
+    "description": "Ultimate comfort for sensitive skin during potty training. These pull-ups are hypoallergenic and fragrance-free, with super-soft, stretchy sides. Light, breathable thickness.",
+    "buff": "The wearer has advantage on saving throws against effects that would cause the charmed condition.",
+    "rarity": "Uncommon",
+    "charges": 2,
+    "price": 40,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/comfortweartrainingpantspastelhearts.jpg"
+  },
+  {
+    "id": 185,
+    "name": "BigKid Briefs Superhero Power",
+    "aesthetic": "Bold comic book style with \"POW!\" and \"BAM!\" designs, featuring generic superhero silhouettes in red, blue, and yellow. Stretchy sides have a star pattern.",
+    "description": "Give your little hero the confidence they need! These pull-up briefs look and feel like big kid underwear but provide discreet protection. Easy pull-on design. Light thickness.",
+    "buff": "Once per day, the wearer can add 1d4 to one attack roll or saving throw they make.",
+    "rarity": "Uncommon",
+    "charges": 2,
+    "price": 50,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/bigkidbriefssuperheropower.png"
+  },
+  {
+    "id": 186,
+    "name": "AquaTrainers Swim Pants Tropical Fish",
+    "aesthetic": "Bright turquoise with a vibrant print of colorful tropical fish, coral, and bubbles. Stretchy sides are designed not to swell in water.",
+    "description": "Perfect for the pool or beach, these disposable swim pants offer protection without swelling up like regular diapers. Easy on and off, even when wet. Minimal, water-friendly bulk.",
+    "buff": "The wearer can hold their breath for an additional minute while underwater.",
+    "rarity": "Common",
+    "charges": 1,
+    "price": 15,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/aquatrainersswimpantstropicalfish.jpg"
+  },
+  {
+    "id": 187,
+    "name": "EcoLearners Pull-Ups Bamboo Leaves",
+    "aesthetic": "Natural beige color with a subtle green bamboo leaf print on the main body. Stretchy sides are a plain, soft beige.",
+    "description": "An eco-friendly choice for potty training, made with sustainable bamboo fibers. Soft, gentle, and biodegradable (check local composting guidelines). Light-to-medium thickness.",
+    "buff": null,
+    "rarity": "Common",
+    "charges": 2,
+    "price": 6,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/ecolearnerspullupsbambooleaves.jpg"
+  },
+  {
+    "id": 188,
+    "name": "SnuggleUp Trainers Teddy Bear Tea Party",
+    "aesthetic": "Cream background with cute teddy bears having a tea party with tiny teacups and cakes. Stretchy sides have a delicate doily pattern.",
+    "description": "For cozy afternoons and learning moments, these pull-up trainers are extra soft and comfortable. The stretchy waistband ensures a snug fit. Medium, plush thickness.",
+    "buff": "The wearer has advantage on Charisma checks made to interact socially in a calm, friendly setting.",
+    "rarity": "Common",
+    "charges": 2,
+    "price": 18,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/snuggleuptrainersteddybeartearparty.jpg"
+  },
+  {
+    "id": 189,
+    "name": "FastTrack Pull-Ons Racing Cars",
+    "aesthetic": "Bright red with sleek racing cars, checkered flags, and speed lines. Stretchy sides look like a racetrack.",
+    "description": "Speed towards potty training success! These pull-ons are designed for fast and easy changes, with a comfortable, underwear-like fit. Light thickness for active racers.",
+    "buff": null,
+    "rarity": "Common",
+    "charges": 1,
+    "price": 4,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/fasttrackpullonsracingcars.jpg"
+  },
+  {
+    "id": 190,
+    "name": "GentleSteps Organic Cotton Trainers Plain Cloud",
+    "aesthetic": "Undyed, natural organic cotton color with a very faint, embossed cloud pattern. Stretchy sides are also natural cotton color.",
+    "description": "The gentlest choice for sensitive skin, these pull-up trainers are made with 100% organic cotton. Free of dyes, fragrances, and chlorine. Light, breathable thickness.",
+    "buff": "The wearer gains a +1 bonus to Constitution saving throws.",
+    "rarity": "Uncommon",
+    "charges": 2,
+    "price": 45,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/gentlestepsorganiccottontrainersplaincloud.jpg"
+  },
+  {
+    "id": 191,
+    "name": "AdventurePants Pirate Treasure Map",
+    "aesthetic": "Aged parchment look with a cartoon treasure map, featuring islands, pirate ships, \"X marks the spot,\" and a compass rose. Stretchy sides look like old rope.",
+    "description": "Embark on a potty training treasure hunt! These fun pull-up pants are easy for little adventurers to manage, with tear-away sides for quick escapes. Medium thickness.",
+    "buff": "The wearer has advantage on Wisdom (Perception) checks made to find hidden objects or secret doors.",
+    "rarity": "Uncommon",
+    "charges": 2,
+    "price": 40,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/adventurepantspiratetreasuremap.png"
+  },
+  {
+    "id": 192,
+    "name": "NightOwl Trainers Galaxy Explorer",
+    "aesthetic": "Deep space blue with glow-in-the-dark stars and planets; solid dark grey stretchy sides.",
+    "description": "Make nighttime potty training an out-of-this-world experience! These pull-ups offer excellent overnight absorbency and a fun design that kids will love. Medium-plus, secure thickness.",
+    "buff": "The wearer gains darkvision out to 60 feet. If they already have darkvision, its range increases by 30 feet.",
+    "rarity": "Rare",
+    "charges": 3,
+    "price": 60,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/nightowltrainersgalaxyexplorer.jpg"
+  },
+  {
+    "id": 193,
+    "name": "MaxiComfort Adult Pull-Ons Gentle Grey",
+    "aesthetic": "Discreet soft heather grey with darker grey stretchy side panels.",
+    "description": "Highly absorbent, body-hugging fit, stretchy waistband, tear-away sides, moderate bulk.",
+    "buff": "The wearer has advantage on saving throws against effects that would cause them to become exhausted.",
+    "rarity": "Uncommon",
+    "charges": 3,
+    "price": 40,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/maxicomfortadultpullonsgentlegray.jpg"
+  },
+  {
+    "id": 194,
+    "name": "DigniFit Flexi-Pants Navy Blue",
+    "aesthetic": "Classic navy blue with seamless stretchy side panels.",
+    "description": "Secure, comfortable fit, ultra-soft, cloth-like feel, odor control, breathable zones, medium, trim bulk.",
+    "buff": null,
+    "rarity": "Common",
+    "charges": 2,
+    "price": 7,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/digniflexpantsnavyblue.jpg"
+  },
+  {
+    "id": 195,
+    "name": "SecureDay Taped Briefs Classic Beige",
+    "aesthetic": "Traditional medical beige, subtle texture, blue wetness indicator lines.",
+    "description": "High absorbency, secure fit, four refastenable tapes, tall leak guards, comfortable, moderate bulk.",
+    "buff": "The wearer regains 1 additional hit point whenever they receive magical healing.",
+    "rarity": "Common",
+    "charges": 5,
+    "price": 30,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/securedaytapedbriefsclassicbeige.jpg"
+  },
+  {
+    "id": 196,
+    "name": "ComfyNights Overnight Taped Briefs Starry Sky",
+    "aesthetic": "Deep midnight blue with silver constellations pattern.",
+    "description": "Maximum overnight protection, extra-absorbent core, soft, quiet cover, and wide, secure tapes, plush, high bulk.",
+    "buff": "While wearing these, the wearer is under the effects of a Sanctuary spell (DC 12) against creatures that attempt to attack them while they are sleeping.",
+    "rarity": "Rare",
+    "charges": 8,
+    "price": 150,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/comfynightsovernighttapedbriefsstarrysky.png"
+  },
+  {
+    "id": 197,
+    "name": "ActiveLife Pull-Up Briefs Sport Grey",
+    "aesthetic": "Light athletic grey with darker grey accent lines.",
+    "description": "Flexible, breathable fit, discreet protection, moderate absorbency, light-to-medium, body-contouring bulk.",
+    "buff": null,
+    "rarity": "Common",
+    "charges": 2,
+    "price": 6,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/activelifepullupbriefssportsgray.jpg"
+  },
+  {
+    "id": 198,
+    "name": "UltraDry Max Absorbency Taped Diapers White",
+    "aesthetic": "Plain white, high-capacity visual design.",
+    "description": "Ultimate absorbency, multi-layer core, exceptional leak protection, four heavy-duty tapes, very high, robust bulk.",
+    "buff": "The wearer's hit point maximum is increased by 5.",
+    "rarity": "Very-Rare",
+    "charges": 9,
+    "price": 190,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/ultradrymaxabsorbencytapeddiaperswhite.jpg"
+  },
+  {
+    "id": 199,
+    "name": "EverydayComfort Pull-Ons Soft Floral",
+    "aesthetic": "Gentle cream with pastel floral print, solid cream stretchy sides.",
+    "description": "Reliable protection, feminine elegance, soft, breathable materials, comfortable waistband, medium, discreet bulk.",
+    "buff": null,
+    "rarity": "Common",
+    "charges": 2,
+    "price": 6,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/everydaycomfortpullonssoftfloral.png"
+  },
+  {
+    "id": 200,
+    "name": "StealthWear Panty-Cut Pull-Ups Black",
+    "aesthetic": "Matte black, low-rise design.",
+    "description": "Discreet protection, light-to-moderate absorbency, minimal, ultra-slim bulk.",
+    "buff": "The wearer has advantage on Dexterity (Stealth) checks made to avoid being seen.",
+    "rarity": "Uncommon",
+    "charges": 2,
+    "price": 48,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/stealthwearpantycutpullupsblack.jpg"
+  },
+    {
+    "id": 201,
+    "name": "Simple Times Cotton Squares",
+    "aesthetic": "Plain, unbleached folded cotton square.",
+    "description": "A very basic and traditional option. Requires pins or a snug cover. Offers minimal protection.",
+    "buff": "Can be used as a makeshift bandage in an emergency (1 HP healing).",
+    "rarity": "Mundane",
+    "charges": 2,
+    "price": 1,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/simpletimescottonsquares.jpg"
+  },
+  {
+    "id": 202,
+    "name": "Budget Briefs - Faded Blue",
+    "aesthetic": "Thin disposable material in a washed-out blue.",
+    "description": "Two weak tapes. Light bulk, prone to tearing. Barely adequate for a single minor incident.",
+    "buff": "Slightly less crinkly than other cheap options.",
+    "rarity": "Mundane",
+    "charges": 1,
+    "price": 2,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/budgetbriefsblue.jpg"
+  },
+  {
+    "id": 203,
+    "name": "Trainee Try-Outs - Plain White",
+    "aesthetic": "Generic white pull-up style with a thin absorbent strip.",
+    "description": "Stretchy sides with no tapes. Very light bulk, intended more for catching dribbles than full accidents.",
+    "buff": "Easy to pull up and down (+1 to Dexterity checks for self-dressing).",
+    "rarity": "Mundane",
+    "charges": 2,
+    "price": 3,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/traineetryoutsplainwhite.jpg"
+  },
+  {
+    "id": 204,
+    "name": "Market Stall Seconds - Assorted Prints",
+    "aesthetic": "Mismatched, slightly off-center cartoon animal prints.",
+    "description": "Two tapes of varying stickiness. Medium bulk, quality is inconsistent. You get what you pay for.",
+    "buff": "Occasionally, one might have a surprisingly pleasant, faint scent of berries.",
+    "rarity": "Mundane",
+    "charges": 3,
+    "price": 2,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/marketstallsecondsprint.jpg"
+  },
+  {
+    "id": 205,
+    "name": "Traveler's Emergency Thinlines",
+    "aesthetic": "Compressed, paper-thin beige material.",
+    "description": "Single, weak adhesive strip. Minimal bulk, folds flat for easy packing. For absolute last-resort situations only.",
+    "buff": "Takes up negligible space in a pack.",
+    "rarity": "Mundane",
+    "charges": 1,
+    "price": 4,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/travelersemergencythinlines.jpg"
+  },
+  {
+    "id": 206,
+    "name": "Institutional Comfort Tapes - Plain White",
+    "aesthetic": "Standard clinical white with a blue wetness indicator stripe.",
+    "description": "Four strong, refastenable tapes. Medium-heavy bulk, offering reliable absorbency for extended wear in institutional settings. Hypoallergenic.",
+    "buff": "The wearer has advantage on saving throws against exhaustion from prolonged bed rest.",
+    "rarity": "Mundane",
+    "charges": 5,
+    "price": 7,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/institutionalcomfort.jpg"
+  },
+  {
+    "id": 207,
+    "name": "Homestead Flannel Snaps - Heather Grey",
+    "aesthetic": "Soft heather grey flannel with reinforced snap closures.",
+    "description": "Reusable cloth diaper with three adjustable snaps on each side for a secure fit. Medium bulk, absorbent and durable for daily use. Gets softer with each wash.",
+    "buff": "The wearer gains a +1 bonus to Constitution saving throws against cold weather effects.",
+    "rarity": "Mundane",
+    "charges": 4,
+    "price": 6,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/homesteadflannelsnapsgray.jpg"
+  },
+  {
+    "id": 208,
+    "name": "General Store Basics - Earth Tone",
+    "aesthetic": "Simple, disposable diaper in a muted brown or tan color.",
+    "description": "Two reliable adhesive tapes. Light-medium bulk, offering decent protection for general use. Unscented.",
+    "buff": "Creatures have disadvantage on Wisdom (Perception) checks made to notice the diaper by sight if the wearer is in a natural/forest environment.",
+    "rarity": "Mundane",
+    "charges": 3,
+    "price": 3,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/generalstorebasicsearthtone.jpg"
+  },
+  {
+    "id": 209,
+    "name": "Potty Learner's Pal - Alphabet Print",
+    "aesthetic": "White diaper with a colorful, repeating pattern of friendly cartoon letters and numbers.",
+    "description": "Two wide, easy-grip tapes designed for little hands (or those assisting). Medium bulk with good absorbency for training accidents. Features a 'Well Done!' star that appears when very wet.",
+    "buff": "The wearer (or their caregiver) has advantage on Wisdom (Insight) checks to determine if a change is needed.",
+    "rarity": "Mundane",
+    "charges": 3,
+    "price": 5,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/homesteadflannelsnapsgray.jpg"
+  },
+  {
+    "id": 210,
+    "name": "Bare Minimum Briefs",
+    "aesthetic": "A very thin, almost transparent white material.",
+    "description": "Single center tape. Extremely light bulk, offering the illusion of protection more than actual absorbency.",
+    "buff": "If the wearer is trying to be discreet, creatures have disadvantage on Wisdom (Perception) checks to notice they are diapered by sight alone (smell is another matter).",
+    "rarity": "Mundane",
+    "charges": 1,
+    "price": 3,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/bareminimumbriefs.jpg"
+  },
+    {
+    "id": 211,
+    "name": "Bulwark of the Iron Tortoise",
+    "aesthetic": "Interlocking plates of dark grey, magically treated metal-like fabric, with a soft, padded interior.",
+    "description": "Four heavy-duty magnetic clasps. Immense bulk and weight, offers incredible protection but significantly hinders movement if not attuned.",
+    "buff": "Grants a +2 bonus to AC. The wearer's speed is reduced by 10 feet unless they are a Strength-based character (Str 15+).",
+    "rarity": "Very-Rare",
+    "charges": 10,
+    "price": 500,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/bulwarkoftheirontortoise.png"
+  },
+  {
+    "id": 212,
+    "name": "Whisperwind Zephyr Briefs",
+    "aesthetic": "Pale, almost translucent sky-blue silk, embroidered with swirling cloud patterns that subtly shift.",
+    "description": "Self-fastening with a gentle magical breeze. Feather-light bulk, completely silent. Contains odors perfectly.",
+    "buff": "The wearer gains advantage on Dexterity (Stealth) checks and can cast *Feather Fall* on themselves once per long rest.",
+    "rarity": "Very-Rare",
+    "charges": 8,
+    "price": 500,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/whisperwindzephyrs.jpg"
+  },
+  {
+    "id": 213,
+    "name": "Guardian's Embrace of Comfort",
+    "aesthetic": "Plush, deep crimson velvet with golden, glowing runes of warding along the leg gathers.",
+    "description": "Four wide, soft, magically locking tapes. Luxuriously thick and soft, providing unparalleled comfort and security.",
+    "buff": "The wearer has immunity to psychic damage and advantage on saving throws against being charmed or frightened.",
+    "rarity": "Very-Rare",
+    "charges": 12,
+    "price": 500,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/guardiansembrace.jpg"
+  },
+  {
+    "id": 214,
+    "name": "Chronomage's Pocket of Holding",
+    "aesthetic": "A complex pattern of gears and clock faces in bronze and silver that slowly turn.",
+    "description": "Features temporal clasps that adjust to the perfect fit. Medium bulk. Any mess within is shunted to a tiny extradimensional space.",
+    "buff": "The diaper never feels 'full' to the wearer as contents are stored elsewhere. Once per day, the wearer can cast *Haste* on themselves for 1 minute (no concentration required). After the effect ends, they don't suffer the usual lethargy.",
+    "rarity": "Very-Rare",
+    "charges": 7,
+    "price": 1000,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/chronomagepocket.jpg"
+  },
+  {
+    "id": 215,
+    "name": "Feywild Bloomers",
+    "aesthetic": "Woven from living, iridescent flowers and leaves that change with the seasons or wearer's mood.",
+    "description": "Tied with silken, glowing vines. Light and airy bulk, smells faintly of wildflowers and honey.",
+    "buff": "The wearer can cast *Misty Step* once per short rest. Additionally, they have advantage on Charisma checks when interacting with fey creatures.",
+    "rarity": "Very-Rare",
+    "charges": 9,
+    "price": 3500,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/feywildbloomers.jpg"
+  },
+  {
+    "id": 216,
+    "name": "DeepDwarf DelveDungarees",
+    "aesthetic": "Thick, dark brown, rune-etched material that feels like stone but flexes like leather.",
+    "description": "Four heavy iron buckles. Substantial bulk. Offers excellent protection against environmental hazards underground.",
+    "buff": "The wearer gains tremorsense out to 30 feet and resistance to poison damage.",
+    "rarity": "Very-Rare",
+    "charges": 10,
+    "price": 2800,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/deepdwarfdelvedungarees.jpg"
+  },
+  {
+    "id": 217,
+    "name": "Celestial's Radiance Receptacle",
+    "aesthetic": "Shimmering white and gold fabric that emits a soft, holy light.",
+    "description": "Fastens with clasps of pure light. Medium, comforting bulk. Any unholy taint is neutralized upon contact.",
+    "buff": "The wearer has resistance to necrotic damage and can cast *Protection from Evil and Good* on themselves once per day.",
+    "rarity": "Very-Rare",
+    "charges": 8,
+    "price": 3800,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/celestialradiancereceptacle.jpg"
+  },
+  {
+    "id": 218,
+    "name": "Abyssal Absorbency Wrap",
+    "aesthetic": "Pitch black material that seems to drink in light, with faint, pulsing red veins.",
+    "description": "Secured by shadowy tendrils that writhe slightly. Surprisingly light bulk. Exudes an aura of menace.",
+    "buff": "The wearer gains resistance to fire damage. Once per day, they can cast *Darkness* centered on themselves.",
+    "rarity": "Very-Rare",
+    "charges": 7,
+    "price": 3600,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/abyssalwrap.jpg"
+  },
+  {
+    "id": 219,
+    "name": "Soother of the Savage Beast",
+    "aesthetic": "Soft, natural furs and leathers, adorned with simple, calming nature symbols.",
+    "description": "Leather thong ties. Medium bulk, emanates a calming pheromone that pacifies wild animals.",
+    "buff": "Beasts with an Intelligence of 3 or lower must succeed on a DC 15 Wisdom saving throw to attack the wearer. If they fail, they become indifferent for 1 hour. This effect ends if the wearer attacks the beast.",
+    "rarity": "Very-Rare",
+    "charges": 6, 
+    "price": 3300,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/savagebeastsoother.jpg"
+  },
+  {
+    "id": 220,
+    "name": "Scholar's Secure Study Slips",
+    "aesthetic": "Deep blue velvet, embroidered with silver arcane symbols and constellations.",
+    "description": "Four elegant, self-locking silver clasps. Comfortable medium bulk, designed for long hours of uninterrupted study.",
+    "buff": "The wearer has advantage on Intelligence (Investigation) and Intelligence (Arcana) checks. They cannot be unwillingly put to sleep by magical means.",
+    "rarity": "Very-Rare",
+    "charges": 10,
+    "price": 3700,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/scholarsecureslipjps.g"
+  },
+{
+    "id": 221,
+    "name": "The Unburdened Throne",
+    "aesthetic": "Appears as a simple, perfectly white, impossibly soft diaper that glows with a gentle, internal light. It adjusts its appearance subtly to the wearer's ideal of comfort and dignity.",
+    "description": "No visible tapes or fasteners; it wills itself to stay perfectly in place. No discernible bulk, yet offers absolute containment. All waste is instantly and silently transmuted into harmless, sweet-smelling motes of light that dissipate.",
+    "buff": "The wearer is immune to all non-magical diseases and the poisoned condition. They gain advantage on all Constitution saving throws and automatically succeed on Continence Checks. Once per day, the wearer can cast *Heal* on themselves.",
+    "rarity": "Legendary",
+    "charges": 20,
+    "price": 1500,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/unburdenedthrone.jpg"
+  },
+  {
+    "id": 222,
+    "name": "Pantheon Padding of the Primordials",
+    "aesthetic": "Woven from strands of raw elemental energies—flickering flame, solid earth, flowing water, and whispering air—all harmonized into a single, constantly shifting textile.",
+    "description": "Four clasps, each representing a different primordial element, which fuse seamlessly. The bulk shifts from non-existent to imposing based on the wearer's immediate needs, absorbing and redirecting elemental energies.",
+    "buff": "The wearer gains immunity to acid, cold, fire, lightning, and thunder damage. As an action, the wearer can choose one of these damage types and gain immunity to it for 1 hour (once per long rest). They can cast *Absorb Elements* at 3rd level three times per day.",
+    "rarity": "Legendary",
+    "charges": 15,
+    "price": 5000,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/primordialpadding.jpg"
+  },
+  {
+    "id": 223,
+    "name": "Aspect of the Unsleeping Guardian",
+    "aesthetic": "Forged from a metallic, star-like material that is cool to the touch, etched with countless tiny eyes that slowly blink and observe. It hums with a low, protective energy.",
+    "description": "Locks with a complex series of interlocking, animated plates. Surprisingly comfortable despite its appearance, providing a constant sense of vigilance. It is said to be a fragment of a celestial sentinel's armor.",
+    "buff": "The wearer gains a +3 bonus to AC and saving throws. They cannot be surprised and are immune to the unconscious condition (if reduced to 0 HP, they remain conscious but incapacitated). They gain Truesight out to 60 feet. Any creature attempting to remove the diaper against the wearer's will takes 5d10 radiant damage.",
+    "rarity": "Legendary",
+    "charges": "N/A",
+    "price": 25000,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/unsleepingguardian.png"
+  },
+  {
+    "id": 224,
+    "name": "The Littlest Cosmic Wanderer's Nappy",
+    "aesthetic": "Appears as an impossibly soft, dark blue diaper, speckled with what seem to be actual, twinkling stars and miniature, slowly drifting nebulae. It occasionally emits faint, melodic chimes.",
+    "description": "Fastens with ribbons of pure starlight. Feels like being swaddled by the night sky itself. It is warm and comforting, and whispers secrets of the cosmos to the wearer in dreams or quiet moments.",
+    "buff": "The wearer gains the ability to cast *Teleport* (self only) once per week. They are always under the effect of a *Comprehend Languages* spell. They gain proficiency in navigator's tools and cartographer's tools, and have advantage on Wisdom (Survival) checks to navigate by the stars, even on unfamiliar planes. Once per month, the wearer can ask the diaper a single question that can be answered with a 'yes' or 'no' regarding a future event (as *Augury*). The charges on this diaper reset every 12 hours.",
+    "rarity": "Legendary",
+    "charges": 10,
+    "price": 22000,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/cosmicnappy.jpg"
+  },
+  {
+    "id": 225,
+    "name": "Diaper of the Patient Saint",
+    "aesthetic": "A simple, pure white cloth diaper, exceptionally clean and soft, that never seems to stain or wear. It has a faint, almost imperceptible scent of old parchment and dried herbs.",
+    "description": "Secured by two perfectly smooth, unadorned wooden pins. It is of medium, comforting bulk. Wearing it instills a profound sense of calm, patience, and acceptance.",
+    "buff": "The wearer is immune to madness and effects that would cause extreme emotional states (like magical rage or fear). They can cast *Calm Emotions* (DC 18) at will. Once per day, if the wearer or an ally within 30 feet fails a saving throw, the wearer can choose to allow them to reroll it with advantage. All healing effects on the wearer are maximized.",
+    "rarity": "Legendary",
+    "charges": "Unlimited",
+    "price": 20000,
+    "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/patientsaint.jpg"
+  },
+  {
+  "id": 226, 
+  "name": "Diaper of the Hyena's Riddle",
+  "aesthetic": "Durable, soft grey material with a repeating print of a leering hyena clamping an ornate padlock in its jaws. Fused adhesive tapes.",
+  "description": "This cursed diaper binds to its wearer. It grants +2 AC and +1 Wisdom. Once donned, it cannot be removed except by successfully seducing another willing creature (DC 18 Charisma check). Failure results in illusory mocking laughter and disadvantage on Charisma checks/saves for 1 hour. Prevents external sexual stimulation.",
+  "buff": "Grants a +2 bonus to AC and a +1 bonus to Wisdom (max 22). Curse: Irremovable until a DC 18 Charisma (Persuasion/Deception) check for seduction is passed. Failure causes illusory laughter and disadvantage on Charisma checks/saves for 1 hour. Prevents external sexual stimulation. The diaper charges reset at dawn.",
+  "rarity": "Cursed",
+  "charges": 10,
+  "price": null,
+  "imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/hyenasriddles.jpg"
+  },
+  {
+	"id": 227,
+	"name": "Diaper of Perpetual Dampness",
+	"aesthetic": "A soggy, greyish diaper that always feels uncomfortably moist. It emits a faint, unpleasant odor.",
+	"description": "This cursed diaper can never truly be dried. It offers minimal protection and maximum discomfort.",
+	"buff": "The wearer always feels damp and uncomfortable, imposing disadvantage on Charisma (Persuasion) checks and Dexterity (Stealth) checks due to squishing sounds. It cannot be removed by normal means until a Remove Curse spell is cast.",
+	"rarity": "Cursed",
+	"charges": null,
+	"price": null,
+	"imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/perpetualdampness.jpg"
+  },
+  {
+	"id": 228,
+	"name": "The Leaky Sieve",
+	"aesthetic": "A shoddily made diaper with visible holes and loose threads. It looks like it would fall apart at any moment.",
+	"description": "Despite its appearance of a diaper, it offers virtually no absorbency, channelling any moisture directly outwards.",
+	"buff": "Fails to contain anything. Any liquid that would be absorbed is instead immediately and noticeably released. The wearer must make a DC 10 Constitution saving throw every hour or suffer one level of exhaustion from dehydration if fluids are not replenished.",
+	"rarity": "Cursed",
+	"charges": 1,
+	"price": null,
+	"imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/leakysieve.jpg"
+  },
+  {
+	"id": 229,
+	"name": "Diaper Cover of Irresistible Itchiness",
+	"aesthetic": "Made from a coarse, irritating fabric, possibly burlap, with angry red stitching.",
+	"description": "This diaper cover causes an unbearable itching sensation that makes concentration nearly impossible.",
+	"buff": "The wearer has disadvantage on all ability checks, attack rolls, and saving throws that require concentration. They must also succeed on a DC 13 Wisdom saving throw each hour or spend their action scratching uncontrollably.",
+	"rarity": "Cursed",
+	"charges": null,
+	"price": null,
+	"imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/irresistableitchiness.jpg"
+  },
+  {
+	"id": 230,
+	"name": "The Attention Magnet Diaper",
+	"aesthetic": "Garishly colored in clashing neon hues, adorned with loud, jingling bells and squeakers. Extremely bulky.",
+	"description": "This diaper is impossible to ignore, drawing unwanted attention   from everyone and everything nearby.",
+	"buff": "The wearer has disadvantage on all Dexterity (Stealth) checks. Hostile creatures are always aware of the wearer's location if they are within 60 feet and can see or hear. Any attempt to be inconspicuous automatically fails.",
+	"rarity": "Cursed",
+	"charges": 12,
+	"price": null,
+	"imageUrl": "https://ik.imagekit.io/owlcan/diaperlistapp/attentionmagnet.jpg"
+  },
+  ];
+
+  // Function to render all cards
+  function renderCards(filteredItems = items) {
+    const cardsContainer = cardsContainerEl;
+    
+    // Clear container
+    cardsContainer.innerHTML = '';
+    
+    if (filteredItems.length === 0) {
+      cardsContainer.innerHTML = `
+        <div class="no-results">
+          <h3>No items found</h3>
+          <p>Try adjusting your search or filter criteria</p>
+        </div>
+      `;
+      return;
+    }
+    
+    // Add item cards
+    filteredItems.forEach(item => {
+      // Create card element
+      const cardEl = document.createElement('div');
+      cardEl.className = 'card';
+      cardEl.setAttribute('data-id', item.id);
+      cardEl.onclick = () => showModal(item.id);
+      
+      // Generate card HTML
+      cardEl.innerHTML = `
+        <div class="card-header">
+          <h3 class="card-title">
+            ${item.name}
+            <span class="card-rarity ${item.rarity}">${item.rarity}</span>
+          </h3>
+        </div>
+        <img src="${item.imageUrl}" alt="${item.name}" class="card-image" onerror="this.src='https://placehold.co/400x200/152238/8a9dff?text=Image+Unavailable'">
+        <div class="card-body">
+          <p class="card-aesthetic">${truncateText(item.aesthetic, 100)}</p>
+          <p class="card-description">${truncateText(item.description, 100)}</p>
+          ${item.buff ? `
+            <div class="card-buff">
+              <span class="card-buff-title">D&D 5e Buff:</span>
+              ${truncateText(item.buff, 80)}
+            </div>
+          ` : ''}
+          <div class="card-details">
+            <div class="card-detail-item">
+              <span class="card-detail-icon">💰</span> ${item.price} gp
+            </div>
+            <div class="card-detail-item">
+              <span class="card-detail-icon">🔋</span> ${item.charges} charges
+            </div>
+            ${item.note ? `
+              <div class="card-detail-item">
+                <span class="card-detail-icon">📝</span> ${truncateText(item.note, 20)}
+              </div>
+            ` : ''}
+          </div>
+        </div>
+      `;
+      
+      // Add to container
+      cardsContainer.appendChild(cardEl);
+    });
+  }
+
+  // Helper function to truncate text
+  function truncateText(text, maxLength) {
+    if (!text) return '';
+    if (text.length <= maxLength) return text;
+    return text.substr(0, maxLength) + '...';
+  }
+
+  // Function to filter and sort items
+  function filterAndSortItems() {
+    const searchTerm = searchInputEl.value.toLowerCase();
+    const rarityFilter = rarityFilterEl.value;
+    const sortBy = sortByEl.value;
+    
+    // Filter items
+    let filteredItems = items.filter(item => {
+      const matchesSearch = 
+        item.name.toLowerCase().includes(searchTerm) || 
+        (item.buff && item.buff.toLowerCase().includes(searchTerm)) ||
+        item.description.toLowerCase().includes(searchTerm) ||
+        item.aesthetic.toLowerCase().includes(searchTerm);
+      
+      const matchesRarity = rarityFilter === '' || item.rarity === rarityFilter;
+      
+      return matchesSearch && matchesRarity;
+    });
+    
+    // Sort items
+    filteredItems.sort((a, b) => {
+      switch(sortBy) {
+        case 'name':
+          return a.name.localeCompare(b.name);
+        case 'price':
+          return b.price - a.price;
+        case 'rarity':
+          const rarityOrder = { 'Mundane': 0, 'Common': 1, 'Uncommon': 2, 'Rare': 3, 'Very-Rare': 4,'Legendary': 5, 'Cursed': 6 };
+          return rarityOrder[b.rarity] - rarityOrder[a.rarity];
+        case 'charges':
+          return b.charges - a.charges;
+        default:
+          return 0;
+      }
+    });
+    
+    renderCards(filteredItems);
+  }
+
+  // Function to show the expanded card modal
+  function showModal(itemId) {
+    const item = items.find(i => i.id === parseInt(itemId));
+    if (!item) return;
+    
+    const modalContent = modalContentEl;
+    
+    modalContent.innerHTML = `
+      <div class="expanded-card">
+        <div class="expanded-card-header">
+          <h2 class="expanded-card-title">${item.name}</h2>
+        </div>
+        <div class="expanded-card-content">
+          <div class="expanded-card-image-container">
+            <img src="${item.imageUrl}" alt="${item.name}" class="expanded-card-image" onerror="this.src='https://placehold.co/600x800/152238/8a9dff?text=Image+Unavailable'">
+          </div>
+          <div class="expanded-card-details">
+            <div class="expanded-card-section">
+              <h3 class="expanded-card-section-title">Aesthetic</h3>
+              <p>${item.aesthetic}</p>
+            </div>
+            <div class="expanded-card-section">
+              <h3 class="expanded-card-section-title">Description</h3>
+              <p>${item.description}</p>
+            </div>
+            ${item.buff ? `
+              <div class="expanded-card-section">
+                <h3 class="expanded-card-section-title">D&D 5e Buff</h3>
+                <p>${item.buff}</p>
+              </div>
+            ` : ''}
+            <div class="expanded-card-section">
+              <h3 class="expanded-card-section-title">Stats</h3>
+              <div class="stats-grid">
+                <div class="stat-item">
+                  <div class="stat-value">${item.rarity}</div>
+                  <div class="stat-label">Rarity</div>
+                </div>
+                <div class="stat-item">
+                  <div class="stat-value">${item.charges}</div>
+                  <div class="stat-label">Charges</div>
+                </div>
+                <div class="stat-item">
+                  <div class="stat-value">${item.price} gp</div>
+                  <div class="stat-label">Price</div>
+                </div>
+                ${item.note ? `
+                  <div class="stat-item">
+                    <div class="stat-value">Note</div>
+                    <div class="stat-label">${item.note}</div>
+                  </div>
+                ` : ''}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+    
+    const modal = cardModalEl;
+    modal.hidden = false;
+  }
+
+  // Function to close the modal
+  function closeModal() {
+    const modal = cardModalEl;
+    modal.hidden = true;
+  }
+
+  // Toggle add item form visibility
+  function toggleAddForm() {
+    const form = addItemFormEl;
+    form.hidden = !form.hidden;
+    
+    if (!form.hidden) {
+      itemNameEl.focus();
+    }
+  }
+
+  // Function to handle adding a new item
+  function handleAddItem(event) {
+    event.preventDefault();
+    
+    // Get the next ID
+    const maxId = Math.max(...items.map(item => item.id));
+    
+    // Create new item object
+    const newItem = {
+      id: maxId + 1,
+      name: itemNameEl.value,
+      aesthetic: itemAestheticEl.value,
+      description: itemDescriptionEl.value,
+      buff: itemBuffEl.value,
+      rarity: itemRarityEl.value,
+      charges: parseInt(itemChargesEl.value),
+      price: parseInt(itemPriceEl.value),
+      note: itemNoteEl.value || undefined,
+      imageUrl: itemImageUrlEl.value || `https://placehold.co/400x200/152238/8a9dff?text=${encodeURIComponent(itemNameEl.value)}`
+    };
+    
+    // Add to items array
+    items.push(newItem);
+    
+    // Reset form
+    newItemFormEl.reset();
+    
+    // Hide form
+    toggleAddForm();
+    
+    // Re-render cards
+    filterAndSortItems();
+  }
+
+  // Close modal when clicking outside the content
+  cardModalEl.addEventListener('click', function(event) {
+    if (event.target === this) {
+      closeModal();
+    }
+  });
+
+  // Set up event listeners
+  searchInputEl.addEventListener('input', filterAndSortItems);
+  rarityFilterEl.addEventListener('change', filterAndSortItems);
+  sortByEl.addEventListener('change', filterAndSortItems);
+  // Initialize the page
+  document.addEventListener('DOMContentLoaded', () => {
+    console.log("DOM loaded");
+    // Make sure modal is hidden
+    if (cardModalEl) {
+      cardModalEl.hidden = true;
+      console.log("Modal hidden");
+    } else {
+      console.log("Modal element not found!");
+    }
+    renderCards();
+  });
+    // Initial render
+  renderCards();
+</script>
+</body>
+</html>

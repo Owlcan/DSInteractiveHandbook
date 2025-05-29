@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Combat Academy Rules and Regulations</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=MedievalSharp&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #44403c; /* stone-700 */
+            color: #a09893; /* stone-100 */
+        }
+        .medieval-title {
+            font-family: 'MedievalSharp', cursive;
+        }
+        .content-card {
+            background-color: #a09893; /* stone-200 */
+            color: #292524; /* stone-800 */
+            border: 2px solid #f59e0b; /* amber-500 */
+        }
+        .content-card h2 {
+            color: #78350f; /* amber-700 */
+            border-bottom: 2px solid #f59e0b; /* amber-500 */
+        }
+        .content-card h3 {
+            color: #92400e; /* amber-600 */
+        }
+        .code-block {
+            background-color: #292524; /* stone-800 */
+            color: #eab308; /* yellow-500 */
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem; /* rounded-md */
+            font-family: monospace;
+            overflow-x: auto;
+            border: 1px solid #f59e0b; /* amber-500 */
+        }
+        .link-custom {
+            color: #b45309; /* amber-600 */
+            text-decoration: underline;
+        }
+        .link-custom:hover {
+            color: #f59e0b; /* amber-500 */
+        }
+        .placeholder-img {
+            width: 100%;
+            max-width: 300px; /* Max width for placeholders */
+            height: auto;
+            border-radius: 0.5rem; /* rounded-lg */
+            margin: 1rem auto;
+            display: block;
+            border: 2px solid #f59e0b; /* amber-500 */
+        }
+        .gold-text {
+            color: #f59e0b; /* amber-500 */
+        }
+        .dark-brown-bg {
+             background-color: #57534e; /* stone-600 for slightly lighter than body */
+        }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8">
+    <div class="container mx-auto max-w-4xl">
+        <header class="text-center mb-12">
+            <h1 class="medieval-title text-5xl md:text-6xl font-bold gold-text mb-4">Combat Academy</h1>
+            <p class="text-2xl md:text-3xl text-stone-300">Rules and Regulations</p>
+            <img src="https://placehold.co/600x150/57534E/F59E0B?text=Academy+Banner+Placeholder" alt="Academy Banner Placeholder" class="placeholder-img mt-6 !max-w-xl">
+        </header>
+
+        <section class="mb-10 p-6 content-card rounded-lg shadow-xl">
+            <h2 class="medieval-title text-3xl font-semibold mb-6 pb-2">Academy Conduct</h2>
+            <div class="grid md:grid-cols-3 gap-4 items-center">
+                <div class="md:col-span-2 space-y-4">
+                    <p><strong class="gold-text">"Lawful" Combat:</strong> Must stay in Sparring Room channels. PvP outside designated areas may face consequences from staff. You can PvP outside these areas if you accept the risks.</p>
+                    <p><strong class="gold-text">PvP Agreement:</strong> You acknowledge that PvP may occur. Fight or flee to avoid conflict. This is a Combat Academy.</p>
+                    <p><strong class="gold-text">No Abuse:</strong> Ganging up or abusing players is forbidden. Access may be revoked. Play nice; no killing.</p>
+                    <p><strong class="gold-text">Character Creation:</strong> Owlcan only approves characters, no troubleshooting provided.</p>
+                    <p><strong class="gold-text">Rolls:</strong> Avoid superfluous rolls for actions a normal person wouldn't fail under extreme circumstances.</p>
+                    <p><strong class="gold-text">Mortality:</strong> You are not dead unless Owlcan states it. Do not circumvent death rules.</p>
+                    <p><strong class="gold-text">Server Nickname:</strong> Recommended to add your character name to your server nickname.</p>
+                    <p><strong class="gold-text">Uniforms:</strong> Femme-Cut and Masculine-Cut examples provided. Combinations are acceptable if a shirt, undershirt, vest, socks, bottoms, and underpants are present and reasonably unaltered.</p>
+                </div>
+                <img src="https://placehold.co/300x400/44403C/F59E0B?text=Sparring+Rules+Icon" alt="Sparring Rules Icon" class="placeholder-img hidden md:block">
+            </div>
+        </section>
+
+        <section class="mb-10 p-6 content-card rounded-lg shadow-xl">
+            <h2 class="medieval-title text-3xl font-semibold mb-6 pb-2">Getting Started: Character Creation (Level 5)</h2>
+            <div class="grid md:grid-cols-3 gap-4 items-center">
+                 <img src="https://placehold.co/300x450/44403C/F59E0B?text=Character+Sheet+Art" alt="Character Sheet Art" class="placeholder-img hidden md:block">
+                <div class="md:col-span-2 space-y-4">
+                    <p>This game uses Dungeons and Dragons 5th Edition. You'll need a character sheet. Compatible methods: Gsheet and D&D Beyond.</p>
+                    
+                    <h3 class="text-xl font-semibold mt-4">Gsheet:</h3>
+                    <p>Use this link: <a href="https://gsheet2.avrae.io/" target="_blank" class="link-custom">GSheet v2.0</a>.</p>
+                    <p>Once made, use command: <code class="code-block inline-block">!gsheet (link to google sheet, set privacy to "anyone with link can view")</code>.</p>
+                    <p>This is a manual, free option.</p>
+
+                    <h3 class="text-xl font-semibold mt-4">D&D Beyond:</h3>
+                    <p>Use the official site: <a href="https://www.dndbeyond.com/characters/builder" target="_blank" class="link-custom">D&D Beyond Character Builder</a>.</p>
+                    <p>Link with command: <code class="code-block inline-block">!beyond (url to character)</code>.</p>
+                    <p>Note: Many features are behind a paywall.</p>
+
+                    <h3 class="text-xl font-semibold mt-4">Key Character Creation Points:</h3>
+                    <ul class="list-disc list-inside space-y-2 pl-4">
+                        <li><strong class="gold-text">Starting Level:</strong> Characters are currently <strong class="text-2xl gold-text">Level 5</strong>. Choose spells and feats accordingly.</li>
+                        <li><strong class="gold-text">Point Buy System:</strong> Use the 27 point buy system. Start with 8 in every skill, distribute 27 additional points. Calculator: <a href="http://chicken-dinner.com/5e/5e-point-buy.html" target="_blank" class="link-custom">Point Buy Calculator</a>.</li>
+                        <li><strong class="gold-text">Health Calculation:</strong> Take max HP per level. (e.g., Bard d8 = 8 + CON modifier per level).</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-10 p-6 content-card rounded-lg shadow-xl">
+            <h2 class="medieval-title text-3xl font-semibold mb-6 pb-2">Using The Bot</h2>
+            <img src="https://placehold.co/400x200/44403C/F59E0B?text=Bot+Interface+Concept" alt="Bot Interface Concept" class="placeholder-img">
+            <p class="mb-4">The bot has many useful commands. `<>` denotes required, `()` optional. Do not include brackets. Shortened commands are in `[]`.</p>
+            <ul class="space-y-3">
+                <li><code class="code-block">!roll [!r] &lt;num_dice&gt;d&lt;sides&gt; (+ mod) (adv/dis) (-dc &lt;target_num&gt;)</code>: Rolls dice, can include modifiers, advantage/disadvantage, and DC for auto pass/fail.</li>
+                <li><code class="code-block">!check [!c] &lt;skill&gt; (adv/dis) (-dc &lt;target_num&gt;)</code>: Rolls for a skill/attribute using sheet modifiers.</li>
+                <li><code class="code-block">!save [!s] &lt;skill&gt; (adv/dis) (-dc &lt;target_num&gt;)</code>: Rolls for a skill save using sheet modifiers.</li>
+                <li><code class="code-block">!attack [!a] &lt;attack_name&gt; (adv/dis)</code>: Attacks with a weapon from your sheet.</li>
+                <li><code class="code-block">!cast &lt;spell_name&gt; (-l &lt;level&gt;) (-i) (-dc &lt;target_num&gt;)</code>: Casts a spell. `-l` for slot level, `-i` to ignore restrictions (useful for racial/class spells without slots).</li>
+                <li><code class="code-block">!game [!g] (longrest) (shortrest) (spellslot (slot_to_check) (num_left)) (hp)</code>: Manages character game status. Includes rests, spell slot checking/setting, and HP checking/setting.</li>
+            </ul>
+        </section>
+
+        <section class="mb-10 p-6 content-card rounded-lg shadow-xl">
+            <h2 class="medieval-title text-3xl font-semibold mb-6 pb-2">Fight Commands (Initiative System)</h2>
+             <img src="https://placehold.co/400x250/44403C/F59E0B?text=Dynamic+Combat+Scene" alt="Dynamic Combat Scene" class="placeholder-img">
+            <p class="mb-4">The bot's initiative tracking system is invaluable for combat.</p>
+            <p><strong class="gold-text">Starting Combat:</strong> One player uses <code class="code-block inline-block">!init begin</code>.</p>
+            <p><strong class="gold-text">Joining Combat:</strong> Players use <code class="code-block inline-block">!init join (adv/dis if applicable)</code>.</p>
+            <p><strong class="gold-text">Turns:</strong> Use <code class="code-block inline-block">!init next</code> to start the first turn and to proceed to subsequent turns.</p>
+            
+            <h3 class="text-xl font-semibold mt-6 mb-2">Initiative Commands:</h3>
+            <ul class="space-y-3">
+                <li><code class="code-block">!init madd &lt;monster_name&gt;</code>: Adds a monster with auto health/stats.</li>
+                <li><code class="code-block">!init hp &lt;target_name&gt; &lt;mod, set, max&gt; &lt;hp_value or +value&gt;</code>: Sets target's health.</li>
+                <li><code class="code-block">!init attack &lt;target_name&gt; &lt;attack_name&gt; (adv/dis)</code>: Attacks target.</li>
+                <li><code class="code-block">!init aoo &lt;target_name&gt; &lt;attack_name&gt;</code>: Attack of opportunity.</li>
+                <li><code class="code-block">!init cast &lt;spellname&gt; (-t &lt;target(s)&gt;)</code>: Casts spell, auto calculates saves/DC.</li>
+                <li><code class="code-block">!init reactcast &lt;spellname&gt; (-t &lt;target(s)&gt;)</code>: Casts spell as reaction.</li>
+                <li><code class="code-block">!init end</code>: Ends combat in the channel.</li>
+            </ul>
+            <p class="mt-4">Find all bot commands here: <a href="https://avrae.io/commands" target="_blank" class="link-custom">Avrae Commands</a>.</p>
+        </section>
+
+        <section class="mb-10 p-6 content-card rounded-lg shadow-xl">
+            <h2 class="medieval-title text-3xl font-semibold mb-6 pb-2">Special Item Rules: Diapers</h2>
+            <div class="flex flex-col md:flex-row items-center gap-4">
+                <img src="https://placehold.co/200x200/44403C/F59E0B?text=Rules+Scroll+Icon" alt="Rules Scroll Icon" class="placeholder-img !max-w-[150px] md:!max-w-[200px]">
+                <ul class="list-disc list-inside space-y-2 pl-4 flex-grow">
+                    <li><strong class="gold-text">-5 Speed</strong> while diapered.</li>
+                    <li><strong class="gold-text">-5 additional Speed</strong> when messy (total -10 Speed).</li>
+                    <li><strong class="gold-text">-5 to Persuasion</strong> if diaper is visible to someone.</li>
+                    <li><strong class="gold-text">-10 to Persuasion</strong> if stinky or visibly leaking and diaper is visible.</li>
+                    <li><strong class="gold-text">+1 to Bluff checks</strong> involving innocence/guiltlessness if diaper is visible.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="mb-10 p-6 content-card rounded-lg shadow-xl">
+            <h2 class="medieval-title text-3xl font-semibold mb-6 pb-2">Helpful Links</h2>
+            <img src="https://placehold.co/300x150/44403C/F59E0B?text=Library+of+Links" alt="Library of Links" class="placeholder-img">
+            <ul class="list-disc list-inside space-y-2 pl-4">
+                <li><a href="https://crobi.github.io/dnd5e-quickref/preview/quickref.html" target="_blank" class="link-custom">D&D 5e Quick Reference</a>: Actions your character can take.</li>
+                <li><a href="https://5thsrd.org/rules/abilities/strength/" target="_blank" class="link-custom">5e SRD: Strength (Carrying Capacity)</a>: How much your character can carry.</li>
+            </ul>
+        </section>
+
+        <section class="p-6 content-card rounded-lg shadow-xl">
+            <h2 class="medieval-title text-3xl font-semibold mb-6 pb-2">Dice Are Final</h2>
+            <div class="flex flex-col md:flex-row items-center gap-6">
+                <img src="https://placehold.co/250x250/44403C/F59E0B?text=Dice+of+Destiny" alt="Dice of Destiny" class="placeholder-img !max-w-[200px] md:!max-w-[250px]">
+                <p class="flex-grow">With exceptions like the Lucky feat, dice rolls are final. If you believe a roll is superfluous (auto-pass) or your passive skill is sufficient, you don't need to roll. <strong class="gold-text">However, once you HAVE rolled, you must abide by that roll.</strong> This is D&D; the dice rule all.</p>
+            </div>
+        </section>
+
+        <footer class="text-center mt-12 py-6 border-t-2 border-amber-600">
+            <p class="text-stone-300">&copy; Combat Academy - May your rolls be ever in your favor.</p>
+        </footer>
+    </div>
+</body>
+</html>

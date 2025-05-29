@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diaper Academy Regalia Uniform Creator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--light-gold);
+            background-image: url('https://www.transparenttextures.com/patterns/light-paper-fibers.png');
+            color: #3b322c; /* Darker text for readability */
+            line-height: 1.6;
+        }
+
+        .content-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            background-color: var(--light-gold);
+            background-image: url('https://www.transparenttextures.com/patterns/parchment.png');
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border: 12px solid #b08d57; /* Muted gold border */
+        }
+
+        h1, h2, h3 {
+            font-family: 'Cinzel', serif;
+            color: #8c693a; /* Muted gold for titles */
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            border-bottom: 2px solid #8c693a;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+
+        .regalia-creator {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .section {
+            background-color: rgba(240, 230, 220, 0.7); /* Lighter section background */
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            width: 100%;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        select, button {
+            background: linear-gradient(to bottom, #d4b78c, #a88665); /* Muted gold gradient */
+            color: #4a3b2a;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            font-family: 'Cinzel', serif;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            margin: 5px;
+        }
+
+        select {
+            width: 100%;
+            max-width: 400px;
+        }
+
+        button:disabled {
+            background: linear-gradient(to bottom, #b0b0b0, #8d8d8d);
+            cursor: not-allowed;
+            color: #555;
+        }
+
+        .slot-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .slot-value {
+            font-size: 24px;
+            margin: 0 15px;
+            font-weight: bold;
+            color: #8c693a;
+        }
+
+        .upgrades-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .upgrade-card {
+            background-color: rgba(224, 206, 184, 0.8); /* Lighter card background */
+            border: 1px solid #b08d57;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .upgrade-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(176, 141, 87, 0.3);
+        }
+
+        .upgrade-title {
+            font-weight: bold;
+            color: #8c693a;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .upgrade-type {
+            color: #a88665;
+            font-style: italic;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .upgrade-cost {
+            margin-bottom: 10px;
+        }
+
+        .upgrade-description {
+            color: #5c4d3e;
+            margin-bottom: 15px;
+            font-size: 0.95em;
+        }
+
+        .selectUpgradeBtn {
+            background: linear-gradient(to bottom, #b08d57, #826440);
+            color: #f0e6d6;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.2s;
+        }
+        
+        .selectUpgradeBtn:not([disabled]):hover {
+            filter: brightness(1.1);
+            transform: scale(1.05);
+        }
+
+        .type-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        /* New type indicators for Regalia */
+        .defense-type { background-color: #6495ED; /* Cornflower Blue */ }
+        .utility-type { background-color: #90EE90; /* Light Green */ }
+        .special-type { background-color: #BA55D3; /* Medium Orchid */ }
+        .academy-type { background-color: #FFD700; /* Gold */ }
+
+
+        #regaliaSummary {
+            background-color: rgba(224, 206, 184, 0.8);
+            border: 1px solid #b08d57;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 30px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        #decreaseSlotBtn:hover, #increaseSlotBtn:hover {
+            background-color: #c4a880;
+            transform: scale(1.05);
+        }
+
+        #confirmSlotsBtn:hover, #finalizeRegaliaBtn:hover {
+            background: linear-gradient(to bottom, #e0c8a0, #b89670);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .slot-group {
+            display: flex;
+            border: 2px solid #b08d57;
+            border-radius: 15px;
+            padding: 5px;
+            background-color: rgba(176, 141, 87, 0.1);
+        }
+
+        .slot-circle {
+            width: 23px;
+            height: 23px;
+            border-radius: 50%;
+            margin: 5px;
+            background-color: #D3D3D3; /* Light Gray for empty */
+            border: 2px solid #b08d57;
+            transition: background-color 0.3s;
+        }
+
+        /* Slot filled colors for Regalia */
+        .slot-filled-defense  { background: radial-gradient(circle, #87CEFA, #6495ED); } /* Light Sky Blue to Cornflower Blue */
+        .slot-filled-utility  { background: radial-gradient(circle, #98FB98, #90EE90); } /* Pale Green to Light Green */
+        .slot-filled-special  { background: radial-gradient(circle, #DDA0DD, #BA55D3); } /* Plum to Medium Orchid */
+        .slot-filled-academy  { background: radial-gradient(circle, #FFEEAA, #FFD700); } /* Light Gold to Gold */
+
+        .regalia-notes {
+            font-size: 0.8em;
+            color: #7a5c3b;
+            margin-left: 5px;
+        }
+
+    </style>
+
+<body>
+<div class="content-container">
+    <div id="regalia-creator-app" style="background-color: #f0e6d6; color: #4a3b2a; font-family: 'Cinzel', serif; padding: 20px; border: 2px solid #b08d57; border-radius: 5px; max-width: 1200px; margin: 0 auto; box-shadow: 0 0 20px rgba(176, 141, 87, 0.3);">
+      <h1 style="text-align: center; color: #8c693a; text-shadow: 0 0 5px #b08d57; margin-bottom: 30px;">Diaper Academy Regalia Uniform Creator</h1>
+      
+      <div id="progressBarCtn" style="width: 100%; height: 20px; background-color: #c4a880; border: 1px solid #8c693a; margin: 20px 0; border-radius: 10px; overflow: hidden;">
+        <div id="progressBarEl" style="height: 100%; width: 0%; background: linear-gradient(to right, #b08d57, #8c693a); transition: width 0.5s;"></div>
+      </div>
+      <div style="text-align: center; margin-bottom: 30px; font-size: 1.2em;">
+        <span id="stageDisplay" style="background-color: rgba(176, 141, 87, 0.2); padding: 5px 15px; border-radius: 15px; border: 1px solid #b08d57;">Stage 1: Choose Base Regalia</span>
+      </div>
+      
+      <div id="slotIndicatorsCtn" style="display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;"></div>
+      
+      <div id="regaliaSelectionCtn" style="transition: all 0.3s ease;">
+        <h2 style="color: #8c693a; border-bottom: 1px solid #b08d57; padding-bottom: 10px; text-align: center;">Choose Your Regalia Base</h2>
+        <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
+          <select id="regaliaTypeSelect" style="background-color: #e0c8a0; color: #4a3b2a; padding: 12px; border: 1px solid #b08d57; border-radius: 4px; width: 100%; margin-bottom: 20px; font-family: 'Cinzel', serif; cursor: pointer;">
+            <option value="" disabled selected>Select a regalia type...</option>
+          </select>
+        </div>
+        
+        <div id="slotSelectionCtn" style="margin-top: 20px; display: none; animation: fadeIn 0.5s ease;">
+          <h2 style="color: #8c693a; border-bottom: 1px solid #b08d57; padding-bottom: 10px; text-align: center;">Select Upgrade Slots</h2>
+          <p style="text-align: center; margin-bottom: 20px;">How many upgrade slots for your regalia?</p>
+          <div style="display: flex; justify-content: center; align-items: center; gap: 15px;">
+            <button id="decreaseSlotBtn" style="background-color: #d4b78c; color: #4a3b2a; border: 1px solid #b08d57; border-radius: 50%; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; font-size: 20px; cursor: pointer; transition: all 0.2s;">-</button>
+            <span id="slotCountDisplay" style="font-size: 2em; width: 60px; text-align: center; color: #8c693a; text-shadow: 0 0 3px #b08d57;">1</span>
+            <button id="increaseSlotBtn" style="background-color: #d4b78c; color: #4a3b2a; border: 1px solid #b08d57; border-radius: 50%; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; font-size: 20px; cursor: pointer; transition: all 0.2s;">+</button>
+          </div>
+          <div style="margin-top: 30px; text-align: center;">
+            <button id="confirmSlotsBtn" style="background: linear-gradient(to bottom, #d4b78c, #a88665); color: #4a3b2a; border: none; border-radius: 4px; padding: 12px 24px; font-weight: bold; cursor: pointer; font-family: 'Cinzel', serif; transition: all 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">Confirm Slots</button>
+          </div>
+        </div>
+        
+        <div id="upgradeSelectionCtn" style="margin-top: 20px; display: none; animation: fadeIn 0.5s ease;">
+          <h2 style="color: #8c693a; border-bottom: 1px solid #b08d57; padding-bottom: 10px; text-align: center;">Choose Your Upgrades</h2>
+          <p style="text-align: center; margin-bottom: 20px; font-size: 1.2em;">
+            Slots Remaining: <span id="remainingSlotsDisplay" style="color: #8c693a; font-weight: bold;">1</span>
+          </p>
+          
+          <div id="upgradeOptionsCtn" class="upgrades-container" style="margin-top: 20px;">
+            </div>
+          
+          <div id="selectedUpgradesCtn" style="margin-top: 30px; background-color: rgba(212, 183, 140, 0.5); padding: 10px; border-radius: 5px; border: 1px solid #b08d57;">
+            <h3 style="color: #8c693a; text-align: center; margin-top: 0;">Selected Loadout</h3>
+            <ul id="selectedUpgradesList" style="list-style-type: none; padding: 0;">
+              </ul>
+          </div>
+          
+          <div style="margin-top: 30px; text-align: center;">
+            <button id="finalizeRegaliaBtn" style="background: linear-gradient(to bottom, #d4b78c, #a88665); color: #4a3b2a; border: none; border-radius: 4px; padding: 12px 24px; font-weight: bold; cursor: pointer; font-family: 'Cinzel', serif; transition: all 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.2); display: none;">Finalize Regalia Design</button>
+          </div>
+          
+          <div id="regaliaCustomizationCtn" style="margin-top: 30px; display: none; animation: fadeIn 0.5s ease; background-color: rgba(212, 183, 140, 0.5); padding: 20px; border-radius: 5px; border: 1px solid #b08d57;">
+            <h3 style="color: #8c693a; text-align: center; margin-top: 0; border-bottom: 1px solid #b08d57; padding-bottom: 10px;">Personalize Your Regalia (Optional)</h3>
+            <p style="text-align: center; margin-bottom: 20px; font-size: 0.9em; color: #4a3b2a;">
+              Give your splendid regalia a name and an image before finalizing.
+            </p>
+            
+            <div style="display: flex; flex-direction: column; gap: 15px; margin-top: 20px;">
+              <div>
+                <label for="regaliaNameInput" style="display: block; margin-bottom: 5px; color: #8c693a;">Regalia Name:</label>
+                <input type="text" id="regaliaNameInput" placeholder="Enter a name for your regalia..." style="width: 100%; padding: 12px; background-color: #e0c8a0; color: #4a3b2a; border: 1px solid #b08d57; border-radius: 4px; font-family: 'Cinzel', serif;">
+              </div>
+              
+              <div>
+                <label for="regaliaImageInput" style="display: block; margin-bottom: 5px; color: #8c693a;">Regalia Image URL (optional):</label>
+                <input type="text" id="regaliaImageInput" placeholder="Enter an image URL..." style="width: 100%; padding: 12px; background-color: #e0c8a0; color: #4a3b2a; border: 1px solid #b08d57; border-radius: 4px; font-family: 'Cinzel', serif;">
+              </div>
+              
+              <div id="imagePreviewCtn" style="display: none; margin: 15px auto; max-width: 300px; border: 1px solid #b08d57; padding: 5px; background-color: #e0c8a0;">
+                <img id="imagePreviewEl" src="" alt="Regalia Preview" style="max-width: 100%; max-height: 200px; display: block; margin: 0 auto;">
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div id="regaliaSummaryCtn" style="margin-top: 20px; display: none; animation: fadeIn 0.5s ease;">
+          <h2 style="color: #8c693a; border-bottom: 1px solid #b08d57; padding-bottom: 10px; text-align: center;">Your Diaper Academy Regalia Uniform</h2>
+          <div id="regaliaSummaryContent">
+            </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+<script>
+  // Data for Regalia Types
+const regaliaTypes = [
+    // **Themed Regalia**
+    { name: "Standard Issue Onesie", ac: 11, notes: "", value: 5 }, // Analogous to Padded Armor
+    { name: "Padded Training Pants", ac: 11, notes: "Stealth Disadvantage", value: 5 }, // Analogous to Padded Armor
+    { name: "Reinforced Footie Pajamas", ac: 12, notes: "", value: 45 }, // Analogous to Studded Leather
+    { name: "Absorbency-Enhanced Jumpsuit", ac: 12, notes: "", value: 45 }, // Analogous to Studded Leather
+    { name: "Scholarly Robes with Padded Lining", ac: 11, notes: "", value: 5 }, // Analogous to Padded Armor
+    { name: "Ceremonial Gown of the Graduate", ac: 10, notes: "", value: 1 }, // Basic clothing
+    { name: "Tactical Diaper Coveralls", ac: 13, notes: "", value: 50 }, // Analogous to Chain Shirt
+    { name: "Little Knight's Armored Bloomers", ac: 14, notes: "Stealth Disadvantage", value: 50 }, // Analogous to Scale Mail/Ring Mail
+    { name: "Princess's Protective Pettipants", ac: 13, notes: "It's a diaper cover- missy, you can call it pettipants all day, but it goes over what? Your DIAPER!~ <3", value: 50 }, // Analogous to Chain Shirt
+    { name: "Starlight Dreamer Sleepsuit", ac: 11, notes: "", value: 5 }, // Analogous to Padded Armor
+    { name: "Moonlight Serenade Frilled Dress", ac: 12, notes: "Grants advantage on Charisma checks while worn", value: 1400 }, // AC 12 + significant social bonus
+    { name: "Cloudweave Hooded Onesie", ac: 11, notes: "Advantage on stealth checks in low-light areas", value: 1400 }, // AC 11 + stealth bonus
+    { name: "Battle-Knit Tutu", ac: 13, notes: "Grants +1 to AC against melee attacks due to agility", value: 1400 }, // AC 13 + conditional +1 AC
+    { name: "Darkenveil Latex Victorian Dress", ac: 12, notes: "Resistance to poison effects and sensory afflictions, disadvantage on stealth based sound checks against targets with hearing.", value: 2200 }, // AC 12 + multiple resistances
+    { name: "Arcane Scholar's Layered Dress", ac: 12, notes: "Grants advantage on Intelligence saves", value: 1400 }, // AC 12 + advantage on a key save
+
+    // **Themed Gear**
+    { name: "Armored Nun’s Habit", ac: 13, notes: "Light armor; allows wearer to cast divine spells with +1 save DC", value: 2200 }, // AC 13 + potent spellcasting bonus
+    { name: "Restrictive Heavy Armored Nun’s Habit", ac: 16, notes: "Heavy armor; wearer gains advantage on all saves against fear effects", value: 1400 }, // AC 16 (Chain Mail base) + advantage vs fear
+    { name: "Sanctified Cleric Vestments", ac: 12, notes: "Grants resistance to necrotic damage", value: 2200 }, // AC 12 + damage resistance
+    { name: "Oracle’s Blessed Mantle", ac: 12, notes: "Wearer has advantage on insight checks and saves against illusions", value: 1400 }, // AC 12 + advantage on insight & illusion saves
+   
+    // **Witch Attire**
+    { name: "Traditional Witch’s Outfit", ac: 12, notes: "Standard dark robes infused with minor enchantments. Grants +1 to Arcana checks.", value: 1400 }, // AC 12 + skill bonus
+    { name: "Widdle Witch Waddle Dress", ac: 12, notes: "A poofy, overly frilly dress perfect for waddling around. Allows wearer to cast Prestidigitation at will.", value: 1400 }, // AC 12 + at-will cantrip
+    { name: "Shadowbound Witch Hat", ac: 11, notes: "A deep black, wide-brimmed hat that enhances the wearer’s magical senses. Grants advantage on Perception checks for detecting magic.", value: 1400 }, // AC 11 + specific perception advantage
+    { name: "Frilly Arcane Witch Hat", ac: 11, notes: "A lace-adorned hat that boosts magical prowess. Wearer gains +1 bonus to spell attack rolls.", value: 2200 }, // AC 11 + significant spell attack bonus
+
+    // **D&D Armors**
+    { name: "Padded Armor", ac: 11, notes: "Stealth Disadvantage", value: 5 },
+    { name: "Leather Armor", ac: 11, notes: "", value: 10 },
+    { name: "Studded Leather Armor", ac: 12, notes: "", value: 45 },
+    { name: "Hide Armor", ac: 12, notes: "", value: 10 },
+    { name: "Chain Shirt", ac: 13, notes: "", value: 50 },
+    { name: "Scale Mail", ac: 14, notes: "Stealth Disadvantage", value: 50 },
+    { name: "Breastplate", ac: 14, notes: "", value: 400 },
+    { name: "Half Plate Armor", ac: 15, notes: "Stealth Disadvantage", value: 750 },
+    { name: "Ring Mail", ac: 14, notes: "Stealth Disadvantage", value: 30 },
+    { name: "Chain Mail", ac: 16, notes: "Stealth Disadvantage, Str 13 req.", value: 75 },
+    { name: "Splint Armor", ac: 17, notes: "Stealth Disadvantage, Str 15 req.", value: 200 },
+    { name: "Plate Armor", ac: 18, notes: "Stealth Disadvantage, Str 15 req.", value: 1500 },
+
+    // **Jewelry & Accessories** (Assuming 'ac: X' for these means '+X AC Bonus')
+    { name: "Frilly Arcane Witch Hat", ac: 1, notes: "A lace-adorned hat that boosts magical prowess. Wearer gains +1 bonus to spell attack rolls.", value: 2200 }, // +1 AC & spell
+    { name: "Gold/Silver Ring", ac: 1, notes: "A simple ring that grants a +1 bonus to AC and requires attunement, a basic regalia base.", value: 1400 }, // +1 AC
+    { name: "Gold/Silver Necklace", ac: 1, notes: "A simple necklace that grants a +1 bonus to AC and requires attunement, a basic regalia base.", value: 1400 }, // +1 AC
+    { name: "Gold/Silver Bracelet", ac: 1, notes: "A simple bracelet that grants a +1 bonus to AC and requires attunement, a basic regalia base.", value: 1400 }, // +1 AC
+    { name: "Gold/Silver Circlet", ac: 1, notes: "A simple circlet that grants a +1 bonus to AC and requires attunement, a basic regalia base.", value: 1400 }, // +1 AC
+    { name: "Enchanted Pacifier", ac: 1, notes: "A simple pacifier that grants a +1 bonus to AC and requires attunement, a basic regalia base.", value: 1400 }, // +1 AC
+    { name: "Enchanted Diaper Pin", ac: 1, notes: "Grants +1 AC and allows wearer to cast Mage Armor once per long rest", value: 1400 }, // +1 AC & spell
+    { name: "Mystic Brooch", ac: 1, notes: "Grants +1 AC and allows wearer to cast Protection from Evil and Good once per long rest", value: 1400 }, // +1 AC & spell
+    { name: "RuneShield Ring", ac: 1, notes: "Grants +1 AC and allows wearer to cast Shield of Faith once per long rest", value: 1400 }, // +1 AC & spell
+    { name: "ArcaneWard Pendant", ac: 1, notes: "Grants +1 AC and allows wearer to cast Mage Armor once per long rest", value: 1400 }, // +1 AC & spell
+    { name: "Celestial Amulet", ac: 1, notes: "Grants +1 AC and allows wearer to cast Bless once per long rest", value: 1400 }, // +1 AC & spell
+    { name: "Diaper Cover of the Arcane Guardian", ac: 2, notes: "Grants +2 AC and allows wearer to cast Shield spell once per long rest", value: 2200 }, // +2 AC & powerful spell
+
+    // **Armor Partials & Accessories** (Assuming 'ac: X' for these means '+X AC Bonus', unless it's a shield)
+    { name: "Steel-Reinforced Pauldrons", ac: 1, notes: "Stackable with other armor; grants resistance to bludgeoning damage from above attacks", value: 2200 }, // +1 AC & resistance
+    { name: "Shield", ac: 2, notes: "Grants +2 AC when wielded.", value: 10 },
+    { name: "+1 Shield", ac: 3, notes: "Grants +3 AC when wielded.", value: 1400 }, // Standard +1 magic item
+    { name: "Buckler Shield", ac: 1, notes: "Grants +1 AC when wielded; does not impose disadvantage on Dexterity (Stealth) checks.", value: 5 }, // Cheaper shield variant
+    { name: "Enchanted Bracers", ac: 1, notes: "Grants +1 AC and allows wearer to cast Shield spell once per long rest", value: 1400 }, // +1 AC & spell
+    { name: "Mystic Cloak", ac: 1, notes: "Grants advantage on Dexterity (Stealth) checks and resistance to fire damage", value: 2200 }, // +1 AC, stealth adv, & resistance
+    { name: "Runed Gauntlets", ac: 1, notes: "Adds +1 to unarmed strikes and allows wearer to punch ghosts", value: 1400 }, // +1 AC & magical unarmed strikes
+    { name: "Boots of the Warden", ac: 1, notes: "Grants advantage on Dexterity (Stealth) checks in dim light or darkness", value: 1400 }, // +1 AC & stealth adv
+    { name: "Greaves of the Titan", ac: 1, notes: "Wearer cannot be knocked prone by non-magical effects", value: 1400 }, // +1 AC & prone immunity
+    { name: "Ceremonial Cloak of the Gilded", ac: 1, notes: "Grants +1 to Charisma-based skill checks and resistance to radiant damage", value: 2200 }, // +1 AC, skill bonus, & resistance
+    { name: "Adamantine Plated Gloves", ac: 1, notes: "Wearer negates one critical hit per long rest", value: 2200 }, // +1 AC & crit negation
+    { name: "Stormbound Warboots", ac: 1, notes: "Wearer gains resistance to lightning damage", value: 2200 }, // +1 AC & resistance
+    { name: "Enchanted Warden’s Hood", ac: 1, notes: "Grants advantage on saving throws against mind-affecting spells", value: 2200 }, // +1 AC & adv on saves
+    { name: "Frozen Guard Bracers", ac: 1, notes: "Grants resistance to cold damage", value: 2200 }, // +1 AC & resistance
+    { name: "Runed Battlemage Cloak", ac: 1, notes: "Allows wearer to ignore the verbal component of one spell per long rest", value: 1400 }, // +1 AC & spell utility
+    { name: "Dragonhide Bracers", ac: 1, notes: "Grants resistance to fire damage", value: 2200 }, // +1 AC & resistance
+    { name: "Mithral Gauntlets", ac: 1, notes: "Adds +1 to unarmed strikes and allows wearer to punch ghosts", value: 1400 }, // +1 AC & magical unarmed strikes
+    { name: "Shadowstep Boots", ac: 1, notes: "Grants advantage on Dexterity (Stealth) checks in dim light or darkness", value: 1400 }, // +1 AC & stealth adv
+    { name: "Titan’s Greaves", ac: 1, notes: "Wearer cannot be knocked prone by non-magical effects", value: 1400 }, // +1 AC & prone immunity
+    // Duplicates from original list - values assigned as per their first instance
+    { name: "Gilded Ceremonial Cloak", ac: 1, notes: "Grants +1 to Charisma-based skill checks and resistance to radiant damage", value: 2200 },
+    { name: "Adamantine Plated Gloves", ac: 1, notes: "Wearer negates one critical hit per long rest", value: 2200 },
+    { name: "Stormbound Warboots", ac: 1, notes: "Wearer gains resistance to lightning damage", value: 2200 },
+    { name: "Enchanted Warden’s Hood", ac: 1, notes: "Grants advantage on saving throws against mind-affecting spells", value: 2200 },
+    { name: "Frozen Guard Bracers", ac: 1, notes: "Grants resistance to cold damage", value: 2200 },
+    { name: "Runed Battlemage Cloak", ac: 1, notes: "Allows wearer to ignore the verbal component of one spell per long rest", value: 1400 },
+    
+    { name: "Titansteel Helm", ac: 2, notes: "Wearer cannot be stunned or blinded by non-magical effects", value: 2200 }, // +2 AC & stun/blind immunity
+    { name: "Dwarven Warbelt", ac: 1, notes: "Adds +1 AC when combined with heavy armor and grants advantage on Constitution saves", value: 2200 }, // Conditional +1 AC & adv on strong save
+    { name: "Elven Silksash", ac: 1, notes: "Adds +1 AC when combined with light armor and grants resistance to psychic damage", value: 2200 }, // Conditional +1 AC & resistance
+    { name: "Voidbound Mask", ac: 1, notes: "Wearer cannot be tracked by non-magical means", value: 1400 }, // +1 AC & tracking immunity
+    { name: "Bloodforged Gauntlets", ac: 1, notes: "When wearer reduces an enemy to 0 HP, they gain temporary HP equal to their proficiency bonus", value: 1400 }, // +1 AC & temp HP gain
+    
+    // Non-armor items (AC 10 likely means base unarmored AC, value based on magical properties)
+    { name: "Spectacles of Insight", ac: 10, notes: "These finely crafted glasses grant the wearer advantage on Perception and Investigation checks when searching for hidden details.", value: 1400 }, // Adv on two key skills
+    { name: "Mystic Monocle", ac: 10, notes: "A single enchanted lens that, once per encounter, provides a +2 bonus on Intelligence checks (Investigation, Arcana, or History) when examining intricate details.", value: 1400 }, // Potent limited skill bonus
+    { name: "Tech-Enhanced Visor", ac: 10, notes: "A futuristic visor with augmented-reality overlays. Grants the wearer a +2 bonus on Arcana checks related to technology and reveals hidden digital or magical auras within 30 feet.", value: 2200 }, // Skill bonus & aura detection
+    { name: "Dashing Musketeer Hat", ac: 10, notes: "A flamboyant hat that exudes style. The wearer gains advantage on Persuasion checks and a +1 bonus to initiative rolls, inspiring both allies and intimidating foes.", value: 1400 } // Adv on skill & initiative bonus
+];
+
+
+const regaliaUpgrades = [
+    // **Defense Upgrades**
+    { 
+        name: "Extra Padding Layer", 
+        description: "Adds an additional layer of reinforced impact-absorbing material. Grants **+3 to the Regalia's base AC** and **resistance to all non-magical bludgeoning, piercing, and slashing damage**.", 
+        cost: 2, 
+        type: "Defense" 
+    },
+    { 
+        name: "Reinforced Seams", 
+        description: "Fortified stitching prevents tears and grants **immunity to forced movement effects** (shoves, grapples, knockbacks). Additionally, once per long rest, wearer can **convert any critical fumble into a normal roll**.", 
+        cost: 1, 
+        type: "Defense" 
+    },
+    { 
+        name: "Superior Leak-Guard Technology", 
+        description: "Advanced absorbent cores ensure **absolute containment**. Wearer gains **immunity to all contamination effects** (poison, disease, curses that spread by touch or proximity). Additionally, minor mess-based hazards automatically fail against the wearer.", 
+        cost: 2, 
+        type: "Defense" 
+    },
+    { 
+        name: "Impact Dampening Gel Inserts", 
+        description: "Strategically placed gel packs absorb kinetic energy. Wearer gains **resistance to force and thunder damage**. Additionally, any single incoming hit **over 30 damage** is automatically reduced by **half** once per short rest.", 
+        cost: 2, 
+        type: "Defense" 
+    },
+    { 
+        name: "Anti-Monster-Under-The-Bed Weave", 
+        description: "Enchanted fabric wards off childhood fears. Wearer gains **immunity to fear effects**. Once per long rest, they may **force an ally within 30 feet to ignore a fear effect**, even if they've already failed a saving throw.", 
+        cost: 1, 
+        type: "Defense"
+    },
+
+    // **Utility Upgrades**
+    { 
+        name: "Quick-Release Fasteners", 
+        description: "Oversized snaps allow rapid changes. Wearer may **don or doff this regalia as a bonus action** and **gain advantage on checks to escape grapples and restraints**.", 
+        cost: 1, 
+        type: "Utility" 
+    },
+    { 
+        name: "Emergency Snack Pouch", 
+        description: "Once per long rest, consuming a snack from this pouch grants the wearer **temporary HP equal to twice their level** and **removes one level of exhaustion**.", 
+        cost: 1, 
+        type: "Utility" 
+    },
+    { 
+        name: "Odor-Neutralizing Charcoal Weave", 
+        description: "Fabric neutralizes odors entirely. Wearer gains **immunity to scent-based detection** (tracking, divination effects relying on smell). Additionally, they gain **advantage on all social skill checks (Persuasion, Deception, Intimidation) for 1 hour after using this feature**.", 
+        cost: 2, 
+        type: "Utility" 
+    },
+    { 
+        name: "Comfort-Luxe Lining", 
+        description: "Ultra-soft lining enhances endurance. Wearer **automatically succeeds on Constitution saves against exhaustion** and recovers **two additional hit dice** during short rests.", 
+        cost: 1, 
+        type: "Utility" 
+    },
+    { 
+        name: "Reflective Safety Patches", 
+        description: "Shiny patches increase visibility. Wearer **cannot be surprised** while awake and imposes **disadvantage** on attacks against them in dim light or darkness.", 
+        cost: 1, 
+        type: "Utility" 
+    },
+    { 
+        name: "Feather-Light Weave", 
+        description: "Advanced tailoring removes burdens. Wearer **ignores movement restrictions from all armor and heavy clothing** and **gains +10 feet to movement speed**.", 
+        cost: 2, 
+        type: "Utility" 
+    },
+    { 
+        name: "Instant Wardrobe Switch", 
+        description: "Magically enhances swift changes. Wearer may **swap regalia as a free action**, and their **previous armor bonus continues for one additional round**, even after switching to another outfit.", 
+        cost: 1, 
+        type: "Utility" 
+    },
+
+    // **Special Upgrades**
+    { 
+        name: "'Oopsie Absorption' Field", 
+        description: "Regalia **automatically negates any accidental contamination** (mess, poison, hazardous splash effects). Additionally, when negating an effect, the wearer **gains advantage on their next saving throw, attack, or skill check**.", 
+        cost: 2, 
+        type: "Special" 
+    },
+    { 
+        name: "Cushioned Landing System", 
+        description: "Regalia **completely negates all fall damage** for the wearer and provides **resistance to forced knockdowns and prone conditions**.", 
+        cost: 1, 
+        type: "Special" 
+    },
+    { 
+        name: "'Quiet Time' Aura Emitter", 
+        description: "Once per long rest, wearer emits a **10ft aura** that forces all creatures within range to **make a DC 18 Wisdom save** or become **unable to take aggressive actions for 1 minute**.", 
+        cost: 2, 
+        type: "Special" 
+    },
+    { 
+        name: "Waddle-Dash Maneuver", 
+        description: "Wearer performs a **supernaturally fast waddle-dash** as a **bonus action**, increasing movement speed by **30 feet for one turn**.", 
+        cost: 1, 
+        type: "Special" 
+    },
+    { 
+        name: "'Look At Me!' Distraction Charm", 
+        description: "Once per encounter, as a **reaction**, the regalia flashes with dazzling patterns, imposing **disadvantage on ALL attacks against the wearer for one full round**.", 
+        cost: 2, 
+        type: "Special"
+    },
+
+    // **Academy Upgrades**
+    { 
+        name: "Prefect's Badge of Authority", 
+        description: "An embroidered badge signifying status. Grants **+4 bonus** to Intimidation and Persuasion checks when interacting with lower-ranking individuals.", 
+        cost: 2, 
+        type: "Academy" 
+    },
+    { 
+        name: "Secret Stash Pockets", 
+        description: "Extra hidden compartments allow concealed storage. Wearer gains **advantage on all Sleight of Hand checks** and may hide items within their regalia that **cannot be detected by mundane searches**.", 
+        cost: 1, 
+        type: "Academy" 
+    },
+    { 
+        name: "Naptime Resilience Protocol", 
+        description: "Wearer gains **complete immunity to sleep effects** (magical or non-magical). Additionally, if stunned, they may **make an immediate saving throw with advantage** as a reaction.", 
+        cost: 2, 
+        type: "Academy" 
+    },
+// 1-Slot Upgrades (Minor, but potent in a powerful setting)
+  { 
+    name: "Quick-React Reflexes", 
+    description: "Once per long rest, as a reaction, the wearer gains a +3 bonus to initiative and advantage on all Dexterity saving throws until the start of their next turn.", 
+    cost: 1, 
+    type: "Special" 
+  },
+  { 
+    name: "Flawless Footwork", 
+    description: "Once per short rest, the wearer becomes immune to being knocked prone for 1 round and gains advantage on Acrobatics checks while moving.", 
+    cost: 1, 
+    type: "Special" 
+  },
+  { 
+    name: "Minor Fortification", 
+    description: "As a reaction (once per short rest), the wearer gains a +3 bonus to AC against a single attack, potentially causing it to miss.", 
+    cost: 1, 
+    type: "Special" 
+  },
+  { 
+    name: "Swift Recovery Glyph", 
+    description: "Once per short rest, when reduced below half their maximum HP, the wearer regains hit points equal to 1d6 + their level as an immediate burst of rejuvenation.", 
+    cost: 1, 
+    type: "Special" 
+  },
+  { 
+    name: "Reactive Ward", 
+    description: "Once per long rest, when hit by an attack, the wearer can use their reaction to reduce the damage from that attack by an amount equal to their proficiency bonus × 2.", 
+    cost: 1, 
+    type: "Special" 
+  },
+
+  // 2-Slot Upgrades (Notable defensive and utility bonuses)
+  { 
+    name: "Enhanced Barrier Weave", 
+    description: "Once per long rest, for 10 rounds the wearer gains a +2 bonus to AC and resistance to one damage type of their choice (physical or magical) for the duration of the effect.", 
+    cost: 2, 
+    type: "Special" 
+  },
+  { 
+    name: "Mystic Reversal", 
+    description: "Once per short rest, when targeted by a spell, the wearer may force the caster to make a spellcasting ability check against the wearer's spell save DC. On a failure, the spell is reflected back at the caster.", 
+    cost: 2, 
+    type: "Special" 
+  },
+  { 
+    name: "Empowered Concentration", 
+    description: "When activated (once per long rest), for 1 minute the wearer has advantage on concentration checks and adds a +2 bonus to all saving throws against spells.", 
+    cost: 2, 
+    type: "Special" 
+  },
+  { 
+    name: "Titanic Core", 
+    description: "Once per long rest for 1 minute, the wearer's maximum HP increases by 20 and they gain regeneration, recovering 3 hit points at the start of each of their turns.", 
+    cost: 2, 
+    type: "Special" 
+  },
+  { 
+    name: "Guardian's Accord", 
+    description: "Once per long rest, when an ally within 30 feet is hit by an attack, the wearer can redirect the attack to themselves, taking the damage instead but with resistance to it.", 
+    cost: 2, 
+    type: "Special" 
+  },
+
+  // 3-Slot Upgrades (Major game-changing defenses)
+  { 
+    name: "Colossus Shield Matrix", 
+    description: "Once per long rest, as a bonus action, the wearer activates this upgrade to gain immunity to all non-magical physical damage (bludgeoning, piercing, and slashing) for 1 minute.", 
+    cost: 3, 
+    type: "Special" 
+  },
+  { 
+    name: "Arcane Barrier Nexus", 
+    description: "Once per long rest, as an action, the wearer activates the nexus to gain resistance to all magical damage and advantage on saving throws against spells for 1 minute.", 
+    cost: 3, 
+    type: "Special" 
+  },
+  { 
+    name: "Absolute Ward", 
+    description: "Once per long rest, as an action, the wearer creates a protective field that grants themselves and all allies within 10 feet immunity to all damage for 1 round.", 
+    cost: 3, 
+    type: "Special" 
+  },
+  { 
+    name: "Legendary Resilience", 
+    description: "Once per long rest, the wearer gains immunity to all conditions (charmed, frightened, stunned, etc.) for 1 minute and can end one condition affecting them as a bonus action.", 
+    cost: 3, 
+    type: "Special" 
+  },
+  { 
+    name: "Vortex of Defiance", 
+    description: "Once per long rest, as a reaction when taking damage, the wearer converts up to 30 points of that damage into healing for themselves and allies within 15 feet, split evenly among all targets.", 
+    cost: 3, 
+    type: "Special" 
+  },
+
+  // 4-Slot Upgrades (Top-tier, nearly game-breaking options)
+  { 
+    name: "Omni-Defender Regalia", 
+    description: "Once per short rest, as an action, the wearer may choose to gain complete immunity to either physical or magical damage for 1 minute. During this time, all damage of the chosen type is completely negated.", 
+    cost: 4, 
+    type: "Special" 
+  },
+  { 
+    name: "Aegis of the Gods", 
+    description: "Once per long rest, as an action, the wearer activates this upgrade to become immune to both physical and magical damage simultaneously for 1 round, then gains resistance to all damage for 1 minute afterward.", 
+    cost: 4, 
+    type: "Special" 
+  },
+  { 
+    name: "Divine Bastion", 
+    description: "Once per long rest, as an action, the wearer creates an impenetrable barrier around themselves and allies within 15 feet that grants immunity to all damage and harmful effects for 1 round, then grants 30 temporary hit points to each protected creature.", 
+    cost: 4, 
+    type: "Special" 
+  },
+  { 
+    name: "Celestial Ward of Perpetuity", 
+    description: "Once per long rest, the wearer may choose two damage types and gain immunity to them for 1 minute. Additionally, any healing the wearer receives during this time is increased by 50%.", 
+    cost: 4, 
+    type: "Special" 
+  },
+  { 
+    name: "Absolute Omni-Shield", 
+    description: "Once per long rest, as a bonus action, for 1 minute the wearer gains immunity to the next instance of each damage type they would take, effectively negating one hit of each damage type in the game.", 
+    cost: 4, 
+    type: "Special" 
+  },
+  // Serious 5-Slot Upgrade
+  { 
+    name: "Ascendant Regalia of Eternal Light", 
+    description: "Once per long rest, as an action, the wearer activates this 5-slot upgrade to become completely immune to all damage and conditions for 1 minute. In addition, allies within 30 feet gain temporary hit points equal to twice the wearer's level at the start of each of their turns and advantage on all saving throws.", 
+    cost: 5, 
+    type: "Special" 
+  },
+
+  // Diaper School Themed 5-Slot Upgrade
+  { 
+    name: "Diaper of Ultimate Cleanliness", 
+    description: "Once per long rest, as an action, the wearer activates this 5-slot upgrade. For 1 minute, they gain immunity to all damage and conditions. Additionally, at the start of each of the wearer's turns, all enemies within 30 feet must make a DC 17 Wisdom save or be charmed until the start of their next turn, finding the wearer simply too adorable to attack.", 
+    cost: 5, 
+    type: "Special" 
+  },
+
+  // **New Upgrade Options**
+    { 
+        name: "Crawling Speed Enhancement", 
+        description: "Specially reinforced knees and elbows. Your **crawling movement doesn't count as difficult terrain**, and you can crawl at **half your walking speed** instead of one-third. Additionally, you have **advantage on Stealth checks** while crawling.", 
+        cost: 1, 
+        type: "Utility" 
+    },
+    { 
+        name: "Emergency Phase Shift", 
+        description: "Distortion field creates momentary safety. Once per short rest, as a reaction when targeted by an attack, you can **teleport up to 30 feet** to an unoccupied space you can see, completely avoiding the attack.", 
+        cost: 2, 
+        type: "Special" 
+    },
+    { 
+        name: "Tactical Opportunity Matrix", 
+        description: "Combat analysis systems enhance reactions. Once per combat, you can **take an additional reaction** during a round. Additionally, opportunity attacks against you have disadvantage.", 
+        cost: 2, 
+        type: "Special" 
+    },
+    { 
+        name: "Harmonic Resonance Shield", 
+        description: "Vibrating defensive field. Once per long rest, as a bonus action, create a **10-foot radius aura** around yourself that grants allies within it **resistance to thunder and force damage** for 1 minute.", 
+        cost: 3, 
+        type: "Special" 
+    },
+    { 
+        name: "Sudden Growth Spurt", 
+        description: "Magical regalia temporarily enhances size. Once per long rest, as a bonus action, you can **increase your size category by one** for 1 minute, gaining all benefits of the Enlarge spell without concentration.", 
+        cost: 2, 
+        type: "Special" 
+    },
+    { 
+        name: "Playful Illusion Projector", 
+        description: "Creates distracting images of toys and childish things. Once per short rest, as an action, you can cast **Mirror Image** on yourself without requiring components or concentration.", 
+        cost: 2, 
+        type: "Special" 
+    },
+    { 
+        name: "Timeout Corner Protocol", 
+        description: "Creates a disciplinary zone. Once per long rest, as an action, you create a **5-foot cube force field** within 30 feet. A creature inside must make a DC 15 Wisdom save or be unable to leave the zone for 1 minute or until it takes damage.", 
+        cost: 2, 
+        type: "Special" 
+    },
+    { 
+        name: "Scholar's Perfect Recall", 
+        description: "Academic enhancement systems. Once per long rest, you can recall any information you've ever learned with perfect clarity, gaining advantage and double proficiency bonus on any Intelligence-based check for 10 minutes.", 
+        cost: 2, 
+        type: "Academy" 
+    },
+    { 
+        name: "Faculty Override Authorization", 
+        description: "Special insignia of authority. You gain **advantage on Persuasion checks** when dealing with institutional authorities. Additionally, once per long rest, you can cast **Command** as a 2nd-level spell without components.", 
+        cost: 1, 
+        type: "Academy" 
+    },
+    { 
+        name: "Research Assistant Protocol", 
+        description: "Enchantment aids in locating information. When searching for specific information in a library or archive, you locate it in half the normal time. You also gain a **+5 bonus to Investigation checks** when examining written materials.", 
+        cost: 1, 
+        type: "Academy" 
+    },
+    { 
+        name: "Gold Star Achievement System", 
+        description: "Magical rewards for good behavior. Whenever you roll a natural 20 on an ability check, save, or attack roll, you gain a \"gold star\" that you can spend to gain advantage on any single roll. You can store up to 3 gold stars at once.", 
+        cost: 2, 
+        type: "Academy" 
+    },
+    { 
+        name: "Nap Mat Deployment", 
+        description: "Emergency rest capabilities. Once per long rest, as an action, you can create a comfortable resting space that allows you to gain the benefits of a short rest in just 10 minutes instead of 1 hour.", 
+        cost: 1, 
+        type: "Academy" 
+    },
+    { 
+        name: "Recess Energy Reserves", 
+        description: "Stored playful energy enhances performance. Once per short rest, as a bonus action, you can expend one hit die to gain **advantage on all Strength, Dexterity, and Constitution checks** for 1 minute.", 
+        cost: 1, 
+        type: "Academy" 
+    }
+];
+
+
+  // Global state
+  let state = {
+    currentStage: 1, // 1: Base, 2: Slots, 3: Upgrades, 4: Summary
+    selectedRegaliaBase: null, // Will store the full object
+    totalSlots: 1,
+    remainingSlots: 1,
+    selectedUpgrades: [],
+    usedSlots: [], 
+    regaliaName: "",
+    regaliaImageUrl: ""
+  };
+  
+  // DOM Elements
+  const progressBarEl = document.getElementById("progressBarEl");
+  const stageDisplay = document.getElementById("stageDisplay");
+  const regaliaTypeSelect = document.getElementById("regaliaTypeSelect");
+  const slotSelectionCtn = document.getElementById("slotSelectionCtn");
+  const decreaseSlotBtn = document.getElementById("decreaseSlotBtn");
+  const increaseSlotBtn = document.getElementById("increaseSlotBtn");
+  const slotCountDisplay = document.getElementById("slotCountDisplay");
+  const confirmSlotsBtn = document.getElementById("confirmSlotsBtn");
+  const upgradeSelectionCtn = document.getElementById("upgradeSelectionCtn");
+  const remainingSlotsDisplay = document.getElementById("remainingSlotsDisplay");
+  const upgradeOptionsCtn = document.getElementById("upgradeOptionsCtn");
+  const selectedUpgradesList = document.getElementById("selectedUpgradesList");
+  const finalizeRegaliaBtn = document.getElementById("finalizeRegaliaBtn");
+  const regaliaCustomizationCtn = document.getElementById("regaliaCustomizationCtn");
+  const regaliaNameInput = document.getElementById("regaliaNameInput");
+  const regaliaImageInput = document.getElementById("regaliaImageInput");
+  const imagePreviewCtn = document.getElementById("imagePreviewCtn");
+  const imagePreviewEl = document.getElementById("imagePreviewEl");
+  const regaliaSummaryCtn = document.getElementById("regaliaSummaryCtn");
+  const regaliaSummaryContent = document.getElementById("regaliaSummaryContent");
+  const slotIndicatorsCtn = document.getElementById("slotIndicatorsCtn");
+
+
+  // Initialize
+  document.addEventListener("DOMContentLoaded", () => {
+    populateRegaliaDropdown();
+    updateProgress();
+    
+    regaliaTypeSelect.addEventListener("change", onRegaliaSelected);
+    decreaseSlotBtn.addEventListener("click", decreaseSlots);
+    increaseSlotBtn.addEventListener("click", increaseSlots);
+    confirmSlotsBtn.addEventListener("click", confirmSlots);
+    finalizeRegaliaBtn.addEventListener("click", showRegaliaSummary);
+    
+    if (regaliaImageInput) {
+      regaliaImageInput.addEventListener("input", updateImagePreview);
+    }
+    if (regaliaNameInput) {
+      regaliaNameInput.addEventListener("input", updateRegaliaName);
+    }
+  });
+
+  function updateProgress() {
+    const stageNames = [
+        "Stage 1: Choose Base Regalia", 
+        "Stage 2: Select Upgrade Slots", 
+        "Stage 3: Choose Upgrades", 
+        "Stage 4: Regalia Summary"
+    ];
+    progressBarEl.style.width = (state.currentStage * 25) + "%";
+    stageDisplay.textContent = stageNames[state.currentStage -1];
+  }
+
+  function populateRegaliaDropdown() {
+    regaliaTypeSelect.innerHTML = '<option value="" disabled selected>Select a regalia type...</option>';
+    regaliaTypes.forEach(regalia => {
+      const option = document.createElement('option');
+      option.value = regalia.name; // Store name as value for easy lookup
+      let displayText = `${regalia.name} (AC ${regalia.ac}) (Value: ${regalia.value})`;
+      if (regalia.notes) {
+        displayText += ` - ${regalia.notes}`;
+      }
+      option.textContent = displayText;
+      regaliaTypeSelect.appendChild(option);
+    });
+  }
+
+  function onRegaliaSelected() {
+    const selectedName = regaliaTypeSelect.value;
+    state.selectedRegaliaBase = regaliaTypes.find(r => r.name === selectedName); // Store the whole object
+    
+    slotSelectionCtn.style.display = "block";
+    state.currentStage = 2;
+    updateProgress();
+    updateSlotDisplay(); 
+    updateSelectedUpgradesList(); 
+  }
+
+  function decreaseSlots() {
+    if (state.totalSlots > 1) {
+      state.totalSlots--;
+      updateSlotDisplay();
+    }
+  }
+
+  function increaseSlots() {
+    if (state.totalSlots < 10) { // Max 10 slots
+        state.totalSlots++;
+        updateSlotDisplay();
+    }
+  }
+
+  function updateSlotDisplay() {
+    slotCountDisplay.textContent = state.totalSlots;
+    state.remainingSlots = state.totalSlots; 
+  }
+
+  function confirmSlots() {
+    state.remainingSlots = state.totalSlots;
+    remainingSlotsDisplay.textContent = state.remainingSlots;
+    slotSelectionCtn.style.display = "none";
+    upgradeSelectionCtn.style.display = "block";
+    state.currentStage = 3;
+    updateProgress();
+    renderSlotIndicators();
+    renderUpgradeOptions();
+  }
+
+ function renderSlotIndicators() {
+    slotIndicatorsCtn.innerHTML = "";
+    const totalGroups = Math.ceil(state.totalSlots / 5);
+    
+    for (let i = 0; i < totalGroups; i++) {
+      const groupContainer = document.createElement("div");
+      groupContainer.className = "slot-group";
+      const slotsInGroup = (i === totalGroups - 1) ? (state.totalSlots % 5 || 5) : 5;
+      
+      for (let j = 0; j < slotsInGroup; j++) {
+        const slotIndex = i * 5 + j;
+        if (slotIndex >= state.totalSlots) break; 
+
+        const slotCircle = document.createElement("div");
+        slotCircle.className = "slot-circle";
+        slotCircle.dataset.slotIndex = slotIndex;
+        
+        const slotInfo = state.usedSlots.find(slot => slot.index === slotIndex);
+        if (slotInfo) {
+          if (slotInfo.type === "Defense") slotCircle.classList.add("slot-filled-defense");
+          else if (slotInfo.type === "Utility") slotCircle.classList.add("slot-filled-utility");
+          else if (slotInfo.type === "Special") slotCircle.classList.add("slot-filled-special");
+          else if (slotInfo.type === "Academy") slotCircle.classList.add("slot-filled-academy");
+        }
+        groupContainer.appendChild(slotCircle);
+      }
+      slotIndicatorsCtn.appendChild(groupContainer);
+    }
+  }
+
+  function renderUpgradeOptions() {
+    upgradeOptionsCtn.innerHTML = "";
+    
+    regaliaUpgrades.forEach(upgrade => {
+      const upgradeCard = document.createElement("div");
+      upgradeCard.className = "upgrade-card";
+      upgradeCard.style.cssText = "border: 1px solid #b08d57; border-radius: 8px; padding: 15px; background-color: rgba(224, 206, 184, 0.8); position: relative; height: 320px; display: flex; flex-direction: column; justify-content: space-between;";
+
+      const canAfford = state.remainingSlots >= upgrade.cost;
+      const isSelected = state.selectedUpgrades.some(u => u.name === upgrade.name);
+      
+      let typeClass = '';
+      if (upgrade.type === "Defense") typeClass = "defense-type";
+      else if (upgrade.type === "Utility") typeClass = "utility-type";
+      else if (upgrade.type === "Special") typeClass = "special-type";
+      else if (upgrade.type === "Academy") typeClass = "academy-type";
+
+      upgradeCard.innerHTML = `
+        <div>
+          <h3 class="upgrade-title">${upgrade.name}</h3>
+          <div class="upgrade-type">
+            <span class="type-indicator ${typeClass}"></span>${upgrade.type}
+          </div>
+          <div class="upgrade-cost" style="color: ${canAfford ? '#5c4d3e' : '#d9534f'};">
+            Cost: ${upgrade.cost} slot${upgrade.cost > 1 ? 's' : ''}
+          </div>
+          <p class="upgrade-description" style="max-height: 100px; overflow-y: auto;">${upgrade.description}</p>
+        </div>
+        <button class="selectUpgradeBtn" data-upgrade-name="${upgrade.name}" style="
+          background: ${isSelected ? 'linear-gradient(to bottom, #826440, #664c2d)' : (canAfford ? 'linear-gradient(to bottom, #b08d57, #826440)' : '#a0a0a0')};
+          color: ${canAfford || isSelected ? '#f0e6d6' : '#666'};
+          cursor: ${canAfford || isSelected ? 'pointer' : 'not-allowed'};
+        ">${isSelected ? 'Remove' : 'Select'}</button>
+      `;
+      
+      upgradeOptionsCtn.appendChild(upgradeCard);
+      
+      const selectBtn = upgradeCard.querySelector(".selectUpgradeBtn");
+      selectBtn.addEventListener("click", () => {
+        if (isSelected) removeUpgrade(upgrade);
+        else if (canAfford) selectUpgrade(upgrade);
+      });
+    });
+    
+    const showFinalizeAndCustomization = state.remainingSlots === 0;
+    finalizeRegaliaBtn.style.display = showFinalizeAndCustomization ? "inline-block" : "none";
+    regaliaCustomizationCtn.style.display = showFinalizeAndCustomization ? "block" : "none";
+  }
+
+  function selectUpgrade(upgrade) {
+    if (state.remainingSlots >= upgrade.cost) {
+      state.selectedUpgrades.push(upgrade);
+      state.remainingSlots -= upgrade.cost;
+      
+      const availableSlotIndices = [];
+      for (let i = 0; i < state.totalSlots; i++) {
+        if (!state.usedSlots.some(slot => slot.index === i)) {
+          availableSlotIndices.push(i);
+        }
+      }
+      
+      for (let i = 0; i < upgrade.cost; i++) {
+        if (availableSlotIndices.length > 0) {
+          const slotIndex = availableSlotIndices.shift();
+          state.usedSlots.push({ index: slotIndex, type: upgrade.type, name: upgrade.name });
+        }
+      }
+      
+      remainingSlotsDisplay.textContent = state.remainingSlots;
+      updateSelectedUpgradesList();
+      renderSlotIndicators();
+      renderUpgradeOptions();
+    }
+  }
+
+  function removeUpgrade(upgrade) {
+    state.selectedUpgrades = state.selectedUpgrades.filter(u => u.name !== upgrade.name);
+    state.remainingSlots += upgrade.cost;
+    state.usedSlots = state.usedSlots.filter(slot => slot.name !== upgrade.name);
+    
+    remainingSlotsDisplay.textContent = state.remainingSlots;
+    updateSelectedUpgradesList();
+    renderSlotIndicators();
+    renderUpgradeOptions();
+  }
+  
+  function updateSelectedUpgradesList() {
+    selectedUpgradesList.innerHTML = "";
+
+    if (state.selectedRegaliaBase) {
+        const li = document.createElement("li");
+        li.style.cssText = "padding: 10px; background-color: #e0c8a0; margin-bottom: 8px; border-left: 3px solid #8c693a;";
+        let baseText = `<strong style="color: #8c693a;">Base: ${state.selectedRegaliaBase.name} (AC ${state.selectedRegaliaBase.ac})</strong>`;
+        if (state.selectedRegaliaBase.notes) {
+            baseText += `<span class="regalia-notes"> - ${state.selectedRegaliaBase.notes}</span>`;
+        }
+        li.innerHTML = `
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span>${baseText}</span>
+          </div>
+        `;
+        selectedUpgradesList.appendChild(li);
+    }
+    
+    if (state.selectedUpgrades.length === 0 && !state.selectedRegaliaBase) {
+      selectedUpgradesList.innerHTML = "<li style='text-align: center; padding: 10px; color: #5c4d3e;'>No base or upgrades selected yet</li>";
+      return;
+    }
+
+    state.selectedUpgrades.forEach(upgrade => {
+      const li = document.createElement("li");
+      li.style.cssText = "padding: 10px; background-color: #e0c8a0; margin-bottom: 8px; border-left: 3px solid #b08d57;";
+      li.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span><strong style="color: #8c693a;">${upgrade.name}</strong> (${upgrade.cost} slot${upgrade.cost > 1 ? 's' : ''})</span>
+          <button class="removeUpgradeBtn" style="background: none; border: none; color: #b08d57; cursor: pointer; font-size: 1.2em;">×</button>
+        </div>
+        <div style="font-size: 0.8em; color: #5c4d3e; margin-top: 5px;">${upgrade.description}</div>
+      `;
+      selectedUpgradesList.appendChild(li);
+      
+      const removeBtn = li.querySelector(".removeUpgradeBtn");
+      removeBtn.addEventListener("click", () => removeUpgrade(upgrade));
+    });
+  }
+
+  function updateImagePreview() {
+    state.regaliaImageUrl = regaliaImageInput.value.trim();
+    if (state.regaliaImageUrl) {
+      imagePreviewEl.src = state.regaliaImageUrl;
+      imagePreviewCtn.style.display = "block";
+      imagePreviewEl.onerror = () => {
+        imagePreviewCtn.style.display = "none";
+        state.regaliaImageUrl = ""; 
+        regaliaImageInput.value = ""; 
+      };
+    } else {
+      imagePreviewCtn.style.display = "none";
+    }
+  }
+
+  function updateRegaliaName() {
+    state.regaliaName = regaliaNameInput.value.trim();
+  }
+  
+  function showRegaliaSummary() {
+    state.regaliaName = regaliaNameInput.value.trim() || (state.selectedRegaliaBase ? state.selectedRegaliaBase.name : "My Custom Regalia");
+    state.regaliaImageUrl = regaliaImageInput.value.trim();
+    
+    upgradeSelectionCtn.style.display = "none";
+    regaliaSummaryCtn.style.display = "block";
+    state.currentStage = 4;
+    updateProgress();
+
+    const regaliaDisplayName = state.regaliaName;
+    let finalAC = state.selectedRegaliaBase ? state.selectedRegaliaBase.ac : 10; // Start with base AC
+    let finalNotes = state.selectedRegaliaBase ? state.selectedRegaliaBase.notes : "";
+
+    // Check for AC modifying upgrades
+    if (state.selectedUpgrades.some(upg => upg.name === "Extra Padding Layer")) {
+        finalAC += 1;
+    }
+    // Check for penalty removing upgrade
+    if (state.selectedUpgrades.some(upg => upg.name === "Feather-Light Weave")) {
+        finalNotes = finalNotes.replace(/Stealth Disadvantage/g, '').replace(/Str \d+ req\./g, '').replace(/,/g, '').trim();
+        if (finalNotes === "") finalNotes = "Penalties Removed";
+        else finalNotes += " (Some Penalties Removed)";
+    }
+    
+    let summaryHTML = `
+      <div style="border: 2px solid #b08d57; border-radius: 5px; padding: 20px; background-color: #e0c8a0;">
+    `;
+    
+    if (state.regaliaImageUrl) {
+      summaryHTML += `
+        <div style="text-align: center; margin-bottom: 20px;">
+          <img src="${state.regaliaImageUrl}" alt="${regaliaDisplayName}" style="max-width: 100%; max-height: 300px; border: 2px solid #b08d57; border-radius: 5px;" onerror="this.style.display='none';">
+        </div>
+      `;
+    }
+    
+    summaryHTML += `
+        <h3 style="color: #8c693a; margin-top: 0; font-size: 1.5em; text-align: center;">${regaliaDisplayName}</h3>
+        <div style="display: flex; justify-content: space-between; flex-wrap: wrap; margin-bottom: 10px; color: #5c4d3e;">
+          <p><strong>Base Type:</strong> ${state.selectedRegaliaBase ? state.selectedRegaliaBase.name : 'N/A'}</p>
+          <p><strong>Final AC:</strong> ${finalAC}</p>
+        </div>
+        <div style="margin-bottom: 20px; color: #5c4d3e;">
+            <p><strong>Notes:</strong> ${finalNotes || "None"}</p>
+            <p><strong>Total Slots Used:</strong> ${state.totalSlots - state.remainingSlots} / ${state.totalSlots}</p>
+        </div>
+        <h4 style="color: #8c693a; border-bottom: 1px solid #b08d57; padding-bottom: 5px;">Chosen Upgrades</h4>
+        <ul style="list-style-type: none; padding: 0;">
+    `;
+    
+    if (state.selectedUpgrades.length === 0) {
+        summaryHTML += `<li style="text-align: center; color: #5c4d3e; padding: 10px;">No upgrades selected.</li>`;
+    } else {
+        state.selectedUpgrades.forEach(upgrade => {
+          summaryHTML += `<li style="margin-bottom: 15px; background-color: rgba(176, 141, 87, 0.1); padding: 15px; border-radius: 5px;">
+            <strong style="color: #8c693a; font-size: 1.2em;">${upgrade.name}</strong>
+            <div style="display: flex; justify-content: space-between; margin: 5px 0; color: #5c4d3e;">
+              <span style="position: relative; padding-left: 20px;">
+                <span style="display: inline-block; width: 12px; height: 12px; border-radius: 50%; background-color: ${getUpgradeTypeColor(upgrade.type)}; position: absolute; left: 0; top: 50%; transform: translateY(-50%);"></span>
+                ${upgrade.type}
+              </span>
+              <span>Cost: ${upgrade.cost} slot${upgrade.cost > 1 ? 's' : ''}</span>
+            </div>
+            <p style="margin-top: 10px; font-size: 0.9em; color: #4a3b2a;">${upgrade.description}</p>
+          </li>`;
+        });
+    }
+    
+    summaryHTML += `
+        </ul>
+      </div>
+      <div style="margin-top: 30px; text-align: center;">
+        <button onclick="location.reload()" style="background: linear-gradient(to bottom, #d4b78c, #a88665); color: #4a3b2a; border: none; border-radius: 4px; padding: 12px 24px; font-weight: bold; cursor: pointer; font-family: 'Cinzel', serif; transition: all 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">Create Another Regalia</button>
+      </div>
+    `;
+    
+    regaliaSummaryContent.innerHTML = summaryHTML;
+  }
+  
+  function getUpgradeTypeColor(type) {
+    if (type === "Defense") return "#6495ED"; // Cornflower Blue
+    if (type === "Utility") return "#90EE90"; // Light Green
+    if (type === "Special") return "#BA55D3"; // Medium Orchid
+    if (type === "Academy") return "#FFD700"; // Gold
+    return "#A9A9A9"; // Dark Gray for unknown
+  }
+
+</script>
+</body>

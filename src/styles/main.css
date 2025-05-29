@@ -1,0 +1,349 @@
+/* Main Tome Styling */
+:root {
+  --gold: #d4af37;
+  --gold-light: #f1e5ac;
+  --gold-dark: #9a7d22;
+  --parchment: #f7f2e3;
+  --parchment-dark: #e8e0cc;
+  --ink: #3b3024;
+  --accent: #964b00;
+  --shadow: rgba(0, 0, 0, 0.5);
+}
+
+body {
+  font-family: 'Cormorant Garamond', serif;
+  margin: 0;
+  padding: 0;
+  background: #2c2219 url('../assets/images/wood-texture.jpg') repeat;
+  color: var(--ink);
+  line-height: 1.6;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#tome-container {
+  width: 95vw;
+  height: 95vh;
+  background: var(--parchment) url('../assets/images/parchment-texture.jpg') repeat;
+  border: 12px solid var(--gold-dark);
+  box-shadow: 0 0 20px var(--shadow), inset 0 0 10px var(--shadow);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+/* Decorative Elements */
+.corner-decoration {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  z-index: 2;
+}
+
+.top-left {
+  top: 10px;
+  left: 10px;
+  background-image: url('../assets/images/corner-tl.png');
+}
+
+.top-right {
+  top: 10px;
+  right: 10px;
+  background-image: url('../assets/images/corner-tr.png');
+  transform: rotate(90deg);
+}
+
+.bottom-left {
+  bottom: 10px;
+  left: 10px;
+  background-image: url('../assets/images/corner-bl.png');
+  transform: rotate(-90deg);
+}
+
+.bottom-right {
+  bottom: 10px;
+  right: 10px;
+  background-image: url('../assets/images/corner-br.png');
+  transform: rotate(180deg);
+}
+
+/* Header Styling */
+header {
+  padding: 20px;
+  text-align: center;
+  border-bottom: 3px double var(--gold);
+  position: relative;
+  background: linear-gradient(to bottom, var(--parchment), var(--parchment-dark));
+}
+
+header h1 {
+  font-family: 'MedievalSharp', cursive;
+  color: var(--accent);
+  font-size: 2.5rem;
+  margin: 0 0 10px 0;
+  text-shadow: 1px 1px 3px var(--shadow);
+}
+
+.search-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 15px;
+  position: relative;
+  z-index: 1;
+}
+
+#search-input {
+  padding: 8px 15px;
+  width: 300px;
+  font-family: inherit;
+  border: 2px solid var(--gold);
+  border-radius: 5px 0 0 5px;
+  background-color: var(--parchment);
+}
+
+#search-button {
+  padding: 8px 15px;
+  background: linear-gradient(var(--gold), var(--gold-dark));
+  border: 2px solid var(--gold-dark);
+  border-left: none;
+  border-radius: 0 5px 5px 0;
+  color: var(--ink);
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: bold;
+}
+
+#search-button:hover {
+  background: linear-gradient(var(--gold-light), var(--gold));
+}
+
+.audio-controls {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+}
+
+#toggle-music {
+  background: linear-gradient(var(--gold), var(--gold-dark));
+  border: 2px solid var(--gold-dark);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#toggle-music:hover {
+  background: linear-gradient(var(--gold-light), var(--gold));
+}
+
+.volume-slider-container {
+  margin-left: 10px;
+  width: 100px;
+  display: none;
+}
+
+#toggle-music:hover + .volume-slider-container,
+.volume-slider-container:hover {
+  display: block;
+}
+
+/* Main Content Area */
+#content-container {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* Sidebar Navigation */
+#sidebar {
+  width: 280px;
+  background: linear-gradient(to right, var(--parchment-dark), var(--parchment));
+  border-right: 3px double var(--gold);
+  padding: 20px 0;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.nav-section {
+  margin-bottom: 30px;
+}
+
+.nav-section h3 {
+  padding: 0 20px;
+  margin: 0 0 10px 0;
+  font-family: 'MedievalSharp', cursive;
+  color: var(--accent);
+  font-size: 1.3rem;
+  text-shadow: 1px 1px 2px var(--shadow);
+}
+
+#nav-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+#nav-list li {
+  padding: 8px 20px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+#nav-list li:hover {
+  background-color: var(--gold-light);
+}
+
+#nav-list li.active {
+  background-color: var(--gold);
+  font-weight: bold;
+}
+
+/* Sub-navigation for items and other categories */
+.sub-nav {
+  margin-left: 20px;
+  padding-left: 10px;
+  border-left: 1px solid var(--gold);
+  list-style-type: none;
+}
+
+.sub-nav li {
+  margin: 5px 0;
+  padding: 3px 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  border-radius: 3px;
+}
+
+.sub-nav li:hover {
+  background-color: var(--gold-light);
+}
+
+/* Alchemy Tracker Styles */
+.alchemy-tabs {
+  background-color: var(--parchment-dark);
+  border: 1px solid var(--gold);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.tab-buttons {
+  display: flex;
+  border-bottom: 1px solid var(--gold);
+}
+
+.tab-button {
+  flex: 1;
+  padding: 10px;
+  background: linear-gradient(var(--parchment), var(--parchment-dark));
+  border: none;
+  border-right: 1px solid var(--gold);
+  font-family: inherit;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.tab-button:last-child {
+  border-right: none;
+}
+
+.tab-button.active {
+  background: linear-gradient(var(--gold-light), var(--parchment));
+  font-weight: bold;
+}
+
+.tab-pane {
+  display: none;
+  padding: 10px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.tab-pane.active {
+  display: block;
+}
+
+/* Ingredients and recipes lists */
+#ingredients-list, #recipes-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 10px 0 0 0;
+}
+
+.ingredient-item, .recipe-item {
+  padding: 5px;
+  margin: 2px 0;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: background-color 0.2s;
+}
+
+.ingredient-item:hover, .recipe-item:hover {
+  background-color: var(--gold-light);
+}
+
+.rarity-header {
+  font-weight: bold;
+  margin-top: 10px;
+  padding: 3px;
+  background-color: var(--parchment-dark);
+  border-bottom: 1px solid var(--gold);
+}
+
+/* Custom items added by user */
+.custom-item {
+  font-style: italic;
+  border-left: 3px solid var(--accent);
+  padding-left: 8px;
+}
+
+/* Form styles for adding items */
+.add-ingredient-form, .add-recipe-form {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 5px;
+  align-items: center;
+}
+
+.add-ingredient-form {
+  grid-template-areas: 
+    "label input button"
+    "rarity-label rarity-select .";
+}
+
+.add-recipe-form {
+  grid-template-areas: 
+    "label input button";
+}
+
+.add-ingredient-form label:first-child {
+  grid-area: label;
+}
+
+.add-ingredient-form #new-ingredient {
+  grid-area: input;
+}
+
+.add-ingredient-form #add-ingredient {
+  grid-area: button;
+}
+
+.add-ingredient-form label[for="ingredient-rarity"] {
+  grid-area: rarity-label;
+}
+
+.add-ingredient-form #ingredient-rarity {
+  grid-area: rarity-select;
+}

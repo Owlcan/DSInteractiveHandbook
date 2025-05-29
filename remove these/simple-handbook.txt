@@ -1,0 +1,1679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Interactive Handbook</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=MedievalSharp&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #d4af37;
+      --gold-light: #f1e5ac;
+      --gold-dark: #9a7d22;
+      --parchment: #f7f2e3;
+      --parchment-dark: #e8e0cc;
+      --ink: #3b3024;
+      --accent: #8b4513;
+      --shadow: rgba(0, 0, 0, 0.5);
+    }
+    
+    body {
+      font-family: 'Cormorant Garamond', serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #2c2219;
+      background-image: url('https://www.transparenttextures.com/patterns/dark-wood.png');
+      color: var(--ink);
+      line-height: 1.6;
+    }
+    
+    #app {
+      max-width: 1200px;
+      margin: 0 auto;
+      background-color: var(--parchment);
+      background-image: url('https://www.transparenttextures.com/patterns/parchment.png');
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      padding: 20px;
+      border: 12px solid var(--gold-dark);
+      position: relative;
+    }
+    
+    .corner-decoration {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      background-color: var(--gold);
+      background-image: url('https://www.transparenttextures.com/patterns/asfalt-light.png');
+      z-index: 1;
+    }
+    
+    .top-left {
+      top: -6px;
+      left: -6px;
+      border-top-left-radius: 15px;
+    }
+    
+    .top-right {
+      top: -6px;
+      right: -6px;
+      border-top-right-radius: 15px;
+    }
+    
+    .bottom-left {
+      bottom: -6px;
+      left: -6px;
+      border-bottom-left-radius: 15px;
+    }
+    
+    .bottom-right {
+      bottom: -6px;
+      right: -6px;
+      border-bottom-right-radius: 15px;
+    }
+    
+    h1 {
+      text-align: center;
+      color: var(--accent);
+      font-family: 'MedievalSharp', cursive;
+      font-size: 3rem;
+      margin: 10px 0 20px;
+      text-shadow: 1px 1px 3px var(--shadow);
+      position: relative;
+    }
+    
+    h1::after {
+      content: "";
+      display: block;
+      width: 80%;
+      height: 3px;
+      background: linear-gradient(to right, transparent, var(--gold), transparent);
+      margin: 10px auto;
+    }
+    
+    h2 {
+      font-family: 'MedievalSharp', cursive;
+      color: var(--accent);
+      border-bottom: 2px solid var(--gold);
+      padding-bottom: 5px;
+      margin-top: 20px;
+    }
+    
+    nav {
+      margin: 20px 0;
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+    
+    button {
+      padding: 12px 25px;
+      background: linear-gradient(to bottom, var(--gold-light), var(--gold));
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      font-family: 'MedievalSharp', cursive;
+      color: var(--ink);
+      box-shadow: 0 2px 5px var(--shadow);
+      transition: all 0.3s ease;
+    }
+    
+    button:hover {
+      background: linear-gradient(to bottom, var(--gold), var(--gold-dark));
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px var(--shadow);
+    }
+    
+    .content-section {
+      display: none;
+      padding: 20px;
+      background-color: rgba(255, 255, 255, 0.5);
+      border-radius: 8px;
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .content-section.active {
+      display: block;
+      animation: fadeIn 0.5s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    .card {
+      border: 2px solid var(--gold);
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 20px;
+      background-color: var(--parchment-dark);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    .card h3 {
+      color: var(--accent);
+      font-family: 'MedievalSharp', cursive;
+      margin-top: 0;
+      border-bottom: 1px solid var(--gold);
+      padding-bottom: 5px;
+    }
+    
+    .card img {
+      width: 100%;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      border: 3px solid var(--gold-dark);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+    
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    
+    .welcome-image-container {
+      text-align: center;
+      margin: 30px 0;
+    }
+    
+    .handbook-cover {
+      max-width: 80%;
+      border: 5px solid var(--gold-dark);
+      border-radius: 8px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+    
+    ul {
+      padding-left: 20px;
+    }
+    
+    li {
+      margin-bottom: 5px;
+    }
+    
+    /* Scrollbar styling */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: var(--parchment-dark);
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: var(--gold-dark);
+      border-radius: 5px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--gold);
+    }
+    
+    .lore-era {
+      margin-bottom: 40px;
+      background-color: var(--parchment-dark);
+      border-radius: 8px;
+      padding: 15px;
+      border: 1px solid var(--gold);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .lore-era h3 {
+      color: var(--accent);
+      font-family: 'MedievalSharp', cursive;
+      text-align: center;
+      border-bottom: 2px solid var(--gold);
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+    }
+
+    .lore-content {
+      text-align: justify;
+      padding: 0 10px;
+    }
+
+    .lore-content p {
+      margin-bottom: 15px;
+      line-height: 1.6;
+    }
+
+    .lore-content strong {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .lore-image-placeholder {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .lore-image {
+      max-width: 80%;
+      border: 3px solid var(--gold-dark);
+      border-radius: 8px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+    
+    #lore-section {
+      max-height: 75vh;
+      overflow-y: auto;
+      padding-right: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="corner-decoration top-left"></div>
+    <div class="corner-decoration top-right"></div>
+    <div class="corner-decoration bottom-left"></div>
+    <div class="corner-decoration bottom-right"></div>
+    
+    <h1>Interactive Handbook</h1>
+    
+    <nav>
+      <button id="btn-welcome">Welcome</button>
+      <button id="btn-bestiary">Bestiary</button>
+      <button id="btn-items">Items</button>
+      <button id="btn-lore">School Lore</button>
+    </nav>
+    
+    <div id="welcome-section" class="content-section active">
+      <h2>Welcome to the Interactive Handbook</h2>
+      <p>Click on the buttons above to explore the handbook of monsters and items from the world.</p>
+      <div class="welcome-image-container">
+        <img src="assets/images/logo.png" alt="Handbook Cover" class="handbook-cover">
+      </div>
+    </div>
+    
+    <div id="bestiary-section" class="content-section">
+      <h2>Bestiary</h2>
+      <div class="card-grid" id="monsters-container">
+        <!-- Monster cards will be generated here -->
+      </div>
+    </div>
+    
+    <div id="items-section" class="content-section">
+      <h2>Items</h2>
+      <div class="card-grid" id="items-container">
+        <!-- Item cards will be generated here -->
+      </div>
+    </div>
+
+    <div id="lore-section" class="content-section">
+      <h2>Academy History & Lore</h2>
+      <p>Over the last 900 years, the academy has been a bulkwark of education against the misuse of power and an institution of consistent renown in the business of training up generations upon generations of heroes and champions of just causes.</p>
+      
+      <div class="lore-era">
+        <h3>Pre Old-War Period</h3>
+        <div class="lore-content">
+          <p><strong>~1000 Years Ago:</strong> Academy Plane is established by the enigmatic figure known only as The Headmaster.</p>
+          <p><strong>~900 Years Ago:</strong> The Headmaster teaches his first class, "Practical Adventuring." The class is so overbooked that the backlog to attend is estimated to be ~890 years long.</p>
+          <p><strong>~850 Years Ago:</strong> The Headmaster disappears from everyday life amongst the Academy. Somehow, he continues to teach his classes as usual. In time, students forget they even take the class despite it appearing on their rosters and their earning of credits towards the class. Some students claim memories from these sessions with a Professor Hoots, but many dismiss these claims as some illusory trick of the Academy's latent magics.</p>
+        </div>
+        <div class="lore-image-placeholder">
+          <img src="assets/images/lore/headmaster_placeholder.jpg" alt="The Headmaster" class="lore-image">
+        </div>
+        <div class="lore-content">
+          <p><strong>~800 Years Ago:</strong> Sorceress Tabitha enrolls at the Academy at the age of 12, an orphan from a devastated and erased realm.</p>
+          <p><strong>~770 Years Ago:</strong> Tabitha creates The Well of the Blessed Engine, a device she claims will allow her to save souls from outside the realm.</p>
+          <p><strong>710-708 Years Ago:</strong> Sorceress Tabitha unleashes the true intent of the Well of Souls. Despite claiming it had never been turned on to full power to save the souls of those who died on other planes without some way to preserve the sanctity of their spirit, the device had been collecting and storing souls for almost a century. Using this power, Tabitha creates the first of her Warforged Host.</p>
+          <p><strong>~707-705 Years Ago:</strong> Using the power of the Well and her Warforged Host, Tabitha wrests control of the Academy from The Council of Professorial Oversight which had taken over for the Headmaster after his sudden ontological dysfunction became apparent. Her pataphysical control over the Academic Plane becomes so strong that she is able to eject students and staff that pose any sort of threat to her hegemony.</p>
+          <p>Tabitha begins to recruit students not simply for the purpose of training but to harvest the failures for conversion into a part of her Warforged Host.</p>
+        </div>
+      </div>
+      
+      <div class="lore-image-placeholder">
+        <img src="assets/images/lore/well_of_souls_placeholder.jpg" alt="The Well of Souls" class="lore-image">
+      </div>
+      
+      <div class="lore-era">
+        <h3>The Old War Period</h3>
+        <div class="lore-content">
+          <p><strong>704-700 Years Ago:</strong> The First Internal Siege of Scholia Proper occurs. This represents the first attack on the Campus rendered by The Warforged Host. After finding a way to bring down the anti-lethality wards on the school, Tabitha sets out to reave the souls of the largest enrolled class since the opening of the Academy. Hundreds, if not thousands, die within the first few days of fighting in the small demiplane.</p>
+          <p><strong>704 Years Ago:</strong> Pliya and dozens of other students are killed during the events of the First Internal Siege. Warforged emerge from beneath the school and ravage the campus- held back by bulwarks of remaining magical wards and the efforts of valiant students and staff who turn back the initial tide. Tabitha, Acting Headmistress, disappears from public view when scrutiny falls on her after the attack is repelled.</p>
+        </div>
+        <div class="lore-image-placeholder">
+          <img src="assets/images/lore/internal_siege_placeholder.jpg" alt="The First Internal Siege" class="lore-image">
+        </div>
+        <div class="lore-content">
+          <p><strong>703 Years Ago:</strong> Magiana and Lesser Radiana are consumed in magical fire and etheric nuclear flame as the Dragons of Monacalath are seen flying overhead in their first war formation in 200 years. They send message that this is a warning for the Academy to surrender to Tabitha's entourage. However, in burning the only lesser-protected spaces outside the grounds, Tabitha had also torched her own auspices of negotiation- war was now absolute and armies would march at The First Battle of the Gate in this year- Tabitha's armies, led by Monacalath the Dragon Lord and Sylane the Sister-Witch of the Sorceress, and the Scholian Forces led by Galander Forsythe and Ylva of the Circle of the Academy.</p>
+          <p>After weeks of slamming their forms against the Bulwark of the Gate, the Battle at the Doors takes place in the later days of this year. For a second time, Monacalath and Sylane are turned back from the Academy grounds they had once called home. The cost, Avatar of the Headmaster and another hero of the age are said to have held aloft the original doors of the school, using them as weapon and aegis against the foes of the Warforged Host.</p>
+          <p>At the Apex of Planar Power on The Eve of the New Year, The Mountains Mordest are levelled in an act of revenge after the loss of Galander Forsythe, Leader of Scholia Armies. Ylva made a pact with the spirits of nature bound to the Academy plane to destroy the mountains, dropping them into the planar void.</p>
+          <p><strong>702 Years Ago:</strong> The Day the Mountains Tumbled results in the near-total annihilation of the Renegade Remnant of students under Tabitha, as well as eliminating most of The Training Fortress, which had been converted into The Ebony Echelon by Tabitha's forces.</p>
+          <p>The Iron March Begins as The Longest of Wintertide begins. Using Spatial Distortion magic fuelled by a last-ditch effort to tap the Well of Souls to defend against Tabitha, the Planar Demesne is drastically elongated in both spatial and temporal dimensions. The tension and stress of this action claims the lives of the entire Scholia Psionica and would mark the end of those studies at the Academy for almost 650 years.</p>
+        </div>
+      </div>
+      
+      <div class="lore-image-placeholder">
+        <img src="assets/images/lore/mountains_tumbling_placeholder.jpg" alt="The Day the Mountains Tumbled" class="lore-image">
+      </div>
+      
+      <div class="lore-era">
+        <h3>The Middle War Period</h3>
+        <div class="lore-content">
+          <p><strong>~699 Years Prior:</strong> The Iron March concluded, and the Council of Professorial Oversight, now bolstered by the indomitable spirit of surviving heroes, reasserted its governance. The Well of the Blessed Engine, a once-proud bastion of innovation, was sealed, and the Academy embraced a new epoch of prudence and restraint in arcane research.</p>
+          <p><strong>~680 Years Prior:</strong> The Academy, its reputation besmirched by the dark shadow of conflict, saw a dramatic decline in enrollment. In response, the Council broadened its admissions criteria, inviting pupils of diverse and unconventional backgrounds to walk its storied halls.</p>
+          <p><strong>~650 Years Prior:</strong> The Great Library of Scholia, a bastion of erudition and the epicenter of academic endeavor, arose from the ashes of the past. It was enshrouded by an enchanted barrier, impermeable to those whose intentions were not pure.</p>
+        </div>
+        <div class="lore-image-placeholder">
+          <img src="assets/images/lore/great_library_placeholder.jpg" alt="The Great Library of Scholia" class="lore-image">
+        </div>
+        <div class="lore-content">
+          <p><strong>~630 Years Prior:</strong> The Shadow Guild, a clandestine cabal of nefarious scholars and practitioners of the arcane, insinuated themselves into the very fabric of the Academy. Their machinations aimed to corrupt the youth and pilfer the school's ancient secrets.</p>
+          <p><strong>~600 Years Prior:</strong> The Second Internal Siege of Scholia Proper was discovered as the Council unearthed a clandestine chamber within the Great Library, serving as the nexus of the Shadow Guild's operations. The ensuing battle cleansed the School of this malicious presence.</p>
+          <p><strong>~580 Years Prior:</strong> In the wake of the Old War, the Academy introduced a novel curriculum centered on the study and safeguarding of ancient artifacts, recognizing the dual nature of power in the hands of the unenlightened.</p>
+        </div>
+      </div>
+      
+      <div class="lore-image-placeholder">
+        <img src="assets/images/lore/shadow_guild_placeholder.jpg" alt="The Shadow Guild" class="lore-image">
+      </div>
+      
+      <div class="lore-era">
+        <h3>The First New Dawn of Stability</h3>
+        <div class="lore-content">
+          <p><strong>~550 Years Prior:</strong> The Planar Games, an interdimensional tournament of wit and might, were established to foster unity and camaraderie among the disparate realms of existence.</p>
+          <p><strong>~520 Years Prior:</strong> The Circle of the Academy, a clandestine society dedicated to the protection of the School and its tenets, was formed. Their unseen hand has been a bastion of order and vigilance within the ever-shifting tapestry of academic intrigue.</p>
+          <p><strong>~490 Years Prior:</strong> The Great Reawakening of Magic reverberated through the multiverse, and the Academy's enrollment soared. This influx of aspirants sought to harness the burgeoning power and prevent future cataclysms.</p>
+        </div>
+        <div class="lore-image-placeholder">
+          <img src="assets/images/lore/planar_games_placeholder.jpg" alt="The Planar Games" class="lore-image">
+        </div>
+        <div class="lore-content">
+          <p><strong>~450 Years Prior:</strong> The Headmaster's Tome, an ancient grimoire replete with the secrets of the founder's disappearance and the Academy's latent potential, was unearthed in the desolate ruins of the Training Fortress.</p>
+          <p><strong>~430 Years Prior:</strong> The Planar Exchange Program was initiated, enabling students to venture forth and study in distant lands, thus weaving a tapestry of diplomatic ties and cultural exchanges that spanned the cosmos.</p>
+        </div>
+      </div>
+      
+      <div class="lore-image-placeholder">
+        <img src="assets/images/lore/headmaster_tome_placeholder.jpg" alt="The Headmaster's Tome" class="lore-image">
+      </div>
+      
+      <div class="lore-era">
+        <h3>The Modern Age Period</h3>
+        <div class="lore-content">
+          <p><strong>~350 Years Prior:</strong> The Academy delved into the esoteric study of Planar Mechanics, mastering the intricacies of interdimensional travel to navigate and safeguard the multiverse.</p>
+          <p><strong>~330 Years Prior:</strong> The Diapered Defenders, a band of heroes known for their peculiar choice of emblematic attire, graduated from the Academy. Their legend grew as they championed humility and vulnerability in the face of adversity.</p>
+          <p><strong>~300 Years Prior:</strong> The Great Schism rent the academic community asunder, as a contingent of traditionalists advocated for a return to the bygone era of the Well of Souls. The Council's intervention brought about a harmonious resolution, though echoes of discord lingered.</p>
+        </div>
+        <div class="lore-image-placeholder">
+          <img src="assets/images/lore/diapered_defenders_placeholder.jpg" alt="The Diapered Defenders" class="lore-image">
+        </div>
+        <div class="lore-content">
+          <p><strong>~280 Years Prior:</strong> The Outreach, a satellite campus of the Scholia Magus Academy, was established in the Material Plane, offering the fruits of knowledge to those unable to partake in the Planar Campus's ethereal embrace.</p>
+          <p><strong>~250 Years Prior:</strong> The "Incontinence Incident," a regrettable prank gone awry, cast an embarrassing pall over the School. The ensuing hilarity and confusion, however, did little to deter the student body's resolve.</p>
+          <p><strong>~230 Years Prior:</strong> The Council of Professorial Oversight was infiltrated by the descendants of the Shadow Guild. The Diapered Whisperer, a mole of insidious intent, began subtly shaping the Academy's destiny.</p>
+          <p><strong>~200 Years Prior:</strong> The "Water War," a magical conflagration precipitated by a student's experiment, led to the temporary closure of the School of Elementalism for renovations.</p>
+        </div>
+      </div>
+      
+      <div class="lore-image-placeholder">
+        <img src="assets/images/lore/water_war_placeholder.jpg" alt="The Water War" class="lore-image">
+      </div>
+      
+      <div class="lore-era">
+        <h3>Recent Historical Milestones</h3>
+        <div class="lore-content">
+          <p><strong>~155 Years Prior:</strong> The era saw the enrollment of several current luminaries of the Academy's faculty, including the esteemed Ardelie Heller.</p>
+          <p><strong>~150 Years Prior:</strong> The Diapered Defenders reunited to confront the emergent menace of "The Infantilizer," whose insidious power sought to diminish the great to the state of the powerless.</p>
+          <p><strong>~130 Years Prior:</strong> The enigmatic Ghostly Host materialized before the eyes of the School's denizens, their spectral presence a silent sentinel and a poignant reminder of the Academy's storied past.</p>
+        </div>
+        <div class="lore-image-placeholder">
+          <img src="assets/images/lore/infantilizer_battle_placeholder.jpg" alt="Battle with The Infantilizer" class="lore-image">
+        </div>
+        <div class="lore-content">
+          <p><strong>~120 Years Prior:</strong> The Infantilizer was vanquished, though not before leaving a trail of diapered dignitaries in his wake. The Diapered Defenders, having served their purpose, once again dispersed into the annals of history.</p>
+          <p><strong>~100 Years Prior:</strong> The millennial anniversary of the Academy's founding was celebrated with the Grand Quest, a series of trials to test the mettle of its pupils and reaffirm its legacy of heroism.</p>
+          <p><strong>~90 Years Prior:</strong> The Ghostly Host was revealed to be an unintended consequence of the Headmaster's efforts to shield the School. Their existence served as a haunting reminder of the interplay between protection and confinement.</p>
+        </div>
+      </div>
+      
+      <div class="lore-image-placeholder">
+        <img src="assets/images/lore/ghostly_host_placeholder.jpg" alt="The Ghostly Host" class="lore-image">
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Integrated Items Data (Parts 1 and 2)
+    const itemsData = [
+      {
+        name: "Adhesive",
+        value: "12 VRP",
+        type: "Ingredient (Essence)",
+        description: "A highly effective, sticky substance with powerful bonding properties, ideal for uniting disparate materials into one cohesive whole.",
+        location: "Greensea Forest, Lissome Plains",
+        rarity: "Common",
+        image: "assets/images/Adhesive.png"
+      },
+      {
+        name: "Azure Harvest Blue Moon Ice Cream",
+        value: "250 VRP",
+        type: "Crafted (Food Legendary)",
+        description: "Some say they taste citrus, others swear there are hints of custard and aromatics—and yet still more profess their belief it tastes like the platonic ideal of blue children's modeling clay. All agree it is one of the best iced confections ever created.",
+        rarity: "Legendary",
+        image: "assets/images/Azure Harvest Blue Moon Ice Cream.png"
+      },
+      {
+        name: "Azure Moon Cream",
+        value: "250 VRP",
+        type: "Ingredient (Legendary)",
+        description: "Legendary cream harvested under a blue moon. Glows with ethereal light.",
+        location: "Greensea Forest",
+        rarity: "Legendary",
+        image: "assets/images/Azure Moon Cream.png"
+      },
+      {
+        name: "Barkgum",
+        value: "7 VRP",
+        type: "Ingredient (Botanical)",
+        description: "A sticky and rubbery organic compound refined from the sap of certain trees. Used as a base for products from chewing gum to glue and rubber.",
+        location: "Greensea Forest",
+        rarity: "Common",
+        image: "assets/images/Barkgum.png"
+      },
+      {
+        name: "Berrimaters",
+        value: "5 VRP",
+        type: "Ingredient (Botanical, Food)",
+        description: "Small, round, savory and sweet—these cherry‑red delights are awfully fun to eat and pair well with many treats.",
+        location: "Greensea Forest",
+        rarity: "Common",
+        image: "assets/images/Berrimaters.png"
+      },
+      {
+        name: "Birch Syrup",
+        value: "35 VRP",
+        type: "Ingredient (Food, Botanical)",
+        description: "A rare syrup tapped from ancient, enchanted birch trees; each drop resonates with the forest's whispered secrets.",
+        rarity: "Uncommon",
+        image: "assets/images/Birch Syrup.bak.png"
+      },
+      {
+        name: "Butter",
+        value: "5 VRP",
+        type: "Crafted (Food)",
+        description: "Smooth, creamy butter, perfect for cooking.",
+        rarity: "Common",
+        image: "assets/images/Butter.png"
+      },
+      {
+        name: "Chromatic Platinum",
+        value: "250 VRP",
+        type: "Ingredient (Legendary, Metal)",
+        description: "A resplendent metal alloy imbued with shifting prismatic hues, radiating a subtle magical aura.",
+        rarity: "Legendary",
+        image: "assets/images/Chromatic Platinum.png"
+      },
+      {
+        name: "Cream",
+        value: "5 VRP",
+        type: "Ingredient (Food)",
+        description: "Fresh dairy cream, essential for making ice cream and other desserts.",
+        rarity: "Common",
+        image: "assets/images/Cream.png"
+      },
+      {
+        name: "Darkessence",
+        value: "250 VRP",
+        type: "Ingredient (Legendary, Essence)",
+        description: "A mysterious, shadow‑infused essence that exudes an aura of hidden power, often employed in dark magical rites.",
+        rarity: "Legendary",
+        image: "assets/images/Darkessence.png"
+      },
+      {
+        name: "Defractor Prism",
+        value: "35 VRP",
+        type: "Ingredient (Rare)",
+        description: "Differentiates magical, material, and chemical processes, allowing for the breakdown of materials into their components.",
+        rarity: "Rare",
+        image: "assets/images/Defractor Prism.png"
+      },
+      {
+        name: "Distillation of a Night Sky",
+        value: "250 VRP",
+        type: "Ingredient (Legendary, Essence)",
+        description: "The essence of a perfect night sky captured in a bottle. Contains stardust and dreams.",
+        location: "Dracespire Mountain Range, Lissome Plains, Greensea Forest, Campus (Extremely Rare)",
+        rarity: "Legendary",
+        image: "assets/images/Distillation of a Night Sky.png"
+      },
+      {
+        name: "Dreamvapor",
+        value: "250 VRP",
+        type: "Ingredient (Legendary, Essence)",
+        description: "An ephemeral mist carrying the scents of lavender and lost lullabies, slipping away like a fragment of a fading dream.",
+        rarity: "Legendary",
+        image: "assets/images/Dreamvapor.png"
+      },
+      {
+        name: "Egg",
+        value: "5 VRP",
+        type: "Ingredient (Food)",
+        description: "A common binding agent used in cooking and baking.",
+        location: "Lissome Plains",
+        rarity: "Common",
+        image: "assets/images/Egg.png"
+      },
+      {
+        name: "Flavor Matrix",
+        value: "250 VRP",
+        type: "Ingredient (Legendary)",
+        description: "Made from the distillation of Candy Elemental, this crystallized flavor matrix radically expands the flavor profile of many food items—and can even unlock hidden potential.",
+        rarity: "Legendary",
+        image: "assets/images/flavor matrix.png"
+      },
+      {
+        name: "Fractal Copper",
+        value: "7 VRP",
+        type: "Ingredient (Metal)",
+        description: "A mysterious, ever‑fractalizing metal whose intricate patterns appear only under the full moon's light.",
+        rarity: "Common",
+        image: "assets/images/Fractal Copper.png"
+      },
+      {
+        name: "Flour",
+        value: "5 VRP",
+        type: "Ingredient (Food)",
+        description: "A finely milled powder ground from high-quality grains, known for its versatile binding properties and delicate, neutral flavor.",
+        rarity: "Common",
+        image: "assets/images/Flour.png"
+      },
+      {
+        name: "Glimmelectrum",
+        value: "7 VRP",
+        type: "Ingredient (Metal)",
+        description: "A radiant, mysterious alloy that hums with magical energy, capturing and reflecting light in mesmerizing patterns.",
+        rarity: "Common",
+        image: "assets/images/Glimmelectrum.png"
+      },
+      {
+        name: "Health Potion",
+        value: "5 VRP",
+        type: "Crafted (Potion)",
+        description: "A basic healing potion that restores vitality.",
+        rarity: "Common",
+        image: "assets/images/healthpotion.png"
+      },
+      {
+        name: "Herb Butter",
+        value: "5 VRP",
+        type: "Crafted (Food)",
+        description: "Butter infused with aromatic herbs.",
+        rarity: "Common",
+        image: "assets/images/Herb Butter.png"
+      },
+      {
+        name: "Jadicine",
+        value: "12 VRP",
+        type: "Ingredient (Exotic)",
+        description: "A translucent green substance, rumored to be distilled from the tears of a jade dragon, soothing the mind and mending wounds.",
+        rarity: "Uncommon",
+        image: "assets/images/Jadicine.png"
+      },
+      {
+        name: "Liquid Pain",
+        value: "250 VRP",
+        type: "Ingredient (Legendary, Food, Essence)",
+        description: "A shifting, blood‑red fluid pulsing as though alive, harvested from the shattered hearts of fiends—dangerous, potent, and steeped in dark magic.",
+        rarity: "Legendary",
+        image: "assets/images/Liquid Pain.png"
+      },
+      {
+        name: "Lovely Diaper",
+        value: "7 VRP",
+        type: "Crafted (Textile Crafted)",
+        description: "D'awwww! Isn't that sweet. A token meant to show just how much you want to keep someone safe.",
+        rarity: "Common",
+        image: "assets/images/Lovely Diaper.png"
+      },
+      {
+        name: "Lunar‑Dodo Egg",
+        value: "250 VRP",
+        type: "Ingredient (Legendary, Food)",
+        description: "An egg from the rare Lunar‑Dodo bird. Emits a soft blue glow.",
+        location: "Lissome Plains",
+        rarity: "Legendary",
+        image: "assets/images/Lunar-Dodo Egg.png"
+      },
+      {
+        name: "Bitter Balm",
+        value: "20 VRP",
+        type: "Crafted Item",
+        description: "A pungent salve that creates an unpleasant taste when applied to objects, discouraging chewing or sucking.",
+        rarity: "Uncommon",
+        image: "assets/images/placeholder.js"
+      },
+      {
+        name: "Matrix Malachite",
+        value: "35 VRP",
+        type: "Ingredient (Crystal)",
+        description: "A green crystalline material with geometric patterns that resonate with magical energies.",
+        location: "Dracespire Mountain Range",
+        rarity: "Uncommon",
+        image: "assets/images/matrixmalachite.png"
+      },
+      {
+        name: "Magibutter",
+        value: "30 VRP",
+        type: "Crafted (Food, Magical)",
+        description: "Butter infused with magical essence, giving it a faint glow and enhanced flavor. Used in magical cooking.",
+        rarity: "Uncommon",
+        image: "assets/images/Magibutter.png"
+      },
+      {
+        name: "Orichalchite",
+        value: "7 VRP",
+        type: "Ingredient (Metal)",
+        description: "Often called 'orichalcum's ghost,' this peculiar mineral shifts between the material and ethereal realms, evoking lost legends.",
+        rarity: "Common",
+        image: "assets/images/Orichalchite.png"
+      },
+      // --- Part 2 ---
+      {
+        name: "Petrodistillate",
+        value: "12 VRP",
+        type: "Ingredient (Essence)",
+        description: "A refined, volatile extract from crude oil, known for its flammable characteristics and its use in catalyzing various reactions.",
+        location: "Dracespire Mountain Range",
+        rarity: "Uncommon",
+        image: "assets/images/Petrodistillate.png"
+      },
+      {
+        name: "Plastic Sheeting",
+        value: "7 VRP",
+        type: "Crafted (Textile Crafted)",
+        description: "A thin yet durable layer of plastic engineered for protective coverings, waterproofing, and precise industrial applications.",
+        rarity: "Common",
+        image: "assets/images/Plastic Sheeting.png"
+      },
+      {
+        name: "Plasticizer",
+        value: "12 VRP",
+        type: "Ingredient (Essence)",
+        description: "A transformative substance used to soften and mold plastics, enabling them to be fashioned into flexible forms.",
+        location: "Dracespire Mountain Range",
+        rarity: "Uncommon",
+        image: "assets/images/Plasticizer.png"
+      },
+      {
+        name: "Prismatic Activator",
+        value: "250 VRP",
+        type: "Ingredient (Legendary, Rare)",
+        description: "A dazzling device shimmering with the full spectrum of colors, designed to unlock hidden magical potentials with a decisive spark.",
+        rarity: "Legendary",
+        image: "assets/images/Prismatic Activator.png"
+      },
+      {
+        name: "Quiche",
+        value: "5 VRP",
+        type: "Crafted (Food Crafted)",
+        description: "A savory tart filled with a rich blend of ingredients, offering a hearty, delectable treat with artisanal flair.",
+        rarity: "Common",
+        image: "assets/images/Quiche.png"
+      },
+      {
+        name: "Robusca",
+        value: "35 VRP",
+        type: "Ingredient (Crystal)",
+        description: "A dense, robust crystalline alloy prized for its exceptional strength and durability, ideal for crafting heavy‑duty tools and resilient structures.",
+        location: "Dracespire Mountain Range",
+        rarity: "Uncommon",
+        image: "assets/images/Robusca.png"
+      },
+      {
+        name: "Rock Salt",
+        value: "7 VRP",
+        type: "Ingredient (Metal, Food)",
+        description: "A coarse, naturally occurring crystalline salt harvested from ancient deposits. Lends a distinct crunch and subtle brininess to recipes.",
+        rarity: "Common",
+        image: "assets/images/Rock Salt.png"
+      },
+      {
+        name: "Savour Herb",
+        value: "5 VRP",
+        type: "Ingredient (Botanical)",
+        description: "A common botanical with a rich, savory aroma.",
+        location: "Greensea Forest",
+        rarity: "Common",
+        image: "assets/images/Savour Herb.png"
+      },
+      {
+        name: "Solvent",
+        value: "12 VRP",
+        type: "Ingredient (Essence)",
+        description: "A volatile liquid compound known for its ability to dissolve and extract substances, essential in various alchemical and industrial processes.",
+        location: "Dracespire Mountain Range",
+        rarity: "Uncommon",
+        image: "assets/images/Solvent.png"
+      },
+      {
+        name: "Spring Water",
+        value: "5 VRP",
+        type: "Ingredient (Food)",
+        description: "Pure water drawn from pristine natural springs, enriched with essential minerals to enhance clarity and freshness.",
+        rarity: "Common",
+        image: "assets/images/Spring Water.png"
+      },
+      {
+        name: "Star Sugar",
+        value: "250 VRP",
+        type: "Ingredient (Legendary, Food)",
+        description: "Crystallized sweetness that fell from the stars. Sparkles with cosmic energy.",
+        location: "Dracespire Mountain Range",
+        rarity: "Legendary",
+        image: "assets/images/Star Sugar.png"
+      },
+      {
+        name: "Starsoaked Vanilla",
+        value: "250 VRP",
+        type: "Ingredient (Legendary, Botanical, Food, Essence)",
+        description: "Vanilla beans that have been bathed in starlight for a full lunar cycle.",
+        location: "Dracespire Mountain Range",
+        rarity: "Legendary",
+        image: "assets/images/Starsoaked Vanilla.png"
+      },
+      {
+        name: "Starshot Ore",
+        value: "7 VRP",
+        type: "Ingredient (Metal)",
+        description: "A celestial metallic fragment believed to have fallen from the heavens; it glimmers with soft starlight even in utter darkness.",
+        rarity: "Common",
+        image: "assets/images/Starshot Ore.png"
+      },
+      {
+        name: "Sunset Essence",
+        value: "35 VRP",
+        type: "Ingredient (Rare, Food, Essence)",
+        description: "Captured at the fleeting moment of twilight, this radiant liquid holds the fading light of a dying day, evoking enchanting warmth and mystery.",
+        rarity: "Uncommon",
+        image: "assets/images/Sunset Essence.png"
+      },
+      {
+        name: "Sweetleaf",
+        value: "5 VRP",
+        type: "Ingredient (Food, Botanical)",
+        description: "Naturally sweet leaves that add a delicate sweetness without overpowering other flavors.",
+        rarity: "Common",
+        image: "assets/images/Sweetleaf.png"
+      },
+      {
+        name: "Tastetanium Crystal",
+        value: "250 VRP",
+        type: "Ingredient (Legendary, Metal, Food)",
+        description: "An anomalous crystalline lattice of freestate energy that interacts with ingredients to create new, novel building blocks for taste sensation—while also being incredibly durable.",
+        rarity: "Legendary",
+        image: "assets/images/Tastetanium Crystal.png"
+      },
+      {
+        name: "Turbinado Sugar",
+        value: "250 VRP",
+        type: "Crafted (Food Legendary)",
+        description: "With the awesome gastronomic might of the flavor matrix, even plain white sugar is elevated to godly tiers of taste sensation!",
+        rarity: "Legendary",
+        image: "assets/images/TurbonadoSugar.png"
+      },
+      {
+        name: "Touch of Love",
+        value: "250 VRP",
+        type: "Ingredient (Legendary, Exotic, Essence)",
+        description: "The 'most common' of Legendary Ingredients—a staple many can make themselves, yet its ubiquity is a testament to its love-infused magic.",
+        location: "Greensea Forest",
+        rarity: "Legendary",
+        image: "assets/images/Touch of Love.png"
+      },
+      {
+        name: "Vanilla",
+        value: "5 VRP",
+        type: "Ingredient (Food, Botanical, Essence)",
+        description: "A fragrant flavoring extracted from vanilla pods.",
+        location: "Lissome Plains",
+        rarity: "Common",
+        image: "assets/images/Vanilla.png"
+      },
+      {
+        name: "Vanilla Ice Cream",
+        value: "5 VRP",
+        type: "Crafted (Food)",
+        description: "The tried and true classic. Almost no one can mess this up—delicious even when it turns to soup!",
+        rarity: "Common",
+        image: "assets/images/VanillaIceCream.png"
+      },
+      {
+        name: "Vitalium",
+        value: "35 VRP",
+        type: "Ingredient (Crystal, Exotic)",
+        description: "A shimmering metal imbued with the essence of life, frequently harnessed to empower enchanting constructs and devices.",
+        location: "Dracespire Mountain Range",
+        rarity: "Uncommon",
+        image: "assets/images/Vitalium.png"
+      },
+      {
+        name: "Vitalocanum",
+        value: "35 VRP",
+        type: "Ingredient (Crystal, Exotic)",
+        description: "A potent compound derived from Vitalium, renowned for its ability to bridge the gap between vitality and arcane energies.",
+        location: "Dracespire Mountain Range",
+        rarity: "Uncommon",
+        image: "assets/images/Vitalocanum.png"
+      },
+      {
+        name: "White Sugar",
+        value: "5 VRP",
+        type: "Ingredient (Food)",
+        description: "Refined sugar that adds sweetness to any recipe.",
+        location: "Lissome Plains",
+        rarity: "Common",
+        image: "assets/images/White Sugar.png"
+      },
+      {
+        name: "Whipped White Butter",
+        value: "5 VRP",
+        type: "Crafted (Food)",
+        description: "Light and airy butter whipped to perfection. Spreads like a dream.",
+        rarity: "Common",
+        image: "assets/images/Whipped White Butter.png"
+      },
+      {
+        name: "Yarn",
+        value: "7 VRP",
+        type: "Ingredient (Textile)",
+        description: "Finely spun fiber used in weaving and knitting, prized for its delicate texture and potential enchantments in crafted garments.",
+        location: "Lissome Plains",
+        rarity: "Common",
+        image: "assets/images/Yarn.png"
+      }
+    ];
+
+    const monstersData = [
+  {
+    name: "Darkforme Overwatch",
+    description: "Medium abomination, Anxious Evil",
+    imageUrl: "assets/images/Monsters/Darkforme-Overwatch.png",
+    size: "Medium",
+    type: "Abomination",
+    alignment: "Anxious Evil",
+    armorClass: 14,
+    hitPoints: "22 (4d8 + 4)",
+    speed: "35 ft.",
+    challengeRating: "2",
+    actions: [
+      { name: "Multi-Tendril Lash", description: "Melee Weapon Attack (Slashing): +5 to hit, reach 10 ft., one target. Hit: 8 (2d6 + 3)" },
+      { name: "Shuddering Pound", description: "Melee Weapon Attack (Blunt): +5 to hit, reach 5 ft., one target. Hit: 4 (1d10+2)" },
+      { name: "Shadowmist Jaunt", description: "Teleport 20 ft (Movement Action)" }
+    ],
+    abilities: [
+      { name: "Pack Tactician", description: "When in groups of more than 2, darklings will attempt to gang up on singular opponents and close distances with long ranged attackers. This Darkling, with its superior intellect, uses its reaction to wordlessly give telepathic orders to any Darkling or Darkforme Overwatch it can see within 100 ft. If the Darkling follows this command, they receive a +1 bonus to the action." },
+      { name: "Degenerate Regenerator", description: "If unwounded for 2 rounds, the Darkforme will begin to coalesce its being back together. Every round after the first round it is not wounded, the Darkforme Overwatch can restore 1d6 hitpoints at the start of its turn provided it does not move more than 10 ft in that turn." }
+    ]
+  },
+  {
+    name: "Darkling-Caller",
+    description: "Small abomination, wheezing evil",
+    imageUrl: "assets/images/Monsters/Darkling Caller.png", 
+    size: "Small",
+    type: "Abomination",
+    alignment: "Wheezing Evil",
+    armorClass: 11,
+    hitPoints: "5 (1d6 + 2)",
+    speed: "10 ft., fly 15 ft. (clumsy)",
+    challengeRating: "1/4",
+    actions: [
+      { name: "Bite", description: "Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 4 (1d6 + 1) piercing damage." },
+      { name: "Wing Flap", description: "Melee Weapon Attack: +1 to hit, reach 5 ft., one target. Hit: 2 (1d4 - 1) bludgeoning damage. On a hit, the target must succeed on a DC 10 Strength saving throw or be pushed back 5 ft." }
+    ],
+    abilities: [
+      { name: "Clumsy Flier", description: "The Darkling Caller has poor control over its flight, and its flying speed is halved in strong winds or heavy rain." },
+      { name: "Piercing Call (Recharge 5-6)", description: "The Darkling Caller emits a high-pitched, reverberating screech. Each creature within 60 ft. that can hear the call must succeed on a DC 10 Constitution saving throw or be deafened until the end of its next turn. Additionally, there is a 50% chance that the call attracts 1d4 Darkformes to the Caller's location after 1d4 rounds." }
+    ]
+  },
+  {
+    name: "Darkling-Yowler",
+    description: "Small abomination, wailing evil",
+    imageUrl: "assets/images/Monsters/Darkling Yowler.png",
+    size: "Small",
+    type: "Abomination",
+    alignment: "Wailing Evil",
+    armorClass: 12,
+    hitPoints: "16 (3d6 + 6)",
+    speed: "10 ft., fly 15 ft. (clumsy)",
+    challengeRating: "1/2",
+    actions: [
+      { name: "Bite", description: "Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) piercing damage." },
+      { name: "Wing Flap", description: "Melee Weapon Attack: +1 to hit, reach 5 ft., one target. Hit: 3 (1d4 + 1) bludgeoning damage. On a hit, the target must succeed on a DC 11 Strength saving throw or be pushed back 5 ft." }
+    ],
+    abilities: [
+      { name: "Clumsy Flier", description: "The Darkling Yowler has poor control over its flight, and its flying speed is halved in strong winds or heavy rain." },
+      { name: "Ordure Wail (Recharge 5-6)", description: "The Darkling Yowler emits a low, resonant tone that threatens to humiliate its enemies. Each creature within 60 ft. that can hear the wail must succeed on a DC 11 Constitution saving throw. On a failed save, the creature suffers an embarrassing \"brown note incident,\" momentarily losing control of their bowels." }
+    ]
+  },
+  {
+    name: "Darkforme-Sleek-Lurker Pack Alpha",
+    description: "Medium abomination, stalking evil",
+    imageUrl: "assets/images/Monsters/Darkforme Shadow-Lurker Pack Alpha.png",
+    size: "Medium",
+    type: "Abomination",
+    alignment: "Stalking Evil",
+    armorClass: 14,
+    hitPoints: "32 (5d8 + 10)",
+    speed: "40 ft., climb 30 ft.",
+    challengeRating: "1",
+    actions: [
+      { name: "Claw", description: "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 9 (2d4 + 3) slashing damage." },
+      { name: "Bite", description: "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 7 (1d8 + 3) piercing damage." },
+      { name: "Shadow Ambush (Recharge 5-6)", description: "The Darkling Pack Alpha teleports up to 30 feet to an unoccupied space in dim light or darkness that it can see. It can make a claw attack immediately after teleporting." }
+    ],
+    abilities: [
+      { name: "Shadow Stalker", description: "While in dim light or darkness, the Darkling Pack Alpha has advantage on Dexterity (Stealth) checks and can Hide as a bonus action." },
+      { name: "Pounce", description: "If the Darkling Pack Alpha moves at least 20 feet straight toward a creature and then hits it with a claw attack on the same turn, that target must succeed on a DC 13 Strength saving throw or be knocked prone." },
+      { name: "Pack Tactics", description: "The Darkling Pack Alpha has advantage on attack rolls against a creature if at least one of the Pack Alpha's allies is within 5 feet of the creature and isn't incapacitated." }
+    ]
+  },
+  {
+    name: "Darkforme-Shade-Sneak",
+    description: "Small abomination, stalking evil",
+    imageUrl: "assets/images/Monsters/Darkforme Shadow-Lurker.png",
+    size: "Small",
+    type: "Abomination",
+    alignment: "Stalking Evil",
+    armorClass: 13,
+    hitPoints: "13 (3d6 + 3)",
+    speed: "40 ft., climb 20 ft.",
+    challengeRating: "1/2",
+    actions: [
+      { name: "Claw", description: "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 7 (2d4 + 2) slashing damage." },
+      { name: "Bite", description: "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) piercing damage." }
+    ],
+    abilities: [
+      { name: "Shadow Stalker", description: "While in dim light or darkness, the Darkling Shade-Sneak has advantage on Dexterity (Stealth) checks." },
+      { name: "Pack Tactics", description: "The Darkling Shade-Sneak has advantage on attack rolls against a creature if at least one of its allies is within 5 feet of the creature and isn't incapacitated." }
+    ]
+  },
+  {
+    name: "Darkling-Bellowbelly",
+    description: "Medium abomination, wailing evil",
+    imageUrl: "assets/images/Monsters/Darkforme Bellowbelly.png",
+    size: "Medium",
+    type: "Abomination",
+    alignment: "Wailing Evil",
+    armorClass: 13,
+    hitPoints: "26 (4d8 + 8)",
+    speed: "30 ft., climb 20 ft.",
+    challengeRating: "1",
+    actions: [
+      { name: "Multiattack", description: "The Darkling Bellowbelly makes two attacks: one with its claws and one with its bite." },
+      { name: "Claw", description: "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 9 (2d4 + 3) slashing damage." },
+      { name: "Bite", description: "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 8 (1d8 + 3) piercing damage." }
+    ],
+    abilities: [
+      { name: "Distracting Wail", description: "The Darkling Bellowbelly's torso-mounted mouth produces an eerie, discordant wail that affects all creatures within 30 ft. As a reaction on another creature's turn, the Bellowbelly may emit this sound. Any creature within range that can hear the wail must succeed on a DC 12 Wisdom saving throw or suffer disadvantage on its next attack roll before the end of its turn." }
+    ]
+  },
+  {
+    name: "Darkforme-Cavesweller",
+    description: "Large abomination, brooding evil",
+    imageUrl: "assets/images/Monsters/Darkforme Cavesweller.png",
+    size: "Large",
+    type: "Abomination",
+    alignment: "Brooding Evil",
+    armorClass: 15,
+    hitPoints: "136 (16d10 + 48)",
+    speed: "40 ft., climb 20 ft.",
+    challengeRating: "3",
+    actions: [
+      { name: "Claw", description: "Melee Weapon Attack (Slashing): +8 to hit, reach 5 ft., one target. Hit: 13 (2d8 + 5)." },
+      { name: "Bite", description: "Melee Weapon Attack (Piercing): +8 to hit, reach 5 ft., one target. Hit: 17 (2d10 + 5)." },
+      { name: "Tendril Lash", description: "Melee Weapon Attack (Slashing): +8 to hit, reach 10 ft., one target. Hit: 15 (3d6 + 5)." },
+      { name: "Blistering Wail (Recharge 5-6)", description: "The Cavesweller unleashes a powerful shriek charged with dark energy. Ranged 120 ft., one target. Hit: 18 (3d10 + 2) piercing damage. If the target is within 30 feet of the Cavesweller, it must also succeed on a DC 14 Wisdom saving throw or be incapacitated until the end of its next turn due to disorientation." }
+    ],
+    abilities: [
+      { name: "Multiattack", description: "The Darkling Cavesweller can make three attacks: two with its claws or tendrils, and one with its bite." },
+      { name: "Lurker of the Subterrane", description: "The Darkling Cavesweller has advantage on Dexterity (Stealth) checks made in natural cave or underground environments." },
+      { name: "Tormented Wail (Recharge 5-6)", description: "The malformed head and torso-mounted mouth emit an unearthly screech. Creatures within 30 feet must make a DC 14 Constitution saving throw. On a failed save, they take 11 (2d10) psychic damage and have disadvantage on attack rolls until the end of their next turn." },
+      { name: "Shadowmist Jaunt (2/Day)", description: "The Cavesweller can teleport up to 30 feet to an unoccupied space in dim light or darkness that it can see. After teleporting, it can make one Tendril Lash attack as part of the same action." }
+    ]
+  },
+  {
+    name: "Darkling-Brackling",
+    description: "Medium abomination, brackish evil",
+    imageUrl: "assets/images/Monsters/Brackling.png",
+    size: "Small",
+    type: "Abomination",
+    alignment: "Brackish Evil",
+    armorClass: 12,
+    hitPoints: "22 (4d6 + 8)",
+    speed: "10 ft., swim 30 ft., fly 15 ft. (clumsy)",
+    challengeRating: "1",
+    actions: [
+      { name: "Tendril Lash", description: "Melee Weapon Attack: +4 to hit, reach 10 ft., one target. Hit: 10 (2d8 + 2) slashing damage." },
+      { name: "Bite", description: "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 7 (1d8 + 1) piercing damage." }
+    ],
+    abilities: [
+      { name: "Amphibious", description: "The Darkling Brackling can breathe both air and water." },
+      { name: "Ink Jet Dash", description: "While airborne, the Darkling Brackling can expel a jet of dark, brackish ink behind it, propelling itself forward. When not targeting an enemy with its Ink Spray, the Brackling may use this ability to take the Dash action." },
+      { name: "Obscuring Ink Spray (Recharge 5-6)", description: "The Brackling ejects a 15-foot cone of ink that obscures vision in its area for 1 minute or until dispersed by a strong current. Creatures caught in the spray must succeed on a DC 12 Constitution saving throw or be blinded until the end of their next turn." }
+    ]
+  },
+  {
+    name: "Darkling-Lurker",
+    description: "Small abomination, sad evil",
+    imageUrl: "assets/images/Monsters/Darkling Lurker.png",
+    size: "Small",
+    type: "Abomination",
+    alignment: "Sad Evil",
+    armorClass: 13,
+    hitPoints: "4 (1d8)",
+    speed: "35 ft.",
+    challengeRating: "1/2",
+    actions: [
+      { name: "Tendril Lash", description: "Melee Weapon Attack (Slashing): +4 to hit, reach 10 ft., one target. Hit: 5 (1d6 + 3)." },
+      { name: "Shuddering Pound", description: "Melee Weapon Attack (Blunt): +4 to hit, reach 5 ft., one target. Hit: 4 (1d10)." }
+    ],
+    abilities: [
+      { name: "Pack Tactics", description: "When in groups of more than 2, darklings will attempt to gang up on singular opponents and close distances with long ranged attackers." }
+    ]
+  },
+  {
+    name: "Darkling-Slurper",
+    description: "Small abomination, hungry evil",
+    imageUrl: "assets/images/Monsters/Darkling Slurper.png",
+    size: "Small",
+    type: "Abomination",
+    alignment: "Hungry Evil",
+    armorClass: 10,
+    hitPoints: "4 (1d8)",
+    speed: "30 ft.",
+    challengeRating: "1/2",
+    actions: [
+      { name: "Slurp", description: "Grapple Attack (Piercing/Blunt): +4 to hit, reach 10 ft., one target. Hit: 6 (1d6 + 3). This degenerate darkling will attempt to swallow prey and then chew upon them. This process is initiated in the same manner as a grapple." },
+      { name: "Shuddering Pound", description: "Melee Weapon Attack (Blunt): +4 to hit, reach 5 ft., one target. Hit: 7 (1d10 + 3)." }
+    ],
+    abilities: [
+      { name: "Pack Tactics", description: "When in groups of more than 2, darklings will attempt to gang up on singular opponents and close distances with long ranged attackers." }
+    ]
+  },
+  {
+    name: "Darkling Bellowbelly Cubling",
+    description: "Small abomination, squeaky evil",
+    imageUrl: "assets/images/Monsters/Darkling Cubling.png",
+    size: "Small",
+    type: "Abomination",
+    alignment: "Squeaky Evil",
+    armorClass: 10,
+    hitPoints: "2 (1d6 - 1)",
+    speed: "25 ft., climb 10 ft.",
+    challengeRating: "1/4",
+    actions: [
+      { name: "Playful Bite", description: "Melee Weapon Attack: +2 to hit, reach 5 ft., one target. Hit: 1 piercing damage." },
+      { name: "Tiny Claw Swipe", description: "Melee Weapon Attack: +0 to hit, reach 5 ft., one target. Hit: 1 slashing damage." }
+    ],
+    abilities: [
+      { name: "Irresistibly Chirpy", description: "The Darkling Bellowbelly Cubling constantly emits high-pitched chirping noises. Once per round, there is a 10% chance (roll of 19-20 on a d20) that these sounds attract 1d4 larger Darklings or up to 2d6 Cublings to its location after 1d4 rounds." },
+      { name: "Swarm Instinct", description: "The Cubling gains advantage on attack rolls if two or more other Darkling Cublings are within 5 feet of its target." }
+    ]
+  },
+  {
+    name: "Darkform Enforcer",
+    description: "Large abomination, salty evil",
+    imageUrl: "assets/images/Monsters/Darkforme Enforcer.png",
+    size: "Large",
+    type: "Abomination",
+    alignment: "Salty Evil",
+    armorClass: 16,
+    hitPoints: "102 (12d10 + 36)",
+    speed: "30 ft.",
+    challengeRating: "5",
+    actions: [
+      { name: "Multiattack", description: "The Darkform Enforcer makes three attacks: two with its tendrils and one with its Pound attack." },
+      { name: "Tendril Barrage", description: "Melee Weapon Attack (Slashing): +8 to hit, reach 15 ft, up to 3 targets. Hit: 10 (1d8 + 6)." },
+      { name: "Pound", description: "Melee Weapon Attack (Blunt): +8 to hit, reach 5 ft., one target. Hit: 18 (3d10 + 6) bludgeoning damage." },
+      { name: "Blistering Beam", description: "Energy Weapon Attack (Piercing): +7 to hit, range 100 ft (300 ft on long range), one target. Hit: 15 (2d10 + 4)." }
+    ],
+    abilities: [
+      { name: "Pack Tactician", description: "When in groups of more than 2, darklings will attempt to gang up on singular opponents and close distances with long ranged attackers. This Darkling, with its superior intellect, is capable of using its reaction to wordlessly give telepathic orders to any Darkling, Darkforme Overwatch, or Darkforme Enforcer it can see within 100 ft." },
+      { name: "Degenerate Regenerator", description: "If unwounded for 1 round, the Darkforme will begin to coalesce its being back together. Every round after the first round it is not wounded, the Darkforme Enforcer can restore 1d8 hitpoints at the end of its turn provided it does not move more than 10 ft in that turn." }
+    ]
+  },
+  {
+    name: "Darkling-Paralurker",
+    description: "Small abomination, gliding evil",
+    imageUrl: "https://i.postimg.cc/ydCjcZ9f/darkling-paralurker.png",
+    size: "Small",
+    type: "Abomination",
+    alignment: "Gliding Evil",
+    armorClass: 13,
+    hitPoints: "9 (2d6 + 2)",
+    speed: "35 ft., climb 20 ft., glide 10 ft.",
+    challengeRating: "1/2",
+    actions: [
+      { name: "Talon Kick", description: "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 7 (2d4 + 2) slashing damage." }
+    ],
+    abilities: [
+      { name: "Pack Tactics", description: "This Darkling-Paralurker has advantage on attack rolls against a creature if at least one of its allies is within 5 feet of the creature and isn't incapacitated." }
+    ]
+  },
+  {
+    name: "Weirdling-Paralurker",
+    description: "Small abomination, unsettling evil",
+    imageUrl: "https://i.postimg.cc/sDgcYyQR/weirdling-paralurker.png",
+    size: "Small",
+    type: "Abomination",
+    alignment: "Unsettling Evil",
+    armorClass: 15,
+    hitPoints: "22 (4d6 + 8)",
+    speed: "35 ft., climb 20 ft., glide 10 ft.",
+    challengeRating: "1",
+    actions: [
+      { name: "Talon Kick", description: "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 8 (2d4 + 3) slashing damage." }
+    ],
+    abilities: [
+      { name: "Pack Tactics", description: "This Weirdling-Paralurker has advantage on attack rolls against a creature if at least one of its allies is within 5 feet of the creature and isn't incapacitated." },
+      { name: "Unsettling Reconfiguration", description: "When reduced to 0 HP (but not less than -9 HP), the Weirdling transforms back into a Darkling-Paralurker. Any creature within 25 ft. that witnesses this transformation must make a DC 14 Constitution saving throw or suffer a \"brown note incident,\" losing their reactions until the end of their next turn." }
+    ]
+  },
+  {
+    name: "Darkling-Hungerer",
+    description: "Medium abomination, frail and insatiably hungry",
+    imageUrl: "https://i.postimg.cc/rFVhfxH3/darkling-hungerer.png",
+    size: "Medium",
+    type: "Abomination",
+    alignment: "Gluttonous Evil",
+    armorClass: 12,
+    hitPoints: "10 (3d8 - 3)",
+    speed: "30 ft.",
+    challengeRating: "1/2",
+    actions: [
+      { name: "Gnawing Swipe", description: "Melee Weapon Attack: +3 to hit, reach 5 ft., one target. On hit, the target takes 4 (1d4+1) bludgeoning damage and must succeed on a DC 12 Strength (Athletics) or Dexterity (Acrobatics) check or be grappled (thus triggering Partial-Swallow)." }
+    ],
+    abilities: [
+      { name: "Partial-Swallow", description: "When the Darkling-Hungerer successfully grapples a creature, that creature is partially swallowed. At the start of each of the Hungerer's turns, the swallowed creature takes 1d6 crushing damage. The grappled creature can attempt to escape as an action by making a Strength (Athletics) or Dexterity (Acrobatics) check (DC 12)." }
+    ]
+  },
+  {
+    name: "Darkforme-Hungore",
+    description: "Large abomination, a menacing mid-boss with a voracious maw",
+    imageUrl: "https://i.postimg.cc/RZ3LYRLs/darkforme-hungore.png",
+    size: "Large",
+    type: "Abomination",
+    alignment: "Gluttonous Evil",
+    armorClass: 14,
+    hitPoints: "32 (5d8 + 10)",
+    speed: "30 ft.",
+    challengeRating: "2",
+    actions: [
+      { name: "Ventral Maw", description: "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. On hit, the target takes 10 (1d8+3) bludgeoning damage and is grappled (swallowed) by the Darkforme-Hungore, triggering the Ventral Maw effect." }
+    ],
+    abilities: [
+      { name: "Large Build", description: "The Darkforme-Hungore counts as one size larger when grappling opponents." },
+      { name: "Ventral Maw", description: "When the Darkforme-Hungore hits a creature with its Ventral Maw attack, it grapples the target and attempts to swallow it. A grappled target is partially restrained and, while swallowed, takes 2d6 compressive asphyxiative damage at the start of each of the Hungore's turns." }
+    ]
+  },
+  {
+    name: "Darkling-Shark",
+    description: "Medium abomination, a stealthy aquatic predator with a predatory grin",
+    imageUrl: "https://i.postimg.cc/qRcLLvxp/darkling-shark.png",
+    size: "Medium",
+    type: "Abomination",
+    alignment: "Predatory Evil",
+    armorClass: 13,
+    hitPoints: "16 (3d8 + 3)",
+    speed: "40 ft., swim 40 ft.",
+    challengeRating: "1",
+    actions: [
+      { name: "Bite", description: "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 1d8+2 piercing damage." }
+    ],
+    abilities: [
+      { name: "Aquatic Ambush", description: "The Darkling-Shark has advantage on attack rolls against creatures that are surprised while in water or emerging from it." }
+    ]
+  },
+  {
+    name: "Darkforme-Shark",
+    description: "Large abomination, a twisted aquatic predator with crab legs and an unsettling presence",
+    imageUrl: "https://i.postimg.cc/ZRL8NDJR/darkforme-shark.png",
+    size: "Large",
+    type: "Abomination",
+    alignment: "Unsettling Evil",
+    armorClass: 15,
+    hitPoints: "45 (6d8 + 18)",
+    speed: "30 ft., swim 40 ft.",
+    challengeRating: "3",
+    actions: [
+      { name: "Ravenous Bite", description: "Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 2d6+4 piercing damage." }
+    ],
+    abilities: [
+      { name: "Unsettling Presence", description: "Any creature within 25 ft. that witnesses the Darkforme-Shark's sudden transition from aquatic to terrestrial posture (as its crab legs engage) must succeed on a DC 14 Constitution saving throw or suffer a 'brown note incident,' losing their reactions until the end of their next turn." }
+    ]
+  },
+  {
+    name: "Darkling-Nightshade Elemental",
+    description: "Medium elemental abomination, a shadowy presence that instills fear with its eerie, whispering darkness",
+    imageUrl: "https://i.postimg.cc/x17tj7dV/darkling-nightshade-elemental.png",
+    size: "Medium",
+    type: "Elemental",
+    alignment: "Shadowy Evil",
+    armorClass: 14,
+    hitPoints: "26 (4d8 + 8)",
+    speed: "30 ft.",
+    challengeRating: "2",
+    actions: [
+      { name: "Shadow Swipe", description: "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 2d6+2 necrotic damage." }
+    ],
+    abilities: [
+      { name: "Eerie Brown Note", description: "Any creature within 25 ft. that witnesses the Darkling-Nightshade Elemental channel its shadow energy must succeed on a DC 14 Constitution saving throw or lose their reactions until the end of their next turn, overcome by overwhelming dread." }
+    ]
+  },
+  {
+    name: "The Darkformless",
+    description: "Medium abomination elemental mage wielding both shadow and non-elemental magic in unsettling ways",
+    imageUrl: "https://i.postimg.cc/v8zhxDmz/the-darkformless.png",
+    size: "Medium",
+    type: "Abomination Elemental Mage",
+    alignment: "Unsettling Evil",
+    armorClass: 15,
+    hitPoints: "39 (6d8 + 12)",
+    speed: "30 ft.",
+    challengeRating: "4",
+    actions: [
+      { name: "Shadow Bolt", description: "Ranged Spell Attack: +5 to hit, range 60 ft., one target. Hit: 2d8 necrotic damage." },
+      { name: "Umbral Blast", description: "The Darkforme-less releases a burst of dark energy. Each creature of its choice within 10 ft. must succeed on a DC 14 Dexterity saving throw or take 1d8 necrotic damage." }
+    ],
+    abilities: [
+      { name: "Unsettling Brown Note", description: "Any creature within 25 ft. that witnesses the Darkforme-less manifest its dark magic must succeed on a DC 14 Constitution saving throw or lose their reactions until the end of their next turn." },
+      { name: "Umbral Empowerment", description: "As a bonus action, the Darkforme-less can channel ominous energy to either grant one allied darkling within 30 ft. temporary hit points equal to its Intelligence modifier or add +2 to that ally's next attack roll." }
+    ]
+  },
+  {
+    name: "Darkling-Cactine",
+    description: "Small abomination, a whimsical cactus creature that unexpectedly calls for help with its backup spines.",
+    imageUrl: "https://i.postimg.cc/1tDWjHsh/darkling-cactine.png",
+    size: "Small",
+    type: "Abomination",
+    alignment: "Mischievous Evil",
+    armorClass: 12,
+    hitPoints: "7 (2d6)",
+    speed: "30 ft.",
+    challengeRating: "1/2",
+    actions: [
+      { name: "Prickly Jab", description: "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 1d6+2 piercing damage." }
+    ],
+    abilities: [
+      { name: "Grab Backup", description: "As a bonus action, the Darkling-Cactine may attempt to disengage. Roll 1d2; on a roll of 2 it calls reinforcements that rejoin the fray 1d2 rounds later in adjacent squares." }
+    ]
+  },
+  {
+    name: "Darkforme-Spinebearer",
+    description: "Medium abomination, a bristling cactus menace with brutal spike attacks and a lethal grappling maneuver called Heel ¡Lucha!",
+    imageUrl: "https://i.postimg.cc/C5LjsHK4/darkforme-spinebearer.png",
+    size: "Medium",
+    type: "Abomination",
+    alignment: "Unsettling Evil",
+    armorClass: 15,
+    hitPoints: "26 (4d8 + 8)",
+    speed: "30 ft.",
+    challengeRating: "3",
+    actions: [
+      { name: "Spike Jab", description: "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 1d8+3 piercing damage." },
+      { name: "Spine Barrage", description: "Ranged Weapon Attack: +3 to hit, range 30/60 ft., one target. Hit: 1d10+1 piercing damage." }
+    ],
+    abilities: [
+      { name: "Heel ¡Lucha!", description: "When the Darkforme-Spinebearer successfully grapples a creature, it may use a bonus action to initiate Heel ¡Lucha! The target takes an extra 2d6 piercing damage and becomes restrained until it escapes." }
+    ]
+  },
+  {
+    name: "Darkling-Cactine-Biggo-Boy",
+    description: "Small abomination, a chunkier, delightfully round cactus creature whose smooth exterior hides microcrystalline spines.",
+    imageUrl: "https://i.postimg.cc/BZcY5Mm2/darkling-cactine-biggo-boy.png",
+    size: "Small",
+    type: "Abomination",
+    alignment: "Mischievous Evil",
+    armorClass: 14,
+    hitPoints: "18 (4d6 + 4)",
+    speed: "35 ft.",
+    challengeRating: "1",
+    actions: [
+      { name: "Spiny Jab", description: "Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 1d6+1 piercing damage." }
+    ],
+    abilities: [
+      { name: "Relentless Backup", description: "At the end of its turn, the Darkling-Cactine-Biggo-Boy automatically calls for reinforcements. Reinforcements arrive in 1d2 rounds." },
+      { name: "Painful Embrace", description: "When the Darkling-Cactine-Biggo-Boy successfully grapples a creature, it may use a bonus action to execute a painful embrace. The target takes an additional 1d6 piercing damage and must succeed on a DC 12 check or be restrained." }
+    ]
+  },
+  {
+    name: "Darkling-Slitherscale",
+    description: "Small abomination, a sinuous reptilian darkling whose shimmering scales ripple as it slithers silently.",
+    imageUrl: "https://i.postimg.cc/NFgxPvdm/darkling-slitherscale.png",
+    size: "Small",
+    type: "Abomination",
+    alignment: "Stealthy Evil",
+    armorClass: 12,
+    hitPoints: "7 (2d6)",
+    speed: "30 ft.",
+    challengeRating: "1/2",
+    actions: [
+      { name: "Bite", description: "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 1d4+2 piercing damage." }
+    ],
+    abilities: [
+      { name: "Slithering Escape", description: "Once per turn, the Darkling-Slitherscale can disengage without provoking opportunity attacks, dodging away with slick, sinuous movements." }
+    ]
+  },
+  {
+    name: "Darkforme-Suffocator",
+    description: "Medium abomination, a grotesque creature with elongated, enveloping limbs that suffocate its prey with a crushing grip.",
+    imageUrl: "https://i.postimg.cc/GtQXcm4X/darkforme-suffocator.png",
+    size: "Medium",
+    type: "Abomination",
+    alignment: "Suffocating Evil",
+    armorClass: 13,
+    hitPoints: "26 (4d8 + 8)",
+    speed: "30 ft.",
+    challengeRating: "2",
+    actions: [
+      { name: "Crushing Grip", description: "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 1d6+2 bludgeoning damage, and the target is grappled (escape DC 13)." }
+    ],
+    abilities: [
+      { name: "Suffocating Embrace", description: "When the Darkeforme-Suffocator grapples a creature, that creature must succeed on a DC 13 Strength or Dexterity check at the start of its turn or take 1d8 crushing damage as it struggles for air." }
+    ]
+  },
+  {
+    name: "Darkaconda",
+    description: "Huge abomination, a colossal serpentine dark serpent whose abyssal form can crush, devour, and lunge forth from the shadows with terrifying reach.",
+    imageUrl: "https://i.postimg.cc/GhgjzNGT/darkaconda.png",
+    size: "Huge",
+    type: "Abomination",
+    alignment: "Predatory Evil",
+    armorClass: 16,
+    hitPoints: "102 (12d10 + 36)",
+    speed: "30 ft., swim 30 ft.",
+    challengeRating: "4",
+    actions: [
+      { name: "Shadow Lunge", description: "Melee Weapon Attack: +7 to hit, reach 15 ft., one target. Hit: 2d8+4 piercing damage." },
+      { name: "Crushing Coil", description: "Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 2d6+4 bludgeoning damage." }
+    ],
+    abilities: [
+      { name: "Serpent-Lance Lunge", description: "If the Darkaconda has not moved on its previous turn, it may spend that turn coiling. During the coiling turn it can still make head or tail attacks; on the following turn, it can extend up to 60 ft. in any direction and make one attack." },
+      { name: "Swallow", description: "When the Darkaconda grapples a creature, it can attempt to swallow it. A swallowed creature takes 2d8 piercing damage at the start of each of the Darkaconda's turns and is restrained." }
+    ]
+  },
+  {
+    name: "Darkling-Hooter",
+    description: "Tiny abomination, a cute yet annoying hooter whose gutwrenching call shakes nerves.",
+    imageUrl: "https://i.postimg.cc/br86ctwG/darkling-hooter.png",
+    size: "Tiny",
+    type: "Abomination",
+    alignment: "Mischievous Evil",
+    armorClass: 12,
+    hitPoints: "1 (1d4 - 1)",
+    speed: "fly 25 ft.",
+    challengeRating: "1/8",
+    actions: [
+      { name: "Peck", description: "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 1d4 piercing damage." }
+    ],
+    abilities: [
+      { name: "Gutwrenching Hootery", description: "As a bonus action, this Darkling-Hooter emits an ear-piercing hoot. Any creature within 25 ft. must make a DC 12 Constitution saving throw or lose its reaction until the end of its next turn." }
+    ]
+  },
+  {
+    name: "Darkforme-Nightpinyon",
+    description: "Medium abomination, a larger and aggressive hooter whose piercing, debilitating peck leaves foes breathless—and reactionless.",
+    imageUrl: "https://i.postimg.cc/Z51xzdfT/darkforme-nightpinyon.png",
+    size: "Medium",
+    type: "Abomination",
+    alignment: "Malevolent Evil",
+    armorClass: 14,
+    hitPoints: "22 (4d8 + 4)",
+    speed: "fly 45 ft.",
+    challengeRating: "2",
+    actions: [
+      { name: "Debilitating Peck", description: "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 1d8+2 piercing damage. The target is overwhelmed by a brown note effect and loses its reaction until the end of its next turn." }
+    ]
+  },
+  {
+    name: "Sky-Darkener Nightveil",
+    description: "Large abomination, a majestic aerial predator rumored to have inspired umbral raven forms. With perfect flight and lethal swoop-and-dive tactics, it dominates the heavens.",
+    imageUrl: "https://i.postimg.cc/90JY6gkS/sky-darkener-nightveil.png",
+    size: "Large",
+    type: "Abomination",
+    alignment: "Unsettling Evil",
+    armorClass: 17,
+    hitPoints: "85 (10d10 + 30)",
+    speed: "fly 50 ft.",
+    challengeRating: "5",
+    actions: [
+      { name: "Taloned Strike", description: "Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 2d6+4 slashing damage." }
+    ],
+    abilities: [
+      { name: "Aerial Ace", description: "When targeting a creature that is flying, the Sky-Darkener Nightveil gains a +3 supernatural bonus to its attack roll on one attack per round." },
+      { name: "Swoop and Dive", description: "As an action, the Sky-Darkener Nightveil can dive from the sky to make a melee attack. If the target is unprepared, it is knocked prone. This attack deals an extra 1d8 slashing damage." }
+    ]
+  },
+  {
+    name: "Darkling-Ossokin",
+    description: "Tiny abomination, a small little bone guy with an annoying shin-smacking attack that falls apart when defeated. Occasionally, its scattered bones reassemble—if not consecrated—minutes later.",
+    imageUrl: "https://i.postimg.cc/wTwwZ38v/darkling-ossokin.png",
+    size: "Tiny",
+    type: "Abomination",
+    alignment: "Mischievous Evil",
+    armorClass: 11,
+    hitPoints: "0 (1d4 - 2)",
+    speed: "30 ft.",
+    challengeRating: "1/8",
+    actions: [
+      { name: "Shin Smack", description: "Melee Weapon Attack: +0 to hit, reach 5 ft., one target. Hit: 1 piercing damage." }
+    ],
+    abilities: [
+      { name: "Bone Reassembly", description: "When defeated, the Darkling-Ossokin shatters into scattered bones. At 10 seconds and again 24 hours later, roll a d100; on a result of 10 or lower, if its remains haven't been consecrated, the bones reassemble into a functioning creature." }
+    ]
+  },
+  {
+    name: "Darkforme-Ossokin-Aegisite",
+    description: "Medium bone golem abomination with a large build. Its fearsome, unliving bulk forms an unyielding defensive bulwark on the battlefield.",
+    imageUrl: "https://i.postimg.cc/VNnBfkTX/darkforme-ossokin-aegisite.png",
+    size: "Medium",
+    type: "Abomination",
+    alignment: "Unyielding Evil",
+    armorClass: 16,
+    hitPoints: "30 (4d8 + 12)",
+    speed: "30 ft.",
+    challengeRating: "2",
+    actions: [
+      { name: "Bone Slam", description: "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 1d8+2 bludgeoning damage." }
+    ],
+    abilities: [
+      { name: "Bony Bulwark", description: "At the start of its turn, the Darkling-Ossuite Aegisite gains temporary hit points equal to its proficiency bonus. Additionally, one adjacent ally gains a +2 bonus to AC until the start of its next turn." }
+    ]
+  },
+  {
+    name: "Darkling-Ossuite Charger",
+    description: "Large centauroid abomination darkling with four-legged speed and a bow that fires arrow-tipped tendrils.",
+    imageUrl: "https://i.postimg.cc/yNZnDPJg/darkling-ossuite-charger.png",
+    size: "Large",
+    type: "Abomination",
+    alignment: "Aggressive Evil",
+    armorClass: 14,
+    hitPoints: "32 (5d8 + 10)",
+    speed: "40 ft.",
+    challengeRating: "2",
+    actions: [
+      { name: "Tendril Bow", description: "Ranged Weapon Attack: +5 to hit, range 60/120 ft., one target. Hit: 1d8+3 piercing damage. On a hit, the target must make a DC 13 saving throw or be grappled." }
+    ],
+    abilities: [
+      { name: "Arrow-Tipped Tendrils", description: "When the Charger fires its bow, each target hit must succeed on a DC 13 Strength or Dexterity saving throw or be grappled. Tendrils attached function as objects with 10 HP and an AC of 8." }
+    ]
+  },
+  {
+    name: "Darkling-Ossuite Charger Omega",
+    description: "A larger, more fearsome evolution of the Darkling-Ossuite Charger, this massive centauroid abomination uses its lance to deadly effect. It charges in a devastating line attack, trampling through foes, and can unleash shadowy tendrils to entangle and slow its enemies. Writhing black miasma flows over its skeletal, shadowy frame, forming a grotesque yet awe-inspiring presence.",
+    imageUrl: "https://i.postimg.cc/Jh67Phkj/Comfy-UI-00880.png",
+    size: "Large",
+    type: "Abomination",
+    alignment: "Aggressive Evil",
+    armorClass: 16,
+    hitPoints: "57 (6d12 + 18)",
+    speed: "50 ft.",
+    challengeRating: "6",
+    actions: [
+      { name: "Multiattack", description: "The Charger makes two melee attacks, either two Lance Strikes or one Lance Strike and one Hoof Stomp." },
+      { name: "Lance Strike", description: "Melee Weapon Attack: +7 to hit, reach 10 ft., one target. Hit: 2d8+4 piercing damage." },
+      { name: "Hoof Stomp", description: "Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 1d10+3 bludgeoning damage." },
+      { name: "Tendril Arrow", description: "Ranged Weapon Attack: +5 to hit, range 60/120 ft., one target. Hit: 1d8+3 piercing damage. On a hit, the target must succeed on a DC 13 Strength (Athletics) or Dexterity (Acrobatics) saving throw or be grappled by tendrils (10 HP, AC 8)." }
+    ],
+    abilities: [
+      { name: "Charging Lance", description: "If the Charger moves at least 20 ft. in a straight line toward a target, it may use its lance to attack every creature whose space it passes through. Each creature must succeed on aDC 14 Dexterity saving throw or take 2d8+4 piercing damage. The attack ends when the Charger hits its primary target or fails tomove into an unoccupied square." },
+      { name: "Shadow Snare (1/Day)", description: "The Charger can throw its lance up to 30 ft. at a point it can see. Upon impact, the lance bursts into writhing black tendrils, creating a 10 ft. radius area of difficult terrain. Any creature in the area must succeed on a DC 15 Strength saving throw or be restrained. Restrained creatures may attempt the save again at the end of each of their turns." },
+      { name: "Back Kick (Reaction)", description: "When an enemy passes through any threatened square within reach of the Charger Omega, it may make one hoof stomp strike." }
+    ],
+    senses: "Darkvision 60 ft., Passive Perception 15, Scent",
+    immunities: "Necrotic damage, Cursed, Charmed, Deafened, Incapacitated",
+    resistances: "Non-Magical Weapons and Abilities",
+    vulnerabilities: "Radiant"
+  },
+  {
+    name: "Darkforme-Ossuarian",
+    description: "Huge abomination—a living ossuary formed by countless ossuite remains fused into a massive, lumbering bone monster.",
+    imageUrl: "https://i.postimg.cc/9M2Prj5K/Darkforme-Ossuarian.png",
+    size: "Huge",
+    type: "Abomination",
+    alignment: "Horrifying Evil",
+    armorClass: 17,
+    hitPoints: "142 (15d10 + 60)",
+    speed: "20 ft.",
+    challengeRating: "7",
+    actions: [
+      { name: "Multiattack", description: "The Darkforme-Ossuarian makes two Bone Slam attacks and one Bone Rake attack." },
+      { name: "Bone Slam", description: "Melee Weapon Attack: +8 to hit, reach 10 ft., one target. Hit: 2d8+5 bludgeoning damage." },
+      { name: "Bone Rake", description: "Melee Weapon Attack: +8 to hit, reach 10 ft., one target. On a hit, the target suffers 1d8+5 slashing damage and, if already grappled by the ossuarian, becomes restrained until the end of its next turn." }
+    ],
+    abilities: [
+      { name: "Pants-Crapping Fear Presence", description: "Any creature within 30 ft. that can see the Darkforme-Ossuarian must succeed on a DC 16 Wisdom saving throw or become frightened for 1 minute- as well as hypermess or hyperwet their current smallclothes." },
+      { name: "Living Ossuary Spellcasting", description: "The Darkforme-Ossuarian is a 7th-level spellcaster. Its spellcasting ability is Wisdom (spell save DC 15, +7 to hit with spells). It has the following spells prepared: Cantrips (at will), 1st level (4 slots), 2nd level (3 slots), 3rd level (2 slots)." }
+    ]
+  },
+  {
+    name: "Darkling-Ossokin-Proselyte",
+    description: "A small, skeletal abomination support creature, its form composed of formless black and smoky miasmic condensate.",
+    imageUrl: "https://i.postimg.cc/kgDTm9qy/darkling-ossokin-proselyte.png",
+    size: "Small",
+    type: "Abomination",
+    alignment: "Unsettling Evil",
+    armorClass: 12,
+    hitPoints: "13 (3d6 + 3)",
+    speed: "30 ft.",
+    challengeRating: "1",
+    actions: [
+      { name: "Bone Tap", description: "Melee Weapon Attack: +2 to hit, reach 5 ft., one target. Hit: 1d4+1 bludgeoning damage." }
+    ],
+    abilities: [
+      { name: "Divine Spellcasting", description: "The creature is a 2nd-level spellcaster. Its spellcasting ability is Wisdom (spell save DC 13, +5 to hit with spell attacks). It has various spells prepared including cantrips and 1st/2nd level spells." },
+      { name: "Ossuaries' Boon", description: "Once per short rest, when an allied ossuite or ossokin is within 5 ft., the proselyte can grant that ally a bonus to saving throws until the start of the ally's next turn." }
+    ]
+  }
+];
+
+    // DOM elements
+    const welcomeSection = document.getElementById('welcome-section');
+    const bestiarySection = document.getElementById('bestiary-section');
+    const itemsSection = document.getElementById('items-section');
+    const btnWelcome = document.getElementById('btn-welcome');
+    const btnBestiary = document.getElementById('btn-bestiary');
+    const btnItems = document.getElementById('btn-items');
+    const monstersContainer = document.getElementById('monsters-container');
+    const itemsContainer = document.getElementById('items-container');
+
+    // Event listeners for buttons
+    btnWelcome.addEventListener('click', () => {
+      hideAllSections();
+      welcomeSection.classList.add('active');
+    });
+
+    btnBestiary.addEventListener('click', () => {
+      hideAllSections();
+      bestiarySection.classList.add('active');
+      loadMonsters();
+    });
+
+    btnItems.addEventListener('click', () => {
+      hideAllSections();
+      itemsSection.classList.add('active');
+      loadItems();
+    });
+
+    // Add the lore section button listener
+    document.getElementById('btn-lore').addEventListener('click', () => {
+      hideAllSections();
+      document.getElementById('lore-section').classList.add('active');
+    });
+
+    // Helper functions
+    function hideAllSections() {
+      welcomeSection.classList.remove('active');
+      bestiarySection.classList.remove('active');
+      itemsSection.classList.remove('active');
+      document.getElementById('lore-section').classList.remove('active');
+    }
+
+    function loadMonsters() {
+      monstersContainer.innerHTML = '';
+      monstersData.forEach(monster => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        
+        let actionsList = '';
+        if (monster.actions && monster.actions.length > 0) {
+          actionsList = '<h4>Actions:</h4><ul>' +
+            monster.actions.map(action => `<li><strong>${action.name}:</strong> ${action.description}</li>`).join('') +
+            '</ul>';
+        }
+        
+        let abilitiesList = '';
+        if (monster.abilities && monster.abilities.length > 0) {
+          abilitiesList = '<h4>Abilities:</h4><ul>' +
+            monster.abilities.map(ability => `<li><strong>${ability.name}:</strong> ${ability.description}</li>`).join('') +
+            '</ul>';
+        }
+        
+        card.innerHTML = `
+          <h3>${monster.name}</h3>
+          <p>${monster.description}</p>
+          <img src="${monster.imageUrl}" alt="${monster.name}" style="width: 100%; border-radius: 5px; margin-bottom: 10px;">
+          <p><strong>Type:</strong> ${monster.type}</p>
+          <p><strong>Size:</strong> ${monster.size}</p>
+          <p><strong>Armor Class:</strong> ${monster.armorClass}</p>
+          <p><strong>Hit Points:</strong> ${monster.hitPoints}</p>
+          <p><strong>Speed:</strong> ${monster.speed}</p>
+          <p><strong>Challenge Rating:</strong> ${monster.challengeRating}</p>
+          ${abilitiesList}
+          ${actionsList}
+        `;
+        monstersContainer.appendChild(card);
+      });
+    }
+
+    function loadItems() {
+      itemsContainer.innerHTML = '';
+      itemsData.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <h3>${item.name}</h3>
+          <p><strong>Value:</strong> ${item.value}</p>
+          <p><strong>Type:</strong> ${item.type}</p>
+          <p><strong>Rarity:</strong> ${item.rarity}</p>
+          <p><strong>Location:</strong> ${item.location || 'Unknown'}</p>
+          <p>${item.description}</p>
+          <img src="${item.image}" alt="${item.name}" style="width: 100%; border-radius: 5px;">
+        `;
+        itemsContainer.appendChild(card);
+      });
+    }
+  </script>
+</body>
+</html>

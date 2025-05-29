@@ -1,0 +1,913 @@
+<div id="generatorCtn">
+  <h1>Cursed Diaper Outfit Generator</h1>
+  
+  <div id="modeSelectorCtn" style="display: flex; justify-content: center; margin-bottom: 20px;">
+    <button id="randomModeBtn" class="modeBtn active" onclick="switchMode('random')">Random Generator</button>
+    <button id="customModeBtn" class="modeBtn" onclick="switchMode('custom')">Custom Creator</button>
+  </div>
+  
+  <!-- Random Generator Section -->
+  <div id="randomGeneratorCtn">
+    <div id="buttonsCtn" style="display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;">
+      <button id="generateBtn" onclick="generateOutfit()">Generate Cursed Outfit</button>
+      <button id="regenerateImageBtn" onclick="regenerateImage()" hidden>Regenerate Image</button>
+    </div>
+  </div>
+  
+  <!-- Custom Creator Section -->
+  <div id="customCreatorCtn" hidden>
+    <div id="selectionsCtn" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;">
+      <div class="selectorCtn">
+        <label for="materialSelect">Material:</label>
+        <select id="materialSelect" class="customSelect"></select>
+      </div>
+      <div class="selectorCtn">
+        <label for="outfitTypeSelect">Outfit Type:</label>
+        <select id="outfitTypeSelect" class="customSelect"></select>
+      </div>
+      <div class="selectorCtn">
+        <label for="adjectiveSelect">Adjectives: (Hold Ctrl/Cmd to select multiple)</label>
+        <select id="adjectiveSelect" class="customSelect" multiple size="5"></select>
+      </div>
+    </div>
+<div class="selectorCtn">
+  <label for="curseEffectSelect">Curse Effects: (Hold Ctrl/Cmd to select multiple)</label>
+  <select id="curseEffectSelect" class="customSelect" multiple size="5" style="width: 100%; overflow-x: hidden; white-space: pre-wrap;"></select>
+</div>
+    <div id="customButtonsCtn" style="display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;">
+      <button id="randomizeCustomBtn" onclick="randomizeCustomSelections()">Randomize Selections</button>
+      <button id="createCustomBtn" onclick="createCustomOutfit()">Create Custom Outfit</button>
+      <button id="regenerateCustomImageBtn" onclick="regenerateImage()" hidden>Regenerate Image</button>
+    </div>
+  </div>
+  
+  <!-- Output Display Section (shared between both modes) -->
+  <div id="outputCtn">
+    <div id="outfitDisplayEl">
+      <h2 id="outfitNameEl">Press Generate for a Cursed Outfit</h2>
+      <p id="outfitDescriptionEl">The description of the cursed outfit will appear here.</p>
+    </div>
+    <div id="imageDisplayEl">
+      <div id="loadingIndicatorEl" hidden>Generating image...</div>
+      <img id="outfitImageEl" style="max-width: 400px; max-height: 400px;" hidden>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Data for the generator
+  const materials = [
+    "cotton", "silk", "leather", "rubber", "latex", "satin", 
+    "velvet", "plastic", "fleece", "wool", "linen", "terry cloth",
+    "flannel", "denim", "lace", "polyester", "nylon", "spandex"
+  ];
+  
+  const outfitTypes = [
+    "onesie", "diaper", "spanking panties", "bulky punishment diapers", "petticoat", "romper", "diaper cover", "bloomers", 
+    "bodysuit", "pajamas", "shortalls", "overalls", "playsuit", "huggies", "pampers", "permapoopy pampers", "permasoggy pampers",
+    "training pants", "briefs", "panties", "dress", "permastank huggies", "permasog huggies",
+    "leggings", "mittens", "booties", "bonnet", "jumper"
+  ];
+  
+  const punishmentAdjectives = [
+    "woeful", "punishing", "embarrassing", "humiliating", "restrictive", "permatented", "permastank", "permasog", "permapaddled",
+    "cursed", "shameful", "mortifying", "disgracing", "infantilizing", "permachaste", "permapadded", "hyperincontinent", "hyperbowel incontinence",
+    "taunting", "mocking", "teasing", "belittling", "babyish", "hyperbladder incontinence",
+    "regressive", "magical", "enchanted", "hexed", "jinxed", "childish", "infantile", "degrading", "patronizing", 
+    "comical", "pristine", "bulky", "frilly", "permaleaky", "permapoofy", "demeaning", "exaggerated", 
+    "oversized", "fluorescent", "glowing", "encumbering", "crinkling", "rustling", "whimsical", "ridiculous", 
+    "noisy", "squeaky", "odorous", "permababied", "permathick", "hyperdistended", "hypernoticeable", 
+    "hyperpadded", "permawaddling", "squelchy", "stinky", "smelly", "soiled", "droopy", "sodden", "squishy",
+    "padded", "pillowy", "puffy", "ruffled", "sissified", "drenched", "swollen", "bloated", "foaming",
+    "permagurgling", "hyperswelling", "hyperfragrant", "permacrinkly", "hypervisible", "permasquishy",
+    // Additional punishment adjectives
+    "perpetually soaked", "eternally messy", "permanently pouty", "chronically swaddled", "relentlessly padded",
+    "perpetually chastised", "eternally infantile", "persistently babbling", "unceasingly crinkly", "inescapably diapered",
+    "utterly dependent", "hopelessly infantilized", "overwhelmingly diapered", "absurdly bulky", "conspicuously thick",
+    "exceedingly crinkly", "permanently infantilized", "eternally toddlerish", "undeniably babyish", "perpetually messy",
+    "impossibly poufy", "shockingly visible", "unstoppably leaky", "mercilessly padded", "hideously babyish",
+    "cruelly infantilizing", "utterly humbled", "eternally soggy", "profoundly embarrassing", "blatantly padded",
+    "agonizingly noticeable", "unbearably cute", "insufferably padded", "hideously infantile", "nightmarishly babyish",
+    "grotesquely padded", "fiendishly crinkly", "diabolically diapered", "dreadfully padded", "horrifyingly infantilized",
+    "monstrously thickened", "tormentingly noticeable", "despairingly obvious", "agonizingly infantilized", "distressingly babyish",
+    "permadrooling", "hyperthirst", "hypersoaked", "permastained", "perpetually bulging", "chronically obvious",
+    "excruciatingly infantile", "perpetually wet", "eternally loaded", "hyperaudible", "hyperstinky", "superthick"
+  ];
+  
+  // Curse effect templates with placeholders for dice rolls
+const curseEffects = [
+    "Makes every diaper feel {d4}x bulkier and slows movement speed by {d10} ft. Cannot be taken off until the diaper under it is loaded and full.",
+    "These cover a diaper, but can't cover you from the sting of a random {d4} force damage that feels like a hard spank to your booty whenever you fail a check.",
+    "Whenever worn, reduces dexterity by {d6} and makes the wearer need to make a DC {d8+10} constitution save every hour or wet themselves uncontrollably.",
+    "Causes the wearer to babble like an infant, reducing charisma by {d6} during social interactions. For each hour worn, the wearer must make a DC {d10+5} wisdom save or begin crying loudly for {d4} minutes.",
+    "Transforms any food consumed into baby food, and any drink into formula. Wearer must make a DC {d6+8} constitution save when consuming adult food or suffer {d4} psychic damage from the overwhelming babyish taste.",
+    "Creates a {d20}% chance that any attempt to speak will come out as baby babble. Every time this effect triggers, the diaper gets {d6}% more thickly padded.",
+    "Magically increases diaper capacity by {d6} times but adds {d4} levels of exhaustion if the diaper is not changed within {d6} hours of being used.",
+    "Conjures a magical pacifier that must remain in the wearer's mouth whenever they attempt to cast a spell or the spell fails. Spells cast successfully while sucking the pacifier have a {d20}% chance of being empowered.",
+    "Produces a loud, embarrassing nursery tune whenever the wearer attempts to stealth, imposing disadvantage on stealth checks and attracting attention within a {d6*10} foot radius.",
+    "Causes the wearer to toddle instead of walk, reducing movement speed by {d10} ft and requiring a DC {d8+6} dexterity save to prevent falling when attempting to run.",
+    "Changes the wearer's voice to be {d4} octaves higher and adds a childish lisp that persists for {d12} hours after the outfit is removed.",
+    "Creates an illusory rattle that only the wearer can see and hear, imposing a -{d4} penalty on perception checks due to the constant distraction.",
+    "Randomly teleports the wearer to the nearest changing table or nursery within {d100*10} feet if they attempt to change themselves without assistance.",
+    "Forces the wearer to make a DC {d8+10} wisdom save whenever they see something cute or they will squeal with delight and point at it like a toddler.",
+    "Imposes disadvantage on all attempts to use adult furniture. The wearer feels inexplicably more comfortable in highchairs, cribs, and playpens, gaining advantage on rest checks in such furniture.",
+    "Renders the user incontinent as per the flaw listed in the Diaper School Handbook.",
+    "Whenever the wearer tries to stay awake past their bedtime, they must make a DC {d8+10} Constitution save or immediately fall asleep in the nearest crib, bed, or soft surface.",
+    "Every hour, the wearer must make a DC {d10+5} Wisdom save or demand to be changed, even if their diaper is clean. Failure results in loud whining until attended to.",
+    "Wearer becomes incredibly excitable, gaining disadvantage on Stealth checks and automatically failing attempts to stay still for longer than {d6} minutes.",
+    "Whenever the wearer hears a lullaby, they must make a DC {d12+5} Wisdom save or immediately start singing along in a childish voice until the song ends.",
+    "Every time the wearer tries to explain a complicated idea, they must roll a {d20}. On an even number, their words come out as baby babble instead.",
+    "Whenever the wearer tries to grab something fragile, there is a {d20}% chance they drop it instantly, accompanied by an embarrassed pout.",
+    "A magical pacifier appears whenever the wearer is upset. If they refuse to use it, they suffer {d4} points of psychic damage and disadvantage on all concentration checks.",
+    "Whenever the wearer casts a spell, there is a {d12}% chance their clothes will change into a randomly chosen, overly frilly baby outfit for {d6} hours.",
+    "Anytime the wearer laughs, all creatures within {d6*10} feet must make a DC {d8+10} Charisma save or involuntarily giggle along with them for {d4} rounds.",
+    "If the wearer is in combat for longer than {d12} rounds, they are automatically teleported to the nearest nursery and tucked in for a nap.",
+    "Whenever the wearer sits in a chair meant for adults, it slowly transforms into an oversized highchair over the course of {d4} minutes.",
+     "Whenever the wearer fails a Dexterity save, they produce a loud toot that echoes within {d6*10} feet. Creatures in the radius must make a DC {d8+6} Wisdom save or be distracted for 1 round.",
+    "You produce a noxious aroma that makes everyone think you need a change, even when you don't. Creatures within {d10*5} feet must make a DC {d12+5} Constitution save or instinctively offer assistance in an overly condescending tone.",
+    "Every {d6} hours, the wearer must make a DC {d8+8} Charisma save or involuntarily blow raspberries at the nearest authority figure.",
+    "Whenever the wearer tries to act serious, there's a {d20}% chance they let out an uncontrollable babyish giggle, reducing their intimidation effectiveness by half.",
+    "When the wearer is frightened or surprised, they involuntarily squeal in delight, imposing disadvantage on all attempts to hide or remain unnoticed.",
+    "If the wearer sneezes, hiccups, or coughs, a nursery rhyme plays softly within a {d10*10} foot radius, drawing unnecessary attention.",
+    "Whenever the wearer lies, their diaper lets out a dramatic crinkle sound, forcing them to make a DC {d12} Deception check with disadvantage.",
+    "Wearer develops an automatic response when questioned—they must make a DC {d8+10} Wisdom save or instinctively say 'No!' like a fussy toddler before even thinking.",
+    "Whenever the wearer gets frustrated, they must make a DC {d10+5} Wisdom save or stomp their feet petulantly, reducing movement speed by {d6} ft for {d4} rounds.",
+    "If the wearer runs, toddles, or attempts to flee, they automatically emit a sequence of high-pitched squeaks, reducing stealth effectiveness by {d8*10}%.",
+    "For every hour spent walking, the wearer's movements become increasingly exaggerated, eventually resembling an overly dramatic waddle until they rest.",
+    "Whenever the wearer gets startled, their outfit momentarily flashes with colorful sparkles before returning to normal, forcing them to make a DC {d8+8} Charisma save or feel inexplicably embarrassed.",
+    "Whenever the wearer sits on the floor, their posture stiffens slightly and they must make a DC {d6+8} Dexterity save or end up sitting with their legs spread in a clumsy toddler pose.",
+    "If the wearer tries to whisper, their voice automatically rises in pitch and volume, making it impossible to truly be discreet.",
+    "Whenever the wearer tries to act tough, their diaper magically puffs up by {d6}% in exaggerated bulk, making their attempts at intimidation far less effective.",
+     // Stinky Effects
+    "Whenever the wearer fails a Constitution save, they involuntarily let out a loud toot, causing creatures within {d6*10} feet to make a DC {d8+6} Constitution save or recoil in discomfort.",
+    "You produce a lingering, powdery scent mixed with an inexplicable noxious aroma. Creatures within {d10*5} feet must make a DC {d12+5} Wisdom save or assume you need a change even when you don't.",
+    "Every {d6} hours, the wearer must make a DC {d8+8} Constitution save or be overwhelmed by their own scent, suffering disadvantage on Persuasion checks due to an aura of unmistakable 'baby powder and mystery'.",
+    "If the wearer is in a stressful situation, they must roll a {d20}. On a result of 15 or higher, they let out a sequence of comically loud toots that echo within {d6*10} feet, disrupting all nearby conversations and stealth attempts.",
+    "Whenever the wearer tries to sound intimidating, their voice is accompanied by an embarrassing 'poot' sound effect, making all Intimidation checks roll at disadvantage.",
+    "Whenever the wearer speaks, there is a {d20}% chance their words come out in an exaggerated baby-talk voice for {d6} minutes.",
+    "All food the wearer eats tastes like mashed peas and applesauce until they make a DC {d10+5} Wisdom save to temporarily overcome the effect.",
+    "Whenever the wearer casts a spell, there's a {d12}% chance they loudly announce what they're doing in the most dramatic and childish way possible.",
+    "The wearer automatically giggles any time someone says their name, forcing a DC {d8+8} Charisma save to avoid laughing uncontrollably for {d4} rounds.",
+    "The wearer's outfit emits a random squeaky noise whenever they move, reducing stealth effectiveness by {d8*10}% and making sneaking nearly impossible.",
+    "Whenever the wearer tries to run, they must make a DC {d10+5} Dexterity save or immediately trip and land softly on their bottom, unable to move for {d4} rounds.",
+    "If the wearer tries to argue or engage in a debate, their words come out as incoherent baby babble, forcing them to make a DC {d12+6} Intelligence save to regain normal speech.",
+    "Every {d8} minutes, the wearer must roll a {d20}. On an even result, they momentarily forget how to use adult furniture and instinctively seek out cribs, playpens, or booster seats.",
+    "Whenever the wearer is startled, their diaper briefly inflates by {d6}% before returning to normal, drawing unnecessary attention and ruining stealth attempts.",
+    "If the wearer becomes embarrassed, their cheeks glow pink, and they automatically let out an involuntary high-pitched squeal, imposing disadvantage on all attempts to hide their emotions.",
+     "Whenever the wearer experiences an adrenaline rush, their diaper inflates by {d6}% and emits a loud squeaky noise.",
+    "The wearer has a {d20}% chance to let out an involuntary high-pitched giggle whenever they attempt to sound serious.",
+    "If the wearer tries to rush through a doorway, their movements inexplicably slow down, requiring a DC {d8+6} Dexterity save to avoid stumbling.",
+    "Whenever the wearer casts a spell, there's a {d12}% chance their diaper lets out a dramatic crinkle sound, making stealth nearly impossible.",
+    "Every {d6} hours, the wearer randomly produces a soft, musical chime that plays nursery rhymes until they make a DC {d10+5} Wisdom save.",
+    "The wearer radiates an aura of innocent chaos. Any time they attempt to lie, a faint babyish echo overlays their voice, making deception significantly harder.",
+    "Whenever the wearer tries to intimidate someone, their voice involuntarily cracks, reducing their effectiveness by {d6}% for {d4} rounds.",
+    "If the wearer runs, toddles, or attempts any sudden movement, they automatically release an embarrassing toot, forcing a DC {d8+10} Charisma save to avoid drawing unwanted attention.",
+    "Whenever the wearer attempts to sneak, a faint scent of baby powder follows them, leaving an obvious sensory trail behind.",
+    "Any attempt to whisper results in exaggerated baby babble, making stealthy communication impossible until a DC {d12+6} Wisdom save succeeds.",
+    "Whenever the wearer fails a perception check, they instinctively pout and let out a frustrated whimper, reducing their intimidation effectiveness by {d8}%.",
+    "If the wearer is startled, their outfit briefly sparkles in bright pastel colors before returning to normal, making it impossible to hide effectively for {d6} rounds.",
+    "Whenever the wearer feels embarrassed, their cheeks glow pink, and they automatically produce an involuntary high-pitched squeal, imposing disadvantage on deception attempts.",
+    "If the wearer tries to act mature, a {d20}% chance causes them to instinctively suck their thumb for {d4} minutes, making social interactions significantly harder.",
+    "Whenever the wearer sits down too quickly, a whimsical jingle plays from their outfit, forcing a DC {d10+5} Charisma save to avoid drawing attention.",
+    "Whenever the wearer gets frustrated, their speech slows down as if they were explaining something to a toddler, forcing them to roll a DC {d12+6} Intelligence save to regain normal speech patterns.",
+    "Every time the wearer is forced to wait longer than {d8} minutes, they automatically start bouncing in place impatiently, imposing disadvantage on all attempts to appear composed.",
+    "If the wearer tries to resist being picked up or led by the hand, they must make a DC {d8+10} Strength save or instinctively cooperate instead.",
+    "Whenever the wearer attempts to intimidate someone, there's a {d10}% chance their outfit momentarily puffs up, exaggeratedly reducing their imposing presence.",
+    "Whenever the wearer eats something crunchy, their chewing sound briefly echoes like a comically oversized cartoon munching noise, forcing a DC {d12+5} Dexterity save to prevent embarrassment.",
+    "If the wearer attempts to ignore their surroundings, a {d20}% chance causes a faint nursery tune to play around them for {d4} minutes, ruining attempts at focus.",
+    "Whenever the wearer tries to stay quiet, they automatically hum softly, making stealth nearly impossible for {d6} rounds.",
+    "Every {d12} hours, the wearer automatically feels a strong urge to skip playfully instead of walking. A DC {d8+10} Dexterity save is required to resist.",
+     "Whenever the wearer attempts to sit down, their diaper magically expands by {d6}% in bulk, causing them to shift uncomfortably for {d4} minutes.",
+    "The wearer's diaper emits an exaggerated crinkle sound whenever they take a step, reducing stealth effectiveness by {d8*10}%.",
+    "If the wearer is embarrassed, their diaper temporarily doubles in size, making movement awkward for {d6} rounds before returning to normal.",
+    "Whenever the wearer tries to act serious, their outfit momentarily transforms into an overly frilly, lace-covered ensemble before shifting back.",
+    "Any attempt to sneak results in their diaper producing an echoing squeak, making stealth nearly impossible within {d10*5} feet.",
+    "Whenever the wearer laughs, their diaper momentarily puffs up with harmless sparkles before shrinking back to its normal size.",
+    "If the wearer fails a Constitution save, they must waddle instead of walk for {d6} minutes, making movement clumsy and exaggerated.",
+    "Every time the wearer fails a check, their diaper emits a faint nursery tune, revealing their presence within {d8*10} feet.",
+    "Whenever the wearer runs, their diaper briefly glows with soft pastel hues before fading, forcing them to make a DC {d10+5} Charisma save to avoid embarrassment.",
+    "If the wearer is startled, their diaper lets out an involuntary loud 'pfffft!' sound, forcing a DC {d12+6} Charisma save to recover their composure.",
+    "The wearer radiates a faint scent of baby powder and warm milk, making those nearby instinctively assume they need assistance, even when they don't.",
+    "Whenever the wearer argues, their voice momentarily slips into a childish tone, reducing their effectiveness in persuasion by {d6}%.",
+    "If the wearer attempts to lie, their diaper puffs up slightly, forcing them to roll a DC {d12+8} Deception check with disadvantage.",
+    "Whenever the wearer sits for longer than {d8} minutes, their diaper begins warming itself for comfort, leading to unexpected relaxation.",
+    "Anytime the wearer sneezes, their outfit magically alters slightly, adding extra frills or puffed sleeves until they rest.",
+    "Whenever the wearer eats something crunchy, their chewing sound briefly echoes with a cartoonishly exaggerated munching noise.",
+    "If the wearer ignores someone speaking to them, their diaper automatically lets out a soft 'squeak,' reminding everyone of their presence.",
+    "Whenever the wearer tries to be intimidating, their diaper expands by {d4}%, making them look much less threatening.",
+    "Whenever the wearer fails a Dexterity save, they involuntarily toddle in place for {d6} seconds before regaining control.",
+    "The wearer randomly produces a soft lullaby effect when attempting to concentrate, forcing them to make a DC {d10+5} Wisdom save to stay focused.",
+    "Whenever the wearer jumps or moves suddenly, their diaper briefly shifts colors, adopting bright babyish hues before fading back.",
+    "Any attempt to whisper results in involuntary baby babble for {d6} minutes, making discreet communication impossible.",
+    "Whenever the wearer pouts, a faint magical sparkle forms around their eyes, making their frustration adorably visible to all.",
+    "If the wearer gets frustrated, their words slow down, automatically turning into exaggerated baby-talk until they pass a DC {d12+6} Intelligence save.",
+    "Every {d12} hours, the wearer instinctively skips playfully instead of walking for {d8+10} minutes unless they pass a Dexterity check.",
+    "Whenever the wearer is about to succeed at a check, their diaper randomly increases in bulk by {d6}%, imposing disadvantage if stealth or movement is involved.",
+    "Whenever the wearer receives direct attention, their diaper momentarily crinkles loudly, drawing extra unnecessary focus.",
+    "If the wearer blushes, their diaper emits a faint glow, revealing their flustered state for {d4} rounds before fading.",
+    "Whenever the wearer fails a Dexterity save, their diaper briefly doubles in size before returning to normal, causing an awkward moment of adjustment.",
+    "Each time the wearer rolls a natural 1, their diaper randomly changes color and gains extra padding equal to {d6}% of its original thickness.",
+    "If the wearer is embarrassed, their diaper puffs up dramatically, forcing them to waddle for {d4} minutes before it deflates.",
+    "Whenever the wearer tries to speak in a formal setting, their diaper lets out a loud crinkle noise, disrupting the conversation.",
+    "Whenever the wearer tries to be intimidating, their diaper gently glows with soft pastel hues, making them seem much less threatening.",
+    "Any attempt to sneak results in an exaggerated 'squeak!' sound from their diaper every {d8} steps, ruining all stealth attempts.",
+    "Whenever the wearer sits down, their diaper lets out an exaggerated 'poof!' sound, making it seem far bulkier than it really is.",
+    "If the wearer tries to whisper, their voice automatically turns into playful baby babble, making discreet communication impossible.",
+    "Whenever the wearer receives praise, their diaper briefly sparkles, radiating an aura of innocent embarrassment for {d6} rounds.",
+    "If the wearer gets frustrated, their diaper inflates slightly each time they sigh, forcing a DC {d12+6} Wisdom save to suppress the effect.",
+    "Anytime the wearer eats solid food, their diaper lets out a subtle musical chime, as if celebrating their meal.",
+    "If the wearer blushes, their diaper momentarily emits a gentle puff of baby powder, revealing their flustered state for {d4} minutes.",
+    "Whenever the wearer tries to act grown-up, they instinctively begin sucking their thumb for {d4} rounds unless they pass a DC {d10+5} Will save.",
+    "Each time the wearer tries to make an important decision, they must roll a {d20}. On an even result, they hesitate and feel overwhelmed, requiring outside reassurance before proceeding.",
+    "If the wearer moves faster than their walking speed, they must roll a {d12}. On an odd number, they immediately trip and land safely on their padded bottom, unable to stand for {d6} rounds.",
+    "Whenever the wearer is startled, their diaper produces an involuntary 'pfffft!' noise, drawing unnecessary attention.",
+    "If the wearer tries to resist being guided by the hand, they must pass a DC {d8+10} Strength save or instinctively cooperate instead.",
+    "Whenever the wearer sits in a normal chair, their diaper magically expands slightly for comfort, making furniture adjustments awkward.",
+    "If the wearer refuses assistance for any task, there is a {d10}% chance they instinctively pout and stomp their foot, reducing their effectiveness in negotiations.",
+    "Whenever the wearer is upset, their diaper emits a faint, pitiful whimpering sound, compelling those nearby to offer words of reassurance.",
+    "Whenever the wearer ignores someone speaking to them, their diaper automatically lets out an exaggerated rustling noise, forcing a DC {d10+5} Wisdom save to suppress their distracted reaction.",
+    "If the wearer tries to avoid attention, their diaper temporarily becomes extra plush, exaggerating their movements until they pass a DC {d8+10} Dexterity save.",
+    "Every {d8} hours, the wearer must make a DC {d10+6} Charisma save or someone nearby will instinctively ask them if they need a change, whether they do or not.",
+    "Whenever the wearer rolls a natural 1, they immediately feel an overwhelming urge to check their diaper, losing their next free action due to momentary distraction.",
+    "If the wearer fails a Constitution save, they must loudly announce their current diaper status, whether they meant to or not.",
+    "Whenever the wearer enters a room with at least {d6} other people, there is a {d12}% chance someone instinctively performs a 'potty check gesture' toward them.",
+    "Each time the wearer attempts to act mature, they must roll a DC {d8+8} Wisdom save or someone near them jokingly asks if they need assistance with their diaper.",
+    "Whenever the wearer fails a Dexterity check, their outfit momentarily shifts into an overly frilly, padded ensemble before reverting back.",
+    "Each time the wearer is startled, they must roll a {d20}. On a result of 15 or higher, their diaper magically grows by {d6}% thickness.",
+    "Whenever the wearer tries to remove their diaper, it temporarily refuses to budge for {d8} minutes unless they pass a DC {d12+10} Strength save.",
+    "If the wearer walks too fast, they must roll a {d20}. On an even result, their diaper magically restocks itself with extra padding, making movement slightly more cumbersome.",
+    "Whenever the wearer blushes, their diaper lets out a soft, magical crinkle noise that momentarily draws unwanted attention.",
+    "If the wearer rolls a natural 1 on any saving throw, they must roll a {d6}. On a result of 3 or higher, they experience an unexpected accident, requiring immediate attention.",
+    "Whenever the wearer is frightened, they must make a DC {d10+6} Wisdom save or their diaper immediately absorbs additional weight, making movement harder.",
+    "Each time the wearer laughs too hard, they must roll a {d20}. On an odd result, their diaper magically reacts, forcing them to shift awkwardly for {d6} rounds.",
+    "Whenever the wearer experiences an intense emotion (fear, excitement, embarrassment), they must pass a DC {d8+8} Constitution save or suffer a sudden 'oops' moment.",
+    "If the wearer stays still for longer than {d12} minutes, they must roll a {d20}. On a 10 or higher, their diaper inexplicably activates its full capacity, triggering a need for immediate attention.",
+       "Whenever the wearer tries to stand up too quickly, their diaper momentarily inflates, making balance awkward for {d6} rounds.",
+    "The wearer must make a DC {d10+6} Wisdom save every {d8} hours or instinctively pat their diaper as if checking it, whether necessary or not.",
+    "Whenever the wearer denies needing a change, their diaper lets out an exaggerated crinkle noise, undermining their argument.",
+    "Every time the wearer rolls a natural 20, their diaper briefly glows with magical energy before settling back to normal.",
+    "If the wearer attempts to remove their diaper, it momentarily fuses with their outfit, requiring a DC {d12+8} Strength save to successfully detach it.",
+    "Whenever the wearer is startled, they must roll a {d20}. On an even result, their diaper lets out a loud, cartoonish 'poof!' sound.",
+    "Whenever the wearer tries to sound authoritative, there's a {d12}% chance their diaper lets out an involuntary squeak, diminishing their presence.",
+    "Whenever the wearer enters a quiet room, their diaper inexplicably makes a soft rustling sound, ensuring they can never truly move silently.",
+    "If the wearer blushes, their diaper instantly changes color to match their cheeks for {d4} minutes before returning to normal.",
+    "Whenever the wearer attempts a charisma-based skill check, their diaper emits a tiny musical chime, distracting all nearby creatures.",
+    "If the wearer moves too quickly, their diaper puffs up slightly, forcing them to waddle awkwardly for {d8} rounds.",
+    "Whenever the wearer fails a saving throw, their diaper briefly expands, forcing a DC {d10+5} Dexterity check to avoid losing their balance.",
+    "If the wearer argues with someone, there's a {d20}% chance their diaper momentarily adds an extra layer, causing slight discomfort.",
+    "Whenever the wearer laughs, their diaper briefly sparkles, adding an adorable yet embarrassing flair to their moment.",
+    "Each time the wearer tries to sneak successfully, there's a {d8}% chance their diaper crinkles at the worst possible moment.",
+    "Whenever the wearer sits down, their diaper emits a soft 'plop' sound, making their seating choice feel far more exaggerated than necessary.",
+    "If the wearer is concentrating on an intense action, their diaper momentarily warms for comfort, reducing their tension but possibly breaking focus.",
+    "Whenever the wearer gets too excited, their diaper lets out a tiny burst of baby powder scent, alerting those nearby to their enthusiasm.",
+    "Each time the wearer tries to avoid attention, their diaper automatically adopts pastel colors, making them more noticeable for {d6} minutes.",
+    "Whenever the wearer is in combat, there's a {d12}% chance their diaper momentarily fluffs up as if reinforcing itself for battle.",
+    "If the wearer rolls a natural 1, their diaper briefly shimmers with faint magical energy, hinting that it might be smarter than they are.",
+    "Whenever the wearer tells a lie, their diaper briefly inflates {d4}% more, visually calling attention to their deception.",
+    "Every time the wearer tries to walk normally, there's a {d10}% chance they toddle instead, increasing their adorability but reducing movement speed.",
+    "Whenever the wearer refuses assistance, their diaper briefly shifts colors, subtly suggesting they might need help anyway.",
+    // Additional curse effects
+    "Whenever the wearer attempts to appear dignified, ghostly baby toys materialize around them, floating and making nursery sounds for {d4} minutes.",
+    "The diaper summons a spectral changing table that follows the wearer at a distance of {d6} feet, vanishing only when they admit they need assistance.",
+    "If the wearer attempts to use sophisticated vocabulary, each word over two syllables has a {d20}% chance to be replaced with a babyish equivalent.",
+    "The diaper occasionally manifests illusory safety pins that glow with arcane energy, drawing attention whenever the wearer tries to be discreet.",
+    "When startled, the wearer must pass a DC {d8+8} Constitution save or their diaper instantly fills with glittering, magical contents that weigh nothing but appear extremely full.",
+    "The diaper creates a faint magical outline around the wearer that resembles a baby's silhouette, becoming more visible whenever they attempt to assert authority.",
+    "Any attempt to sit in a dignified manner forces a DC {d10+5} Dexterity save or the wearer automatically assumes a toddler's sitting position, legs splayed outward.",
+    "The diaper periodically emits soft lullaby music that only the wearer and anyone touching them can hear, growing louder whenever they become stressed.",
+    "Whenever the wearer attempts a Charisma check, their diaper produces {d6} spectral butterflies that circle them, imposing disadvantage on intimidation attempts.",
+    "The diaper causes any chair the wearer sits in to slowly transform into a rocking cradle over {d10} minutes unless they succeed on a DC {d12+5} Wisdom save.",
+    "The wearer's shadow always appears to be wearing an exaggerated, puffy diaper regardless of their actual clothing or attempts to conceal their outfit.",
+    "Magical baby powder occasionally falls from the wearer's outfit, leaving tiny sparkling footprints behind them for {d8} minutes that can only be seen by those who know their secret.",
+    "Every full moon, the diaper's curse intensifies, causing the wearer to speak exclusively in babble for {d12} hours unless they sleep in a crib.",
+    "The diaper causes any food the wearer tries to eat with utensils to mysteriously slip or spill, forcing them to eat with their hands like a toddler.",
+    "Whenever the wearer succeeds on an Intelligence check, their diaper produces a cheerful 'well done!' sound that can be heard within {d6*5} feet.",
+    "The diaper occasionally creates illusory stuffed animals that only the wearer can see, which appear to judge them silently whenever they try to act mature.",
+    "If the wearer attempts to intimidate someone, they must pass a DC {d10+8} Charisma save or their voice becomes adorably high-pitched for {d6} rounds.",
+    "The diaper causes all liquids within {d4} feet of the wearer to transform into milk or juice, complete with sippy cups or bottles replacing their containers.",
+    "Whenever the wearer tries to lie, their diaper emits the scent of fresh baby powder, increasing in intensity proportional to the magnitude of the lie.",
+    "The diaper occasionally whispers encouraging but infantilizing phrases that only the wearer can hear, requiring a DC {d8+6} Wisdom save to ignore.",
+    "The curse causes any bed the wearer sleeps in to gradually transform into a magical crib that prevents them from leaving until someone else lowers the rail.",
+    "Whenever the wearer attempts to read adult literature, the text occasionally shifts into colorful, oversized lettering reminiscent of a children's picture book.",
+    "The diaper periodically creates illusory mobile toys that hang above the wearer's head whenever they lie down, visible to all and impossible to dispel for {d8} minutes.",
+    "If the wearer becomes angry or frustrated, they must pass a DC {d10+6} Wisdom save or magical teething rings appear in their hands, impossible to drop for {d4} minutes.",
+    "The diaper occasionally makes surrounding adults instinctively speak to the wearer in sing-song voices, requiring a DC {d8+6} Charisma save to resist the compulsion."
+    ];
+
+  
+  // Function to simulate dice rolls
+  function rollDice(notation) {
+    const match = notation.match(/d(\d+)(?:\*(\d+))?(?:\+(\d+))?/);
+    if (!match) return 0;
+    
+    const sides = parseInt(match[1]);
+    const multiplier = match[2] ? parseInt(match[2]) : 1;
+    const bonus = match[3] ? parseInt(match[3]) : 0;
+    
+    return (Math.floor(Math.random() * sides) + 1) * multiplier + bonus;
+  }
+  
+  // Function to apply dice rolls to a curse effect template
+  function applyCurseRolls(effectTemplate) {
+    let effect = effectTemplate;
+    const diceNotations = effectTemplate.match(/\{[^}]+\}/g) || [];
+    
+    diceNotations.forEach(notation => {
+      const diceCode = notation.slice(1, -1); // Remove the { }
+      const roll = rollDice(diceCode);
+      effect = effect.replace(notation, roll);
+    });
+    
+    return effect;
+  }
+  
+  // Function to check for special keywords and return corresponding effects
+  function getSpecialEffects(adjectives, outfitType, description) {
+    // Map of special keywords to their effects
+    const specialKeywordsEffects = {
+      "permatented": "Permanent inconvenient erection until the diaper is used fully or curse is removed.",
+      "permachaste": "In chastity under their diaper and suffers inability to orgasm until diaper is full and changed.",
+      "permastank": "When this curse is active the user always smells like they have a messy diaper.",
+      "permasoggy": "The user is constantly damp in their diapers, needing them to stay dry above the diaper.",
+      "permasog": "The user is constantly damp in their diapers, needing them to stay dry above the diaper.",
+      "permapaddled": "Whenever the user suffers a failure on a skill check or a natural 1, they must roll a DC10 wisdom save or suffer 1d4 force-based spanking damage.",
+      "hyperincontinent": "Will hyperwet or hypermess whenever they have an accident with a potty check lower than 5.",
+      "hyperbowel incontinence": "Whenever a victim rolls under a 5, they hypermess their diaper, using 7 charges per mess.",
+      "hyperbladder incontinence": "Whenever a victim rolls under a 8, they will hyperwet their diaper, using 3 use charges per wetting.",
+      "jinxed": "You take a -1 on all rolls to avoid shame or humiliation.",
+      "hexed": "You take disadvantage on all rolls to avoid shame or humiliation.",
+      "babyish": "Has a 10% chance of making the user speak like a baby.",
+      "regressive": "Has a 10% chance to force the user to wake up as a toddler form of their current selves each morning.",
+      "belittling": "The victim suffers -1 on all checks to persuade or deceive people about their maturity, adulthood, or potty-training.",
+      "childish": "The wearer has a 15% chance to throw a temper tantrum when denied something they want.",
+      "infantile": "The wearer's voice becomes higher pitched and vocabulary simplifies to basic words.",
+      "degrading": "The wearer must roll a DC12 Wisdom save to resist referring to themselves in the third person.",
+      "patronizing": "Everyone who sees the wearer has a strong urge to talk to them as if they were a small child.",
+      "permaleaky": "The diaper constantly leaks a small amount, requiring frequent changes and leaving a faint trail.",
+      "permapoofy": "The diaper is constantly expanding and contracting, drawing attention with its exaggerated puffiness.",
+      "hyperdistended": "The diaper magically expands to 3x normal size when used, making it impossible to conceal.",
+      "hypernoticeable": "The diaper causes nearby people to stare and comment, regardless of how well it's concealed.",
+      "hyperpadded": "The padding is supernaturally thick, making normal movement difficult and requiring a waddling gait.",
+      "permawaddling": "The wearer is magically compelled to waddle exaggeratedly regardless of what they're wearing.",
+      "permababied": "The wearer is treated as a baby by all NPCs and creatures, regardless of their actual appearance or behavior.",
+      "permathick": "The diaper is always at least 3 inches thick, regardless of use status or attempts to compress it.",
+      "noisy": "The outfit produces random baby-related sounds at the most inconvenient moments.",
+      "squeaky": "Each step produces a loud squeaky toy sound that cannot be muffled or suppressed.",
+      "odorous": "The outfit emanates a powerful scent of baby powder that can be detected up to 30 feet away.",
+      "crinkling": "The outfit produces an exaggerated crinkling sound with every movement, audible up to 20 feet away.",
+      "whimsical": "Random objects near the wearer occasionally transform into baby-themed items for 1d4 minutes.",
+      "encumbering": "The wearer's movement speed is reduced by 10 feet due to the bulky nature of the outfit.",
+      "glowing": "The outfit emits a soft glow in the dark, making stealth in darkness impossible.",
+      "fluorescent": "Under certain lighting conditions, the outfit becomes extremely bright and visible.",
+      "stinky": "The outfit periodically emits an embarrassing odor that can't be masked, noticeable within 20 feet.",
+      "smelly": "Anyone within 15 feet assumes the wearer needs a change, regardless of the actual state of their diaper.",
+      "soiled": "The diaper appears perpetually messy from the outside, though the wearer remains clean and dry.",
+      "droopy": "The diaper appears to sag constantly, creating the illusion of fullness even when fresh.",
+      "sodden": "The diaper always feels wet to the wearer, though it never leaks beyond its magical containment.",
+      "squishy": "Every step produces an audible squishing sound that cannot be suppressed or hidden.",
+      "padded": "The padding is visibly thicker than normal, adding +1 inch to the wearer's measurements in all directions.",
+      "pillowy": "The padding feels extraordinarily soft but makes sitting on hard surfaces virtually impossible.",
+      "puffy": "The diaper periodically puffs up to twice its size for 1d4 minutes before returning to normal.",
+      "ruffled": "The edges of the diaper are adorned with frilly ruffles that peek out from under clothing.",
+      "sissified": "The diaper is decorated with extremely childish and gender-inappropriate designs.",
+      "drenched": "The outside of the diaper appears constantly wet, though it never actually leaks.",
+      "swollen": "The diaper randomly swells to 2x normal size whenever the wearer is in social situations.",
+      "bloated": "The diaper appears to be uncomfortably full from behind, drawing concerned glances.",
+      "foaming": "Occasionally produces harmless but embarrassing soap-like bubbles that emerge from the leg cuffs.",
+      "permagurgling": "The diaper constantly makes audible gurgling sounds as if actively being used.",
+      "hyperswelling": "When used, the diaper expands to 4x its normal size for 2d6 hours before returning to normal.",
+      "hyperfragrant": "Emits an overwhelming baby powder scent that can be detected from 50 feet away.",
+      "permacrinkly": "Every movement produces an extremely exaggerated crinkling sound that can't be muffled.",
+      "hypervisible": "The diaper occasionally glows brightly through clothing during moments of embarrassment.",
+      "permasquishy": "The diaper makes constant squishing sounds with every step, even when completely dry.",
+      // Additional special effects
+      "permadrooling": "The wearer constantly drools like an infant, requiring a bib at all times to prevent clothing from becoming soaked.",
+      "hyperthirst": "The wearer experiences an unquenchable thirst, causing them to constantly seek out bottles or sippy cups of liquid.",
+      "hypersoaked": "The diaper immediately becomes extremely saturated upon any accident, expanding to 5x its normal size for at least 1d8 hours.",
+      "permastained": "The diaper always appears to have colorful stains visible from the outside, regardless of its actual condition.",
+      "perpetually bulging": "The rear of the diaper constantly appears extremely full, even when completely fresh and unused.",
+      "chronically obvious": "The diaper refuses to be concealed by any clothing, always finding a way to peek out or make itself visible.",
+      "perpetually wet": "The diaper is always at minimum 50% saturated, never appearing or feeling completely dry.",
+      "eternally loaded": "The diaper always appears and feels partially used from behind, regardless of its actual state.",
+      "hyperaudible": "Every movement produces a sound 3x louder than normal, making the wearer's diaper audible up to 50 feet away.",
+      "hyperstinky": "The diaper periodically releases powerful aromas detectable from up to 100 feet away, causing NPCs to comment.",
+      "superthick": "The diaper's padding is 5x thicker than normal, making it impossible to sit properly or walk without an extreme waddle."
+    };
+    
+    const specialEffects = [];
+    
+    // Check for special keywords in adjectives and outfit type
+    for (const keyword in specialKeywordsEffects) {
+      // Check if any of the adjectives contain the keyword
+      let hasKeyword = adjectives.some(adj => adj.includes(keyword));
+      // Also check if outfit type contains the keyword
+      hasKeyword = hasKeyword || outfitType.includes(keyword);
+      
+      if (hasKeyword && !specialEffects.includes(specialKeywordsEffects[keyword])) {
+        specialEffects.push(specialKeywordsEffects[keyword]);
+      }
+    }
+    
+    // Return the combined description with special effects
+    if (specialEffects.length > 0) {
+      return description + "\n\nSpecial Effects:\n" + specialEffects.join("\n");
+    }
+    
+    return description;
+  }
+  
+  // Function to generate a random outfit
+  function generateRandomOutfit() {
+    const material = materials[Math.floor(Math.random() * materials.length)];
+    const outfitType = outfitTypes[Math.floor(Math.random() * outfitTypes.length)];
+    const adjective = punishmentAdjectives[Math.floor(Math.random() * punishmentAdjectives.length)];
+    const effectTemplate = curseEffects[Math.floor(Math.random() * curseEffects.length)];
+    const effect = applyCurseRolls(effectTemplate);
+    
+    // Capitalize first letter of words for the name
+    const capitalizedAdjective = adjective.charAt(0).toUpperCase() + adjective.slice(1);
+    const capitalizedOutfitType = outfitType.charAt(0).toUpperCase() + outfitType.slice(1);
+    
+    // Check for special effects
+    const finalDescription = getSpecialEffects([adjective], outfitType, effect);
+    
+    return {
+      name: `${capitalizedAdjective} ${capitalizedOutfitType}`,
+      description: finalDescription,
+      material: material,
+      outfitType: outfitType,
+      adjective: adjective,
+      imagePrompt: `masterpiece, best quality, ${material} ${outfitType} ${adjective}, clothing with diaper, anime style, source_anime, white background, no background,`,
+      negativeprompt: `loli, underage, minor kid, little girl, infant`
+    };
+  }
+  
+  // Store the current outfit for regenerating the image
+  let currentOutfit = null;
+  
+  // Function to create a custom outfit from selections
+  function createCustomOutfit() {
+    // Disable button while generating
+    createCustomBtn.disabled = true;
+    createCustomBtn.textContent = "Creating...";
+    
+    // Get selected values
+    const material = materialSelect.value;
+    const outfitType = outfitTypeSelect.value;
+    
+    // Get selected adjectives (multiple)
+    const adjectiveSelect = document.getElementById('adjectiveSelect');
+    const selectedAdjectives = Array.from(adjectiveSelect.selectedOptions).map(option => option.value);
+    
+    // If no adjectives are selected, randomly pick one
+    if (selectedAdjectives.length === 0) {
+      const randomAdjective = punishmentAdjectives[Math.floor(Math.random() * punishmentAdjectives.length)];
+      selectedAdjectives.push(randomAdjective);
+    }
+    
+    // Get selected curse effects (multiple)
+    const curseEffectSelect = document.getElementById('curseEffectSelect');
+    const selectedEffectTemplates = Array.from(curseEffectSelect.selectedOptions).map(option => option.value);
+    
+    // If no effects are selected, randomly pick one
+    if (selectedEffectTemplates.length === 0) {
+      const randomEffect = curseEffects[Math.floor(Math.random() * curseEffects.length)];
+      selectedEffectTemplates.push(randomEffect);
+    }
+    
+    // Apply dice rolls to each effect and join them
+    const effects = selectedEffectTemplates.map(template => applyCurseRolls(template));
+    const combinedEffect = effects.join("\n\n");
+    
+    // Capitalize adjectives for the name
+    const capitalizedAdjectives = selectedAdjectives.map(adj => adj.charAt(0).toUpperCase() + adj.slice(1));
+    const capitalizedOutfitType = outfitType.charAt(0).toUpperCase() + outfitType.slice(1);
+    
+    // Combine adjectives with commas and 'and' for the last one if there are multiple
+    let adjectiveText;
+    if (capitalizedAdjectives.length === 1) {
+      adjectiveText = capitalizedAdjectives[0];
+    } else {
+      adjectiveText = capitalizedAdjectives.slice(0, -1).join(", ") + " and " + capitalizedAdjectives.slice(-1);
+    }
+    
+    // Check for special effects
+    const finalDescription = getSpecialEffects(selectedAdjectives, outfitType, combinedEffect);
+    
+    // Create the outfit object
+    currentOutfit = {
+      name: `${adjectiveText} ${capitalizedOutfitType}`,
+      description: finalDescription,
+      material: material,
+      outfitType: outfitType,
+      adjective: selectedAdjectives.join(" "), // Join adjectives for the image prompt
+      imagePrompt: `masterpiece, best quality, ${material} ${outfitType} ${selectedAdjectives.join(" ")}, clothing with diaper, anime style, source_anime, white background, no background,`,
+      negativeprompt: `loli, underage, minor kid, little girl, infant`
+    };
+    
+    // Update the text content
+    outfitNameEl.textContent = currentOutfit.name;
+    outfitDescriptionEl.textContent = currentOutfit.description;
+    
+    // Generate the image
+    generateImageForOutfit()
+      .finally(() => {
+        // Re-enable button
+        createCustomBtn.disabled = false;
+        createCustomBtn.textContent = "Create Custom Outfit";
+      });
+  }
+  
+  // Function to randomize the custom selections
+  function randomizeCustomSelections() {
+    // Clear current selections
+    materialSelect.value = materials[Math.floor(Math.random() * materials.length)];
+    outfitTypeSelect.value = outfitTypes[Math.floor(Math.random() * outfitTypes.length)];
+    
+    // Deselect all options in multiple selects
+    Array.from(adjectiveSelect.options).forEach(option => option.selected = false);
+    Array.from(curseEffectSelect.options).forEach(option => option.selected = false);
+    
+    // Randomly select 1-3 adjectives
+    const numAdjectives = Math.floor(Math.random() * 3) + 1;
+    for (let i = 0; i < numAdjectives; i++) {
+      const randomIndex = Math.floor(Math.random() * adjectiveSelect.options.length);
+      adjectiveSelect.options[randomIndex].selected = true;
+    }
+    
+    // Randomly select 1-3 curse effects
+    const numEffects = Math.floor(Math.random() * 3) + 1;
+    for (let i = 0; i < numEffects; i++) {
+      const randomIndex = Math.floor(Math.random() * curseEffectSelect.options.length);
+      curseEffectSelect.options[randomIndex].selected = true;
+    }
+  }
+  
+  // Main function to generate and display a random outfit
+  async function generateOutfit() {
+    // Disable button while generating
+    generateBtn.disabled = true;
+    generateBtn.textContent = "Generating...";
+    
+    // Generate random outfit
+    currentOutfit = generateRandomOutfit();
+    
+    // Update the text content
+    outfitNameEl.textContent = currentOutfit.name;
+    outfitDescriptionEl.textContent = currentOutfit.description;
+    
+    // Show loading indicator and hide previous image
+    loadingIndicatorEl.hidden = false;
+    outfitImageEl.hidden = true;
+    regenerateImageBtn.hidden = true;
+    
+    try {
+      // Generate image
+      await generateImageForOutfit();
+    } finally {
+      // Re-enable button
+      generateBtn.disabled = false;
+      generateBtn.textContent = "Generate Cursed Outfit";
+    }
+  }
+  
+  // Function to generate image for the current outfit
+  async function generateImageForOutfit() {
+    if (!currentOutfit) return;
+    
+    // Show loading indicator and hide previous image
+    loadingIndicatorEl.hidden = false;
+    outfitImageEl.hidden = true;
+    
+    try {
+      // Generate image
+      const dataUrl = await generateImage(currentOutfit.imagePrompt);
+      
+      // Display the image
+      outfitImageEl.src = dataUrl;
+      outfitImageEl.hidden = false;
+      
+      // Show the regenerate image button based on current mode
+      if (customCreatorCtn.hidden) {
+        regenerateImageBtn.hidden = false;
+      } else {
+        regenerateCustomImageBtn.hidden = false;
+      }
+    } catch (error) {
+      console.error("Failed to generate image:", error);
+      outfitDescriptionEl.textContent += "\n\nFailed to generate image.";
+      if (customCreatorCtn.hidden) {
+        regenerateImageBtn.hidden = true;
+      } else {
+        regenerateCustomImageBtn.hidden = true;
+      }
+    } finally {
+      // Hide loading indicator
+      loadingIndicatorEl.hidden = true;
+    }
+  }
+  
+  // Function to regenerate just the image for the current outfit
+  async function regenerateImage() {
+    // If no outfit has been generated yet, return
+    if (!currentOutfit) return;
+    
+    // Disable buttons while generating
+    if (customCreatorCtn.hidden) {
+      regenerateImageBtn.disabled = true;
+      generateBtn.disabled = true;
+      regenerateImageBtn.textContent = "Regenerating...";
+    } else {
+      regenerateCustomImageBtn.disabled = true;
+      createCustomBtn.disabled = true;
+      randomizeCustomBtn.disabled = true;
+      regenerateCustomImageBtn.textContent = "Regenerating...";
+    }
+    
+    // Show loading indicator and hide previous image
+    loadingIndicatorEl.hidden = false;
+    outfitImageEl.hidden = true;
+    
+    try {
+      // Generate new image with the same prompt
+      const dataUrl = await generateImage(currentOutfit.imagePrompt);
+      
+      // Display the new image
+      outfitImageEl.src = dataUrl;
+      outfitImageEl.hidden = false;
+    } catch (error) {
+      console.error("Failed to regenerate image:", error);
+      outfitDescriptionEl.textContent += "\n\nFailed to regenerate image.";
+    } finally {
+      // Hide loading indicator
+      loadingIndicatorEl.hidden = true;
+      
+      // Re-enable buttons
+      if (customCreatorCtn.hidden) {
+        regenerateImageBtn.disabled = false;
+        generateBtn.disabled = false;
+        regenerateImageBtn.textContent = "Regenerate Image";
+      } else {
+        regenerateCustomImageBtn.disabled = false;
+        createCustomBtn.disabled = false;
+        randomizeCustomBtn.disabled = false;
+        regenerateCustomImageBtn.textContent = "Regenerate Image";
+      }
+    }
+  }
+  
+  // Function to switch between random and custom modes
+  function switchMode(mode) {
+    if (mode === 'random') {
+      randomGeneratorCtn.hidden = false;
+      customCreatorCtn.hidden = true;
+      randomModeBtn.classList.add('active');
+      customModeBtn.classList.remove('active');
+      regenerateImageBtn.hidden = true;
+      regenerateCustomImageBtn.hidden = true;
+      outfitNameEl.textContent = "Press Generate for a Cursed Outfit";
+    } else {
+      randomGeneratorCtn.hidden = true;
+      customCreatorCtn.hidden = false;
+      randomModeBtn.classList.remove('active');
+      customModeBtn.classList.add('active');
+      regenerateImageBtn.hidden = true;
+      regenerateCustomImageBtn.hidden = true;
+      outfitNameEl.textContent = "Select Options for a Cursed Outfit";
+    }
+    
+    // Reset display
+    outfitDescriptionEl.textContent = "The description of the cursed outfit will appear here.";
+    outfitImageEl.hidden = true;
+    currentOutfit = null;
+  }
+  
+  // Function to populate all select dropdowns with options
+  function populateSelects() {
+    // Populate material select
+    materials.forEach(material => {
+      const option = document.createElement('option');
+      option.value = material;
+      option.textContent = material.charAt(0).toUpperCase() + material.slice(1);
+      materialSelect.appendChild(option);
+    });
+    
+    // Populate outfit type select
+    outfitTypes.forEach(outfitType => {
+      const option = document.createElement('option');
+      option.value = outfitType;
+      option.textContent = outfitType.charAt(0).toUpperCase() + outfitType.slice(1);
+      outfitTypeSelect.appendChild(option);
+    });
+    
+    // Populate adjective select
+    punishmentAdjectives.forEach(adjective => {
+      const option = document.createElement('option');
+      option.value = adjective;
+      option.textContent = adjective.charAt(0).toUpperCase() + adjective.slice(1);
+      adjectiveSelect.appendChild(option);
+    });
+    
+    // Update this part in the populateSelects function
+    curseEffects.forEach((effect, index) => {
+      const option = document.createElement('option');
+      option.value = effect;
+      // Format better for display
+      option.textContent = `${index + 1}: ${effect.split('.')[0]}...`;
+      option.title = effect; // Add tooltip with full effect text
+      curseEffectSelect.appendChild(option);
+    });
+  }
+  
+  // Initialize the app when DOM is loaded
+  document.addEventListener('DOMContentLoaded', () => {
+    populateSelects();
+    randomizeCustomSelections(); // Set random initial values
+    switchMode('random'); // Start in random mode
+  });
+</script>
+
+<style>
+  :root {
+    mix-blend-mode: multiply;
+    background-color: #1a1207; /* Dark brown background */
+    color: goldenrod; /* Light text for contrast */
+  }
+  
+  #generatorCtn {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: fantasy, 'Times New Roman', serif;
+    background-color: #2D1E10; /* Dark brown background */
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+    text-align: left;
+    border: 5px solid #D4AF37; /* Gold border */
+  }
+  
+  h1 {
+    color: #D4AF37; /* Gold text */
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    text-align: center;
+  }
+  
+  #outputCtn {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin: 20px 0;
+    justify-content: center;
+  }
+  
+  #outfitDisplayEl {
+    flex: 1;
+    min-width: 300px;
+    background-color: #3D2B1A; /* Darker brown */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    border: 2px solid #D4AF37; /* Gold border */
+    color: #E8D4B9; /* Light text */
+  }
+  
+  #imageDisplayEl {
+    flex: 1;
+    min-width: 300px;
+    background-color: #3D2B1A; /* Darker brown */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 250px;
+    border: 2px solid #D4AF37; /* Gold border */
+  }
+  
+  #generateBtn, #regenerateImageBtn, #createCustomBtn, #regenerateCustomImageBtn, #randomizeCustomBtn {
+    background-color: #8B4513; /* Saddle brown */
+    color: gold; /* Light text */
+    border: 2px solid #D4AF37; /* Gold border */
+    padding: 12px 24px;
+    font-size: 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    font-weight: bold;
+  }
+  
+  #generateBtn:hover, #regenerateImageBtn:hover, #createCustomBtn:hover, #regenerateCustomImageBtn:hover, #randomizeCustomBtn:hover {
+    background-color: #A0522D; /* Sienna brown */
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.5); /* Gold glow */
+  }
+  
+  #generateBtn:disabled, #regenerateImageBtn:disabled, #createCustomBtn:disabled, #regenerateCustomImageBtn:disabled, #randomizeCustomBtn:disabled {
+    background-color: #5D4037; /* Dark brown */
+    border-color: #8D6E63; /* Lighter brown */
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+  
+  #loadingIndicatorEl {
+    font-style: italic;
+    color: #D4AF37; /* Gold text */
+  }
+  
+  #outfitNameEl {
+    color: #D4AF37; /* Gold text */
+    margin-top: 0;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+  }
+  
+  #outfitDescriptionEl {
+    line-height: 1.6;
+    color: gold; /* Light text */
+    white-space: pre-wrap;
+  }
+  
+  #buttonsCtn {
+    margin-top: 20px;
+  }
+  
+  /* Mode selection buttons */
+  .modeBtn {
+    background-color: #5D4037; /* Dark brown */
+    color: #D4AF37; /* Gold text */
+    border: 2px solid #D4AF37; /* Gold border */
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 8px 8px 0 0;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: bold;
+    margin: 0 5px;
+  }
+  
+  .modeBtn.active {
+    background-color: #8B4513; /* Saddle brown */
+    color: gold; /* Light text */
+    border-bottom: 2px solid #8B4513; /* Hide the bottom border */
+  }
+  
+  /* Custom creator styles */
+  .selectorCtn {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+  }
+  
+  .customSelect {
+    background-color: #3D2B1A; /* Darker brown */
+    color: gold; /* Light text */
+    border: 2px solid #D4AF37; /* Gold border */
+    padding: 10px;
+    border-radius: 5px;
+    font-family: fantasy, 'Times New Roman', serif;
+    cursor: pointer;
+    margin-top: 5px;
+    max-width: 100%;
+  }
+  
+  .customSelect option {
+    background-color: #2D1E10; /* Dark brown */
+    color: gold; /* Light text */
+    white-space: normal;
+    padding: 5px;
+    word-wrap: break-word;
+  }
+  
+  label {
+    color: #D4AF37; /* Gold text */
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+  
+  /* Special effects for the image */
+  #outfitImageEl {
+    transition: filter 0.3s;
+    filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.6)); /* Gold glow */
+    border: 3px solid #D4AF37; /* Gold border */
+    border-radius: 5px;
+  }
+  
+  #outfitImageEl:hover {
+    filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.8)); /* Enhanced gold glow on hover */
+  }
+  
+  /* Animation for title */
+  h1 {
+    animation: titleGlow 3s infinite alternate;
+  }
+  
+  @keyframes titleGlow {
+    from {
+      text-shadow: 1px 1px 5px rgba(212, 175, 55, 0.3);
+    }
+    to {
+      text-shadow: 0 0 15px rgba(212, 175, 55, 0.8), 0 0 20px rgba(212, 175, 55, 0.5);
+    }
+  }
+</style>

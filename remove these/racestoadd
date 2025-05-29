@@ -1,0 +1,69 @@
+Pampire
+Pampires are beings touched by the ancient curse of vampirism, yet their existence is uniquely intertwined with an unexpected and persistent reliance on childish comforts, much like the fabled Crinklehearts. They possess an inherent, often formidable strength and resilience, but this power is tethered to their need to consume blood or a suitable blood allegory. Many Pampires, particularly those associated with institutions like the Diaper School, have access to specially prepared blood allegories "on tap." Some even cultivate a refined palate for raw meats, such as steak tartare, as a substitute.
+A defining characteristic of Pampires is their physiological and magical incontinence, a trait shared with Crinklehearts, which necessitates the constant use of diapers. This often creates a stark contrast between their formidable vampiric capabilities and their seemingly juvenile dependency.
+
+Pampire Traits
+Your Pampire character has the following racial traits:
+Creature Type: You are a Humanoid.
+Ability Score Increase: Your Strength score increases by 2, and your Constitution score increases by 1.
+Age: Pampires reach physical maturity at a rate similar to humans but can live for several centuries, often maintaining a youthful appearance as long as they are regularly fed.
+Alignment: Pampires can be of any alignment. Their inherent needs might push them towards pragmatic or selfish choices, but individuals vary greatly. Those raised in structured environments like the Diaper School might adopt the alignments prevalent there.
+Size: Pampires are typically Medium, though some can be Small. You choose the size when you select this race.
+Speed: Your base walking speed is 30 feet.
+Darkvision: Accustomed to the night, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can’t discern color in darkness, only shades of gray.
+Padded Existence: Your vampiric nature has been uniquely altered. Pampires are physiologically and magically incontinent, requiring the use of diapers. You cannot be potty-trained by normal or magical means. Due to this, you qualify to take the Diaper Mastery feat at character creation (if available in your campaign) as you are considered Incontinent.
+Blood Thirst: You must consume at least one ration of fresh blood or a suitable blood allegory (such as those provided by the Diaper School, or equivalent amounts of very rare raw meat like steak tartare) every 24 hours to avoid suffering ill effects. If you go 24 hours without feeding, you gain one level of the Unfed condition. Successfully feeding removes all current levels of the Unfed condition and any associated penalties. The DM will track your feeding.
+Unliving Fortitude (When Fed): As long as you are not suffering from any levels of the Unfed condition, you do not need to sleep and are unaffected by magical sleep. Instead of sleeping, you can spend 4 hours in a state of inactive, conscious reverie to gain the benefits of a long rest. While in this state, you remain aware of your surroundings. Additionally, while fed, you do not need to breathe.
+Bat Form: Once per long rest, you can use your action to polymorph into a Tiny bat. This transformation lasts for 1 hour, or until you use a bonus action to revert to your true form, or until you drop to 0 hit points or die.
+While in bat form, your game statistics, including your mental ability scores, are replaced by the statistics of a standard bat, though you retain your alignment, personality, Hit Points, and current hit point total.
+You also retain your Padded Existence trait (your padding magically resizes with you for safety and comfort).
+You gain a flying speed of 30 feet. You cannot speak in bat form.
+While in bat form, you can use your action to make a special bite attack. This attack uses your Strength or Dexterity modifier (your choice) for the attack roll and deals 1 piercing damage. If the target is a willing creature, or a creature that is grappled, incapacitated, or restrained, you can feed from it as part of this attack. Feeding in this manner counts towards sating your Blood Thirst for the day.
+If you are reduced to 0 hit points in bat form, you revert to your true form, and any excess damage carries over.
+Languages: You can speak, read, and write Common and one other language of your choice (often Undercommon or a language fitting your background).
+
+
+Unfed Condition
+If you fail to meet your Blood Thirst requirement, you gain levels of the Unfed condition. These levels are cumulative. All levels of Unfed and their effects are removed once you consume one ration of blood or blood allegory.
+Unfed Level
+Effect
+1
+You gain one level of exhaustion. You have disadvantage on attack rolls. The DC for your Pampire racial abilities is reduced by 2.
+2
+You gain a second level of exhaustion. Your speed is reduced by 10 feet. You cannot use your Bat Form trait or other racial transformation abilities granted by your subrace. Your maximum hit points are reduced by your character level.
+3
+You gain a third level of exhaustion. You lose access to all active Pampire racial traits (including subrace abilities that require activation, but not passive benefits like Darkvision or ability score increases). Your maximum hit points are reduced by an amount equal to twice your character level. You have disadvantage on all ability checks and saving throws.
+4
+You gain a fourth level of exhaustion. Your hit point maximum is reduced to 1. You are incapacitated and can only take an action to attempt to feed if a source is within reach. If you do not feed within the next 24 hours, you perish.
+
+Note: Exhaustion levels gained from the Unfed condition are separate from normal exhaustion and are only removed by feeding.
+
+
+Pampire Subraces
+The touch of vampirism manifests differently among Pampires, leading to distinct subraces.
+
+Dampire
+Dampires are the most adaptable of their kind, often able to blend more seamlessly into mortal societies. They possess a diluted form of the vampiric curse, granting them resilience without some of the more debilitating weaknesses.
+Ability Score Increase: Your Charisma score increases by 1, and one other ability score of your choice increases by 1.
+Daywalker: You suffer no ill effects from direct sunlight.
+Resilient Undeath: You have advantage on saving throws against effects that specifically target or detect living creatures (such as a Detect Evil and Good spell used to find undead, or effects that state "a living creature must..."). You still count as a Humanoid for all other purposes. You retain the "Unliving Fortitude (When Fed)" trait benefits.
+Crinkle Count/Countess
+These Pampires embody the classic, aristocratic vampire archetype, albeit with the unique Pampire twist. They are powerful and charismatic but bear the traditional vampiric aversion to sunlight and radiant energy.
+Ability Score Increase: Your Strength score increases by an additional 1 (for a total of +3 from the base race), and your Charisma score increases by 2.
+Increased Speed: Your base walking speed increases to 35 feet.
+Sunlight Hypersensitivity: You have disadvantage on attack rolls and Wisdom (Perception) checks that rely on sight when you, the target of your attack, or whatever you are trying to perceive is in direct sunlight. If you start your turn in direct sunlight, you take 1d4 radiant damage. This damage ignores resistance and immunity.
+Radiant Vulnerability: You have vulnerability to radiant damage.
+Sunlight Mitigation: The damage from Sunlight Hypersensitivity can be prevented by taking extensive precautions. This might include wearing thick, completely obscuring clothing, using a specially treated, expensive parasol (costing at least 50 gp), or regular application of a potent, magically infused sunscreen (costing 10 gp per application, lasting 1 hour, often referred to as SPF 200). Spells like Resist Elements (if the DM rules it applies to this specific environmental damage) can also negate the damage for their duration. However, your Radiant Vulnerability cannot be negated by such mundane or low-level magical means.
+Nocturne Magic: You know two cantrips of your choice from the wizard spell list. Additionally, you can cast one 1st-level spell of your choice from the wizard spell list once with this trait and regain the ability to do so when you finish a long rest. Neither the cantrips nor the 1st-level spell can produce effects that create sunlight (like the Daylight spell) or primarily deal radiant damage. Charisma is your spellcasting ability for these spells.
+Satiated Power: If you consume a ration of blood or blood allegory when you are not suffering from any levels of the Unfed condition, you can choose to become Satiated. For the next hour, you gain a +2 bonus to your attack and damage rolls. You can only benefit from being Satiated once per long rest.
+
+Pampire-Bat
+Pampire-Bats have a deeper connection to the transformative aspects of vampirism, focusing their abilities on shapeshifting and stealth.
+Ability Score Increase: Your Charisma score increases by 2. Choose either your Dexterity or Strength score to increase by 2.
+Master of Forms: Your Bat Form trait improves. You can use it a number of times equal to your proficiency bonus per long rest. Additionally, when you use your Bat Form, you can choose to transform into any Small or Medium humanoid creature you have seen before, instead of a bat.
+Your game statistics, including mental ability scores, are replaced by the statistics of the chosen humanoid (the DM has the creature's game statistics), but you retain your alignment, personality, Hit Points, and current hit point total. You also retain your Padded Existence trait (your padding magically resizes).
+You do not gain any class features or special abilities of the form you take. Your equipment does not merge into your new form; it either falls to the ground in your space, is worn by it if the new form can wear it, or is carried by it if the new form can carry it.
+While in humanoid form, you can feed via a bite if the target is willing, grappled, incapacitated, or restrained, similar to your bat form's feeding. This transformation also lasts for 1 hour or until you use a bonus action to revert, drop to 0 HP, or die.
+
+
+

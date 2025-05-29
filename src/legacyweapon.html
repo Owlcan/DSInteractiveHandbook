@@ -1,0 +1,1747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legacy Weapon Creator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #2c2619;
+            background-image: url('https://www.transparenttextures.com/patterns/dark-wood.png');
+            color: #c7a81d;
+            line-height: 1.6;
+        }
+
+        .content-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            background-color: #2C2614;
+            background-image: url('https://www.transparenttextures.com/patterns/parchment.png');
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border: 12px solid #97740a;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Cinzel', serif;
+            color: #daac17;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            border-bottom: 2px solid #daac17;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+
+        .weapon-creator {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .section {
+            background-color: rgba(30, 28, 18, 0.7);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            width: 100%;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        select, button {
+            background: linear-gradient(to bottom, #c0a060, #8a7040);
+            color: #1a1a1a;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            font-family: 'Cinzel', serif;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            margin: 5px;
+        }
+
+        select {
+            width: 100%;
+            max-width: 400px;
+        }
+
+        button:disabled {
+            background: linear-gradient(to bottom, #7c7c7c, #5a5a5a);
+            cursor: not-allowed;
+        }
+
+        .slot-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .slot-value {
+            font-size: 24px;
+            margin: 0 15px;
+            font-weight: bold;
+            color: gold;
+        }
+
+        .control-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #2a2a2a;
+            color: white;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.2s;
+        }
+
+        .upgrades-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .upgrade-card {
+            background-color: rgba(39, 35, 25, 0.8);
+            border: 1px solid #c0a060;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .upgrade-title {
+            font-weight: bold;
+            color: gold;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .upgrade-type {
+            color: #c0a060;
+            font-style: italic;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .upgrade-cost {
+            margin-bottom: 10px;
+        }
+
+        .upgrade-description {
+            color: #e0d2b4;
+            margin-bottom: 15px;
+            font-size: 0.95em;
+        }
+
+        .selectUpgradeBtn {
+            background: linear-gradient(to bottom, #97740a, #6b5207);
+            color: #ffd700;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.2s;
+        }
+
+        .type-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .damage-type {
+            background-color: #D32F2F;
+        }
+
+        .special-type {
+            background-color: #455A64;
+        }
+
+        .utility-type {
+            background-color: #1976D2;
+        }
+
+        .class-type {
+            background-color: #FF8A65;
+        }
+
+        .slots-display {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        #weaponSummary {
+            background-color: rgba(39, 35, 25, 0.8);
+            border: 1px solid #c0a060;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 30px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        #decreaseSlotBtn:hover, #increaseSlotBtn:hover {
+            background-color: #3a3a3a;
+            transform: scale(1.05);
+        }
+
+        #confirmSlotsBtn:hover, #proceedToNextTierBtn:hover {
+            background: linear-gradient(to bottom, #d1b171, #9b8151);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+        }
+
+        .upgrade-card {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .upgrade-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(192, 160, 96, 0.3);
+        }
+
+        .selectUpgradeBtn:not([disabled]):hover {
+            filter: brightness(1.1);
+            transform: scale(1.05);
+        }
+
+        .slot-group {
+            display: flex;
+            border: 2px solid #c0a060;
+            border-radius: 15px;
+            padding: 5px;
+            background-color: rgba(192, 160, 96, 0.1);
+        }
+
+        .slot-circle {
+            width: 23px;
+            height: 23px;
+            border-radius: 50%;
+            margin: 5px;
+            background-color: #C0C0C0;
+            border: 2px solid #c0a060;
+            transition: background-color 0.3s;
+        }
+
+        .slot-filled-damage {
+            background: radial-gradient(circle, #FF5252, #D32F2F); /* Red gradient */
+        }
+
+        .slot-filled-special {
+            background: radial-gradient(circle, #607D8B, #455A64); /* Steel Blue gradient */
+        }
+
+        .slot-filled-utility {
+            background: radial-gradient(circle, #42A5F5, #1976D2); /* Blue gradient */
+        }
+
+        .slot-filled-class {
+            background: radial-gradient(circle, #FFAB91, #FF8A65); /* Orange gradient */
+        }
+    </style>
+<div id="legacy-Weapon" style="background-color: #1a1a1a; color: #e0d2b4; font-family: 'Cinzel', serif; padding: 20px; border: 2px solid #c0a060; border-radius: 5px; max-width: 1200px; margin: 0 auto; box-shadow: 0 0 20px rgba(192, 160, 96, 0.3);">
+  <h1 style="text-align: center; color: #ffd700; text-shadow: 0 0 5px #c0a060; margin-bottom: 30px;">Legacy Weapon Creator</h1>
+  
+  <!-- Progress Bar -->
+  <div id="progressBarCtn" style="width: 100%; height: 20px; background-color: #333; border: 1px solid #c0a060; margin: 20px 0; border-radius: 10px; overflow: hidden;">
+    <div id="progressBarEl" style="height: 100%; width: 25%; background: linear-gradient(to right, #c0a060, #ffd700); transition: width 0.5s;"></div>
+  </div>
+  <div style="text-align: center; margin-bottom: 30px; font-size: 1.2em;">
+    <span id="tierDisplay" style="background-color: rgba(192, 160, 96, 0.2); padding: 5px 15px; border-radius: 15px; border: 1px solid #c0a060;">Tier 1: Awakened Legacy Weapon</span>
+  </div>
+  
+  <!-- Slot Indicators -->
+  <div id="slotIndicatorsCtn" style="display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;"></div>
+  
+  <!-- Weapon Selection Section -->
+  <div id="weaponSelectionCtn" style="transition: all 0.3s ease;">
+    <h2 style="color: #ffd700; border-bottom: 1px solid #c0a060; padding-bottom: 10px; text-align: center;">Choose Your Weapon</h2>
+    <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
+      <select id="weaponTypeSelect" style="background-color: #2a2a2a; color: #e0d2b4; padding: 12px; border: 1px solid #c0a060; border-radius: 4px; width: 100%; margin-bottom: 20px; font-family: 'Cinzel', serif; cursor: pointer;">
+        <option value="" disabled selected>Select a weapon type...</option>
+      </select>
+    </div>
+    
+    <!-- Slot Selection -->
+    <div id="slotSelectionCtn" style="margin-top: 20px; display: none; animation: fadeIn 0.5s ease;">
+      <h2 style="color: #ffd700; border-bottom: 1px solid #c0a060; padding-bottom: 10px; text-align: center;">Select Initial Slots</h2>
+      <p style="text-align: center; margin-bottom: 20px;">How many slots would you like for your awakened weapon?</p>
+      <div style="display: flex; justify-content: center; align-items: center; gap: 15px;">
+        <button id="decreaseSlotBtn" style="background-color: #2a2a2a; color: #e0d2b4; border: 1px solid #c0a060; border-radius: 50%; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; font-size: 20px; cursor: pointer; transition: all 0.2s;">-</button>
+        <span id="slotCountDisplay" style="font-size: 2em; width: 60px; text-align: center; color: #ffd700; text-shadow: 0 0 3px #c0a060;">1</span>
+        <button id="increaseSlotBtn" style="background-color: #2a2a2a; color: #e0d2b4; border: 1px solid #c0a060; border-radius: 50%; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; font-size: 20px; cursor: pointer; transition: all 0.2s;">+</button>
+      </div>
+      <div style="margin-top: 30px; text-align: center;">
+        <button id="confirmSlotsBtn" style="background: linear-gradient(to bottom, #c0a060, #8a7040); color: #1a1a1a; border: none; border-radius: 4px; padding: 12px 24px; font-weight: bold; cursor: pointer; font-family: 'Cinzel', serif; transition: all 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.3);">Confirm Slots</button>
+      </div>
+    </div>
+    
+    <!-- Upgrade Selection -->
+    <div id="upgradeSelectionCtn" style="margin-top: 20px; display: none; animation: fadeIn 0.5s ease;">
+      <h2 style="color: #ffd700; border-bottom: 1px solid #c0a060; padding-bottom: 10px; text-align: center;">Choose Your Upgrades</h2>
+      <p style="text-align: center; margin-bottom: 20px; font-size: 1.2em;">
+        Slots Remaining: <span id="remainingSlotsDisplay" style="color: #ffd700; font-weight: bold;">1</span>
+      </p>
+      
+      <div id="upgradeOptionsCtn" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 20px;">
+        <!-- Upgrade options will be dynamically added here -->
+      </div>
+      
+      <div id="selectedUpgradesCtn" style="margin-top: 30px; background-color: rgba(42, 42, 42, 0.5); padding: 10px; border-radius: 5px; border: 1px solid #c0a060;">
+        <h3 style="color: #ffd700; text-align: center; margin-top: 0;">Selected Loadout</h3>
+        <ul id="selectedUpgradesList" style="list-style-type: none; padding: 0;">
+          <!-- Selected upgrades will be dynamically added here -->
+        </ul>
+      </div>
+      
+      <div style="margin-top: 30px; text-align: center;">
+        <button id="proceedToNextTierBtn" style="background: linear-gradient(to bottom, #c0a060, #8a7040); color: #1a1a1a; border: none; border-radius: 4px; padding: 12px 24px; font-weight: bold; cursor: pointer; font-family: 'Cinzel', serif; transition: all 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.3); display: none;">Proceed to Next Tier</button>
+      </div>
+      
+      <!-- Optional Weapon Customization Section -->
+      <div id="weaponCustomizationCtn" style="margin-top: 30px; display: none; animation: fadeIn 0.5s ease; background-color: rgba(42, 42, 42, 0.5); padding: 20px; border-radius: 5px; border: 1px solid #c0a060;">
+        <h3 style="color: #ffd700; text-align: center; margin-top: 0; border-bottom: 1px solid #c0a060; padding-bottom: 10px;">Personalize Your Weapon (Optional)</h3>
+        <p style="text-align: center; margin-bottom: 20px; font-size: 0.9em; color: #e0d2b4;">
+          Give your legendary weapon a name and appearance before proceeding.
+        </p>
+        
+        <div style="display: flex; flex-direction: column; gap: 15px; margin-top: 20px;">
+          <div>
+            <label for="weaponNameInput" style="display: block; margin-bottom: 5px; color: #ffd700;">Weapon Name:</label>
+            <input type="text" id="weaponNameInput" placeholder="Enter a name for your weapon..." style="width: 100%; padding: 12px; background-color: #2a2a2a; color: #e0d2b4; border: 1px solid #c0a060; border-radius: 4px; font-family: 'Cinzel', serif;">
+          </div>
+          
+          <div>
+            <label for="weaponImageInput" style="display: block; margin-bottom: 5px; color: #ffd700;">Weapon Image URL (optional):</label>
+            <input type="text" id="weaponImageInput" placeholder="Enter an image URL..." style="width: 100%; padding: 12px; background-color: #2a2a2a; color: #e0d2b4; border: 1px solid #c0a060; border-radius: 4px; font-family: 'Cinzel', serif;">
+          </div>
+          
+          <div id="imagePreviewCtn" style="display: none; margin: 15px auto; max-width: 300px; border: 1px solid #c0a060; padding: 5px; background-color: #2a2a2a;">
+            <img id="imagePreviewEl" src="" alt="Weapon Preview" style="max-width: 100%; max-height: 200px; display: block; margin: 0 auto;">
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Weapon Summary -->
+    <div id="weaponSummaryCtn" style="margin-top: 20px; display: none; animation: fadeIn 0.5s ease;">
+      <h2 style="color: #ffd700; border-bottom: 1px solid #c0a060; padding-bottom: 10px; text-align: center;">Your Legacy Weapon</h2>
+      <div id="weaponSummaryContent">
+        <!-- Weapon summary will be dynamically added here -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  #decreaseSlotBtn:hover, #increaseSlotBtn:hover {
+    background-color: #3a3a3a;
+    transform: scale(1.05);
+  }
+  
+  #confirmSlotsBtn:hover, #proceedToNextTierBtn:hover {
+    background: linear-gradient(to bottom, #d1b171, #9b8151);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+  }
+  
+  .upgrade-card {
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  
+  .upgrade-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(192, 160, 96, 0.3);
+  }
+  
+  .selectUpgradeBtn:not([disabled]):hover {
+    filter: brightness(1.1);
+    transform: scale(1.05);
+  }
+  
+  .slot-group {
+    display: flex;
+    border: 2px solid #c0a060;
+    border-radius: 15px;
+    padding: 5px;
+    background-color: rgba(192, 160, 96, 0.1);
+  }
+  
+  .slot-circle {
+    width: 23px;
+    height: 23px;
+    border-radius: 50%;
+    margin: 5px;
+    background-color: #C0C0C0;
+    border: 2px solid #c0a060;
+    transition: background-color 0.3s;
+  }
+  
+  .slot-filled-damage {
+    background: radial-gradient(circle, #FF5252, #D32F2F); /* Red gradient */
+  }
+  
+  .slot-filled-special {
+    background: radial-gradient(circle, #607D8B, #455A64); /* Steel Blue gradient */
+  }
+  
+  .slot-filled-utility {
+    background: radial-gradient(circle, #42A5F5, #1976D2); /* Blue gradient */
+  }
+  
+  .slot-filled-class {
+    background: radial-gradient(circle, #FFAB91, #FF8A65); /* Orange gradient */
+  }
+</style>
+
+<script>
+  // Weapon data with comprehensive details
+  const weaponsData = {
+    "Simple": [
+      {
+        "name": "Club",
+        "damage_dice": "1d4",
+        "damage_type": "bludgeoning",
+        "light": true,
+        "finesse": false,
+        "special": null,
+        "category": "simple melee"
+      },
+      {
+        "name": "Dagger",
+        "damage_dice": "1d4",
+        "damage_type": "piercing",
+        "light": true,
+        "finesse": true,
+        "special": "Thrown (range 20/60)",
+        "category": "simple melee"
+      },
+      {
+        "name": "Greatclub",
+        "damage_dice": "1d8",
+        "damage_type": "bludgeoning",
+        "light": false,
+        "finesse": false,
+        "special": "Two-handed",
+        "category": "simple melee"
+      },
+      {
+        "name": "Handaxe",
+        "damage_dice": "1d6",
+        "damage_type": "slashing",
+        "light": true,
+        "finesse": false,
+        "special": "Thrown (range 20/60)",
+        "category": "simple melee"
+      },
+      {
+        "name": "Javelin",
+        "damage_dice": "1d6",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": "Thrown (range 30/120)",
+        "category": "simple melee"
+      },
+      {
+        "name": "Light Hammer",
+        "damage_dice": "1d4",
+        "damage_type": "bludgeoning",
+        "light": true,
+        "finesse": false,
+        "special": "Thrown (range 20/60)",
+        "category": "simple melee"
+      },
+      {
+        "name": "Mace",
+        "damage_dice": "1d6",
+        "damage_type": "bludgeoning",
+        "light": false,
+        "finesse": false,
+        "special": null,
+        "category": "simple melee"
+      },
+      {
+        "name": "Quarterstaff",
+        "damage_dice": "1d6",
+        "damage_type": "bludgeoning",
+        "light": false,
+        "finesse": false,
+        "special": "Versatile (1d8)",
+        "category": "simple melee"
+      },
+      {
+        "name": "Sickle",
+        "damage_dice": "1d4",
+        "damage_type": "slashing",
+        "light": true,
+        "finesse": false,
+        "special": null,
+        "category": "simple melee"
+      },
+      {
+        "name": "Spear",
+        "damage_dice": "1d6",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": "Thrown (range 20/60), versatile (1d8)",
+        "category": "simple melee"
+      },
+      {
+        "name": "Kunai",
+        "damage_dice": "1d4",
+        "damage_type": "piercing",
+        "light": true,
+        "finesse": true,
+        "special": "Thrown (range 20/60), can be used as a climbing tool",
+        "category": "simple melee"
+      }
+    ],
+    "Melee": [
+      {
+        "name": "Battleaxe",
+        "damage_dice": "1d8",
+        "damage_type": "slashing",
+        "light": false,
+        "finesse": false,
+        "special": "Versatile (1d10)",
+        "category": "martial melee"
+      },
+      {
+        "name": "Flail",
+        "damage_dice": "1d8",
+        "damage_type": "bludgeoning",
+        "light": false,
+        "finesse": false,
+        "special": null,
+        "category": "martial melee"
+      },
+      {
+        "name": "Glaive",
+        "damage_dice": "1d10",
+        "damage_type": "slashing",
+        "light": false,
+        "finesse": false,
+        "special": "Heavy, reach, two-handed",
+        "category": "martial melee"
+      },
+      {
+        "name": "Greataxe",
+        "damage_dice": "1d12",
+        "damage_type": "slashing",
+        "light": false,
+        "finesse": false,
+        "special": "Heavy, two-handed",
+        "category": "martial melee"
+      },
+      {
+        "name": "Greatsword",
+        "damage_dice": "2d6",
+        "damage_type": "slashing",
+        "light": false,
+        "finesse": false,
+        "special": "Heavy, two-handed",
+        "category": "martial melee"
+      },
+      {
+        "name": "Halberd",
+        "damage_dice": "1d10",
+        "damage_type": "slashing",
+        "light": false,
+        "finesse": false,
+        "special": "Heavy, reach, two-handed",
+        "category": "martial melee"
+      },
+      {
+        "name": "Lance",
+        "damage_dice": "1d12",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": "Reach, special (disadvantage when attacking within 5 feet)",
+        "category": "martial melee"
+      },
+      {
+        "name": "Longsword",
+        "damage_dice": "1d8",
+        "damage_type": "slashing",
+        "light": false,
+        "finesse": false,
+        "special": "Versatile (1d10)",
+        "category": "martial melee"
+      },
+      {
+        "name": "Maul",
+        "damage_dice": "2d6",
+        "damage_type": "bludgeoning",
+        "light": false,
+        "finesse": false,
+        "special": "Heavy, two-handed",
+        "category": "martial melee"
+      },
+      {
+        "name": "Morningstar",
+        "damage_dice": "1d8",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": null,
+        "category": "martial melee"
+      },
+      {
+        "name": "Pike",
+        "damage_dice": "1d10",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": "Heavy, reach, two-handed",
+        "category": "martial melee"
+      },
+      {
+        "name": "Rapier",
+        "damage_dice": "1d8",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": true,
+        "special": null,
+        "category": "martial melee"
+      },
+      {
+        "name": "Scimitar",
+        "damage_dice": "1d6",
+        "damage_type": "slashing",
+        "light": true,
+        "finesse": true,
+        "special": null,
+        "category": "martial melee"
+      },
+      {
+        "name": "Shortsword",
+        "damage_dice": "1d6",
+        "damage_type": "piercing",
+        "light": true,
+        "finesse": true,
+        "special": null,
+        "category": "martial melee"
+      },
+      {
+        "name": "Trident",
+        "damage_dice": "1d6",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": "Thrown (range 20/60), versatile (1d8)",
+        "category": "martial melee"
+      },
+      {
+        "name": "War Pick",
+        "damage_dice": "1d8",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": null,
+        "category": "martial melee"
+      },
+      {
+        "name": "Warhammer",
+        "damage_dice": "1d8",
+        "damage_type": "bludgeoning",
+        "light": false,
+        "finesse": false,
+        "special": "Versatile (1d10)",
+        "category": "martial melee"
+      },
+      {
+        "name": "Whip",
+        "damage_dice": "1d4",
+        "damage_type": "slashing",
+        "light": false,
+        "finesse": true,
+        "special": "Reach",
+        "category": "martial melee"
+      },
+      {
+        "name": "Wrist Blades",
+        "damage_dice": "1d8",
+        "damage_type": "slashing",
+        "light": true,
+        "finesse": true,
+        "special": "Light, can be concealed, counts as unarmed strike",
+        "category": "martial melee"
+      },
+      {
+        "name": "Chakram",
+        "damage_dice": "1d6",
+        "damage_type": "slashing",
+        "light": true,
+        "finesse": true,
+        "special": "Thrown (range 30/120), returns to wielder's hand on a successful hit",
+        "category": "martial melee"
+      },
+      {
+        "name": "Cestus",
+        "damage_dice": "1d6",
+        "damage_type": "bludgeoning",
+        "light": true,
+        "finesse": false,
+        "special": "Light, counts as unarmed strike",
+        "category": "martial melee"
+      },
+      {
+        "name": "Scythe",
+        "damage_dice": "1d10",
+        "damage_type": "slashing",
+        "light": false,
+        "finesse": false,
+        "special": "Two-handed, reach",
+        "category": "martial melee"
+      },
+      {
+        "name": "Katana",
+        "damage_dice": "1d8",
+        "damage_type": "slashing",
+        "light": false,
+        "finesse": true,
+        "special": "Versatile (1d10)",
+        "category": "martial melee"
+      },
+      {
+        "name": "Sai",
+        "damage_dice": "1d4",
+        "damage_type": "piercing",
+        "light": true,
+        "finesse": true,
+        "special": "Light, special (can attempt to disarm as bonus action)",
+        "category": "martial melee"
+      }
+    ],
+    "Simple Ranged": [
+      {
+        "name": "Light Crossbow",
+        "damage_dice": "1d8",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": "Ammunition (range 80/320), loading, two-handed",
+        "category": "simple ranged"
+      },
+      {
+        "name": "Dart",
+        "damage_dice": "1d4",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": true,
+        "special": "Thrown (range 20/60)",
+        "category": "simple ranged"
+      },
+      {
+        "name": "Shortbow",
+        "damage_dice": "1d6",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": "Ammunition (range 80/320), two-handed",
+        "category": "simple ranged"
+      },
+      {
+        "name": "Sling",
+        "damage_dice": "1d4",
+        "damage_type": "bludgeoning",
+        "light": false,
+        "finesse": false,
+        "special": "Ammunition (range 30/120)",
+        "category": "simple ranged"
+      },
+      {
+        "name": "Boomerang",
+        "damage_dice": "1d4",
+        "damage_type": "bludgeoning",
+        "light": true,
+        "finesse": true,
+        "special": "Thrown (range 30/120), returns to wielder's hand on a miss",
+        "category": "simple ranged"
+      }
+    ],
+    "Melee Ranged": [
+      {
+        "name": "Hand Crossbow",
+        "damage_dice": "1d6",
+        "damage_type": "piercing",
+        "light": true,
+        "finesse": false,
+        "special": "Ammunition (range 30/120), light, loading",
+        "category": "martial ranged"
+      },
+      {
+        "name": "Heavy Crossbow",
+        "damage_dice": "1d10",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": "Ammunition (range 100/400), heavy, loading, two-handed",
+        "category": "martial ranged"
+      },
+      {
+        "name": "Longbow",
+        "damage_dice": "1d8",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": "Ammunition (range 150/600), heavy, two-handed",
+        "category": "martial ranged"
+      },
+      {
+        "name": "Net",
+        "damage_dice": "0",
+        "damage_type": "none",
+        "light": false,
+        "finesse": false,
+        "special": "Special (restrain, one target), thrown (range 5/15)",
+        "category": "martial ranged"
+      },
+      {
+        "name": "Repeating Crossbow",
+        "damage_dice": "1d8",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": "Ammunition (range 80/320), reload (5), two-handed",
+        "category": "martial ranged"
+      },
+      {
+        "name": "Exploding Bolts Crossbow",
+        "damage_dice": "2d8",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": "Ammunition (range 60/240), reload (3), two-handed, explosive",
+        "category": "martial ranged"
+      },
+      {
+        "name": "Harpoon Gun",
+        "damage_dice": "1d10",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": "Ammunition (range 30/120), reload (1), two-handed, tether",
+        "category": "martial ranged"
+      },
+      {
+        "name": "Heavy Repeating Crossbow",
+        "damage_dice": "1d10",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": "Ammunition (range 100/400), reload (3), heavy, two-handed",
+        "category": "martial ranged"
+      }
+    ],
+    "Renaissance Firearms": [
+      {
+        "name": "Pistol",
+        "damage_dice": "1d10",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": "Ammunition (range 30/90), loading, firearm",
+        "category": "renaissance ranged"
+      },
+      {
+        "name": "Musket",
+        "damage_dice": "1d12",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": "Ammunition (range 40/120), loading, two-handed, firearm",
+        "category": "renaissance ranged"
+      },
+      {
+        "name": "Blunderbuss",
+        "damage_dice": "2d8",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": "Ammunition (range 15/30), loading, two-handed, firearm, scatter",
+        "category": "renaissance ranged"
+      },
+      {
+        "name": "Pepperbox",
+        "damage_dice": "1d8",
+        "damage_type": "piercing",
+        "light": true,
+        "finesse": false,
+        "special": "Ammunition (range 30/90), firearm, reload (6)",
+        "category": "renaissance ranged"
+      },
+      {
+        "name": "Arquebus",
+        "damage_dice": "1d12",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": "Ammunition (range 50/150), loading, two-handed, firearm",
+        "category": "renaissance ranged"
+      },
+      {
+        "name": "Hand Mortar",
+        "damage_dice": "2d8",
+        "damage_type": "bludgeoning",
+        "light": false,
+        "finesse": false,
+        "special": "Ammunition (range 30/90), explosive, reload (1), firearm",
+        "category": "renaissance ranged"
+      },
+      {
+        "name": "Hand Cannon",
+        "damage_dice": "2d10",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": "Ammunition (range 20/60), reload (1), heavy, firearm",
+        "category": "renaissance ranged"
+      }
+    ],
+    "Modern Firearms": [
+      {
+        "name": "Revolver",
+        "damage_dice": "1d10",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": "Ammunition (range 40/120), firearm, reload (6)",
+        "category": "modern ranged"
+      },
+      {
+        "name": "Shotgun",
+        "damage_dice": "2d10",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": "Ammunition (range 20/60), reload (2), two-handed, firearm, scatter",
+        "category": "modern ranged"
+      },
+      {
+        "name": "Double-Barrel Shotgun",
+        "damage_dice": "2d10",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": "Ammunition (range 20/60), reload (2), two-handed, firearm, scatter",
+        "category": "modern ranged"
+      },
+      {
+        "name": "Hunting Rifle",
+        "damage_dice": "2d10",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": "Ammunition (range 80/240), reload (5), two-handed, firearm",
+        "category": "modern ranged"
+      },
+      {
+        "name": "Automatic Rifle",
+        "damage_dice": "2d8",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": "Ammunition (range 80/240), reload (30), two-handed, firearm, burst fire",
+        "category": "modern ranged"
+      },
+      {
+        "name": "Sniper Rifle",
+        "damage_dice": "2d12",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": "Ammunition (range 150/600), reload (4), two-handed, firearm",
+        "category": "modern ranged"
+      },
+      {
+        "name": "Grenade Launcher",
+        "damage_dice": "3d10",
+        "damage_type": "bludgeoning",
+        "light": false,
+        "finesse": false,
+        "special": "Ammunition (range 60/180), reload (1), two-handed, firearm, explosive",
+        "category": "modern ranged"
+      },
+      {
+        "name": "Flamethrower",
+        "damage_dice": "3d6",
+        "damage_type": "fire",
+        "light": false,
+        "finesse": false,
+        "special": "Ammunition (range 15/30), energy, reload (5), two-handed, scatter, explosive",
+        "category": "modern ranged"
+      }
+    ],
+    "Magic": [
+      {
+        "name": "Eldritch Staff",
+        "damage_dice": "1d8",
+        "damage_type": "bludgeoning",
+        "light": false,
+        "finesse": false,
+        "special": "Versatile (1d10), magic (can also cast 3 cantrips)",
+        "category": "magical melee"
+      },
+      {
+        "name": "Crystal Focus Staff",
+        "damage_dice": "2d6",
+        "damage_type": "force",
+        "light": false,
+        "finesse": false,
+        "special": "Magic, versatile (2d8)",
+        "category": "magical melee"
+      },
+      {
+        "name": "Energy Whip",
+        "damage_dice": "2d6",
+        "damage_type": "force",
+        "light": true,
+        "finesse": true,
+        "special": "Reach, energy",
+        "category": "magical melee"
+      },
+      {
+        "name": "Plasma Blade",
+        "damage_dice": "2d8",
+        "damage_type": "fire",
+        "light": true,
+        "finesse": true,
+        "special": "Energy",
+        "category": "futuristic melee"
+      },
+      {
+        "name": "Vibro Sword",
+        "damage_dice": "3d6",
+        "damage_type": "slashing",
+        "light": false,
+        "finesse": true,
+        "special": "Energy, versatile (3d8)",
+        "category": "futuristic melee"
+      },
+      {
+        "name": "Gravity Hammer",
+        "damage_dice": "3d10",
+        "damage_type": "bludgeoning",
+        "light": false,
+        "finesse": false,
+        "special": "Heavy, two-handed, energy, concussive (targets within 10 feet must make a Strength save or be knocked prone)",
+        "category": "futuristic melee"
+      },
+      {
+        "name": "Photon Glaive",
+        "damage_dice": "2d10",
+        "damage_type": "radiant",
+        "light": false,
+        "finesse": false,
+        "special": "Reach, heavy, two-handed, energy",
+        "category": "futuristic melee"
+      },
+      {
+        "name": "Thermal Blade",
+        "damage_dice": "1d8",
+        "damage_type": "slashing",
+        "light": true,
+        "finesse": true,
+        "special": "Light, deals additional 1d6 fire damage",
+        "category": "futuristic melee"
+      },
+      {
+        "name": "Quantum Dagger",
+        "damage_dice": "1d4",
+        "damage_type": "piercing",
+        "light": true,
+        "finesse": true,
+        "special": "Thrown (range 20/60), returns to wielder's hand after being thrown, energy, deals additional 1d6 force damage",
+        "category": "futuristic melee"
+      }
+    ],
+    "Futuristic Firearms": [
+      {
+        "name": "Laser Pistol",
+        "damage_dice": "3d6",
+        "damage_type": "fire",
+        "light": true,
+        "finesse": false,
+        "special": "Ammunition (range 40/120), energy, reload (20)",
+        "category": "futuristic ranged"
+      },
+      {
+        "name": "Laser Rifle",
+        "damage_dice": "3d8",
+        "damage_type": "fire",
+        "light": false,
+        "finesse": false,
+        "special": "Ammunition (range 100/300), energy, reload (10), two-handed",
+        "category": "futuristic ranged"
+      }
+    ]
+  };
+  
+  // Data for upgrades
+  const tierUpgrades = {
+    1: [
+      {
+        name: "Maximized Base Damage",
+        description: "The weapon's base damage dice are maximized (e.g., a Greatsword deals 12+ STR mod; a Longsword deals 8+ STR/Dex mod). Only additional bonus dice still require rolling.",
+        cost: 2,
+        type: "Damage Enhancement"
+      },
+      {
+        name: "Potent Elemental Core",
+        description: "Choose an element (Fire, Cold, Acid, Lightning, Poison, Thunder, Force, Radiant, or Necrotic). On every hit, the weapon deals an extra 1d10 damage of the chosen type.",
+        cost: 1,
+        type: "Damage Enhancement"
+      },
+      {
+        name: "Rending Strike",
+        description: "On a hit, the target begins to bleed—taking an extra 1 damage at the start of each of its turns for a limited duration. This bleeding effect can stack up to three times until halted by stabilization or healing.",
+        cost: 1,
+        type: "Damage Enhancement"
+      },
+      {
+        name: "Forceful Impact",
+        description: "When you hit, the weapon unleashes a burst of kinetic force. It deals an extra 1d6 force damage. If the target fails a DC 13 Strength save, it's knocked back 10 feet or knocked prone- user's choice.",
+        cost: 1,
+        type: "Damage Enhancement"
+      },
+      {
+        name: "Reliable Weakening",
+        description: "On a hit, the target is forced to have disadvantage on attack rolls or saving throws (wielder's choice), a negative -2 to AC, and halved movement speed, until the end of the encounter or until they or the caster are reduced to 0HP. Remove Curse or Restoration will end this effect immediately. This effect is a legendary condition in order to bypass immunities to mundane and magical weakening.",
+        cost: 2,
+        type: "Special Effects / Status"
+      },
+      {
+        name: "Commanding Presence",
+        description: "Once per turn, when you hit a creature, you can command it with decisive authority. The target must succeed on a DC 14 Wisdom save or be forced into a Potty Check—with disadvantage on its check. With a particularly forceful command (subject to DM discretion), you may compel the target to automatically fail its check. This effect channels the humbling impact of Diaper School discipline.",
+        cost: 1,
+        type: "Special Effects / Status"
+      },
+      {
+        name: "Diaper Drench",
+        description: "Unleash a burst of enchanted soiling energy reminiscent of Diaper School lessons. On a hit, the effect expends 2 charges from the target's diaper, destabilizing its composure. The target must make a DC 12 Dexterity save or have its movement halved until the start of your next turn.",
+        cost: 1,
+        type: "Special Effects / Status"
+      },
+      {
+        name: "Infantile Discombobulation",
+        description: "On a hit, the target is bombarded by a wave of infantile chaos, forcing it to immediately make a Potty Check with disadvantage. On a failed check, the target suffers additional disruption—incurring disadvantage on its next attack roll or ability check until the start of your next turn. This amplified effect echoes Diaper School's unorthodox discipline.",
+        cost: 1,
+        type: "Special Effects / Status"
+      },
+      {
+        name: "Reactive Guard",
+        description: "When a creature targets you with an attack, you can use your reaction to impose disadvantage on the attack roll—a swift defensive counter.",
+        cost: 1,
+        type: "Combat Utility"
+      },
+      {
+        name: "Phase Shift",
+        description: "As a bonus action, become incorporeal until the start of your next turn. While incorporeal, you gain resistance to non-magical bludgeoning, piercing, and slashing damage and may move through creatures and objects as if they were difficult terrain (exiting an object teleports you to the nearest open space and deals minor force damage).",
+        cost: 1,
+        type: "Combat Utility"
+      },
+      {
+        name: "Fleetfoot Advance",
+        description: "As a bonus action, gain an extra 5 feet of movement and advantage on the first Acrobatics check made before the end of your turn—ideal for repositioning or evading danger.",
+        cost: 1,
+        type: "Combat Utility"
+      },
+      {
+        name: "Diaper Dash",
+        description: "When targeted by a melee attack, use your reaction to trigger a swift burst reminiscent of Diaper School drills. Until the start of your next turn, your AC increases by +2 and foes making opportunity attacks suffer disadvantage.",
+        cost: 1,
+        type: "Combat Utility"
+      },
+      {
+        name: "Martial Mysticism",
+        description: "Infuse your weapon with mystical martial energy, allowing it to be treated as a monk weapon for you. When you wield this weapon, you may utilize it as part of a flurry of blows—enabling an extra unarmed strike as a bonus action. This upgrade enhances your class skills, blending finesse with esoteric martial discipline. On top of this benefit, the weapon gains +1 to attack and damage, and once per encounter you may channel a single elemental force through your strikes in place of standard magical melee damage.",
+        cost: 2,
+        type: "Class Skill Expansion"
+      },
+      {
+        name: "Maneuver Mastery",
+        description: "Your fighter refines the tactical acumen of their weapon itself by embuing it with its own knowledge- arcane or mechanical- of combat. When you take this upgrade, you gain one maneuver slot—providing a battle dice of 1d10 that may be used once per encounter per slot invested. If you already possess a maneuver pool (as with the Battle Master archetype), this upgrade grants one additional maneuver use and one additional batle die, enhancing your tactical flexibility.",
+        cost: 2,
+        type: "Class Skill Expansion"
+      },
+      {
+        name: "Arcanum Blade",
+        description: "Channel your divine or arcane energy through your weapon: once per encounter, when you make a melee or ranged weapon attack with a to‐hit roll, you can choose to imbue that strike with the full effect of a 1st-level damage-dealing spell that requires an attack roll. This enhanced strike does not count as casting a spell, allowing it to stack with your other magical attack abilities.",
+        cost: 2,
+        type: "Class Skill Expansion"
+      },
+      {
+        name: "Eldritch Weapon Fusion",
+        description: "Learn to channel your eldritch blast energy directly through your weapon. A number of times per encounter equal to your charisma bonus plus proficiency, when you hit with a melee weapon attack, you can fuse the raw force of eldritch magic into that strike. This fusion adds extra force damage equal to 1d10 (or your eldritch blast damage die) to the attack. This additional damage does not count as casting a spell, letting you chain this power with other magical strikes and class abilities.",
+        cost: 2,
+        type: "Class Skill Expansion"
+      },
+      {
+        name: "Dynamic Marking",
+        description: "Your mastery of tracking reveals the hidden kinships among foes. When you cast Hunter's Mark on a target, your mystical insight extends the mark to all other enemies belonging to that target's subgroup (for example, all ossokin or all darkling sharks). Furthermore, if the initially marked enemy is defeated and you shift your mark to a new foe, the subgroup that was marked remains under your influence for the duration of the encounter.",
+        cost: 2,
+        type: "Class Skill Expansion"
+      },
+      {
+        name: "Weapon Modularization",
+        description: "Physically attach one of your magical cannons to your melee weapon to form a hybridized weapons platform. During your melee attack action, you may, a number of times per encounter equal to your Intelligence bonus plus your proficiency bonus, coordinate your cannon to make its full attack as part of your own action—without using the cannon's separate action economy.",
+        cost: 2,
+        type: "Class Skill Expansion"
+      },
+      {
+        name: "Translocational Strike",
+        description: "Inverse the art of weapon-summoning! When you throw your weapon or ammunition, on a subsequent turn you can teleport to its location in a burst of electricity or force (your choice) dealing 2d6 damage (Dex save half) to any creature within 5ft of your destination square. If you then make a qualifying attack—such as a sneak attack, brutal strike, or flurry of blows—on that turn, that attack deals an additional 1d6 damage due to the sudden kinetic impact of your translocation. This ability can be used once per encounter.",
+        cost: 1,
+        type: "Mobility & Damage Enhancement"
+      },
+      {
+        name: "Spell Parrying",
+        description: "When targeted by an incoming spell attack, you can use your reaction to attempt a parry, partially deflecting the spell's effects. On a successful reaction check, reduce the damage or effect by half.",
+        cost: 2,
+        type: "Defensive Magic"
+      },
+      {
+        name: "Enhanced Parrying",
+        description: "Expand your defensive parry capabilities. Gain additional uses of your parry feature per day equal to your relevant ability modifier plus your proficiency bonus, allowing you to deflect more incoming attacks.",
+        cost: 1,
+        type: "Defensive Utility"
+      },
+      {
+        name: "Enhanced Dual-Wielding (Off-Hand)",
+        description: "Improve your off-hand weapon proficiency. This upgrade explicitly enhances your off-hand attacks by increasing damage and accuracy when dual-wielding, allowing for more fluid and lethal combinations in combat.",
+        cost: 1,
+        type: "Off-Hand Combat"
+      },
+      {
+        name: "Ammo Magazine Enhancement",
+        description: "When you reload your ranged weapon, this enhancement activates—once per encounter—and fills your magazine with 10 charges. For the remainder of the encounter, on any ranged attack you make, you may expend charges a number of times equal to your proficiency bonus to apply one of the following effects to your next attack (each effect consumes the designated number of charges):\n\n• Bonus Weapon Dice: Spend 1 charge to add an extra weapon damage die to the attack.\n• Advantage on Attack Roll: Spend 1 charge to gain advantage on the attack roll.\n• Counterspell Bullet: Spend 5 charges (usable as a reaction) to fire a shot that, on a hit, counteracts a spell in a manner similar to Counterspell (using DC = 10 + spell level).\n• Magic Bullet Missile: Spend 4 charges to fire a missile that automatically hits; however, the weapon's damage dice are reduced by one die step for that attack.\n• Cantrip Shot: Spend 3 charges (usable as a reaction) to cast a damaging cantrip through your firearm as an opportunity attack without using your normal spellcasting resources.\n\nOnce you reload or activate this feature again, you regain a new pool of 10 charges (this reload/activation can occur only once per encounter).",
+        cost: 2,
+        type: "Ammunition Utility"
+      },
+      {
+        name: "Minor Spell Storing Magazine",
+        description: "Integrate minor spell-storing capabilities into your firearm's magazine. This upgrade allows you to store a low-level spell within your ammo, which is discharged upon impact for an additional magical effect when you fire your weapon.",
+        cost: 1,
+        type: "Ammunition Utility"
+      },
+      {
+        name: "Fulminant Defense",
+        description: "Activate this power as a reaction to an incoming melee attack. Initiate a contest (similar to a grapple) against the attacker; if you win, the attack is negated. In addition, you may immediately follow up with a riposte in the form of a full attack action counter.",
+        cost: 2,
+        type: "Reactive Defense"
+      },
+      {
+        name: "Underpants Exchange",
+        description: "When an effect forces you to make a Potty Check—or as a reaction to any attack or effect that might cause an unfortunate accident—you may choose to voluntarily fail that check. If you do, you and the triggering target swap underpants. For the rest of the turn, the target suffers disadvantage on attack rolls and ability checks due to its embarrassing, disorienting wardrobe malfunction, while you gain a +2 bonus to AC until the start of your next turn.",
+        cost: 1,
+        type: "Special Effects / Status"
+      }
+    ]
+  };
+  
+  // Tier information
+  const tiers = {
+    1: {
+      name: "Awakened Legacy Weapon",
+      slots: 1,
+      upgradeCost: 1
+    },
+    2: {
+      name: "Enhanced Legacy Weapon",
+      slots: 2,
+      upgradeCost: 2
+    },
+    3: {
+      name: "Potent Legacy Weapon",
+      slots: 3,
+      upgradeCost: 3
+    },
+    4: {
+      name: "Ascendant Legacy Weapon",
+      slots: 4, 
+      upgradeCost: 4
+    }
+  };
+  
+  // Global state
+  let state = {
+    currentTier: 1,
+    selectedWeapon: "",
+    totalSlots: 1,
+    remainingSlots: 1,
+    selectedUpgrades: [],
+    usedSlots: [],  // Track which slots are used and their types
+    weaponName: "", // Added for storing custom weapon name
+    weaponImageUrl: "" // Added for storing weapon image URL
+  };
+  
+  // Initialize
+  document.addEventListener("DOMContentLoaded", () => {
+    // Set up Google Font
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = "https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap";
+    document.head.appendChild(link);
+    
+    // Populate weapon dropdown
+    populateWeaponDropdown();
+    
+    // Set up event listeners
+    weaponTypeSelect.addEventListener("change", onWeaponSelected);
+    decreaseSlotBtn.addEventListener("click", decreaseSlots);
+    increaseSlotBtn.addEventListener("click", increaseSlots);
+    confirmSlotsBtn.addEventListener("click", confirmSlots);
+    proceedToNextTierBtn.addEventListener("click", proceedToNextTier);
+    
+    // Added event listeners for weapon customization
+    if (weaponImageInput) {
+      weaponImageInput.addEventListener("input", updateImagePreview);
+    }
+    if (weaponNameInput) {
+      weaponNameInput.addEventListener("input", updateWeaponName);
+    }
+  });
+  
+  // Function to populate weapon dropdown with formatted options
+  function populateWeaponDropdown() {
+    weaponTypeSelect.innerHTML = '<option value="" disabled selected>Select a weapon type...</option>';
+    
+    for (const [category, weapons] of Object.entries(weaponsData)) {
+      const optgroup = document.createElement('optgroup');
+      optgroup.label = category;
+      
+      weapons.forEach(weapon => {
+        const option = document.createElement('option');
+        option.value = weapon.name;
+        option.textContent = `${weapon.name} (${weapon.damage_dice} ${weapon.damage_type}, ${weapon.category})`;
+        optgroup.appendChild(option);
+      });
+      
+      weaponTypeSelect.appendChild(optgroup);
+    }
+  }
+  
+  function onWeaponSelected() {
+    state.selectedWeapon = weaponTypeSelect.value;
+    slotSelectionCtn.style.display = "block";
+    updateSlotDisplay();
+  }
+  
+  function decreaseSlots() {
+    if (state.totalSlots > 1) {
+      state.totalSlots--;
+      updateSlotDisplay();
+    }
+  }
+  
+  function increaseSlots() {
+    state.totalSlots++;
+    updateSlotDisplay();
+  }
+  
+  function updateSlotDisplay() {
+    slotCountDisplay.textContent = state.totalSlots;
+    state.remainingSlots = state.totalSlots;
+  }
+  
+  function confirmSlots() {
+    state.remainingSlots = state.totalSlots;
+    remainingSlotsDisplay.textContent = state.remainingSlots;
+    slotSelectionCtn.style.display = "none";
+    upgradeSelectionCtn.style.display = "block";
+    renderSlotIndicators();
+    renderUpgradeOptions();
+  }
+  
+  function renderSlotIndicators() {
+    slotIndicatorsCtn.innerHTML = "";
+    
+    // Create groups of 5 slots
+    const totalGroups = Math.ceil(state.totalSlots / 5);
+    
+    for (let i = 0; i < totalGroups; i++) {
+      const groupContainer = document.createElement("div");
+      groupContainer.className = "slot-group";
+      
+      // How many slots to render in this group (5 or less if it's the last group)
+      const slotsInGroup = (i === totalGroups - 1) ? (state.totalSlots % 5 || 5) : 5;
+      
+      for (let j = 0; j < slotsInGroup; j++) {
+        const slotIndex = i * 5 + j;
+        const slotCircle = document.createElement("div");
+        slotCircle.className = "slot-circle";
+        slotCircle.dataset.slotIndex = slotIndex;
+        
+        // Check if this slot is used
+        const slotInfo = state.usedSlots.find(slot => slot.index === slotIndex);
+        if (slotInfo) {
+          // Apply the appropriate color based on the upgrade type
+          if (slotInfo.type === "Damage Enhancement") {
+            slotCircle.classList.add("slot-filled-damage");
+          } else if (slotInfo.type.includes("Special Effects") || slotInfo.type.includes("Status")) {
+            slotCircle.classList.add("slot-filled-special");
+          } else if (slotInfo.type.includes("Combat Utility") || slotInfo.type.includes("Defensive") || 
+                     slotInfo.type.includes("Mobility") || slotInfo.type.includes("Ammunition") || 
+                     slotInfo.type.includes("Off-Hand")) {
+            slotCircle.classList.add("slot-filled-utility");
+          } else if (slotInfo.type.includes("Class Skill")) {
+            slotCircle.classList.add("slot-filled-class");
+          }
+        }
+        
+        groupContainer.appendChild(slotCircle);
+      }
+      
+      slotIndicatorsCtn.appendChild(groupContainer);
+    }
+  }
+  
+  function renderUpgradeOptions() {
+    const upgradeOptions = tierUpgrades[state.currentTier];
+    upgradeOptionsCtn.innerHTML = "";
+    
+    upgradeOptions.forEach(upgrade => {
+      const upgradeCard = document.createElement("div");
+      upgradeCard.className = "upgrade-card";
+      upgradeCard.style.cssText = "border: 1px solid #c0a060; border-radius: 4px; padding: 15px; background-color: #2a2a2a; position: relative; height: 350px; display: flex; flex-direction: column;";
+      
+      const canAfford = state.remainingSlots >= upgrade.cost;
+      const isSelected = state.selectedUpgrades.some(u => u.name === upgrade.name);
+      
+      upgradeCard.innerHTML = `
+        <h3 style="color: #ffd700; margin-top: 0;">${upgrade.name}</h3>
+        <div style="background-color: rgba(192, 160, 96, 0.1); border-radius: 3px; padding: 3px 8px; display: inline-block; margin-bottom: 10px;">
+          <span style="color: #c0a060;">${upgrade.type}</span>
+        </div>
+        <div style="color: #ffd700; margin-bottom: 10px;">
+          Cost: <span style="color: ${canAfford ? '#e0d2b4' : '#ff6b6b'};">${upgrade.cost} slot${upgrade.cost > 1 ? 's' : ''}</span>
+        </div>
+        <p style="flex-grow: 1; overflow-y: auto; margin-bottom: 15px; font-size: 75%;">${upgrade.description}</p>
+        <button class="selectUpgradeBtn" data-upgrade-name="${upgrade.name}" style="
+          background: ${isSelected ? 'linear-gradient(to bottom, #6c4a00, #4c3400)' : (canAfford ? 'linear-gradient(to bottom, #c0a060, #8a7040)' : '#555')};
+          color: ${canAfford ? '#1a1a1a' : '#aaa'};
+          border: none;
+          border-radius: 4px;
+          padding: 8px 12px;
+          cursor: ${canAfford || isSelected ? 'pointer' : 'not-allowed'};
+          font-family: 'Cinzel', serif;
+          font-weight: bold;
+          width: 100%;
+          transition: all 0.2s;
+        ">${isSelected ? 'Remove' : 'Select'}</button>
+      `;
+      
+      upgradeOptionsCtn.appendChild(upgradeCard);
+      
+      // Add event listener
+      const selectBtn = upgradeCard.querySelector(".selectUpgradeBtn");
+      selectBtn.addEventListener("click", () => {
+        if (isSelected) {
+          removeUpgrade(upgrade);
+        } else if (canAfford) {
+          selectUpgrade(upgrade);
+        }
+      });
+    });
+    
+    // Update the proceed button and weapon customization section
+    const showProceedAndCustomization = state.remainingSlots === 0;
+    proceedToNextTierBtn.style.display = showProceedAndCustomization ? "block" : "none";
+    weaponCustomizationCtn.style.display = showProceedAndCustomization ? "block" : "none";
+  }
+  
+  function selectUpgrade(upgrade) {
+    if (state.remainingSlots >= upgrade.cost) {
+      state.selectedUpgrades.push(upgrade);
+      state.remainingSlots -= upgrade.cost;
+      
+      // Update usedSlots with the new upgrade
+      // Find the first available slots
+      const usedSlotCount = state.totalSlots - state.remainingSlots;
+      const availableSlotIndices = [];
+      
+      // Find all unused slot indices
+      for (let i = 0; i < state.totalSlots; i++) {
+        if (!state.usedSlots.some(slot => slot.index === i)) {
+          availableSlotIndices.push(i);
+        }
+      }
+      
+      // Assign slots for this upgrade
+      for (let i = 0; i < upgrade.cost; i++) {
+        if (availableSlotIndices.length > 0) {
+          const slotIndex = availableSlotIndices.shift();
+          state.usedSlots.push({
+            index: slotIndex,
+            type: upgrade.type,
+            name: upgrade.name
+          });
+        }
+      }
+      
+      remainingSlotsDisplay.textContent = state.remainingSlots;
+      updateSelectedUpgradesList();
+      renderSlotIndicators(); // Update the slot indicators
+      renderUpgradeOptions();
+    }
+  }
+  
+  function removeUpgrade(upgrade) {
+    state.selectedUpgrades = state.selectedUpgrades.filter(u => u.name !== upgrade.name);
+    state.remainingSlots += upgrade.cost;
+    
+    // Remove slots used by this upgrade
+    state.usedSlots = state.usedSlots.filter(slot => slot.name !== upgrade.name);
+    
+    remainingSlotsDisplay.textContent = state.remainingSlots;
+    updateSelectedUpgradesList();
+    renderSlotIndicators(); // Update the slot indicators
+    renderUpgradeOptions();
+  }
+  
+  // Helper function to find weapon details
+  function getWeaponDetails(weaponName) {
+    for (const category in weaponsData) {
+      const weapon = weaponsData[category].find(w => w.name === weaponName);
+      if (weapon) return weapon;
+    }
+    return null;
+  }
+  
+  function updateSelectedUpgradesList() {
+    selectedUpgradesList.innerHTML = "";
+    
+    // First, add the weapon info if a weapon is selected
+    if (state.selectedWeapon) {
+      const weaponDetails = getWeaponDetails(state.selectedWeapon);
+      if (weaponDetails) {
+        const li = document.createElement("li");
+        li.style.cssText = "padding: 10px; background-color: #2a2a2a; margin-bottom: 8px; border-left: 3px solid #ffd700;";
+        
+        // Format special properties
+        let specialProperties = "";
+        if (weaponDetails.light) specialProperties += "Light, ";
+        if (weaponDetails.finesse) specialProperties += "Finesse, ";
+        if (weaponDetails.special) specialProperties += weaponDetails.special;
+        // Remove trailing comma if exists
+        specialProperties = specialProperties.replace(/,\s*$/, "");
+        
+        li.innerHTML = `
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span><strong style="color: #ffd700;">${weaponDetails.name}</strong></span>
+          </div>
+          <div style="font-size: 0.875em; color: #e0d2b4; margin-top: 5px;">
+            <div><strong>Damage:</strong> ${weaponDetails.damage_dice} ${weaponDetails.damage_type}</div>
+            <div><strong>Category:</strong> ${weaponDetails.category}</div>
+            <div><strong>Properties:</strong> ${specialProperties || "None"}</div>
+          </div>
+        `;
+        selectedUpgradesList.appendChild(li);
+      }
+    }
+    
+    // Then add the upgrades
+    if (state.selectedUpgrades.length === 0 && !state.selectedWeapon) {
+      selectedUpgradesList.innerHTML = "<li style='text-align: center; padding: 10px;'>No upgrades selected yet</li>";
+      return;
+    }
+    
+    state.selectedUpgrades.forEach(upgrade => {
+      const li = document.createElement("li");
+      li.style.cssText = "padding: 10px; background-color: #2a2a2a; margin-bottom: 8px; border-left: 3px solid #c0a060;";
+      li.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span><strong style="color: #ffd700;">${upgrade.name}</strong> (${upgrade.cost} slot${upgrade.cost > 1 ? 's' : ''})</span>
+          <button class="removeUpgradeBtn" style="background: none; border: none; color: #c0a060; cursor: pointer; font-size: 1.2em;">×</button>
+        </div>
+        <div style="font-size: 0.675em; color: #e0d2b4; margin-top: 5px;">${upgrade.description}</div>
+      `;
+      selectedUpgradesList.appendChild(li);
+      
+      // Add event listener for the remove button
+      const removeBtn = li.querySelector(".removeUpgradeBtn");
+      removeBtn.addEventListener("click", () => removeUpgrade(upgrade));
+    });
+  }
+  
+  // New function to update image preview
+  function updateImagePreview() {
+    state.weaponImageUrl = weaponImageInput.value.trim();
+    
+    if (state.weaponImageUrl) {
+      imagePreviewEl.src = state.weaponImageUrl;
+      imagePreviewCtn.style.display = "block";
+      
+      // Handle image load error
+      imagePreviewEl.onerror = () => {
+        imagePreviewCtn.style.display = "none";
+        state.weaponImageUrl = ""; // Reset URL if invalid
+        weaponImageInput.value = "";
+      };
+    } else {
+      imagePreviewCtn.style.display = "none";
+    }
+  }
+  
+  // New function to update weapon name
+  function updateWeaponName() {
+    state.weaponName = weaponNameInput.value.trim();
+  }
+  
+  function proceedToNextTier() {
+    // Capture weapon name and image before proceeding
+    state.weaponName = weaponNameInput.value.trim() || state.selectedWeapon;
+    state.weaponImageUrl = weaponImageInput.value.trim();
+    
+    // For now, just show a message as we're only implementing Tier 1
+    alert("Congratulations! You've completed Tier 1. In the full implementation, you would now proceed to Tier 2 with double the slots.");
+    
+    // Display weapon summary
+    showWeaponSummary();
+  }
+  
+  function showWeaponSummary() {
+    upgradeSelectionCtn.style.display = "none";
+    weaponSummaryCtn.style.display = "block";
+    
+    // Get weapon details
+    const weaponDetails = getWeaponDetails(state.selectedWeapon);
+    const weaponName = state.weaponName || state.selectedWeapon;
+    
+    let summaryHTML = `
+      <div style="border: 2px solid #c0a060; border-radius: 5px; padding: 20px; background-color: #2a2a2a;">
+    `;
+    
+    // Add weapon image if available
+    if (state.weaponImageUrl) {
+      summaryHTML += `
+        <div style="text-align: center; margin-bottom: 20px;">
+          <img src="${state.weaponImageUrl}" alt="${weaponName}" style="max-width: 100%; max-height: 300px; border: 2px solid #c0a060; border-radius: 5px;">
+        </div>
+      `;
+    }
+    
+    summaryHTML += `
+        <h3 style="color: #ffd700; margin-top: 0; font-size: 1.5em; text-align: center;">${weaponName}</h3>
+        <div style="display: flex; justify-content: space-between; flex-wrap: wrap; margin-bottom: 20px;">
+          <p><strong>Tier:</strong> ${state.currentTier} - ${tiers[state.currentTier].name}</p>
+          <p><strong>Total Slots:</strong> ${state.totalSlots}</p>
+        </div>
+    `;
+    
+    if (weaponDetails) {
+      // Format special properties
+      let specialProperties = "";
+      if (weaponDetails.light) specialProperties += "Light, ";
+      if (weaponDetails.finesse) specialProperties += "Finesse, ";
+      if (weaponDetails.special) specialProperties += weaponDetails.special;
+      // Remove trailing comma if exists
+      specialProperties = specialProperties.replace(/,\s*$/, "");
+      
+      summaryHTML += `
+        <div style="background-color: rgba(192, 160, 96, 0.1); padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+          <h4 style="color: #ffd700; margin-top: 0;">Weapon Details</h4>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
+            <p><strong>Base Type:</strong> ${weaponDetails.name}</p>
+            <p><strong>Damage:</strong> ${weaponDetails.damage_dice} ${weaponDetails.damage_type}</p>
+            <p><strong>Category:</strong> ${weaponDetails.category}</p>
+            <p><strong>Properties:</strong> ${specialProperties || "None"}</p>
+          </div>
+        </div>
+      `;
+    }
+    
+    summaryHTML += `
+        <h4 style="color: #ffd700; border-bottom: 1px solid #c0a060; padding-bottom: 5px;">Upgrades</h4>
+        <ul style="list-style-type: none; padding: 0;">
+    `;
+    
+    state.selectedUpgrades.forEach(upgrade => {
+      // Determine class for color indication
+      let typeClass = "";
+      if (upgrade.type === "Damage Enhancement") {
+        typeClass = "slot-filled-damage";
+      } else if (upgrade.type.includes("Special Effects") || upgrade.type.includes("Status")) {
+        typeClass = "slot-filled-special";
+      } else if (upgrade.type.includes("Combat Utility") || upgrade.type.includes("Defensive") || 
+                upgrade.type.includes("Mobility") || upgrade.type.includes("Ammunition") || 
+                upgrade.type.includes("Off-Hand")) {
+        typeClass = "slot-filled-utility";
+      } else if (upgrade.type.includes("Class Skill")) {
+        typeClass = "slot-filled-class";
+      }
+      
+      summaryHTML += `<li style="margin-bottom: 15px; background-color: rgba(192, 160, 96, 0.1); padding: 15px; border-radius: 5px;">
+        <strong style="color: #ffd700; font-size: 1.2em;">${upgrade.name}</strong>
+        <div style="display: flex; justify-content: space-between; margin: 5px 0;">
+          <span style="color: #c0a060; position: relative; padding-left: 20px;">
+            <span style="display: inline-block; width: 12px; height: 12px; border-radius: 50%; background-color: ${getTypeColor(upgrade.type)}; position: absolute; left: 0; top: 50%; transform: translateY(-50%);"></span>
+            ${upgrade.type}
+          </span>
+          <span>Cost: ${upgrade.cost} slot${upgrade.cost > 1 ? 's' : ''}</span>
+        </div>
+        <p style="margin-top: 10px; font-size: 75%;">${upgrade.description}</p>
+      </li>`;
+    });
+    
+    summaryHTML += `
+        </ul>
+      </div>
+      <div style="margin-top: 30px; text-align: center;">
+        <button onclick="location.reload()" style="background: linear-gradient(to bottom, #c0a060, #8a7040); color: #1a1a1a; border: none; border-radius: 4px; padding: 12px 24px; font-weight: bold; cursor: pointer; font-family: 'Cinzel', serif; transition: all 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.3);">Create Another Weapon</button>
+      </div>
+    `;
+    
+    weaponSummaryContent.innerHTML = summaryHTML;
+  }
+  
+  // Helper function to get the color based on upgrade type
+  function getTypeColor(type) {
+    if (type === "Damage Enhancement" || type.includes("Damage")) {
+      return "#D32F2F"; // Deep Red
+    } else if (type.includes("Special Effects") || type.includes("Status")) {
+      return "#455A64"; // Steel Blue
+    } else if (type.includes("Combat Utility") || type.includes("Defensive") || 
+              type.includes("Mobility") || type.includes("Ammunition") || 
+              type.includes("Off-Hand")) {
+      return "#1976D2"; // Bright Blue
+    } else if (type.includes("Class Skill")) {
+      return "#FF8A65"; // Salmon Orange
+    }
+    return "#333"; // Default
+  }
+</script>
+

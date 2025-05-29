@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to Use Your Interactive Handbook</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=MedievalSharp&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #daac17;
+      --gold-light: #fae791;
+      --gold-dark: #97740a;
+      --parchment: #2C2614;
+      --parchment-dark: #1E1C12;
+      --ink: #c7a81d;
+      --ink2: #8f770d;
+      --accent: #b47018;
+      --accent-light: #e09a3e;
+      --shadow: rgba(0, 0, 0, 0.5);
+    }
+    
+    body {
+      font-family: 'Cormorant Garamond', serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #2c2619;
+      background-image: url('https://www.transparenttextures.com/patterns/dark-wood.png');
+      color: var(--ink);
+      line-height: 1.6;
+    }
+    
+    #guide-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background-color: var(--parchment);
+      background-image: url('https://www.transparenttextures.com/patterns/parchment.png');
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      padding: 30px;
+      border: 12px solid var(--gold-dark);
+      position: relative;
+    }
+    
+    h1 {
+      font-family: 'MedievalSharp', cursive;
+      text-align: center;
+      color: var(--gold);
+      font-size: 42px;
+      margin-bottom: 40px;
+      text-shadow: 2px 2px 4px var(--shadow);
+    }
+    
+    h2 {
+      font-family: 'MedievalSharp', cursive;
+      color: var(--gold);
+      border-bottom: 2px solid var(--gold-dark);
+      padding-bottom: 8px;
+      margin-top: 40px;
+      font-size: 28px;
+    }
+    
+    .guide-section {
+      display: flex;
+      margin-bottom: 50px;
+      background-color: rgba(44, 38, 20, 0.6);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+    .section-left-image {
+      flex: 0 0 200px;
+      margin-right: 30px;
+      position: relative;
+    }
+    
+    .section-right-image {
+      flex: 0 0 200px;
+      margin-left: 30px;
+      position: relative;
+    }
+    
+    .section-content {
+      flex: 1;
+    }
+    
+    .image-placeholder {
+      background-color: rgba(255, 255, 255, 0.1);
+      border: 2px dashed var(--gold-light);
+      height: 250px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: var(--gold-light);
+      text-align: center;
+      border-radius: 8px;
+      padding: 10px;
+    }
+    
+    .step-number {
+      display: inline-block;
+      background-color: var(--gold);
+      color: var(--parchment-dark);
+      width: 28px;
+      height: 28px;
+      line-height: 28px;
+      text-align: center;
+      border-radius: 50%;
+      margin-right: 10px;
+      font-weight: bold;
+    }
+    
+    .step {
+      margin-bottom: 15px;
+      padding-left: 10px;
+      border-left: 3px solid var(--gold-light);
+    }
+    
+    .tip-box {
+      background-color: rgba(180, 112, 24, 0.3);
+      border-left: 4px solid var(--accent);
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 0 8px 8px 0;
+    }
+    
+    .tip-title {
+      font-weight: bold;
+      color: var(--accent-light);
+      margin-bottom: 8px;
+      display: block;
+    }
+    
+    .button-example {
+      background-color: var(--gold-dark);
+      color: var(--parchment);
+      padding: 8px 15px;
+      border-radius: 5px;
+      text-decoration: none;
+      display: inline-block;
+      margin: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+    
+    .footer {
+      text-align: center;
+      margin-top: 50px;
+      padding-top: 20px;
+      border-top: 1px solid var(--gold-dark);
+      font-style: italic;
+    }
+
+    ol, ul {
+      padding-left: 20px;
+    }
+
+    li {
+      margin-bottom: 10px;
+    }
+    
+    .gold-divider {
+      height: 2px;
+      background-color: var(--gold-dark);
+      margin: 30px 0;
+    }
+  </style>
+</head>
+<body>
+  <div id="guide-container">
+    <h1>How to Use Your Interactive Handbook</h1>
+    
+    <!-- GETTING STARTED SECTION -->
+    <div class="guide-section">
+      <div class="section-left-image">
+        <div class="image-placeholder">
+          <img src="https://ik.imagekit.io/owlcan/README/point2(1).png" alt="Character illustration pointing at Getting Started instructions" style="max-width:100%; height:auto; border-radius:8px;">
+        </div>
+      </div>
+      
+      <div class="section-content">
+        <h2>Getting Started</h2>
+        
+        <div class="step">
+          <span class="step-number">1</span>
+          <strong>Opening the Handbook:</strong> Locate the file named "simple-handbook.html" in the "src" folder and double-click to open it in your web browser.
+        </div>
+        
+        <div class="step">
+          <span class="step-number">2</span>
+          <strong>Navigation:</strong> Use the colored buttons at the top of the page to navigate between different sections of the handbook.
+        </div>
+        
+        <div class="step">
+          <span class="step-number">3</span>
+          <strong>Interactive Elements:</strong> Throughout the handbook, you'll find clickable elements, drop-down menus, and interactive tools to enhance your experience.
+        </div>
+        
+        <div class="tip-box">
+          <span class="tip-title">Tip:</span>
+          For the best experience, use modern browsers like Chrome, Firefox, or Edge. Some features may not work properly in older browsers.
+        </div>
+      </div>
+    </div>
+    
+    <!-- UPDATING THE HANDBOOK SECTION -->
+    <div class="guide-section">
+      <div class="section-content">
+        <h2>Updating Your Handbook</h2>
+        
+        <div class="step">
+          <span class="step-number">1</span>
+          <strong>Receiving Updates:</strong> When you receive new content files, they will typically come as HTML files or folders with assets.
+        </div>
+        
+        <div class="step">
+          <span class="step-number">2</span>
+          <strong>Adding New Files:</strong> To add new files:
+          <ul>
+            <li>Create a backup of your current handbook folder (just in case)</li>
+            <li>Drag and drop the new files into the appropriate locations:</li>
+            <ul>
+              <li>HTML files usually go into the main folder or the "src" folder</li>
+              <li>Images go into "assets/images/" and its subfolders</li>
+              <li>Other resources (like scripts) typically go into designated folders</li>
+            </ul>
+          </ul>
+        </div>
+        
+        <div class="step">
+          <span class="step-number">3</span>
+          <strong>Replacing Files:</strong> When replacing files, your browser might show the old version due to caching. Press <strong>Ctrl+F5</strong> (or <strong>Cmd+Shift+R</strong> on Mac) to perform a hard refresh.
+        </div>
+        
+        <div class="tip-box">
+          <span class="tip-title">Important:</span>
+          Always make sure file names match exactly what's expected. The handbook looks for specific file names in specific locations.
+        </div>
+      </div>
+      
+      <div class="section-right-image">
+        <div class="image-placeholder">
+          <img src="https://ik.imagekit.io/owlcan/README/dragndrop.png" alt="Character showing drag and drop feature" style="max-width:100%; height:auto; border-radius:8px;">
+        </div>
+      </div>
+    </div>
+    
+    <!-- SPECIAL FEATURES SECTION -->
+    <div class="guide-section">
+      <div class="section-left-image">
+        <div class="image-placeholder">
+          <img src="https://ik.imagekit.io/owlcan/README/features.png" alt="Character illustration showcasing features" style="max-width:100%; height:auto; border-radius:8px;">
+        </div>
+      </div>
+      
+      <div class="section-content">
+        <h2>Special Features</h2>
+        
+        <h3>Interactive Tools</h3>
+        <p>The handbook includes several special interactive tools:</p>
+        <ul>
+          <li><strong>Legacy Weapons Creator:</strong> Design and customize legendary equipment</li>
+          <li><strong>Regalia Maker:</strong> Create special ceremonial items</li>
+          <li><strong>Fishing Minigame:</strong> A fun interactive fishing simulation</li>
+        </ul>
+        
+        <h3>Filters and Search</h3>
+        <p>Many sections include filter controls to help you find specific content quickly:</p>
+        <ul>
+          <li>Use dropdown menus to filter by category</li>
+          <li>Click on tags to filter by specific attributes</li>
+          <li>Use the search box when available to find content by keyword</li>
+        </ul>
+        
+        <div class="tip-box">
+          <span class="tip-title">Tip:</span>
+          Click the "Reset" button to clear all filters and return to the full view of content.
+        </div>
+      </div>
+    </div>
+    
+    <!-- TROUBLESHOOTING SECTION -->
+    <div class="guide-section">
+      <div class="section-content">
+        <h2>Troubleshooting</h2>
+        
+        <div class="step">
+          <span class="step-number">1</span>
+          <strong>Content Not Displaying:</strong> If parts of the handbook aren't showing:
+          <ul>
+            <li>Check that all files are in their correct folders</li>
+            <li>Try a hard refresh (Ctrl+F5)</li>
+            <li>Ensure your browser is up to date</li>
+          </ul>
+        </div>
+        
+        <div class="step">
+          <span class="step-number">2</span>
+          <strong>Interactive Features Not Working:</strong> If buttons or interactive elements don't respond:
+          <ul>
+            <li>Make sure JavaScript is enabled in your browser</li>
+            <li>Check if any script blocking extensions might be interfering</li>
+            <li>Try opening the handbook in another browser</li>
+          </ul>
+        </div>
+        
+        <div class="step">
+          <span class="step-number">3</span>
+          <strong>Images Not Loading:</strong> If images aren't appearing:
+          <ul>
+            <li>Verify that the image files exist in the assets/images directory</li>
+            <li>Check that the file names match exactly (including capitalization)</li>
+          </ul>
+        </div>
+        
+        <div class="tip-box">
+          <span class="tip-title">Need Help?</span>
+          If you continue experiencing issues, check the readme.txt file for contact information or additional troubleshooting steps.
+        </div>
+      </div>
+      
+      <div class="section-right-image">
+        <div class="image-placeholder">
+          <img src="https://ik.imagekit.io/owlcan/README/techsupport.png" alt="Character illustration showing troubleshooting" style="max-width:100%; height:auto; border-radius:8px;">
+        </div>
+      </div>
+    </div>
+    
+    <div class="gold-divider"></div>
+    
+    <!-- CREATING A NEW SECTION -->
+    <div class="guide-section">
+      <div class="section-left-image">
+        <div class="image-placeholder">
+          <img src="https://ik.imagekit.io/owlcan/README/codeityourselfbrat (2).png" alt="the twins 'coding' their own section" style="max-width:100%; height:auto; border-radius:8px;">
+        </div>
+      </div>
+      
+      <div class="section-content">
+        <h2>Creating a New Content Section</h2>
+        
+        <p>If you want to add your own custom content section to the handbook:</p>
+        
+        <ol>
+          <li><strong>Create the HTML section:</strong> Add a new <code>&lt;div&gt;</code> with a unique ID to the handbook, following the same pattern as other sections:</li>
+          <code>&lt;div id="your-new-feature" class="content-section"&gt;&lt;/div&gt;</code>
+          
+          <li><strong>Add a navigation button:</strong> Include a new button in the navigation menu:</li>
+          <code>&lt;button id="btn-your-feature"&gt;Your Feature&lt;/button&gt;</code>
+          
+          <li><strong>Add JavaScript event handler:</strong> Create the event listener for your button:</li>
+          <pre style="background: #333; color: #eee; padding: 10px; border-radius: 5px;">document.getElementById("btn-your-feature").addEventListener("click", function() {
+  // Hide all content sections
+  const contentSections = document.querySelectorAll(".content-section");
+  contentSections.forEach(section => section.classList.remove("active"));
+  
+  // Deactivate all buttons
+  const navButtons = document.querySelectorAll("nav button");
+  navButtons.forEach(button => button.classList.remove("active"));
+  
+  // Activate your section
+  document.getElementById("your-new-feature").classList.add("active");
+  this.classList.add("active");
+});</pre>
+          
+          <li><strong>Update the hideAllSections function:</strong> Add your section to the function:</li>
+          <code>document.getElementById('your-new-feature').classList.remove('active');</code>
+        </ol>
+        
+        <div class="tip-box">
+          <span class="tip-title">Advanced:</span>
+          You can either add content directly or load it via an iframe from a separate HTML file, just like the Legacy Weapons and Regalia creators do.
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer">
+      <p>Interactive Handbook v1.0 | Created with ♥ for adventurers everywhere</p>
+    </div>
+  </div>
+</body>
+</html>

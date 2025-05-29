@@ -1,0 +1,66 @@
+/* Page break styling */
+.page-break {
+  height: 20px;
+  margin: 40px 0;
+  position: relative;
+  text-align: center;
+}
+
+.page-break:before {
+  content: "❧";
+  color: #d4af37;
+  font-size: 24px;
+  position: relative;
+}
+
+.page-break:after {
+  content: "";
+  position: absolute;
+  top: 12px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, #d4af37, transparent);
+}
+
+/* Optional: Add print-specific page breaks */
+@media print {
+  .page-break {
+    page-break-before: always;
+  }
+}
+
+/* Additional styling for visual separation */
+.species-section {
+  min-height: 90vh; /* Make each species section take up most of the viewport */
+  padding-bottom: 30px;
+  position: relative;
+}
+
+/* Quick navigation buttons between species */
+.species-nav {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  margin-top: 20px;
+}
+
+.species-nav button {
+  background-color: #5d4a1f;
+  border: 2px solid #d4af37;
+  color: #fff;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.species-nav button:hover {
+  background-color: #d4af37;
+  color: #333;
+}
+
+.species-nav button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

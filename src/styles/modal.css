@@ -1,0 +1,68 @@
+/* Modal styles */
+#modal-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  transition: opacity 0.3s ease;
+}
+
+#modal-container.hidden {
+  display: none;
+  opacity: 0;
+}
+
+#modal-content {
+  background: var(--parchment, #f5f0e1) url('../assets/images/parchment-texture.jpg') repeat;
+  border: 5px solid var(--gold-dark, #b8860b);
+  border-radius: 10px;
+  width: 80%;
+  max-width: 800px;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+#modal-header {
+  padding: 15px 20px;
+  border-bottom: 2px solid var(--gold, #d4af37);
+  position: relative;
+}
+
+#modal-title {
+  margin: 0;
+  font-family: 'MedievalSharp', cursive;
+  color: var(--accent, #8b4513);
+}
+
+#modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: linear-gradient(var(--gold, #d4af37), var(--gold-dark, #b8860b));
+  border: 2px solid var(--gold-dark, #b8860b);
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  font-size: 20px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+#modal-close:hover {
+  background: linear-gradient(var(--gold-light, #ffd700), var(--gold, #d4af37));
+}
+
+#modal-body {
+  padding: 20px;
+}

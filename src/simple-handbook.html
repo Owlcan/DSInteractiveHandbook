@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Interactive Handbook</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=MedievalSharp&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #daac17;
+      --gold-light: #fae791;
+      --gold-dark: #97740a;
+      --parchment: #2C2614;
+      --parchment-dark: #1E1C12;
+      --ink: #c7a81d;
+      --ink2: #8f770d;
+      --accent: #b47018;
+      --shadow: rgba(0, 0, 0, 0.5);
+    }
+    
+    body {
+      font-family: 'Cormorant Garamond', serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #2c2619;
+      background-image: url('https://www.transparenttextures.com/patterns/dark-wood.png');
+      color: var(--ink);
+      line-height: 1.6;
+    }
+    
+    #app {
+      max-width: 1600px;
+      margin: 0 auto;
+      background-color: var(--parchment);
+      background-image: url('https://www.transparenttextures.com/patterns/parchment.png');
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      padding: 20px;
+      border: 12px solid var(--gold-dark);
+      position: relative;
+    }
+    
+    .corner-decoration {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      background-color: var(--gold);
+      background-image: url('https://www.transparenttextures.com/patterns/asfalt-light.png');
+      z-index: 1;
+    }
+    
+    .top-left { top: -6px; left: -6px; border-top-left-radius: 15px; }
+    .top-right { top: -6px; right: -6px; border-top-right-radius: 15px; }
+    .bottom-left { bottom: -6px; left: -6px; border-bottom-left-radius: 15px; }
+    .bottom-right { bottom: -6px; right: -6px; border-bottom-right-radius: 15px; }
+    
+    h1 {
+      text-align: center;
+      color: var(--accent);
+      font-family: 'MedievalSharp', cursive;
+      font-size: 3.45rem;
+      margin: 10px 0 20px;
+      text-shadow: 1px 1px 3px var(--shadow);
+      position: relative;
+    }
+    
+    h1::after {
+      content: "";
+      display: block;
+      width: 80%;
+      height: 3px;
+      background: linear-gradient(to right, transparent, var(--gold), transparent);
+      margin: 10px auto;
+    }
+    
+    h2 {
+      font-family: 'MedievalSharp', cursive;
+      color: var(--accent);
+      border-bottom: 2px solid var(--gold);
+      padding-bottom: 5px;
+      font-size: 2.3rem; 
+      margin-top: 20px;
+      margin-bottom: 15px; /* Added margin for spacing */
+    }
+        
+    h3 {
+      font-size: 1.73rem; 
+    }
+
+    h4 {
+      font-size: 1.38rem; 
+    }
+
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      margin: 20px 0;
+    }
+    
+    button {
+      padding: 12px 25px;
+      background: linear-gradient(to bottom, var(--gold-light), var(--gold));
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 18px;
+      font-family: 'MedievalSharp', cursive;
+      color: var(--ink2);
+      box-shadow: 0 2px 5px var(--shadow);
+      transition: all 0.3s ease;
+      flex: 0 1 auto;
+      margin-bottom: 10px;
+    }
+    
+    button:hover {
+      background: linear-gradient(to bottom, var(--gold), var(--gold-dark));
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px var(--shadow);
+    }
+    
+    .content-section {
+      display: none;
+      padding: 20px;
+      background-color: rgba(255, 255, 255, 0); 
+      border-radius: 8px;
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+      box-sizing: border-box; /* Added for better height calculation with padding */
+    }
+    
+    .content-section.active {
+      display: block;
+      animation: fadeIn 0.5s ease;
+    }
+    
+    /* Styles for iframe containers and loading messages */
+    .iframe-container { /* Used by dynamically created iframes */
+        position: relative;
+        width: 100%;
+        height: 85vh; /* Consistent height for dynamic iframe sections */
+        overflow: hidden; 
+    }
+
+    /* Sections that directly host "static" full-height iframes */
+    #legacy-Weapons.active,
+    #legacy-Regalia.active,
+    #fishing-section.active {
+        display: block; /* or flex if needed for alignment */
+        height: 90vh; /* Give these sections a large height */
+        padding: 10px; /* Reduce padding if iframe is meant to be edge-to-edge */
+    }
+
+
+    .iframe-loading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 1.5em;
+      color: var(--gold);
+      font-family: 'MedievalSharp', cursive;
+      text-align: center;
+    }
+    
+    /* Tips Section Styles */
+    .h2p-accordion-item {
+      border: 1px solid var(--gold);
+      border-radius: 5px;
+      margin-bottom: 1rem;
+      background-color: rgba(218, 165, 32, 0.1);
+    }
+    
+    .h2p-accordion-header {
+      padding: 0.75rem 1rem;
+      background-color: rgba(218, 165, 32, 0.2);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 0;
+    }
+    
+    .h2p-accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+      padding: 0 1rem;
+    }
+    
+    .h2p-accordion-content.open {
+      max-height: 2000px; 
+      padding: 1rem;
+    }
+    
+    .arrow {
+      transition: transform 0.3s ease;
+    }
+    
+    .h2p-codeblock {
+      background-color: #2c2619;
+      border: 1px solid var(--gold);
+      padding: 0.5rem 1rem;
+      margin: 0.5rem 0;
+      border-radius: 4px;
+      font-family: monospace;
+      position: relative;
+      display: block;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+    
+    .inline-block {
+      display: inline-block;
+      padding: 0.15rem 0.5rem;
+      margin: 0 0.25rem;
+    }
+    
+    .h2p-copy-button {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background-color: var(--gold-dark);
+      color: white;
+      border: none;
+      border-radius: 3px;
+      padding: 2px 8px;
+      font-size: 0.7rem;
+      cursor: pointer;
+    }
+    
+    .h2p-note {
+      background-color: rgba(218, 165, 32, 0.15);
+      border-left: 4px solid var(--gold);
+      padding: 0.5rem 1rem;
+      margin: 1rem 0;
+      border-radius: 0 4px 4px 0;
+    }
+    
+    .relative {
+      position: relative;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); } 
+      to { opacity: 1; transform: translateY(0); }
+    }
+        
+    .welcome-image-container {
+      text-align: center;
+      margin: 30px 0;
+    }
+    
+    .handbook-cover {
+      max-width: 80%;
+      border: 5px solid var(--gold-dark);
+      border-radius: 8px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+    
+    ul {
+      padding-left: 20px;
+    }
+    
+    li {
+      margin-bottom: 5px;
+    }
+    
+    /* Scrollbar styling */
+    ::-webkit-scrollbar { width: 10px; }
+    ::-webkit-scrollbar-track { background: var(--parchment-dark); }
+    ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 5px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+    
+    .lore-era {
+      margin-bottom: 40px;
+      background-color: var(--parchment-dark);
+      border-radius: 8px;
+      padding: 15px;
+      border: 1px solid var(--gold);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .lore-era h3 {
+      color: var(--accent);
+      font-family: 'MedievalSharp', cursive;
+      text-align: center;
+      border-bottom: 2px solid var(--gold);
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+    }
+
+    .lore-content {
+      margin: 0 auto;
+      max-width: 90%;
+      text-align: justify;
+      padding: 0 10px;
+    }
+
+    .lore-content p {
+      margin-bottom: 15px;
+      line-height: 1.6;
+    }
+
+    .lore-content strong {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .lore-image-placeholder {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .lore-image {
+      max-width: 80%;
+      border: 3px solid var(--gold-dark);
+      border-radius: 8px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    #lore-section {
+      max-height: 75vh;
+      overflow-y: auto;
+      max-width: 75%; 
+      padding-right: 15px; 
+      margin: 0 auto;
+    }
+    
+    /* Styles for specific iframe sections */
+    #bestiary-iframe-container,
+    #items-iframe-container,
+    #races-iframe-container,
+    #spellbook-iframe-container,
+    #potty-checker-iframe-container,
+    #pamperlogue-iframe-container {
+        height: 90vh; 
+    }
+
+    /* General iframe styling */
+    #bestiary-iframe,
+    #items-iframe, 
+    #races-iframe,
+    #spellbook-iframe,
+    #potty-checker-iframe, 
+    #pamperlogue-iframe,
+    #legacy-weapon-iframe,
+    #regalia-creator-iframe,
+    #fishing-iframe {
+        width: 100%;
+        height: 100%; 
+        border: none;
+        display: block; 
+        border-radius: 8px; 
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2); 
+    }
+    
+    /* Corrected spellbook display rule */
+    #spellbook-section.active { 
+      display: flex; 
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+    }
+    
+    /* Ensure other sections are block when active, unless specified otherwise like spellbook */
+    #bestiary-section.active,
+    #items-section.active, 
+    #races-section.active,
+    /* #legacy-Weapons.active,  Letting specific rule above handle its height */
+    /* #legacy-Regalia.active, Leting specific rule above handle its height */
+    /* #fishing-section.active, Leting specific rule above handle its height */
+    #pamperlogue.active,
+    #potty-checker.active {
+        display: block;
+    }
+
+    #fishing-section h2 {
+      text-align: center;
+    }
+    
+    #legacy-Weapons, #legacy-Regalia, #pamperlogue, #potty-checker {
+      background-color: #2c2619; 
+      position: relative; 
+      z-index: 10; 
+      overflow: auto; /* Changed from visible to auto for better containment */
+    }
+    #legacy-weapon-iframe, #regalia-creator-iframe { background-color: #2c2619; }
+
+
+    #code-of-conduct-section blockquote { background-color: rgba(218, 165, 32, 0.1); border-left: 4px solid var(--gold); padding: 0.5rem 1rem; margin: 0.5rem 0; font-style: italic; }
+    #code-of-conduct-section h2 { text-align: center; margin-bottom: 1.5rem; color: var(--gold); border-bottom: 2px solid var(--gold); padding-bottom: 0.5rem; font-size: 3.45rem; }
+    #code-of-conduct-section .h2p-accordion-header { font-weight: 600; color: var(--gold-dark); }
+    #code-of-conduct-section h3 { font-size: 2.76rem; }
+    #code-of-conduct-section p, #code-of-conduct-section li, #code-of-conduct-section blockquote { font-size: 1.575rem; line-height: 1.35em; }
+    #code-of-conduct-section strong { font-size: 1.84rem; color: #e4bd12; font-weight: bold; }
+    
+    #potty-checker-iframe-container { max-width: 1000px; margin: 0 auto; padding: 0; }
+    
+    .float-right-image { float: right; margin: 0 0 15px 15px; max-width: 500px; width: 40%; height: auto; border-radius: 5px; border: 3px solid var(--gold-dark); box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2); }
+    .center-image { display: block; margin: 15px auto; max-height: 500px; max-width: 100%; height: auto; width: auto; border-radius: 5px; border: 3px solid var(--gold-dark); box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2); }
+    
+    body, p, li, td, th, button, input, select, textarea { font-size: 1.05em; line-height: 1.6; } 
+    h1, h2, h3, h4, h5, h6 { line-height: 1.2; } 
+
+
+    strong, b { font-size: 1.1em; color: #e4bd12; }
+    .clearfix::after { content: ""; clear: both; display: table; }
+    
+    #tips-section h2 { font-size: 3.45rem; }
+    #tips-section h3 { font-size: 2.76rem; }
+    #tips-section h4 { font-size: 2.2rem; }
+    #tips-section p, #tips-section li, #tips-section ul, #tips-section ol, #tips-section div:not(.h2p-accordion-header):not(.h2p-accordion-content) { font-size: 1.575rem; line-height: 1.35em; }
+    #tips-section strong, #tips-section b { font-size: 1.84rem; color: #e4bd12; font-weight: bold; }
+    #tips-section .h2p-accordion-header { font-size: 2.1rem; }
+    #tips-section .h2p-accordion-content { font-size: 1.575rem; }
+    #tips-section .h2p-codeblock, #tips-section code { font-size: 1.4rem; }
+    #tips-section .h2p-copy-button { font-size: 1.05rem; padding: 3px 8px; }
+
+    #pamperlogue-iframe { background-color: #2c2619; }
+    @media (min-width: 1200px) { 
+        #pamperlogue-iframe-container { height: 1000px; } /* Ensure container also scales */
+    }
+    
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="corner-decoration top-left"></div>
+    <div class="corner-decoration top-right"></div>
+    <div class="corner-decoration bottom-left"></div>
+    <div class="corner-decoration bottom-right"></div>
+    
+    <h1>Interactive Handbook</h1>
+    
+    <nav>
+      <button id="btn-welcome">Welcome</button>
+      <button id="btn-conduct" class="nav-button">Code of Conduct</button>
+      <button id="btn-bestiary">Bestiary</button>
+      <button id="btn-items">Items</button> 
+      <button id="btn-tips" class="nav-button">How to Play</button>
+      <button id="btn-legacy-Weapons">Legacy Weapons</button>
+      <button id="btn-regalia" class="section-button">Regalia Creator</button>
+      <button id="btn-lore">School Lore</button>
+      <button id="btn-spellbook">Spellbook</button>
+      <button id="btn-fishing" class="nav-button">Fishing</button>
+      <button id="btn-pamperlogue" class="nav-button">Pamperlogue</button>
+      <button id="btn-potty-checker" class="nav-button">Potty Checker</button>
+      <button id="btn-races" class="nav-button">Races</button>
+    </nav>
+    
+    <div id="welcome-section" class="content-section active">
+      <h2>Welcome to the Interactive Handbook</h2>
+      <p>Click on the buttons above to explore the handbook of monsters and items from the world.</p>
+      <div class="welcome-image-container">
+          <video class="handbook-cover" controls poster="assets/images/logo.png">
+            <source src="assets/videos/handbook-cover.mp4" type="video/mp4">
+            <source src="assets/videos/handbook-cover.webm" type="video/webm">
+            Your browser does not support the video tag. <a href="assets/videos/handbook-cover.mp4">Download the video</a> instead.
+          </video>
+      </div>
+    </div>
+
+    <div id="bestiary-section" class="content-section">
+      <h2>Bestiary</h2>
+      <div id="bestiary-iframe-container" class="iframe-container">
+        </div>
+    </div>
+    
+    <div id="items-section" class="content-section">
+      <h2>Item Compendium</h2>
+      <div id="items-iframe-container" class="iframe-container">
+        </div>
+    </div>
+
+    <div id="tips-section" class="content-section">
+      <h2>How to Play: Naptime Adventures!</h2>
+      <p>This section will guide you through the essentials of getting started, creating your character, understanding game mechanics, and using tools like Avrae. It’s your first step into becoming a legendary Diaper School adventurer!</p>
+      <div class="h2p-accordion-item">
+        <h3 class="h2p-accordion-header">Getting Started, Little Sprout!<span class="arrow">&#9662;</span></h3>
+        <div class="h2p-accordion-content">
+          <p>Before you can battle dragons (or maybe just very grumpy dust bunnies), there are a few things every Diaper School student needs:</p>
+          <ul>
+            <li><strong>Our Clubhouse: Discord!</strong> All our games, chats, and super-secret plans happen on Discord! It's like our magical treehouse, but with more dice and fewer splinters. Make sure you've joined our server to get all the latest news and find friends for your quests! <a href="[Link to Your Awesome Discord Server Here!]" target="_blank" rel="noopener noreferrer">[Link to Your Awesome Discord Server Here!]</a></li>
+            <li><strong>Your Hero Storybook: Character Sheets!</strong> Every brave adventurer needs a storybook that tells everyone how amazing they are! This is your character sheet. You can make one using:
+              <ul>
+                <li><a href="https://www.dndbeyond.com/" target="_blank" rel="noopener noreferrer">D&D Beyond</a>: It's super easy, like coloring by numbers, and helps you keep track of all your cool powers!</li>
+                <li>Our Special <a href="[Link to Your GSheet Template Here]" target="_blank" rel="noopener noreferrer">Google Sheet Template</a>: This is another magic scroll that helps you build your hero!</li>
+              </ul>
+              Both are fantastic for showing off your character!
+            </li>
+            <li><strong>Knowing Your D&D ABCs!</strong> We hope our little scholars have a little bit of D&D know-how – like what an Ability score is, how to be Brave in a fight, and the basics of Casting spells! If you're brand new to the big world of Dungeons & Dragons, think of it like learning how to use your building blocks before making a giant castle. Don't worry, there are lots of friendly grown-ups (Admins) and older students who are happy to help you learn the ropes!</li>
+          </ul>
+        </div>
+      </div>
+      <div class="h2p-accordion-item">
+        <h3 class="h2p-accordion-header">Making Your Very Own Hero (with a Robot Helper!)<span class="arrow">&#9662;</span></h3>
+        <div class="h2p-accordion-content">
+          <p>Sometimes, the bestest heroes are the ones you dream up all by yourself, with sparkly powers and cool outfits not found in the regular storybooks! This is called "homebrew," and it's like inventing your own super-duper flavor of ice cream!</p>
+          <p>If you're using homebrew bits like a special race (maybe you're a Fluffy Cloud Kitten!) or a new class (like a Crayon Knight of Justice!), our grown-up helpers (Admins) need to give it a big thumbs up first. But don't fret! Making your character sheet can be as easy as 1-2-3-4 with a friendly robot helper (that's an AI Assistant!).</p>
+          <ol>
+            <li><strong>Gather Your Sparkles!</strong> Collect all your notes, drawings, and ideas about your homebrew race, class, and any other special bits you want. It's like gathering all your favorite crayons and glitter before making a masterpiece!</li>
+            <li><strong>Tell the Robot Helper!</strong> Find your favorite AI assistant (like ChatGPT, Claude, Gemini, or another one – ask a grown-up if you need help finding one!). Show it all your notes. You can copy-paste the text or even upload files if your robot helper is extra smart!</li>
+            <li><strong>The Magic Words!</strong> Tell your robot helper this very special instruction. It's like a secret password to unlock a treasure chest of character creation!
+              <div class="h2p-codeblock">
+                <button class="h2p-copy-button" onclick="copyToClipboard(this)">Copy</button>
+                <code>Create a Level 5 D&D character with the provided materials. The character needs to have both the 2024 background option (which includes a feat and an Ability Score Increase - ASI) AND their normal racial ASI. Use the 27 point-buy method for ability scores, and make sure they have maximized Hit Points (HP) at every level. Please provide the character sheet in a document format if you can!</code>
+              </div>
+            </li>
+            <li><strong>Show and Tell Time!</strong> Once your robot helper has made your character sheet (poof!), bring it to the character approval channel on our Discord. Our Admin team will take a peek, ooh and aah, and help you get ready for your big adventures! Remember to check page 7 of the main handbook for general character creation rules, like "Hit Points MAXIMIZED Every Level" and "Level 5"!</li>
+          </ol>
+        </div>
+      </div>
+      <div class="h2p-accordion-item">
+        <h3 class="h2p-accordion-header">Playing by Post: Adventures in Text!<span class="arrow">&#9662;</span></h3>
+        <div class="h2p-accordion-content">
+          <p>Imagine telling a super exciting story with your friends, but instead of talking out loud, you write it all down! That's "Play by Post" (or PbP for short). It's like passing secret notes in class, but with more dragons, fewer detentions, and definitely more diapers!</p>
+          <p>We use our Discord clubhouse for PbP games. Because Discord is super speedy like a race car, our stories can zoom along much faster than old-fashioned forums, which were more like slow, sleepy snails. You can post when you have a moment – maybe during snack time, after school, or before bed – and the adventure keeps unfolding, one exciting message at a time!</p>
+        </div>
+      </div>
+      <div class="h2p-accordion-item">
+        <h3 class="h2p-accordion-header">Playground Rules: Being a Good Friend!<span class="arrow">&#9662;</span></h3>
+        <div class="h2p-accordion-content">
+          <p>Even in a world filled with magic, monsters, and mountains of plushies, we all need to be good friends to each other. That's what roleplay etiquette is all about! It’s like sharing your toys, taking turns on the slide, and not throwing sand (unless it’s magic sand, and everyone agrees it’s okay!).</p>
+          <ul>
+            <li><strong>Remember the Code!</strong> Our Student Code of Conduct (you can find it on page 10 of the main handbook, little ones!) is super important. Being respectful, not cheating (that’s a big no-no!), and making sure everyone feels safe and happy are the golden rules of Diaper School.</li>
+            <li><strong>Think Before You Type!</strong> Before you post what your hero does or says, take a tiny pause. Is your character being kind (even if they're a grumpy barbarian)? Are you helping the story be fun for *everyone*? Teamwork makes the dream work, even when you're fighting giggling goblins!</li>
+            <li><strong>No Peeking! (Metagaming)</strong> Don't use grown-up knowledge that your little hero wouldn't actually know in the game. That's called "metagaming," and it's like peeking at someone else's drawing before they shout "Ta-da!"</li>
+            <li><strong>Consent is Cool!</strong> This is a big one, especially for things like punishments or certain types of roleplay (we talk about this on page 15 of the main handbook). Always make sure your playmates are comfy and having just as much fun as you are. If someone says "stop" or "I'm not comfortable," we listen!</li>
+          </ul>
+        </div>
+      </div>
+      <div class="h2p-accordion-item">
+        <h3 class="h2p-accordion-header">Magic, Mayhem, and Mighty Actions!<span class="arrow">&#9662;</span></h3>
+        <div class="h2p-accordion-content">
+          <p>When you're roleplaying, you'll be doing all sorts of fantastically fun things! Casting super-duper spells, using amazing magical items, and taking brave actions that make everyone say "Wow!"</p>
+          <ul>
+            <li><strong>Waving Your Wand (Magic!):</strong> Spells are like special instructions you give to the world, using funny words, wiggly hand gestures, or even sparkly dust! When you want your hero to cast a spell, describe what they do and say. Then, you'll use Avrae to see if your magic works its wonders. Remember, some spells need special bits and bobs (components)!</li>
+            <li><strong>Treasures and Trinkets (Items!):</strong> You'll find all sorts of amazing treasures! Magic swords that sing, potions that make you burp rainbows, and maybe even enchanted diapers (peek at "Da Big Diaper Chart" on page 66 of the main handbook!). When you want to use an item, just say so in your post.</li>
+            <li><strong>Doing Stuff (Actions in D&D!):</strong> In D&D, when it's your turn, you get to do an <strong>Action</strong>, maybe a <strong>Bonus Action</strong>, and <strong>Movement</strong>. Sometimes you get a <strong>Reaction</strong> even when it's not your turn! Describe your actions clearly and excitingly!</li>
+          </ul>
+        </div>
+      </div>
+      <div class="h2p-accordion-item">
+        <h3 class="h2p-accordion-header">Avrae: Our Friendly Dice Robot!<span class="arrow">&#9662;</span></h3>
+        <div class="h2p-accordion-content">
+          <p>Meet Avrae! He's a super-smart robot on our Discord who helps us roll dice.</p>
+          <p><strong>Rolling with a Character Sheet:</strong></p>
+          <ul>
+            <li>Attack: <code class="h2p-codeblock inline-block relative">!a [weapon name]<button class="h2p-copy-button" onclick="copyToClipboard(this, '!a [weapon name]')">Copy</button></code></li>
+            <li>Skill check: <code class="h2p-codeblock inline-block relative">!c [skill name]<button class="h2p-copy-button" onclick="copyToClipboard(this, '!c [skill name]')">Copy</button></code></li>
+            <li>Saving throw: <code class="h2p-codeblock inline-block relative">!s [ability score]<button class="h2p-copy-button" onclick="copyToClipboard(this, '!s [ability score]')">Copy</button></code></li>
+          </ul>
+          <p><strong>Rolling Without a Character Sheet:</strong></p>
+          <ul>
+            <li>Roll d20: <code class="h2p-codeblock inline-block relative">!r 1d20<button class="h2p-copy-button" onclick="copyToClipboard(this, '!r 1d20')">Copy</button></code></li>
+            <li>d20 + bonus: <code class="h2p-codeblock inline-block relative">!r 1d20+5<button class="h2p-copy-button" onclick="copyToClipboard(this, '!r 1d20+5')">Copy</button></code></li>
+            <li>Advantage: <code class="h2p-codeblock inline-block relative">!adv 1d20+5<button class="h2p-copy-button" onclick="copyToClipboard(this, '!adv 1d20+5')">Copy</button></code></li>
+            <li>Disadvantage: <code class="h2p-codeblock inline-block relative">!dis 1d20+5<button class="h2p-copy-button" onclick="copyToClipboard(this, '!dis 1d20+5')">Copy</button></code></li>
+            <li>Damage: <code class="h2p-codeblock inline-block relative">!r 1d8+3<button class="h2p-copy-button" onclick="copyToClipboard(this, '!r 1d8+3')">Copy</button></code></li>
+          </ul>
+          <p><strong>Manual Rolling:</strong> If you roll physical dice, just announce your results clearly in the chat!</p>
+        </div>
+      </div>
+      <div class="h2p-accordion-item">
+        <h3 class="h2p-accordion-header">Brave Battles: A Little Guide to Bonking Baddies!<span class="arrow">&#9662;</span></h3>
+        <div class="h2p-accordion-content">
+          <p>Combat is like taking turns in an exciting game!</p>
+          <ul>
+            <li><strong>Initiative (Who Goes First?):</strong> Roll a Dexterity check. Avrae: <code class="h2p-codeblock inline-block relative">!init<button class="h2p-copy-button" onclick="copyToClipboard(this, '!init')">Copy</button></code>. Manual: <code class="h2p-codeblock inline-block relative">!r 1d20 + [Dex mod]<button class="h2p-copy-button" onclick="copyToClipboard(this, '!r 1d20 + DEX_MOD')">Copy</button></code>. Highest goes first!</li>
+            <li><strong>Your Turn:</strong> Move, Action, maybe a Bonus Action. Describe attacks, spells, or helping friends!</li>
+            <li><strong>Monster's Turn:</strong> The DM describes what baddies do.</li>
+            <li><strong>Winning!:</strong> Defeat baddies, get treasure, and high-fives!</li>
+          </ul>
+          <div class="h2p-note">
+            <p><strong>Example Scenario: The Case of the Cranky Cookie Monster!</strong></p>
+            <p><strong>Player 1 (Fighter):</strong> "I shout, 'Hey! Those are for sharing!' and run towards him! I try to bonk him with my rolling pin!" (Posts <code class="h2p-codeblock inline-block relative">!a rolling pin at Cookie Monster<button class="h2p-copy-button" onclick="copyToClipboard(this, '!a rolling pin at Cookie Monster')">Copy</button></code>)</p>
+            <p><strong>Player 2 (Wizard):</strong> "I'm going to try and make the cookies float away! I cast <code>Mage Hand</code> to gently lift the cookie jar out of his reach!" (Posts <code class="h2p-codeblock inline-block relative">!cast mage hand<button class="h2p-copy-button" onclick="copyToClipboard(this, '!cast mage hand')">Copy</button></code> and describes the action)</p>
+            <p>The DM will then tell you if your actions work and what the (now even crankier) Cookie Monster does next!</p>
+          </div>
+        </div>
+      </div>
+      <h2 style="margin-top: 3rem;">Roleplaying Tips: Tiny Thespian Fun!</h2>
+      <p>Roleplaying is like being the star of your very own adventure movie or cartoon! You get to decide what your hero says, thinks, and does. It's all about imagination and having fun pretending! This section offers advice on bringing your character to life, thinking creatively, and engaging with others in the game world.</p>
+      <div class="h2p-accordion-item">
+        <h3 class="h2p-accordion-header">Words and Wiggles: Bringing Your Hero to Life!<span class="arrow">&#9662;</span></h3>
+        <div class="h2p-accordion-content">
+          <ul>
+            <li><strong>Think Like Your Hero:</strong> What would your character do? If a giant, fluffy bunny hops by, a brave hero might try to ride it, while a shy hero might offer it a carrot from a safe distance!</li>
+            <li><strong>Use Your Words (and Funny Voices!):</strong> Don't just say "I attack." Try: "Gronk the Brave roars, 'You won't get past me, you overgrown broccoli!' and swings his axe with all his might!"</li>
+            <li><strong>Show, Don't Just Tell (Like a Storybook!):</strong> Instead of "My character is sad," try: "A little tear rolled down Pip's cheek as he looked at his broken toy soldier."</li>
+          </ul>
+        </div>
+      </div>
+      <div class="h2p-accordion-item">
+        <h3 class="h2p-accordion-header">Sparkle and Shine: Awesome Ideas for Actions!<span class="arrow">&#9662;</span></h3>
+        <div class="h2p-accordion-content">
+          <p>Sometimes the bestest adventures come from thinking outside the toy box!</p>
+          <ul>
+            <li><strong>Use Your Surroundings:</strong> Is there a comfy chair to hide behind? A wobbly chandelier to swing from?</li>
+            <li><strong>Talk to People (and Monsters?):</strong> Maybe that grumpy ogre just lost his teddy bear. Try talking!</li>
+            <li><strong>Be Creative with Spells and Skills:</strong> Got pretty lights? Distract a monster! Good at climbing? Tickle a giant's nose!</li>
+            <li><strong>Work as a Team:</strong> "Hey Gronk, if you distract the guards, I can get the cupcakes!"</li>
+            <li><strong>Embrace Mistakes:</strong> Funny oopsie-daisies make the best memories!</li>
+            <li><strong>The "Yes, and..." Game:</strong> Build on what others do! If someone sees a purple mushroom, you could say, "Yes, and it smells like bubblegum! Let's poke it!"</li>
+          </ul>
+        </div>
+      </div>
+      <div class="h2p-accordion-item">
+        <h3 class="h2p-accordion-header">Making New Friends and Finding Fun Scenes!<span class="arrow">&#9662;</span></h3>
+        <div class="h2p-accordion-content">
+          <p>Our Discord is for making friends and finding playdates!</p>
+          <ul>
+            <li><strong>Looking for Scene Channels (LFS):</strong> Post a note like: "Barnaby the Brave Bear is in Whispering Woods, wants to explore a sparkly cave! Anyone join?"</li>
+            <li><strong>Social Channels:</strong> Chat, share drawings, talk snacks! Making friends makes the game more fun.</li>
+            <li><strong>Being Clear and Kind:</strong> Be clear about what scene you want. "Pip the Penguin is at Sunny Meadow for a picnic. Looking for 1-2 friends for a relaxing scene!" Be patient.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="h2p-accordion-item">
+        <h3 class="h2p-accordion-header">Juggling Adventures: Playing in Many Sandboxes!<span class="arrow">&#9662;</span></h3>
+        <div class="h2p-accordion-content">
+          <p>Your hero can be in more than one story (scene) at once!</p>
+          <ul>
+            <li><strong>The Golden Rule (No Confuzzlements!):</strong> Make sure stories don't get mixed up or depend on each other confusingly. It's about fairness and keeping the story sensible.</li>
+            <li><strong>The Super-Important Dungeon Exception!</strong> When in an <strong>active dungeon session</strong> (live adventures run by a DM), your character is 100% focused on *that* adventure. No side-scenes! It's like a school field trip – give your full attention.</li>
+          </ul>
+        </div>
+      </div>
+      <h2 style="margin-top: 3rem;">Advanced Tips: Big Kid Brain Boosters!</h2>
+      <p>Ready to become a Diaper School Deluxe Detective or a Padded Pro Player? These advanced tips are for little heroes who want to add some extra sparkle and strategy to their game! Learn more about Avrae, Gsheets, and using AI assistants to enhance your experience.</p>
+      <div class="h2p-accordion-item">
+        <h3 class="h2p-accordion-header">Avrae Power-Ups: Making Your Rolls Extra Awesome!<span class="arrow">&#9662;</span></h3>
+        <div class="h2p-accordion-content">
+          <p>Let's teach Avrae new tricks!</p>
+          <ul>
+            <li><strong>Flavor Text Fun:</strong> After your command (e.g., <code class="h2p-codeblock inline-block relative">!a longsword<button class="h2p-copy-button" onclick="copyToClipboard(this, '!a longsword')">Copy</button></code>), type <code>#</code> then your description. Example: <code class="h2p-codeblock inline-block relative">!a greatstaff at Ogre # Barnaby whacks the ogre!<button class="h2p-copy-button" onclick="copyToClipboard(this, '!a greatstaff at Ogre # Barnaby whacks the ogre!')">Copy</button></code></li>
+            <li><strong>Managing Actions:</strong>
+              <ul>
+                <li>Multiple Attacks: <code class="h2p-codeblock inline-block relative">!a shortsword at Goblin 1 # Poke 1!<button class="h2p-copy-button" onclick="copyToClipboard(this, '!a shortsword at Goblin 1 # Poke 1!')">Copy</button></code> then <code class="h2p-codeblock inline-block relative">!a shortsword at Goblin 1 # Poke 2!<button class="h2p-copy-button" onclick="copyToClipboard(this, '!a shortsword at Goblin 1 # Poke 2!')">Copy</button></code></li>
+                <li>Bonus Actions/Reactions: Announce them! "Bonus Action: <code class="h2p-codeblock inline-block relative">!cast healing word on Pip<button class="h2p-copy-button" onclick="copyToClipboard(this, '!cast healing word on Pip')">Copy</button></code>"</li>
+              </ul>
+            </li>
+            <li><strong>Tracking Sparkles (HP, Spells, Counters):</strong>
+              <ul>
+                <li>Features: <code class="h2p-codeblock inline-block relative">!use Second Wind<button class="h2p-copy-button" onclick="copyToClipboard(this, '!use Second Wind')">Copy</button></code></li>
+                <li>Spell Slots: <code class="h2p-codeblock inline-block relative">!cast fireball -l 3<button class="h2p-copy-button" onclick="copyToClipboard(this, '!cast fireball -l 3')">Copy</button></code></li>
+                <li>HP: Heal <code class="h2p-codeblock inline-block relative">!hp +10<button class="h2p-copy-button" onclick="copyToClipboard(this, '!hp +10')">Copy</button></code>, Damage <code class="h2p-codeblock inline-block relative">!hp -5<button class="h2p-copy-button" onclick="copyToClipboard(this, '!hp -5')">Copy</button></code>, Temp HP <code class="h2p-codeblock inline-block relative">!thp +8<button class="h2p-copy-button" onclick="copyToClipboard(this, '!thp +8')">Copy</button></code></li>
+                <li>Custom Counters: <code class="h2p-codeblock inline-block relative">!cc create "Cookies" -max 3 -reset long<button class="h2p-copy-button" onclick="copyToClipboard(this, '!cc create Cookies -max 3 -reset long')">Copy</button></code>. Use: <code class="h2p-codeblock inline-block relative">!cc -Cookies<button class="h2p-copy-button" onclick="copyToClipboard(this, '!cc -Cookies')">Copy</button></code>. View: <code class="h2p-codeblock inline-block relative">!cc<button class="h2p-copy-button" onclick="copyToClipboard(this, '!cc')">Copy</button></code></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="h2p-accordion-item">
+        <h3 class="h2p-accordion-header">Gsheet Genius: Tips for Our Special Scroll!<span class="arrow">&#9662;</span></h3>
+        <div class="h2p-accordion-content">
+          <p>Our Google Sheet is like an organized toy box!</p>
+          <ul>
+            <li><strong>Automation Magic:</strong> Calculates bonuses for you!</li>
+            <li><strong>Backpack Check (Inventory Tabs):</strong> List your gear.</li>
+            <li><strong>Spellbook Secrets:</strong> List spells, slots, and prepared spells.</li>
+            <li><strong>All About Me (Notes & Backstory):</strong> Write your hero's story, personality, and important notes.</li>
+            <li><strong>Sharing is Caring (With the DM!):</strong> Give DM "view" access.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="h2p-accordion-item">
+        <h3 class="h2p-accordion-header">AI Assistants: Your Super-Smart Sidekicks!<span class="arrow">&#9662;</span></h3>
+        <div class="h2p-accordion-content">
+          <p>AI Assistants can do MORE cool stuff!</p>
+          <ul>
+            <li><strong>Super-Charged Character Creation:</strong> Ask for specific personalities, backstories, or help choosing abilities. Example tweak: "...create a Level 5 character... who is a shy but brave Kittenfolk from Whispering Woods, loves buttons, and wants to be a cookie baker. Ensure skills/feat reflect this for the Combat Academy setting."</li>
+            <li><strong>Solo Adventures & Combat Practice:</strong>
+              <ul>
+                <li>Running Baddies: Give AI monster stats. "You are Darkling Slurper. I am Gronk. What do you do?" Ask it to roll attacks.</li>
+                <li>Grid Marking & Image Recognition (Super Advanced!): Try showing AI a map image. "My hero (H) is by swings. Nannybot (M1) by slide moves to me. Show on grid?" (May not work perfectly).</li>
+                <li>Story Sparks: "Pip found a glowing, singing mushroom. Give 3 silly ideas if Pip eats/pokes/sings to it."</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <p style="margin-top: 2rem; text-align: center;">Remember, little heroes, the most important rule is to have FUN and be kind to your fellow adventurers! Now go forth and have some amazing Diaper School adventures!</p>
+    </div> <div id="code-of-conduct-section" class="content-section">
+      <h2>Student Code of Conduct</h2>
+      <p>The basic expectations of all students includes BUT IS NOT LIMITED to:</p>
+      <div class="h2p-accordion-item">
+        <h3 class="h2p-accordion-header">1: Acceptance of Academy Responsibilities<span class="arrow">&#9662;</span></h3>
+        <div class="h2p-accordion-content">
+          <p>A student accepts all responsibilities of being an enrolled member of the academy family- failure to do so will result in expulsion.</p>
+          <blockquote><p>If you're hanging around the spaces within the Academy, you can assume you're enrolled. <strong>Orientation is optional.</strong></p></blockquote>
+        </div>
+      </div>
+      <div class="h2p-accordion-item">
+        <h3 class="h2p-accordion-header">2: Accident Protocol & Diapering Policy<span class="arrow">&#9662;</span></h3>
+        <div class="h2p-accordion-content">
+          <p>Accidents that soil pants, underpants, bedding, seating, or school property may result in immediate diapering.</p>
+          <blockquote>
+            <p>This school has played host to demons, angels, princes and princesses, imperial nobility, and all manner of deities nascent and juvenile. They got diapered when they had accidents. This is also expected of you.</p>
+            <p>The length and thickness of diaper punishments given to you is entirely dependent on the punishing staff member and your own actions and behavior.</p>
+            <p>If you're acting especially rotten, your diapers may also look appropriately infantile to match your tantrum.</p>
+          </blockquote>
+        </div>
+      </div>
+      <div class="h2p-accordion-item">
+        <h3 class="h2p-accordion-header">3: Universal Accountability<span class="arrow">&#9662;</span></h3>
+        <div class="h2p-accordion-content">
+          <p>No student is above punishment for their actions.</p>
+          <blockquote><p>There exists a punishment applicable for every student and every infraction.</p></blockquote>
+        </div>
+      </div>
+      <div class="h2p-accordion-item">
+        <h3 class="h2p-accordion-header">4: Hall Monitor Authority<span class="arrow">&#9662;</span></h3>
+        <div class="h2p-accordion-content">
+          <p>Hall Monitors can enforce rules & are allowed to use force when it is necessary.</p>
+          <blockquote><p>Hall Monitors should attempt to restrain before subjecting anyone to force.</p></blockquote>
+        </div>
+      </div>
+      <div class="h2p-accordion-item">
+        <h3 class="h2p-accordion-header">5: Substance Restrictions<span class="arrow">&#9662;</span></h3>
+        <div class="h2p-accordion-content">
+          <p>Alcohol and Smoking are prohibited in dorms and on school grounds.</p>
+          <blockquote><p>We all know you're going to do it anyway... just be aware it's right here in the rules when you're over a knee complaining that you "had no idea," you couldn't do a keg-stand in the common area.</p></blockquote>
+        </div>
+      </div>
+      <div class="h2p-accordion-item">
+        <h3 class="h2p-accordion-header">6: Weapons & Combat Magic Policy<span class="arrow">&#9662;</span></h3>
+        <div class="h2p-accordion-content">
+          <p>Use of live weapons/lethal magic on campus is highly prohibited.</p>
+          <blockquote><p>All students will note that their weapons do not deal lethal damage while on campus- though are capable of knocking out and generally harming others regardless.</p></blockquote>
+        </div>
+      </div>
+      <div class="h2p-accordion-item">
+        <h3 class="h2p-accordion-header">7: Uniform Requirements<span class="arrow">&#9662;</span></h3>
+        <div class="h2p-accordion-content">
+          <p>Uniform dress code will be enforced all weekdays & for all Students given punishment classes or other weekend duties.</p>
+          <blockquote><p>As well, students taking part in dungeons or adventures off-campus must wear their armored uniform during the course of their assignment. Uniform includes: undergarment, button-up or blouse, vest, pants/skirt/diaper (counts for undergarment as well), bow/tie/bowtie/ascot, and any appropriate regalia as called-for by the activity in question.</p></blockquote>
+        </div>
+      </div>
+      <div class="h2p-accordion-item">
+        <h3 class="h2p-accordion-header">8: Academic Integrity<span class="arrow">&#9662;</span></h3>
+        <div class="h2p-accordion-content">
+          <p>Cheating on assignments and other forms of academic dishonesty will be dealt with severely.</p>
+          <blockquote><p>Mechanical or player-based cheating of the game may result in removal of playing privileges up to and including outright Expulsion from the Realm.</p></blockquote>
+        </div>
+      </div>
+      <div class="h2p-accordion-item">
+        <h3 class="h2p-accordion-header">9: Anti-Theft Policy<span class="arrow">&#9662;</span></h3>
+        <div class="h2p-accordion-content">
+          <p>Theft of personal items from staff/students will be punished severely depending on the item.</p>
+          <blockquote><p>Light fingers are one thing, taking the important items of other students is another and will not be tolerated.</p></blockquote>
+        </div>
+      </div>
+      <div class="h2p-accordion-item">
+        <h3 class="h2p-accordion-header">10: Quest Participation Rules<span class="arrow">&#9662;</span></h3>
+        <div class="h2p-accordion-content">
+          <p>Right to go on quests is dependent on behavior and availability.</p>
+          <blockquote><p>Questrunners are people with lives and responsibilities- they will schedule and run these quests at their own discretion. You cannot reasonably expect quests and dungeons to be paused or held back for you. If your presence in a situation would be dangerous if you need to leave, you will be teleported to safety.</p></blockquote>
+        </div>
+      </div>
+    </div> <div id="legacy-Weapons" class="content-section">
+      <h2>Legacy Weapons</h2>
+      <iframe id="legacy-weapon-iframe" src="../legacyweapon.html" data-original-src="../legacyweapon.html"></iframe>
+    </div>
+    <div id="legacy-Regalia" class="content-section">
+      <h2>Regalia Creator</h2>
+      <iframe id="regalia-creator-iframe" src="../regalia maker.html" data-original-src="../regalia maker.html"></iframe>
+    </div>
+    <div id="fishing-section" class="content-section">
+      <h2>Fishing Adventure</h2>
+      <p>Grab your rod and lure, and test your luck in the academy's lakes and rivers! Catch a variety of fish that can provide special benefits when prepared.</p>
+      <iframe id="fishing-iframe" src="fishingminigame.html" data-original-src="fishingminigame.html"></iframe>
+    </div>
+
+    <div id="pamperlogue" class="content-section">
+      <h2>Pamperlogue</h2>
+      <div id="pamperlogue-iframe-container" class="iframe-container">
+        <div class="iframe-loading">Loading catalog...</div>
+        <iframe id="pamperlogue-iframe" src="../pamperlogue.html" data-original-src="../pamperlogue.html" onload="this.previousElementSibling.style.display='none'"></iframe>
+      </div>
+    </div>
+
+    <div id="potty-checker" class="content-section">
+      <h2>Potty Checker</h2>
+      <div id="potty-checker-iframe-container" class="iframe-container">
+        </div>
+    </div>
+
+    <div id="lore-section" class="content-section">
+      <h2>Academy History & Lore</h2>
+      <p>Over the last 900 years, the academy has been a bulkwark of education against the misuse of power and an institution of consistent renown in the business of training up generations upon generations of heroes and champions of just causes.</p>
+      <div class="lore-era">
+        <h3>Pre Old-War Period</h3>
+        <div class="lore-content">
+          <p><strong>~1000 Years Ago:</strong> Academy Plane is established by the enigmatic figure known only as The Headmaster.</p>
+          <p><strong>~900 Years Ago:</strong> The Headmaster teaches his first class, "Practical Adventuring." The class is so overbooked that the backlog to attend is estimated to be ~890 years long.</p>
+          <p><strong>~850 Years Ago:</strong> The Headmaster disappears from everyday life amongst the Academy. Somehow, he continues to teach his classes as usual. In time, students forget they even take the class despite it appearing on their rosters and their earning of credits towards the class. Some students claim memories from these sessions with a Professor Hoots, but many dismiss these claims as some illusory trick of the Academy's latent magics.</p>
+        </div>
+        <div class="lore-image-placeholder"><img src="assets/images/lore/headmaster.png" alt="The Headmaster" class="lore-image" onerror="this.style.display='none'"></div>
+        <div class="lore-content">
+          <p><strong>~800 Years Ago:</strong> Sorceress Tabitha enrolls at the Academy at the age of 12, an orphan from a devastated and erased realm.</p>
+          <p><strong>~770 Years Ago:</strong> Tabitha creates The Well of the Blessed Engine, a device she claims will allow her to save souls from outside the realm.</p>
+          <p><strong>710-708 Years Ago:</strong> Sorceress Tabitha unleashes the true intent of the Well of Souls. Despite claiming it had never been turned on to full power to save the souls of those who died on other planes without some way to preserve the sanctity of their spirit, the device had been collecting and storing souls for almost a century. Using this power, Tabitha creates the first of her Warforged Host.</p>
+          <p><strong>~707-705 Years Ago:</strong> Using the power of the Well and her Warforged Host, Tabitha wrests control of the Academy from The Council of Professorial Oversight which had taken over for the Headmaster after his sudden ontological dysfunction became apparent. Her pataphysical control over the Academic Plane becomes so strong that she is able to eject students and staff that pose any sort of threat to her hegemony.</p>
+          <p>Tabitha begins to recruit students not simply for the purpose of training but to harvest the failures for conversion into a part of her Warforged Host.</p>
+        </div>
+      </div>
+      <div class="lore-image-placeholder"><img src="assets/images/lore/wellofsouls.jpeg" alt="The Well of Souls" class="lore-image" onerror="this.style.display='none'"></div>
+      <div class="lore-era">
+        <h3>The Old War Period</h3>
+        <div class="lore-content">
+          <p><strong>704-700 Years Ago:</strong> The First Internal Siege of Scholia Proper occurs. This represents the first attack on the Campus rendered by The Warforged Host. After finding a way to bring down the anti-lethality wards on the school, Tabitha sets out to reave the souls of the largest enrolled class since the opening of the Academy. Hundreds, if not thousands, die within the first few days of fighting in the small demiplane.</p>
+          <p><strong>704 Years Ago:</strong> Pliya and dozens of other students are killed during the events of the First Internal Siege. Warforged emerge from beneath the school and ravage the campus- held back by bulwarks of remaining magical wards and the efforts of valiant students and staff who turn back the initial tide. Tabitha, Acting Headmistress, disappears from public view when scrutiny falls on her after the attack is repelled.</p>
+        </div>
+        <div class="lore-image-placeholder"><img src="assets/images/lore/internalsiege.png" alt="The First Internal Siege" class="lore-image" onerror="this.style.display='none'"></div>
+        <div class="lore-content">
+          <p><strong>703 Years Ago:</strong> Magiana and Lesser Radiana are consumed in magical fire and etheric nuclear flame as the Dragons of Monacalath are seen flying overhead in their first war formation in 200 years. They send message that this is a warning for the Academy to surrender to Tabitha's entourage. However, in burning the only lesser-protected spaces outside the grounds, Tabitha had also torched her own auspices of negotiation- war was now absolute and armies would march at The First Battle of the Gate in this year- Tabitha's armies, led by Monacalath the Dragon Lord and Sylane the Sister-Witch of the Sorceress, and the Scholian Forces led by Galander Forsythe and Ylva of the Circle of the Academy.</p>
+          <p>After weeks of slamming their forms against the Bulwark of the Gate, the Battle at the Doors takes place in the later days of this year. For a second time, Monacalath and Sylane are turned back from the Academy grounds they had once called home. The cost, Avatar of the Headmaster and another hero of the age are said to have held aloft the original doors of the school, using them as weapon and aegis against the foes of the Warforged Host.</p>
+          <p>At the Apex of Planar Power on The Eve of the New Year, The Mountains Mordest are levelled in an act of revenge after the loss of Galander Forsythe, Leader of Scholia Armies. Ylva made a pact with the spirits of nature bound to the Academy plane to destroy the mountains, dropping them into the planar void.</p>
+          <p><strong>702 Years Ago:</strong> The Day the Mountains Tumbled results in the near-total annihilation of the Renegade Remnant of students under Tabitha, as well as eliminating most of The Training Fortress, which had been converted into The Ebony Echelon by Tabitha's forces.</p>
+          <p>The Iron March Begins as The Longest of Wintertide begins. Using Spatial Distortion magic fuelled by a last-ditch effort to tap the Well of Souls to defend against Tabitha, the Planar Demesne is drastically elongated in both spatial and temporal dimensions. The tension and stress of this action claims the lives of the entire Scholia Psionica and would mark the end of those studies at the Academy for almost 650 years.</p>
+        </div>
+      </div>
+      <div class="lore-image-placeholder"><img src="assets/images/lore/mountainstumbling.jpeg" alt="The Day the Mountains Tumbled" class="lore-image" onerror="this.style.display='none'"></div>
+      <div class="lore-era">
+        <h3>The Middle War Period</h3>
+        <div class="lore-content">
+          <p><strong>~699 Years Prior:</strong> The Iron March concluded, and the Council of Professorial Oversight, now bolstered by the indomitable spirit of surviving heroes, reasserted its governance. The Well of the Blessed Engine, a once-proud bastion of innovation, was sealed, and the Academy embraced a new epoch of prudence and restraint in arcane research.</p>
+          <p><strong>~680 Years Prior:</strong> The Academy, its reputation besmirched by the dark shadow of conflict, saw a dramatic decline in enrollment. In response, the Council broadened its admissions criteria, inviting pupils of diverse and unconventional backgrounds to walk its storied halls.</p>
+          <p><strong>~650 Years Prior:</strong> The Great Library of Scholia, a bastion of erudition and the epicenter of academic endeavor, arose from the ashes of the past. It was enshrouded by an enchanted barrier, impermeable to those whose intentions were not pure.</p>
+        </div>
+        <div class="lore-image-placeholder"><img src="assets/images/lore/scholialibrary.jpeg" alt="The Great Library of Scholia" class="lore-image" onerror="this.style.display='none'"></div>
+        <div class="lore-content">
+          <p><strong>~630 Years Prior:</strong> The Shadow Guild, a clandestine cabal of nefarious scholars and practitioners of the arcane, insinuated themselves into the very fabric of the Academy. Their machinations aimed to corrupt the youth and pilfer the school's ancient secrets.</p>
+          <p><strong>~600 Years Prior:</strong> The Second Internal Siege of Scholia Proper was discovered as the Council unearthed a clandestine chamber within the Great Library, serving as the nexus of the Shadow Guild's operations. The ensuing battle cleansed the School of this malicious presence. After the battle, the first sightings of darklings outside the walls of the school is reported. Early darklings are largely formless and pose little threat to anyone.</p>
+          <p><strong>~580 Years Prior:</strong> In the wake of the Old War, the Academy introduced a novel curriculum centered on the study and safeguarding of ancient artifacts, recognizing the dual nature of power in the hands of the unenlightened.</p>
+        </div>
+      </div>
+      <div class="lore-image-placeholder"><img src="assets/images/lore/theshadowcabal.png" alt="The Shadow Guild" class="lore-image" onerror="this.style.display='none'"></div>
+      <div class="lore-era">
+        <h3>The First New Dawn of Stability</h3>
+        <div class="lore-content">
+          <p><strong>~550 Years Prior:</strong> The Planar Games, an interdimensional tournament of wit and might, were established to foster unity and camaraderie among the disparate realms of existence.</p>
+          <p><strong>~520 Years Prior:</strong> The Circle of the Academy, a clandestine society dedicated to the protection of the School and its tenets, was formed. Their unseen hand has been a bastion of order and vigilance within the ever-shifting tapestry of academic intrigue.</p>
+          <p><strong>~490 Years Prior:</strong> The Great Reawakening of Magic reverberated through the multiverse, and the Academy's enrollment soared. This influx of aspirants sought to harness the burgeoning power and prevent future cataclysms.</p>
+        </div>
+        <div class="lore-image-placeholder"><img src="assets/images/lore/theplanargames.png" alt="The Planar Games" class="lore-image" onerror="this.style.display='none'"></div>
+        <div class="lore-content">
+          <p><strong>~450 Years Prior:</strong> The Headmaster's Tome, an ancient grimoire replete with the secrets of the founder's disappearance and the Academy's latent potential, was unearthed in the desolate ruins of the Training Fortress.</p>
+          <p><strong>~430 Years Prior:</strong> The Planar Exchange Program was initiated, enabling students to venture forth and study in distant lands, thus weaving a tapestry of diplomatic ties and cultural exchanges that spanned the cosmos.</p>
+        </div>
+      </div>
+      <div class="lore-image-placeholder"><img src="assets/images/lore/headmaster_tome_.png" alt="The Headmaster's Tome" class="lore-image" onerror="this.style.display='none'"></div>
+      <div class="lore-era">
+        <h3>The Modern Age Period</h3>
+        <div class="lore-content">
+          <p><strong>~350 Years Prior:</strong> The Academy delved into the esoteric study of Planar Mechanics, mastering the intricacies of interdimensional travel to navigate and safeguard the multiverse.</p>
+          <p><strong>~330 Years Prior:</strong> The Diapered Defenders, a band of heroes known for their peculiar choice of emblematic attire, graduated from the Academy. Their legend grew as they championed humility and vulnerability in the face of adversity.</p>
+          <p><strong>~300 Years Prior:</strong> The Great Schism rent the academic community asunder, as a contingent of traditionalists advocated for a return to the bygone era of the Well of Souls. The Council's intervention brought about a harmonious resolution, though echoes of discord lingered.</p>
+        </div>
+        <div class="lore-image-placeholder"><img src="assets/images/lore/diapered_defenders_placeholder.jpg" alt="The Diapered Defenders" class="lore-image" onerror="this.style.display='none'"></div>
+        <div class="lore-content">
+          <p><strong>~280 Years Prior:</strong> The Outreach, a satellite campus of the Scholia Magus Academy, was established in the Material Plane, offering the fruits of knowledge to those unable to partake in the Planar Campus's ethereal embrace.</p>
+          <p><strong>~250 Years Prior:</strong> The "Incontinence Incident," a regrettable prank gone awry, cast an embarrassing pall over the School. The ensuing hilarity and confusion, however, did little to deter the student body's resolve.</p>
+          <p><strong>~230 Years Prior:</strong> The Council of Professorial Oversight was infiltrated by the descendants of the Shadow Guild. The Diapered Whisperer, a mole of insidious intent, began subtly shaping the Academy's destiny.</p>
+          <p><strong>~200 Years Prior:</strong> The "Water War," a magical conflagration precipitated by a student's experiment, led to the temporary closure of the School of Elementalism for renovations.</p>
+        </div>
+      </div>
+      <div class="lore-image-placeholder"><img src="assets/images/lore/thewaterwar.png" alt="The Water War" class="lore-image" onerror="this.style.display='none'"></div>
+      <div class="lore-era">
+        <h3>Recent Historical Milestones</h3>
+        <div class="lore-content">
+          <p><strong>~155 Years Prior:</strong> The era saw the enrollment of several current luminaries of the Academy's faculty, including the esteemed Ardelie Heller.</p>
+          <p><strong>~150 Years Prior:</strong> The Diapered Defenders reunited to confront the emergent menace of "The Infantilizer," whose insidious power sought to diminish the great to the state of the powerless.</p>
+          <p><strong>~130 Years Prior:</strong> The enigmatic Ghostly Host materialized before the eyes of the School's denizens, their spectral presence a silent sentinel and a poignant reminder of the Academy's storied past.</p>
+        </div>
+        <div class="lore-image-placeholder"><img src="assets/images/lore/battlewiththeinfantilizer.png" alt="Battle with The Infantilizer" class="lore-image" onerror="this.style.display='none'"></div>
+        <div class="lore-content">
+          <p><strong>~120 Years Prior:</strong> The Infantilizer was vanquished, though not before leaving a trail of diapered dignitaries in his wake. The Diapered Defenders, having served their purpose, once again dispersed into the annals of history.</p>
+          <p><strong>~100 Years Prior:</strong> The millennial anniversary of the Academy's founding was celebrated with the Grand Quest, a series of trials to test the mettle of its pupils and reaffirm its legacy of heroism.</p>
+          <p><strong>~90 Years Prior:</strong> The Ghostly Host was revealed to be an unintended consequence of the Headmaster's efforts to shield the School. Their existence served as a haunting reminder of the interplay between protection and confinement.</p>
+        </div>
+      </div>
+      <div class="lore-image-placeholder"><img src="assets/images/lore/ghostly_host_placeholder.jpg" alt="The Ghostly Host" class="lore-image" onerror="this.style.display='none'"></div>
+    </div> <div id="races-section" class="content-section">
+      <h2>Academy Races</h2>
+      <div id="races-iframe-container" class="iframe-container">
+        </div>
+    </div>
+    
+    <div id="spellbook-section" class="content-section">
+      <h2>Spellbook</h2>
+      <div id="spellbook-iframe-container" class="iframe-container">
+        </div>
+    </div>
+
+  </div> <script>
+    // DOM elements (sections - no need to declare all if accessed directly via ID by functions)
+    const welcomeSection = document.getElementById('welcome-section');
+    const codeOfConductSection = document.getElementById('code-of-conduct-section');
+    const tipsSection = document.getElementById('tips-section');
+    const loreSection = document.getElementById('lore-section');
+    // Other sections are typically fetched by ID within their handlers or helper functions
+
+    /**
+     * Hides all content sections and resets iframes.
+     */
+    function hideAllSections() {
+      const sections = document.querySelectorAll('.content-section');
+      sections.forEach(section => section.classList.remove('active'));
+      
+      const iframeConfigs = [
+        // Dynamically created iframes (container will be cleared)
+        { containerId: 'bestiary-iframe-container', iframeId: 'bestiary-iframe', type: 'dynamic' },
+        { containerId: 'items-iframe-container', iframeId: 'items-iframe', type: 'dynamic' },
+        { containerId: 'spellbook-iframe-container', iframeId: 'spellbook-iframe', type: 'dynamic' },
+        { containerId: 'potty-checker-iframe-container', iframeId: 'potty-checker-iframe', type: 'dynamic' },
+        { containerId: 'races-iframe-container', iframeId: 'races-iframe', type: 'dynamic' },
+        // Statically placed iframes (src will be blanked, loading div handled by its own onload or reset)
+        { iframeId: 'legacy-weapon-iframe', type: 'static' },
+        { iframeId: 'regalia-creator-iframe', type: 'static' },
+        { iframeId: 'fishing-iframe', type: 'static' },
+        { containerId: 'pamperlogue-iframe-container', iframeId: 'pamperlogue-iframe', type: 'staticWithExternalLoader' }
+      ];
+
+      iframeConfigs.forEach(config => {
+        const iframe = document.getElementById(config.iframeId);
+        if (iframe) {
+          iframe.src = 'about:blank'; 
+        }
+        if (config.type === 'dynamic') {
+            const container = document.getElementById(config.containerId);
+            if (container) {
+                container.innerHTML = `<div class="iframe-loading">Loading...</div>`; // Reset container
+            }
+        } else if (config.type === 'staticWithExternalLoader') {
+            const container = document.getElementById(config.containerId);
+            if (container) {
+                const loadingMessage = container.querySelector('.iframe-loading');
+                if (loadingMessage) {
+                    loadingMessage.style.display = 'block'; 
+                }
+            }
+        }
+      });
+    }
+    
+    /**
+     * Creates or refreshes an iframe in a specified container.
+     */
+    function createOrRefreshIframe(containerId, iframeId, src, title) {
+        const container = document.getElementById(containerId);
+        if (!container) {
+            console.error(`Container with ID ${containerId} not found for iframe ${iframeId}.`);
+            return;
+        }
+        container.innerHTML = `<div class="iframe-loading">Loading ${title.toLowerCase()}...</div>
+                             <iframe id="${iframeId}" src="${src}" title="${title}" style="width: 100%; height: 100%; border: none; display: block; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.2);" onload="if(this.previousElementSibling && this.previousElementSibling.classList.contains('iframe-loading')) { this.previousElementSibling.style.display='none'; }"></iframe>`;
+    }
+
+    /**
+     * Refreshes a statically placed iframe by resetting its src.
+     */
+    function refreshStaticIframe(iframeId, defaultSrc, isPamperlogue = false) {
+        const iframe = document.getElementById(iframeId);
+        if (iframe) {
+            if (!iframe.hasAttribute('data-original-src')) {
+                iframe.setAttribute('data-original-src', defaultSrc);
+            }
+            const originalSrc = iframe.getAttribute('data-original-src');
+            
+            // For Pamperlogue, we won't manually show its loader here as per user feedback.
+            // Its own onload and the hideAllSections reset should manage it.
+            if (!isPamperlogue) {
+                const loadingSibling = iframe.previousElementSibling;
+                if (loadingSibling && loadingSibling.classList.contains('iframe-loading')) {
+                    loadingSibling.style.display = 'block';
+                }
+            }
+            
+            iframe.src = 'about:blank'; 
+            setTimeout(() => { iframe.src = originalSrc; }, 50); 
+            
+        } else {
+            console.error(`Static iframe with ID ${iframeId} not found for refresh.`);
+        }
+    }
+
+
+    // --- Event Listeners Setup ---
+    document.addEventListener('DOMContentLoaded', function() {
+      const navActions = {
+        'btn-welcome': () => document.getElementById('welcome-section').classList.add('active'),
+        'btn-conduct': () => {
+            document.getElementById('code-of-conduct-section').classList.add('active');
+            initializeAccordions(document.getElementById('code-of-conduct-section'));
+        },
+        'btn-bestiary': () => {
+            document.getElementById('bestiary-section').classList.add('active');
+            createOrRefreshIframe('bestiary-iframe-container', 'bestiary-iframe', '../bestiary.html', 'Bestiary');
+        },
+        'btn-items': () => { 
+            document.getElementById('items-section').classList.add('active');
+            createOrRefreshIframe('items-iframe-container', 'items-iframe', 'items.html', 'Item Compendium');
+        },
+        'btn-tips': () => {
+            document.getElementById('tips-section').classList.add('active');
+            initializeAccordions(document.getElementById('tips-section'));
+        },
+        'btn-legacy-Weapons': () => {
+            document.getElementById('legacy-Weapons').classList.add('active');
+            refreshStaticIframe('legacy-weapon-iframe', '../legacyweapon.html');
+        },
+        'btn-regalia': () => {
+            document.getElementById('legacy-Regalia').classList.add('active');
+            refreshStaticIframe('regalia-creator-iframe', '../regalia maker.html');
+        },
+        'btn-lore': () => document.getElementById('lore-section').classList.add('active'),
+        'btn-spellbook': () => {
+            document.getElementById('spellbook-section').classList.add('active');
+            createOrRefreshIframe('spellbook-iframe-container', 'spellbook-iframe', '../spellbook.html', 'Spellbook');
+        },
+        'btn-fishing': () => {
+            document.getElementById('fishing-section').classList.add('active');
+            refreshStaticIframe('fishing-iframe', 'fishingminigame.html');
+        },
+        'btn-pamperlogue': () => {
+            document.getElementById('pamperlogue').classList.add('active');
+            // Pamperlogue specific: rely on its internal onload and hideAllSections reset for loader.
+            // The hideAllSections already makes its loader visible. Refresh just sets src.
+            refreshStaticIframe('pamperlogue-iframe', '../pamperlogue.html', true); // Pass true for isPamperlogue
+        },
+        'btn-potty-checker': () => {
+            document.getElementById('potty-checker').classList.add('active');
+            createOrRefreshIframe('potty-checker-iframe-container', 'potty-checker-iframe', '../pottychecker.html', 'Potty Checker');
+        },
+        'btn-races': () => { 
+            document.getElementById('races-section').classList.add('active');
+            createOrRefreshIframe('races-iframe-container', 'races-iframe', 'races.html', 'Academy Races');
+        }
+      };
+
+      for (const btnId in navActions) {
+        const button = document.getElementById(btnId);
+        if (button) {
+          const newButton = button.cloneNode(true); 
+          button.parentNode.replaceChild(newButton, button);
+          newButton.addEventListener('click', () => {
+            hideAllSections();
+            navActions[btnId]();
+          });
+        } else {
+            console.warn(`Button with ID ${btnId} not found.`);
+        }
+      }
+      
+      initializeAccordions(document); 
+    });
+
+    function initializeAccordions(parentElement) {
+      const accordionHeaders = parentElement.querySelectorAll('.h2p-accordion-header');
+      accordionHeaders.forEach(header => {
+        const newHeader = header.cloneNode(true); // Prevents multiple listeners if called again
+        if (header.parentNode) {
+            header.parentNode.replaceChild(newHeader, header);
+        }
+        newHeader.addEventListener('click', toggleAccordion);
+      });
+    }
+
+    function toggleAccordion() {
+      const content = this.nextElementSibling;
+      const arrow = this.querySelector('.arrow');
+      // Check if content and arrow exist to prevent errors
+      if (!content) return; 
+
+      const isOpen = content.classList.contains('open');
+      
+      if (isOpen) {
+        content.classList.remove('open');
+        content.style.maxHeight = '0';
+        if (arrow) arrow.innerHTML = '&#9662;';
+      } else {
+        content.classList.add('open');
+        content.style.maxHeight = content.scrollHeight + "px";
+        if (arrow) arrow.innerHTML = '&#9652;';
+      }
+    }
+
+    function copyToClipboard(button, text) {
+      const textToCopy = text || button.parentElement.querySelector('code').innerText;
+      navigator.clipboard.writeText(textToCopy).then(() => {
+        button.textContent = 'Copied!';
+        setTimeout(() => { button.textContent = 'Copy'; }, 2000);
+      }).catch(err => {
+        console.error('Failed to copy with navigator.clipboard: ', err);
+        const textArea = document.createElement("textarea");
+        textArea.value = textToCopy;
+        textArea.style.position = "fixed"; 
+        textArea.style.left = "-9999px";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        try {
+            const successful = document.execCommand('copy');
+            if (successful) {
+                button.textContent = 'Copied!';
+            } else {
+                button.textContent = 'Error!';
+            }
+            setTimeout(() => { button.textContent = 'Copy'; }, 2000);
+        } catch (execErr) {
+            console.error('Fallback copy with execCommand failed: ', execErr);
+            button.textContent = 'Error!';
+            setTimeout(() => { button.textContent = 'Copy'; }, 2000);
+        }
+        document.body.removeChild(textArea);
+      });
+    }
+    window.copyToClipboard = copyToClipboard;
+
+  </script>
+</body>
+</html>

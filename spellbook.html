@@ -1,0 +1,1968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spellbook</title>
+  <style>
+:root {
+  --gold-dark: #97740a;
+  --parchment: #2C2614;
+  --parchment-dark: #1E1C12;
+  --ink: #c7a81d;
+  --ink2: #8f770d;
+  --accent: #b47018;
+  --shadow: rgba(0, 0, 0, 0.5);
+}
+
+body {
+  font-family: 'Cormorant Garamond', serif;
+  margin: 0;
+  padding: 20px;
+  background-color: #2c2619;
+  background-image: url('https://www.transparenttextures.com/patterns/dark-wood.png');
+  color: var(--ink);
+  line-height: 1.6;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.content-section {
+  background-color: var(--parchment);
+  background-image: url('https://www.transparenttextures.com/patterns/parchment.png');
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  border: 12px solid var(--gold-dark);
+}
+
+h2 {
+  color: var(--ink);
+  margin-bottom: 20px;
+  border-bottom: 2px solid var(--gold-dark);
+  padding-bottom: 8px;
+  font-size: 1.8rem;
+}
+
+.filter-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: var(--parchment-dark);
+  border-radius: 8px;
+  box-shadow: 0 2px 5px var(--shadow);
+  border: 1px solid var(--gold-dark);
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+}
+
+.filter-group label {
+  margin-right: 5px;
+  font-weight: bold;
+  color: var(--ink);
+}
+
+select {
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid var(--gold-dark);
+  background-color: var(--parchment-dark);
+  color: var(--ink);
+  font-family: 'Cormorant Garamond', serif;
+}
+
+button {
+  padding: 8px 15px;
+  background-color: var(--gold-dark);
+  color: var(--parchment-dark);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s;
+  font-family: 'Cormorant Garamond', serif;
+}
+
+button:hover {
+  background-color: var(--ink2);
+  box-shadow: 0 0 5px var(--ink);
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background-color: var(--parchment-dark);
+  border-radius: 8px;
+  box-shadow: 0 2px 5px var(--shadow);
+  padding: 15px;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: 1px solid var(--gold-dark);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px var(--shadow), 0 0 5px var(--ink);
+}
+
+.card h3 {
+  color: var(--ink);
+  margin-top: 0;
+  border-bottom: 1px solid var(--gold-dark);
+  padding-bottom: 10px;
+  font-size: 1.5rem;
+}
+
+.card p {
+  color: var(--ink);
+}
+
+.card strong {
+  color: var(--accent);
+}
+
+.card em {
+  color: var(--ink2);
+}
+
+@media (max-width: 600px) {
+  .filter-container {
+    flex-direction: column;
+  }
+  
+  .card-grid {
+    grid-template-columns: 1fr;
+  }
+}
+  </style>
+</head>
+<body>
+  <div id="spellbook-section" class="content-section">
+    <h2>Padded Arcana</h2>
+    <p>In the realm of magic there are outlets and studies for every desire, interest, and proclivity. From conjuring sweets, to summoning friends, to creating tools and items- magic is pretty neat! And so, yes, of course, there is magic solely designed for ABDL tasks, causes and needs. Many are diaper and diaper-use focused, but others are aesthetic or even have obvious utility in the big scary world!</p>
+    <div class="filter-container">
+      <div class="filter-group">
+        <label for="level-filter">Level: </label>
+        <select id="level-filter">
+          <option value="all" selected>All Levels</option>
+          <option value="0">Cantrips</option>
+          <option value="1">Level 1</option>
+          <option value="2">Level 2</option>
+          <option value="3">Level 3</option>
+          <option value="4+">Level 4+</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="school-filter">School: </label>
+        <select id="school-filter">
+          <option value="all" selected>All Schools</option>
+          <option value="abjuration">Abjuration</option>
+          <option value="conjuration">Conjuration</option>
+          <option value="divination">Divination</option>
+          <option value="enchantment">Enchantment</option>
+          <option value="evocation">Evocation</option>
+          <option value="illusion">Illusion</option>
+          <option value="necromancy">Necromancy</option>
+          <option value="transmutation">Transmutation</option>
+          <option value="luminancy">Luminancy</option>
+        </select>
+      </div>
+      <button id="apply-filters">Apply Filters</button>
+      <button id="reset-filters">Reset</button>
+    </div>
+    <div class="card-grid" id="spellbook-container">
+      <!-- Spell cards will be generated here -->
+    </div>
+  </div>
+
+  <script>
+   // Spells data
+	const spellsData = [
+	{
+    	"name": "Radiant Lance",
+    	"level": 0,
+    	"school": "V",
+    	"automation": [
+        	{
+            	"type": "target",
+            	"target": "each",
+            	"effects": [
+                	{
+                    	"type": "attack",
+                    	"hit": [
+                        	{
+                            	"type": "damage",
+                            	"damage": "1d8+ {spell_attack_bonus}",
+                            	"higher": {
+                                	"1": "2d8",
+                                	"2": "3d8",
+                                	"3": "4d8"
+                            	},
+                            	"cantripScale": true
+                        	}
+                    	],
+                    	"miss": []
+                	}
+            	]
+        	}
+    	],
+    	"classes": "All Divine Classes",
+    	"subclasses": "",
+    	"casttime": "1 Action",
+    	"range": "",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "Holy Symbol"
+    	},
+    	"duration": "Instantaneous",
+    	"ritual": false,
+    	"description": "You raise your holy symbol or weapon of faith and a glowing white beam of radiance lances out between you and your target. Make a ranged spell attack. On a hit, you deal 1d8 + your spellcasting ability modifier radiant damage.",
+    	"higherlevels": "The damage increased to 2d8 when you reach 5th level, 3d8 at 11th level, and 4d8 at 17th level.",
+    	"concentration": false
+	},
+	{
+    	"name": "Diapering",
+    	"level": 0,
+    	"school": "C",
+    	"automation": [
+        	{
+            	"type": "target",
+            	"target": "all",
+            	"effects": [
+                	{
+                    	"type": "save",
+                    	"stat": "dex",
+                    	"fail": [],
+                    	"success": []
+                	}
+            	]
+        	},
+        	{
+            	"type": "text",
+            	"text": "You hold out a fresh diaper at a creature within sight. On a failed Dexterity save, the target is diapered. The diaper is magically locked and cannot be untaped until the diaper has been used- dispelling the lock."
+        	}
+    	],
+    	"classes": "All",
+    	"subclasses": "",
+    	"casttime": "Instantaneous",
+    	"range": "100ft",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "A fresh diaper"
+    	},
+    	"duration": "Instantaneous",
+    	"ritual": false,
+    	"description": "You hold out a fresh diaper at a creature within sight. On a failed Dexterity save, the target is diapered. The diaper is magically locked and cannot be untaped until the diaper has been used- dispelling the lock.",
+    	"higherlevels": "",
+    	"concentration": false,
+	},
+	{
+    	"name": "Aliza's Electricky Paw",
+    	"level": 0,
+    	"school": "Evocation",
+    	"casttime": "1 action",
+    	"range": "Touch",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "None"
+    	},
+    	"duration": "Instantaneous",
+    	"description": "You channel a jolt of electricity through your hand to deliver an embarrassing shock. Make a melee spell attack against a creature you can reach. On a hit, the target takes 1d8 lightning damage and must make a Constitution saving throw. On a failed save, the creature loses control and wets their pants, causing both humiliation and inconvenience.\n\nIf the target wets their pants, they cannot take reactions until the start of their next turn. Creatures wearing impermeable or magically resistant clothing may gain advantage on this saving throw, at the DM's discretion.\n\nThe spell’s damage increases when you reach higher levels:\n• At 5th level, the damage increases to 2d8.\n• At 11th level, the damage increases to 3d8.\n• At 17th level, the damage increases to 4d8.",
+	},
+	{
+    	"name": "Spank!",
+    	"level": 0,
+    	"school": "Evocation",
+    	"casttime": "1 bonus action",
+    	"range": "30 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "False"
+    	},
+    	"duration": "1 turn",
+    	"description": "With a sharp flick of energy, you conjure a spectral sting that strikes a foe. Make a ranged spell attack against a creature within range. The target must succeed on a Dexterity saving throw or take 1 damage and have its speed reduced to 0 until the end of its current turn. On its next turn, its speed is further reduced to 10 feet.\n\nThe spell’s power does not scale with your character level, remaining a quick and versatile utility in combat.",
+	},
+	{
+    	"name": "Spontaneous Accident",
+    	"level": 0,
+    	"school": "Enchantment",
+    	"casttime": "1 action",
+    	"range": "30 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "Pinch of glitter dust or vial of stink worth 1sp+"
+    	},
+    	"duration": "Instantaneous",
+    	"description": "With either a captivating word or an attention-grabbing object, you compel a creature within range to experience an embarrassing accident. Choose one creature you can see within range. The target must succeed on a Wisdom saving throw or suffer one of the following effects. The caster can either choose the effect or roll randomly on the table below:\n\n| d8 | Effect |\n|----|--------|\n|  1 | The target produces a loud, gusty fart. There is a **50% chance of \"tragic consequences\"** (as determined by the DM), but regardless, they will **require a wardrobe change.** |\n|  2 | The target visibly loses control of their bladder, causing humiliation and dampened spirits. |\n|  3 | The target suddenly slips as if on an invisible banana peel, falling prone and losing their next reaction. |\n|  4 | The target is overcome with uncontrollable hiccups, making it impossible for them to cast spells with verbal components until the end of their next turn. |\n|  5 | The target sneezes violently, causing them to drop any item they are holding. |\n|  6 | A piece of the target's clothing or armor suddenly tears or falls out of place, causing embarrassment and disadvantage on Charisma checks until the end of their next turn. |\n|  7 | The target bursts into uncontrollable laughter, unable to take actions or reactions until the start of their next turn. |\n|  8 | The target starts scratching furiously as if covered in an imaginary rash, giving them disadvantage on attack rolls until the end of their next turn. |\n\nThe spell’s effects are meant for comedic and non-lethal scenarios. At the DM's discretion, these results can be modified to suit specific situations or party dynamics.",
+	},
+	{
+    	"name": "Little Miracle",
+    	"level": 0,
+    	"school": "Divine",
+    	"classes": "Wizard, Sorcerer, Bard, Cleric",
+    	"casttime": "1 action",
+    	"range": "10 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "a tiny holy pacifier or blessed teether"
+    	},
+    	"duration": "Up to 1 hour",
+    	"ritual": false,
+    	"description": "You invoke a tender spark of divine care, performing minor miracles that soothe and refresh. Choose one of the following effects within range when you cast this cantrip: Clean or Soil: You cause a nonmagical object no larger than 1 cubic foot to either become impeccably clean or comically soiled. Deodorize or Scent: You neutralize undesirable odors on an object or creature, or imbue them with an enchanting fragrance reminiscent of fresh baby powder, warm milk, or blossoming garden flowers. Heating/Chilling (with Gentle Massage): You alter the temperature of an object or creature so that it becomes pleasantly warm or cool. If you target a creature, you may opt to provide a gentle, soothing massage along with the temperature change. When you do, the recipient gains advantage on its next saving throw against effects that would instill fear or panic. Flavoring: You imbue a morsel of food or a drink with a subtle burst of flavor, heightening its comforting qualities. Soothing Care: You channel a gentle magic that alleviates minor aches, pains, and the discomfort of mild fatigue. Choose one creature within range; for the duration, that creature feels a soothing alleviation of bodily discomfort, granting it advantage on ability checks and saving throws related to minor pain or fatigue. This effect does not restore hit points. Furthermore, if the target remains under the uninterrupted effect of Soothing Care for an entire short rest, and it is suffering from exhaustion at level 1, that level of exhaustion is removed at the end of the rest. Only one effect can be active per casting, and the chosen miracle persists for the spell's duration or until you invoke a different effect with this cantrip. While not a substitute for potent restorative magic, Little Miracle reflects the tender, task-focused character of divine care in Diaper School."
+	},
+	{
+    	"name": "Pacification",
+    	"level": 1,
+    	"school": "conjuration",
+    	"casttime": "1 action",
+    	"range": "30 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "True"
+    	},
+    	"duration": "12 hours",
+    	"description": "You conjure a magical pacifier and attempt to affix it to a creature you can see within range. The target must succeed on a Wisdom saving throw or become affected by the spell. If the target fails, the pacifier magically transforms to match their style and color palette, becoming uniquely suited to them and cannot be removed manually. It will sprout a straw to allow the target to drink.\n\nWhile pacified, the target experiences the following effects:\n• **Restricted Speech:** The target cannot speak competently; words are muffled and jumbled. Any spell with verbal components has a 75% chance to fail, determined by rolling a d4 (on a result of 1, the spell fails).\n• **Muffled Voice:** The target's voice is muffled to 10% of its normal volume.\n\nIf the pacifier is removed through magical means, such as *dispel magic* or *remove curse*, it immediately ceases to exist. Otherwise, it vanishes when the spell ends after the designated duration.\n\n**At Higher Levels.** When you cast this spell using a spell slot of 2nd level or higher, its duration increases by 12 hours for each slot level above 1st.",
+	},
+	{
+    	"name": "Hide Smell",
+    	"level": 1,
+    	"school": "illusion",
+    	"casttime": "1 action",
+    	"range": "Self",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "False"
+    	},
+    	"duration": "Concentration, up to 1 hour",
+    	"description": "You create an illusory aura that obfuscates your natural scent, replacing it with one of the following:\n• A neutral scent typical for your race.\n• A comically eggy smell.\n• A pleasant floral fragrance of your choice.\n\nThis spell is useful for avoiding detection by creatures that rely on scent, such as beasts or certain monsters. The altered scent remains for the duration or until the spell is dispelled. Creatures attempting to discern your true scent must succeed on a Wisdom (Perception) check against your spell save DC.\n\n**At Higher Levels.** When you cast this spell using a spell slot of 2nd level or higher, you can target one additional creature within 10 feet for each slot level above 1st.",
+	},
+	{
+    	"name": "Disguise Age",
+    	"level": 1,
+    	"school": "illusion",
+    	"casttime": "1 action",
+    	"range": "Self",
+    	"components": {
+        	"verbal": false,
+        	"somatic": true,
+        	"material": "True"
+    	},
+    	"duration": "1 hour",
+    	"description": "You make yourself and all equipped items look YOUNGER/more childish until the spell ends or until you use your action to dismiss it. You can appear as young as 8 years old, but the choice of age is your choice. You can't change your body type, so you must adopt a form that has the same basic arrangement of limbs. All other aesthetic considerations are up to you.\n\nWhile outwardly convincing, this spell fails any physical scrutiny. For example, if you were to use the spell to appear as an 8 year old and someone were to lift you, they would immediately notice that you are far heavier than you look.\n\nTo discern that you are disguised, a creature can use its action to inspect your appearance and must succeed on an Intelligence (Investigation) check against your spell save DC. If the person is familiar with the adult form of the caster, this check is made with advantage."
+	},
+	{
+    	"name": "Magic Messle",
+    	"level": 1,
+    	"school": "Conjuration",
+    	"classes": "Wizard, Sorcerer, Bard,Cleric",
+    	"casttime": "1 action",
+    	"range": "120 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": ""
+    	},
+    	"duration": "Instantaneous",
+    	"ritual": false,
+    	"description": "You conjure a burst of magically sticky, messy goo that darts toward one creature you can see within 120 feet. The messle automatically strikes its target, dealing 1d4 acid damage per missile. You create three messle missiles, with one additional missile for each spell slot level above 1. In addition to the acid damage, the target must succeed on a Constitution saving throw or fill their diaper or pants with magical mess. While messy, the target suffers disadvantage on Dexterity-based checks and saving throws, as the mess clings and hinders their movements."
+	},
+	{
+    	"name": "Diaper Shield",
+    	"level": 1,
+    	"school": "Abjuration",
+    	"classes": "Wizard, Sorcerer, Bard, Cleric",
+    	"casttime": "1 reaction",
+    	"range": "Self",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": ""
+    	},
+    	"duration": "10 minutes",
+    	"ritual": false,
+    	"description": "A shimmering magical barrier forms around your diaper, temporarily preventing leaks and ensuring maximum absorbency. For the duration, your diaper cannot leak, no matter how full it becomes, and it remains comfortably intact. This shield provides psychological relief from embarrassment, granting advantage on saving throws against humiliation-based effects. This spell also nullifies Magic Messle and Magic Missile in the same fashion as Shield."
+	},
+	{
+    	"name": "Personal Littlespace",
+    	"level": 1,
+    	"school": "Abjuration",
+    	"classes": "Wizard, Sorcerer, Bard, Cleric",
+    	"casttime": "1 action",
+    	"range": "Self (10-foot radius)",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "a tiny rattle or pacifier"
+    	},
+    	"duration": "Concentration, up to 1 minute",
+    	"ritual": false,
+    	"description": "You envelop yourself in a playful yet potent aura of protection. Until the spell ends, a 10-foot radius emanates from you, functioning similarly to sanctuary. However, this field has a mischievous drawback: any creature (other than you) that enters the Personal Littlespace is instantaneously transformed into a baby version of themselves. Their physical ability scores (Strength, Dexterity, and Constitution) are reduced by 10 (to a minimum of 5), and they become incapable of speaking or casting spells that require verbal components. This transformation persists only while the creature remains within the aura; once they exit the area, they immediately return to normal. In addition, any spell cast from outside and targeting an area within your Personal Littlespace has a 75% chance of dissolving into harmless confetti and sparkles, rendering it ineffective—unless the spell specifically bypasses or negates effects akin to sanctuary."
+	},
+	{
+    	"name": "Binky Barrier",
+    	"level": 1,
+    	"school": "Abjuration",
+    	"classes": "Wizard, Sorcerer, Bard, Cleric",
+    	"casttime": "1 reaction",
+    	"range": "Self",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "a glittering pacifier"
+    	},
+    	"duration": "Until the start of your next turn",
+    	"ritual": false,
+    	"description": "In a flash of command and cuddly authority, you invoke a magical shield made of fluttering binkies and soft blankets. Until the start of your next turn, you gain a +2 bonus to your AC. Additionally, if the triggering attack is made with a ranged weapon, the attacker must roll with disadvantage on that attack roll."
+	},
+	{
+    	"name": "Smelly Smite",
+    	"level": 1,
+    	"school": "Evocation",
+    	"classes": "Wizard, Sorcerer, Bard, Cleric",
+    	"casttime": "1 bonus action",
+    	"range": "Self",
+    	"components": {
+        	"verbal": true,
+        	"somatic": false,
+        	"material": ""
+    	},
+    	"duration": "Until you hit with a melee weapon attack",
+    	"ritual": false,
+    	"description": "Your weapon becomes imbued with an overpowering odor reminiscent of freshly loaded diapers. The next time you hit a creature with a melee attack before the spell ends, the target takes an extra 1d6 poison damage and must succeed on a Constitution saving throw or be stunned until the end of its next turn, overcome by repulsion. Until they have been deodorized, or until the end of combat, the target has disadvantage on charisma checks and concentration checks. At Higher Levels: When you cast this spell using a spell slot of 3rd level or higher, increase the damage by 1d6 for each slot level above 2nd."
+	},
+	{
+    	"name": "Tearful Tantrum",
+    	"level": 1,
+    	"school": "Enchantment",
+    	"classes": "Wizard, Sorcerer, Bard, Cleric",
+    	"casttime": "1 action",
+    	"range": "60 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "a broken lullaby music box or shattered baby's rattle"
+    	},
+    	"duration": "Instantaneous",
+    	"ritual": false,
+    	"description": "You force a creature to confront a cascade of repressed, unsettling childhood memories. Choose one creature you can see; that creature must make a Wisdom saving throw. On a failed save, it is inundated with sorrowful recollections and takes 2d6 psychic damage as echoes of humiliating nursery rhymes fill its mind. Immediately afterward, the target must succeed on a Constitution saving throw. On a failure, the target suffers an embarrassing accident—its composure shatters as it becomes overwhelmed by humiliation. Until the start of its next turn, the target has disadvantage on attack rolls and ability checks, as the lingering trauma renders it momentarily clumsy and distracted. On a successful initial Wisdom save, the creature takes half damage and avoids the subsequent effect.",
+	},
+	{
+    	"name": "Plushie Form",
+    	"level": 1,
+    	"school": "Transmutation",
+    	"classes": "Wizard, Sorcerer, Bard, Cleric",
+    	"casttime": "1 action",
+    	"range": "Self",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "a scrap of plush fabric and a pinch of magical stuffing"
+    	},
+    	"duration": "Concentration, up to 1 minute",
+    	"ritual": false,
+    	"description": "You magically transform into a cuddly plushie version of yourself. In this altered state, your body becomes soft and endearingly stuffed, but you lose some of your agility. Your walking speed is reduced by 10 feet, and you have disadvantage on Dexterity (Acrobatics) checks and Dexterity saving throws. Despite these drawbacks, your plush exterior grants you superior protection: you gain resistance to all non-magical bludgeoning, piercing, and slashing damage. Additionally, when you cast this spell, choose one damage type from fire, cold, lightning, acid, or poison. While transformed, you are immune to that chosen damage type."
+	},
+	{
+    	"name": "Babybrain",
+    	"level": 2,
+    	"school": "illusion",
+    	"casttime": "1 action",
+    	"range": "60 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "False"
+    	},
+    	"duration": "1 round",
+    	"description": "You cloud the mind of a creature with the illusion of infantile simplicity. Choose one creature within range. The target must succeed on an Intelligence saving throw or be affected by the spell until the start of their next turn.\n\nWhile affected by Babybrain, the creature:\n• Loses access to all class features, abilities, and powers.\n• Has their movement speed reduced to their racial base.\n• Loses all proficiencies in armor, weapons, and skills.\n• Fizzles any attempts to cast spells they know or prepare.\n\nThe only actions they can take during their turn are to move, flee, or make a single melee attack with a simple weapon, natural weapon, or a weapon with which they are racially proficient.\n\n**Special:** If the affected creature is a raging barbarian, their rage is not interrupted or lost unless their rage ends before the spell’s effect does.\n\nThis spell reduces even the mightiest to a state of childish ineffectiveness, often to their great frustration. At the DM’s discretion, this spell may have additional narrative effects appropriate to the context.",
+	},
+	{
+    	"name": "Lulu's Convenient Changing Break",
+    	"level": 2,
+    	"school": "conjuration",
+    	"casttime": "1 action",
+    	"range": "Touch",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "A drawing or sculpture of a small charming outhouse worth at least 100gp as an arcane focus."
+    	},
+    	"duration": "2 minutes",
+    	"ritual": false,
+    	"description": "You create a small, non-temporal, extra-dimensional space perfectly suited for a quick clothing change. When you cast this spell, you and one person touching you are instantly transported to the space. The room contains everything necessary for changing clothing, armor, and diapers- such as mirrors, privacy screens, and fresh towels, but does not contain food or potable water.\n\nThe space exists for up to 2 minutes, after which the spell ends and anyone still inside is deposited back to the point where they entered. A single door in the room allows voluntary exit at any time, returning the individual to their original location.\n\n**At Higher Levels.** When you cast this spell using a spell slot of 3rd level or higher, you can bring an additional person for each slot level above 2nd. The room expands slightly to accommodate any additional occupants and lasts 2 extra minutes.\n\n*This spell is often used for moments requiring quick discretion and convenience. Despite its utility, the space is purely functional and designed for changing purposes only.*"
+	},
+	{
+    	"name": "Create Changing Supplies",
+    	"level": 2,
+    	"school": "Conjuration",
+    	"classes": "Wizard, Sorcerer, Bard, Cleric",
+    	"casttime": "1 action",
+    	"range": "Self",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "a roll of premium baby wipes, a sample of enchanted diaper fabric, and a vial of soothing lotion"
+    	},
+    	"duration": "Instantaneous",
+    	"ritual": false,
+    	"description": "You call forth a superb assortment of magical changing supplies, meticulously prepared to meet the refined standards of Diaper School. Upon casting, you conjure two enchanted diapers that function as Shield Magidiaper+1. While donned, each Shield Magidiaper+1 grants its wearer a +1 bonus to AC and resistance to non‐magical bludgeoning damage—its magically imbued softness deflecting blows that would otherwise harm. In addition, a set of high-quality, mundane supplies accompanies each diaper: fresh wipes, luxurious creams, and immaculate adhesive fasteners guaranteed to keep everything in place. For every spell slot level above 2nd that you expend, two additional enchanted diapers are created (each identical in function to a Shield Magidiaper+1). These diapers magically adhere to the wearer as permanent clothing for the duration of their use. However, the moment a diaper is removed, it instantly vanishes in a burst of glittering magic. During the changing process, you may choose to \"lock\" the diaper onto the wearer—ensuring that its protective properties remain secure until the wearer completes a short rest.",
+	},
+	{
+    	"name": "My Hero!",
+    	"level": 2,
+    	"school": "Enchantment",
+    	"classes": "Wizard, Sorcerer, Bard, Cleric",
+    	"casttime": "1 action",
+    	"range": "30 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "a heroic token such as a small medal or treasured keepsake"
+    	},
+    	"duration": "Concentration, up to 1 minute",
+    	"ritual": false,
+    	"description": "Choose one ally you can see within range. For the duration, as long as the target remains within 10 feet of you, they gain these benefits: AC Bonus: A +2 bonus to Armor Class. Temporary Shielding: They gain 10 temporary hit points. Damage Resistance: They have resistance to all non-magical damage. Initiative Edge: They gain advantage on initiative rolls. Protector’s Prowess: They gain advantage on ability checks made specifically to protect you. If the target ends their turn more than 10 feet from you, the spell ends immediately. At Higher Levels: When you cast this spell using a spell slot of 3rd level or higher, for each slot level above 2nd: The AC bonus increases by +1. The temporary hit points increase by 5."
+	},
+	{
+    	"name": "Instantaneous Accident",
+    	"level": 2,
+    	"school": "Enchantment",
+    	"classes": "Wizard, Sorcerer, Bard,Cleric",
+    	"casttime": "1 action",
+    	"range": "60 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": ""
+    	},
+    	"duration": "1 round",
+    	"ritual": false,
+    	"description": "A chaotic burst of diaper-school magic forces an unexpected mishap upon your target. Choose one creature you can see within 60 feet. The target must succeed on a DC 13 Constitution saving throw or suffer an embarrassing, uncontrollable accident. On a failed save, the creature is overwhelmed by disarray — unable to take actions, bonus actions, or reactions until the start of its next turn as it fumbles and drops held objects. Though this spell deals no damage, its disruptive effects can turn the tide of battle by leaving foes disoriented and vulnerable.",
+	},
+	{
+    	"name": "Diaper Detonation",
+    	"level": 2,
+    	"school": "Evocation",
+    	"classes": "Wizard, Sorcerer, Bard, Cleric",
+    	"casttime": "1 action",
+    	"range": "60 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "a scrap of absorbent cloth from a well-worn diaper"
+    	},
+    	"duration": "Instantaneous",
+    	"ritual": false,
+    	"description": "You hurl a burst of pamper-seeking energy a creature within range. The target must make a Constitution saving throw. On a failed save, the creature takes 3d6 damage and is overwhelmed with embarrassing stink, causing it to have disadvantage on its next attack roll. On a successful save, the creature takes half damage and suffers no additional effect. If the target is wearing a diaper, the diaper takes 3 uses from this effect as the polymer is magically denatured in the blast. If the diaper is destroyed by this attack, it does an additional 1d6 damage. At Higher Levels: When you cast this spell using a spell slot of 3rd level or higher, increase the damage by 1d6 for each slot level above 2nd.",
+	},
+	{
+    	"name": "Uncontrollable Fantasy",
+    	"level": 2,
+    	"school": "Illusion",
+    	"classes": "Wizard, Sorcerer, Bard, Cleric",
+    	"casttime": "1 action",
+    	"range": "30 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "Dreamvapor, Touch of Love, and a healing potion worth 750 GP"
+    	},
+    	"duration": "Concentration, up to 1 hour per spell level",
+    	"ritual": false,
+    	"description": "You conjure a euphoric playtime fantasy that envelops one creature within range, compelling it to abandon all aggression and embrace pure joy. The target must succeed on a DC 14 Wisdom saving throw or succumb to the illusion, becoming unable to take attack actions, cast spells, or use class features for the duration. The spell overrides rage, trances, meditations, active maneuvers, and other effects that rely on focused aggression or discipline. While in this state of euphoria, the target experiences blissful serenity, incapable of harboring hostility or negative intent. Special Properties: The illusion's effects are universal, affecting even creatures with traits such as Aggressive or those with radically different thought processes. It can pacify even the tantrum rage of a toddler ork barbarian. Magical effects granted by consumable items (such as potions) persist but cannot be consciously activated during the spell’s duration. The spell ends instantly if the target takes intentional/malicious damage. A consented spanking, for example, would NOT end the effect. Ritual Casting: You may cast this spell as a ritual by combining Dreamvapor, Touch of Love, and a healing potion totalling 750 GP. Performing the ritual enhances the spell’s duration by an additional hour and prevents the target from recognizing the illusion as magic until the effects end naturally. At Higher Levels: When you cast this spell using a spell slot of 3rd level or higher, the duration extends by 1 hour for each slot level above 2nd. Notes: The joy induced by this spell is unshakable. Only dispel magic or similar counter-effects can end the illusion prematurely."
+	},
+	{
+    	"name": "Absorbent Barrier",
+    	"level": 2,
+    	"school": "Abjuration",
+    	"classes": "Wizard, Sorcerer, Bard, Cleric",
+    	"casttime": "1 reaction",
+    	"range": "Self",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "a pinch of baby powder"
+    	},
+    	"duration": "1 round",
+    	"ritual": false,
+    	"description": "When an attack lands against you, you conjure an invisible shield of absorbent magic. This barrier reduces the triggering damage by 1d8 + your spellcasting modifier. The shield absorbs the impact like a well-timed diaper change, lasting until the start of your next turn."
+	},
+	{
+    	"name": "Diaper Douse",
+    	"level": 2,
+    	"school": "Transmutation",
+    	"classes": "Wizard, Sorcerer, Bard, Cleric",
+    	"casttime": "1 action",
+    	"range": "30 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "a soaking wet diaper"
+    	},
+    	"duration": "Instantaneous",
+    	"ritual": false,
+    	"description": "You hurl a burst of saturated, messy energy at a target. The creature must succeed on a Dexterity saving throw or be drenched—its movement is reduced to 0 until the end of its next turn and it suffers disadvantage on its following attack roll as it struggles with a slick, slippery condition. If it is wearing a diaper, it takes three use charges, half if it saves."
+	},
+	{
+    	"name": "Potty Puddle",
+    	"level": 2,
+    	"school": "Conjuration",
+    	"classes": "Wizard, Sorcerer, Bard, Cleric",
+    	"casttime": "1 action",
+    	"range": "60 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "a miniature porcelain toilet bowl"
+    	},
+    	"duration": "Concentration, up to 1 minute",
+    	"ritual": false,
+    	"description": "You conjure a sticky, sprawling puddle in a 20-foot radius centered on a point within range. Any creature that enters or starts its turn in the area must succeed on a Strength or Dexterity saving throw (your choice) or fall prone and have its speed reduced by 10 feet on its next turn. IF the creature that falls into the puddle is wearing a diaper, it takes 3 use charges. If this fills the diaper, the target is adhered to the surface and must make a DC 12 Strength or Dexterity check to rise out of the puddle. The area is treated as difficult terrain for the duration."
+	},
+	{
+    	"name": "Cleansing Change",
+    	"level": 2,
+    	"school": "Conjuration",
+    	"classes": "Wizard, Sorcerer, Bard, Cleric",
+    	"casttime": "1 action",
+    	"range": "30 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "a fresh diaper and a vial of consecrated water"
+    	},
+    	"duration": "Instantaneous",
+    	"ritual": false,
+    	"description": "With a swift, magical change, you purify a creature’s body and soul. The target regains 2d8 + your spellcasting modifier hit points and is cleansed of one minor curse or debilitating condition (such as being frightened or poisoned). Their diaper is changed with the fresh diaper used in the spell components and its normal number of uses is increased by 2 for the duration."
+	},
+	{
+    	"name": "Diaper Drift",
+    	"level": 2,
+    	"school": "Transmutation",
+    	"classes": "Wizard, Sorcerer, Bard, Cleric",
+    	"casttime": "1 bonus action",
+    	"range": "Self or one willing creature within 10 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": ""
+    	},
+    	"duration": "1 minute",
+    	"ritual": false,
+    	"description": "Drawing on the buoyant energy of a well-timed change, you or an ally gains the ability to drift effortlessly. The target may, as a free action on its turn, move up to 20 feet without provoking opportunity attacks, as if carried along on an unseen current."
+	},
+	{
+    	"name": "Baby Powder Blast",
+    	"level": 2,
+    	"school": "Evocation",
+    	"classes": "Wizard, Sorcerer, Bard, Cleric",
+    	"casttime": "1 action",
+    	"range": "30 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "a pinch of baby powder"
+    	},
+    	"duration": "Instantaneous",
+    	"ritual": false,
+    	"description": "You unleash a bright flash of powdery magic in a 10-foot cone. All creatures in the area must succeed on a Constitution saving throw or be dazzled and blinded until the end of your next turn. Those who succeed are merely ruffled and retain normal vision."
+	},
+	{
+    	"name": "Soiled Scramble",
+    	"level": 2,
+    	"school": "Illusion",
+    	"classes": "Wizard, Sorcerer, Bard, Cleric",
+    	"casttime": "1 action",
+    	"range": "60 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "a scrap of soiled cloth"
+    	},
+    	"duration": "Concentration, up to 1 minute",
+    	"ritual": false,
+    	"description": "You create swirling, disorienting illusions of messy fractals and cacophonous brown notes. In a 15-foot radius centered on a point within range, each creature must make an Intelligence saving throw. On a failure, their attack rolls have disadvantage until the start of your next turn as their senses are muddled by the filth and confusion. They also must make a Con-based Potty Check or soil themselves."
+	},
+	{
+    	"name": "Foul Fragrance",
+    	"level": 2,
+    	"school": "Enchantment",
+    	"classes": "Wizard, Sorcerer, Bard, Cleric",
+    	"casttime": "1 action",
+    	"range": "30 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "a vial of rancid diaper cream"
+    	},
+    	"duration": "Concentration, up to 1 minute",
+    	"ritual": false,
+    	"description": "A nauseating stench spreads from a point of your choice in a 15-foot radius. Creatures caught within the odor must succeed on a Constitution saving throw or be poisoned and sickened, suffering disadvantage on Constitution checks and saving throws for the spell’s duration and immediately soiling themselves on the spot."
+	},
+	{
+    	"name": "Rash Reaction",
+    	"level": 2,
+    	"school": "Enchantment",
+    	"classes": "Wizard, Sorcerer, Bard, Cleric",
+    	"casttime": "1 action",
+    	"range": "60 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "a dab of irritant ointment"
+    	},
+    	"duration": "1 minute",
+    	"ritual": false,
+    	"description": "You inflict a maddening rash upon a target creature. The target must succeed on a Constitution saving throw or develop an excruciating, persistent rash; until the spell ends, it has disadvantage on Dexterity-based ability checks and saving throws."
+	},
+	{
+    	"name": "Stinky Shield",
+    	"level": 2,
+    	"school": "Abjuration",
+    	"classes": "Wizard, Sorcerer, Bard, Cleric",
+    	"casttime": "1 reaction",
+    	"range": "Self",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "a wisp of fetid air from a neglected diaper"
+    	},
+    	"duration": "1 round",
+    	"ritual": false,
+    	"description": "In the face of incoming harm, you conjure a shuddering shield of malodorous magic by filling your diaper with concentrated willpower. You add a +4 bonus to your AC against the triggering attack; if the attack still connects, the attacker must make a Constitution saving throw or take 1d6 poison damage as it recoils in disgust. If they fail the save, they also fail a potty check of equal severity- soiling themselves in some manner."
+	},
+	{
+    	"name": "Nature's Wet Wipes",
+    	"level": 2,
+    	"school": "Transmutation",
+    	"classes": "Druid",
+    	"casttime": "1 action",
+    	"range": "30 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "a magically infused cleaning wipe"
+    	},
+    	"duration": "Instantaneous",
+    	"ritual": false,
+    	"description": "You channel a burst of restorative cleanliness that attempts to “wipe” away minor curses and conditions. The target must succeed on a Wisdom saving throw or have one minor curse or negative condition (such as being charmed, frightened, or a similar effect) immediately removed as it’s scrubbed clean by the magical wipe. It also cleans them and any non-disposable diaper or booster they might be wearing. This effect does not work on disposable diapers or garments."
+	},
+	{
+    	"name": "Parental Power",
+    	"level": 3,
+    	"school": "Enchantment",
+    	"classes": "Wizard, Sorcerer, Bard, Cleric",
+    	"casttime": "1 action",
+    	"range": "Self (10-foot aura)",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "a cherished family heirloom or symbolic keepsake of guardianship"
+    	},
+    	"duration": "Concentration, up to 1 minute",
+    	"ritual": false,
+    	"description": "You invoke the full force of parental might, wrapping yourself in an aura of nurturing strength and imperious resolve. While this spell is active, you gain the following benefits: Guardian's Resilience: You gain a +2 bonus to Armor Class and 10 temporary hit points. Steadfast Resistance: You have resistance to all non-magical damage. Quick Reflexes: You gain advantage on initiative rolls and on ability checks made to shield yourself or others. Immunity to Ailments: You become immune to disease, curses, and chronic conditions—including incontinence, babybrain, and other Diaper School afflictions. Imposing Presence: Your appearance transforms dramatically, becoming more mature and imposing; your features sharpen and your posture exudes unwavering authority. Empowered Offense & Healing: You gain a +1 bonus to damage on your attacks, and any healing (magical or mundane) received by you or allies within 10 feet of you is augmented by an amount equal to your spellcasting ability modifier. Parental Interposition: As a reaction—usable once per turn—you can interpose yourself when an ally within 10 feet is hit by an attack. When you do, the incoming damage is redirected to you instead of your ally. At Higher Levels: When you cast this spell using a spell slot of 4th level or higher, for each slot level above 3rd: The AC bonus increases by +1. The temporary hit points increase by +5. The offensive bonus increases by +1. The healing bonus increases by an amount equal to half your spellcasting bonus."
+	},
+	{
+    	"name": "Glamorous Nursery Camper",
+    	"level": 3,
+    	"school": "Conjuration",
+    	"classes": "Wizard, Sorcerer, Bard, Cleric",
+    	"casttime": "1 action",
+    	"range": "30 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "a miniature dollhouse, a snippet of enchanted baby blanket, and a sparkling keepsake"
+    	},
+    	"duration": "1 Long Rest (ends when occupants depart)",
+    	"ritual": false,
+    	"description": "You conjure a luxurious, magically constructed camper that blends the nostalgic charm of a nursery with formidable magical defenses. Choose an unoccupied space within range, and a fully formed structure appears with the following features: Structure & Occupancy: The basic camper is sized to comfortably house up to 5 Medium creatures, or 3 Medium creatures and 1 Large creature, along with hitching posts for mounts and outdoor pets. With higher-level spell slots, the camper enlarges to accommodate additional occupants as noted above. Interior Layout: Crib-Shaped Sleeping Area: A generous area is fashioned like an oversized crib where party members can rest. This sleeping area is imbued with a secondary defensive layer equivalent to the sanctuary spell, protecting those who sleep within from unwelcome intrusions. Cooking Area: A well-appointed nook contains a magical hearth and cooking utensils, ensuring warm, fresh meals throughout the night. Defensive and Functional Features: The camper is a magical object, its lock and door warded by enchantments that hold back all but the most potent magical foes. The structure remains intact for one Long Rest. When the occupants leave at the end of their rest, the camper vanishes. Any creature still inside when the spell’s duration expires is automatically deposited at the spot where the camper was originally erected. At Higher Levels: For each spell slot level above 3rd, the camper’s capacity increases by space for 2 additional Medium creatures or 1 additional Large creature. This spell creates a safe, temporary haven that’s as comfy and secure as it is whimsical—perfect for the heroes of Diaper School who know that true power lies in both nurturing care and formidable magical resilience."
+	},
+	{
+    	"name": "Soothing Sanitization",
+    	"level": 3,
+    	"school": "Conjuration",
+    	"classes": "Druid, Bard, Cleric",
+    	"casttime": "1 action",
+    	"range": "Touch",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "a clean, freshly folded diaper"
+    	},
+    	"duration": "Instantaneous",
+    	"ritual": false,
+    	"description": "You channel a wave of cleansing, magical energy through a comforting diapering or diaper change. Choose yourself or a creature you touch. The target regains 2d8 + your spellcasting modifier hit points, and any toxin, poison, or minor disease is neutralized. This gentle cleanse can also lift one minor curse or lingering ill effect. Any diaper they are wearing is changed if needed, and the resulting fresh diaper gains a +2 AC bonus as well as resistance to necrotic damage."
+	},
+	{
+    	"name": "Diaper Deflection",
+    	"level": 3,
+    	"school": "Abjuration",
+    	"classes": "Paladin, Cleric",
+    	"casttime": "1 reaction",
+    	"range": "Self",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "a scrap of ultra-absorbent fabric"
+    	},
+    	"duration": "1 round",
+    	"ritual": false,
+    	"description": "When an attack is declared against you or an ally within 5 feet of you, you conjure a barrier of magically reinforced, absorbent material. You gain a +5 bonus to AC against that attack, and if it still connects, reduce the damage dealt by 1d8 + your spellcasting modifier. For every use charge of your diaper that you sacrifice, the AC bonus increases by 1. ***You may sacrifice these charges AFTER the attack roll is made.***"
+	},
+	{
+    	"name": "Potty Portal",
+    	"level": 3,
+    	"school": "Conjuration",
+    	"classes": "Wizard, Sorcerer, Bard, Cleric",
+    	"casttime": "1 action",
+    	"range": "Self (10-foot circle)",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "a compact roll of plush toilet paper"
+    	},
+    	"duration": "Concentration, up to 1 minute",
+    	"ritual": false,
+    	"description": "You open a swirling, lavatorial gateway that manifests as a 10-foot circle of shimmering, playful energy. The area transforms into a miniature enchanted changing room, with soft giggles and a hint of baby powder in the air. While the portal remains open, you and one willing creature of your choice may step inside and be instantly transported to any location you have previously seen. The portal vanishes at the start of your next turn or if your concentration is broken. If any lingering magical or embarrassing effects level 3 or below cling to those who travel through, the transit washes them clean of such afflictions."
+	},
+	{
+    	"name": "Messy Misdirection",
+    	"level": 3,
+    	"school": "Illusion",
+    	"classes": "Wizard, Sorcerer, Bard, Cleric, Paladin, Druid",
+    	"casttime": "1 action",
+    	"range": "60 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "a soiled wipe from a freshly changed diaper"
+    	},
+    	"duration": "Concentration, up to 1 round",
+    	"ritual": false,
+    	"description": "You create a burst of chaotic, odorous illusions that confound your enemies. In a 15-foot radius centered on a point of your choice, all creatures must make a Constitution saving throw. On a failure, they have disadvantage on attack rolls and saving throws until the start of your next turn as their senses are overwhelmed by the unexpected mess. Those who fail this check must immediately roll a potty check. If they fail, the effect chains a new 15 foot radius of stinky illusions emanating from the target."
+	},
+	{
+    	"name": "Parental Power",
+    	"level": 3,
+    	"school": "Enchantment",
+    	"classes": "Wizard, Sorcerer, Bard, Cleric",
+    	"casttime": "1 action",
+    	"range": "Self (10-foot aura)",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "a cherished family heirloom or symbolic keepsake of guardianship"
+    	},
+    	"duration": "Concentration, up to 1 minute",
+    	"ritual": false,
+    	"description": "You invoke the full force of parental might, wrapping yourself in an aura of nurturing strength and imperious resolve. While this spell is active, you gain the following benefits:\n\n**Guardian's Resilience:**\nYou gain a +2 bonus to Armor Class and 10 temporary hit points.\n\n**Steadfast Resistance:**\nYou have resistance to all non-magical damage.\n\n**Quick Reflexes:**\nYou gain advantage on initiative rolls and on ability checks made to shield yourself or others.\n\n**Immunity to Ailments:**\nYou become immune to disease, curses, and chronic conditions—including incontinence, babybrain, and other Diaper School afflictions.\n\n**Imposing Presence:**\nYour appearance transforms dramatically, becoming more mature and imposing; your features sharpen and your posture exudes unwavering authority.\n\n**Empowered Offense & Healing:**\nYou gain a +1 bonus to damage on your attacks, and any healing (magical or mundane) received by you or allies within 10 feet of you is augmented by an amount equal to your spellcasting ability modifier.\n\n**Parental Interposition:**\nAs a reaction—usable once per turn—you can interpose yourself when an ally within 10 feet is hit by an attack. When you do, the incoming damage is redirected to you instead of your ally.\n\n**At Higher Levels:**\nWhen you cast this spell using a spell slot of 4th level or higher, for each slot level above 3rd:\n- The AC bonus increases by +1.\n- The temporary hit points increase by +5.\n- The offensive bonus increases by +1.\n- The healing bonus increases by an amount equal to half your spellcasting bonus."
+	},
+	{
+    	"name": "Diaper Drip",
+    	"level": 0,
+    	"school": "Luminancy",
+    	"classes": "Luminancer",
+    	"casttime": "1 action",
+    	"range": "60 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true
+    	},
+    	"duration": "Instantaneous",
+    	"description": "You conjure a globule of magical baby fluid and hurl it at a creature within 60 feet. Make a ranged spell attack; on a hit, the target takes 1d6 damage of your choice—radiant (a sparkling pure droplet) or necrotic (a grimy, soiled glob). This power scales with the Causal Points you invest:\n\n- **Base Level (No Points):** **1d6** damage.  \n- **Overcharge (+1 Point):** Add an extra **1d6** damage and impose disadvantage on the target’s next saving throw as a minor wet-pants embarrassment sets in.  \n- **Maximum Overcharge (5 Points):** Deal up to **6d6** damage, and all creatures in a 10-foot radius must succeed on a Dexterity save or suffer disadvantage on all attack rolls until the end of their next turn due to severe wet-pants discomfort.\n\n*“One drop is an inconvenience—six drops are a disaster.”*"
+	},
+	{
+    	"name": "Messy Mote",
+    	"level": 0,
+    	"school": "Luminancy",
+    	"classes": "Luminancer",
+    	"casttime": "1 action",
+    	"range": "60 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true
+    	},
+    	"duration": "Instantaneous",
+    	"description": "You conjure a mote of chaotic, luminescent diaper muck and fling it at a target within 60 feet. On a hit, the target suffers ***1d8 force damage***, plus an additional effect based on the invested points:\n- **Base Level (No Points):** ***1d8*** force damage.  \n- **Overcharge (+1 Point):** Add an extra ***1d8*** damage, and the target begins to fidget uncomfortably, suffering a mild wet pants effect and disadvantage on their next attack roll.  \n- **Maximum Overcharge (5 Points):** Deal up to **6d8** damage, and the target must succeed on a Constitution save or suffer a brown-note accident and be blinded for 1 round and prone due to overwhelming mortification.\n\n*“A little mote of power, or a big mess of trouble—it’s all in how much effort you put in.”*"
+	},
+	{
+    	"name": "Diaper Dazzle",
+    	"level": 0,
+    	"school": "Luminancy",
+    	"classes": "Luminancer",
+    	"casttime": "1 action",
+    	"range": "30 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true
+    	},
+    	"duration": "Instantaneous",
+    	"description": "You emit a dazzling flash of baby brilliance, scattering sparkling lint in all directions. Choose one creature within 30 feet. The target must make a Constitution saving throw.\n\n- **Base (0 Extra Points; Cost: 0):** On a failure, the target is blinded until the end of its next turn and must roll a potty check if not incontinent. If incontinent, they immediately wet their diaper.\n- **Overcharge (+1 Point):** In addition to being blinded, the target suffers disadvantage on its attack rolls until the end of its next turn.  \n- **Maximum Overcharge (3 Additional Points Total):** The target takes an extra **3d6** damage and remains blinded for 2 rounds on a failure- as well as immediately failing a full pants potty check.\n\n*“A burst of dazzling brilliance leaves foes struggling to see—and to fight.”*"
+	},
+	{
+    	"name": "Diaper Dart",
+    	"level": 1,
+    	"school": "Luminancy",
+    	"classes": "Luminancer",
+    	"casttime": "1 action",
+    	"range": "60 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true
+    	},
+    	"duration": "Instantaneous",
+    	"description": "Focus your causal energy to create a sharp projectile of radiant diaper fluff. Make a ranged spell attack; on a hit, the target takes piercing damage and suffers additional effects based on Causal Points invested:\n\n- **Base Level (2 Points):** **2d8** damage, and target must roll a dexterity save or be covered in diaper-sticky goop that reduces movement speed by half.  \n- **Overcharge (+1 Point):** Add **1d8** damage per additional point spent.  \n- **Maximum Overcharge (5 Points):** Deal up to **6d8** damage and reduce the target’s speed to 0 until the start of your next turn as sticky residue clings to them.\n\n*“A dart of doom, ready to stick where it hurts most.”*"
+	},
+	{
+    	"name": "Giggle Gush",
+    	"level": 1,
+    	"school": "Luminancy",
+    	"classes": "Luminancer",
+    	"casttime": "1 action",
+    	"range": "30 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true
+    	},
+    	"duration": "Instantaneous",
+    	"description": "A gushing burst of magical baby laughter erupts toward a creature within 30 feet. The target must make a Constitution saving throw or be disoriented by the radiant giggles. Overcharge this power to amplify the damage and the impact:\n\n- **Base Level (2 Points):** **2d6** radiant damage and deafens sounds beyond 10 feet from the target until the end of their turn, as well as initiating a potty check.  \n- **Overcharge (+1 Point):** Add **1d6** damage and impose disadvantage on the target’s saving throw.  \n- **Maximum Overcharge (5 Points):** Deal up to *6d6* damage, and the target is blinded until the end of their next turn.\n\n*“Even the most stoic foes falter in the face of pure, unrelenting giggles.”*"
+	},
+	{
+    	"name": "Cuddly Caulk",
+    	"level": 1,
+    	"school": "Luminancy",
+    	"classes": "Luminancer",
+    	"casttime": "1 action",
+    	"range": "30 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true
+    	},
+    	"duration": "Instantaneous",
+    	"description": "You lob an adhesive, glowing globule of caulk at a target within 30 feet. On a hit, the sticky magic restrains the target and deals damage based on your investment of Causal Points:\n\n- **Base Level (2 Points):** **2d6** acid damage, and the target must make a Strength saving throw or be restrained until the end of your next turn.  \n- **Overcharge (+1 Point):** Add **1d6** damage and increase the restraining effect by 1 round.  As the pressure increases, the target must make a potty check.\n- **Maximum Overcharge (5 Points):** Deal up to **6d6** damage, and the target is restrained for up to 3 rounds unless it uses its action to escape. If it uses its action to escape, it must make a potty check at disadvantage.\n\n*“Stick to your principles—or just to the floor.”*"
+	},
+	{
+    	"name": "Tush Tackle",
+    	"level": 1,
+    	"school": "Luminancy",
+    	"classes": "Luminancer",
+    	"casttime": "1 action",
+    	"range": "30 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true
+    	},
+    	"duration": "Instantaneous",
+    	"description": "Propelled by the unstoppable momentum of a diaper in motion, you tackle a target with reckless force. Choose a creature within 30 feet and make a melee attack roll.\n\n- **Base (Cost: 2 Points):** On a hit, deal **2d8** bludgeoning damage and push the target 5 feet away.  \n- **Overcharge (+1 Point/Extra):** Add **1d8** damage and increase the push distance by 5 feet per extra point spent.  \n- **Maximum Overcharge (5 Points Total):** Deal up to **6d8** damage, push the target up to 25 feet away, and force a Constitution save; on failure, the target suffers a full brown-note accident, reducing its speed to 0 for 1 round while it recovers its composure.\n\n*“When your backside leads the charge, even the mightiest foes tumble before your weighty influence.”*"
+	},
+	{
+    	"name": "Padded Pound",
+    	"level": 1,
+    	"school": "Luminancy",
+    	"classes": "Luminancer",
+    	"casttime": "1 action",
+    	"range": "Melee",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true
+    	},
+    	"duration": "Instantaneous",
+    	"description": "You channel the sturdy impact of a well-cushioned diaper spank into a mighty melee blow. Make a melee spell attack against a creature within reach.\n\n- **Base (Cost: 2 Points):** On a hit, deal **2d8** bludgeoning damage and impose disadvantage on the target’s next attack roll as they reel from the padded impact.  \n- **Overcharge (+1 Point/Extra):** Add 1d8 damage per additional point spent.  \n- **Maximum Overcharge (5 Points Total):** Deal up to 6d8 damage and inflict a full pants effect: the target must succeed on a Constitution saving throw or suffer disadvantage on all saving throws for 1 round due to full pants accident and the distraction and humiliation that goes with it.\n\n*“A hearty pound that delivers both damage and a good dose of mortifying impact.”*"
+	},
+	{
+    	"name": "Crib Crash",
+    	"level": 1,
+    	"school": "Luminancy",
+    	"classes": "Luminancer",
+    	"casttime": "1 action",
+    	"range": "30 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true
+    	},
+    	"duration": "Instantaneous",
+    	"description": "You summon a magically animated crib that crashes into your foes in a burst of chaotic force. Choose a point within 30 feet; every creature in a 15-foot cone must make a Dexterity saving throw.\n\n- **Base (Cost: 2 Points):** On a failure, creatures take **2d8** force damage and are pushed 5 feet away as well as having to make a potty check; on a success, they take half damage and are not pushed nor checked.  \n- **Overcharge (+1 Point/Extra):** Add **1d8** damage and increase the push distance by 5 feet per extra point spent.  \n- **Maximum Overcharge (5 Points Total):** Deal up to **6d8** damage, push creatures up to 25 feet away, and impose disadvantage on their next saving throw as mortifying distraction (wet pants effect) sets in.\n\n*“A crib crash comes barreling in—loud, disruptive, and absolutely unforgettable.”*"
+	},
+	{
+    	"name": "Soiled Surge",
+    	"level": 2,
+    	"school": "Luminancy",
+    	"classes": "Luminancer",
+    	"casttime": "1 action",
+    	"range": "15-foot cone",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true
+    	},
+    	"duration": "Instantaneous",
+    	"description": "You unleash a torrent of chaotic diaper energy in a 15-foot cone. Each creature in the area must make a Dexterity saving throw. The damage and effects scale based on the points you invest:\n\n- **Base Level (3 Points):** **3d8** acid damage, and creatures that fail their save are knocked prone and wet their diaper/pants.  \n- **Overcharge (+1 Point):** Add **1d8** damage and increase the area to a 20-foot cone.  \n- **Maximum Overcharge (7 Points):** Deal up to **7d8** damage, increase the area to a 30-foot cone, and impose disadvantage on all saving throws for affected creatures until the end of their next turn unless they give in to the urge to mess their pants or diaper.\n\n*“A tidal wave of pure chaos, fueled by diaper-driven destruction.”*"
+	},
+	{
+    	"name": "Infantile Illumination",
+    	"level": 2,
+    	"school": "Luminancy",
+    	"classes": "Luminancer",
+    	"casttime": "1 action",
+    	"range": "30 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true
+    	},
+    	"duration": "Instantaneous",
+    	"description": "Radiant baby light floods a 15-foot radius cylinder centered on a point within 30 feet. Allies basking in the glow are healed, while enemies are blinded. The intensity of the effect depends on your point investment:\n\n- **Base Level (3 Points):** Restore **3d6** hit points to allies and impose disadvantage on enemies’ attack rolls for 1 round.  \n- **Overcharge (+1 Point):** Add **1d6** healing and increase the duration of disadvantage by 1 round.  \n- **Maximum Overcharge (7 Points):** Heal up to **7d6** hit points, and blind enemies for up to 3 rounds unless they succeed on a Constitution saving throw at the end of their turns, failure resulting in progressively worsening wet/full pants accidents.\n\n*“Light so pure, it heals your wounds—and blinds your foes with its brilliance.”*"
+	},
+	{
+    	"name": "Mucky Multiplication",
+    	"level": 2,
+    	"school": "Luminancy",
+    	"classes": "Luminancer",
+    	"casttime": "1 action",
+    	"range": "30 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true
+    	},
+    	"duration": "1 minute",
+    	"description": "Summon semi-real duplicates made of glowing diaper residue to confound your enemies. The number of duplicates and their effects scale with your Causal Points:\n\n- **Base Level (3 Points):** Summon 1 duplicate (AC = 10 + proficiency bonus, 1 HP) that mimics you for 1 minute, using mirror image mechanics. Those who strike a mirror image instead of the real one must roll a potty check as the clone bursts into a puff of noxious gas.  \n- **Overcharge (+1 Point):** Add 1 duplicate per point spent.  \n- **Maximum Overcharge (7 Points):** Summon up to 5 duplicates, each capable of decoying attacks or dealing 1d6 radiant damage if destroyed by a melee attack. Those hit by the AOE burst must make a potty-check at disadvantage.\n\n*“A crowd of messy mimics—your foes won’t know which way to attack!”*"
+	},
+	{
+    	"name": "Radiant Spark / Umbral Spark",
+    	"level": 0,
+    	"school": "Luminancy",
+    	"classes": "Luminancer",
+    	"casttime": "1 action",
+    	"range": "60 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true
+    	},
+    	"duration": "Instantaneous",
+    	"description": "You know a simple ranged bolt attack that you can flavor as either a mote of light or a shard of shadow. Make a ranged spell attack against a target within 60 ft. On a hit, the target takes **1d8** damage, either radiant (if a radiant spark) or necrotic (if umbral spark), your choice each time you use it. This power’s damage increases as you level (scaling like a cantrip: **2d8** at 5th, **3d8** at 11th, **4d8** at 17th). For every extra point spent, increase bonus to hit and damage by +1. You inherently learn this at 1st level, reflecting your basic training (doesn’t count against powers known)."
+	},
+	{
+    	"name": "Light Bending",
+    	"level": 0,
+    	"school": "Luminancy",
+    	"classes": "Luminancer",
+    	"casttime": "1 action",
+    	"range": "10 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true
+    	},
+    	"duration": "1 minute",
+    	"description": "You manipulate light around an object or creature. This is similar to the light and darkness cantrips combined in a minor way. You can dim a 10-foot radius of bright light to dim for 1 minute, or increase a 10-foot radius of dim light to bright. Alternatively, you can create small illusions of light and shadow – simple images or silhouettes equivalent to a minor illusion spell (but visual only). Creatures inspecting the illusion can discern it with a successful Investigation check against your power DC. This is useful for small tricks: e.g., create a patch of shadow to hide a small item, or a brief holographic-like image."
+	},
+	{
+    	"name": "Minor Causal Shield",
+    	"level": 0,
+    	"school": "Luminancy",
+    	"classes": "Luminancer",
+    	"casttime": "Reaction",
+    	"range": "Self",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true
+    	},
+    	"duration": "Instantaneous",
+    	"description": "A brief burst of causal energy protects you. When you cast this (reaction to an attack), you gain a **+2 bonus** to AC against that attack. This is effectively a very weak version of the shield spell. It won’t stop magic missiles or multiple attacks, but it might turn a hit into a miss occasionally. You’d use this cantrip when you’re low on points but really want to try preventing a single hit."
+	},
+	{
+    	"name": "Trace Fate",
+    	"level": 0,
+    	"school": "Luminancy",
+    	"classes": "Luminancer",
+    	"casttime": "1 action",
+    	"range": "Self",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true
+    	},
+    	"duration": "1 minute",
+    	"description": "By concentrating briefly, you get a minor insight into immediate outcomes. You perform a tiny divination, like rolling a d20 and recording the number. On your next ability check or attack roll within 1 minute, you can choose to use that recorded number instead of rolling (you must decide before rolling normally). This is akin to a much weaker Portent (Diviner Wizard) – essentially you “peek” at one possible outcome and can follow it if desired. Once you use the stored number, this cantrip’s effect ends. If not used, the glimpse fades after 1 minute. You can only have one Trace Fate “glimpse” at a time.",
+    	"higherlevels": "**Overchannel:** For every Causal Point used to boost this power, the divined roll gains a **+1**\n**Maximum Overchannel:** (**5** Points):At the DM's discretion, you may choose to trace the fates of others, using your stored roll to influence an ally or enemy's attacks, ability checks, or saving throws."
+	},
+	{
+    	"name": "Causal Missile",
+    	"level": 1,
+    	"school": "Luminancy",
+    	"classes": "Luminancer",
+    	"casttime": "1 action",
+    	"range": "120 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true
+    	},
+    	"duration": "Instantaneous",
+    	"description": "**Cost: 2 points**. \nYou unleash darts of pure causal force that never miss their mark. This functions like the magic missile spell. You create three glowing projectiles of energy (they may appear as slivers of white light or black shadow or twisting yin-yang bolts). Each dart automatically hits a creature of your choice within 120 ft that you can see, dealing **1d4+1 force damage** each. You can direct the darts at one target or split them among several. \n\n**Overcharge**: This power creates more darts – following the scaling of magic missile: 1 additional dart for each power, you could spend 4 points to cast a stronger version with 5 darts- you may empower this spell a number of times equal to your Luminancer class level.\n\n**Maximum Overcharge**: (+5 points or more) Each missile bursts, hitting enemies within 5 feet of the target for half damage. Targets slain by the missile burst into a pillar of light or shadow, doing 1d8 Radiant or Necrotic (your choice) damage to enemies within 5ft of the target (DEX save for half)."
+	},
+	{
+    	"name": "Causal Shield",
+    	"level": 1,
+    	"school": "Luminancy",
+    	"classes": "Luminancer",
+    	"casttime": "Reaction",
+    	"range": "Self",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true
+    	},
+    	"duration": "1 round",
+    	"description": "In the blink of an eye, you raise a ward of causality to foil an attack. This mimics the shield spell. As a reaction when you are hit by an attack or targeted by magic missile, you create an invisible barrier of force. You gain **+5 bonus to AC** against that triggering attack (and any other attacks until start of your next turn), potentially turning the hit into a miss. You also become immune to magic missile for that moment. The visual of your Causal Shield might be a brief flash of light or a disk of darkness intercepting the blow. **Cost: 2 points**."
+	},
+	{
+    	"name": "Luminal Motion",
+    	"level": 1,
+    	"school": "Luminancy",
+    	"classes": "Luminancer",
+    	"casttime": "Bonus action",
+    	"range": "30 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true
+    	},
+    	"duration": "Instantaneous",
+    	"description": "You momentarily become light-as-a-photon, blinking out of one spot and into another. This replicates the effect of misty step. As a bonus action, you teleport up to 30 feet to an unoccupied space you can see. You leave behind a slight afterimage or a burst of motes where you were, and appear with a flicker. **Cost: 2 points**. (Requirement: Luminancer 3rd level, as this is equivalent to a 2nd-level spell.)"
+	},
+	{
+    	"name": "Rock Ensnarement",
+    	"level": 1,
+    	"school": "Luminancy",
+    	"classes": "Luminancer",
+    	"casttime": "1 action",
+    	"range": "90 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true
+    	},
+    	"duration": "1 minute",
+    	"description": "You call upon earth energy to bind a foe’s legs. This power causes jagged rocks and earthen spikes to erupt and entangle creatures, similar to a mix of entangle and earthbind. Choose a point on the ground within 90 ft. At that point, the ground in a 20-foot square erupts with stony tendrils. Creatures in that area must succeed on a Strength saving throw or be restrained by the rocky vines. While restrained, their speed is 0 and attacks against them have advantage. They can use an action to attempt a new Str check to break free. The area becomes difficult terrain for the duration (1 minute). **Cost: 2 points**."
+	},
+	{
+    	"name": "Elemental Ward",
+    	"level": 1,
+    	"school": "Luminancy",
+    	"classes": "Luminancer",
+    	"casttime": "1 action",
+    	"range": "Touch",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true
+    	},
+    	"duration": "1 hour",
+    	"description": "You create a ward to protect against elemental harm. When you use this power, choose one damage type: acid, cold, fire, lightning, or thunder. You (or one creature you touch) gain resistance to that damage type for 1 hour. This mirrors the effect of protection from energy but shorter duration (the original is concentration up to 1 hour; you make it fixed 10 minutes or similar for balance). Alternatively, you can cast this reactionary like absorb elements: as a reaction to taking elemental damage, gain resistance to that instance and deal an extra **+1d6** of that type on your next attack. You decide which mode when learning the power (or the DM may allow either mode each use). **Cost: 3 points**."
+	},
+	{
+    	"name": "Self-Empowerment",
+    	"level": 1,
+    	"school": "Luminancy",
+    	"classes": "Luminancer",
+    	"casttime": "Bonus action",
+    	"range": "Self",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true
+    	},
+    	"duration": "1 minute",
+    	"description": "You flood your body with balanced energy, boosting your physical capabilities. This power is like a mini haste or enhance ability. As a bonus action, you spend **3 points** to gain the following for 1 minute: +10 feet to your movement speed, advantage on Dexterity checks and saving throws, and you can make one additional weapon attack as part of your Attack action on each turn. However, attacks against you have advantage until this effect ends (as your defenses are slightly lowered while pushing your limits). This risk reflects balancing on a razor’s edge. When the effect ends, you must succeed a DC 10 Constitution save or gain one level of exhaustion. (Requirement: Luminancer 5th level; this is roughly 3rd-level spell power.)"
+	},
+	{
+    	"name": "Umbral/Luminal Duplication",
+    	"level": 1,
+    	"school": "Luminancy",
+    	"classes": "Luminancer",
+    	"casttime": "1 action",
+    	"range": "15 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true
+    	},
+    	"duration": "1 minute",
+    	"description": "Through either solidified shadow or holographic light, you create a duplicate of yourself. This power functions similarly to an Echo Knight’s echo or the mirror image spell, depending on how you use it. You have two modes:\n\nMirror Images: By spending **2 points**, you create three illusory duplicates of yourself that mimic your actions (like mirror image). These images impose a chance for enemies to hit them instead of you. An attacker must roll to see if they hit an image; images are destroyed when hit. This lasts 1 minute.\n\nEcho Duplicate: By spending **3 points**, you summon a single semi-real duplicate (made of shadow or light) in an unoccupied space within 15 ft. This duplicate lasts until destroyed (AC equal to 10 + your proficiency, 1 HP) or until you dismiss it. You can move it on your turn (up to 30 ft) and you can mentally swap places with it as a bonus action (teleporting both of you, no limit on uses, akin to Echo Knight’s switch). You can also make attacks from the duplicate’s position when you take the Attack action (essentially extending your melee reach or angle). Unlike mirror images, this duplicate isn’t an illusion but a conjured entity of light/shadow. Only one duplicate can exist at a time from this power. This power costs 2 or 3 points depending on mode. (Requirement: 5th level for Echo mode.) It synergizes with Mutual Substitution (below)."
+	},
+	{
+    	"name": "Translocation",
+    	"level": 1,
+    	"school": "Luminancy",
+    	"classes": "Luminancer",
+    	"casttime": "1 action",
+    	"range": "60 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true
+    	},
+    	"duration": "Instantaneous",
+    	"description": "You momentarily step through the veil between here and there. This is effectively dimension door on a smaller scale, or vortex warp style teleportation of others. You have two uses:\n\n**Personal Translocation**: As in Luminal Motion, you teleport yourself 30 ft (or potentially farther at higher level with more points). At base (**3 points**) you can do up to 60 ft (like an advanced misty step). For each causal point spent to boost this effect, the distance increases by 10 feet, to a maximum of 60.\n\nMutual Substitution: (Requires 5th level, **3 points**) Choose two creatures you can see within 60 ft of you. They must each make a Charisma saving throw if unwilling (or automatically fail if willing). If both fail (or are willing), you swap their positions instantaneously – each teleports to where the other was. An unwilling creature that succeeds on the save is not moved. This can be used on yourself and an enemy, yourself and ally, or two other creatures. This is akin to a swap places ability. After using any Translocation, you can’t cast another teleport power until your next turn (to avoid chaining infinite teleports). **Cost: 3 points**."
+	},
+	{
+    	"name": "Veil of Shadows",
+    	"level": 2,
+    	"school": "Luminancy",
+    	"classes": "Luminancer",
+    	"casttime": "1 action",
+    	"range": "Touch or 60 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true
+    	},
+    	"duration": "Up to 1 hour or 10 minutes",
+    	"description": "You wrap an area or a creature in a cloak of shadow. This functions like the invisibility spell when cast on a creature, or like darkness spell when cast on an area. When you learn this power, choose one mode (or learn it twice for both):\n\n- **Invisibility:** One creature you touch (or yourself) becomes invisible for up to 1 hour or until they attack/cast a power. Anything the target is wearing or carrying is also invisible. **Cost: 3 points**.\n\n- **Shadow Sphere:** You create a 15-foot-radius sphere of magical darkness centered on a point within 60 ft, which lasts up to 10 minutes (concentration). No light can illuminate it, and even creatures with darkvision can’t see through it. However, you as a Luminancer can see through your own magical darkness normally (thanks to your balancing of light/dark). **Cost: 3 points**."
+	},
+	{
+    	"name": "Blinding Gleam",
+    	"level": 2,
+    	"school": "Luminancy",
+    	"classes": "Luminancer",
+    	"casttime": "1 action",
+    	"range": "Self (20-foot cone or 15-foot radius)",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true
+    	},
+    	"duration": "Instantaneous",
+    	"description": "You emit a sudden flash of intense light. All creatures in a 20-foot cone or 15-foot radius (your choice) originating from you must make a Constitution save or be blinded for 1 round. Undead, abominations of the dark, and oozes have disadvantage on the save (sensitive to light), greater undead (such as those immune to turning) are blinded twice as long (2 rounds) and are rendered blind permanently via persistent photonic injury if they fail a second save at the end of the effect.. This is akin to color spray or a mini sunburst. **Cost: 2 points**. This non-lethal power is great for escapes or setups."
+	},
+	{
+    	"name": "Grasp of Night",
+    	"level": 2,
+    	"school": "Luminancy",
+    	"classes": "Luminancer",
+    	"casttime": "1 action",
+    	"range": "60 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true
+    	},
+    	"duration": "Instantaneous",
+    	"description": "**Cost: 3 points**.\nOpposite of Blinding Gleam, you can invoke pure darkness to sap a foe’s strength. One creature within 60 ft must make a Constitution save or take **3d6 necrotic damage** and have disadvantage on strength-based checks and saves until the end of your next turn as their strength is shadow-bound and drained. If they save, half damage and no disadvantage. **Cost: 3 points**.\n\n**Overcharge**: For every **2** points spent, the damage increases by **1d6** and the Save DC increases by **+1**. For Every **3** points spent, increase number of targets by **1**.\n\n**Maximum Overcharge**: (**8+** points) Spell damage increases to a maximum of **6d6 Necrotic** damage. The area surrounding any targets that fail the save becomes a 10ft hemisphere of magical darkness that the Luminancer can see within. If two hemispheres touch, the radius wides by 10ft."
+	},
+	{
+    	"name": "Call Forth the Elements",
+    	"level": 2,
+    	"school": "Luminancy",
+    	"classes": "Luminancer",
+    	"casttime": "1 action",
+    	"range": "Varies",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true
+    	},
+    	"duration": "Instantaneous",
+    	"description": "You tap into elemental forces aside from light/dark. This versatile power lets you produce small elemental effects, akin to low-level elemental spells:\n\n- **Flame Jet:** You shoot a streak of fire (like burning hands 15-ft cone, **3d6 fire**, Dex save half).\n\n- **Frost Shards:** You fling ice shards (like ice knife or Snilloc’s snowball swarm, **3d6 cold** in a small radius, Dex save).\n\n- **Thunderclap:** A concussive boom (like thunderwave, 15-ft cube, **2d8 thunder** and push, Con save).\n\n- **Gusting Wind:** Push one creature or object with a gust (no damage, but like a strong shove 20 ft, Str save resists).\n\nYou essentially know a handful of minor elemental attacks under one umbrella power. Each time you use Call Forth the Elements, choose which version. **Cost: 2 points** per use."
+	},
+	{
+    	"name": "Elemental Infusion",
+    	"level": 2,
+    	"school": "Luminancy",
+    	"classes": "Luminancer",
+    	"casttime": "1 action",
+    	"range": "Touch",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true
+    	},
+    	"duration": "1 minute",
+    	"description": "Instead of attacking with elements, you infuse your weapon with an element. Imbue a melee weapon (or a handful of ammo) with acid, cold, fire, lightning, or thunder. For the next minute, that weapon deals an extra **1d6 damage** of the chosen type on hit and counts as magical. If you infuse ammo, it applies to up to 20 pieces of ammunition. This mimics elemental weapon spell (3rd level, but that one gives +1 to hit too; we simplified to damage only). **Cost: 3 points**."
+	},
+	{
+    	"name": "Metaconcert",
+    	"level": 2,
+    	"school": "Luminancy",
+    	"classes": "Luminancer",
+    	"casttime": "1 action",
+    	"range": "30 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true
+    	},
+    	"duration": "Until the end of your next turn",
+    	"description": "A strange psychic harmonic power that allows coordination with allies. When you activate Metaconcert (**cost: 3 points**, action), choose up to 3 willing creatures within 30 ft. You and the chosen allies form a psychic network until the end of your next turn. During this time, you all gain the following benefits:\n\n- You can communicate telepathically with each other instantly.\n\n- The first time each of you casts a spell or uses a power on your turn that deals damage or forces saves, you can add a +1 bonus to the spell’s save DC or attack roll for each other member of the metaconcert who is within 30 ft. (e.g. if 3 of you are linked, one casts a spell, they get +2 DC because two others are “augmenting”).\n\n- If two of you target the same creature with an effect in the same round, that creature has disadvantage on the second saving throw (as the combined assault overwhelms them).\n\nEssentially, this encourages teamwork in the round following activation. This is drawn from the concept of psionic metaconcerts (multiple minds combining). It’s situational but can turn the tide in a coordinated party. Once used, you cannot use it again for 10 minutes (to avoid constant spam)."
+	},
+	{
+    	"name": "Quicken Causality",
+    	"level": 2,
+    	"school": "Luminancy",
+    	"classes": "Luminancer",
+    	"casttime": "Bonus action",
+    	"range": "Self",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true
+    	},
+    	"duration": "Instantaneous",
+    	"description": "You momentarily accelerate your personal timeline. This power is like a mini haste on yourself for a single turn.When you use it (**bonus action, 2 points**), you can take one additional action immediately. You could use this extra action to Attack (one weapon attack only), Use an Object, or even cast another Luminancer power of a cost equal or less than Quicken Causality.  After using Quicken, you cannot move or take reactions until your next turn (briefly disorienting). This basically allows a quick burst of activity."
+	},
+	{
+    	"name": "Copied Strength",
+    	"level": 2,
+    	"school": "Luminancy",
+    	"classes": "Luminancer",
+    	"casttime": "Reaction",
+    	"range": "60 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true
+    	},
+    	"duration": "Instantaneous",
+    	"description": "With a flash of radiant insight from your eyes, you momentarily harness the magical essence of another's spellcasting or luminancer power, replicating its strength.\n\n- **Base Level (Cost: 2 Points):** When a creature within range casts a spell or uses a luminancer power of 2nd level or below, you can use your reaction to store the knowledge of that ability. You can then cast or use the stored spell or power as though it were a luminancer power of the same level.\n- **Overcharge (+1 Point/Level):** For each additional point spent, increase the maximum level of the stored spell or power by 1, up to a level equal to your Luminancer level.\n- **Maximum Overcharge (7 Points Total):** Use your reaction to initiate a magical grapple contest with the spellcaster (using your spellcasting ability modifiers instead of Strength). On a success, the caster's spell or power is turned back upon them, and you also store the knowledge of the spell or power to use later.",
+	},
+	{
+    	"name": "Absolute Submission",
+    	"level": 7,
+    	"school": "Enchantment",
+    	"classes": "Cleric",
+    	"casttime": "1 action",
+    	"range": "30 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true
+    	},
+    	"duration": "Concentration, up to 1 minute",
+    	"ritual": false,
+    	"description": "You emanate an **irresistible aura of authority and comfort**, forcing creatures into **deep psychological compliance** and **potty-trained discipline** under your presence. Choose up to **three creatures** within range that can hear you. Each target must make a **Wisdom saving throw** (DC = 8 + your proficiency bonus + your Wisdom modifier).\n\n**On a failed save, the affected creature:**  \n - **Ceases all hostile intent.** If the creature was preparing an attack or spell, it falters, unable to complete it.  \n - **Falls into a state of behavioral compliance.** It instinctively obeys any **reasonable verbal command** you give.  \n - **Is unable to willingly move more than 30 feet away from you.** If forced beyond this range, it must make another Wisdom saving throw. On failure, it becomes **stunned until the end of its next turn**.  \n - **Cannot attack you** under any circumstances unless directly harmed by you or your allies.  \n\n---\n\n### **Potty Discipline Effects:**  \n🍼 **Potty Check Compliance:** Any affected creature must **immediately make a Constitution saving throw** (same DC).  \n- **On failure:** The creature experiences **a subconscious \"potty-trained response,\" feeling an overwhelming urge to adhere to expected discipline.**  \n- The creature **hesitates before making aggressive moves** and **subconsciously suppresses any rebellious action** (DM may impose minor penalties or narrative effects).  \n\n🍑 **Accident Aversion:**  \n- While under the spell’s influence, affected creatures **instinctively avoid reckless behavior** that might risk embarrassment or loss of control.  \n- If the creature **fails a Dexterity save** during the duration, it is **momentarily distracted**, reducing its AC by **1 until the start of its next turn** (reflecting its focus on maintaining its composure).  \n\n✨ **Softened Defiance:**  \n- If an affected creature **attempts to resist a direct command**, it must first **succeed on a Charisma saving throw** (DC = spell save DC).  \n- **On failure:** It **second-guesses itself**, losing **advantage on its next roll** and feeling **social pressure to comply.**\n\n---\n\n### **Structured Environment Effects:**  \n- In settings with **clear discipline structures** (such as **Diaper School, academies, or noble courts**), affected creatures exhibit **deferential respect, instinctively yielding to authority figures.**  \n- They **hesitate before contradicting commands**, showing signs of **trained obedience and behavioral molding.**  \n- If cast within a **formalized hierarchy**, creatures may **instinctively seek approval before making decisions**, even after the spell ends.  \n\n---\n\n### **At Higher Levels:**  \n- When cast using a **spell slot of 8th level or higher**, the duration **extends to 10 minutes**, and affected creatures **retain a lingering attachment** to your authority for **1 hour** after the spell ends.  \n- **During this period**, creatures may feel a **subtle but persistent inclination to follow your instructions**, even if they would normally resist.",
+	},
+	{
+    	"name": "Uncrinkling Catastrophe",
+    	"level": 0,
+    	"school": "Transmutation",
+    	"classes": "",
+    	"casttime": "1 Action",
+    	"range": "30 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true
+    	},
+    	"duration": "Instantaneous",
+    	"ritual": false,
+    	"description": "With a quick, offhand incantation, you send forth a minor burst of irreverent magical energy. The targeted creature must succeed on a Constitution saving throw (DC 10) or fail a next potty check. Even if the save is successful, the target feels a fleeting sense of discomfiture—imposing disadvantage on its next Intelligence (Investigation) or Charisma (Performance) check as it struggles to regain composure. If the target is asleep, it automatically fails the saving throw."
+	},
+	{
+    	"name": "Blessed Baby Lotion",
+    	"level": 1,
+    	"school": "Abjuration",
+    	"classes": "Cleric",
+    	"casttime": "1 action",
+    	"range": "Self or 30 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "a vial of sacred baby lotion"
+    	},
+    	"duration": "1 minute",
+    	"ritual": false,
+    	"description": "You lavish a thick, holy lotion upon yourself or a willing creature. For the duration, the target is enveloped in a gleaming protective sheen, gaining a +1 bonus to AC and all saving throws as minor harms are slicked away like spilled milk. This effect immediately ends if the lotion is washed off with water.\n\n*“A well-applied dab of divine goodness can ward off the stickiest troubles.”*"
+	},
+	{
+    	"name": "Sacred Swaddle",
+    	"level": 1,
+    	"school": "Evocation",
+    	"classes": "Cleric, Druid",
+    	"casttime": "1 action",
+    	"range": "Touch",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "a soft, vine-woven cloth diaper or diaper with appropriate divine motif"
+    	},
+    	"duration": "Instantaneous",
+    	"ritual": false,
+    	"description": "You wrap a creature in a magical diaper that heals as it comforts and protects. The target regains 1d8 + your spellcasting modifier in hit points, and, as a tender bonus, gains temporary hit points equal to your spellcasting modifier that last for 1 minute. This nurturing embrace sews wounds closed as securely as a snug diaper change.\n\n*“In the sacred fold, body and soul begin to mend.”*"
+	},
+	{
+    	"name": "Hymn of the Lullaby",
+    	"level": 1,
+    	"school": "Enchantment",
+    	"classes": "Bard, Cleric",
+    	"casttime": "1 action",
+    	"range": "30 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "a tiny rattle fashioned from enchanted cloth"
+    	},
+    	"duration": "Concentration, up to 1 minute",
+    	"ritual": false,
+    	"description": "You serenade one creature within range with a soothing lullaby. The target must succeed on a Wisdom saving throw or be charmed and drowsy; while affected, its speed is reduced to 0 and it has disadvantage on attack rolls. At the end of each of its turns, the creature may repeat the saving throw, ending the effect on a success.\n\n*“When even the fiercest heart succumbs to a gentle tune, peace is born from chaos.”*"
+	},
+	{
+    	"name": "Nature's Nappy",
+    	"level": 1,
+    	"school": "Transmutation",
+    	"classes": "Druid",
+    	"casttime": "1 action",
+    	"range": "30 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "a diaper stuffed with fresh leaves and twigs"
+    	},
+    	"duration": "Concentration, up to 1 minute",
+    	"ritual": false,
+    	"description": "Calling on the wild whimsy of nature, you summon a thick, sticky “nappy” over a 10‑foot square. Every creature in the area must make a Dexterity saving throw. On a failure, a creature becomes restrained by the natural bonds until the spell ends. A restrained creature may use its action to attempt a Strength check against your spell save DC to free itself.\n\n*“Even nature knows: sometimes a good binding is the start of healing.”*"
+	},
+	{
+    	"name": "Soothing Snuggle",
+    	"level": 1,
+    	"school": "Conjuration",
+    	"classes": "Druid",
+    	"casttime": "1 action",
+    	"range": "30 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "a plush, enchanted stuffed animal"
+    	},
+    	"duration": "Instantaneous",
+    	"ritual": false,
+    	"description": "You envelop a creature in a comforting snuggle imbued with restorative energy. The target regains 1d6 + your spellcasting modifier hit points and is freed from one minor condition (such as frightened or charmed). The warmth of the embrace radiates a brief sense of calm even in the midst of turmoil.\n\n*“A tender hug, infused with nature’s care, mends more than just wounds.”*"
+	},
+	{
+    	"name": "Hallowed Diaper",
+    	"level": 1,
+    	"school": "Abjuration",
+    	"classes": "Paladin",
+    	"casttime": "1 bonus action",
+    	"range": "Self",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "a sacred scrap of cloth, used in consecrated changing rituals"
+    	},
+    	"duration": "1 minute",
+    	"ritual": false,
+    	"description": "You fasten a hallowed diaper around yourself, reinforcing your resolve with divine comfort. Until the spell ends, you gain a +2 bonus to AC as any blow is cushioned by your sanctified padding. In addition, attacks against you have disadvantage, as your radiant wrap diverts and softens enemy strikes.\n\n*“When adversity comes pouring in, a little divine cushioning can save the day.”*"
+	},
+	{
+    	"name": "Diaper of Devotion",
+    	"level": 1,
+    	"school": "Conjuration",
+    	"classes": "Paladin",
+    	"casttime": "1 action",
+    	"range": "30 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "a blessed, embroidered diaper"
+    	},
+    	"duration": "Concentration, up to 1 minute",
+    	"ritual": false,
+    	"description": "You consecrate a diaper in the name of your deities, channeling its protective aura onto an ally of your choice. For the duration, the target gains a +1 bonus on attack rolls and saving throws. Additionally, whenever they make a successful spell attack, they add 1d4 radiant damage to the effect. The divine scent of devotion lingers and uplifts their spirits.\n\n*“In devotion, every embrace transforms into a blessing – soft yet mighty.”*"
+	},
+	{
+    	"name": "Foul Flush",
+    	"level": 1,
+    	"school": "Evocation",
+    	"classes": "",
+    	"casttime": "1 action",
+    	"range": "30 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "a half-flushed, grimy diaper fragment"
+    	},
+    	"duration": "Instantaneous",
+    	"ritual": false,
+    	"description": "A sudden torrent of rancid water smashes forth in a 15‑foot cone from a point you choose. Each creature in the area must succeed on a Dexterity saving throw or take 1d8 acid damage and be pushed 5 feet away as they’re blasted by the spurrious water. Creatures that succeed take half damage and are not pushed. Anyone in the cone wearing a diaper suffers one use charge.\n\n*“An unexpected flush can leave enemies reeling—and very wet.”*"
+	},
+	{
+    	"name": "Rancid Rumble",
+    	"level": 1,
+    	"school": "Evocation",
+    	"classes": "",
+    	"casttime": "1 action",
+    	"range": "60 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "a rotten scrap of diaper lining"
+    	},
+    	"duration": "Instantaneous",
+    	"ritual": false,
+    	"description": "You unleash a booming fart of explosive putrid force at a specified point. Every creature within a 10‑foot radius must make a Constitution saving throw. On a failed save, a creature suffers 2d6 poison damage, soils themselves, and is disoriented (it takes disadvantage on its next attack roll). A successful save halves the damage and negates the disorientation.\n\n*“A roar of rancid stench shakes your foes to their very core.”*"
+	},
+	{
+    	"name": "Stench Strike",
+    	"level": 1,
+    	"school": "Evocation",
+    	"classes": "",
+    	"casttime": "1 action",
+    	"range": "60 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "a spritz of potent skunk essence"
+    	},
+    	"duration": "Instantaneous",
+    	"ritual": false,
+    	"description": "You focus your malodorous might into a concentrated beam. Make a ranged spell attack against a creature. On a hit, the target takes 1d8 poison damage and must succeed on a Constitution saving throw or be stunned until the end of its next turn as your overwhelming stench disorients it.\n\n*“A well-aimed hit of stench leaves adversaries dazed and reeling.”*"
+	},
+	{
+    	"name": "Messy Mangle",
+    	"level": 1,
+    	"school": "Evocation",
+    	"classes": "",
+    	"casttime": "1 action",
+    	"range": "30 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true
+    	},
+    	"duration": "Instantaneous",
+    	"ritual": false,
+    	"description": "A burst of messy, acidic splatter erupts in a 15‑foot cone. Each creature in the area must make a Dexterity saving throw. On a failure, they take 2d6 acid damage and become partially ensnared by the sticky mess until the end of your next turn (they may use an action to try to break free with a Strength check against your spell save DC). On a success, they take half damage and are not restrained.\n\n*“Out of chaos comes the perfect mangle—a sure way to splatter your foes.”*"
+	},
+	{
+    	"name": "Sullied Satchel",
+    	"level": 1,
+    	"school": "Conjuration",
+    	"classes": "",
+    	"casttime": "1 action",
+    	"range": "30 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "a tattered satchel that doubles as a diaper bag"
+    	},
+    	"duration": "Instantaneous",
+    	"ritual": false,
+    	"description": "You hurl a sullied satchel toward a point within range. When it impacts, a burst of corrosive mess explodes in a 10‑foot radius. Creatures in the area must succeed on a Dexterity saving throw or take 2d6 acid damage and be blinded by the overwhelming stench for 1 round; a successful save halves the damage and avoids blindness.\n\n*“Let your enemies be caught off guard by the unexpected explosion of filth.”*"
+	},
+	{
+    	"name": "Smear of Slime",
+    	"level": 1,
+    	"school": "Transmutation",
+    	"classes": "",
+    	"casttime": "1 action",
+    	"range": "Self (15‑foot cone)",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "a glob of gooey wand residue mixed with diaper fluff"
+    	},
+    	"duration": "Instantaneous",
+    	"ritual": false,
+    	"description": "You exude a wave of slippery slime in a 15‑foot cone. Each creature in that area must make a Dexterity saving throw. On a failure, they take 2d6 acid damage and are knocked prone as the slimy mess causes them to lose their footing; on a success, they take half damage and remain standing.\n\n*“Slip ‘em up with a well-placed smear — messy mayhem at its finest.”*"
+	},
+	{
+    	"name": "Soiled Shrapnel",
+    	"level": 1,
+    	"school": "Evocation",
+    	"classes": "",
+    	"casttime": "1 action",
+    	"range": "60 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "a handful of shredded, grimy cloth"
+    	},
+    	"duration": "Instantaneous",
+    	"ritual": false,
+    	"description": "You launch a burst of soiled shrapnel toward a point. Creatures within a 10‑foot radius must succeed on a Dexterity saving throw. On a failure, they take 1d8 piercing damage plus 1d4 acid damage from the corrosive grime; on a success, they take half of each damage type.\n\n*“Every piece of filthy debris finds its mark in a downpour of rustic ruin.”*"
+	},
+	{
+    	"name": "Magehand in Warm Water",
+    	"level": 0,
+    	"school": "Transmutation",
+    	"classes": "",
+    	"casttime": "1 action",
+    	"range": "30 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true
+    	},
+    	"duration": "Instantaneous",
+    	"ritual": false,
+    	"description": "A spectral, insubstantial hand manifests briefly near the target, its sole purpose being the subtle manipulation of bodily instinct rather than objects or equipment.\n\n##### Effects:\n- The caster makes a **ranged touch attack** against the target. On a success, there is no immediate effect, but the spell lingers.  \n- On the caster’s **next turn**, they may make a **second ranged touch attack** against the same target. If this attack also succeeds, the target **outright fails their next potty check** without a roll.  \n- If the caster only succeeds **one** of the two checks, the target instead rolls a normal **Constitution-based potty check** as per standard mechanics.  \n- **Sleeping Targets:** If the target is asleep, they **fail their potty check automatically** after a single success, but have a chance to wake up and resist the second success if the first attempt was a failure.  \n\nThe hand disappears after completing its effect, leaving the target to deal with the consequences of its unwanted intervention."
+	},
+	{
+    	"name": "Diaper of Debilitation",
+    	"level": 2,
+    	"school": "Conjuration",
+    	"classes": "",
+    	"casttime": "1 Action",
+    	"range": "30 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "a magically preserved baby wipe"
+    	},
+    	"duration": "Concentration, up to 1 minute",
+    	"ritual": false,
+    	"description": "You summon a bulky, cursed diaper that immediately encases an enemy. The target is overcome by the weight and awkwardness of the enchanted padding, suffering the following effects:\n- **Encumbered Movement:** The target’s speed is reduced by 10 feet.\n- **Fumbling Focus:** They have disadvantage on Dexterity checks and saving throws involving agility or spell concentration.\n- **Humiliating Urge:** At the start of each of the target’s turns, they must succeed on a Constitution saving throw (DC 12) or automatically fail their next potty check as embarrassingly urgent bodily functions overtake them.\nThe cursed swaddling clings until your concentration is broken.\n\n***If you used a magi-diaper of at least +2, the curse instead lasts up to 1 hour.***"
+	},
+	{
+    	"name": "Diaper Bomb",
+    	"level": 1,
+    	"school": "Evocation",
+    	"classes": "",
+    	"casttime": "1 action",
+    	"range": "60 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "a magically unstable, compacted diaper"
+    	},
+    	"duration": "Instantaneous",
+    	"ritual": false,
+    	"description": "You detonate your own diaper in a blast centered on yourself. Each creature in a 15‑foot radius must make a Dexterity saving throw. On a failure, they take 2d8 force damage and are pushed 5 feet away by the shockwave of explosive event; on a success, they take half damage and are not pushed. Any target that fails the save must roll an additional potty-check, failure results in soiled pants or pamps.\n\n*“Boom! Sometimes nothing says ‘game over’ like a freshly detonated diaper.”*"
+	},
+	{
+    	"name": "Grimy Gouge",
+    	"level": 1,
+    	"school": "Evocation",
+    	"classes": "",
+    	"casttime": "1 action",
+    	"range": "Self (melee, 5‑foot radius effect)",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "a gritty scrap of soiled fabric"
+    	},
+    	"duration": "Instantaneous",
+    	"ritual": false,
+    	"description": "In a burst of close-quarters filth, you channel messy energy into a sweeping attack. Every creature within 5 feet of you must succeed on a Constitution saving throw or take 1d8 acid damage and have their movement reduced to 0 for 1 round as stink paralyzes their senses and overwhelms them; a successful save halves the damage and does not hinder movement- not having a sense of smell grants immunity to this spell.\n\n*“Close the gap with a guttural gouge of grime—deft, dirty, and devastating.”*"
+	},
+	{
+    	"name": "Rotting Racket",
+    	"level": 1,
+    	"school": "Evocation",
+    	"classes": "",
+    	"casttime": "1 action",
+    	"range": "30 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "a deflated whoopee cushion infused with foul magic"
+    	},
+    	"duration": "Instantaneous",
+    	"ritual": false,
+    	"description": "A cacophonous explosion of rotten sound and odor bursts from a point of your choosing. Every creature in a 15‑foot radius must make a Constitution saving throw. On a failure, their diapers or pants are soiled and they take 2d6 thunder damage as the rotting racket reverberates and are deafened for 1 round; a successful save halves the damage and avoids the deafened condition but still prompts an additional potty-check to avoid the messy accident.\n\n*“When the call of a rotting racket sounds, even the boldest enemies falter in sheer repulsion.”*"
+	},
+	{
+    	"name": "Spontaneous Diaper Change",
+    	"level": 2,
+    	"school": "Transmutation",
+    	"classes": "",
+    	"casttime": "1 action",
+    	"range": "Touch",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true
+    	},
+    	"duration": "Instantaneous",
+    	"ritual": false,
+    	"description": "With a flick of your hand and a touch of magic, you cleanse and replace a worn diaper with a fresh, perfectly fitted one—leaving no mess, discomfort, or evidence of prior accidents.  \n\n#### Effects:  \n- Instantly removes any **soiled, damaged, or cursed diaper** and replaces it with a clean, well-fitted one. This spell cannot remove a cursed diaper that was created by a spell effect or effects stronger than this spell, unless a higher level spell slot is spent to cast it.  \n- Neutralizes **minor discomfort or irritation** caused by previous wear, restoring a sense of freshness to the recipient.\n\nThis spell is invaluable for caretakers, Diaper School staff, and adventurers seeking a swift, hassle-free solution to an otherwise embarrassing predicament."
+	},
+	{
+    	"name": "Padding Swap",
+    	"level": 2,
+    	"school": "Transmutation",
+    	"classes": "",
+    	"casttime": "1 reaction",
+    	"range": "30 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true
+    	},
+    	"duration": "Instantaneous",
+    	"ritual": false,
+    	"description": "With a mischievous flick of magic, you force an **underwear exchange** between yourself and a target within range. The victim feels an abrupt shift as their lower garments vanish and are replaced with yours.\n\n#### Effects:  \n- The target must make a **Constitution saving throw** against the caster's spell save to resist the swap. On a failure, their underwear—magical or mundane—is instantly exchanged with yours.  \n- If either participant was wearing a **magical diaper or pull-up**, it **automatically resizes** to fit the new wearer, regardless of body type.  \n- Any **cursed** padding retains its effects even after swapping, meaning an unfortunate wearer might end up stuck with enchanted discomfort.  \n- The sudden surprise imposes **disadvantage** on the target’s next Charisma-based check as they process their new attire.  \n\nWhile primarily a tool of pranks, **Padding Swap** has been known to cause both battlefield distractions and personal humiliation when poorly timed."
+	},
+	{
+    	"name": "Stabilizing Swaddle",
+    	"level": 3,
+    	"school": "Abjuration",
+    	"classes": "",
+    	"casttime": "1 action",
+    	"range": "30 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "a small cloth diaper"
+    	},
+    	"duration": "Concentration, up to 1 minute",
+    	"ritual": false,
+    	"description": "You wrap an ally in a comforting, magically reinforced swaddle. The target gains temporary hit points equal to 3d8 + your spellcasting modifier and has advantage on saving throws against being knocked prone or forcibly moved. Should these temporary hit points be depleted, the magical swaddle persists, continuing to protect the target for the duration.\n\n*“A soft embrace can fortify even the weariest warrior.”*"
+	},
+	{
+    	"name": "Sanitary Surge",
+    	"level": 3,
+    	"school": "Conjuration",
+    	"classes": "",
+    	"casttime": "1 action",
+    	"range": "Self (15-foot radius)",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "a vial of enchanted sanitizer"
+    	},
+    	"duration": "Instantaneous",
+    	"ritual": false,
+    	"description": "You unleash a burst of purifying energy in a 15-foot radius around you. Choose up to three creatures; each target regains 2d8 + your spellcasting modifier hit points and is freed from one minor adverse condition (such as disadvantage on attack rolls or a lingering curse). Additionally, if hostile creatures are caught in the surge, each must succeed on a Constitution saving throw or suffer disadvantage on their next saving throw as the purifying energy disrupts their defenses."
+	},
+	{
+    	"name": "Diaper Dash",
+    	"level": 3,
+    	"school": "Transmutation",
+    	"classes": "",
+    	"casttime": "1 bonus action",
+    	"range": "Self",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true
+    	},
+    	"duration": "1 minute",
+    	"ritual": false,
+    	"description": "Tapping into the quicksilver reflexes of a fresh change, you surge forward with newfound agility. For the duration, your movement speed increases by 15 feet, and you gain advantage on Dexterity saving throws. Furthermore, difficult terrain is treated as normal ground for you during this burst of speed.\n\n*“Sometimes all you need is a quick change to get an edge in the fray.”*"
+	},
+	{
+    	"name": "Cradle of Comfort",
+    	"level": 3,
+    	"school": "Abjuration",
+    	"classes": "",
+    	"casttime": "1 action",
+    	"range": "30 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "a soft, comforting blanket"
+    	},
+    	"duration": "1 minute",
+    	"ritual": false,
+    	"description": "You create a benevolent aura in a 30-foot radius that cradles your allies in a warm embrace. Each ally in the area gains 1d6 temporary hit points at the start of their turn and has advantage on saving throws against fear and charm effects for the duration. The gentle magic softens every wound, if only briefly.\n\n*“In the cradle of comfort, even the gravest wounds begin to mend.”*"
+	},
+	{
+    	"name": "Soiled Stasis",
+    	"level": 3,
+    	"school": "Enchantment",
+    	"classes": "",
+    	"casttime": "1 action",
+    	"range": "60 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "a ragged scrap of soiled cloth"
+    	},
+    	"duration": "Concentration, up to 1 round",
+    	"ritual": false,
+    	"description": "You unleash a putrid shock of magical filth at a creature within range. The target must succeed on a Constitution saving throw or be overwhelmed by the nauseating stench. On a failure, the creature is incapacitated (as if paralyzed) for 1 round, while on a success its speed is halved until the start of your next turn.\n\n*“Sometimes, the stench of neglect is enough to stop even the mightiest in their tracks.”*"
+	},
+	{
+    	"name": "Diaper Disarray",
+    	"level": 3,
+    	"school": "Evocation",
+    	"classes": "",
+    	"casttime": "1 action",
+    	"range": "60 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "a crumpled, discarded diaper"
+    	},
+    	"duration": "Instantaneous",
+    	"ritual": false,
+    	"description": "You unleash a chaotic burst of messy energy in a 20-foot-radius sphere centered on a point you choose. Each creature in the area must succeed on a Dexterity saving throw. On a failure, they take 3d6 acid damage and are knocked prone as they slip in the ensuing mess; on a success, they take half damage and remain standing.\n\n*“When chaos reigns, order is nothing but a fleeting memory.”*"
+	},
+	{
+    	"name": "Big Babification",
+    	"level": 3,
+    	"school": "Transmutation",
+    	"classes": "",
+    	"casttime": "1 action",
+    	"range": "30 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "a ribbon of enchanted nursery lace"
+    	},
+    	"duration": "Concentration, up to 1 minute",
+    	"ritual": false,
+    	"description": "With a dramatic flick of your hand and a surge of infantile magic, you curse a target within range, subjecting them to a humiliating transformation that impairs their combat effectiveness and shrouds their mind in childish whimsy.\n\n##### Effects:\n- **Magidiaper Lock:** The target is instantly bound in a thick, cursed magidiaper that locks in place, preventing mundane removal.  \n- **Hyper-Infantile Glamour:** Their armor, clothing, and wielded items are magically restyled into extravagant babyish versions with frills, lace, and pastel designs.  \n- **Pacified Silence:** A conjured pacifier manifests in their mouth, locking itself in place as per the *Pacification* spell, interfering with verbal spellcasting.  \n- **Mittens & Booties:** Their hands are encased in thick, plush mittens that diminish weapon control, while oversized booties encase their feet, worsening their mobility. Combined with the comically thick padding, their **speed is reduced by 15 feet**.  \n- **Mental Regression:** The target suffers **disadvantage on Intelligence and Wisdom saving throws**, as their thoughts are clouded by infantile fancies.  \n- **Potty Uncertainty:** They also suffer **disadvantage on potty checks**, finding their bodily control inexplicably unreliable.  \n\n**At Higher Levels.** When cast using a spell slot of **4th level or higher**, the target’s mental regression deepens. Each slot level above 3rd raises the **Wisdom save DC by 1** and extends the **duration by an additional minute**."
+	},
+	{
+    	"name": "Unstoppable Leak",
+    	"level": 4,
+    	"school": "Evocation",
+    	"classes": "",
+    	"casttime": "1 action",
+    	"range": "60 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "a bedraggled, leaking diaper"
+    	},
+    	"duration": "Instantaneous",
+    	"ritual": false,
+    	"description": "You cause a torrent of corrosive, soiled fluid to blast from a conjured diaper. Choose one creature within range; it must make a Dexterity saving throw. On a failure, the creature takes 4d6 acid damage and its clothing or gear becomes sodden—imposing disadvantage on its next attack roll. In a 15-foot cone from the target, every creature must succeed on a Dexterity saving throw or take half damage as the filth splashes wildly.  \n\n*“Sometimes, the worst is the best kind of assault!”*"
+	},
+	{
+    	"name": "Diaper Doom",
+    	"level": 5,
+    	"school": "Evocation",
+    	"classes": "",
+    	"casttime": "1 action",
+    	"range": "90 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "a cursed, enchanted ultra-diaper"
+    	},
+    	"duration": "Concentration, up to 1 minute",
+    	"ritual": false,
+    	"description": "You call down a colossal magical diaper from the skies to doom your foes. Choose a point within range; for the duration, a 20-foot radius zone centered there is filled with oppressive, foul-miasma energy and crushing pressure. Affected creatures that start their turn inside the area must succeed on a Constitution saving throw. On a failed save, they take 4d8 bludgeoning damage and are overcome with nausea until the start of their next turn; on a success, they take half damage and suffer no further effect. The zone’s terrain is considered difficult for its duration.\n\n*“When doom descends, not even the mightiest can escape its messy embrace!”*"
+	},
+	{
+    	"name": "Grossed Out!",
+    	"level": 6,
+    	"school": "Illusion",
+    	"classes": "",
+    	"casttime": "1 action",
+    	"range": "120 feet",
+    	"components": {
+        	"verbal": true,
+        	"somatic": true,
+        	"material": "a soiled, vintage diaper"
+    	},
+    	"duration": "Concentration, up to 1 minute",
+    	"ritual": false,
+    	"description": "You evoke an overwhelming aura of repulsion and olfactory disgust. Choose one creature within range; the target must make a Wisdom saving throw. On a failure, it is incapacitated with revulsion for the duration, and all attack rolls against it are made at disadvantage as foes recoil in utter disgust. The affected creature may repeat the saving throw at the end of each of its turns, ending the effect on a success.\n\n*“A stench so foul, it stops foes in their tracks—literally!”*"
+	}
+];
+
+  // Function to load and display spells
+  function loadSpells() {
+    const spellsContainer = document.getElementById('spellbook-container');
+    if (!spellsContainer) return; // Guard clause to prevent errors
+    
+    spellsContainer.innerHTML = '';
+    
+    // Get filter values with error handling
+    const levelFilter = document.getElementById('level-filter');
+    const schoolFilter = document.getElementById('school-filter');
+    
+    const levelValue = levelFilter ? levelFilter.value : 'all';
+    const schoolValue = schoolFilter ? schoolFilter.value : 'all';
+    
+    // Create a filtered array of spells
+    let filteredSpells = [...spellsData];
+    
+    // Apply level filter
+    if (levelValue !== 'all') {
+      if (levelValue === '0') {
+        filteredSpells = filteredSpells.filter(spell => spell.level === 0);
+      } else if (levelValue === '4+') {
+        filteredSpells = filteredSpells.filter(spell => spell.level >= 4);
+      } else {
+        filteredSpells = filteredSpells.filter(spell => spell.level === parseInt(levelValue));
+      }
+    }
+    
+    // Apply school filter
+    if (schoolValue !== 'all') {
+      filteredSpells = filteredSpells.filter(spell =>
+        spell.school && spell.school.toLowerCase() === schoolValue.toLowerCase()
+      );
+    }
+    
+    // Display spells
+    filteredSpells.forEach(spell => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      
+      // Create components string
+      let componentsText = [];
+      if (spell.components) {
+        if (spell.components.verbal) componentsText.push("V");
+        if (spell.components.somatic) componentsText.push("S");
+        if (spell.components.material && typeof spell.components.material === 'string' && spell.components.material !== "False") {
+          componentsText.push(`M (${spell.components.material})`);
+        }
+      }
+      
+      // Create the HTML content for the spell card
+      card.innerHTML = `
+        <h3>${spell.name}</h3>
+        <p><em>${getOrdinal(spell.level)}-level ${spell.school}</em></p>
+        <p><strong>Casting Time:</strong> ${spell.casttime}</p>
+        <p><strong>Range:</strong> ${spell.range || "Self"}</p>
+        <p><strong>Components:</strong> ${componentsText.join(", ") || "None"}</p>
+        <p><strong>Duration:</strong> ${spell.duration}</p>
+        ${spell.ritual ? "<p><strong>Ritual</strong></p>" : ""}
+        <p>${spell.description.replace(/\n/g, '<br>')}</p>
+        ${spell.higherlevels ? `<p><strong>At Higher Levels:</strong> ${spell.higherlevels}</p>` : ""}
+      `;
+      
+      spellsContainer.appendChild(card);
+    });
+  }
+  
+  // Helper function to convert number to ordinal text
+  function getOrdinal(level) {
+    if (level === 0) return "Cantrip";
+    
+    const suffixes = ["th", "st", "nd", "rd"];
+    const v = level % 100;
+    return level + (suffixes[(v - 20) % 10] || suffixes[v] || suffixes[0]);
+  }
+  
+  // Setup function that safely initializes everything
+  function initializeSpellbook() {
+    const applyFiltersButton = document.getElementById('apply-filters');
+    const resetFiltersButton = document.getElementById('reset-filters');
+    
+    // Add event listeners only if elements exist
+    if (applyFiltersButton) {
+      applyFiltersButton.addEventListener('click', loadSpells);
+    }
+    
+    if (resetFiltersButton) {
+      resetFiltersButton.addEventListener('click', function() {
+        const levelFilter = document.getElementById('level-filter');
+        const schoolFilter = document.getElementById('school-filter');
+        
+        if (levelFilter) levelFilter.value = 'all';
+        if (schoolFilter) schoolFilter.value = 'all';
+        
+        loadSpells();
+      });
+    }
+    
+    // Initial load of spells
+    loadSpells();
+  }
+  
+  // Use a more robust method to ensure the content is loaded
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeSpellbook);
+  } else {
+    // DOM already loaded, run the initialization directly
+    initializeSpellbook();
+  }
+  
+  // Additional handler for iframe-specific issues
+  window.addEventListener('load', function() {
+    // This runs after all resources (images, iframes, etc.) have loaded
+    // It's a good backup to ensure everything is initialized properly
+    initializeSpellbook();
+  });
+</script>
+</body>
+</html>

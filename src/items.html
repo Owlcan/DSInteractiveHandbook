@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Item Browser</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=MedievalSharp&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #daac17;
+      --gold-light: #fae791;
+      --gold-dark: #97740a;
+      --parchment: #2C2614; /* Darker parchment for main background */
+      --parchment-light: #f5e8c8; /* Lighter parchment for cards */
+      --parchment-dark: #1E1C12; /* Darker parchment for card details */
+      --ink: #c7a81d;
+      --ink-dark: #3a2d0c; /* Darker ink for text on light parchment */
+      --accent: #b47018;
+      --shadow: rgba(0, 0, 0, 0.5);
+    }
+
+    body {
+      font-family: 'Cormorant Garamond', serif;
+      margin: 0;
+      padding: 20px;
+      background-color: var(--parchment);
+      background-image: url('https://www.transparenttextures.com/patterns/dark-wood.png');
+      color: var(--ink);
+      line-height: 1.6;
+    }
+
+    #app {
+      max-width: 1600px;
+      margin: 0 auto;
+      background-color: var(--parchment);
+      background-image: url('https://www.transparenttextures.com/patterns/parchment.png');
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      padding: 20px;
+      border: 12px solid var(--gold-dark);
+      position: relative;
+    }
+
+    .corner-decoration {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      background-color: var(--gold);
+      background-image: url('https://www.transparenttextures.com/patterns/asfalt-light.png');
+      z-index: 1;
+    }
+
+    .top-left { top: -6px; left: -6px; border-top-left-radius: 15px; }
+    .top-right { top: -6px; right: -6px; border-top-right-radius: 15px; }
+    .bottom-left { bottom: -6px; left: -6px; border-bottom-left-radius: 15px; }
+    .bottom-right { bottom: -6px; right: -6px; border-bottom-right-radius: 15px; }
+
+    h1 {
+      text-align: center;
+      color: var(--accent);
+      font-family: 'MedievalSharp', cursive;
+      font-size: 3rem;
+      margin: 10px 0 30px;
+      text-shadow: 1px 1px 3px var(--shadow);
+      position: relative;
+    }
+
+    h1::after {
+      content: "";
+      display: block;
+      width: 60%;
+      height: 3px;
+      background: linear-gradient(to right, transparent, var(--gold), transparent);
+      margin: 10px auto;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 25px;
+      padding: 10px;
+    }
+
+    .card {
+      border: 3px solid var(--gold-dark);
+      border-radius: 10px;
+      padding: 20px;
+      background-color: var(--parchment-dark); /* Darker card background */
+      color: var(--ink); /* Ink color for text on dark parchment */
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2), inset 0 0 15px rgba(0,0,0,0.3);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card:hover {
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3), inset 0 0 10px rgba(0,0,0,0.2);
+    }
+
+    .card h3 {
+      color: var(--accent);
+      font-family: 'MedievalSharp', cursive;
+      font-size: 1.75rem;
+      margin-top: 0;
+      margin-bottom: 15px;
+      border-bottom: 2px solid var(--gold);
+      padding-bottom: 8px;
+      text-align: center;
+    }
+    
+    .card p {
+        margin-bottom: 8px;
+        font-size: 1.05em;
+    }
+
+    .card strong {
+        color: var(--gold-light);
+        font-weight: 600;
+    }
+
+    .card img {
+      width: 100%;
+      max-height: 250px;
+      object-fit: contain; /* Changed from cover to contain */
+      border-radius: 5px;
+      margin-top: 15px;
+      margin-bottom: 10px;
+      border: 3px solid var(--gold);
+      background-color: rgba(0,0,0,0.1); /* Slight background for images */
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+    
+    .card .description {
+        font-style: italic;
+        color: var(--gold-light);
+        margin-top: auto; /* Pushes description to the bottom if card content is sparse */
+        padding-top: 10px;
+        border-top: 1px dashed var(--gold-dark);
+    }
+
+    /* Scrollbar styling */
+    ::-webkit-scrollbar { width: 10px; }
+    ::-webkit-scrollbar-track { background: var(--parchment-dark); }
+    ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 5px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+    /* Filter and Search Styles */
+    .filter-search-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 30px;
+      padding: 20px;
+      background-color: rgba(0,0,0,0.1);
+      border-radius: 8px;
+      border: 2px solid var(--gold-dark);
+    }
+
+    .filter-group, .search-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .filter-group label, .search-group label {
+      font-weight: bold;
+      color: var(--accent);
+      font-family: 'MedievalSharp', cursive;
+      font-size: 1.2rem;
+    }
+
+    .filter-group select, .search-group input[type="text"] {
+      padding: 8px 12px;
+      background-color: var(--parchment-dark);
+      color: var(--ink);
+      border: 1px solid var(--gold);
+      border-radius: 4px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      min-width: 180px;
+    }
+
+    .filter-search-container button {
+      padding: 10px 20px;
+      background: linear-gradient(to bottom, var(--gold-light), var(--gold));
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-family: 'MedievalSharp', cursive;
+      color: var(--ink2);
+      box-shadow: 0 2px 5px var(--shadow);
+      transition: all 0.3s ease;
+      align-self: flex-end; /* Align button with bottom of inputs */
+    }
+
+    .filter-search-container button:hover {
+      background: linear-gradient(to bottom, var(--gold), var(--gold-dark));
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px var(--shadow);
+    }
+
+    #no-results {
+        text-align: center;
+        font-size: 1.5rem;
+        color: var(--gold-light);
+        margin-top: 30px;
+        display: none; /* Hidden by default */
+    }
+
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="corner-decoration top-left"></div>
+    <div class="corner-decoration top-right"></div>
+    <div class="corner-decoration bottom-left"></div>
+    <div class="corner-decoration bottom-right"></div>
+
+    <h1>Item Compendium</h1>
+
+    <div class="filter-search-container">
+      <div class="search-group">
+        <label for="search-input">Search by Name:</label>
+        <input type="text" id="search-input" placeholder="E.g., Adhesive">
+      </div>
+      <div class="filter-group">
+        <label for="type-filter">Filter by Type:</label>
+        <select id="type-filter">
+          <option value="all">All Types</option>
+          {/* Options will be populated by JavaScript */}
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="rarity-filter">Filter by Rarity:</label>
+        <select id="rarity-filter">
+          <option value="all">All Rarities</option>
+          {/* Options will be populated by JavaScript */}
+        </select>
+      </div>
+      <button id="reset-filters-btn">Reset</button>
+    </div>
+
+    <div class="card-grid" id="items-container">
+      </div>
+    <p id="no-results">No items match your criteria.</p>
+  </div>
+
+  <script>
+    const itemsData = [
+      {
+        name: "Adhesive",
+        value: "12 VRP",
+        type: "Ingredient (Essence)",
+        description: "A highly effective, sticky substance with powerful bonding properties, ideal for uniting disparate materials into one cohesive whole.",
+        location: "Greensea Forest, Lissome Plains",
+        rarity: "Common",
+        image: "assets/images/Adhesive.png"
+      },
+      {
+        name: "Azure Harvest Blue Moon Ice Cream",
+        value: "250 VRP",
+        type: "Crafted (Food Legendary)",
+        description: "Some say they taste citrus, others swear there are hints of custard and aromatics—and yet still more profess their belief it tastes like the platonic ideal of blue children's modeling clay. All agree it is one of the best iced confections ever created.",
+        rarity: "Legendary",
+        image: "assets/images/Azure Harvest Blue Moon Ice Cream.png"
+      },
+      {
+        name: "Azure Moon Cream",
+        value: "250 VRP",
+        type: "Ingredient (Legendary)",
+        description: "Legendary cream harvested under a blue moon. Glows with ethereal light.",
+        location: "Greensea Forest",
+        rarity: "Legendary",
+        image: "assets/images/Azure Moon Cream.png"
+      },
+      {
+        name: "Barkgum",
+        value: "7 VRP",
+        type: "Ingredient (Botanical)",
+        description: "A sticky and rubbery organic compound refined from the sap of certain trees. Used as a base for products from chewing gum to glue and rubber.",
+        location: "Greensea Forest",
+        rarity: "Common",
+        image: "assets/images/Barkgum.png"
+      },
+      {
+        name: "Berrimaters",
+        value: "5 VRP",
+        type: "Ingredient (Botanical, Food)",
+        description: "Small, round, savory and sweet—these cherry‑red delights are awfully fun to eat and pair well with many treats.",
+        location: "Greensea Forest",
+        rarity: "Common",
+        image: "assets/images/Berrimaters.png"
+      },
+      {
+        name: "Birch Syrup",
+        value: "35 VRP",
+        type: "Ingredient (Food, Botanical)",
+        description: "A rare syrup tapped from ancient, enchanted birch trees; each drop resonates with the forest's whispered secrets.",
+        rarity: "Uncommon",
+        image: "assets/images/Birch Syrup.bak.png" // Note: .bak extension, might be intentional or a typo
+      },
+      {
+        name: "Butter",
+        value: "5 VRP",
+        type: "Crafted (Food)",
+        description: "Smooth, creamy butter, perfect for cooking.",
+        rarity: "Common",
+        image: "assets/images/Butter.png"
+      },
+      {
+        name: "Chromatic Platinum",
+        value: "250 VRP",
+        type: "Ingredient (Legendary, Metal)",
+        description: "A resplendent metal alloy imbued with shifting prismatic hues, radiating a subtle magical aura.",
+        rarity: "Legendary",
+        image: "assets/images/Chromatic Platinum.png"
+      },
+      {
+        name: "Cream",
+        value: "5 VRP",
+        type: "Ingredient (Food)",
+        description: "Fresh dairy cream, essential for making ice cream and other desserts.",
+        rarity: "Common",
+        image: "assets/images/Cream.png"
+      },
+      {
+        name: "Darkessence",
+        value: "250 VRP",
+        type: "Ingredient (Legendary, Essence)",
+        description: "A mysterious, shadow‑infused essence that exudes an aura of hidden power, often employed in dark magical rites.",
+        rarity: "Legendary",
+        image: "assets/images/Darkessence.png"
+      },
+      {
+        name: "Defractor Prism",
+        value: "35 VRP",
+        type: "Ingredient (Rare)", // Assuming this was meant to be a rarity, not type
+        description: "Differentiates magical, material, and chemical processes, allowing for the breakdown of materials into their components.",
+        rarity: "Rare", // Added rarity based on type value
+        image: "assets/images/Defractor Prism.png"
+      },
+      {
+        name: "Distillation of a Night Sky",
+        value: "250 VRP",
+        type: "Ingredient (Legendary, Essence)",
+        description: "The essence of a perfect night sky captured in a bottle. Contains stardust and dreams.",
+        location: "Dracespire Mountain Range, Lissome Plains, Greensea Forest, Campus (Extremely Rare)",
+        rarity: "Legendary",
+        image: "assets/images/Distillation of a Night Sky.png"
+      },
+      {
+        name: "Dreamvapor",
+        value: "250 VRP",
+        type: "Ingredient (Legendary, Essence)",
+        description: "An ephemeral mist carrying the scents of lavender and lost lullabies, slipping away like a fragment of a fading dream.",
+        rarity: "Legendary",
+        image: "assets/images/Dreamvapor.png"
+      },
+      {
+        name: "Egg",
+        value: "5 VRP",
+        type: "Ingredient (Food)",
+        description: "A common binding agent used in cooking and baking.",
+        location: "Lissome Plains",
+        rarity: "Common",
+        image: "assets/images/Egg.png"
+      },
+      {
+        name: "Flavor Matrix",
+        value: "250 VRP",
+        type: "Ingredient (Legendary)",
+        description: "Made from the distillation of Candy Elemental, this crystallized flavor matrix radically expands the flavor profile of many food items—and can even unlock hidden potential.",
+        rarity: "Legendary",
+        image: "assets/images/flavor matrix.png"
+      },
+      {
+        name: "Fractal Copper",
+        value: "7 VRP",
+        type: "Ingredient (Metal)",
+        description: "A mysterious, ever‑fractalizing metal whose intricate patterns appear only under the full moon's light.",
+        rarity: "Common",
+        image: "assets/images/Fractal Copper.png"
+      },
+      {
+        name: "Flour",
+        value: "5 VRP",
+        type: "Ingredient (Food)",
+        description: "A finely milled powder ground from high-quality grains, known for its versatile binding properties and delicate, neutral flavor.",
+        rarity: "Common",
+        image: "assets/images/Flour.png"
+      },
+      {
+        name: "Glimmelectrum",
+        value: "7 VRP",
+        type: "Ingredient (Metal)",
+        description: "A radiant, mysterious alloy that hums with magical energy, capturing and reflecting light in mesmerizing patterns.",
+        rarity: "Common",
+        image: "assets/images/Glimmelectrum.png"
+      },
+      {
+        name: "Health Potion",
+        value: "5 VRP",
+        type: "Crafted (Potion)",
+        description: "A basic healing potion that restores vitality.",
+        rarity: "Common",
+        image: "assets/images/healthpotion.png"
+      },
+      {
+        name: "Herb Butter",
+        value: "5 VRP",
+        type: "Crafted (Food)",
+        description: "Butter infused with aromatic herbs.",
+        rarity: "Common",
+        image: "assets/images/Herb Butter.png"
+      },
+      {
+        name: "Jadicine",
+        value: "12 VRP",
+        type: "Ingredient (Exotic)",
+        description: "A translucent green substance, rumored to be distilled from the tears of a jade dragon, soothing the mind and mending wounds.",
+        rarity: "Uncommon",
+        image: "assets/images/Jadicine.png"
+      },
+      {
+        name: "Liquid Pain",
+        value: "250 VRP",
+        type: "Ingredient (Legendary, Food, Essence)",
+        description: "A shifting, blood‑red fluid pulsing as though alive, harvested from the shattered hearts of fiends—dangerous, potent, and steeped in dark magic.",
+        rarity: "Legendary",
+        image: "assets/images/Liquid Pain.png"
+      },
+      {
+        name: "Lovely Diaper",
+        value: "7 VRP",
+        type: "Crafted (Textile Crafted)",
+        description: "D'awwww! Isn't that sweet. A token meant to show just how much you want to keep someone safe.",
+        rarity: "Common",
+        image: "assets/images/Lovely Diaper.png"
+      },
+      {
+        name: "Lunar‑Dodo Egg",
+        value: "250 VRP",
+        type: "Ingredient (Legendary, Food)",
+        description: "An egg from the rare Lunar‑Dodo bird. Emits a soft blue glow.",
+        location: "Lissome Plains",
+        rarity: "Legendary",
+        image: "assets/images/Lunar-Dodo Egg.png"
+      },
+      {
+        name: "Bitter Balm", // This item was missing from the original list but present in the full data
+        value: "20 VRP",
+        type: "Crafted Item",
+        description: "A pungent salve that creates an unpleasant taste when applied to objects, discouraging chewing or sucking.",
+        rarity: "Uncommon",
+        image: "assets/images/placeholder.js" // Placeholder image, as in original data
+      },
+      {
+        name: "Matrix Malachite",
+        value: "35 VRP",
+        type: "Ingredient (Crystal)",
+        description: "A green crystalline material with geometric patterns that resonate with magical energies.",
+        location: "Dracespire Mountain Range",
+        rarity: "Uncommon",
+        image: "assets/images/matrixmalachite.png"
+      },
+      {
+        name: "Magibutter",
+        value: "30 VRP",
+        type: "Crafted (Food, Magical)",
+        description: "Butter infused with magical essence, giving it a faint glow and enhanced flavor. Used in magical cooking.",
+        rarity: "Uncommon",
+        image: "assets/images/Magibutter.png"
+      },
+      {
+        name: "Orichalchite",
+        value: "7 VRP",
+        type: "Ingredient (Metal)",
+        description: "Often called 'orichalcum's ghost,' this peculiar mineral shifts between the material and ethereal realms, evoking lost legends.",
+        rarity: "Common",
+        image: "assets/images/Orichalchite.png"
+      },
+      {
+        name: "Petrodistillate",
+        value: "12 VRP",
+        type: "Ingredient (Essence)",
+        description: "A refined, volatile extract from crude oil, known for its flammable characteristics and its use in catalyzing various reactions.",
+        location: "Dracespire Mountain Range",
+        rarity: "Uncommon",
+        image: "assets/images/Petrodistillate.png"
+      },
+      {
+        name: "Plastic Sheeting",
+        value: "7 VRP",
+        type: "Crafted (Textile Crafted)",
+        description: "A thin yet durable layer of plastic engineered for protective coverings, waterproofing, and precise industrial applications.",
+        rarity: "Common",
+        image: "assets/images/Plastic Sheeting.png"
+      },
+      {
+        name: "Plasticizer",
+        value: "12 VRP",
+        type: "Ingredient (Essence)",
+        description: "A transformative substance used to soften and mold plastics, enabling them to be fashioned into flexible forms.",
+        location: "Dracespire Mountain Range",
+        rarity: "Uncommon",
+        image: "assets/images/Plasticizer.png"
+      },
+      {
+        name: "Pripa",
+        value: "5 VRP",
+        type: "Ingredient (Plant)",
+        description: "An exotic-looking fruit with swirls of purple and yellow skin and blue-leafed stems, commonly found on the Diaper School plain, with a refreshing flavor reminiscent of citrus and pear.",
+        location: "Greensea Forest",
+        rarity: "Common",
+        image: "assets/images/Pripa.png"
+      },
+      {
+        name: "Prismatic Activator",
+        value: "250 VRP",
+        type: "Ingredient (Legendary, Rare)", // Type includes "Rare", likely a sub-category
+        description: "A dazzling device shimmering with the full spectrum of colors, designed to unlock hidden magical potentials with a decisive spark.",
+        rarity: "Legendary",
+        image: "assets/images/Prismatic Activator.png"
+      },
+      {
+        name: "Quiche",
+        value: "5 VRP",
+        type: "Crafted (Food Crafted)",
+        description: "A savory tart filled with a rich blend of ingredients, offering a hearty, delectable treat with artisanal flair.",
+        rarity: "Common",
+        image: "assets/images/Quiche.png"
+      },
+      {
+        name: "Robusca",
+        value: "35 VRP",
+        type: "Ingredient (Crystal)",
+        description: "A dense, robust crystalline alloy prized for its exceptional strength and durability, ideal for crafting heavy‑duty tools and resilient structures.",
+        location: "Dracespire Mountain Range",
+        rarity: "Uncommon",
+        image: "assets/images/Robusca.png"
+      },
+      {
+        name: "Rock Salt",
+        value: "7 VRP",
+        type: "Ingredient (Metal, Food)",
+        description: "A coarse, naturally occurring crystalline salt harvested from ancient deposits. Lends a distinct crunch and subtle brininess to recipes.",
+        rarity: "Common",
+        image: "assets/images/Rock_Salt.png"
+      },
+      {
+        name: "Savour Herb",
+        value: "5 VRP",
+        type: "Ingredient (Botanical)",
+        description: "A common botanical with a rich, savory aroma.",
+        location: "Greensea Forest",
+        rarity: "Common",
+        image: "assets/images/Savour Herb.png"
+      },
+      {
+        name: "Solvent",
+        value: "12 VRP",
+        type: "Ingredient (Essence)",
+        description: "A volatile liquid compound known for its ability to dissolve and extract substances, essential in various alchemical and industrial processes.",
+        location: "Dracespire Mountain Range",
+        rarity: "Uncommon",
+        image: "assets/images/Solvent.png"
+      },
+      {
+        name: "Spring Water",
+        value: "5 VRP",
+        type: "Ingredient (Food)",
+        description: "Pure water drawn from pristine natural springs, enriched with essential minerals to enhance clarity and freshness.",
+        rarity: "Common",
+        image: "assets/images/Spring Water.png"
+      },
+      {
+        name: "Star Sugar",
+        value: "250 VRP",
+        type: "Ingredient (Legendary, Food)",
+        description: "Crystallized sweetness that fell from the stars. Sparkles with cosmic energy.",
+        location: "Dracespire Mountain Range",
+        rarity: "Legendary",
+        image: "assets/images/Star Sugar.png"
+      },
+      {
+        name: "Starsoaked Vanilla",
+        value: "250 VRP",
+        type: "Ingredient (Legendary, Botanical, Food, Essence)",
+        description: "Vanilla beans that have been bathed in starlight for a full lunar cycle.",
+        location: "Dracespire Mountain Range",
+        rarity: "Legendary",
+        image: "assets/images/Starsoaked Vanilla.png"
+      },
+      {
+        name: "Starshot Ore",
+        value: "7 VRP",
+        type: "Ingredient (Metal)",
+        description: "A celestial metallic fragment believed to have fallen from the heavens; it glimmers with soft starlight even in utter darkness.",
+        rarity: "Common",
+        image: "assets/images/Starshot Ore.png"
+      },
+      {
+        name: "Sunset Essence",
+        value: "35 VRP",
+        type: "Ingredient (Rare, Food, Essence)", // Type includes "Rare"
+        description: "Captured at the fleeting moment of twilight, this radiant liquid holds the fading light of a dying day, evoking enchanting warmth and mystery.",
+        rarity: "Uncommon", // Rarity is Uncommon, despite "Rare" in type
+        image: "assets/images/Sunset Essence.png"
+      },
+      {
+        name: "Sweetleaf",
+        value: "5 VRP",
+        type: "Ingredient (Food, Botanical)",
+        description: "Naturally sweet leaves that add a delicate sweetness without overpowering other flavors.",
+        rarity: "Common",
+        image: "assets/images/Sweetleaf.png"
+      },
+      {
+        name: "Tastetanium Crystal",
+        value: "250 VRP",
+        type: "Ingredient (Legendary, Metal, Food)",
+        description: "An anomalous crystalline lattice of freestate energy that interacts with ingredients to create new, novel building blocks for taste sensation—while also being incredibly durable.",
+        rarity: "Legendary",
+        image: "assets/images/Tastetanium Crystal.png"
+      },
+      {
+        name: "Turbinado Sugar",
+        value: "250 VRP",
+        type: "Crafted (Food Legendary)",
+        description: "With the awesome gastronomic might of the flavor matrix, even plain white sugar is elevated to godly tiers of taste sensation!",
+        rarity: "Legendary",
+        image: "assets/images/TurbonadoSugar.png"
+      },
+      {
+        name: "Touch of Love",
+        value: "250 VRP",
+        type: "Ingredient (Legendary, Exotic, Essence)",
+        description: "The 'most common' of Legendary Ingredients—a staple many can make themselves, yet its ubiquity is a testament to its love-infused magic.",
+        location: "Greensea Forest",
+        rarity: "Legendary",
+        image: "assets/images/Touch of Love.png"
+      },
+      {
+        name: "Vanilla",
+        value: "5 VRP",
+        type: "Ingredient (Food, Botanical, Essence)",
+        description: "A fragrant flavoring extracted from vanilla pods.",
+        location: "Lissome Plains",
+        rarity: "Common",
+        image: "assets/images/Vanilla.png"
+      },
+      {
+        name: "Vanilla Ice Cream",
+        value: "5 VRP",
+        type: "Crafted (Food)",
+        description: "The tried and true classic. Almost no one can mess this up—delicious even when it turns to soup!",
+        rarity: "Common",
+        image: "assets/images/VanillaIceCream.png"
+      },
+      {
+        name: "Vitalium",
+        value: "35 VRP",
+        type: "Ingredient (Crystal, Exotic)",
+        description: "A shimmering metal imbued with the essence of life, frequently harnessed to empower enchanting constructs and devices.",
+        location: "Dracespire Mountain Range",
+        rarity: "Uncommon",
+        image: "assets/images/Vitalium.png"
+      },
+      {
+        name: "Vitalocanum",
+        value: "35 VRP",
+        type: "Ingredient (Crystal, Exotic)",
+        description: "A potent compound derived from Vitalium, renowned for its ability to bridge the gap between vitality and arcane energies.",
+        location: "Dracespire Mountain Range",
+        rarity: "Uncommon",
+        image: "assets/images/Vitalocanum.png"
+      },
+      {
+        name: "White Sugar",
+        value: "5 VRP",
+        type: "Ingredient (Food)",
+        description: "Refined sugar that adds sweetness to any recipe.",
+        location: "Lissome Plains",
+        rarity: "Common",
+        image: "assets/images/White Sugar.png"
+      },
+      {
+        name: "Whipped White Butter",
+        value: "5 VRP",
+        type: "Crafted (Food)",
+        description: "Light and airy butter whipped to perfection. Spreads like a dream.",
+        rarity: "Common",
+        image: "assets/images/Whipped White Butter.png"
+      },
+      {
+        name: "Yarn",
+        value: "7 VRP",
+        type: "Ingredient (Textile)",
+        description: "Finely spun fiber used in weaving and knitting, prized for its delicate texture and potential enchantments in crafted garments.",
+        location: "Lissome Plains",
+        rarity: "Common",
+        image: "assets/images/Yarn.png"
+      }
+    ];
+
+    const itemsContainer = document.getElementById('items-container');
+    const searchInput = document.getElementById('search-input');
+    const typeFilter = document.getElementById('type-filter');
+    const rarityFilter = document.getElementById('rarity-filter');
+    const resetFiltersBtn = document.getElementById('reset-filters-btn');
+    const noResultsMsg = document.getElementById('no-results');
+
+    // --- Populate Filter Dropdowns ---
+    function populateFilters() {
+      const types = new Set();
+      const rarities = new Set();
+      itemsData.forEach(item => {
+        types.add(item.type);
+        rarities.add(item.rarity);
+      });
+
+      types.forEach(type => {
+        const option = document.createElement('option');
+        option.value = type;
+        option.textContent = type;
+        typeFilter.appendChild(option);
+      });
+
+      rarities.forEach(rarity => {
+        const option = document.createElement('option');
+        option.value = rarity;
+        option.textContent = rarity;
+        rarityFilter.appendChild(option);
+      });
+    }
+
+    // --- Display Items ---
+    function displayItems(filteredItems) {
+      itemsContainer.innerHTML = ''; // Clear existing items
+      if (filteredItems.length === 0) {
+        noResultsMsg.style.display = 'block';
+      } else {
+        noResultsMsg.style.display = 'none';
+        filteredItems.forEach(item => {
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.innerHTML = `
+            <h3>${item.name}</h3>
+            <p><strong>Value:</strong> ${item.value}</p>
+            <p><strong>Type:</strong> ${item.type}</p>
+            <p><strong>Rarity:</strong> ${item.rarity}</p>
+            <p><strong>Location:</strong> ${item.location || 'N/A'}</p>
+            <img src="${item.image}" alt="${item.name}" onerror="this.onerror=null; this.src='https://placehold.co/300x200/1E1C12/c7a81d?text=Image+Not+Found';">
+            <p class="description">${item.description}</p>
+          `;
+          itemsContainer.appendChild(card);
+        });
+      }
+    }
+
+    // --- Filter and Search Logic ---
+    function filterAndSearchItems() {
+      const searchTerm = searchInput.value.toLowerCase();
+      const selectedType = typeFilter.value;
+      const selectedRarity = rarityFilter.value;
+
+      const filteredItems = itemsData.filter(item => {
+        const nameMatch = item.name.toLowerCase().includes(searchTerm);
+        const typeMatch = selectedType === 'all' || item.type === selectedType;
+        const rarityMatch = selectedRarity === 'all' || item.rarity === selectedRarity;
+        return nameMatch && typeMatch && rarityMatch;
+      });
+      displayItems(filteredItems);
+    }
+
+    // --- Event Listeners ---
+    searchInput.addEventListener('input', filterAndSearchItems);
+    typeFilter.addEventListener('change', filterAndSearchItems);
+    rarityFilter.addEventListener('change', filterAndSearchItems);
+    
+    resetFiltersBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        typeFilter.value = 'all';
+        rarityFilter.value = 'all';
+        filterAndSearchItems();
+    });
+
+    // --- Initial Load ---
+    populateFilters();
+    displayItems(itemsData); // Display all items initially
+
+  </script>
+</body>
+</html>

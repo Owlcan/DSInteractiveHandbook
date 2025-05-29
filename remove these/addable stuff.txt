@@ -1,0 +1,71 @@
+- **Adaptive Material Weave** - Enchanted fabric that studies incoming damage. After being hit by an attack type, gain **resistance to that damage type** until your next long rest. Additionally, once per short rest, you may **reflect 1d8 damage of that type** back at an attacker.
+Cost: 2, Type: Defense
+
+- **Guardian Embroidery** - Protective runes sewn into critical areas. When you would take damage that would reduce you to 0 HP, you instead remain at 1 HP. This effect can be used once per long rest.
+Cost: 2, Type: Defense
+
+- **Dimensional Padding** - Advanced spatial magic creates extra protection where needed. As a reaction, you can **impose disadvantage** on any attack roll made against you. You can use this feature a number of times equal to your proficiency bonus, regaining all uses after a long rest.
+Cost: 1, Type: Defense
+
+- **Blushing Protection Protocol** - A special lining infused with emotion-suppressing magic. Grants **immunity to charm effects** and **advantage on saving throws against enchantment spells**. Additionally, once per short rest, if you would be embarrassed, you can maintain perfect composure.
+Cost: 1, Type: Defense
+
+- **Caretaker's Embrace** - Enchanted fabric mimics protective hugs. When you would fail a saving throw, you can choose to succeed instead. After using this feature, you fall under the effects of the Calm Emotions spell for 1 minute. Usable once per long rest.
+Cost: 2, Type: Defense
+
+- **Tantrum Damper** - Energy-diffusing padding nullifies emotional outbursts. Gain **resistance to psychic damage** and **immunity to the frightened condition**. Additionally, hostile creatures within 10ft must make a DC 15 Wisdom save or have disadvantage on attack rolls against you.
+Cost: 2, Type: Defense
+
+- **Tactical Deployment Harness** - Reinforced support straps for enhanced mobility. You gain a **+10ft bonus to your walking speed** and can **stand from prone as a free action** rather than using half your movement.
+Cost: 1, Type: Utility
+
+- **Environment-Adaptive Coating** - Material adjusts to surroundings. You gain **advantage on saving throws against extreme environments** (heat, cold, etc.) and can **maintain comfortable body temperature** in any climate without requiring special gear.
+Cost: 1, Type: Utility
+
+- **Reconnaissance Enhancement Suite** - Sensors woven into the fabric amplify awareness. You gain **darkvision to 60ft** (or an extra 60ft if you already have it) and **advantage on Perception checks** related to sound and smell.
+Cost: 2, Type: Utility
+
+- **Snack Crumb Deterrent** - Never worry about messy eating again. Food and drink consumed while wearing this regalia **never stains or leaves residue**. Additionally, you gain **advantage on Sleight of Hand checks** involving small objects, as they never get lost in your clothing.
+Cost: 1, Type: Utility
+
+- **Naptime Efficiency Protocol** - Enhanced rest capabilities while padded. During a short rest, you recover **additional hit points equal to your Constitution modifier + your level**. Long rests take only 6 hours instead of 8 to complete.
+Cost: 2, Type: Utility
+
+- **Crawling Speed Enhancement** - Specially reinforced knees and elbows. Your **crawling movement doesn't count as difficult terrain**, and you can crawl at **half your walking speed** instead of one-third. Additionally, you have **advantage on Stealth checks** while crawling.
+Cost: 1, Type: Utility
+
+- **Emergency Phase Shift** - Distortion field creates momentary safety. Once per short rest, as a reaction when targeted by an attack, you can **teleport up to 30 feet** to an unoccupied space you can see, completely avoiding the attack.
+Cost: 2, Type: Special
+
+- **Tactical Opportunity Matrix** - Combat analysis systems enhance reactions. Once per combat, you can **take an additional reaction** during a round. Additionally, opportunity attacks against you have disadvantage.
+Cost: 2, Type: Special
+
+- **Harmonic Resonance Shield** - Vibrating defensive field. Once per long rest, as a bonus action, create a **10-foot radius aura** around yourself that grants allies within it **resistance to thunder and force damage** for 1 minute.
+Cost: 3, Type: Special
+
+- **Sudden Growth Spurt** - Magical regalia temporarily enhances size. Once per long rest, as a bonus action, you can **increase your size category by one** for 1 minute, gaining all benefits of the Enlarge spell without concentration.
+Cost: 2, Type: Special
+
+- **Playful Illusion Projector** - Creates distracting images of toys and childish things. Once per short rest, as an action, you can cast **Mirror Image** on yourself without requiring components or concentration.
+Cost: 2, Type: Special
+
+- **Timeout Corner Protocol** - Creates a disciplinary zone. Once per long rest, as an action, you create a **5-foot cube force field** within 30 feet. A creature inside must make a DC 15 Wisdom save or be unable to leave the zone for 1 minute or until it takes damage.
+Cost: 2, Type: Special
+
+- **Scholar's Perfect Recall** - Academic enhancement systems. Once per long rest, you can recall any information you've ever learned with perfect clarity, gaining advantage and double proficiency bonus on any Intelligence-based check for 10 minutes.
+Cost: 2, Type: Academy
+
+- **Faculty Override Authorization** - Special insignia of authority. You gain **advantage on Persuasion checks** when dealing with institutional authorities. Additionally, once per long rest, you can cast **Command** as a 2nd-level spell without components.
+Cost: 1, Type: Academy
+
+- **Research Assistant Protocol** - Enchantment aids in locating information. When searching for specific information in a library or archive, you locate it in half the normal time. You also gain a **+5 bonus to Investigation checks** when examining written materials.
+Cost: 1, Type: Academy
+
+- **Gold Star Achievement System** - Magical rewards for good behavior. Whenever you roll a natural 20 on an ability check, save, or attack roll, you gain a "gold star" that you can spend to gain advantage on any single roll. You can store up to 3 gold stars at once.
+Cost: 2, Type: Academy
+
+- **Nap Mat Deployment** - Emergency rest capabilities. Once per long rest, as an action, you can create a comfortable resting space that allows you to gain the benefits of a short rest in just 10 minutes instead of 1 hour.
+Cost: 1, Type: Academy
+
+- **Recess Energy Reserves** - Stored playful energy enhances performance. Once per short rest, as a bonus action, you can expend one hit die to gain **advantage on all Strength, Dexterity, and Constitution checks** for 1 minute.
+Cost: 1, Type: Academy
