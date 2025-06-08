@@ -1,0 +1,118 @@
+{{frontCover}}
+
+{{logo ![](https://ik.imagekit.io/owlcan/dslogo.png)}}
+
+{{banner HOMEBREWED in (very BIG) DIAPERS}}
+
+{{footnote
+  First you toddle, then you trot, then you run like the wind!
+}}
+
+![background image](https://ik.imagekit.io/owlcan/Pagematerials/waddlehooves.png){position:absolute,bottom:0,left:0,height:100%}
+
+\page
+# WADDLEHOOVES
+
+Among the most ancient and steadfast residents of the Scholia Diaspros, the Waddlehooves are a robust and spirited centaurine race. It is said their ancestors trod the nascent lands of this very plane alongside Professor Horace Hootz himself, playing a pivotal role in the early exploration and shaping of the world under The Headmaster's guidance. Possessing a boundless energy and an insatiable curiosity akin to that of young ponies, Waddlehooves retain their zest for roaming and ranging throughout their lives, regardless of their specific clangroup or age. Hearty, capable, and naturally attuned to the rhythms of both the wild and the peculiar necessities of Diaper School, they are a common and cherished sight, their cheerful waddles and thundering gallops a familiar sound in the halls and fields.
+
+Unlike many traditional centaur tales that speak of prideful reluctance to bear riders, Waddlehooves often exhibit a joyful willingness to share their strength and speed. They relish the opportunity to give playful horsey-rides to their smaller friends, readily offer their backs to aid tired or injured comrades, and, depending on their clangroup and individual prowess, some may even rise to become legendary mounts for truly capable and respected warriors. This cooperative spirit is a hallmark of their open and generous nature.
+
+## WADDLEHOOVES TRAITS
+Your Waddlehooves character has the following racial traits:
+
+**Creature Type:** You are a Monstrosity (Centaur).
+
+**Ability Score Increase:** Your Strength score increases by 4, and your Constitution score increases by 2.
+
+**Age:** Waddlehooves mature at a rate similar to humans but are considered adults around 16. They live robust lives, often reaching 300 to 320 years. Their playful spirit, however, remains ageless.
+
+**Alignment:** With their roaming nature and inherent curiosity, Waddlehooves lean towards chaotic or neutral alignments. Their strong community bonds and loyalty can also lead them towards good.
+
+**Size:** Waddlehooves stand between 6 and 8 feet tall from hoof to head, with their equine bodies being proportionally large. Your size is Large.
+
+**Speed:** Your base walking speed is 60 feet. You may choose to slow down and trot at the speed of your adventurers without exerting yourself.
+
+**Swift Strider:** You can take the Dash action as a bonus action on your turn.
+
+**Powerful Charge:** Your hooves are natural melee weapons, which you can use for unarmed strikes. When you hit with a hoof attack, it deals bludgeoning damage equal to 1d8 + your Strength modifier. Additionally, if you move at least 30 feet straight toward a target and then hit it with a melee weapon attack on the same turn, you can use your bonus action to make one hoof attack against the same target.
+
+**Waddlehoof Kick:** As an action, you can deliver a powerful kick with your hooves. Make a melee attack roll using Strength against one creature within 5 feet of you. On a hit, the target takes 1d8 bludgeoning damage, and you can choose to push the target up to 10 feet away from you.
+
+**Equine Build:** You count as one size larger when determining your carrying capacity and the weight you can push, drag, or lift. In addition, any climb that requires hands and feet is especially difficult for you because of your equine legs. When you make such a climb, each foot of movement costs you 4 extra feet, instead of the normal 1 extra foot.
+
+**Natural Incontinence:** Like many of the Scholia Diaspros's denizens, and true to their equine nature, Waddlehooves are naturally incontinent. Their bodies are simply not designed for prolonged control outside of their most primal needs. They are, however, remarkably adaptable and easily accustomed to the use of diapers, often seeing them as a practical part of life. This trait means you are considered Incontinent for the purposes of qualifying for feats like Diaper Mastery, if available in your campaign.
+
+**Languages:** You can speak, read, and write Common and Sylvan. You also understand the specific Centaur dialect of Sylvan, which incorporates more whinnies, snorts, and hoof-stamping emphasis.
+
+**Hoof-Bound Weapon Training:** You have proficiency with lances, shortbows, longbows, and armor crafted primarily from wood, vines, and other plant materials (such as Oaken Scale Mail or Vine Weave Armor, if available).
+
+\page
+
+
+
+**Unbridled Gait:** Your four-legged form is built for efficient, sustained movement across vast distances. You have advantage on saving throws against exhaustion caused by a forced march. Additionally, when traveling for an hour or more, your speed increases, allowing you to cover more ground. If you are carrying no more than a medium load, your overland travel pace is increased as shown in the Waddlehoof Overland Travel table.
+
+This additional speed and pace assumes you are not stopping for combat or long breaks.
+
+##### Waddlehooves Hyper-Speed Overland Travel
+| Pace   | Waddlehooves (120ft Base) Distance per Hour / Day | Speedkindred (130ft Base) Distance per Hour / Day | Notes                                              |
+| :----- | :------------------------------------------------ | :-------------------------------------------------- | :------------------------------------------------- |
+| Normal | 10 miles / 80 miles                               | 11 miles / 88 miles                                 |                                                    |
+| Fast   | 11 miles / 88 miles                               | 12 miles / 96 miles                                 | -5 to passive Perception                           |
+| Slow   | 9 miles / 72 miles                                | 10 miles / 80 miles                                 | Can attempt to use Stealth                         |
+
+
+\column
+
+## WADDLEHOOVES SUBRACES
+The Waddlehooves are divided into several clangroups, each with distinct adaptations and roles within their vibrant society.
+
+### SPEEDKINDRED
+Leaner and swifter than their kin, the Speedkindred are the scouts, messengers, and fleet-footed explorers of the Waddlehooves. Their energy is channeled into incredible bursts of speed and keen awareness.
+
+**Ability Score Adjustment:** Your Dexterity score increases by 2, and your Strength score decreases by 2 (resulting in a net +2 Strength from the base race).
+
+**Fleet of Hoof:** Your base walking speed increases to 65 feet.
+
+**Alert:** You gain proficiency in the Perception skill. Additionally, you have advantage on initiative rolls as long as you aren’t surprised.
+
+![speedkindred](https://ik.imagekit.io/owlcan/Pagematerials/speedkindred.png) {position:absolute,top:420px,right:130px,width:500px}
+\page
+### BURDENBEARERS
+The sturdy and steadfast Burdenbearers are the backbone of Waddlehooves communities, known for their incredible endurance and practical skills. They are the builders, crafters, and long-haul travelers.
+
+**Ability Score Adjustment:** Your Constitution score increases by an additional 2 (for a total of +4 Constitution from the base race), and your Wisdom score decreases by 2.
+
+**Unyielding Endurance:** You have advantage on saving throws against exhaustion. Additionally, when you would gain a level of exhaustion from travel or physical exertion (but not from other sources like lack of food, water, or magical effects that directly cause exhaustion levels), you can choose to ignore it. Once you use this trait, you can't use it again until you finish a long rest. (This trait supersedes the forced march advantage from Unbridled Gait).
+
+**Artisan's Knack:** You gain proficiency with one type of artisan's tools of your choice and proficiency in the Survival skill.
+
+**Natural Diaper Mastery:** Burdenbearers are so accustomed to managing their bodily functions during their arduous labors that they have an innate understanding of their padding. You gain the Diaper Mastery feat (as described in the Diaper School Regulation Handbook, if available) at 1st level.
+
+**Earthshaker Kick:** Your Waddlehoof Kick is especially forceful. When you hit a creature with your Waddlehoof Kick, the damage increases to 1d10 bludgeoning damage, and instead of pushing the target, you can choose to knock it prone.
+
+### WARBRED
+Hailing from clangroups with long martial traditions, the Warbred are the protectors and warriors among the Waddlehooves. They are trained for battle from a young age, their powerful forms clad in armor, ready to defend their kin.
+
+**Ability Score Increase:** Your Constitution score increases by an additional 2 (for a total of +4 Constitution from the base race).
+
+**Aggressive:** As a bonus action on your turn, you can move up to your speed toward an enemy of your choice that you can see or hear. You must end this move closer to the enemy than you started.
+
+**War-Clad Training:** You gain proficiency with all types of armor and shields.
+
+**Clan Weaponry:** You gain proficiency with one martial weapon type of your choice, reflecting the traditional weaponry of your War Clan.
+
+**Impact Kick:** Your Waddlehoof Kick can shatter defenses. When you hit a creature with your Waddlehoof Kick, the damage increases to 1d10 bludgeoning damage. The target is pushed 10 feet directly away from you. If the pushed target collides with another creature or a solid object like a wall, the target takes an additional 1d6 bludgeoning damage.
+
+### GROVEHOOF
+Deeply connected to the ancient forests and wild magic of the plane, Grovehooves are the mystics, lorekeepers, and nature-wardens of their people. They possess an innate understanding of the land and its creatures.
+
+**Ability Score Adjustment:** Your Intelligence score increases by 2, your Constitution score increases by an additional 2 (for a total of +4 Constitution from the base race), and your Strength score decreases by 2 (resulting in a net +2 Strength from the base race).
+
+**Druidic Initiate:** You know one cantrip of your choice from the druid spell list. When you reach 3rd level, you can cast one 1st-level spell of your choice from the druid spell list once with this trait, and you regain the ability to do so when you finish a long rest. Wisdom is your spellcasting ability for these spells.
+
+**Sylvan Knowledge:** You gain proficiency in the Nature skill. You also choose one from the following: proficiency in the Survival skill or proficiency with an herbalism kit. You have advantage on Intelligence (Nature) checks related to identifying flora, fauna, and natural phenomena within your home plane.
+
+**Pathfinder:** You can alwaysfind your way within any forest located on your home plane, even if you have never been there before, as long as the forest is not magically manipulated to prevent navigation. You can also communicate simple ideas with beasts and plants within such forests. They understand the meaning of your words, though you have no special ability to understand them in return. You have advantage on all Charisma checks you make to influence them.
+
+**Animal Affinity:** Wild animals and non-predatory mundane beasts are naturally calm in your presence and will not attack you unless provoked or magically compelled. They may even show curiosity or approach you without fear.

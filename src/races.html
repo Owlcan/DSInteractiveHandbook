@@ -361,6 +361,8 @@
                             <li><a href="javascript:void(0);" onclick="navigateToRaceById('living-dolls')">Living Dolls</a></li>
                             <li><a href="javascript:void(0);" onclick="navigateToRaceById('crinkleheart')">Crinklehearts</a></li>
                             <li><a href="javascript:void(0);" onclick="navigateToRaceById('cowbuddies')">Cowbuddies</a></li>
+                            <li><a href="javascript:void(0);" onclick="navigateToRaceById('carcharodonian')">Carcharodonian</a></li>
+                            <li><a href="javascript:void(0);" onclick="navigateToRaceById('waddlehooves')">Waddlehooves</a></li>
                         </ul>
                     </div>
                     <hr class="gold-divider-biggo">
@@ -1435,15 +1437,16 @@
                             <li><strong>Stone Shaper.</strong> You still know the <em>mold earth</em> cantrip (Wisdom spellcasting ability).</li>
                             </ul>
                             <hr class="gold-divider">
-                            <h4><strong>Qilin Yearling</strong></h4>
-                            <hr class="gold-divider">
-                            <p class="subrace-description">Their auspicious nature is becoming more apparent, and they often find themselves in the right place at the right time (especially if "right place" means "near the snack delivery"). Their shimmering coats are more noticeable, and their tiny horn-nubs might actually feel a bit pointy now.</p>
-                            <ul>
-                            <li><strong>Ability Score Increase.</strong> Your <strong>Charisma</strong> score increases by 2, and your <strong>Wisdom</strong> score increases by 1.</li>
-                            <li><strong>Blessed Gait.</strong> Your speed is still increased by 5 feet, and you ignore difficult terrain when Dashing.</li>
-                            <li><strong>Harmonious Gift (1/Long Rest).</strong> As a bonus action, you can choose one friendly creature (can be yourself) within 30 feet. The chosen creature gains temporary hit points equal to your character level + your Charisma modifier.</li>
-                            <li><strong>Guiding Luck.</strong> You still know the <em>guidance</em> cantrip. The ability to reroll a 1 on a d20 for an ability check or saving throw can now be used twice per long rest.</li>
-                            </ul>
+                                 <h4><strong>Crinqilin</strong></h4>
+                    <hr class="gold-divider">
+                    <p class="subrace-description">These Qilin yearlings have fully embraced their connection to the whimsical magic of the Diaper School. Their auspicious nature now manifests in charmingly clumsy ways and unexpected bursts of minor enchantments, often centered around their ever-present, perfectly puffed padding. They exude an air of innocent dependence that belies a surprising resilience and a unique, if somewhat messy, magical talent. Their shimmering coats are often adorned with colorful safety pins or cute magical charms, and their tiny horn-nubs are more for gentle nuzzling than any real defense.</p>
+                    <ul>
+                        <li><strong>Ability Score Increase.</strong> Your <strong>Charisma</strong> score increases by 2, and your <strong>Wisdom</strong> score increases by 1.</li>
+                        <li><strong>Naturally Padded.</strong> Crinqilins are inherently tied to the comforts and necessities of a well-padded existence. They are always considered to be wearing a diaper, which magically adapts to their needs and form. This state is natural to them and cannot be changed by conventional means. Attempts to remove their padding or potty-train them invariably meet with whimsical magical mishaps, often resulting in the padding reappearing cleaner and fluffier than before. You have advantage on saving throws against being frightened, as you are comforted by your perpetual padding.</li>
+                        <li><strong>Cushioned Charm (Diaper-Allure Power).</strong> Your undeniably innocent and comfortably padded appearance can be quite disarming. As an action, you can attempt to charm one humanoid you can see within 30 feet. The target must make a Wisdom saving throw (DC = 8 + your proficiency bonus + your Charisma modifier). On a failed save, the creature is charmed by you for 1 minute or until it takes damage. While charmed in this way, the creature regards you as a harmless, endearing being and is unwilling to attack you. You can use this feature a number of times equal to your proficiency bonus, regaining all expended uses on a long rest.</li>
+                        <li><strong>Auspicious Accidents &amp; Miracles.</strong> You have an innate connection to playful and protective magic. You know the <em>Spontaneous Accident</em> and <em>Little Miracle</em> cantrips. Additionally, you can cast the <em>Magic Messle</em> spell. You can cast <em>Magic Messle</em> a number of times equal to your Charisma modifier (minimum of once), and you regain all expended uses when you finish a long rest. Charisma is your spellcasting ability for these spells.</li>
+                        <li><strong>Blessed Bounce.</strong> Your padded nature makes you surprisingly resilient to falls and tumbles. You have resistance to falling damage, and you can use your reaction when you fall to reduce any falling damage you take by an amount equal to five times your character level. Additionally, when you are knocked prone, you can use your reaction to immediately stand up without expending any movement.</li>
+                    </ul>
                             <hr class="gold-divider">
                             <h4><strong>Jotun Rimeblood</strong></h4>
                             <hr class="gold-divider">
@@ -2239,6 +2242,180 @@
                         <li><strong>Unyielding Might.</strong> Once per short rest, when you roll a Strength check or saving throw, you can add a bonus equal to your Strength modifier (minimum +1), tapping into an inner reserve of raw power.</li>
                         </ul>
                     </div>
+                `
+            },
+            {
+                type: "race",
+                name: "Carcharodonian",
+                id: "carcharodonian",
+                contentHTML: `
+                    <div id="carcharodonian_content">
+                        <h2 id="carcharodonian">Carcharodonian: The Toothy Terrors of the Tides</h2>
+                        <hr class="gold-divider">
+                        <img src="assets/images/races/carcharodonians.png" alt="Carcharodonian" class="center-image" style="max-width: 700px;" onerror="this.src='https://placehold.co/700x500/3e2e1e/f0e68c?text=Image+Not+Found'; this.alt='Image not found';">
+                        <h3>Physical Description</h3>
+                        <p>Children of the deep, Carcharadonians are formidable shark-folk with powerful builds standing between 5 and 7 feet tall. Their skin ranges from slate gray to deep blue, sometimes bearing the distinctive markings of their shark heritage. Rows of sharp teeth fill their elongated jaws, and their eyes—often black or darkly colored—possess a predatory focus that can be unnerving to land-dwellers. Their powerful forms move with surprising grace both on land and in water, though they clearly appear most at home beneath the waves.</p>
+                        <hr class="gold-divider">
+                        <h3>Cultural Description</h3>
+                        <p>Perfectly adapted to life beneath the waves, Carcharodonians are the apex predators of their aquatic domains. Yet, the call of the surface world, and perhaps the peculiar necessities of places like the Diaper School, sometimes draw these mighty beings into unfamiliar territory. Their societies vary based on subrace—from the solitary, powerful Benthic Folk to the social, cunning Shoal Folk and the nomadic Waves Folk. While their primal instincts and predatory nature are undeniable, many have developed sophisticated cultures and traditions. The very pressure that makes them mighty in the ocean depths presents unique challenges on land, particularly regarding bodily functions, leading many to adopt the padding practices common at institutions like the Diaper School.</p>
+                        <hr class="gold-divider">
+                        <h3>Carcharodonian Traits</h3>
+                        <p>Your Carcharodonian character has the following racial traits:</p>
+                        <p><strong>Creature Type.</strong> You are a Humanoid.</p>
+                        <p><strong>Ability Score Increase.</strong> Your <strong>Constitution</strong> score increases by 2. In addition, either your <strong>Strength</strong> or your <strong>Dexterity</strong> score increases by 3 (your choice).</p>
+                        <p><strong>Age.</strong> Carcharodonians mature quickly, reaching adulthood around age 15. They can live up to 120 years.</p>
+                        <p><strong>Alignment.</strong> Carcharodonians possess a predatory nature and a strong sense of self-preservation, often leading them towards neutral or chaotic alignments. However, societal influences and individual choices can lead them to any alignment.</p>
+                        <p><strong>Size.</strong> Carcharodonians are typically powerfully built and stand between 5 and 7 feet tall. Your size is <strong>Medium</strong>.</p>
+                        <p><strong>Speed.</strong> Your base walking speed is <strong>30 feet</strong>.</p>
+                        <p><strong>Swim Speed.</strong> You have a swim speed equal to your walking speed.</p>
+                        <p><strong>Darkvision.</strong> Accustomed to the gloomy depths, you have superior vision in dark and dim conditions. You can see in dim light within <strong>60 feet</strong> of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.</p>
+                        <p><strong>Amphibious.</strong> You can breathe air and water.</p>
+                        <p><strong>Underwater Agility.</strong> When you are underwater, you can take the Dash action as a bonus action.</p>
+                        <p><strong>Aquatic Aggression.</strong> If you move at least 10 feet through water in a straight line towards a creature and then hit it with a melee weapon attack on the same turn, that attack deals an extra 1d6 damage of the weapon's type.</p>
+                        <p><strong>Land-Incontinence.</strong> The immense pressure of the deep waters is integral to a Carcharodonian's bodily regulation. When they spend extended periods above water, this natural support is lost, leading to a physiological need for absorbent padding, much like many residents of Diaper School. While submerged, Carcharodonians who possessed bladder control retain it, though they might opt for a swim diaper for convenience if they anticipate returning to the surface soon. This trait means you are considered <strong>Incontinent</strong> for the purposes of qualifying for feats like Diaper Mastery, if available in your campaign.</p>
+                        <p><strong>Sharkfolk Weapon Training.</strong> You have proficiency with spears, nets, and tridents.</p>
+                        <p><strong>Armored Swimmer.</strong> Your natural affinity for water allows you to move more easily in armor than most. You do not suffer disadvantage on Strength (Athletics) checks made to swim when wearing any armor other than full plate. Additionally, wearing armor you are proficient with does not reduce your swim speed unless it is full plate.</p>
+                        <p><strong>Languages.</strong> You can speak, read, and write <strong>Common</strong> and <strong>Aquan</strong>.</p>
+                        <hr class="gold-divider">
+                        <h3>Carcharodonian Subraces</h3>
+                        <hr class="gold-divider">
+                        <p>Three main groups of Carcharodonians are commonly found, each adapted to different aspects of aquatic life.</p>
+                        <h4 id="benthic-folk"><strong>Benthic Folk</strong></h4>
+                        <hr class="gold-divider">
+                        <p class="subrace-description">Inspired by the mighty great white sharks, Benthic Folk are powerful, deep-dwelling Carcharodonians, known for their sheer strength and resilience. They are often solitary or live in small, formidable family units in the darkest trenches.</p>
+                        <ul>
+                        <li><strong>Ability Score Increase.</strong> Your <strong>Strength</strong> score increases by an additional 1 (for a total of +4 if you chose Strength for your primary increase, or +1 Strength and +3 Dexterity if you chose Dexterity), and your <strong>Wisdom</strong> score increases by 2.</li>
+                        <li><strong>Powerful Build.</strong> You count as one size larger when determining your carrying capacity and the weight you can push, drag, or lift.</li>
+                        <li><strong>Deep Dweller's Resilience.</strong> You have advantage on saving throws against being frightened.</li>
+                        </ul>
+                        <hr class="gold-divider">
+                        <h4 id="shoal-folk"><strong>Shoal Folk</strong></h4>
+                        <hr class="gold-divider">
+                        <p class="subrace-description">More nimble and often found in larger, more social groups in shallower waters or near reefs, Shoal Folk are intelligent hunters who rely on cunning and teamwork. They can vary more in size than their larger cousins.</p>
+                        <ul>
+                        <li><strong>Ability Score Increase.</strong> Your <strong>Dexterity</strong> score increases by an additional 1 (for a total of +4 if you chose Dexterity for your primary increase, or +1 Dexterity and +3 Strength if you chose Strength), and your <strong>Intelligence</strong> score increases by 2.</li>
+                        <li><strong>Size.</strong> Your size can be Small or Medium (your choice at character creation).</li>
+                        <li><strong>Shark's Grace.</strong> You have advantage on Dexterity (Acrobatics) checks made while in water.</li>
+                        <li><strong>Reef Strider.</strong> You have advantage on Dexterity (Stealth) checks made to hide in watery environments with ample cover, such as reefs, kelp forests, or shipwrecks.</li>
+                        </ul>
+                        <hr class="gold-divider">
+                        <h4 id="waves-folk"><strong>Waves Folk</strong></h4>
+                        <hr class="gold-divider">
+                        <p class="subrace-description">Nomadic and adaptable, Waves Folk roam the open oceans and coastal areas. They are known for their speed and versatility, comfortable in various marine environments and often the first to interact with surface dwellers.</p>
+                        <ul>
+                        <li><strong>Ability Score Increase.</strong> Either your <strong>Strength</strong> or <strong>Dexterity</strong> score increases by an additional 1 (your choice), and either your <strong>Intelligence</strong> or <strong>Wisdom</strong> score increases by 1 (your choice).</li>
+                        <li><strong>Increased Speed.</strong> Your base walking speed and swim speed increase to 35 feet.</li>
+                        <li><strong>Size.</strong> Your size can be Small or Medium (your choice at character creation).</li>
+                        <li><strong>Ocean's Grace.</strong> You have advantage on Dexterity saving throws made to avoid being knocked prone while in water.</li>
+                        <li><strong>Nomad's Acclimation.</strong> You have advantage on saving throws against exhaustion due to forced marches or prolonged swimming.</li>                        </ul>
+                    </div>
+                    <hr class="gold-divider-biggo">
+                `
+            },
+            {
+                type: "race",
+                name: "Waddlehooves",
+                id: "waddlehooves",
+                contentHTML: `
+                    <div id="waddlehooves_content">
+                        <h2 id="waddlehooves">WADDLEHOOVES</h2>
+                        <hr class="gold-divider">
+                        <img src="assets/images/races/waddlehooves.png" alt="Waddlehooves" class="center-image" style="max-width: 700px;" onerror="this.src='https://placehold.co/700x500/3e2e1e/f0e68c?text=Image+Not+Found'; this.alt='Image not found';">
+                        <p>Among the most ancient and steadfast residents of the Scholia Diaspros, the Waddlehooves are a robust and spirited centaurine race. It is said their ancestors trod the nascent lands of this very plane alongside Professor Horace Hootz himself, playing a pivotal role in the early exploration and shaping of the world under The Headmaster's guidance. Possessing a boundless energy and an insatiable curiosity akin to that of young ponies, Waddlehooves retain their zest for roaming and ranging throughout their lives, regardless of their specific clangroup or age. Hearty, capable, and naturally attuned to the rhythms of both the wild and the peculiar necessities of Diaper School, they are a common and cherished sight, their cheerful waddles and thundering gallops a familiar sound in the halls and fields.</p>
+                        
+                        <p>Unlike many traditional centaur tales that speak of prideful reluctance to bear riders, Waddlehooves often exhibit a joyful willingness to share their strength and speed. They relish the opportunity to give playful horsey-rides to their smaller friends, readily offer their backs to aid tired or injured comrades, and, depending on their clangroup and individual prowess, some may even rise to become legendary mounts for truly capable and respected warriors. This cooperative spirit is a hallmark of their open and generous nature.</p>
+                        <hr class="gold-divider">
+                        <h3>Waddlehooves Traits</h3>
+                        <p>Your Waddlehooves character has the following racial traits:</p>
+                        <p><strong>Creature Type:</strong> You are a Monstrosity (Centaur).</p>
+                        <p><strong>Ability Score Increase:</strong> Your Strength score increases by 4, and your Constitution score increases by 2.</p>
+                        <p><strong>Age:</strong> Waddlehooves mature at a rate similar to humans but are considered adults around 16. They live robust lives, often reaching 300 to 320 years. Their playful spirit, however, remains ageless.</p>
+                        <p><strong>Alignment:</strong> With their roaming nature and inherent curiosity, Waddlehooves lean towards chaotic or neutral alignments. Their strong community bonds and loyalty can also lead them towards good.</p>
+                        <p><strong>Size:</strong> Waddlehooves stand between 6 and 8 feet tall from hoof to head, with their equine bodies being proportionally large. Your size is Large.</p>
+                        <p><strong>Speed:</strong> Your base walking speed is 60 feet. You may choose to slow down and trot at the speed of your adventurers without exerting yourself.</p>
+                        <p><strong>Swift Strider:</strong> You can take the Dash action as a bonus action on your turn.</p>
+                        <p><strong>Powerful Charge:</strong> Your hooves are natural melee weapons, which you can use for unarmed strikes. When you hit with a hoof attack, it deals bludgeoning damage equal to 1d8 + your Strength modifier. Additionally, if you move at least 30 feet straight toward a target and then hit it with a melee weapon attack on the same turn, you can use your bonus action to make one hoof attack against the same target.</p>
+                        <p><strong>Waddlehoof Kick:</strong> As an action, you can deliver a powerful kick with your hooves. Make a melee attack roll using Strength against one creature within 5 feet of you. On a hit, the target takes 1d8 bludgeoning damage, and you can choose to push the target up to 10 feet away from you.</p>
+                        <p><strong>Equine Build:</strong> You count as one size larger when determining your carrying capacity and the weight you can push, drag, or lift. In addition, any climb that requires hands and feet is especially difficult for you because of your equine legs. When you make such a climb, each foot of movement costs you 4 extra feet, instead of the normal 1 extra foot.</p>
+                        <p><strong>Natural Incontinence:</strong> Like many of the Scholia Diaspros's denizens, and true to their equine nature, Waddlehooves are naturally incontinent. Their bodies are simply not designed for prolonged control outside of their most primal needs. They are, however, remarkably adaptable and easily accustomed to the use of diapers, often seeing them as a practical part of life. This trait means you are considered Incontinent for the purposes of qualifying for feats like Diaper Mastery, if available in your campaign.</p>
+                        <p><strong>Languages:</strong> You can speak, read, and write Common and Sylvan. You also understand the specific Centaur dialect of Sylvan, which incorporates more whinnies, snorts, and hoof-stamping emphasis.</p>
+                        <p><strong>Hoof-Bound Weapon Training:</strong> You have proficiency with lances, shortbows, longbows, and armor crafted primarily from wood, vines, and other plant materials (such as Oaken Scale Mail or Vine Weave Armor, if available).</p>
+                        <p><strong>Unbridled Gait:</strong> Your four-legged form is built for efficient, sustained movement across vast distances. You have advantage on saving throws against exhaustion caused by a forced march. Additionally, when traveling for an hour or more, your speed increases, allowing you to cover more ground. If you are carrying no more than a medium load, your overland travel pace is increased as shown in the Waddlehoof Overland Travel table.</p>
+                        <p>This additional speed and pace assumes you are not stopping for combat or long breaks.</p>
+                        <h5>Waddlehooves Hyper-Speed Overland Travel</h5>
+                        <table>
+                            <tr>
+                                <th>Pace</th>
+                                <th>Waddlehooves (120ft Base) Distance per Hour / Day</th>
+                                <th>Speedkindred (130ft Base) Distance per Hour / Day</th>
+                                <th>Notes</th>
+                            </tr>
+                            <tr>
+                                <td>Normal</td>
+                                <td>10 miles / 80 miles</td>
+                                <td>11 miles / 88 miles</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Fast</td>
+                                <td>11 miles / 88 miles</td>
+                                <td>12 miles / 96 miles</td>
+                                <td>-5 to passive Perception</td>
+                            </tr>
+                            <tr>
+                                <td>Slow</td>
+                                <td>9 miles / 72 miles</td>
+                                <td>10 miles / 80 miles</td>
+                                <td>Can attempt to use Stealth</td>
+                            </tr>
+                        </table>
+                        <hr class="gold-divider">
+                        <h3>Waddlehooves Subraces</h3>
+                        <p>The Waddlehooves are divided into several clangroups, each with distinct adaptations and roles within their vibrant society.</p>
+                        <hr class="gold-divider">
+                        <h4><strong>Speedkindred</strong></h4>
+                        <hr class="gold-divider">
+                        <p class="subrace-description">Leaner and swifter than their kin, the Speedkindred are the scouts, messengers, and fleet-footed explorers of the Waddlehooves. Their energy is channeled into incredible bursts of speed and keen awareness.</p>
+                        <ul>
+                            <li><strong>Ability Score Adjustment:</strong> Your Dexterity score increases by 2, and your Strength score decreases by 2 (resulting in a net +2 Strength from the base race).</li>
+                            <li><strong>Fleet of Hoof:</strong> Your base walking speed increases to 65 feet.</li>
+                            <li><strong>Alert:</strong> You gain proficiency in the Perception skill. Additionally, you have advantage on initiative rolls as long as you aren't surprised.</li>
+                        </ul>
+                        <hr class="gold-divider">
+                        <h4><strong>Burdenbearers</strong></h4>
+                        <hr class="gold-divider">
+                        <p class="subrace-description">The sturdy and steadfast Burdenbearers are the backbone of Waddlehooves communities, known for their incredible endurance and practical skills. They are the builders, crafters, and long-haul travelers.</p>
+                        <ul>
+                            <li><strong>Ability Score Adjustment:</strong> Your Constitution score increases by an additional 2 (for a total of +4 Constitution from the base race), and your Wisdom score decreases by 2.</li>
+                            <li><strong>Unyielding Endurance:</strong> You have advantage on saving throws against exhaustion. Additionally, when you would gain a level of exhaustion from travel or physical exertion (but not from other sources like lack of food, water, or magical effects that directly cause exhaustion levels), you can choose to ignore it. Once you use this trait, you can't use it again until you finish a long rest. (This trait supersedes the forced march advantage from Unbridled Gait).</li>
+                            <li><strong>Artisan's Knack:</strong> You gain proficiency with one type of artisan's tools of your choice and proficiency in the Survival skill.</li>
+                            <li><strong>Natural Diaper Mastery:</strong> Burdenbearers are so accustomed to managing their bodily functions during their arduous labors that they have an innate understanding of their padding. You gain the Diaper Mastery feat (as described in the Diaper School Regulation Handbook, if available) at 1st level.</li>
+                            <li><strong>Earthshaker Kick:</strong> Your Waddlehoof Kick is especially forceful. When you hit a creature with your Waddlehoof Kick, the damage increases to 1d10 bludgeoning damage, and instead of pushing the target, you can choose to knock it prone.</li>
+                        </ul>
+                        <hr class="gold-divider">
+                        <h4><strong>Warbred</strong></h4>
+                        <hr class="gold-divider">
+                        <p class="subrace-description">Hailing from clangroups with long martial traditions, the Warbred are the protectors and warriors among the Waddlehooves. They are trained for battle from a young age, their powerful forms clad in armor, ready to defend their kin.</p>
+                        <ul>
+                            <li><strong>Ability Score Increase:</strong> Your Constitution score increases by an additional 2 (for a total of +4 Constitution from the base race).</li>
+                            <li><strong>Aggressive:</strong> As a bonus action on your turn, you can move up to your speed toward an enemy of your choice that you can see or hear. You must end this move closer to the enemy than you started.</li>
+                            <li><strong>War-Clad Training:</strong> You gain proficiency with all types of armor and shields.</li>
+                            <li><strong>Clan Weaponry:</strong> You gain proficiency with one martial weapon type of your choice, reflecting the traditional weaponry of your War Clan.</li>
+                            <li><strong>Impact Kick:</strong> Your Waddlehoof Kick can shatter defenses. When you hit a creature with your Waddlehoof Kick, the damage increases to 1d10 bludgeoning damage. The target is pushed 10 feet directly away from you. If the pushed target collides with another creature or a solid object like a wall, the target takes an additional 1d6 bludgeoning damage.</li>
+                        </ul>
+                        <hr class="gold-divider">
+                        <h4><strong>Grovehoof</strong></h4>
+                        <hr class="gold-divider">
+                        <p class="subrace-description">Deeply connected to the ancient forests and wild magic of the plane, Grovehooves are the mystics, lorekeepers, and nature-wardens of their people. They possess an innate understanding of the land and its creatures.</p>
+                        <ul>
+                            <li><strong>Ability Score Adjustment:</strong> Your Intelligence score increases by 2, your Constitution score increases by an additional 2 (for a total of +4 Constitution from the base race), and your Strength score decreases by 2 (resulting in a net +2 Strength from the base race).</li>
+                            <li><strong>Druidic Initiate:</strong> You know one cantrip of your choice from the druid spell list. When you reach 3rd level, you can cast one 1st-level spell of your choice from the druid spell list once with this trait, and you regain the ability to do so when you finish a long rest. Wisdom is your spellcasting ability for these spells.</li>
+                            <li><strong>Sylvan Knowledge:</strong> You gain proficiency in the Nature skill. You also choose one from the following: proficiency in the Survival skill or proficiency with an herbalism kit. You have advantage on Intelligence (Nature) checks related to identifying flora, fauna, and natural phenomena within your home plane.</li>
+                            <li><strong>Pathfinder:</strong> You can always find your way within any forest located on your home plane, even if you have never been there before, as long as the forest is not magically manipulated to prevent navigation. You can also communicate simple ideas with beasts and plants within such forests. They understand the meaning of your words, though you have no special ability to understand them in return. You have advantage on all Charisma checks you make to influence them.</li>
+                            <li><strong>Animal Affinity:</strong> Wild animals and non-predatory mundane beasts are naturally calm in your presence and will not attack you unless provoked or magically compelled. They may even show curiosity or approach you without fear.</li>
+                        </ul>
+                    </div>
+                    <hr class="gold-divider-biggo">
                 `
             }
         ];
