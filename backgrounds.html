@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diaper School Backgrounds</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold-darker: #8B4513;
+            --gold-dark: #B8860B;
+            --gold: #DAA520;
+            --gold-light: #FFD700;
+            --parchment: #f0e68c;
+            --dark-bg1: #2c1e12;
+            --dark-bg2: #3e2e1e;
+        }
+
+        body {
+            font-family: 'Lora', serif;
+            background-color: var(--dark-bg1);
+            color: var(--parchment);
+            line-height: 1.7;
+        }
+
+        .storybook-container {
+            border: 8px solid var(--gold);
+            box-shadow: 0 0 20px rgba(218, 165, 32, 0.5);
+            background-color: var(--dark-bg2);
+            max-width: 900px;
+            width: 95%;
+            margin: 2rem auto;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .storybook-header {
+            text-align: center;
+            padding: 1.5rem;
+            background-color: rgba(0,0,0,0.3);
+            border-bottom: 4px solid var(--gold-dark);
+        }
+
+        .storybook-header h1 {
+            font-family: 'Lora', serif;
+            font-weight: 700;
+            font-size: 2.25rem;
+            color: var(--gold-light);
+            text-shadow: 1px 1px 3px var(--gold-darker);
+        }
+
+        .content-page {
+            padding: 1.5rem;
+            max-height: 95vh;
+            overflow-y: auto;
+            color: var(--parchment);
+        }
+
+        .content-page h2 {
+            font-family: 'Lora', serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--gold-light);
+            margin-bottom: 1rem;
+            padding-bottom: 0.25rem;
+            border-bottom: 2px solid var(--gold);
+        }
+
+        .content-page h3 {
+            font-family: 'Lora', serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--gold);
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .content-page p {
+            margin-bottom: 1rem;
+            text-align: justify;
+        }
+
+        .content-page ul {
+            list-style-type: '✧ ';
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .content-page li {
+            padding-left: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .content-page strong {
+            font-weight: 700;
+            color: var(--gold);
+        }
+
+        .gold-divider {
+            border: none;
+            height: 1px;
+            background-color: var(--gold);
+            margin: 1.5rem 0;
+        }
+
+        .float-right-image-container {
+            float: right;
+            margin: 0 0 1rem 1.5rem;
+            width: 40%;
+            max-width: 300px;
+            text-align: center;
+        }
+
+        .background-image {
+            width: 100%;
+            height: auto;
+            border: 4px solid var(--gold-dark);
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(218,165,32,0.3);
+        }
+        
+        .image-caption {
+            font-size: 0.9rem;
+            font-style: italic;
+            margin-top: 0.5rem;
+            color: var(--parchment);
+        }
+
+        .clearfix::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+
+        .storybook-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background-color: rgba(0,0,0,0.3);
+            border-top: 4px solid var(--gold-dark);
+        }
+
+        .nav-button {
+            background-color: var(--gold);
+            color: var(--dark-bg1);
+            font-family: 'Inter', sans-serif;
+            font-weight: bold;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            border: 1px solid var(--gold-dark);
+            cursor: pointer;
+        }
+
+        .nav-button:hover:not(:disabled) {
+            background-color: var(--gold-dark);
+            color: var(--parchment);
+            transform: translateY(-1px);
+        }
+
+        .nav-button:disabled {
+            background-color: #a08c5b;
+            color: #5a4a3a;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        #pageIndicator {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--gold-light);
+            font-family: 'Inter', sans-serif;
+            text-align: center;
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 12px; }
+        ::-webkit-scrollbar-track { background: var(--dark-bg1); }
+        ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 10px; border: 2px solid var(--dark-bg2); }
+        ::-webkit-scrollbar-thumb:hover { background: var(--gold-dark); }
+        
+        @media (max-width: 768px) {
+            .float-right-image-container {
+                float: none;
+                margin: 1rem auto;
+                width: 70%;
+                max-width: none;
+            }
+        }
+    </style>
+</head>
+<body class="p-2 sm:p-4">
+
+    <div class="storybook-container">
+        <header class="storybook-header">
+            <h1>Compendium of Backgrounds</h1>
+        </header>
+
+        <main id="backgroundContent" class="content-page">
+            <!-- Background content will be injected here -->
+        </main>
+
+        <footer class="storybook-footer">
+            <button id="prevButton" class="nav-button">Previous</button>
+            <div class="flex flex-col items-center">
+                <button id="contentsButton" class="nav-button">Contents</button>
+                <div id="pageIndicator" class="mt-1">Page 1 / 1</div>
+            </div>
+            <button id="nextButton" class="nav-button">Next</button>
+        </footer>
+    </div>
+
+    <script>
+        const backgroundsData = [
+            {
+                type: "navigation",
+                name: "Quick Navigation",
+                id: "quicknav",
+                contentHTML: `
+                    <div id="quicknav-content">
+                        <h2>Backgrounds Quick Navigation</h2>
+                        <ul style="list-style-type: '♞ '; columns: 2; -webkit-columns: 2; -moz-columns: 2;">
+                            <li><a href="javascript:void(0);" onclick="navigateToBackgroundById('orphan-from-afar')">Orphan from Afar</a></li>
+                            <li><a href="javascript:void(0);" onclick="navigateToBackgroundById('disciplinary-exile')">Disciplinary Exile</a></li>
+                            <li><a href="javascript:void(0);" onclick="navigateToBackgroundById('brat-prince-princess')">Brat Prince/Princess</a></li>
+                            <li><a href="javascript:void(0);" onclick="navigateToBackgroundById('child-of-alumni')">Child of an Alumni</a></li>
+                            <li><a href="javascript:void(0);" onclick="navigateToBackgroundById('hero-in-training')">Hero-in-Training(pants)</a></li>
+                            <li><a href="javascript:void(0);" onclick="navigateToBackgroundById('darkling-sympathizer')">Darkling Sympathizer</a></li>
+                            <li><a href="javascript:void(0);" onclick="navigateToBackgroundById('well-of-souls-survivor')">Well of Souls Survivor</a></li>
+                            <li><a href="javascript:void(0);" onclick="navigateToBackgroundById('chronal-anomaly')">Chronal Anomaly</a></li>
+                            <li><a href="javascript:void(0);" onclick="navigateToBackgroundById('former-hall-monitor')">Former Hall Monitor</a></li>
+                            <li><a href="javascript:void(0);" onclick="navigateToBackgroundById('accidental-alchemist')">"Accidental" Alchemist</a></li>
+                            <li><a href="javascript:void(0);" onclick="navigateToBackgroundById('creature-of-the-forbidden-woods')">Creature of the Woods</a></li>
+                            <li><a href="javascript:void(0);" onclick="navigateToBackgroundById('padded-pop-idol')">Padded Pop Idol</a></li>
+                            <li><a href="javascript:void(0);" onclick="navigateToBackgroundById('punk-rocker')">Punk Rocker</a></li>
+                            <li><a href="javascript:void(0);" onclick="navigateToBackgroundById('desert-bloom-entertainer')">Desert Bloom Entertainer</a></li>
+                            <li><a href="javascript:void(0);" onclick="navigateToBackgroundById('big-lil-bully')">Big Lil Bully</a></li>
+                        </ul>
+                    </div>
+                `
+            },
+            {
+                type: "background",
+                name: "Orphan from Afar",
+                id: "orphan-from-afar",
+                contentHTML: `
+                    <div class="clearfix">
+                        <div class="float-right-image-container">
+                             <img src="src/assets/images/backgrounds/orphan_from_afar.png" alt="Illustration for Orphan from Afar" class="background-image">
+                             <p class="image-caption">A lone child arrives at the academy gates.</p>
+                        </div>
+                        <h2>Orphan from Afar</h2>
+                        <p>You arrived at the Scholia Diaspros not by choice, but by circumstance. Whether your home was lost to the annals of time like Tabitha Caelestis's, or you were simply left on the academy's doorstep, you are a child without a past, seeking a future within these hallowed, and often padded, halls. The academy is your only home, its students and faculty the only family you've ever known.</p>
+                        <h3>Traits & Proficiencies</h3>
+                        <ul>
+                            <li><strong>Ability Score Increases:</strong> +2 to one ability score and +1 to another, OR +1 to three different ability scores.</li>
+                            <li><strong>Skill Proficiencies:</strong> Insight, Survival</li>
+                            <li><strong>Tool Proficiency:</strong> One type of artisan's tools or a musical instrument.</li>
+                            <li><strong>Origin Feat:</strong> Choose one from Magic Initiate (Arcane or Divine), Skilled, or Tough. <strong>Or a Diaper School Origin Feat</strong></li>
+                        </ul>
+                        <h3>Starting Equipment</h3>
+                        <p>A small, worn blanket from your infancy, a set of common clothes, a simple toy, and a pouch containing 10 gp.</p>
+                    </div>
+                `
+            },
+            {
+                type: "background",
+                name: "Disciplinary Exile",
+                id: "disciplinary-exile",
+                contentHTML: `
+                    <div class="clearfix">
+                        <div class="float-right-image-container">
+                             <img src="src/assets/images/backgrounds/disciplinary_exile.png" alt="Illustration for Disciplinary Exile" class="background-image">
+                             <p class="image-caption">Sent away for being a handful.</p>
+                        </div>
+                        <h2>Disciplinary Exile</h2>
+                        <p>You weren't sent to the Scholia Diaspros for your academic prowess, but for your... behavioral quirks. Whether you were a noble scion with a penchant for pranks, a magical prodigy with a disregard for safety protocols, or simply a troublemaker who pushed your previous guardians too far, you've been exiled to the one place that can handle you. Your time here is a punishment, but it might also be your chance at redemption... or at least, learning how to be a more effective brat.</p>
+                        <h3>Traits & Proficiencies</h3>
+                        <ul>
+                            <li><strong>Ability Score Increases:</strong> +2 to one ability score and +1 to another, OR +1 to three different ability scores.</li>
+                            <li><strong>Skill Proficiencies:</strong> Deception, Sleight of Hand</li>
+                            <li><strong>Tool Proficiency:</strong> Forgery kit or thieves' tools.</li>
+                            <li><strong>Origin Feat:</strong> Choose one from Alert, Mobile, or Magic Initiate (Arcane or Divine). <strong>Or a Diaper School Origin Feat</strong></li>
+                        </ul>
+                        <h3>Starting Equipment</h3>
+                        <p>A set of fine clothes, a signet ring from your family or a token from your past life, and a pouch containing 25 gp.</p>
+                    </div>
+                `
+            },
+            {
+                type: "background",
+                name: "Brat Prince/Princess",
+                id: "brat-prince-princess",
+                contentHTML: `
+                    <div class="clearfix">
+                         <div class="float-right-image-container">
+                             <img src="src/assets/images/backgrounds/brat_princess.png" alt="Illustration for Brat Prince/Princess" class="background-image">
+                             <p class="image-caption">Used to getting their way.</p>
+                        </div>
+                        <h2>Brat Prince/Princess</h2>
+                        <p>You are royalty, and you've never let anyone forget it. Pampered, doted upon, and always given your way, you've arrived at the Scholia Diaspros with a sense of entitlement that could rival a dragon's hoard. You're used to the finest things in life, and the academy's strict rules and... *rustic* punishments are a rude awakening. But you are determined to not only survive but to rule this new, strange kingdom.</p>
+                        <h3>Traits & Proficiencies</h3>
+                        <ul>
+                            <li><strong>Ability Score Increases:</strong> +2 to one ability score and +1 to another, OR +1 to three different ability scores.</li>
+                            <li><strong>Skill Proficiencies:</strong> Persuasion, Performance</li>
+                            <li><strong>Tool Proficiency:</strong> One musical instrument of your choice.</li>
+                            <li><strong>Origin Feat:</strong> Choose one from Actor, Fey Touched, or Magic Initiate (Arcane or Divine). <strong>Or a Diaper School Origin Feat</strong></li>
+                        </ul>
+                        <h3>Starting Equipment</h3>
+                        <p>A set of fine clothes, a crown or other symbol of your royal status, and a pouch containing 25 gp.</p>
+                    </div>
+                `
+            },
+            {
+                type: "background",
+                name: "Child of an Alumni",
+                id: "child-of-alumni",
+                contentHTML: `
+                    <div class="clearfix">
+                        <div class="float-right-image-container">
+                             <img src="src/assets/images/backgrounds/alumnikid.png" alt="Illustration for Child of an Alumni" class="background-image">
+                             <p class="image-caption">Following in a parent's footsteps.</p>
+                        </div>
+                        <h2>Child of an Alumni of Diaper School</h2>
+                        <p>The Scholia Diaspros is in your blood. One or both of your parents attended this esteemed (and often embarrassing) institution, and their stories have filled your childhood. You've grown up with tales of heroic deeds, magical mishaps, and, of course, the ever-present threat of diaperings. You've come to the academy to follow in their footsteps, to make a name for yourself, and perhaps, to finally understand all those inside jokes.</p>
+                        <h3>Traits & Proficiencies</h3>
+                        <ul>
+                            <li><strong>Ability Score Increases:</strong> +2 to one ability score and +1 to another, OR +1 to three different ability scores.</li>
+                            <li><strong>Skill Proficiencies:</strong> History, Investigation</li>
+                            <li><strong>Tool Proficiency:</strong> Calligrapher's supplies or cartographer's tools.</li>
+                            <li><strong>Origin Feat:</strong> Choose one from Magic Initiate (Arcane or Divine), Skilled, or a feat related to your parent's class (at DM's discretion). <strong>Or a Diaper School Origin Feat</strong></li>
+                        </ul>
+                        <h3>Starting Equipment</h3>
+                        <p>A family heirloom (a trinket, a weapon, or a piece of armor), a letter of recommendation from your alumni parent, a set of common clothes, and a pouch containing 15 gp.</p>
+                    </div>
+                `
+            },
+            {
+                type: "background",
+                name: "Hero-in-Training",
+                id: "hero-in-training",
+                contentHTML: `
+                    <div class="clearfix">
+                        <div class="float-right-image-container">
+                             <img src="src/assets/images/backgrounds/training_hero.png" alt="Illustration for Hero-in-Training" class="background-image">
+                             <p class="image-caption">A beacon of potty-trained hope.</p>
+                        </div>
+                        <h2>Hero-in-Training (Pants)</h2>
+                        <p>You're not like the others. You've managed to avoid the all-but-inescapable reality of diapers, a feat that has earned you a mixture of awe and suspicion from your peers. You are a hero in training, determined to prove that true strength doesn't come from padding, but from skill, courage, and a well-fitting pair of training pants. You are a beacon of hope for the potty-trained, a symbol of defiance in a world of crinkly plastic.</p>
+                        <h3>Traits & Proficiencies</h3>
+                        <ul>
+                            <li><strong>Ability Score Increases:</strong> +2 to one ability score and +1 to another, OR +1 to three different ability scores.</li>
+                            <li><strong>Skill Proficiencies:</strong> Athletics, Acrobatics</li>
+                            <li><strong>Tool Proficiency:</strong> One type of artisan's tools or a musical instrument.</li>
+                            <li><strong>Origin Feat:</strong> Choose one from Martial Initiate, Charger, or Sentinel. <strong>Or a Diaper School Origin Feat</strong></li>
+                        </ul>
+                        <h3>Starting Equipment</h3>
+                        <p>A well-made set of adventurer's clothes (with training-pants!), a symbol of your heroic aspirations (a wooden sword, a shield with a hand-painted crest, etc.), and a pouch containing 10 gp.</p>
+                    </div>
+                `
+            },
+            {
+                type: "background",
+                name: "Darkling Sympathizer",
+                id: "darkling-sympathizer",
+                contentHTML: `
+                    <div class="clearfix">
+                         <div class="float-right-image-container">
+                             <img src="src/assets/images/backgrounds/darkling_sympathiser.png" alt="Illustration for Darkling Sympathizer" class="background-image">
+                             <p class="image-caption">One who sees beauty in the shadows.</p>
+                        </div>
+                        <h2>Darkling Sympathizer</h2>
+                        <p>While others see the Darklings as monsters, you see something more. Perhaps you've studied them, finding a strange beauty in their shadowy forms, or maybe you've had a personal encounter that has led you to believe they are not the mindless beasts everyone thinks they are. You walk a dangerous path, your sympathies putting you at odds with the academy's teachings and the prejudices of your peers.</p>
+                        <h3>Traits & Proficiencies</h3>
+                        <ul>
+                            <li><strong>Ability Score Increases:</strong> +2 to one ability score and +1 to another, OR +1 to three different ability scores.</li>
+                            <li><strong>Skill Proficiencies:</strong> Nature, Stealth</li>
+                            <li><strong>Tool Proficiency:</strong> Herbalism kit.</li>
+                            <li><strong>Origin Feat:</strong> Choose one from Shadow Touched, Aberrant Dragonmark, or Magic Initiate (Arcane). <strong>Or a Diaper School Origin Feat</strong></li>
+                        </ul>
+                        <h3>Starting Equipment</h3>
+                        <p>A collection of Darkling artifacts (a shed scale, a piece of solidified shadow, etc.), a journal filled with your observations and theories, a set of dark-colored common clothes, and a pouch containing 10 gp.</p>
+                    </div>
+                `
+            },
+            {
+                type: "background",
+                name: "Well of Souls Survivor",
+                id: "well-of-souls-survivor",
+                contentHTML: `
+                     <div class="clearfix">
+                        <div class="float-right-image-container">
+                             <img src="src/assets/images/backgrounds/well_of_souls_survivor.png" alt="Illustration for Well of Souls Survivor" class="background-image">
+                             <p class="image-caption">Haunted by whispers of the past.</p>
+                        </div>
+                        <h2>Well of Souls Survivor</h2>
+                        <p>Your past is a mystery, even to you. You have fragmented memories of a time before the academy, a time filled with a strange, humming energy and the whispers of lost souls. You may have been a direct victim of Tabitha's terrible machine, or perhaps you are a descendant of one of the souls she trapped. Whatever the case, you are a survivor, and you've come to the Scholia Diaspros to find answers about your past and the strange power that courses through you.</p>
+                        <h3>Traits & Proficiencies</h3>
+                        <ul>
+                            <li><strong>Ability Score Increases:</strong> +2 to one ability score and +1 to another, OR +1 to three different ability scores.</li>
+                            <li><strong>Skill Proficiencies:</strong> Arcana, History</li>
+                            <li><strong>Tool Proficiency:</strong> One type of artisan's tools.</li>
+                            <li><strong>Origin Feat:</strong> Choose one from Magic Initiate (Sorcerer), Born Psion, or Resilient. <strong>Or a Diaper School Origin Feat</strong></li>
+                        </ul>
+                        <h3>Starting Equipment</h3>
+                        <p>A strange, non-magical trinket that seems to hum with a faint energy, a set of common clothes, and a pouch containing 10 gp.</p>
+                    </div>
+                `
+            },
+            {
+                type: "background",
+                name: "Chronal Anomaly",
+                id: "chronal-anomaly",
+                contentHTML: `
+                    <div class="clearfix">
+                        <div class="float-right-image-container">
+                             <img src="src/assets/images/backgrounds/chronal_anomaly.png" alt="Illustration for Chronal Anomaly" class="background-image">
+                             <p class="image-caption">Unstuck in the flow of time.</p>
+                        </div>
+                        <h2>Chronal Anomaly</h2>
+                        <p>Time doesn't seem to work the same way for you as it does for others. You might experience moments of deja vu, have flashes of the future, or even find yourself unstuck in time, repeating moments or skipping them entirely. This has made your life... complicated, to say the least. You've come to the Scholia Diaspros in the hopes of understanding and controlling your strange abilities, and perhaps, to find out why you are a walking, talking temporal paradox.</p>
+                        <h3>Traits & Proficiencies</h3>
+                        <ul>
+                            <li><strong>Ability Score Increases:</strong> +2 to one ability score and +1 to another, OR +1 to three different ability scores.</li>
+                            <li><strong>Skill Proficiencies:</strong> Investigation, Perception</li>
+                            <li><strong>Tool Proficiency:</strong> Tinker's tools.</li>
+                            <li><strong>Origin Feat:</strong> Choose one from Alert, Lucky, or Magic Initiate (Wizard). <strong>Or a Diaper School Origin Feat</strong></li>
+                        </ul>
+                        <h3>Starting Equipment</h3>
+                        <p>A collection of strange, anachronistic objects (a futuristic gadget, an ancient coin, etc.), a journal filled with your confusing and contradictory memories, a set of common clothes, and a pouch containing 10 gp.</p>
+                    </div>
+                `
+            },
+            {
+                type: "background",
+                name: "Former Hall Monitor",
+                id: "former-hall-monitor",
+                contentHTML: `
+                    <div class="clearfix">
+                        <div class="float-right-image-container">
+                             <img src="src/assets/images/backgrounds/former_hall_monitor.png" alt="Illustration for Former Hall Monitor" class="background-image">
+                             <p class="image-caption">From enforcer of rules to breaker of them.</p>
+                        </div>
+                        <h2>Former Hall Monitor</h2>
+                        <p>You once walked the halls as a symbol of order, a bastion of the rules, a proud Hall Monitor. But something changed. Perhaps you grew disillusioned with the system, or maybe you committed an infraction so great that you were stripped of your authority. Now, you find yourself on the other side of the law, a rebel with an intimate knowledge of the very rules you once enforced.</p>
+                        <h3>Traits & Proficiencies</h3>
+                        <ul>
+                            <li><strong>Ability Score Increases:</strong> +2 to one ability score and +1 to another, OR +1 to three different ability scores.</li>
+                            <li><strong>Skill Proficiencies:</strong> Intimidation, Investigation</li>
+                            <li><strong>Tool Proficiency:</strong> Thieves' tools.</li>
+                            <li><strong>Origin Feat:</strong> Choose one from Alert, Mobile, or Skulker. <strong>Or a Diaper School Origin Feat</strong></li>
+                        </ul>
+                        <h3>Starting Equipment</h3>
+                        <p>Your old Hall Monitor sash (now worn as a symbol of defiance), a copy of the student handbook (with your own rebellious annotations), a set of common clothes, and a pouch containing 10 gp.</p>
+                    </div>
+                `
+            },
+            {
+                type: "background",
+                name: '"Accidental" Alchemist',
+                id: "accidental-alchemist",
+                contentHTML: `
+                     <div class="clearfix">
+                        <div class="float-right-image-container">
+                             <img src="src/assets/images/backgrounds/accidental_alchemist.png" alt="Illustration for Accidental Alchemist" class="background-image">
+                             <p class="image-caption">A master of chaotic concoctions.</p>
+                        </div>
+                        <h2>"Accidental" Alchemist</h2>
+                        <p>You never meant to become an alchemist. Maybe you wandered into the wrong classroom, mixed the wrong ingredients in a potion-making class, or were the subject of a magical experiment gone awry. Whatever the cause, you now have an innate, chaotic knack for alchemy. Your creations are often unpredictable, sometimes brilliant, and frequently embarrassing for you and anyone standing nearby.</p>
+                        <h3>Traits & Proficiencies</h3>
+                        <ul>
+                            <li><strong>Ability Score Increases:</strong> +2 to one ability score and +1 to another, OR +1 to three different ability scores.</li>
+                            <li><strong>Skill Proficiencies:</strong> Investigation, Medicine</li>
+                            <li><strong>Tool Proficiency:</strong> Alchemist's supplies.</li>
+                            <li><strong>Origin Feat:</strong> Alchemy Initiate.</li>
+                        </ul>
+                        <h3>Starting Equipment</h3>
+                        <p>A set of perpetually-stained common clothes, a notebook with scorched pages and cryptic formulas, a pouch of "mystery ingredients," and 10 gp.</p>
+                    </div>
+                `
+            },
+            {
+                type: "background",
+                name: "Creature of the Forbidden Woods",
+                id: "creature-of-the-forbidden-woods",
+                contentHTML: `
+                    <div class="clearfix">
+                        <div class="float-right-image-container">
+                             <img src="src/assets/images/backgrounds/wilds_child.png" alt="Illustration for Creature of the Forbidden Woods" class="background-image">
+                             <p class="image-caption">Raised by the magic of the forest.</p>
+                        </div>
+                        <h2>Creature of the Forbidden Woods</h2>
+                        <p>You are not from any known town or kingdom. Your home is the Forbidden Wood that borders the academy. Raised by beasts, fey, or simply the ancient magic of the forest itself, you are a child of the wild. Your ways are not the ways of civilized folk, and the rules of the academy are a strange and confusing puzzle. You were either found and brought to the Scholia Diaspros for your own safety, or you wandered in, drawn by a curiosity that outweighed your caution.</p>
+                        <h3>Traits & Proficiencies</h3>
+                        <ul>
+                            <li><strong>Ability Score Increases:</strong> +2 to one ability score and +1 to another, OR +1 to three different ability scores.</li>
+                            <li><strong>Skill Proficiencies:</strong> Nature, Survival</li>
+                            <li><strong>Tool Proficiency:</strong> Herbalism kit.</li>
+                            <li><strong>Origin Feat:</strong> Choose one from Magic Initiate (Druid), Fey Touched, or Tough. <strong>Or a Diaper School Origin Feat</strong></li>
+                        </ul>
+                        <h3>Starting Equipment</h3>
+                        <p>A staff made from a gnarled branch, a cloak of leaves and moss, a collection of strange berries and fungi, and a pouch containing 5 gp.</p>
+                    </div>
+                `
+            },
+            {
+                type: "background",
+                name: "Padded Pop Idol",
+                id: "padded-pop-idol",
+                contentHTML: `
+                    <div class="clearfix">
+                        <div class="float-right-image-container">
+                             <img src="src/assets/images/backgrounds/padded_pop_idol.png" alt="Illustration for Padded Pop Idol" class="background-image">
+                             <p class="image-caption">Capturing hearts with a crinkly beat.</p>
+                        </div>
+                        <h2>Padded Pop Idol</h2>
+                        <p>You live for the spotlight, the roar of the crowd, and the perfectly choreographed dance number. You're a pop sensation, but you have a secret that makes you all the more endearing to your fans: you're incontinent. Far from being a hindrance, you've embraced this, making your designer diapers a key, crinkly part of your iconic stage persona. Your music is catchy, your charm is infectious, and your dedication to your padded brand is absolute.</p>
+                        <h3>Traits & Proficiencies</h3>
+                        <ul>
+                            <li><strong>Ability Score Increases:</strong> +2 to Charisma and +1 to Dexterity.</li>
+                            <li><strong>Skill Proficiencies:</strong> Performance, Persuasion.</li>
+                            <li><strong>Tool Proficiency:</strong> One musical instrument of your choice.</li>
+                            <li><strong>Origin Feat:</strong> Choose one from Actor, Magic Initiate (Bard), or Diaper-Mastery. <strong>Or a Diaper School Origin Feat</strong></li>
+                            <li><strong>Feature: Idol's Endearing Secret:</strong> You have the Incontinent trait. This is not a secret to be hidden, but a core part of your public image that you have masterfully spun into a point of charm and relatability. You can always find a place to perform for profit and renown. Your adoring fans will often provide you with free, high-quality diapers and other 'gifts' to show their support.</li>
+                        </ul>
+                        <h3>Starting Equipment</h3>
+                        <p>A stylish stage outfit, a musical instrument, a collection of fan letters, and a pouch containing 20 gp.</p>
+                    </div>
+                `
+            },
+            {
+                type: "background",
+                name: "Punk Rocker",
+                id: "punk-rocker",
+                contentHTML: `
+                    <div class="clearfix">
+                        <div class="float-right-image-container">
+                             <img src="src/assets/images/backgrounds/punk_rocker.png" alt="Illustration for Punk Rocker" class="background-image">
+                             <p class="image-caption">Comfort is revolutionary.</p>
+                        </div>
+                        <h2>Punk Rocker</h2>
+                        <p>Forget pop charts and mainstream appeal; your stage is the underground club, your music a blast of raw, rebellious energy. You live by a code of anti-authoritarianism, and your look—be it ripped clothes, liberty spikes, or heavy boots—is a statement. For you, even something as mundane as a diaper can be a symbol of defiance, a way to reject convention and embrace comfort on your own terms.</p>
+                        <h3>Traits & Proficiencies</h3>
+                        <ul>
+                           <li><strong>Ability Score Increases:</strong> +2 to one ability score and +1 to another, OR +1 to three different ability scores.</li>
+                            <li><strong>Skill Proficiencies:</strong> Performance, Intimidation.</li>
+                            <li><strong>Tool Proficiency:</strong> One musical instrument (Electric Guitar is a classic choice) or Thieves' Tools.</li>
+                            <li><strong>Origin Feat:</strong> Choose one from Actor, Martial Initiate, or Tough. <strong>Or a Diaper School Origin Feat</strong></li>
+                        </ul>
+                        <h3>Starting Equipment</h3>
+                        <p>A musical instrument (likely well-worn and covered in stickers), a set of punk clothes, a chain wallet, and a pouch containing 10 gp.</p>
+                    </div>
+                `
+            },
+            {
+                type: "background",
+                name: "Desert Bloom Entertainer",
+                id: "desert-bloom-entertainer",
+                contentHTML: `
+                    <div class="clearfix">
+                        <div class="float-right-image-container">
+                             <img src="src/assets/images/backgrounds/desert_bloom.png" alt="Illustration for Desert Bloom Entertainer" class="background-image">
+                             <p class="image-caption">A storyteller carried on the desert wind.</p>
+                        </div>
+                        <h2>Desert Bloom Entertainer</h2>
+                        <p>You are a child of the arid wastes and sun-scorched cities, a member of a wandering troupe that brings color and life to the desert. Your art is one of captivating stories, mesmerizing dances, and songs that speak of djinn, oases, and stars. You know how to read a crowd as well as you can read shifting sands, and your performances are a welcome respite from the harsh desert sun.</p>
+                        <h3>Traits & Proficiencies</h3>
+                        <ul>
+                            <li><strong>Ability Score Increases:</strong> +2 to one ability score and +1 to another, OR +1 to three different ability scores.</li>
+                            <li><strong>Skill Proficiencies:</strong> Insight, Perception.</li>
+                            <li><strong>Tool Proficiency:</strong> Disguise Kit or one type of musical instrument.</li>
+                            <li><strong>Origin Feat:</strong> Choose one from Actor, Fey Touched, or Magic Initiate (Bard). <strong>Or a Diaper School Origin Feat</strong></li>
+                            <li><strong>Feature: Heart of the Oasis Troupe:</strong> You and your troupe are a welcome sight in desolate lands. You can always find a place to perform in settlements. In return for a performance, you can expect modest lodging and food for yourself and your companions. Your troupe also maintains a network of contacts and admirers who might offer shelter, information, or minor aid.</li>
+                        </ul>
+                        <h3>Starting Equipment</h3>
+                        <p>A musical instrument, a colorful costume, a waterskin, and a pouch containing 15 gp.</p>
+                    </div>
+                `
+            },
+              {
+                type: "background",
+                name: "Big Lil Bully",
+                id: "big-lil-bully",
+                contentHTML: `
+                    <div class="clearfix">
+                        <div class="float-right-image-container">
+                             <img src="src/assets/images/backgrounds/big_lil_bully.png" alt="Illustration for Big Lil Bully" class="background-image">
+                             <p class="image-caption">From playground terror to gentle giant.</p>
+                        </div>
+                        <h2>Big Lil Bully</h2>
+                        <p>You were the terror of the playground, the one who made others cry with a well-timed wedgie or stolen lunch money. But here at the Academy, surrounded by grown-ups who still wear diapers by choice, your tough-guy act feels... different. Maybe it's the way everyone just accepts their vulnerabilities, or how your "victims" giggle instead of cry when you give them a gentle push. You're still learning that being big doesn't always mean being mean, and that sometimes the strongest thing you can do is ask for help with your own buckles.</p>
+                        <h3>Traits & Proficiencies</h3>
+                        <ul>
+                            <li><strong>Ability Score Increases:</strong> +2 to one ability score and +1 to another, OR +1 to three different ability scores.</li>
+                            <li><strong>Skill Proficiencies:</strong> Intimidation, Athletics</li>
+                            <li><strong>Tool Proficiency:</strong> One type of gaming set (your choice).</li>
+                            <li><strong>Origin Feat:</strong> Choose one from Tough, Martial Initiate, or Alert. <strong>Or a Diaper School Origin Feat</strong></li>
+                            <li><strong>Feature: Playground Reputation:</strong> Your reputation as a former bully precedes you, but in the Academy's nurturing environment, this manifests differently. Other students and staff recognize your protective instincts beneath the tough exterior. When someone is being genuinely mistreated or bullied, you can step in with natural authority - your intimidating presence causes most troublemakers to back down without a fight. Additionally, younger or more vulnerable Academy members often seek you out as an unlikely protector.</li>
+                        </ul>
+                        <h3>Starting Equipment</h3>
+                        <p>A set of common clothes that are slightly too small for you, a gaming set (matching your proficiency), a crude wooden toy you "confiscated" but secretly cherish, and a belt pouch containing 10 gp.</p>
+                    </div>
+                `
+            }
+        ];
+
+        let currentPage = 0;
+        const backgroundContentDiv = document.getElementById('backgroundContent');
+        const prevButton = document.getElementById('prevButton');
+        const nextButton = document.getElementById('nextButton');
+        const contentsButton = document.getElementById('contentsButton');
+        const pageIndicator = document.getElementById('pageIndicator');
+
+        function displayBackground(pageIndex) {
+            if (pageIndex < 0 || pageIndex >= backgroundsData.length) {
+                console.error("Invalid page index:", pageIndex);
+                backgroundContentDiv.innerHTML = "<p>Error: Could not load background data.</p>";
+                return;
+            }
+            const backgroundEntry = backgroundsData[pageIndex];
+            backgroundContentDiv.innerHTML = backgroundEntry.contentHTML;
+            backgroundContentDiv.scrollTop = 0; 
+            updateNavigation();
+        }
+
+        function updateNavigation() {
+            prevButton.disabled = currentPage === 0;
+            nextButton.disabled = currentPage === backgroundsData.length - 1;
+            const currentName = backgroundsData[currentPage] ? backgroundsData[currentPage].name : "Unknown";
+            pageIndicator.textContent = `${currentName} (Page ${currentPage + 1} / ${backgroundsData.length})`;
+        }
+        
+        window.navigateToBackgroundById = function(backgroundId) {
+            const index = backgroundsData.findIndex(bg => bg.id === backgroundId);
+            if (index !== -1) {
+                currentPage = index;
+                displayBackground(currentPage);
+            } else {
+                console.warn("Could not find background with ID:", backgroundId);
+            }
+        }
+
+        prevButton.addEventListener('click', () => {
+            if (currentPage > 0) {
+                currentPage--;
+                displayBackground(currentPage);
+            }
+        });
+
+        nextButton.addEventListener('click', () => {
+            if (currentPage < backgroundsData.length - 1) {
+                currentPage++;
+                displayBackground(currentPage);
+            }
+        });
+
+        contentsButton.addEventListener('click', () => {
+            navigateToBackgroundById('quicknav');
+        });
+
+        if (backgroundsData.length > 0) {
+            displayBackground(currentPage);
+        } else {
+            backgroundContentDiv.innerHTML = "<p>No background data found.</p>";
+            prevButton.disabled = true;
+            nextButton.disabled = true;
+            pageIndicator.textContent = "Page 0 / 0";
+        }
+    </script>
+
+</body>
+</html>

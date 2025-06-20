@@ -116,3 +116,83 @@ Deeply connected to the ancient forests and wild magic of the plane, Grovehooves
 **Pathfinder:** You can alwaysfind your way within any forest located on your home plane, even if you have never been there before, as long as the forest is not magically manipulated to prevent navigation. You can also communicate simple ideas with beasts and plants within such forests. They understand the meaning of your words, though you have no special ability to understand them in return. You have advantage on all Charisma checks you make to influence them.
 
 **Animal Affinity:** Wild animals and non-predatory mundane beasts are naturally calm in your presence and will not attack you unless provoked or magically compelled. They may even show curiosity or approach you without fear.
+
+
+======================================================================================
+**NEW RACE**
+======================================================================================
+<h2>Diaparachnid</h2>
+<p><i>“They wove the first banners of the Old War and the first diapers of the peace that followed. Their threads are woven into the very history of this Academy. Show them respect, for they are both cradle and warrior.”</i><br>- Professor Ardelie Heller</p>
+
+<h3>The Ancient Weavers</h3>
+<p>Among the oldest denizens of the Scholia Diaspros, the Diaparachnids are a race of sophisticated arachnoids whose history is inseparable from that of the Academy itself. In the ages before the Old War, it was the Diaparachnids who first perfected the art of weaving magical silks. Their many hands worked the looms that produced the first enchanted student uniforms, the resilient armor worn by the Academy’s defenders, and, as the needs of the realm evolved, the very first diapers designed to withstand the rigors of magical mishaps and extended nursery stays.</p>
+<p>While their often-imposing appearance can be unnerving to other races, Diaparachnids are a deeply intellectual and industrious people, with a society built on intricate craftsmanship, communal living, and ancient traditions. They move with an unsettling grace, their multiple eyes missing no detail, their many arms capable of performing feats of complex artistry and martial prowess simultaneously. Though they come in many shapes—from the almost-humanoid to the centaur-like—all Diaparachnids share a common heritage as the master artisans and silent guardians of the deep places, their webs and halls forming a secret geography within and below the Academy.</p>
+
+<h3>Diaparachnid Traits</h3>
+<ul>
+    <li><strong>Creature Type:</strong> You are a Monstrosity.</li>
+    <li><strong>Ability Score Adjustments:</strong> Your Diaparachnid character begins with the following base ability score adjustments before applying subrace modifications: Strength +2, Dexterity +2, Your choice of Intelligence or Constitution +2, Charisma -1.</li>
+    <li><strong>Age:</strong> Diaparachnids mature at the same rate as humans but can live for several centuries.</li>
+    <li><strong>Alignment:</strong> Diaparachnids' societies are built on order and tradition, leading them towards lawful alignments. However, their individual pursuits can lead them anywhere on the spectrum.</li>
+    <li><strong>Size:</strong> Your size is determined by your subrace.</li>
+    <li><strong>Speed:</strong> Your base walking speed is 35 feet.</li>
+    <li><strong>Arachnovision:</strong> You have a superior, multi-faceted perception of the world. You have Blindsight to a range of 30 feet, Darkvision to a range of 120 feet, and lowlight vision to 300ft.</li>
+    <li><strong>Spiderwalking:</strong> All Diaparachnids can climb up vertical surfaces, but only those with a robust spider morphology or small size can walk upon the ceilings of rooms and surfaces. Slick or slippery surfaces pose the same challenge to walk upon, but result in falling and possible damage if a spiderling loses their footing on these surfaces. A spiderling does not suffer these disadvantages inside the vicinity of their webbing, no matter their size.</li>
+    <li><strong>Many-Armed:</strong> You have six arms. You can use your extra arms to interact with objects, provide the Help action to up to three persons within five feet of them at one time, or perform other tasks, but you cannot use them to wield additional weapons or shields in combat. You can prepare spells or perform manual crafting tasks in half the time.</li>
+    <li><strong>Webspinning:</strong> All Diaparachnids can perform some manner of web-spinning- and can, at the very least, create a simple trap or secure hammock at will provided they are adequately fed and have 1 hour to construct the web. The web should function as a permanent trap or temporary rest placing lasting for 24 hours, during such time any creature other than the Diaparachnid that enters or touches the area of the web must succeed on a dexterity saving throw or have their movement speed halved. The web has an AC of 10 and 15 hit points. The web can be moved with an action, but after it has been used to engulf a prey item or has existed for 24 hours, its properties degrade and it is no longer a viable web. Additionally, once per long rest, you can spend 1 hour to spin webbing into diapers. You can create either two diapers sized for your specific Diaparachnid morphology or five diapers sized for a Medium creature. These diapers have 4 use charges, plus a number of additional charges equal to your Constitution modifier (minimum of 0).</li>
+    <li><strong>Arachnincontinence:</strong> Ages living in the Diaper School realm and producing magical and mundane diapers have led all but the rarest of Diaparachnids to be lifelong diaper-wearers. At creation Diaparachnids are considered Incontinent as per the trait for the purpose of qualifying for taking the diaper-mastery feat if offered. Diaparachnids must ensure they have diapers suited for their morphology- be that a prominent spinneret or a full spider-like lower-half.</li>
+    <li><strong>Languages:</strong> You can speak, read, and write Common and Undercommon.</li>
+</ul>
+
+<h3>Spider Morphology</h3>
+<p>Spiderfolk take many forms. A player can be fully anthropomorphic, something akin to a spidertaur, or any blending of spider and human insofar as their general appearance is concerned. It should be noted that exotic body-types require exotic armor (and diapers).</p>
+
+<hr class="gold-divider">
+<h3>Diaparachnid Subraces</h3>
+<p>The Diaparachnids are divided into several clades, each with distinct adaptations and roles within their vibrant society.</p>
+<hr class="gold-divider">
+
+<h4><strong>Padded Pouncers</strong></h4>
+<hr class="gold-divider">
+<p class="subrace-description">Inspired by the vibrant and agile jumping spiders, these are the artists, diplomats, and dancers of Diaparachnid society. Their surprisingly endearing, multi-eyed faces make them the most approachable of their kind.</p>
+<ul>
+    <li><strong>Ability Score Adjustments:</strong> +2 Dexterity, +1 Charisma.</li>
+    <li><strong>Size:</strong> Small.</li>
+    <li><strong>Speed:</strong> Your base walking speed is 40 feet.</li>
+    <li><strong>Acrobatic Prowess:</strong> You gain proficiency in the Acrobatics skill.</li>
+    <li><strong>Ceiling Walker:</strong> You can walk on ceilings at half movement speed.</li>
+</ul>
+<hr class="gold-divider">
+
+<h4><strong>Silkswaddlers</strong></h4>
+<hr class="gold-divider">
+<p class="subrace-description">Drawing their lineage from massive, powerful tarantulas, Silkswaddlers are the builders and laborers of the Diaparachnids. They are immensely strong, capable of producing thick, incredibly durable silk used for construction and clothing.</p>
+<ul>
+    <li><strong>Ability Score Adjustments:</strong> +2 Strength, -1 Dexterity, -1 Charisma.</li>
+    <li><strong>Size:</strong> Large.</li>
+    <li><strong>Dig Speed:</strong> You have a burrowing speed of 15 feet through dirt, sand, and loose rock.</li>
+    <li><strong>Fortress Weaving:</strong> Your webs are twice the size of other Diaparachnids' and are harder to break (double HP).</li>
+    <li><strong>Artisan Weaver:</strong> You can produce clothing from your silk and use purchased or created components to turn them into permanent clothing items.</li>
+</ul>
+<hr class="gold-divider">
+
+<h4><strong>Nursery Nightweavers</strong></h4>
+<hr class="gold-divider">
+<p class="subrace-description">Embodying the lethal patience and terrifying speed of huntsman spiders, these Diaparachnids are the preeminent scouts and assassins of their people. They move with a chilling silence and are masters of the ambush.</p>
+<ul>
+    <li><strong>Ceiling Prowler:</strong> You can walk on ceilings at half movement speed.</li>
+    <li><strong>Natural Stealth:</strong> You have proficiency in the Stealth skill.</li>
+    <li><strong>Technical Webbing:</strong> Your webbing can be spun into intricate tripwires and other simple mechanical traps.</li>
+</ul>
+<hr class="gold-divider">
+
+<h4><strong>Pokeypadbutthoids (Scorpionfolk)</strong></h4>
+<hr class="gold-divider">
+<p class="subrace-description">A rare and hardy offshoot, these Diaparachnids are believed to be the result of a magical catastrophe that merged Diaparachnid and scorpion bloodlines. They are ferocious survivalists who have traded prolific silk-weaving for potent venom.</p>
+<ul>
+    <li><strong>Speed:</strong> Your base walking speed is 40 feet.</li>
+    <li><strong>Stinging Tail:</strong> You have a natural tail weapon that deals decent damage and is a finesse weapon.</li>
+    <li><strong>Envenom:</strong> You can envenomate your tail a number of times per day equal to your Constitution bonus plus proficiency. Poison damage can be enhanced by assassin-subclass skills if available.</li>
+    <li><strong>Antivenom Synthesis:</strong> You can expend 2 uses of your venom to produce an antivenin that will work on any poison crafted by a brewer of equal or lower level than you.</li>
+</ul>
+<hr class="gold-divider-biggo">

@@ -334,12 +334,19 @@
     #potty-checker-iframe-container,
     #pamperlogue-iframe-container {
         height: 90vh; 
+    }    #backgrounds-iframe-container {
+        height: 95vh; 
+    }
+
+    #origin-feats-iframe-container {
+        height: 95vh; 
     }
 
     /* General iframe styling */
     #bestiary-iframe,
-    #items-iframe, 
-    #races-iframe,
+    #items-iframe,    #races-iframe,
+    #backgrounds-iframe,
+    #origin-feats-iframe,
     #spellbook-iframe,
     #potty-checker-iframe, 
     #pamperlogue-iframe,
@@ -365,8 +372,9 @@
     
     /* Ensure other sections are block when active, unless specified otherwise like spellbook */
     #bestiary-section.active,
-    #items-section.active, 
-    #races-section.active,
+    #items-section.active,    #races-section.active,
+    #backgrounds-section.active,
+    #origin-feats-section.active,
     /* #legacy-Weapons.active,  Letting specific rule above handle its height */
     /* #legacy-Regalia.active, Leting specific rule above handle its height */
     /* #fishing-section.active, Leting specific rule above handle its height */
@@ -445,8 +453,9 @@
       <button id="btn-spellbook">Spellbook</button>
       <button id="btn-fishing" class="nav-button">Fishing</button>
       <button id="btn-pamperlogue" class="nav-button">Pamperlogue</button>
-      <button id="btn-potty-checker" class="nav-button">Potty Checker</button>
-      <button id="btn-races" class="nav-button">Races</button>
+      <button id="btn-potty-checker" class="nav-button">Potty Checker</button>      <button id="btn-races" class="nav-button">Races</button>
+      <button id="btn-backgrounds" class="nav-button">Backgrounds</button>
+      <button id="btn-origin-feats" class="nav-button">Origin Feats</button>
     </nav>
     
     <div id="welcome-section" class="content-section active">
@@ -834,7 +843,7 @@
         <div class="h2p-accordion-item">
             <h4 class="h2p-accordion-header">Are panties allowed?<span class="arrow">&#9662;</span></h4>
             <div class="h2p-accordion-content">
-                <p>NO PANTIES ALLOWED. DIAPERS ONLY. (Handbook, p. 7)</p>
+                <p>NO PANTIES ALLOWED. DIAPERS ONLY. Just kidding- if you're not incontinent or suffering from some sort of punishment or curse, you are allowed to wear whatever appropriate underwear you wish.</p>
             </div>
         </div>
 
@@ -1423,8 +1432,18 @@
       <h2>Academy Races</h2>
       <div id="races-iframe-container" class="iframe-container">
         </div>
+    </div>    <div id="backgrounds-section" class="content-section">
+      <h2>Backgrounds</h2>
+      <div id="backgrounds-iframe-container" class="iframe-container">
+        </div>
     </div>
-    
+
+    <div id="origin-feats-section" class="content-section">
+      <h2>Origin Feats</h2>
+      <div id="origin-feats-iframe-container" class="iframe-container">
+        </div>
+    </div>
+
     <div id="spellbook-section" class="content-section">
       <h2>Spellbook</h2>
       <div id="spellbook-iframe-container" class="iframe-container">
@@ -1451,8 +1470,9 @@
         { containerId: 'bestiary-iframe-container', iframeId: 'bestiary-iframe', type: 'dynamic' },
         { containerId: 'items-iframe-container', iframeId: 'items-iframe', type: 'dynamic' },
         { containerId: 'spellbook-iframe-container', iframeId: 'spellbook-iframe', type: 'dynamic' },
-        { containerId: 'potty-checker-iframe-container', iframeId: 'potty-checker-iframe', type: 'dynamic' },
-        { containerId: 'races-iframe-container', iframeId: 'races-iframe', type: 'dynamic' },
+        { containerId: 'potty-checker-iframe-container', iframeId: 'potty-checker-iframe', type: 'dynamic' },        { containerId: 'races-iframe-container', iframeId: 'races-iframe', type: 'dynamic' },
+        { containerId: 'backgrounds-iframe-container', iframeId: 'backgrounds-iframe', type: 'dynamic' },
+        { containerId: 'origin-feats-iframe-container', iframeId: 'origin-feats-iframe', type: 'dynamic' },
         // Statically placed iframes (src will be blanked, loading div handled by its own onload or reset)
         { iframeId: 'legacy-weapon-iframe', type: 'static' },
         { iframeId: 'regalia-creator-iframe', type: 'static' },
@@ -1574,7 +1594,14 @@
         'btn-races': () => { 
             document.getElementById('races-section').classList.add('active');
             createOrRefreshIframe('races-iframe-container', 'races-iframe', 'races.html', 'Academy Races');
-        }
+        },        'btn-backgrounds': () => { 
+            document.getElementById('backgrounds-section').classList.add('active');
+            createOrRefreshIframe('backgrounds-iframe-container', 'backgrounds-iframe', '../backgrounds.html', 'Backgrounds');
+        },
+        'btn-origin-feats': () => { 
+            document.getElementById('origin-feats-section').classList.add('active');
+            createOrRefreshIframe('origin-feats-iframe-container', 'origin-feats-iframe', '../originfeats.html', 'Origin Feats');
+        },
       };
 
       for (const btnId in navActions) {

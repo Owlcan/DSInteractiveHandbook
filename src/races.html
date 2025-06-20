@@ -363,6 +363,8 @@
                             <li><a href="javascript:void(0);" onclick="navigateToRaceById('cowbuddies')">Cowbuddies</a></li>
                             <li><a href="javascript:void(0);" onclick="navigateToRaceById('carcharodonian')">Carcharodonian</a></li>
                             <li><a href="javascript:void(0);" onclick="navigateToRaceById('waddlehooves')">Waddlehooves</a></li>
+                            <li><a href="javascript:void(0);" onclick="navigateToRaceById('scampersaurians')">Scampersaurians</a></li>
+                            <li><a href="javascript:void(0);" onclick="navigateToRaceById('diaparachnid')">Diaparachnid</a></li>
                         </ul>
                     </div>
                     <hr class="gold-divider-biggo">
@@ -2413,6 +2415,224 @@
                             <li><strong>Sylvan Knowledge:</strong> You gain proficiency in the Nature skill. You also choose one from the following: proficiency in the Survival skill or proficiency with an herbalism kit. You have advantage on Intelligence (Nature) checks related to identifying flora, fauna, and natural phenomena within your home plane.</li>
                             <li><strong>Pathfinder:</strong> You can always find your way within any forest located on your home plane, even if you have never been there before, as long as the forest is not magically manipulated to prevent navigation. You can also communicate simple ideas with beasts and plants within such forests. They understand the meaning of your words, though you have no special ability to understand them in return. You have advantage on all Charisma checks you make to influence them.</li>
                             <li><strong>Animal Affinity:</strong> Wild animals and non-predatory mundane beasts are naturally calm in your presence and will not attack you unless provoked or magically compelled. They may even show curiosity or approach you without fear.</li>
+                        </ul>
+                    </div>
+                    <hr class="gold-divider-biggo">
+                `
+            },
+            {
+    type: "race",
+    name: "Scampersaurian",
+    id: "scampersaurians",
+    contentHTML: `
+        <div id="scampersaurian_content">
+            <h2>Scampersaurian</h2>
+            <hr class="gold-divider">
+            <img src="assets/images/races/scampersaurians.png" alt="Scampersaurian" class="center-image" onerror="this.src='https://placehold.co/600x400/3e2e1e/f0e68c?text=Scampersaurian+Image'; this.alt='Scampersaurian placeholder image';">
+            
+            <p><i>"Once thought to be mere legends from the plane's primordial past, the Scampersaurians have been reawakened. Whether through a time-warping accident or hatched from ancient eggs discovered deep beneath the Academy, these dinosaur-like beings are the newest (and oldest) toddlers on campus. They possess a primal power, a wild spirit, and a general confusion about modern concepts like 'inside voices' and 'potty-training,' making them a perfect fit for the chaotic halls of Diaper School."</i></p>
+            <p class="subrace-description">- Overheard in the Faculty Lounge</p>
+            
+            <hr class="gold-divider">
+            <h3>Scampersaurian Traits</h3>
+            <p>Your Scampersaurian character has the following racial traits:</p>
+            <ul>
+                <li><strong>Creature Type:</strong> You are a <strong>Monstrosity</strong>.</li>
+                <li><strong>Ability Score Increase:</strong> Your <strong>Constitution</strong> score increases by <strong>2</strong>.</li>
+                <li><strong>Age:</strong> Scampersaurians mature quickly, reaching young adulthood by age 10, but can live for several hundred years.</li>
+                <li><strong>Alignment:</strong> Their primal instincts and simple desires lean them towards neutral or chaotic alignments.</li>
+                <li><strong>Size:</strong> You are <strong>Medium</strong>. Specific subraces will alter this.</li>
+                <li><strong>Speed:</strong> Your base walking speed is <strong>30</strong> feet.</li>
+                <li><strong>Natural Armor:</strong> Your hide is thick and scaly, granting you a base Armor Class of <strong>13 + your Dexterity modifier</strong>. You can use this natural armor calculation instead of any armor you wear. A shield's benefits apply as normal.</li>
+                <li><strong>Primal Savagery:</strong> Your fangs and claws are natural weapons, which you can use to make unarmed strikes. If you hit with them, you deal piercing or slashing damage (your choice) equal to <strong>1d6 + your Strength modifier</strong>, instead of the bludgeoning damage normal for an unarmed strike.</li>
+                <li><strong>Primal Incontinence:</strong> Having been thrust into the modern era from a time before toilets were even a concept, your Scampersaurian has no instinct for potty training. You are considered <strong>Incontinent</strong> for the purpose of qualifying for the Diaper Mastery feat at character creation.</li>
+            </ul>
+            
+            <hr class="gold-divider">
+            <h3>Scampersaurian Subraces</h3>
+            <p>You must choose one of the following five subraces:</p>
+            <hr class="gold-divider">
+            
+            <h4><strong>Tyrannobabu Wrecks (Theropod Type)</strong></h4>
+            <hr class="gold-divider">
+            <p class="subrace-description">Big, loud, and perpetually hungry, the Tyrannobabu Wrecks are the playground tyrants of the Scampersaurians. Their tiny arms are deceptively strong, but their real power is in their mighty jaws and earth-shaking tantrums.</p>
+            <ul>
+                <li><strong>Ability Score Increase:</strong> Your <strong>Strength</strong> score increases by <strong>2</strong>.</li>
+                <li><strong>Size:</strong> Your size is <strong>Large</strong>.</li>
+                <li><strong>Powerful Bite:</strong> Your bite is a formidable weapon. The damage for your Primal Savagery bite attack increases to <strong>1d10</strong>.</li>
+                <li><strong>Fearsome Roar:</strong> As an action, you can unleash a terrifying roar. Each creature of your choice within 20 feet of you that can hear you must succeed on a Wisdom saving throw (DC = 8 + your proficiency bonus + your Constitution modifier) or become frightened of you for 1 minute. A frightened creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. Once you use this trait, you can't use it again until you finish a long rest.</li>
+            </ul>
+            <hr class="gold-divider">
+            
+            <h4><strong>Bronto-Bottoms (Brachiosaur Type)</strong></h4>
+            <hr class="gold-divider">
+            <p class="subrace-description">Gentle giants with hearts as big as their bodies, the Bronto-Bottoms are the calm, steady members of the Scampersaurians. Their immense size and long necks give them a unique perspective on the world, though they are prone to accidentally knocking things over with their weighty rears.</p>
+            <ul>
+                <li><strong>Ability Score Increase:</strong> Your <strong>Strength</strong> score increases by <strong>2</strong>, and your <strong>Constitution</strong> score increases by an additional <strong>1</strong>.</li>
+                <li><strong>Size:</strong> Your size is <strong>Large</strong>.</li>
+                <li><strong>Long Neck:</strong> You have a reach of <strong>10</strong> feet for your melee attacks.</li>
+                <li><strong>Stomp:</strong> As a bonus action, you can make a special melee attack against one creature within 5 feet of you. On a hit, the target takes bludgeoning damage equal to <strong>1d4 + your Strength modifier</strong> and must succeed on a Strength saving throw (DC = 8 + your proficiency bonus + your Strength modifier) or be knocked prone.</li>
+                <li><strong>Massive Build:</strong> You count as one size larger when determining your carrying capacity and the weight you can push, drag, or lift.</li>
+            </ul>
+            <hr class="gold-divider">
+            
+            <h4><strong>Pterodac-Tots (Pterosaur Type)</strong></h4>
+            <hr class="gold-divider">
+            <p class="subrace-description">Light, agile, and masters of the sky, the Pterodac-Tots are the scouts and daredevils of the Scampersaurians. They love soaring through the Academy's high halls and open fields, often with a screech of delight that can be heard from a mile away.</p>
+            <ul>
+                <li><strong>Ability Score Increase:</strong> Your <strong>Dexterity</strong> score increases by <strong>2</strong>.</li>
+                <li><strong>Flight:</strong> You have a flying speed of <strong>30</strong> feet. To use this speed, you can't be wearing medium or heavy armor.</li>
+                <li><strong>Screeching Dive:</strong> If you fly at least 20 feet straight toward a target and then hit it with a melee weapon attack on the same turn, the target takes an extra <strong>1d6</strong> damage of the weapon's type.</li>
+                <li><strong>Hollow Bones:</strong> You are built for flight, not for brawling. You have vulnerability to bludgeoning damage.</li>
+            </ul>
+            <hr class="gold-divider">
+            
+            <h4><strong>Veloci-Rascals (Raptor Type)</strong></h4>
+            <hr class="gold-divider">
+            <p class="subrace-description">Fast, intelligent, and working with terrifying pack coordination, the Veloci-Rascals are the strategists and tricksters of the Scampersaurians. They communicate with a series of clicks and whistles, setting up elaborate pranks and tactical ambushes with equal glee.</p>
+            <ul>
+                <li><strong>Ability Score Increase:</strong> Your <strong>Dexterity</strong> score increases by <strong>2</strong>, and your <strong>Intelligence</strong> score increases by <strong>1</strong>.</li>
+                <li><strong>Speed:</strong> Your base walking speed increases to <strong>40</strong> feet.</li>
+                <li><strong>Pack Tactics:</strong> You have advantage on an attack roll against a creature if at least one of your allies is within 5 feet of the creature and the ally isn't incapacitated.</li>
+                <li><strong>Sickle Claw:</strong> As a bonus action, after you've moved at least 20 feet, you can make one attack with your Primal Savagery claw. If the attack hits, the target must succeed on a Strength saving throw (DC = 8 + your proficiency bonus + your Dexterity modifier) or be knocked prone.</li>
+            </ul>
+            <hr class="gold-divider">
+            
+            <h4><strong>Armored Titans (Thyreophora/Ceratopsian Type)</strong></h4>
+            <hr class="gold-divider">
+            <p class="subrace-description">These Scamps are the living fortresses of the playground, combining the stubborn defense of an Ankylosaur with the charging might of a Triceratops. They are walking bulwarks, possessing bony frills, thick plating, and a stubborn refusal to be moved. When creating an Armored Titan, choose one of the following builds:</p>
+            
+            <h5><strong>Fortress Build</strong></h5>
+            <ul>
+                <li><strong>Ability Score Increase:</strong> Your <strong>Constitution</strong> score increases by an additional <strong>2</strong> (for a total of +4).</li>
+                <li><strong>Size:</strong> Your size is <strong>Large</strong>.</li>
+                <li><strong>Defensive Plating:</strong> Your Natural Armor is enhanced. Your base AC is <strong>15 + your Dexterity modifier</strong>.</li>
+                <li><strong>Tail Club:</strong> You can use your action to swing your heavy, clubbed tail. Make a melee weapon attack against one creature within 5 feet of you. On a hit, the target takes <strong>2d6 + your Strength modifier</strong> bludgeoning damage and must succeed on a Strength saving throw (DC = 8 + your proficiency bonus + your Strength modifier) or be stunned until the start of your next turn.</li>
+                <li><strong>Light Charge:</strong> When you move at least 15 feet in a straight line toward a target and then hit it with a melee attack on the same turn, you can use your bonus action to shove the creature. If it fails a Strength saving throw (DC = 8 + your proficiency bonus + your Strength modifier), you can push it up to 10 feet away from you.</li>
+            </ul>
+            
+            <h5><strong>Charger Build</strong></h5>
+            <ul>
+                <li><strong>Ability Score Increase:</strong> Your <strong>Strength</strong> score increases by <strong>2</strong>.</li>
+                <li><strong>Size:</strong> Your size is <strong>Large</strong>.</li>
+                <li><strong>Light Plating:</strong> Your Natural Armor is enhanced. Your base AC is <strong>14 + your Dexterity modifier</strong>.</li>
+                <li><strong>Goring Horns:</strong> Your head is adorned with powerful horns. You can use your action to make a special attack with your horns. If you move at least 20 feet in a straight line toward a target right before making this attack, it deals <strong>2d8 + your Strength modifier</strong> piercing damage. On a successful hit, you can also use a bonus action to attempt to shove the target prone.</li>
+                <li><strong>Powerful Charge:</strong> If you move at least 20 feet straight toward a target and then hit it with your <strong>Goring Horns</strong> attack on the same turn, the target takes an extra <strong>1d8 piercing damage</strong>.</li>
+            </ul>
+        </div>
+        <hr class="gold-divider-biggo">
+    `
+},
+            {
+                type: "race",
+                name: "Diaparachnid",
+                id: "diaparachnid",
+                contentHTML: `
+                    <div id="diaparachnid_content">
+                        <h2>Diaparachnid</h2>
+                        <hr class="gold-divider">
+                        <img src="assets/images/races/diaparachnids.png" alt="Diaparachnids" class="center-image" style="max-width: 700px;" onerror="this.src='https://placehold.co/700x500/3e2e1e/f0e68c?text=Image+Not+Found'; this.alt='Image not found';">
+                        <p><i>"They wove the first banners of the Old War and the first diapers of the peace that followed. Their threads are woven into the very history of this Academy. Show them respect, for they are both cradle and warrior."</i><br>- Professor Ardelie Heller</p>
+                        
+                        <h3>The Ancient Weavers</h3>
+                        <p>Among the oldest denizens of the Scholia Diaspros, the Diaparachnids are a race of sophisticated arachnoids whose history is inseparable from that of the Academy itself. In the ages before the Old War, it was the Diaparachnids who first perfected the art of weaving magical silks. Their many hands worked the looms that produced the first enchanted student uniforms, the resilient armor worn by the Academy's defenders, and, as the needs of the realm evolved, the very first diapers designed to withstand the rigors of magical mishaps and extended nursery stays.</p>
+                        <p>While their often-imposing appearance can be unnerving to other races, Diaparachnids are a deeply intellectual and industrious people, with a society built on intricate craftsmanship, communal living, and ancient traditions. They move with an unsettling grace, their multiple eyes missing no detail, their many arms capable of performing feats of complex artistry and martial prowess simultaneously. Though they come in many shapes—from the almost-humanoid to the centaur-like—all Diaparachnids share a common heritage as the master artisans and silent guardians of the deep places, their webs and halls forming a secret geography within and below the Academy.</p>
+                        
+                        <hr class="gold-divider">
+                        <h3>Diaparachnid Traits</h3>
+                        <p>Your Diaparachnid character has the following racial traits:</p>
+                        <ul>
+                            <li><strong>Creature Type:</strong> You are a <strong>Monstrosity</strong>.</li>
+                            <li><strong>Ability Score Adjustments:</strong> Your Diaparachnid character begins with the following base ability score adjustments before applying subrace modifications: <strong>Strength +2, Dexterity +2</strong>, Your choice of <strong>Intelligence or Constitution +2</strong>, <strong>Charisma -1</strong>.</li>
+                            <li><strong>Age:</strong> Diaparachnids mature at the same rate as humans but can live for <strong>several centuries</strong>.</li>
+                            <li><strong>Alignment:</strong> Diaparachnids' societies are built on order and tradition, leading them towards <strong>lawful</strong> alignments. However, their individual pursuits can lead them anywhere on the spectrum.</li>
+                            <li><strong>Size:</strong> Your size is determined by your subrace.</li>
+                            <li><strong>Speed:</strong> Your base walking speed is <strong>35 feet.</strong> You have a climb speed of <strong>35 feet</strong> on walls and vertical surfaces that are not slippery or magically slick.</li>
+                            <li><strong>Arachnovision:</strong> You have a superior, multi-faceted perception of the world. You have <strong>Blindsight</strong> to a range of <strong>30 feet</strong>, <strong>Darkvision</strong> to a range of <strong>120 feet</strong>, and <strong>lowlight vision</strong> to <strong>300ft</strong>.</li>
+                            <li><strong>Spiderwalking:</strong> All Diaparachnids can climb up vertical surfaces, but only those with a robust spider morphology or small size can walk upon the ceilings of rooms and surfaces. Slick or slippery surfaces pose the same challenge to walk upon, but result in falling and possible damage if a spiderling loses their footing on these surfaces. A spiderling does not suffer these disadvantages inside the vicinity of their webbing, no matter their size.</li>
+                            <li><strong>Many-Armed:</strong> You have <strong>six arms</strong>. You can use your extra arms to interact with objects, provide the Help action to up to <strong>three persons</strong> within five feet of them at one time, or perform other tasks, but you cannot use them to wield additional weapons or shields in combat. You can prepare spells or perform manual crafting tasks in <strong>half the time</strong>.</li>
+                            <li><strong>Webspinning:</strong> All Diaparachnids can perform some manner of web-spinning, creating various useful structures. With <strong>1 hour</strong> of work and adequate nutrition, you can create any of the following:</li>
+                            
+                            <table style="width: 100%; border-collapse: collapse; margin: 10px 0; border: 3px solid var(--gold-dark);">
+                                <thead>
+                                    <tr style="background-color: var(--gold-dark); color: var(--parchment);">
+                                        <th style="padding: 10px; text-align: left; border: 2px solid var(--gold);">Web Creation</th>
+                                        <th style="padding: 10px; text-align: left; border: 2px solid var(--gold);">Properties</th>
+                                        <th style="padding: 10px; text-align: left; border: 2px solid var(--gold);">Duration & Limitations</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr style="background-color: rgba(218, 172, 23, 0.1);">
+                                        <td style="padding: 10px; border: 2px solid var(--gold); font-weight: bold;">Trap Web</td>
+                                        <td style="padding: 10px; border: 2px solid var(--gold);">Any creature other than you that enters or touches the web must succeed on a <strong>Dexterity saving throw</strong> or have their movement speed <strong>halved</strong>. The web has <strong>AC 10</strong> and <strong>15 hit points</strong>.</td>
+                                        <td style="padding: 10px; border: 2px solid var(--gold);">Lasts <strong>24 hours</strong>. Can be moved with an action, but degrades once used to trap prey or after its duration expires.</td>
+                                    </tr>
+                                    <tr style="background-color: rgba(218, 172, 23, 0.2);">
+                                        <td style="padding: 10px; border: 2px solid var(--gold); font-weight: bold;">Secure Hammock</td>
+                                        <td style="padding: 10px; border: 2px solid var(--gold);">Creates a temporary resting place large enough for one creature of your size.</td>
+                                        <td style="padding: 10px; border: 2px solid var(--gold);">Lasts <strong>24 hours</strong>. Provides comfortable support during rest. Degrades after its duration expires.</td>
+                                    </tr>
+                                    <tr style="background-color: rgba(218, 172, 23, 0.1);">
+                                        <td style="padding: 10px; border: 2px solid var(--gold); font-weight: bold;">Silken Diapers</td>
+                                        <td style="padding: 10px; border: 2px solid var(--gold);">You can create either <strong>two diapers</strong> sized for your specific Diaparachnid morphology or <strong>five diapers</strong> sized for a Medium creature.</td>
+                                        <td style="padding: 10px; border: 2px solid var(--gold);">Each diaper has <strong>4 use charges</strong>, plus additional charges equal to your <strong>Constitution modifier</strong> (minimum 0). Can only be created <strong>once per long rest</strong>.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <li><strong>Arachnincontinence:</strong> Ages living in the Diaper School realm and producing magical and mundane diapers have led all but the rarest of Diaparachnids to be lifelong diaper-wearers. At creation Diaparachnids are considered <strong>Incontinent</strong> as per the trait for the purpose of qualifying for taking the diaper-mastery feat if offered. Diaparachnids must ensure they have diapers suited for their morphology- be that a prominent spinneret or a full spider-like lower-half.</li>
+                            <li><strong>Languages:</strong> You can speak, read, and write <strong>Common</strong> and <strong>Undercommon</strong>.</li>
+                        </ul>
+                        
+                        <h3>Spider Morphology</h3>
+                        <p>Spiderfolk take many forms. A player can be fully anthropomorphic, something akin to a spidertaur, or any blending of spider and human insofar as their general appearance is concerned. It should be noted that exotic body-types require exotic armor (and diapers).</p>
+                        
+                        <hr class="gold-divider">
+                        <h3>Diaparachnid Subraces</h3>
+                        <p>The Diaparachnids are divided into several clades, each with distinct adaptations and roles within their vibrant society.</p>
+                        <hr class="gold-divider">
+                        
+                        <h4><strong>Padded Pouncers</strong></h4>
+                        <hr class="gold-divider">
+                        <p class="subrace-description">Inspired by the vibrant and agile jumping spiders, these are the artists, diplomats, and dancers of Diaparachnid society. Their surprisingly endearing, multi-eyed faces make them the most approachable of their kind.</p>
+                        <ul>
+                            <li><strong>Ability Score Adjustments:</strong> <strong>+2 Dexterity</strong>, <strong>+1 Charisma</strong>.</li>
+                            <li><strong>Size:</strong> <strong>Small</strong>.</li>
+                            <li><strong>Speed:</strong> Your base walking speed is <strong>40 feet</strong>.</li>
+                            <li><strong>Acrobatic Prowess:</strong> You gain proficiency in the <strong>Acrobatics</strong> skill.</li>
+                            <li><strong>Ceiling Walker:</strong> You can walk on ceilings at <strong>half movement speed</strong>.</li>
+                        </ul>
+                        <hr class="gold-divider">
+                        
+                        <h4><strong>Silkswaddlers</strong></h4>
+                        <hr class="gold-divider">
+                        <p class="subrace-description">Drawing their lineage from massive, powerful tarantulas, Silkswaddlers are the builders and laborers of the Diaparachnids. They are immensely strong, capable of producing thick, incredibly durable silk used for construction and clothing.</p>
+                        <ul>
+                            <li><strong>Ability Score Adjustments:</strong> <strong>+2 Strength</strong>, <strong>-1 Dexterity</strong>, <strong>-1 Charisma</strong>.</li>
+                            <li><strong>Size:</strong> <strong>Large</strong>.</li>
+                            <li><strong>Dig Speed:</strong> You have a burrowing speed of <strong>15 feet</strong> through dirt, sand, and loose rock.</li>
+                            <li><strong>Fortress Weaving:</strong> Your webs are <strong>twice the size</strong> of other Diaparachnids' and are harder to break (<strong>double HP</strong>).</li>
+                            <li><strong>Artisan Weaver:</strong> You can produce clothing from your silk and use purchased or created components to turn them into permanent clothing items.</li>
+                        </ul>
+                        <hr class="gold-divider">
+                        
+                        <h4><strong>Nursery Nightweavers</strong></h4>
+                        <hr class="gold-divider">
+                        <p class="subrace-description">Embodying the lethal patience and terrifying speed of huntsman spiders, these Diaparachnids are the preeminent scouts and assassins of their people. They move with a chilling silence and are masters of the ambush.</p>
+                        <ul>
+                            <li><strong>Ceiling Prowler:</strong> You can walk on ceilings at <strong>half movement speed</strong>.</li>
+                            <li><strong>Natural Stealth:</strong> You have proficiency in the <strong>Stealth</strong> skill.</li>
+                            <li><strong>Technical Webbing:</strong> Your webbing can be spun into intricate tripwires and other simple mechanical traps.</li>
+                        </ul>
+                        <hr class="gold-divider">
+                        
+                        <h4><strong>Pokeypadbutthoids (Scorpionfolk)</strong></h4>
+                        <hr class="gold-divider">
+                        <p class="subrace-description">A rare and hardy offshoot, these Diaparachnids are believed to be the result of a magical catastrophe that merged Diaparachnid and scorpion bloodlines. They are ferocious survivalists who have traded prolific silk-weaving for potent venom.</p>
+                        <ul>
+                            <li><strong>Speed:</strong> Your base walking speed is <strong>40 feet</strong>.</li>
+                            <li><strong>Stinging Tail:</strong> You have a natural tail weapon that deals decent damage and is a <strong>finesse weapon</strong>.</li>
+                            <li><strong>Envenom:</strong> You can envenomate your tail a number of times per day equal to your <strong>Constitution bonus plus proficiency</strong>. Poison damage can be enhanced by assassin-subclass skills if available.</li>
+                            <li><strong>Antivenom Synthesis:</strong> You can expend <strong>2 uses</strong> of your venom to produce an antivenin that will work on any poison crafted by a brewer of equal or lower level than you.</li>
                         </ul>
                     </div>
                     <hr class="gold-divider-biggo">

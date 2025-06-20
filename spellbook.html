@@ -324,6 +324,88 @@ button:hover {
     	"ritual": false,
     	"description": "You invoke a tender spark of divine care, performing minor miracles that soothe and refresh. Choose one of the following effects within range when you cast this cantrip: Clean or Soil: You cause a nonmagical object no larger than 1 cubic foot to either become impeccably clean or comically soiled. Deodorize or Scent: You neutralize undesirable odors on an object or creature, or imbue them with an enchanting fragrance reminiscent of fresh baby powder, warm milk, or blossoming garden flowers. Heating/Chilling (with Gentle Massage): You alter the temperature of an object or creature so that it becomes pleasantly warm or cool. If you target a creature, you may opt to provide a gentle, soothing massage along with the temperature change. When you do, the recipient gains advantage on its next saving throw against effects that would instill fear or panic. Flavoring: You imbue a morsel of food or a drink with a subtle burst of flavor, heightening its comforting qualities. Soothing Care: You channel a gentle magic that alleviates minor aches, pains, and the discomfort of mild fatigue. Choose one creature within range; for the duration, that creature feels a soothing alleviation of bodily discomfort, granting it advantage on ability checks and saving throws related to minor pain or fatigue. This effect does not restore hit points. Furthermore, if the target remains under the uninterrupted effect of Soothing Care for an entire short rest, and it is suffering from exhaustion at level 1, that level of exhaustion is removed at the end of the rest. Only one effect can be active per casting, and the chosen miracle persists for the spell's duration or until you invoke a different effect with this cantrip. While not a substitute for potent restorative magic, Little Miracle reflects the tender, task-focused character of divine care in Diaper School."
 	},
+	    {
+        "name": "Sudden Urgency",
+        "level": 0,
+        "school": "Enchantment",
+        "classes": "Wizard, Sorcerer, Bard",
+        "casttime": "1 action",
+        "range": "30 feet",
+        "components": {
+            "verbal": true,
+            "somatic": true,
+            "material": ""
+        },
+        "duration": "Instantaneous",
+        "ritual": false,
+        "description": "You create a minor magical compulsion that triggers natural bodily functions. Choose one creature within range. The target must immediately make a Constitution saving throw. On a failed save, they experience sudden urgency and must make a potty check at disadvantage. On a successful save, they feel only mild discomfort with no mechanical effect. This cantrip affects even creatures that normally have excellent control, though constructs and most types of undead are immune."
+    },
+    {
+        "name": "Leak Detection",
+        "level": 0,
+        "school": "Divination",
+        "classes": "Wizard, Sorcerer, Bard, Cleric",
+        "casttime": "1 action",
+        "range": "60 feet",
+        "components": {
+            "verbal": true,
+            "somatic": true,
+            "material": ""
+        },
+        "duration": "Instantaneous",
+        "ritual": false,
+        "description": "You can instantly detect the state of any diaper or undergarment within range. For each target, you learn: current capacity remaining, if any leaks are occurring, and the general condition (clean, damp, soiled, etc.). This spell can target up to 3 diapers or garments simultaneously. Particularly useful for caregivers and those managing groups at the Academy."
+    },
+    {
+        "name": "Reinforced Padding",
+        "level": 1,
+        "school": "Transmutation",
+        "classes": "Wizard, Sorcerer, Bard, Cleric",
+        "casttime": "1 action",
+        "range": "Touch",
+        "components": {
+            "verbal": true,
+            "somatic": true,
+            "material": "a handful of absorbent material"
+        },
+        "duration": "8 hours",
+        "ritual": false,
+        "description": "You magically enhance a diaper's capacity and protective qualities. The target diaper gains the following benefits for the duration: +3 additional use charges before reaching capacity, advantage on saves against leaking or bursting, and grants the wearer +1 AC as the reinforced padding provides extra protection against physical impacts. The diaper also becomes more comfortable, removing any penalty to Dexterity checks from bulk.",
+        "higherlevels": "When you cast this spell using a spell slot of 2nd level or higher, the duration increases by 8 hours for each slot level above 1st."
+    },
+    {
+        "name": "Potty Training",
+        "level": 1,
+        "school": "Enchantment",
+        "classes": "Bard, Cleric, Druid",
+        "casttime": "1 action",
+        "range": "Touch",
+        "components": {
+            "verbal": true,
+            "somatic": true,
+            "material": "a small potty chair charm"
+        },
+        "duration": "24 hours",
+        "ritual": true,
+        "description": "You bestow magical assistance for bladder and bowel control. The target gains advantage on all potty checks for the duration and learns to recognize the early warning signs of accidents. Additionally, if they would fail a potty check by 5 or less, they instead succeed but must find appropriate facilities within 1 minute or automatically fail. This spell is commonly used by Academy staff to help students develop better control.",
+        "higherlevels": "When you cast this spell using a spell slot of 2nd level or higher, you can target one additional creature for each slot level above 1st."
+    },
+    {
+        "name": "Emergency Change",
+        "level": 1,
+        "school": "Conjuration",
+        "classes": "Wizard, Sorcerer, Bard, Cleric",
+        "casttime": "1 bonus action",
+        "range": "Touch",
+        "components": {
+            "verbal": true,
+            "somatic": true,
+            "material": "a clean diaper"
+        },
+        "duration": "Instantaneous",
+        "ritual": false,
+        "description": "You perform an instantaneous magical diaper change. The target's current diaper is immediately removed (regardless of condition) and replaced with the material component, which automatically resizes and fits perfectly. The old diaper vanishes harmlessly. This change happens so quickly it can be performed even during combat without provoking opportunity attacks. The target is cleaned and refreshed, removing any discomfort penalties from accidents."
+    },
 	{
     	"name": "Pacification",
     	"level": 1,
@@ -367,20 +449,21 @@ button:hover {
     	"description": "You make yourself and all equipped items look YOUNGER/more childish until the spell ends or until you use your action to dismiss it. You can appear as young as 8 years old, but the choice of age is your choice. You can't change your body type, so you must adopt a form that has the same basic arrangement of limbs. All other aesthetic considerations are up to you.\n\nWhile outwardly convincing, this spell fails any physical scrutiny. For example, if you were to use the spell to appear as an 8 year old and someone were to lift you, they would immediately notice that you are far heavier than you look.\n\nTo discern that you are disguised, a creature can use its action to inspect your appearance and must succeed on an Intelligence (Investigation) check against your spell save DC. If the person is familiar with the adult form of the caster, this check is made with advantage."
 	},
 	{
-    	"name": "Magic Messle",
-    	"level": 1,
-    	"school": "Conjuration",
-    	"classes": "Wizard, Sorcerer, Bard,Cleric",
-    	"casttime": "1 action",
-    	"range": "120 feet",
-    	"components": {
-        	"verbal": true,
-        	"somatic": true,
-        	"material": ""
-    	},
-    	"duration": "Instantaneous",
-    	"ritual": false,
-    	"description": "You conjure a burst of magically sticky, messy goo that darts toward one creature you can see within 120 feet. The messle automatically strikes its target, dealing 1d4 acid damage per missile. You create three messle missiles, with one additional missile for each spell slot level above 1. In addition to the acid damage, the target must succeed on a Constitution saving throw or fill their diaper or pants with magical mess. While messy, the target suffers disadvantage on Dexterity-based checks and saving throws, as the mess clings and hinders their movements."
+		"name": "Magic Messle",
+		"level": 1,
+		"school": "Conjuration",
+		"classes": "Wizard, Sorcerer, Bard, Cleric",
+		"casttime": "1 action",
+		"range": "120 feet",
+		"components": {
+			"verbal": true,
+			"somatic": true,
+			"material": ""
+		},
+		"duration": "Instantaneous",
+		"ritual": false,
+		"description": "You conjure a burst of magically sticky, messy goo that darts toward one creature you can see within 120 feet. The messle automatically strikes its target, dealing 1d4 acid damage per missile. You create three messle missiles, with one additional missile for each spell slot level above 1st. In addition to the acid damage, the target must succeed on a Constitution saving throw or fill their diaper or pants with magical mess. If the target is wearing a diaper, it gains 2 use charges from the magical mess in addition to other effects. While messy, the target suffers disadvantage on Dexterity-based checks and saving throws, as the mess clings and hinders their movements.",
+		"higherlevels": "When you cast this spell using a spell slot of 2nd level or higher, you create one additional missile for each slot level above 1st."
 	},
 	{
     	"name": "Diaper Shield",
@@ -477,6 +560,105 @@ button:hover {
     	"duration": "Concentration, up to 1 minute",
     	"ritual": false,
     	"description": "You magically transform into a cuddly plushie version of yourself. In this altered state, your body becomes soft and endearingly stuffed, but you lose some of your agility. Your walking speed is reduced by 10 feet, and you have disadvantage on Dexterity (Acrobatics) checks and Dexterity saving throws. Despite these drawbacks, your plush exterior grants you superior protection: you gain resistance to all non-magical bludgeoning, piercing, and slashing damage. Additionally, when you cast this spell, choose one damage type from fire, cold, lightning, acid, or poison. While transformed, you are immune to that chosen damage type."
+	},
+	{
+		"name": "Youthful Glimpse",
+		"level": 1,
+		"school": "Transmutation",
+		"classes": "Wizard, Sorcerer, Bard, Cleric",
+		"casttime": "1 action",
+		"range": "30 feet",
+		"components": {
+			"verbal": true,
+			"somatic": true,
+			"material": "a baby tooth or lock of child's hair"
+		},
+		"duration": "Concentration, up to 1 minute",
+		"ritual": false,
+		"description": "You briefly reverse the flow of time around a creature, causing them to regress to a younger form. Choose one creature within range. The target must make a Constitution saving throw. On a failed save, the creature's physical and mental age is reduced by approximately 25% of their current lifespan for the duration. This affects all races equally - a 400-year-old elf becomes roughly 300, while a 40-year-old human becomes about 30. The target retains their memories but may act more impulsively. Their size category does not change, but they gain disadvantage on Wisdom-based checks and saving throws as their judgment becomes more childlike. Physical abilities remain the same, but their voice may become higher and their mannerisms more youthful.",
+		"higherlevels": "When you cast this spell using a spell slot of 2nd level or higher, the duration increases by 1 minute for each slot level above 1st."
+	},
+
+	{
+		"name": "Temporal Tantrum",
+		"level": 2,
+		"school": "Transmutation", 
+		"classes": "Wizard, Sorcerer, Bard",
+		"casttime": "1 action",
+		"range": "60 feet",
+		"components": {
+			"verbal": true,
+			"somatic": true,
+			"material": "a broken toy or pacifier"
+		},
+		"duration": "Concentration, up to 10 minutes",
+		"ritual": false,
+		"description": "You cause a creature to regress to an earlier stage of emotional and physical development. The target must succeed on a Wisdom saving throw or have their age reduced by roughly 50% of their current lifespan. A 100-year-old dwarf becomes about 50, while a 20-year-old human becomes around 10. The target's size may decrease by one category if this regression would make them significantly smaller. They retain class features and abilities but suffer the following effects: disadvantage on all Wisdom and Intelligence checks, disadvantage on Constitution saving throws against potty checks, inability to cast spells of 3rd level or higher, and a tendency to solve problems through emotional outbursts rather than reason. When frustrated or denied something they want, they must make a Charisma saving throw or spend their action having a tantrum (no other actions possible that turn).",
+		"higherlevels": "When you cast this spell using a spell slot of 3rd level or higher, you can target one additional creature for each slot level above 2nd."
+	},
+	{
+		"name": "Diaper of Holding",
+		"level": 2,
+		"school": "Conjuration",
+		"classes": "Wizard, Sorcerer, Bard, Cleric",
+		"casttime": "1 action",
+		"range": "Touch",
+		"components": {
+			"verbal": true,
+			"somatic": true,
+			"material": "a specially crafted diaper worth at least 50gp"
+		},
+		"duration": "8 hours",
+		"ritual": false,
+		"description": "You create a magical diaper that can hold an incredible amount of material. The diaper can hold up to 500 pounds of non-living material without increasing in size or weight. The diaper is comfortable and does not impede movement. When you cast this spell, you can choose to fill the diaper with any non-living material you touch, such as food, clothing, or other items. The diaper can be used as a backpack or storage container for the duration of the spell.\n\n**At Higher Levels.** When you cast this spell using a spell slot of 3rd level or higher, the weight capacity increases by 100 pounds for each slot level above 2nd.",
+	},
+	{
+		"name": "Diaper of Protection",
+		"level": 2,
+		"school": "Abjuration",
+		"classes": "Wizard, Sorcerer, Bard, Cleric",
+		"casttime": "1 action",
+		"range": "Touch",
+		"components": {
+			"verbal": true,
+			"somatic": true,
+			"material": "a specially crafted diaper worth at least 50gp"
+		},
+		"duration": "8 hours",
+		"ritual": false,
+		"description": "You create a magical diaper that provides protection against physical and magical attacks. The diaper grants the wearer a +1 bonus to AC and resistance to non-magical bludgeoning, piercing, and slashing damage. The diaper is comfortable and does not impede movement. When you cast this spell, you can choose to imbue the diaper with additional protective properties, such as resistance to fire or cold damage.\n\n**At Higher Levels.** When you cast this spell using a spell slot of 3rd level or higher, the AC bonus increases by +1 for each slot level above 2nd.",
+	},
+	{
+		"name": "Diaper of Comfort",
+		"level": 2,
+		"school": "Transmutation",
+		"classes": "Wizard, Sorcerer, Bard, Cleric",
+		"casttime": "1 action",
+		"range": "Touch",
+		"components": {
+			"verbal": true,
+			"somatic": true,
+			"material": "a specially crafted diaper worth at least 50gp"
+		},
+		"duration": "8 hours",
+		"ritual": false,
+		"description": "You create a magical diaper that provides unparalleled comfort and support. The diaper is soft, breathable, and magically adjusts to the wearer's body shape. While wearing the diaper, the wearer gains advantage on saving throws against exhaustion and has their movement speed increased by 10 feet. The diaper also provides a sense of security, granting the wearer advantage on Wisdom saving throws against fear effects.\n\n**At Higher Levels.** When you cast this spell using a spell slot of 3rd level or higher, the movement speed bonus increases by an additional 5 feet for each slot level above 2nd.",
+	},
+	{
+		"name": "Diaper of Comfort (Druid)",
+		"level": 2,
+		"school": "Transmutation",
+		"classes": "Druid",
+		"casttime": "1 action",
+		"range": "Touch",
+		"components": {
+			"verbal": true,
+			"somatic": true,
+			"material": "a specially crafted diaper worth at least 50gp"
+		},
+		"duration": "8 hours",
+		"ritual": false,
+		"description": "You create a magical diaper that provides unparalleled comfort and support. The diaper is soft, breathable, and magically adjusts to the wearer's body shape. While wearing the diaper, the wearer gains advantage on saving throws against exhaustion and has their movement speed increased by 10 feet. The diaper also provides a sense of security, granting the wearer advantage on Wisdom saving throws against fear effects.\n\n**At Higher Levels.** When you cast this spell using a spell slot of 3rd level or higher, the movement speed bonus increases by an additional 5 feet for each slot level above 2nd.",
 	},
 	{
     	"name": "Babybrain",
@@ -764,6 +946,88 @@ button:hover {
     	"description": "You channel a burst of restorative cleanliness that attempts to “wipe” away minor curses and conditions. The target must succeed on a Wisdom saving throw or have one minor curse or negative condition (such as being charmed, frightened, or a similar effect) immediately removed as it’s scrubbed clean by the magical wipe. It also cleans them and any non-disposable diaper or booster they might be wearing. This effect does not work on disposable diapers or garments."
 	},
 	{
+        "name": "Controlled Release",
+        "level": 2,
+        "school": "Transmutation",
+        "classes": "Wizard, Sorcerer, Bard",
+        "casttime": "1 action",
+        "range": "60 feet",
+        "components": {
+            "verbal": true,
+            "somatic": true,
+            "material": "a small valve or cork"
+        },
+        "duration": "Concentration, up to 10 minutes",
+        "ritual": false,
+        "description": "You take magical control over a target's bodily functions. Choose one creature within range; they must make a Constitution saving throw. On a failed save, you control when and how they experience accidents for the duration. As a bonus action on your turn, you can force them to make a potty check at disadvantage, or you can prevent them from having accidents even if they would normally fail checks. This control extends to both bladder and bowel functions. The target is aware of the magical compulsion but cannot resist it through normal means.",
+        "higherlevels": "When you cast this spell using a spell slot of 3rd level or higher, you can target one additional creature for each slot level above 2nd."
+    },
+    {
+        "name": "Absorbency Field",
+        "level": 2,
+        "school": "Abjuration",
+        "classes": "Wizard, Sorcerer, Bard, Cleric",
+        "casttime": "1 action",
+        "range": "Self (20-foot radius)",
+        "components": {
+            "verbal": true,
+            "somatic": true,
+            "material": "a super-absorbent crystal"
+        },
+        "duration": "Concentration, up to 1 minute",
+        "ritual": false,
+        "description": "You create a magical field that absorbs liquid damage and prevents leaks. For the duration, all creatures within the field (including you) have resistance to acid damage and immunity to effects that would cause them to become wet or soaked. Additionally, any diapers worn by creatures in the field cannot leak or overflow - they magically contain any accidents without discomfort or visible signs. The field moves with you and provides a subtle shimmering effect."
+    },
+    {
+        "name": "Mass Potty Break",
+        "level": 3,
+        "school": "Enchantment",
+        "classes": "Bard, Cleric, Druid",
+        "casttime": "1 action",
+        "range": "Self (30-foot radius)",
+        "components": {
+            "verbal": true,
+            "somatic": true,
+            "material": "a small bell or chime"
+        },
+        "duration": "Instantaneous",
+        "ritual": false,
+        "description": "You compel all creatures within range to experience sudden, overwhelming urges. Each creature in the area must make a Constitution saving throw. On a failed save, they immediately fail a potty check and must use their next action to seek appropriate facilities or relief (if such facilities exist within their movement range). Creatures wearing diapers instead have their garments gain 2 use charges as they automatically have accidents. This spell affects allies and enemies alike, making it a double-edged tactical option."
+    },
+    {
+        "name": "Diaper Dimension",
+        "level": 3,
+        "school": "Conjuration",
+        "classes": "Wizard, Sorcerer",
+        "casttime": "1 action",
+        "range": "Touch",
+        "components": {
+            "verbal": true,
+            "somatic": true,
+            "material": "a diaper made from cloth woven in another plane"
+        },
+        "duration": "24 hours",
+        "ritual": false,
+        "description": "You create a diaper with an extradimensional space, similar to a bag of holding but for waste management. The diaper can absorb virtually unlimited amounts without changing size, weight, or comfort. Additionally, anything absorbed is transported to a harmless demiplane where it is safely disposed of. The diaper provides +2 AC due to its magical properties and grants the wearer immunity to disease from unsanitary conditions. If the diaper is destroyed, its contents are lost in the demiplane rather than spilling out."
+    },
+	{
+		"name": "Chronological Cradle",
+		"level": 3,
+		"school": "Transmutation",
+		"classes": "Wizard, Sorcerer, Bard, Cleric",
+		"casttime": "1 action", 
+		"range": "60 feet",
+		"components": {
+			"verbal": true,
+			"somatic": true,
+			"material": "a silver rattle worth at least 100 gp"
+		},
+		"duration": "1 hour",
+		"ritual": false,
+		"description": "You drastically reverse a creature's age, reducing them to early childhood. The target must make a Constitution saving throw. On a failed save, their age is reduced by approximately 75-80% of their current lifespan - a 200-year-old elf becomes about 40-50 (equivalent to a young child for their race), while a 30-year-old human becomes 6-8 years old. The target's size decreases by one category (minimum Small) and they gain the following effects: Strength, Dexterity, and Constitution scores are reduced by 4 (minimum 6), they cannot cast spells above 1st level, they have disadvantage on all saving throws except Constitution saves against fear (children are surprisingly resilient to being scared), and they automatically fail all potty checks. However, they gain advantage on Charisma checks when trying to appear innocent or gain sympathy. The target retains their memories but their emotional responses become extremely childlike. When the spell ends, the target must make a Constitution saving throw. On a failure, they remain in their regressed state for an additional 1d4 hours as their body struggles to return to normal.",
+		"higherlevels": "When you cast this spell using a spell slot of 4th level or higher, the duration increases by 1 hour for each slot level above 3rd, and the DC for the Constitution save to end the extended regression increases by 1."
+	},
+	{
     	"name": "Parental Power",
     	"level": 3,
     	"school": "Enchantment",
@@ -875,6 +1139,87 @@ button:hover {
     	"ritual": false,
     	"description": "You invoke the full force of parental might, wrapping yourself in an aura of nurturing strength and imperious resolve. While this spell is active, you gain the following benefits:\n\n**Guardian's Resilience:**\nYou gain a +2 bonus to Armor Class and 10 temporary hit points.\n\n**Steadfast Resistance:**\nYou have resistance to all non-magical damage.\n\n**Quick Reflexes:**\nYou gain advantage on initiative rolls and on ability checks made to shield yourself or others.\n\n**Immunity to Ailments:**\nYou become immune to disease, curses, and chronic conditions—including incontinence, babybrain, and other Diaper School afflictions.\n\n**Imposing Presence:**\nYour appearance transforms dramatically, becoming more mature and imposing; your features sharpen and your posture exudes unwavering authority.\n\n**Empowered Offense & Healing:**\nYou gain a +1 bonus to damage on your attacks, and any healing (magical or mundane) received by you or allies within 10 feet of you is augmented by an amount equal to your spellcasting ability modifier.\n\n**Parental Interposition:**\nAs a reaction—usable once per turn—you can interpose yourself when an ally within 10 feet is hit by an attack. When you do, the incoming damage is redirected to you instead of your ally.\n\n**At Higher Levels:**\nWhen you cast this spell using a spell slot of 4th level or higher, for each slot level above 3rd:\n- The AC bonus increases by +1.\n- The temporary hit points increase by +5.\n- The offensive bonus increases by +1.\n- The healing bonus increases by an amount equal to half your spellcasting bonus."
 	},
+	{
+		"name": "Infernal Infancy",
+		"level": 4,
+		"school": "Transmutation",
+		"classes": "Wizard, Sorcerer, Warlock",
+		"casttime": "1 action",
+		"range": "60 feet", 
+		"components": {
+			"verbal": true,
+			"somatic": true,
+			"material": "a cursed baby blanket and a vial of temporal essence worth 200 gp"
+		},
+		"duration": "8 hours",
+		"ritual": false,
+		"description": "You invoke a powerful curse that reduces the target to helpless infancy. The target must succeed on a Constitution saving throw or have their age reduced by 90-95% of their current lifespan. A 500-year-old dragon becomes roughly 25-50 (infant for their race), while a 25-year-old human becomes 1-2 years old. The transformation is dramatic: their size becomes Small (or Tiny if they were originally Small), all physical ability scores are reduced to 6, they lose all class features except hit points (though these are recalculated with their new Constitution), they cannot speak coherently or cast any spells, they automatically fail all potty checks and become completely incontinent, and they must be fed, changed, and cared for like a real infant. However, their mental faculties remain partially intact - they understand what's happening but can only express themselves through crying, babbling, and simple gestures. The target can attempt a new Constitution saving throw at the end of each long rest to end the effect early. When the spell ends naturally, there's a 25% chance the target becomes permanently vulnerable to age regression magic (disadvantage on saves against such effects) as their temporal essence has been significantly disrupted. This curse can only be ended early by remove curse cast at 5th level or higher, greater restoration, or wish.",
+		"higherlevels": "When you cast this spell using a spell slot of 5th level or higher, the duration increases by 4 hours for each slot level above 4th, and you can target one additional creature for every two slot levels above 4th."
+	},
+	{
+        "name": "Accident Aura",
+        "level": 4,
+        "school": "Enchantment",
+        "classes": "Wizard, Sorcerer, Bard",
+        "casttime": "1 action",
+        "range": "Self (30-foot aura)",
+        "components": {
+            "verbal": true,
+            "somatic": true,
+            "material": "a soiled cloth from multiple different accidents"
+        },
+        "duration": "Concentration, up to 10 minutes",
+        "ritual": false,
+        "description": "You emanate an aura of magical incontinence that affects all hostile creatures within range. At the start of each affected creature's turn, they must make a Constitution saving throw. On a failed save, they have an accident (gaining use charges if wearing diapers, or suffering embarrassment and disadvantage on their next attack roll if not). Additionally, creatures that start their turn in the aura have disadvantage on Constitution saving throws and concentration checks as they struggle with constant urges and discomfort. The aura moves with you and is clearly visible as a faint, shimmering distortion."
+    },
+    {
+        "name": "Perfect Potty",
+        "level": 4,
+        "school": "Conjuration",
+        "classes": "Wizard, Cleric, Druid",
+        "casttime": "1 action",
+        "range": "30 feet",
+        "components": {
+            "verbal": true,
+            "somatic": true,
+            "material": "a miniature golden chamber pot worth 100 gp"
+        },
+        "duration": "1 hour",
+        "ritual": true,
+        "description": "You conjure an elegant, magical bathroom facility at a point you can see within range. The Perfect Potty appears as a small, private structure (10 feet by 10 feet) with walls that provide complete privacy and sound dampening. Inside is a perfectly clean, comfortable facility with all necessary amenities. Creatures using the Perfect Potty automatically succeed on all potty checks and experience complete relief from any urgency or discomfort. The facility also provides minor healing (1d4 hit points) and removes one level of exhaustion due to its restorative properties. Up to 8 creatures can use it during its duration."
+    },
+    {
+        "name": "Involuntary Void",
+        "level": 5,
+        "school": "Enchantment",
+        "classes": "Wizard, Sorcerer, Warlock",
+        "casttime": "1 action",
+        "range": "60 feet",
+        "components": {
+            "verbal": true,
+            "somatic": true,
+            "material": "a cursed diaper pin"
+        },
+        "duration": "Concentration, up to 1 minute",
+        "ritual": false,
+        "description": "You curse a creature with complete loss of bodily control. The target must make a Constitution saving throw. On a failed save, they lose all ability to control their bodily functions for the duration. They automatically fail all potty checks, continuously have accidents regardless of protection worn, and suffer disadvantage on all ability checks and saving throws due to constant discomfort and humiliation. If not wearing appropriate protection, they also take 1d4 psychic damage at the start of each turn from embarrassment. The target can repeat the saving throw at the end of each of their turns, ending the effect on a success."
+    },
+    {
+        "name": "Academy Amnesty",
+        "level": 5,
+        "school": "Enchantment",
+        "classes": "Bard, Cleric",
+        "casttime": "1 action",
+        "range": "Self (60-foot radius)",
+        "components": {
+            "verbal": true,
+            "somatic": true,
+            "material": "a Academy rulebook or code of conduct"
+        },
+        "duration": "10 minutes",
+        "ritual": true,
+        "description": "You invoke the Academy's atmosphere of acceptance and understanding. For the duration, all creatures within the area become immune to embarrassment, shame, and humiliation related to accidents or bodily functions. They cannot take psychic damage from such sources and automatically succeed on saving throws against fear effects related to social anxiety. Additionally, any creature that has an accident within the area is immediately and discreetly cleaned and changed as if by an invisible caretaker. This spell creates a zone of complete emotional safety and acceptance."
+    },
 	{
     	"name": "Diaper Drip",
     	"level": 0,

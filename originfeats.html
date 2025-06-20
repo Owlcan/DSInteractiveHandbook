@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scholia Diaspros: Origin Feats</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles to supplement Tailwind */
+        body {
+            background-color: #1a140d; /* Dark brown fallback */
+            background-image: url('https://www.transparenttextures.com/patterns/wood-pattern.png'); /* Subtle wood grain */
+            font-family: 'Merriweather', serif;
+            color: #f5eadf; /* Parchment-like text color */
+        }
+        h1, h2, h3 {
+            font-family: 'Cinzel Decorative', cursive;
+            color: #d4af37; /* Gold color */
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+        }
+        .feat-card {
+            background-color: rgba(43, 33, 23, 0.8); /* Darker, semi-transparent wood color */
+            border: 2px solid #d4af37;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        .feat-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.5);
+        }
+        .feat-card ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .feat-card li {
+            position: relative;
+            padding-left: 1.5em;
+            margin-bottom: 0.5em;
+        }
+        .feat-card li::before {
+            content: '✧';
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: #d4af37;
+            font-size: 1.1em;
+        }
+        .flavor-text {
+            font-family: 'Merriweather', serif;
+            font-style: italic;
+            color: #c5b8a5; /* Lighter parchment for quotes */
+            border-left: 3px solid #d4af37;
+            padding-left: 1rem;
+        }
+        .clickable-feat-image {
+            cursor: pointer;
+            transition: opacity 0.2s ease-in-out;
+        }
+        .clickable-feat-image:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Main Container -->
+    <div class="container mx-auto px-4 py-8 md:px-8 md:py-12">
+
+        <!-- Header -->
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-6xl font-bold tracking-wider">Scholia Diaspros</h1>
+            <h2 class="text-2xl md:text-3xl mt-2">Origin Feats</h2>
+            <p class="max-w-3xl mx-auto mt-4 text-lg">
+                A collection of new Origin Feats tailored for the Diaper School setting. These feats can be chosen by players to reflect their character's unique history, talents, or unfortunate circumstances within the academy.
+            </p>
+        </header>
+
+        <!-- Feats Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+            <!-- Feat: Forever Small -->
+            <div class="feat-card rounded-lg p-6 flex flex-col">
+                <img src="src/assets/images/originfeats/foreversmall1.jpg" 
+                     alt="Forever Small character illustration" 
+                     class="clickable-feat-image rounded-md w-full h-auto object-cover mb-4 border-2 border-amber-800" 
+                     data-img1="src/assets/images/originfeats/foreversmall1.jpg" 
+                     data-img2="src/assets/images/originfeats/foreversmall2.jpg"
+                     onerror="this.onerror=null;this.src='https://placehold.co/600x600/3a2d21/d4af37?text=Forever+Small';">
+                <h3 class="text-2xl font-bold text-center mb-2">Forever Small</h3>
+                <p class="mb-4 text-center">Whether due to a quirk of magic, a minor curse, or simply genetics, you never quite had that growth spurt. You're destined to navigate the world from a lower perspective, which has its own unique advantages and challenges.</p>
+                <ul>
+                    <li>Your size is Small, regardless of your race's normal size.</li>
+                    <li>You gain a +1 bonus to your Armor Class.</li>
+                    <li>You have advantage on Dexterity (Stealth) checks.</li>
+                    <li>You can move through the space of any creature that is of a size larger than yours.</li>
+                    <li>You have disadvantage on Strength (Athletics) checks made to shove or grapple creatures larger than you.</li>
+                    <li>Any weapon with the "heavy" property is wielded with disadvantage.</li>
+                    <li>You gain the Incontinent trait. This condition can be overcome with dedicated potty-training efforts during downtime.</li>
+                </ul>
+            </div>
+
+            <!-- Feat: Padding Tsundere -->
+            <div class="feat-card rounded-lg p-6 flex flex-col">
+                <img src="src/assets/images/originfeats/tsundere1.jpg" 
+                     alt="Padding Tsundere character illustration" 
+                     class="clickable-feat-image rounded-md w-full h-auto object-cover mb-4 border-2 border-amber-800"
+                     data-img1="src/assets/images/originfeats/tsundere1.jpg" 
+                     data-img2="src/assets/images/originfeats/tsundere2.jpg"
+                     onerror="this.onerror=null;this.src='https://placehold.co/600x600/3a2d21/d4af37?text=Padding+Tsundere';">
+                <h3 class="text-2xl font-bold text-center mb-2">Padding Tsundere</h3>
+                <blockquote class="flavor-text mb-4">"It's not like I LIKE wearing these, okay?! They're just... practical! And comfortable! But that doesn't mean anything, baka!"</blockquote>
+                <p class="mb-4">You have a complicated relationship with diapers. Your effectiveness is tied to this internal conflict, swinging between frustrated embarrassment and secret, confident enjoyment.</p>
+                <ul>
+                    <li>When your diaper is clean, you gain all the benefits of the Diaper-Mastery feat.</li>
+                    <li>When your diaper is soiled, you lose the benefits of the Diaper-Mastery feat and suffer a -1 penalty to all attack rolls, ability checks, and saving throws.</li>
+                    <li>While your diaper is soiled, you can use a bonus action to find a moment of private enjoyment. Make a Charisma (Deception) or Dexterity (Sleight of Hand) check contested by the passive Wisdom (Perception) of any onlookers. On a success, the penalty is replaced with a +2 bonus to all rolls until your next change, and you regain the Diaper-Mastery benefits. On a failure, the penalty remains.</li>
+                </ul>
+            </div>
+
+            <!-- Feat: Padded Professor in Training -->
+            <div class="feat-card rounded-lg p-6 flex flex-col">
+                <img src="src/assets/images/originfeats/trainingprofessor1.jpg" 
+                     alt="Padded Professor in Training character illustration" 
+                     class="clickable-feat-image rounded-md w-full h-auto object-cover mb-4 border-2 border-amber-800"
+                     data-img1="src/assets/images/originfeats/trainingprofessor1.jpg" 
+                     data-img2="src/assets/images/originfeats/trainingprofessor2.jpg"
+                     onerror="this.onerror=null;this.src='https://placehold.co/600x600/3a2d21/d4af37?text=Professor';">
+                <h3 class="text-2xl font-bold text-center mb-2">Padded Professor in Training</h3>
+                <p class="mb-4">You've always been a bookworm, more interested in the theory of magical diapers than their practical application. You're a fountain of knowledge on everything from proper folding techniques to the arcane principles of absorbency.</p>
+                <ul>
+                    <li>Increase your Intelligence or Wisdom score by 1, to a maximum of 20.</li>
+                    <li>You gain proficiency in two of the following skills: Arcana, History, Investigation, or Medicine.</li>
+                    <li>You have advantage on any ability check made to recall lore about the Academy's history, its staff, or the properties of various types of mundane or magical diapers.</li>
+                    <li>You learn the Little Miracle cantrip and one other cantrip of your choice from the wizard or cleric spell list.</li>
+                </ul>
+            </div>
+            
+            <!-- Feat: Born Brat -->
+            <div class="feat-card rounded-lg p-6 flex flex-col">
+                <img src="src/assets/images/originfeats/brat1.jpg" 
+                     alt="Born Brat character illustration" 
+                     class="clickable-feat-image rounded-md w-full h-auto object-cover mb-4 border-2 border-amber-800" 
+                     data-img1="src/assets/images/originfeats/brat1.jpg" 
+                     data-img2="src/assets/images/originfeats/brat2.jpg"
+                     onerror="this.onerror=null;this.src='https://placehold.co/600x600/3a2d21/d4af37?text=Born+Brat';">
+                <h3 class="text-2xl font-bold text-center mb-2">Born Brat</h3>
+                 <p class="mb-4">Rules were made to be bent, broken, or blamed on someone else. You've been getting your way since you were in pull-ups, and you've elevated whining and manipulation to a high art form.</p>
+                <ul>
+                    <li>Increase your Charisma score by 1, to a maximum of 20.</li>
+                    <li>You gain proficiency in the Deception and Persuasion skills.</li>
+                    <li>You have advantage on Charisma (Persuasion) checks made to get out of trouble or punishments, and on Charisma (Deception) checks made to shift blame for your misdeeds onto another creature.</li>
+                    <li>When a creature attempts to punish you, you can use your reaction to make a contested Charisma (Persuasion) check against their Wisdom (Insight). On a success, the severity of your punishment is halved. You can't use this feature again until you finish a long rest.</li>
+                </ul>
+            </div>
+            
+            <!-- Feat: Darkling Whisperer -->
+            <div class="feat-card rounded-lg p-6 flex flex-col">
+                <img src="src/assets/images/originfeats/darklinglover1.jpg" 
+                     alt="Darkling Whisperer character illustration" 
+                     class="clickable-feat-image rounded-md w-full h-auto object-cover mb-4 border-2 border-amber-800"
+                     data-img1="src/assets/images/originfeats/darklinglover1.jpg" 
+                     data-img2="src/assets/images/originfeats/darklinglover2.jpg"
+                     onerror="this.onerror=null;this.src='https://placehold.co/600x600/3a2d21/d4af37?text=Darkling+Whisperer';">
+                <h3 class="text-2xl font-bold text-center mb-2">Darkling Whisperer</h3>
+                <p class="mb-4">You see a strange sort of logic in the shadows, a hidden beauty in the darklings that others dismiss as monsters. This connection grants you a unique, if unsettling, edge.</p>
+                <ul>
+                    <li>Increase your Wisdom or Charisma score by 1, to a maximum of 20.</li>
+                    <li>You have advantage on Wisdom (Animal Handling) and Wisdom (Insight) checks when interacting with monstrosities and aberrations, including Darklings.</li>
+                    <li>You can communicate simple ideas to Darklings through non-verbal cues and guttural sounds.</li>
+                    <li>You can cast Animal Friendship at will, but only on beasts and monstrosities with an Intelligence score of 5 or lower.</li>
+                </ul>
+            </div>
+            
+             <!-- Feat: Chronal Hiccup -->
+            <div class="feat-card rounded-lg p-6 flex flex-col">
+                <img src="src/assets/images/originfeats/anomaly1.jpg" 
+                     alt="Chronal Hiccup character illustration" 
+                     class="clickable-feat-image rounded-md w-full h-auto object-cover mb-4 border-2 border-amber-800" 
+                     data-img1="src/assets/images/originfeats/anomaly1.jpg" 
+                     data-img2="src/assets/images/originfeats/anomaly2.jpg"
+                     onerror="this.onerror=null;this.src='https://placehold.co/600x600/3a2d21/d4af37?text=Chronal+Hiccup';">
+                <h3 class="text-2xl font-bold text-center mb-2">Chronal Hiccup</h3>
+                <p class="mb-4">Time is more of a suggestion for you. This temporal instability is confusing, but it sometimes works in your favor, letting you rewind a clumsy moment or get a brief glimpse of what's next.</p>
+                <ul>
+                    <li>Increase your Dexterity or Intelligence score by 1, to a maximum of 20.</li>
+                    <li>You gain a +5 bonus to your initiative rolls.</li>
+                    <li>When you or a creature you can see within 30 feet of you makes an attack roll, an ability check, or a saving throw, you can use your reaction to give that roll advantage or disadvantage. You can't use this feature again until you finish a short or long rest.</li>
+                </ul>
+            </div>
+            
+             <!-- Feat: Potty-Trained Paragon -->
+            <div class="feat-card rounded-lg p-6 flex flex-col">
+                <img src="src/assets/images/originfeats/pottytrained1.jpg" 
+                     alt="Potty-Trained Paragon character illustration" 
+                     class="clickable-feat-image rounded-md w-full h-auto object-cover mb-4 border-2 border-amber-800" 
+                     data-img1="src/assets/images/originfeats/pottytrained1.jpg" 
+                     data-img2="src/assets/images/originfeats/pottytrained2.jpg"
+                     onerror="this.onerror=null;this.src='https://placehold.co/600x600/3a2d21/d4af37?text=Paragon';">
+                <h3 class="text-2xl font-bold text-center mb-2">Potty-Trained Paragon</h3>
+                <p class="mb-4">You stand as a bastion of bladder control in a world awash with accidents. Your discipline and training have given you a resilience that the padded populace can only dream of.</p>
+                <ul>
+                    <li>You are considered Potty-Trained and have advantage against effects that would magically inflict the Incontinent trait.</li>
+                    <li>You have advantage on Continence Checks made under duress (such as from extreme stress or magical compulsion).</li>
+                    <li>Once per long rest, when you fail a saving throw against an effect that would cause you to have an "accident", you can choose to succeed instead.</li>
+                </ul>
+            </div>
+
+            <!-- Feat: Wellspring Resilience -->
+            <div class="feat-card rounded-lg p-6 flex flex-col">
+                <img src="src/assets/images/originfeats/wellspring1.jpg" 
+                     alt="Wellspring Resilience character illustration" 
+                     class="clickable-feat-image rounded-md w-full h-auto object-cover mb-4 border-2 border-amber-800" 
+                     data-img1="src/assets/images/originfeats/wellspring1.jpg" 
+                     data-img2="src/assets/images/originfeats/wellspring2.jpg"
+                     onerror="this.onerror=null;this.src='https://placehold.co/600x600/3a2d21/d4af37?text=Wellspring+Resilience';">
+                <h3 class="text-2xl font-bold text-center mb-2">Wellspring Resilience</h3>
+                <p class="mb-4">You survived the energies of the Well of Souls, and its humming, spectral power has left a permanent mark on you, making you unnervingly resilient to forces that affect the mind and spirit.</p>
+                <ul>
+                    <li>Increase your Constitution or Charisma score by 1, to a maximum of 20.</li>
+                    <li>You have advantage on saving throws against being charmed or frightened, and you have resistance to psychic damage.</li>
+                    <li>You learn one cantrip of your choice from the Sorcerer or Warlock spell list. Your spellcasting ability for this cantrip is Charisma.</li>
+                </ul>
+            </div>
+            
+            <!-- Feat: Rulebender -->
+            <div class="feat-card rounded-lg p-6 flex flex-col">
+                <img src="src/assets/images/originfeats/rulebender1.jpg" 
+                     alt="Rulebender character illustration" 
+                     class="clickable-feat-image rounded-md w-full h-auto object-cover mb-4 border-2 border-amber-800"
+                     data-img1="src/assets/images/originfeats/rulebender1.jpg" 
+                     data-img2="src/assets/images/originfeats/rulebender2.jpg"
+                     onerror="this.onerror=null;this.src='https://placehold.co/600x600/3a2d21/d4af37?text=Rulebender';">
+                <h3 class="text-2xl font-bold text-center mb-2">Rulebender</h3>
+                <p class="mb-4">You used to be the law. Now you're the loophole. Your intimate knowledge of the academy's regulations and physical layout makes you exceptionally good at navigating both.</p>
+                <ul>
+                    <li>Increase your Intelligence or Dexterity score by 1, to a maximum of 20.</li>
+                    <li>You gain proficiency in the Investigation and Stealth skills.</li>
+                    <li>You have advantage on checks made to find secret passages, hidden compartments, or notice unusual details within the academy's campus.</li>
+                    <li>Once per long rest, you can automatically succeed on one Dexterity (Stealth) check made to hide from or move silently past academy staff or monitors.</li>
+                </ul>
+            </div>
+            
+            <!-- Feat: Accident-Alchemy Initiate -->
+            <div class="feat-card rounded-lg p-6 flex flex-col">
+                <img src="src/assets/images/originfeats/accident_alchemist1.jpg" 
+                     alt="Accident-Alchemy Initiate character illustration" 
+                     class="clickable-feat-image rounded-md w-full h-auto object-cover mb-4 border-2 border-amber-800"
+                     data-img1="src/assets/images/originfeats/accident_alchemist1.jpg" 
+                     data-img2="src/assets/images/originfeats/accident_alchemist2.jpg"
+                     onerror="this.onerror=null;this.src='https://placehold.co/600x600/3a2d21/d4af37?text=Alchemy+Initiate';">
+                <h3 class="text-2xl font-bold text-center mb-2">Accident-Alchemy Initiate</h3>
+                <p class="mb-4">You have a chaotic, intuitive talent for brewing strange potions. Sometimes they even do what you want them to.</p>
+                <ul>
+                    <li>Increase your Intelligence score by 1, to a maximum of 20.</li>
+                    <li>You gain proficiency with Alchemist's Supplies.</li>
+                    <li>During a short rest, you can create one "Unstable Concoction". When a creature interacts with it, roll a d6 to determine the effect:
+                        <ol class="list-decimal list-inside pl-4 mt-2">
+                           <li>The target regains 2d4 + your Intelligence modifier hit points.</li>
+                           <li>The target gains advantage on Strength checks for 10 minutes.</li>
+                           <li>The target can cast Jump at will for 1 minute.</li>
+                           <li>The target's skin turns a shimmering color for 1 hour.</li>
+                           <li>The target is overcome with uncontrollable giggles for 1 minute (incapacitated).</li>
+                           <li>The target's diaper is instantly filled, bypassing any saves.</li>
+                        </ol>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // JavaScript to handle image swapping on click
+        document.addEventListener('DOMContentLoaded', function() {
+            const images = document.querySelectorAll('.clickable-feat-image');
+            images.forEach(img => {
+                img.addEventListener('click', function() {
+                    const img1 = this.dataset.img1;
+                    const img2 = this.dataset.img2;
+                    // Check the current source and swap to the other one
+                    if (this.src.includes('1.jpg')) {
+                        this.src = img2;
+                    } else {
+                        this.src = img1;
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
