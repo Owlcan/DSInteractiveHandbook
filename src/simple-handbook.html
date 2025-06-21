@@ -452,8 +452,10 @@
       <button id="btn-lore">School Lore</button>
       <button id="btn-spellbook">Spellbook</button>
       <button id="btn-fishing" class="nav-button">Fishing</button>
-      <button id="btn-pamperlogue" class="nav-button">Pamperlogue</button>
-      <button id="btn-potty-checker" class="nav-button">Potty Checker</button>      <button id="btn-races" class="nav-button">Races</button>
+      <button id="btn-pamperlogue" class="nav-button">Pamperlogue</button>      
+      <button id="btn-potty-checker" class="nav-button">Potty Checker</button>
+      <button id="btn-book-reader" class="nav-button">Book Reader</button>
+      <button id="btn-races" class="nav-button">Races</button>
       <button id="btn-backgrounds" class="nav-button">Backgrounds</button>
       <button id="btn-origin-feats" class="nav-button">Origin Feats</button>
     </nav>
@@ -1442,15 +1444,19 @@
       <h2>Origin Feats</h2>
       <div id="origin-feats-iframe-container" class="iframe-container">
         </div>
-    </div>
-
-    <div id="spellbook-section" class="content-section">
+    </div>    <div id="spellbook-section" class="content-section">
       <h2>Spellbook</h2>
       <div id="spellbook-iframe-container" class="iframe-container">
         </div>
     </div>
 
-  </div> <script>
+    <div id="book-reader-section" class="content-section">
+      <h2>Book Reader</h2>
+      <div id="book-reader-iframe-container" class="iframe-container">
+        </div>
+    </div>
+
+  </div><script>
     // DOM elements (sections - no need to declare all if accessed directly via ID by functions)
     const welcomeSection = document.getElementById('welcome-section');
     const codeOfConductSection = document.getElementById('code-of-conduct-section');
@@ -1464,12 +1470,12 @@
     function hideAllSections() {
       const sections = document.querySelectorAll('.content-section');
       sections.forEach(section => section.classList.remove('active'));
-      
-      const iframeConfigs = [
+        const iframeConfigs = [
         // Dynamically created iframes (container will be cleared)
         { containerId: 'bestiary-iframe-container', iframeId: 'bestiary-iframe', type: 'dynamic' },
         { containerId: 'items-iframe-container', iframeId: 'items-iframe', type: 'dynamic' },
         { containerId: 'spellbook-iframe-container', iframeId: 'spellbook-iframe', type: 'dynamic' },
+        { containerId: 'book-reader-iframe-container', iframeId: 'book-reader-iframe', type: 'dynamic' },
         { containerId: 'potty-checker-iframe-container', iframeId: 'potty-checker-iframe', type: 'dynamic' },        { containerId: 'races-iframe-container', iframeId: 'races-iframe', type: 'dynamic' },
         { containerId: 'backgrounds-iframe-container', iframeId: 'backgrounds-iframe', type: 'dynamic' },
         { containerId: 'origin-feats-iframe-container', iframeId: 'origin-feats-iframe', type: 'dynamic' },
@@ -1586,10 +1592,13 @@
             // Pamperlogue specific: rely on its internal onload and hideAllSections reset for loader.
             // The hideAllSections already makes its loader visible. Refresh just sets src.
             refreshStaticIframe('pamperlogue-iframe', '../pamperlogue.html', true); // Pass true for isPamperlogue
-        },
-        'btn-potty-checker': () => {
+        },        'btn-potty-checker': () => {
             document.getElementById('potty-checker').classList.add('active');
             createOrRefreshIframe('potty-checker-iframe-container', 'potty-checker-iframe', '../pottychecker.html', 'Potty Checker');
+        },
+        'btn-book-reader': () => {
+            document.getElementById('book-reader-section').classList.add('active');
+            createOrRefreshIframe('book-reader-iframe-container', 'book-reader-iframe', 'BookReader.html', 'Book Reader');
         },
         'btn-races': () => { 
             document.getElementById('races-section').classList.add('active');
