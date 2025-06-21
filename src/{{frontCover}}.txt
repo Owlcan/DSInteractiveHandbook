@@ -1,0 +1,143 @@
+{{frontCover}}
+
+
+
+
+{{banner HOMEBREWED in DIAPERS}}
+
+{{footnote
+  With a waddle and a toddle- and a flappy flap- these terror tots are back like a blast from the past!!
+}}
+
+![background image](https://ik.imagekit.io/owlcan/psaurianscover1.png){position:absolute,bottom:0,left:0,width:100%}
+
+
+\page
+# Scampersaurians
+
+{{quote
+Once thought to be mere legends from the plane's primordial past, the Scampersaurians have been reawakened. Whether through a time-warping accident or hatched from ancient eggs discovered deep beneath the Academy, these dinosaur-like beings are the newest (and oldest) toddlers on campus. They possess a primal power, a wild spirit, and a general confusion about modern concepts like 'inside voices' and 'potty-training,' making them a perfect fit for the chaotic halls of Diaper School.
+{{attribution  Overheard in the Faculty Lounge}}
+}}
+
+
+## Scampersaurian Traits
+Your Scampersaurian character has the following racial traits:
+
+**Creature Type:** You are a **Monstrosity**.
+
+**Ability Score Increase:** Your Constitution score increases by **2**.
+
+**Age:** Scampersaurians mature quickly, reaching young adulthood by age 10, but can live for several hundred years.
+
+**Alignment:** Their primal instincts and simple desires lean them towards neutral or chaotic alignments.
+
+**Size:** You are Medium. Specific subraces will alter this.
+
+**Speed:** Your base walking speed is **30** feet.
+
+**Natural Armor:** Your hide is thick and scaly, granting you a base Armor Class of **13 + your Dexterity modifier**. You can use this natural armor calculation instead of any armor you wear. A shield’s benefits apply as normal.
+
+**Primal Savagery:** Your fangs and claws are natural weapons, which you can use to make unarmed strikes. If you hit with them, you deal piercing or slashing damage (your choice) equal to **1d6 + your Strength modifier**, instead of the bludgeoning damage normal for an unarmed strike.
+
+**Primal Incontinence:** Having been thrust into the modern era from a time before toilets were even a concept, your Scampersaurian has no instinct for potty training. You are considered **Incontinent** for the purpose of qualifying for the Diaper Mastery feat at character creation.
+
+{{imageMaskEdge6,--offset:0%,--rotation:270
+  ![](https://ik.imagekit.io/owlcan/image.png){position:absolute,bottom:-10px,left:300px,height:100%}
+}}
+<!-- Use --offset to shift the mask away from page center (can use cm instead of %)
+     Use --rotation to set rotation angle in degrees. -->
+
+
+
+\page
+\column
+
+## Scampersaurian Subraces
+You must choose one of the following five subraces.
+
+### Tyrannobabu Wrecks (Theropod Type)
+Big, loud, and perpetually hungry, the Tyrannobabu Wrecks are the playground tyrants of the Scampersaurians. Their tiny arms are deceptively strong, but their real power is in their mighty jaws and earth-shaking tantrums.
+
+**Ability Score Increase:** Your Strength score increases by **2**.
+
+**Size:** Your size is **Large**.
+
+**Powerful Bite:** Your bite is a formidable weapon. The damage for your Primal Savagery bite attack increases to **1d10**.
+
+**Fearsome Roar:** As an action, you can unleash a terrifying roar. Each creature of your choice within 20 feet of you that can hear you must succeed on a Wisdom saving throw (DC = 8 + your proficiency bonus + your Constitution modifier) or become frightened of you for 1 minute. A frightened creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. Once you use this trait, you can't use it again until you finish a long rest.
+
+### Bronto-Bottoms (Brachiosaur Type)
+Gentle giants with hearts as big as their bodies, the Bronto-Bottoms are the calm, steady members of the Scampersaurians. Their immense size and long necks give them a unique perspective on the world, though they are prone to accidentally knocking things over with their weighty rears.
+
+**Ability Score Increase:** Your Strength score increases by **2**, and your Constitution score increases by an additional **1**.
+
+**Size:** Your size is **Large**.
+
+**Long Neck:** You have a reach of **10** feet for your melee attacks.
+
+**Stomp:** As a bonus action, you can make a special melee attack against one creature within 5 feet of you. On a hit, the target takes bludgeoning damage equal to **1d4 + your Strength modifier** and must succeed on a Strength saving throw (DC = 8 + your proficiency bonus + your Strength modifier) or be knocked prone.
+
+**Massive Build:** You count as one size larger when determining your carrying capacity and the weight you can push, drag, or lift.
+{{imageMaskEdge6,--offset:-02%,--rotation:90
+  ![](https://ik.imagekit.io/owlcan/psaurianslifestyle.png){height:100%;position:absolute,right:290px,top:-10px}
+}}
+<!-- Use --offset to shift the mask away from page center (can use cm instead of %)
+     Use --rotation to set rotation angle in degrees. -->
+
+
+\page
+
+### Pterodac-Tots (Pterosaur Type)
+Light, agile, and masters of the sky, the Pterodac-Tots are the scouts and daredevils of the Scampersaurians. They love soaring through the Academy's high halls and open fields, often with a screech of delight that can be heard from a mile away.
+
+**Ability Score Increase:** Your Dexterity score increases by **2**.
+
+**Flight:** You have a flying speed of **30** feet. To use this speed, you can't be wearing medium or heavy armor.
+
+**Screeching Dive:** If you fly at least 20 feet straight toward a target and then hit it with a melee weapon attack on the same turn, the target takes an extra **1d6** damage of the weapon's type.
+
+**Hollow Bones:** You are built for flight, not for brawling. You have vulnerability to bludgeoning damage.
+
+### Veloci-Rascals (Raptor Type)
+Fast, intelligent, and working with terrifying pack coordination, the Veloci-Rascals are the strategists and tricksters of the Scampersaurians. They communicate with a series of clicks and whistles, setting up elaborate pranks and tactical ambushes with equal glee.
+
+**Ability Score Increase:** Your Dexterity score increases by **2**, and your Intelligence score increases by **1**.
+
+**Speed:** Your base walking speed increases to **40** feet.
+
+**Pack Tactics:** You have advantage on an attack roll against a creature if at least one of your allies is within 5 feet of the creature and the ally isn't incapacitated.
+
+**Sickle Claw:** As a bonus action, after you've moved at least 20 feet, you can make one attack with your Primal Savagery claw. If the attack hits, the target must succeed on a Strength saving throw (DC = 8 + your proficiency bonus + your Dexterity modifier) or be knocked prone.
+
+### Armored Titans (Thyreophora/Ceratopsian Type)
+These Scamps are the living fortresses of the playground, combining the stubborn defense of an Ankylosaur with the charging might of a Triceratops. They are walking bulwarks, possessing bony frills, thick plating, and a stubborn refusal to be moved. When creating an Armored Titan, choose one of the following builds:
+
+#### Fortress Build
+**Ability Score Increase:** Your Constitution score increases by an additional **2** (for a total of +4).
+
+**Size:** Your size is **Large**.
+
+**Defensive Plating:** Your Natural Armor is enhanced. Your base AC is **15 + your Dexterity modifier**.
+
+**Tail Club:** You can use your action to swing your heavy, clubbed tail. Make a melee weapon attack against one creature within 5 feet of you. On a hit, the target takes **2d6 + your Strength modifier** bludgeoning damage and must succeed on a Strength saving throw (DC = 8 + your proficiency bonus + your Strength modifier) or be stunned until the start of your next turn.
+
+**Light Charge:** When you move at least 15 feet in a straight line toward a target and then hit it with a melee attack on the same turn, you can use your bonus action to shove the creature. If it fails a Strength saving throw (DC = 8 + your proficiency bonus + your Strength modifier), you can push it up to 10 feet away from you.
+
+#### Charger Build
+**Ability Score Increase:** Your Strength score increases by **2**.
+
+**Size:** Your size is **Large**.
+
+**Light Plating:** Your Natural Armor is enhanced. Your base AC is **14 + your Dexterity modifier**.
+
+**Goring Horns:** Your head is adorned with powerful horns. You can use your action to make a special attack with your horns. If you move at least 20 feet in a straight line toward a target right before making this attack, it deals **2d8 + your Strength modifier** piercing damage. On a successful hit, you can also use a bonus action to attempt to shove the target prone.
+
+**Powerful Charge:** If you move at least 20 feet straight toward a target and then hit it with your **Goring Horns** attack on the same turn, the target takes an extra **1d8 piercing damage**.
+{{imageMaskCorner34,--offsetX:50%,--offsetY:-50%,--rotation:63.5
+  ![](https://ik.imagekit.io/owlcan/dinerdgirl.png){height:57%;position:absolute,right:0px,bottom:-96px}
+}}
+<!-- Use --offsetX to shift the mask left or right (can use cm instead of %)
+     Use --offsetY to shift the mask up or down
+     Use --rotation to set rotation angle in degrees. -->
+
