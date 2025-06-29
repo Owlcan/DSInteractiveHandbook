@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diaper School Campus Events Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=MedievalSharp&display=swap" rel="stylesheet">
+    <style>
+        /* CSS variables from your provided style */
+        :root {
+            --gold: #daac17;
+            --gold-light: #fae791;
+            --gold-dark: #97740a;
+            --parchment: #2C2614;
+            --parchment-dark: #1E1C12;
+            --ink: #c7a81d;
+            --ink2: #8f770d;
+            --accent: #b47018;
+            --shadow: rgba(0, 0, 0, 0.5);
+        }
+
+        /* Base styles for the body, adapted from your program */
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #2c2619;
+            background-image: url('https://www.transparenttextures.com/patterns/dark-wood.png');
+            color: var(--ink);
+            line-height: 1.6;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        /* Container for the entire application, styled like your #app */
+        #appContainerEl {
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+            background-color: var(--parchment);
+            background-image: url('https://www.transparenttextures.com/patterns/parchment.png');
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border: 12px solid var(--gold-dark);
+            position: relative;
+        }
+        
+        /* Corner decorations from your program */
+        .corner-decoration {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background-color: var(--gold);
+            background-image: url('https://www.transparenttextures.com/patterns/asfalt-light.png');
+            z-index: 1;
+        }
+        .top-left { top: -6px; left: -6px; border-top-left-radius: 15px; }
+        .top-right { top: -6px; right: -6px; border-top-right-radius: 15px; }
+        .bottom-left { bottom: -6px; left: -6px; border-bottom-left-radius: 15px; }
+        .bottom-right { bottom: -6px; right: -6px; border-bottom-right-radius: 15px; }
+
+
+        /* Main title styling */
+        h1 {
+            text-align: center;
+            color: var(--accent);
+            font-family: 'MedievalSharp', cursive;
+            font-size: 2.5rem; /* Adjusted for this app */
+            margin: 10px 0 20px;
+            text-shadow: 1px 1px 3px var(--shadow);
+            position: relative;
+        }
+        
+        h1::after {
+            content: "";
+            display: block;
+            width: 80%;
+            height: 3px;
+            background: linear-gradient(to right, transparent, var(--gold), transparent);
+            margin: 10px auto;
+        }
+        
+        /* Sub-heading styling */
+        h2 {
+            font-family: 'MedievalSharp', cursive;
+            color: var(--accent);
+            border-bottom: 2px solid var(--gold);
+            padding-bottom: 5px;
+            font-size: 1.8rem; /* Adjusted */
+            margin-top: 20px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        /* Event result title styling */
+        h3 {
+            font-family: 'MedievalSharp', cursive;
+            color: var(--gold-light);
+            font-size: 1.5rem; /* Adjusted */
+            margin-top: 0;
+        }
+
+        /* Section container styles */
+        .section-container {
+            margin: 20px 0;
+            background-color: var(--parchment-dark);
+            padding: 15px;
+            border: 1px solid var(--gold-dark);
+            border-radius: 5px;
+        }
+
+        #locationButtonsEl {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        /* General button styling from your program */
+        button {
+            padding: 10px 20px;
+            background: linear-gradient(to bottom, var(--gold-light), var(--gold));
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-family: 'MedievalSharp', cursive;
+            color: var(--ink2);
+            box-shadow: 0 2px 5px var(--shadow);
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            background: linear-gradient(to bottom, var(--gold), var(--gold-dark));
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px var(--shadow);
+        }
+
+        /* Style for the currently selected location button */
+        .locationBtn.selected {
+            background: linear-gradient(to bottom, var(--gold), var(--gold-dark));
+            color: var(--parchment);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px var(--shadow);
+        }
+
+        #eventGeneratorEl {
+            display: none;
+        }
+        
+        .generate-button-container {
+            text-align: center;
+        }
+
+        /* Make generate button slightly larger */
+        #generateBtn {
+            font-size: 18px;
+            padding: 12px 25px;
+        }
+
+        #eventResultEl {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: var(--parchment);
+            border: 1px solid var(--gold);
+            border-radius: 5px;
+            min-height: 100px;
+            display: none;
+        }
+
+        #eventDescriptionEl {
+            color: var(--ink);
+            font-size: 16px;
+            line-height: 1.5;
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+    </style>
+</head>
+<body>    <div id="appContainerEl">
+        <div class="corner-decoration top-left"></div>
+        <div class="corner-decoration top-right"></div>
+        <div class="corner-decoration bottom-left"></div>
+        <div class="corner-decoration bottom-right"></div>
+
+        <!-- Hidden secret button for board game rules (overlays bottom-right corner decoration) -->
+        <div id="secretBoardGameButton" style="
+            position: absolute;
+            bottom: -6px;
+            right: -6px;
+            width: 60px;
+            height: 60px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            z-index: 1001;
+            border-bottom-right-radius: 15px;
+        " onclick="showBoardGameRules()" title="Secret Board Game Access"></div>
+
+        <h1>Diaper School Campus Events Generator</h1>
+
+        <div id="locationSelectorEl" class="section-container">
+            <h2>Select a Location</h2>            <div id="locationButtonsEl">
+                <button class="locationBtn" data-location="dormitory">Dormitory Common Areas</button>
+                <button class="locationBtn" data-location="library">Library</button>
+                <button class="locationBtn" data-location="hallways">Hallways</button>
+                <button class="locationBtn" data-location="yard">Campus Yard</button>
+                <button class="locationBtn" data-location="entrance">Entranceway</button>
+                <button class="locationBtn" data-location="classroom">Classroom</button>
+                <button class="locationBtn" data-location="cafeteria">Cafeteria</button>
+                <button class="locationBtn" data-location="dormhall">Dormitory Halls</button>
+            </div>
+        </div>
+
+        <div id="eventGeneratorEl" class="section-container">
+            <h2 id="selectedLocationTitleEl">Location: Not Selected</h2>
+            <div class="generate-button-container">
+                <button id="generateBtn">Generate Random Event</button>
+            </div>
+            <div id="eventResultEl">
+                <h3 id="eventTitleEl"></h3>
+                <p id="eventDescriptionEl"></p>
+            </div>        </div>
+    </div>
+
+    <script>
+        // DOM Element References
+        const locationButtons = document.querySelectorAll('.locationBtn');
+        const eventGeneratorEl = document.getElementById('eventGeneratorEl');
+        const selectedLocationTitleEl = document.getElementById('selectedLocationTitleEl');
+        const generateBtn = document.getElementById('generateBtn');
+        const eventResultEl = document.getElementById('eventResultEl');
+        const eventTitleEl = document.getElementById('eventTitleEl');
+        const eventDescriptionEl = document.getElementById('eventDescriptionEl');
+
+        // Event database organized by location
+        const eventDatabase = {
+            dormitory: [
+        { "title": "Diaper Check", "description": "A Resident Assistant conducts a surprise diaper check in the common area. Everyone present must line up and have their diapers inspected for wetness or messiness. Those found in need of a change are taken care of on the spot in front of everyone. Roll 1d20: On a 1-3, the RA discovers someone wearing 'The Leaky Sieve' cursed diaper and must deal with the immediate consequences." },
+        { "title": "Movie Night Accident", "description": "During the dorm's weekly movie night, someone has an obvious messy accident in their diaper. The smell spreads through the common area, and the RA pauses the movie to identify and change the culprit in front of all attendees. Roll 1d12: On a 12, the incident triggers a magical 'Spontaneous Accident' spell effect, causing 1d4 other students to experience embarrassing effects." },
+        { "title": "Nap Time Enforcement", "description": "The dormitory supervisor declares an impromptu nap time. All students in the common area are guided to mats laid out on the floor, given pacifiers, and tucked in with blankets regardless of their class schedule. Roll 1d6: On a 1-2, a student's magical diaper malfunctions during naptime, requiring immediate attention and waking everyone up." },
+        { "title": "Diaper Delivery", "description": "A large shipment of diapers arrives for the dorm. Students are required to help unpack and organize the various styles, thicknesses, and designs before they're distributed to individual rooms. Roll 1d20: On a 1, the shipment contains 'The Attention Magnet Diaper' which immediately draws everyone's focus to whoever accidentally touches it." },
+        { "title": "Potty Training Session", "description": "A special potty training session is being held for select students. Those with good behavior records may be allowed to use the toilet - under supervision - while everyone else watches to learn proper procedures. Roll 1d10: On a 1-2, nervous students are affected by 'Sudden Urgency' spell effects, requiring immediate assistance." },
+        { "title": "Diaper Punishment", "description": "A student who broke the rules (this can be you) is being publicly reprimanded. They're given an extra thick diaper, with multiple doublers, and plastic pants locked on over it, while everyone in the common area is gathered to witness. Roll 1d8: On a 1, they're accidentally given the 'Diaper of Perpetual Dampness' as their punishment diaper." },
+        { "title": "Group Change Time", "description": "The RAs announce it's time for a group diaper change. Changing mats are laid out in the common area, and students must take turns lying down for changes while their peers watch and wait their turn. Roll 1d20: On a 1-5, magical interference causes temporary incontinence in waiting students, extending the change session significantly." },
+        { "title": "Busted Common Room Party", "description": "An RA has discovered an illicit gathering in the common room after hours. As punishment for violating dorm rules, everyone involved is put into thick, crinkly punishment diapers and assigned to clean the entire building under strict supervision. Roll 1d6: On a 1, someone receives the 'Diaper Cover of Irresistible Itchiness' making cleaning nearly impossible." },
+        { "title": "Contraband Critter", "description": "A student smuggled a 'Darkling Bellowbelly Cubling' into the dorm. Its 'Irresistibly Chirpy' call has attracted a pack of larger Darklings to the common room, forcing a lockdown and a very embarrassing explanation to the responding staff. Roll 1d8: On a 1-2, the stress triggers 'Spontaneous Accident' effects in 1d4 students." },
+        { "title": "Room Cleanliness Inspection", "description": "It's the end-of-week room inspection. The RAs are checking for general tidiness, but also for improperly disposed of used diapers. Any room with a full or smelly diaper pail results in the occupants being put on 'diaper pail duty' for the whole floor. Roll 1d12: On a 1, inspectors discover someone has been secretly trying to use cursed diapers to avoid changes." },
+        { "title": "Bedtime Story Scare", "description": "A student complains of nightmares and a 'Dreameating Darkling' is suspected in the dorm. To 'protect' the students, an RA declares that everyone in the wing must wear magically-warded, extra-absorbent overnight diapers and be tucked in tightly for observation. Roll 1d6: On a 1-2, the magical wards interact badly with existing enchanted diapers, causing random magical effects throughout the night." },
+        { "title": "Curse of the Cackling Roommate", "description": "Your roommate is afflicted with the 'Diaper of the Hyena's Riddle' and has just failed another attempt to break the curse. Their room is now filled with disembodied, mocking laughter, making it impossible to study and drawing the attention of the entire floor. The cursed diaper's effects persist: disadvantage on Charisma checks for 1 hour after each failed removal attempt." },
+        { "title": "Fire Drill False Alarm", "description": "The fire alarm goes off in the middle of the night, forcing everyone into the dorm's common area in whatever they were sleeping in—for most, that means just their pajamas or diapers. It's a false alarm, but the RAs decide to do a diaper check on everyone before they're allowed back to bed. Roll 1d10: On a 1-3, the stress and cold cause temporary incontinence requiring immediate changes." },
+        { "title": "Laundry Day Disaster", "description": "The magical laundry system has malfunctioned, and all the clothes in the dorm are either shrunken to baby sizes or transformed into frilly, babyish outfits. Students must wear what's available while staff sort out the mess, leading to very embarrassing outfit combinations. Roll 1d8: On a 1, the magical malfunction also affects diapers, causing random enchantments." },
+        { "title": "Midnight Feeding", "description": "A confused house-elf has mistaken the dorm for a nursery and is going room to room trying to give students bottles of warm milk and check their diapers. The RA on duty is too amused to stop it immediately. Roll 1d6: On a 1-2, the house-elf accidentally casts 'Little Miracle' effects while trying to help, causing unexpected magical comfort." },
+        { "title": "Sleepwalking Incident", "description": "A student with a sleepwalking curse has been wandering the halls in just their diaper, casting minor spells that are affecting other students' bladder control. The RA needs volunteers to help track them down and wake them safely. Everyone within 30 feet must make a DC 12 Constitution save or be affected by magical 'Sudden Urgency' every 10 minutes until the sleepwalker is found." },
+        { "title": "Diaper Fashion Week", "description": "The dorm is hosting a week-long diaper fashion event. Students model different styles and brands during meals and social hours, with votes cast for categories like 'Most Comfortable' and 'Best Waddle'. Roll 1d20: On a 1, one of the featured diapers is secretly cursed, affecting the model wearing it." },
+        { "title": "Study Group Stress", "description": "A high-stress study group session has devolved into multiple students having accidents due to anxiety. The RA declares a mandatory relaxation period with soft music, dim lighting, and immediate diaper changes for anyone who needs them. Roll 1d8: On a 1-2, the stress triggers 'Spontaneous Accident' spell effects in the group." },
+        { "title": "Hot Cocoa Social", "description": "The dorm is hosting a hot cocoa night with extra-large servings. Within an hour, nearly everyone needs a diaper check due to the large liquid intake, creating a line for the changing rooms. Roll 1d10: On a 1-4, the high liquid volume overwhelms even magical protection, causing breakthrough incidents." },
+        { "title": "Prankster's Revenge", "description": "Someone has enchanted the common room furniture to emit a subtle 'Bladder Weakness' aura. Students sitting down find themselves having mini-accidents, and the RA is conducting frequent checks to identify the magical source. All students in the common room must make a DC 13 Constitution save every 30 minutes or experience minor accidents." },                { "title": "Roommate Swap Day", "description": "The dorm is experimenting with roommate swaps for better compatibility. Part of the process involves roommates demonstrating their daily care routines, including diaper changes, to potential new roommates. Roll 1d6: On a 1-2, one roommate is secretly wearing a cursed diaper they can't remove, creating an awkward situation during the demonstration." },
+                { "title": "Emergency Simulation", "description": "A surprise emergency drill requires students to evacuate to the basement shelter. The drill includes being fitted with emergency diapers rated for extended wear, as shelter protocols assume potential long-term lockdowns. Roll 1d10: On a 1-3, the stress of the drill triggers 'Sudden Urgency' effects requiring immediate attention before evacuation." },
+                { "title": "Dorm Pet Adoption", "description": "The dorm has adopted a 'Puddle Sprite' as a mascot, but it's causing random wet spots to appear around the common areas. Students are being checked more frequently as staff try to distinguish sprite puddles from actual accidents. Roll 1d8: On a 1-2, the sprite's magic interferes with magical diapers, causing random enchantment failures." },
+                { "title": "Anniversary Celebration", "description": "It's the 50th anniversary of the dorm building. To celebrate, current students are required to wear period-appropriate diapers from the founding era - much thicker and more conspicuous than modern designs. Roll 1d12: On a 1, one of the historical diapers is actually 'The Attention Magnet Diaper' from the archives, making the wearer impossible to ignore." },
+                { "title": "Magical Experiment Gone Wrong", "description": "A student's thaumaturgy experiment has backfired, creating a field of uncontrolled magic in their room. Anyone entering experiences random polymorph effects, including temporary age regression requiring emergency diaper changes. Roll 1d20 when entering: On a 1-5, suffer temporary age regression for 1d4 hours; on a 6-10, experience 'Spontaneous Accident' effects; on a 20, gain magical incontinence for 24 hours." },
+                { "title": "Visiting Dignitary", "description": "A high-ranking Academy board member is touring the dorms. Students have been selected to demonstrate the school's 'holistic care approach,' including public diaper checks and changes to show the comprehensive nature of student wellness. Roll 1d6: On a 1, the demonstration goes wrong when someone is discovered wearing 'Diaper of Perpetual Dampness,' causing diplomatic embarrassment." },
+                { "title": "Seasonal Allergies", "description": "Magical pollen from the campus 'Sneezeblossom' trees is affecting students with uncontrollable sneezing fits that lead to accidents. The dorm has set up an allergy station with antihistamines and fresh diapers. All students must make a DC 12 Constitution save every hour or experience sneezing-induced accidents." },
+                { "title": "Therapy Animal Visit", "description": "Emotional support 'Comfort Bears' are visiting the dorm, but their magical aura of relaxation is so strong that it's causing students to lose voluntary muscle control. Multiple changing stations have been set up to handle the effects. All students within 30 feet of a Comfort Bear must make a DC 10 Wisdom save or lose bladder/bowel control for 1d4 hours." },
+                { "title": "Cursed Board Game", "description": "Someone brought a cursed board game to the common room. Players who land on certain spaces experience temporary incontinence curses, and the game can't be stopped until someone wins - which could take hours. Game effects include: 'Spontaneous Accident' spell (spaces 1-5), 'Sudden Urgency' (spaces 6-10), temporary curse effects (spaces 11-15), and one space forces the player to don 'Diaper Cover of Irresistible Itchiness' until the game ends.<br><br><details><summary><strong>📋 Click to view: The Diaper School Academic Race - Complete Rules & Board</strong></summary><div style='margin: 10px 0; padding: 10px; background: rgba(218, 172, 23, 0.1); border-left: 3px solid var(--gold);'><h4>Game Setup:</h4><ul><li><strong>Board:</strong> 60 spaces in a linear track</li><li><strong>Players:</strong> 2-6 players, each with a unique token</li><li><strong>Movement:</strong> Roll 1d20 to advance</li><li><strong>Objective:</strong> First to reach space 60 wins</li></ul><h4>Special Rules:</h4><ul><li><strong>Fluff Counters:</strong> Landing on odd spaces gives +1 Fluff Counter</li><li><strong>Movement Penalty:</strong> Each Fluff Counter = -1 to movement rolls</li><li><strong>Even Spaces:</strong> No special effect (safe spaces)</li><li><strong>Range Effects:</strong> Every 5-space range has themed events</li></ul><table style='width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 12px;'><tr style='background: var(--gold-dark); color: white;'><th style='border: 1px solid var(--gold); padding: 4px;'>Spaces</th><th style='border: 1px solid var(--gold); padding: 4px;'>Theme</th><th style='border: 1px solid var(--gold); padding: 4px;'>Effect</th><th style='border: 1px solid var(--gold); padding: 4px;'>Spell/Consequence</th></tr><tr><td style='border: 1px solid var(--gold); padding: 4px;'>1-5</td><td style='border: 1px solid var(--gold); padding: 4px;'>Freshman Orientation</td><td style='border: 1px solid var(--gold); padding: 4px;'>Learning the Ropes</td><td style='border: 1px solid var(--gold); padding: 4px;'>'Spontaneous Accident' spell - Make Wisdom save or experience embarrassing effects</td></tr><tr style='background: rgba(218, 172, 23, 0.1);'><td style='border: 1px solid var(--gold); padding: 4px;'>6-10</td><td style='border: 1px solid var(--gold); padding: 4px;'>Study Habits</td><td style='border: 1px solid var(--gold); padding: 4px;'>Academic Excellence</td><td style='border: 1px solid var(--gold); padding: 4px;'>'Sudden Urgency' spell - Constitution save or immediate potty check needed</td></tr><tr><td style='border: 1px solid var(--gold); padding: 4px;'>11-15</td><td style='border: 1px solid var(--gold); padding: 4px;'>First Infraction</td><td style='border: 1px solid var(--gold); padding: 4px;'>Minor Rule Breaking</td><td style='border: 1px solid var(--gold); padding: 4px;'>Temporary curse effects - Various magical mishaps for 1d4 turns</td></tr><tr style='background: rgba(218, 172, 23, 0.1);'><td style='border: 1px solid var(--gold); padding: 4px;'>16-20</td><td style='border: 1px solid var(--gold); padding: 4px;'>Dormitory Life</td><td style='border: 1px solid var(--gold); padding: 4px;'>Social Adjustment</td><td style='border: 1px solid var(--gold); padding: 4px;'>POSITIVE: Advance 1d6 extra spaces - 'Little Miracle' effect grants comfort</td></tr><tr><td style='border: 1px solid var(--gold); padding: 4px;'>21-25</td><td style='border: 1px solid var(--gold); padding: 4px;'>Magical Mishap</td><td style='border: 1px solid var(--gold); padding: 4px;'>Experimental Accident</td><td style='border: 1px solid var(--gold); padding: 4px;'>Don 'Diaper Cover of Irresistible Itchiness' - Disadvantage on concentration until game ends</td></tr><tr style='background: rgba(218, 172, 23, 0.1);'><td style='border: 1px solid var(--gold); padding: 4px;'>26-30</td><td style='border: 1px solid var(--gold); padding: 4px;'>Academic Recognition</td><td style='border: 1px solid var(--gold); padding: 4px;'>Honor Roll Achievement</td><td style='border: 1px solid var(--gold); padding: 4px;'>POSITIVE: Remove 2 Fluff Counters and advance 5 spaces - Teacher's pet status</td></tr><tr><td style='border: 1px solid var(--gold); padding: 4px;'>31-35</td><td style='border: 1px solid var(--gold); padding: 4px;'>Contraband Discovery</td><td style='border: 1px solid var(--gold); padding: 4px;'>Forbidden Items Found</td><td style='border: 1px solid var(--gold); padding: 4px;'>Forced to wear 'The Leaky Sieve' cursed diaper - Constant care needed</td></tr><tr style='background: rgba(218, 172, 23, 0.1);'><td style='border: 1px solid var(--gold); padding: 4px;'>36-40</td><td style='border: 1px solid var(--gold); padding: 4px;'>Extracurricular Excellence</td><td style='border: 1px solid var(--gold); padding: 4px;'>Club Leadership</td><td style='border: 1px solid var(--gold); padding: 4px;'>POSITIVE: Choose another player to gain 1 Fluff Counter while you advance 1d10 spaces</td></tr><tr><td style='border: 1px solid var(--gold); padding: 4px;'>41-45</td><td style='border: 1px solid var(--gold); padding: 4px;'>Public Embarrassment</td><td style='border: 1px solid var(--gold); padding: 4px;'>Demonstration Gone Wrong</td><td style='border: 1px solid var(--gold); padding: 4px;'>All players cast 'Spank!' on you - Move back 1d6 spaces and gain 2 Fluff Counters</td></tr><tr style='background: rgba(218, 172, 23, 0.1);'><td style='border: 1px solid var(--gold); padding: 4px;'>46-50</td><td style='border: 1px solid var(--gold); padding: 4px;'>Mentorship Role</td><td style='border: 1px solid var(--gold); padding: 4px;'>Helping Underclassmen</td><td style='border: 1px solid var(--gold); padding: 4px;'>POSITIVE: All players remove 1 Fluff Counter, you advance 8 spaces - Inspiring leadership</td></tr><tr><td style='border: 1px solid var(--gold); padding: 4px;'>51-55</td><td style='border: 1px solid var(--gold); padding: 4px;'>Final Examination Crisis</td><td style='border: 1px solid var(--gold); padding: 4px;'>Academic Pressure</td><td style='border: 1px solid var(--gold); padding: 4px;'>Stress-induced 'Spontaneous Accident' - All players roll saves or lose turns</td></tr><tr style='background: rgba(218, 172, 23, 0.1);'><td style='border: 1px solid var(--gold); padding: 4px;'>56-60</td><td style='border: 1px solid var(--gold); padding: 4px;'>Graduation Preparation</td><td style='border: 1px solid var(--gold); padding: 4px;'>Academy Completion</td><td style='border: 1px solid var(--gold); padding: 4px;'>POSITIVE: Immune to all negative effects - 'Academy Graduate' status protects you</td></tr></table><h4>Victory Conditions:</h4><p><strong>Winner:</strong> First player to reach exactly space 60<br><strong>Curse Breaking:</strong> Game ends when someone wins, releasing all players from magical effects<br><strong>Overtime Rule:</strong> If you roll past space 60, move backwards by the excess amount</p></div></details>" },
+                { "title": "Dorm Competition", "description": "Your dorm is competing against others in a 'Preparedness Challenge.' Points are awarded for cleanliness, organization, and proper adherence to diaper protocols. Surprise inspections and public demonstrations are part of the scoring. Roll 1d20: On a 1-3, inspectors discover cursed items being used to cheat, resulting in automatic disqualification and punishment details." },
+                { "title": "Study Abroad Preparation", "description": "Students selected for study abroad programs must demonstrate they can maintain Academy standards anywhere. This includes public diaper changes and care routines to prove they won't embarrass the school while abroad. Roll 1d8: On a 1-2, the stress of evaluation triggers 'Spontaneous Accident' effects during the demonstration, requiring students to prove they can handle unexpected situations gracefully." }
+            ],
+            library: [
+                { "title": "Quiet Change", "description": "The librarian notices your diaper rustling too loudly while you study. You're taken to a special changing area within the library and given a thicker, quieter diaper with explicit instructions to remain silent." },
+                { "title": "Study Group Inspection", "description": "A professor stops by a study group to check progress, but first insists on inspecting everyone's diapers. Anyone wet or messy must be changed by their study partners before work can continue." },
+                { "title": "Leaked Assignment", "description": "A student's diaper has leaked onto a library chair. The librarian makes an example of them, changing them into a much thicker diaper while explaining proper diaper check protocols to everyone in the vicinity." },
+                { "title": "Restricted Section", "description": "You're given permission to access the restricted section of the library, but the rules require you to wear an extra thick diaper and a locking onesie while handling the valuable books. The librarian personally checks you're properly diapered before allowing entry." },
+                { "title": "Reading Circle", "description": "A mandatory reading circle is formed. Students sit in a circle on the floor, and each must read aloud from a childish book. Anyone who hesitates or makes an error must drink a large bottle of water and have their diaper checked publicly afterward." },
+                { "title": "Extended Study Session", "description": "The library announces an extended late-night study session. All participants must check in with staff to have their diapers changed into overnight-thickness diapers that will not be changed again until morning, no matter how full they become." },
+                { "title": "The Beanbag Book", "description": "You pull a dusty tome from the shelves, but it's jinxed. Upon opening, it poofs into a cloud of sparkling dust, leaving you suddenly encased in an impossibly thick, beanbag-sized diaper that severely hampers your movement, much to the librarian's unamused stare." },
+                { "title": "The Tome of Total Coverage", "description": "You've found a book that promises 'ultimate protection' spells. Unfortunately, it's a prank. Opening it triggers a magical trap, instantly attiring you in a full-body diapersuit with integrated mittens and booties, leaving you helpless until a staff member can dispel it." },
+                { "title": "Haunted History", "description": "You open a historical text about the Old War. The book is haunted with psychic residue from the conflict, showing you a horrifying vision of the First Internal Siege. The sudden fright forces you to make an immediate, high-DC Continence Check." },
+                { "title": "Psionic Shushing", "description": "You are concentrating hard when a spectral librarian from the long-lost Scholia Psionica materializes. It chides you for your 'loud thoughts' and, to help you 'focus,' psychically fastens a Pacification Gag into your mouth without ever touching you." },
+                { "title": "Forced Naptime", "description": "A magically trapped book triggers an 'Uncontrollable Fantasy' spell when opened. You are plunged into a gentle, dreamlike trance, experiencing a soft and confining daycare world. You remain in this state until a classmate or librarian can safely snap you out of it." },
+                { "title": "Flying Book Frenzy", "description": "A miscast spell has enchanted the books in one aisle, causing them to flap around chaotically. The exasperated librarian is diapering every student in the area, declaring that if they're going to cause such childish chaos, they'll be padded for it." },
+                { "title": "Bookworm Infestation", "description": "A 'Small Cuboid Darkling Slime' has gotten into the arcane theory section and is absorbing knowledge from the scrolls. Staff are placing students in easily-cleaned plastic-covered diapers before sending them in to lure the slime away from the priceless texts." },
+                { "title": "Barrier Scour", "description": "The ancient enchanted barrier that guards the library from impure intentions is malfunctioning. It's now flagging any student with 'mischievous thoughts' and magically locks them in a temporary 'Clothen Pamprison' until their thoughts are deemed 'pure' enough for entry. A DC 14 Persuasion, Deception, or Performance check is required to bypass the automated systems" },
+                { "title": "Cheater's Comeuppance", "description": "A student is caught using a minor illusion to cheat on their coursework. As punishment for academic dishonesty, they are fitted with 'Penitent Mitts' to prevent spellcasting and a very thick, crinkly diaper to disrupt their concentration for the rest of the day. Those who find this a bit too funny might join them..." },
+                { "title": "Weaver's Work-Study", "description": "A team of Diaparachnid students are doing their work-study, spinning 'Web Hammocks' between high bookshelves for a new, quiet study area. Access is only granted if you submit to a diaper check, as they refuse to have their silk soiled by leaks." },
+                { "title": "Tome of the Headmaster's Temper", "description": "Someone got too close to the warded display containing the 'Headmaster's Tome'. A pulse of cryptic energy has shot out, transforming the pants of everyone in the main common area halls into thick, bulky, loud, and thick six-taped disposable diapers, just like in the Headmaster's era. If you were the unfortunate rulebender who approached the mantle with intentions of reading the naughty book contained therewithin, you receive <strong>Spank!</strong> cast on your butt." },
+                 { "title": "Research Assistant Duties", "description": "You've been selected as a research assistant for a professor studying historical Academy protocols. Your job includes modeling historical diapers and demonstrating how they were worn, including public changes to show the evolution of design over decades." },
+                { "title": "Magical Contamination", "description": "A leaked alchemical experiment has contaminated an entire section of books. Students must wear special protective diapers that change color if exposed to the magical residue, requiring immediate evacuation and decontamination if they react." },
+                { "title": "Silent Study Challenge", "description": "The library is hosting a 'Silent Study Challenge' where any noise results in immediate diaper inspection. Students making crinkly sounds, wet squishes, or other diaper-related noises must submit to a public change as part of maintaining the silence." },
+                { "title": "Manuscript Recovery", "description": "Ancient manuscripts have been scattered by a mischievous wind spirit. Students crawling under tables and through tight spaces to recover them are having their diapers inspected for damage or displacement after each retrieval." },
+                { "title": "Tutoring Session", "description": "Upper-class students are tutoring underclassmen, but part of the mentoring includes demonstrating proper self-care. Tutors must show their tutees how to check their own diapers and when to seek help for changes." },
+                { "title": "Memory Palace Malfunction", "description": "A student's memory enhancement spell has gone wrong, causing them to regress mentally to various childhood ages. The librarian is caring for them like a small child, including regular diaper checks and changes, while waiting for the spell to wear off." },
+                { "title": "Noise Complaint Investigation", "description": "Multiple noise complaints about 'suspicious sounds' from a study room lead to a formal investigation. It turns out to be students' diapers crinkling during movement, resulting in mandatory 'sound testing' of everyone's current padding." },
+                { "title": "Rare Book Handling", "description": "Students granted access to the rare book collection must undergo 'contamination prevention protocols,' including wearing special, extra-absorbent diapers and having them checked both before and after handling any valuable texts." },
+                { "title": "Ghost Story Hour", "description": "The library is hosting a supernatural literature reading. The scary stories are so effective that several students have fear-induced accidents, requiring the librarian to pause regularly for diaper checks and changes." },
+                { "title": "Study Carrel Assignment", "description": "Students are being assigned personal study carrels for finals season. Each assignment includes a 'comfort assessment' where staff evaluate the student's current diaper and provide upgrades if needed for long study sessions." },
+                { "title": "Research Ethics Seminar", "description": "A mandatory seminar on research ethics includes a practical component where students must demonstrate informed consent procedures, including consenting to diaper checks as an example of bodily autonomy in academic settings." },
+                { "title": "Library Card Renewal", "description": "Annual library card renewal requires students to demonstrate they can properly care for library materials. This includes proving they won't damage books through leaks by submitting to a thorough diaper inspection and potential change." },
+                { "title": "Manuscript Illumination Class", "description": "Students learning manuscript illumination must maintain perfect steadiness while painting. Any signs of fidgeting or discomfort result in immediate diaper checks, as wet or messy diapers are considered incompatible with fine art work." },
+                { "title": "Whispering Gallery Effect", "description": "The library's architecture is amplifying even the slightest sounds, including the soft squishing of wet diapers. Students are being called for discretionary changes to prevent their movements from disturbing others' concentration." }
+            ],
+            hallways: [
+                { "title": "Diaper Check Station", "description": "A temporary diaper check station has been set up in the hallway. All passing students must stop to have their diapers checked by staff members. Those needing changes are handled on the spot, holding up hallway traffic." },
+                { "title": "Crawling Practice", "description": "A section of the hallway has been designated as a 'crawling only' zone. Students must get down on all fours, with their diapered bottoms on display, to cross this section under the watchful eyes of hall monitors." },
+                { "title": "Diaper Fashion Show", "description": "The fashion design class is holding an impromptu diaper fashion show in the main hallway. Students passing by are randomly selected to model the latest in protective garments while others rate their waddle and the aesthetic appeal of their diapers." },
+                { "title": "Hall Monitor Rounds", "description": "The strict hall monitor stops you for a random diaper check. Finding you slightly damp, they decide to change you right there in the hallway as other students pass by, using it as an opportunity to demonstrate proper diapering technique." },
+                { "title": "Diaper Emergency", "description": "A student ahead of you has a dramatic diaper failure in the middle of the busy hallway. Staff quickly respond with a portable changing station, and you're asked to help hold supplies during the change as an impromptu learning experience." },
+                { "title": "Waddle Race", "description": "Two rival student groups are holding an unauthorized waddle race down the hallway. A teacher catches them but instead of punishing them, decides to make it an official event with rules and additional participants drafted from passing students." },
+                { "title": "Hallway Slip 'n' Slide", "description": "A prankster has cast 'Smear of Slime' down a major corridor. The floor is now treacherously slick, causing students to slip, slide, and fall, resulting in numerous surprise diaper checks for those who land hard on their padded seats." },
+                { "title": "Cross-Corridor Breeze", "description": "A powerful 'Gusting Wind' from an open window is creating a fierce cross-breeze. Students wearing skirts or kilts are struggling to keep them down, risking a public reveal of their regulation diapers to everyone in the busy corridor." },
+                { "title": "Aftermath of a Duel", "description": "Two students just had an unauthorized scuffle, and lingering castoff magic fills the air. The chaotic energy is causing a localized 'Uncrinkling Catastrophe' effect, forcing any student who passes through to make a potty check or suffer an immediate accident." },
+                { "title": "Mobile Hall Cleaner", "description": "The Mobile Hall Cleaner is slowly advancing down the hall, its massive, gelatinous form consuming everything in its path. Students must quickly press themselves against the lockers to avoid its 'Indiscriminate Consumption' or risk getting a very acidic, very public cleaning." },
+                { "title": "Diaper-Check Bot Glitch", "description": "A 'Deranged Diaper-Check Bot' is malfunctioning and stuck in a loop. It repeatedly stops the same student for a check, insisting they are 'critically full' and requiring multiple, increasingly embarrassing, public changes until a technician can reset it." },
+                { "title": "Leaking Locker", "description": "Someone's locker is leaking a strange, magical fluid. A hall monitor is performing diaper checks on every student in the corridor, assuming a 'Leaking Diaper' is the cause of the suspicious puddle." },
+                { "title": "Mourning of the Ghostly Host", "description": "A mournful cluster of the 'Ghostly Host' has materialized in the hallway, their spectral sorrow creating a palpable chill. Passing students must succeed on a Willpower save or the psychic grief will cause them to have a sudden, uncontrollable accident." },
+                { "title": "Class Change Rush", "description": "During the five-minute class change, a bottleneck has formed in the main corridor. Students pressed together are accidentally triggering each other's diaper crinkles and becoming aware of who might need changes, leading to peer reporting and subsequent checks." },
+                { "title": "Lost Student Search", "description": "A first-year student has gotten lost in the maze-like halls and is crying. Staff are checking their diaper as part of the standard lost student protocol, and nearby students are asked to demonstrate proper comforting techniques." },
+                { "title": "Magical Portrait Maintenance", "description": "The school's magical portraits are being cleaned, and their subjects are commenting loudly on passing students' appearances, including the obviousness of their diapers and whether they look like they need changing. Staff are responding to the portraits' suggestions." },
+                { "title": "Elevator Breakdown", "description": "The magical elevator is broken, forcing everyone to use the stairs. The extra physical exertion is causing students to work up a sweat and have accidents, with hall monitors stationed at each landing to check and assist as needed." },
+                { "title": "Trophy Case Update", "description": "New trophies celebrating the Academy's diaper innovation are being installed. Students passing by are being asked to model different historical styles for comparison photos, including having their current diapers evaluated against past designs." },
+                { "title": "Ventilation System Malfunction", "description": "The hallway's air circulation has failed, creating an uncomfortably warm environment. Students are being checked more frequently as the heat is causing increased sweating and discomfort that might mask other signs of needing a change." },
+                { "title": "Student Council Election", "description": "Student council candidates are campaigning in the halls, and part of their platform includes promising better diaper policies. They're offering free diaper checks and changes to demonstrate their commitment to student welfare." },
+                { "title": "Fire Safety Demonstration", "description": "The local fire department is demonstrating proper evacuation procedures. Part of the training includes ensuring all students are in appropriate 'emergency diapers' that can handle the stress of evacuation scenarios." },
+                { "title": "Motivational Speaker", "description": "A guest speaker promoting 'authentic self-acceptance' has set up in the main hallway. Their presentation includes having students openly discuss their diaper experiences and submit to public checks as examples of vulnerability and honesty." },
+                { "title": "Art Installation", "description": "The art department has created an interactive installation about 'comfort and protection.' Students walking through must demonstrate various aspects of diaper wear and care as part of the artistic experience." },
+                { "title": "Pep Rally Setup", "description": "Students are preparing for a pep rally, but the activity is causing excitement-induced accidents. Cheerleaders and participants are being checked and changed into school-spirit themed diapers as part of the rally preparation." },
+                { "title": "Locker Inspection Day", "description": "Annual locker inspections are underway. Students must demonstrate they're properly storing backup diapers and supplies in their lockers, and those without adequate supplies are changed into demonstration diapers to emphasize the importance of preparation." },
+                { "title": "Network Maintenance", "description": "Technicians working on the magical communication network have caused interference that's affecting students with enchanted diapers. Those experiencing 'magical feedback' in their padding are being checked and temporarily switched to non-magical alternatives." },
+                { "title": "Guest Parent Shadow Day", "description": "Parents are shadowing their children for a day to understand Academy life. Students must demonstrate their daily routines, including diaper checks and changes, while their parents observe and ask questions about the process." },
+                { "title": "Emergency Response Drill", "description": "A surprise emergency drill is testing the school's crisis response. Students are being evaluated on their ability to quickly and efficiently undergo emergency diaper changes as part of potential lockdown procedures." },
+                { "title": "Hall Monitor Training", "description": "New hall monitors are being trained in proper student assessment techniques. Current students are serving as practice subjects for learning how to identify and respond to various diaper-related situations." },
+                { "title": "Time Capsule Ceremony", "description": "Students are contributing to a time capsule by demonstrating current Academy practices. This includes modeling today's diaper technology and care routines for future students to compare with whatever innovations await them." }
+            ],
+            yard: [
+                { "title": "Outdoor Change Time", "description": "The nice weather has prompted staff to conduct diaper changes outdoors today. Changing stations are set up on the lawn, and students are being called by dorm groups to have their diapers changed in the fresh air and sunshine." },
+                { "title": "Crawling Exercise", "description": "The physical education class is using the yard for crawling exercises. Students are required to crawl through an obstacle course, with their diapered bottoms prominently displayed, while teachers evaluate their form and speed." },
+                { "title": "Diaper Tan Lines", "description": "A supervised sunbathing session is underway. Students are allowed to relax in just their diapers and t-shirts to work on their tans, though staff regularly conduct checks and changes as needed in full view of everyone." },
+                { "title": "Campus Tour", "description": "Prospective students and their parents are touring the campus. Current students are expected to demonstrate proper diapered behavior, with some selected to show the visitors how diaper checks and changes are handled as part of daily life." },
+                { "title": "Water Balloon Fight", "description": "A sanctioned water balloon fight is happening on the lawn. Participation ensures your diaper will get soaked and swollen, with staff waiting on the sidelines with fresh diapers for when the activity ends." },
+                { "title": "Diaper Decoration Contest", "description": "The art department is hosting a diaper decoration contest in the yard. Participants wear plain white diapers that serve as canvases for their peers to decorate with markers, with prizes for the most creative designs." },
+                { "title": "Magical Botany Class", "description": "The herbalism class is tending to the Gluttonberry bushes in the campus gardens. Staff are on hand to manage the 'Gluttonous Consequences' of unauthorized snacking, with changing mats laid out for any student who overindulges." },
+                { "title": "Combat Training Drill", "description": "A practical combat class is running subdual-damage drills on the main lawn. After the strenuous exercise, all participating students are lined up for a mandatory 'cool-down and check-up' to prevent any accidents from overwhelming their training diapers." },
+                { "title": "Echo Bloom Incident", "description": "An 'Echo Bloom' has manifested on the lawn, projecting faint, unsettling scenes from the Old War. The psychic distress is causing students to fail Continence Checks, requiring the hall monitors to set up a mobile changing station to manage the fallout." },
+                { "title": "Creature Handling Class", "description": "The 'Care of Non-Threatening Abominations' class is holding a practical session in the yard with Bellowbelly Cublings. The 'Irresistibly Chirpy' nature of the cublings is causing some students to get overexcited, leading to spontaneous accidents that need immediate attention." },
+                { "title": "The Great School Picnic", "description": "The whole school is out on the lawn for a picnic. To ensure no one soils the picnic blankets, hall monitors are circulating, performing random potty checks on students between sandwiches and juice boxes, enforcing the code of conduct." },
+                { "title": "Punishment Detail: Lawn Care", "description": "You've earned a punishment detail tending to the Academy grounds. You're required to wear extra-thick, highly noticeable 'Punitive Diapers' while you work, and the supervising teacher performs a very thorough check before you're dismissed for the day." },
+                { "title": "Old War Artifact Discovery", "description": "Yard maintenance has unearthed a dormant, 'Unexploded Regression Bomb' from the Old War. As a precaution, all students in the vicinity are being checked and padded in thick, magical diapers in case of accidental detonation while the experts disarm it." },
+                { "title": "Outdoor Theater Rehearsal", "description": "The drama club is rehearsing an outdoor play about Academy history. Students playing historical figures must wear period-appropriate diapers and demonstrate authentic changing techniques as part of their character research." },
+                { "title": "Weather Magic Practice", "description": "Students learning weather control spells are practicing on the lawn, but their inexperience is creating sudden temperature changes and rain bursts that are catching everyone off-guard and causing stress-induced accidents." },
+                { "title": "Sports Day Preparation", "description": "Annual sports day is approaching, and students are being fitted with athletic diapers designed for high-impact activities. Coaches are evaluating each student's needs and conducting test runs to ensure proper fit and function." },
+                { "title": "Photography Session", "description": "The school is updating promotional materials and needs photos of students in natural outdoor settings. Models are being checked and changed into the school's best diapers to ensure they photograph well and represent the Academy positively." },
+                { "title": "Graduation Practice", "description": "Senior students are practicing their graduation ceremony on the lawn. The formal requirements include demonstrating four years of proper Academy training, including public diaper maintenance as evidence of their institutional learning." },
+                { "title": "Science Fair Setup", "description": "Students are setting up outdoor exhibits for the science fair. Several projects focus on diaper technology improvements, requiring volunteers to test prototypes and provide feedback on their performance in real-world conditions." },
+                { "title": "Alumni Fundraiser", "description": "Wealthy alumni are visiting for a fundraising event. Students are demonstrating how their donations have improved Academy life, including showing off the latest in diaper technology and care facilities that donor money has provided." },
+                { "title": "Stress Relief Session", "description": "The counseling department is hosting an outdoor stress relief session with breathing exercises and meditation. The relaxation techniques are working too well, causing several students to lose bladder control and require immediate attention." },
+                { "title": "Garden Party", "description": "The Academy is hosting an elegant garden party for visiting dignitaries. Students serving as hosts must be in pristine condition, leading to frequent diaper checks and changes to maintain the school's sophisticated image." },
+                { "title": "Kite Flying Contest", "description": "A traditional kite flying contest has students running around the yard trying to launch their creations. The vigorous activity and excitement are causing multiple accidents, with staff positioned strategically around the field to assist." },
+                { "title": "Nature Study Expedition", "description": "Biology students are conducting field research in the Academy's gardens. The professor insists on proper 'field preparation,' including ensuring all students have appropriate outdoor diapers for the extended observation period." },
+                { "title": "Moonlight Ceremony", "description": "A special evening ceremony honoring the Academy's traditions is taking place on the lawn. The formal atmosphere and long duration require students to wear ceremonial diapers and submit to checks by appointed monitors throughout the event." },
+                { "title": "Orientation Games", "description": "New students are participating in orientation activities designed to help them bond with classmates. Icebreaker games include sharing personal care routines and demonstrating trust through partner diaper checks." },
+                { "title": "Cultural Exchange", "description": "Students from sister academies in other countries are visiting. Cultural exchange activities include comparing different national approaches to student care, with demonstrations of various international diaper traditions and techniques." },
+                { "title": "Memorial Service", "description": "The Academy is holding a solemn memorial service for alumni lost in the Old War. The emotional ceremony is affecting many students deeply, requiring counselors and care staff to be on hand for those overcome by grief." },
+                { "title": "Innovation Showcase", "description": "Student inventors are demonstrating their latest creations in comfort and care technology. Volunteers are needed to test new diaper designs, magical enhancements, and automated changing systems." },
+                { "title": "Environmental Study", "description": "Ecology students are studying the environmental impact of Academy operations, including diaper disposal and recycling programs. Their research requires documenting current usage patterns, leading to detailed monitoring of student needs." }
+    ],
+            entrance: [
+        { "title": "Welcome Committee", "description": "New students are arriving, and you've been selected for the welcome committee. Your job is to demonstrate proper diaper protocol for newcomers, including submitting to a diaper check and change to show them what to expect." },
+        { "title": "Security Check", "description": "Enhanced security measures are in place today. Along with bag checks, all students entering must undergo a thorough diaper inspection. Those with diapers that don't meet institutional standards are changed on the spot." },
+        { "title": "Delivery Mix-up", "description": "A truck has delivered the wrong type of diapers to the school. As students enter, they're being asked to try on the new brand for feedback. A changing station is set up right in the entryway for this impromptu product testing." },
+        { "title": "Parent Visitation", "description": "It's parent visitation day, and the entrance is crowded with families. Staff are performing exemplary diaper checks and changes to demonstrate the school's attention to proper care, selecting students at random as they enter or exit." },
+        { "title": "Uniform Inspection", "description": "A surprise uniform inspection is taking place at the entrance. Students must prove their diapers are regulation thickness and absorbency. Those failing inspection are given proper diapers and changed immediately before being allowed to proceed." },
+        { "title": "Late Arrival Protocol", "description": "You've arrived late to campus. The late arrival protocol requires a documented diaper change before you're given a pass to class, with the time of your change and the condition of your previous diaper noted in your student record." },
+        { "title": "Wild Magic Surge", "description": "A student's spell has backfired near the gate, creating a wild magic zone. The unpredictable energy is known to cause magical incontinence, so all students passing through are required to undergo a diaper check and are issued a temporary 'Magi-Booster' for protection." },
+        { "title": "Auditor Bot Demonstration", "description": "A new model of the 'Deranged Diaper-Check Bot' is being tested at the entrance. This one is hyper-sensitive, flagging students for a mandatory change for the slightest hint of use to calibrate its sensors. Your entry depends on its assessment." },
+        { "title": "The Weavers' Inspection", "description": "The ancient Diaparachnids, the original weavers of the Academy's diapers, have emerged for a rare quality control inspection. They are personally checking the fit and craftsmanship on students as they pass, their many skilled hands ensuring no detail is overlooked." },
+        { "title": "Health & Wellness Fair", "description": "It's Health & Wellness week, and the main booth at the entrance is focused on preventing diaper rash. All students must stop for a mandatory check and an application of school-issued barrier cream before being allowed to proceed to class." },
+        { "title": "Psychic Cold Spot", "description": "You're passing through the 'cold spot' where the South Dormitory Tower once stood. Latent fear-magic in the area, an echo from the Old War, is causing anxieties to manifest as a sudden loss of control. Hall monitors are on hand to manage the inevitable accidents." },
+        { "title": "Emergency Drill", "description": "An unscheduled 'Darkling Invasion' drill is in effect. Protocol requires all students to be in high-capacity 'Salvation' or 'ForeverDry' diapers for a potential lockdown. Changing stations are active at all muster points, including the main gate, to ensure compliance." },
+        { "title": "Alumni Homecoming", "description": "It's Alumni Homecoming. To prove to the old guard that standards haven't slipped, senior faculty are pulling current students aside for 'nostalgic' and very public diaper checks, comparing today's padding to what the alumni wore in 'the good old days'." },
+        { "title": "Press Visit", "description": "Educational journalists are visiting to write about the Academy's innovative approach to student care. Current students are being interviewed about their experiences and asked to demonstrate daily routines for the cameras." },
+        { "title": "Quarantine Protocols", "description": "A magical illness is spreading through nearby schools, and the Academy has implemented entry quarantine procedures. All incoming students must be checked and changed into specially treated diapers that can detect and neutralize magical pathogens." },
+        { "title": "Scholarship Interview", "description": "Prospective scholarship students are arriving for interviews. Current students are required to serve as ambassadors, showing candidates what Academy life is really like, including the comprehensive personal care standards they'll be expected to maintain." },
+        { "title": "Delivery Day Chaos", "description": "Multiple supply trucks have arrived simultaneously, creating confusion at the entrance. Students are being drafted to help sort deliveries, including testing and cataloging different diaper shipments to ensure they're distributed to the right locations." },
+        { "title": "Magical Weather Warning", "description": "Severe magical weather is approaching, and all students entering must be prepared for potential long-term indoor sheltering. This includes mandatory changes into extended-wear diapers and supplies checks to ensure everyone can weather the storm safely." },
+        { "title": "Tradition Renewal", "description": "The Academy is renewing an old tradition where seniors personally mentor new students. Part of this includes seniors demonstrating proper care techniques and ensuring their assigned mentees understand and can perform all required daily routines." },
+        { "title": "Research Participation", "description": "Students entering are being recruited for a longitudinal study on comfort and academic performance. Participation requires regular monitoring and documentation of diaper usage patterns, starting with an initial assessment at the entrance." },
+        { "title": "Celebrity Visit", "description": "A famous Academy alumnus is visiting and wants to see how much the school has evolved. Students are being selected to demonstrate current practices and technologies, showing how modern Academy life compares to their distinguished visitor's experience." },
+        { "title": "Safety Audit", "description": "Government safety inspectors are conducting a surprise audit of Academy facilities and procedures. Students are being asked to participate in demonstrations of emergency protocols, including rapid diaper changes during crisis scenarios." },
+        { "title": "Cultural Celebration", "description": "The Academy is celebrating its multicultural heritage with representatives from different magical communities. Students are demonstrating various cultural approaches to personal care, showing how different traditions have been integrated into Academy life." },
+        { "title": "Technology Beta Test", "description": "A magical technology company is beta testing new automated care systems at the Academy. Students entering are being recruited as test subjects for prototype diaper-checking and changing devices." },
+        { "title": "Historical Reenactment", "description": "History students are conducting a living history demonstration at the entrance, showing how Academy life has changed over the decades. Visitors can experience different eras of student care, including trying on historical diaper styles and experiencing period-appropriate changing procedures." }
+    ],
+    classroom: [
+        { "title": "Pop Quiz Pressure", "description": "A surprise quiz has several students so nervous they've had accidents. The professor pauses class to arrange changes for affected students, turning it into an impromptu lesson on stress management and the importance of proper preparation." },
+        { "title": "Presentation Anxiety", "description": "A student giving a presentation becomes so nervous they visibly wet themselves in front of the class. The professor handles it matter-of-factly, using it as a teaching moment about public speaking anxiety while arranging for a discrete change." },
+        { "title": "Long Lecture Consequences", "description": "A particularly long and engaging lecture has left several students in need of changes. The professor notices the fidgeting and calls for a 'comfort break,' with teaching assistants conducting checks and changes for those who need them." },
+        { "title": "Practical Demonstration", "description": "Today's health class includes a practical component on personal care. Students must demonstrate proper diaper checking techniques on themselves and volunteer partners, with the instructor providing feedback and corrections." },
+        { "title": "Study Group Accident", "description": "During an intense study session, one group member has an obvious accident that's disrupting everyone's concentration. The group must work together to handle the situation while maintaining their study momentum." },
+        { "title": "Exam Preparation", "description": "Before a major exam, the professor requires all students to undergo diaper checks to ensure comfort during the long test period. Students with insufficient protection are changed into exam-grade diapers on the spot." },
+        { "title": "Guest Lecturer", "description": "A visiting expert is teaching today's class, but they're unfamiliar with Academy protocols. When students start showing signs of needing changes, current students must explain and demonstrate proper classroom procedures." },
+        { "title": "Laboratory Safety", "description": "Today's chemistry lab requires special safety protocols, including wearing protective diapers that can neutralize magical spills. Students must be checked and changed into laboratory-approved protection before handling any materials." },
+        { "title": "Group Project Stress", "description": "A challenging group project has team members working intensely together for hours. The stress and long duration result in multiple students needing attention, requiring the team to integrate care breaks into their workflow." },        
+        { "title": "Video Call With Sister School", "description": "The class is participating in a video conference with students from a sister academy in another plane. Cultural differences in care standards become apparent, leading to discussions and demonstrations of various international practices." },
+        { "title": "Magic Theory Mishap", "description": "A student's concentration breaks during a complex spell demonstration, causing them to lose control and have an accident. The professor uses this as a teaching moment about the importance of proper preparation and focus in magical studies." },
+        { "title": "Detention Assignment", "description": "Students serving detention must demonstrate they can maintain focus during extended periods. The supervising teacher conducts regular diaper checks to ensure discomfort isn't affecting their ability to complete assigned work." },
+        { "title": "Student Teacher Practice", "description": "Education students are practicing their teaching skills, but they must also learn classroom management including recognizing when students need care. Current students help them practice by demonstrating various scenarios." },
+        { "title": "Final Exam Stress", "description": "The pressure of final exams is getting to everyone. The professor notices multiple students fidgeting and calls for a mandatory comfort break, with teaching assistants available to help anyone who needs a change before continuing." },
+        { "title": "Substitute Teacher Confusion", "description": "A substitute teacher unfamiliar with Academy policies doesn't understand why students are raising their hands for 'non-academic reasons.' Current students must educate them about proper classroom care protocols." },
+        { "title": "Interactive Demonstration", "description": "Today's lesson requires hands-on participation from every student. Before beginning, the professor ensures everyone is comfortable and properly protected, conducting a class-wide check to prevent any disruptions." },
+        { "title": "Peer Tutoring Session", "description": "Advanced students are helping struggling classmates with difficult concepts. Part of being a good tutor includes recognizing when your tutee might need a break or assistance, requiring sensitivity and awareness." },
+        { "title": "Class Competition", "description": "The professor has divided the class into teams for an academic competition. The excitement and pressure are causing some students to have accidents, but teammates are supporting each other and working together to handle the situation." },
+        { "title": "Research Presentation Day", "description": "Students are presenting their independent research projects. The professor emphasizes that everyone should be comfortable and focused, offering pre-presentation checks to ensure students can concentrate on their academic work." },
+        { "title": "Practical Spell Workshop", "description": "A hands-on spellcasting workshop requires sustained concentration and precise movements. Students must be in optimal comfort to avoid dangerous magical accidents, leading to thorough preparation and monitoring." },
+        { "title": "Visiting Scholar Lecture", "description": "A renowned expert is giving a special lecture, but they're surprised by Academy protocols when students start requesting care. The professor and students must diplomatically explain while maintaining the prestigious academic atmosphere." },
+        { "title": "Group Study Formation", "description": "The professor is organizing study groups for the upcoming midterms. Part of group compatibility involves ensuring all members are comfortable with each other's needs and can provide mutual support during long study sessions." },
+        { "title": "Technology Integration Day", "description": "The class is learning to use new magical technology for research and spellcasting. The complex equipment requires careful handling, so students must be checked and changed into anti-static diapers before touching any devices." },
+        { "title": "Parent-Teacher Conference", "description": "Parents are visiting to discuss their children's academic progress. Students must demonstrate their daily routines and care standards to show parents how well they're adjusting to Academy life and maintaining their studies." },
+        { "title": "Standardized Testing", "description": "Important standardized tests are being administered with strict timing. All students must undergo pre-test checks and be changed into extended-wear diapers to ensure no interruptions during the lengthy examination period." },
+        { "title": "Field Trip Preparation", "description": "The class is preparing for an educational field trip to ancient magical ruins. Safety protocols require all students to wear exploration-grade protective diapers and demonstrate they can handle extended periods away from facilities." },
+        { "title": "Academic Honesty Seminar", "description": "A mandatory workshop on academic integrity includes discussions about vulnerability and trust. Students share personal experiences and challenges, including how Academy life has taught them about honesty and mutual support." },
+        { "title": "Professor Evaluation Day", "description": "Students are evaluating their professor's teaching effectiveness, but the professor is also assessing how well they've learned to care for themselves and each other. Mutual evaluation includes discussions about classroom comfort and support." },
+        { "title": "Emergency Lockdown Drill", "description": "A surprise lockdown drill tests the class's ability to remain calm and quiet for extended periods. Students must be properly prepared for potential long waits, with emergency supplies and care protocols ready if needed." }
+    ],
+    cafeteria: [
+        { "title": "Lunch Line Accident", "description": "The excitement of seeing a favorite meal has caused a student to have an accident while waiting in line. Cafeteria staff quickly set up a changing station near the entrance to handle the situation without disrupting lunch service." },
+        { "title": "Spicy Food Consequences", "description": "Today's special featured extra-spicy magical peppers, and several students are experiencing the digestive consequences. The cafeteria has set up additional changing stations and is offering bland alternatives to help settle stomachs." },
+        { "title": "Milk Mishap", "description": "A student tripped and spilled an entire pitcher of milk, but everyone's first concern is whether they hurt themselves falling. The school nurse conducts diaper checks on nearby students to ensure the fall didn't cause any injuries or accidents." },
+        { "title": "Eating Contest", "description": "An informal eating contest has broken out among friends, but the large quantities of food and drink are having predictable consequences. Staff are monitoring the situation and ready to provide assistance as needed." },
+        { "title": "New Menu Testing", "description": "The cafeteria is testing new magical cuisine from different cultures. Some dishes have unexpected effects on digestion, requiring staff to be extra vigilant about students' needs and ready to provide immediate assistance." },
+        { "title": "Birthday Celebration", "description": "A student's birthday party in the cafeteria has everyone excited and drinking lots of juice and soda. The birthday student and their friends are being checked regularly to ensure the party doesn't lead to any uncomfortable situations." },
+        { "title": "Cooking Class Practical", "description": "Students are learning to prepare their own meals under supervision. Part of food safety training includes proper hygiene, with instructors checking that all students are in clean, fresh diapers before handling food." },
+        { "title": "Harvest Festival", "description": "The cafeteria is celebrating the autumn harvest with special dishes made from campus-grown ingredients. The abundance of fresh fruits and vegetables is having natural digestive effects that require additional staff attention." },
+        { "title": "Cultural Exchange Meal", "description": "Students from visiting schools are sharing traditional foods from their home academies. Different dietary habits and unfamiliar ingredients are causing various reactions that need to be managed sensitively." },        { "title": "Emergency Food Service", "description": "A magical storm has knocked out normal food delivery, and the cafeteria is serving emergency rations with high fiber content. The change in diet is affecting many students, requiring increased monitoring and care." },
+        { "title": "Gluttonberry Dessert Warning", "description": "Today's dessert features gluttonberries baked into a delicious tart. A small warning sign reads 'Please limit to one slice - gluttonberries may cause digestive urgency,' but many students are ignoring the advice and going back for seconds." },
+        { "title": "Fairy Dust Contamination", "description": "A fairy student-baker has been accidentally contaminating the morning muffins with her fairy dust. There's a 1d20 chance of being affected with 'Fae Diaper Euphoria' for 1d4 hours, causing uncontrollable giggling and a dreamy, carefree attitude toward accidents." },
+        { "title": "High-Fiber Menu Day", "description": "The cafeteria is serving an incredibly fiber-rich menu today featuring whole grains, beans, and magical roughage. The nutritional benefits are obvious, but students are left to discover the digestive consequences on their own." },
+        { "title": "Mystery Meat Monday", "description": "The cafeteria's 'mystery meat' special is causing unusual digestive reactions. Some students are experiencing accelerated digestion, while others report strange cravings. Staff are monitoring the situation and ready to assist with any unexpected needs." },
+        { "title": "Experimental Probiotic Yogurt", "description": "The nutrition department is testing a new probiotic yogurt that promises to 'optimize digestive health.' The cultures are working perhaps too well, causing rapid and frequent bowel movements that require immediate attention." },
+        { "title": "Enchanted Energy Drinks", "description": "Someone spiked the fruit punch with magical energy enhancers. Students are experiencing bursts of hyperactivity followed by crashes that affect their bladder control. The nurse is setting up a monitoring station in the cafeteria." },
+        { "title": "Cultural Food Festival", "description": "The annual cultural food festival features authentic dishes from various magical realms. Some dimensional cuisines have unexpected effects on human digestion, requiring careful monitoring and frequent diaper checks." },
+        { "title": "Stress-Eating Support Group", "description": "Finals week has triggered a wave of stress-eating, and the counseling department has set up a support station in the cafeteria. Comfort foods are being provided alongside emotional support and practical care assistance." },
+        { "title": "Magical Mushroom Mishap", "description": "The kitchen accidentally used 'Giggle Mushrooms' instead of regular mushrooms in today's risotto. Students are experiencing uncontrollable laughter that's making it impossible to maintain normal muscle control, including continence." },
+        { "title": "Hydration Challenge", "description": "The athletics department is running a hydration challenge encouraging students to drink more water. While healthy, the increased fluid intake is having predictable consequences, with changing stations set up around the cafeteria." },
+        { "title": "Allergy Accommodation Day", "description": "The cafeteria is featuring special allergy-friendly foods, but some of the substitute ingredients are having unexpected digestive effects. Students with sensitive systems are being monitored more closely than usual." },
+        { "title": "Baking Class Disaster", "description": "The student baking class accidentally used 'Loosening Flour' instead of regular flour in today's bread. The magical flour is designed to relax all muscles, including those responsible for continence, affecting anyone who ate the bread." },
+        { "title": "Breakfast Burrito Overload", "description": "The popular breakfast burritos are loaded with beans, cheese, and magical hot sauce. The combination is proving too much for many digestive systems, creating a busy morning for the cafeteria's care staff." },
+        { "title": "Smoothie Bar Special", "description": "The new smoothie bar is featuring 'cleansing' smoothies with magical detox ingredients. While great for health, the cleansing effects are more immediate and thorough than most students expected." },
+        { "title": "International Spice Exchange", "description": "Visiting students have brought spices from their home academies to share. Some magical spices have potent digestive effects that aren't obvious until after consumption, catching many students off-guard." },
+        { "title": "Comfort Food Therapy", "description": "The counseling department is providing comfort food therapy for homesick students. The emotional eating combined with rich, heavy foods is having both psychological and physical effects that require gentle management." },
+        { "title": "Farm-to-Table Fresh Vegetables", "description": "Today's vegetables are extremely fresh from the campus garden and still contain active magical properties. The 'living' vegetables are continuing their growth processes inside students' digestive systems, causing unusual sensations and urgent needs." },
+        { "title": "Midnight Snack Raid", "description": "Students have discovered an unlocked storage room full of magical preserved foods. The preservation spells are still active and accelerating all biological processes, including digestion, in anyone who consumed the contraband snacks." },
+        { "title": "Potluck Dinner Chaos", "description": "The dorm potluck dinner features dishes from students' home recipes, but mixing different regional magical cooking traditions is creating unexpected chemical reactions in students' stomachs, requiring immediate intervention." },
+        { "title": "Liquid Diet Day", "description": "The health services department is promoting a 'liquid nutrition' day with soups, smoothies, and juices. The high liquid volume is overwhelming many students' capacity, creating a busy day for care staff." },
+        { "title": "Magical Metabolism Boost", "description": "Someone added 'Quicken Digestion' potion to the salad dressing, thinking it would help with post-meal sluggishness. Instead, it's accelerating everyone's digestive processes to an uncomfortable degree." },
+        { "title": "Heritage Recipe Day", "description": "Students are sharing family recipes from their ancestral homelands. Some traditional ingredients have magical properties that modern students aren't accustomed to, leading to surprising digestive adventures." },
+        { "title": "Study Fuel Special", "description": "The cafeteria is offering special 'brain food' designed to enhance mental performance during finals. The cognitive enhancers are working, but they're also affecting other neural functions, including bladder control." },
+        { "title": "Cleansing Tea Ceremony", "description": "The meditation club is hosting a tea ceremony featuring traditional cleansing teas. The spiritual purification is accompanied by very physical purification that's more intense than participants expected." }
+    ],
+    dormhall: [
+        { "title": "Floor Meeting", "description": "The monthly floor meeting includes a discussion of communal living standards. Part of the agenda involves demonstrating proper hallway etiquette, including how to discretely request help and respond when others need assistance." },
+        { "title": "Noise Complaint", "description": "Residents are complaining about 'suspicious sounds' coming from various rooms. Investigation reveals it's just the normal sounds of diaper changes and care, leading to a floor-wide discussion about privacy and acceptance." },
+        { "title": "Shared Bathroom Schedule", "description": "The floor is implementing a new bathroom sharing schedule for those with potty privileges. Part of the planning involves ensuring students in diapers feel included and have equal access to shared spaces." },
+        { "title": "Study Space Competition", "description": "Students are competing for access to the best study spaces on the floor. Factors being considered include comfort needs, including proximity to changing facilities and quiet areas for those with crinkly protection." },
+        { "title": "Floor Bonding Activity", "description": "The Resident Assistant has organized a floor bonding activity that involves sharing personal challenges and supporting each other. Many students open up about their experiences with Academy life and personal care needs." },
+        { "title": "Emergency Evacuation Drill", "description": "A surprise evacuation drill tests how quickly students can exit the building. Part of the evaluation includes ensuring everyone has appropriate protection for potentially long waits outside before being allowed back in." },
+        { "title": "Visiting Hours Policy", "description": "New visiting hours policies are being implemented, including guidelines for visitors who might not be familiar with Academy norms. Current residents must help educate guests about respectful behavior and appropriate responses." },
+        { "title": "Floor Decoration Contest", "description": "Students are decorating their floor for a campus-wide competition. The theme is 'comfort and care,' leading to creative displays that celebrate the Academy's approach to student wellness and support." },
+        { "title": "Mediator Visit", "description": "A conflict mediator is helping resolve disputes between roommates and floor-mates. Many issues relate to personal space and care routines, requiring open discussion and compromise from all parties involved." },
+        { "title": "Floor Fundraiser", "description": "The floor is raising money for upgraded common area furniture. Students are demonstrating the need for comfortable, durable seating that can accommodate all students regardless of their protection needs." }
+    ]
+        };
+
+        // State variable to track the selected location
+        let selectedLocation = null;
+
+        // Function to handle location selection
+        function selectLocation(locationKey, locationName) {
+            selectedLocation = locationKey;
+
+            // Update button styles to indicate selection
+            locationButtons.forEach(btn => {
+                btn.classList.toggle('selected', btn.dataset.location === locationKey);
+            });
+
+            // Update the title and show the event generator section
+            selectedLocationTitleEl.textContent = `Location: ${locationName}`;
+            eventGeneratorEl.style.display = 'block';
+
+            // Hide any previous event result
+            eventResultEl.style.display = 'none';
+        }
+
+        // Function to generate a random event
+        function generateEvent() {
+            if (!selectedLocation) {
+                // Using a custom modal or inline message would be better in a full app,
+                // but alert is used here for simplicity as it was in the original request.
+                // A non-blocking notification would be ideal.
+                console.error("Please select a location first!");
+                return;
+            }
+
+            const events = eventDatabase[selectedLocation];
+            const randomIndex = Math.floor(Math.random() * events.length);
+            const randomEvent = events[randomIndex];
+
+            // Display the new event
+            eventTitleEl.textContent = randomEvent.title;
+            eventDescriptionEl.textContent = randomEvent.description;
+            eventResultEl.style.display = 'block';
+
+            // Smoothly scroll the event into view
+            eventResultEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // Add click event listeners to all location buttons
+        locationButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const locationKey = this.dataset.location;
+                const locationName = this.textContent;
+                selectLocation(locationKey, locationName);
+            });
+        });        // Add click event listener to the generate button
+        generateBtn.addEventListener('click', generateEvent);
+
+        // Function to directly show the board game rules (secret button feature)
+        function showBoardGameRules() {
+            // Create the board game event display
+            eventTitleEl.textContent = "Cursed Board Game";
+            eventDescriptionEl.innerHTML = "Someone brought a cursed board game to the common room. Players who land on certain spaces experience temporary incontinence curses, and the game can't be stopped until someone wins - which could take hours. Game effects include: 'Spontaneous Accident' spell (spaces 1-5), 'Sudden Urgency' (spaces 6-10), temporary curse effects (spaces 11-15), and one space forces the player to don 'Diaper Cover of Irresistible Itchiness' until the game ends.<br><br><details open><summary><strong>📋 The Diaper School Academic Race - Complete Rules & Board</strong></summary><div style='margin: 10px 0; padding: 10px; background: rgba(218, 172, 23, 0.1); border-left: 3px solid var(--gold);'><h4>Game Setup:</h4><ul><li><strong>Board:</strong> 60 spaces in a linear track</li><li><strong>Players:</strong> 2-6 players, each with a unique token</li><li><strong>Movement:</strong> Roll 1d20 to advance</li><li><strong>Objective:</strong> First to reach space 60 wins</li></ul><h4>Special Rules:</h4><ul><li><strong>Fluff Counters:</strong> Landing on odd spaces gives +1 Fluff Counter</li><li><strong>Movement Penalty:</strong> Each Fluff Counter = -1 to movement rolls</li><li><strong>Even Spaces:</strong> No special effect (safe spaces)</li><li><strong>Range Effects:</strong> Every 5-space range has themed events</li></ul><table style='width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 12px;'><tr style='background: var(--gold-dark); color: white;'><th style='border: 1px solid var(--gold); padding: 4px;'>Spaces</th><th style='border: 1px solid var(--gold); padding: 4px;'>Theme</th><th style='border: 1px solid var(--gold); padding: 4px;'>Effect</th><th style='border: 1px solid var(--gold); padding: 4px;'>Spell/Consequence</th></tr><tr><td style='border: 1px solid var(--gold); padding: 4px;'>1-5</td><td style='border: 1px solid var(--gold); padding: 4px;'>Freshman Orientation</td><td style='border: 1px solid var(--gold); padding: 4px;'>Learning the Ropes</td><td style='border: 1px solid var(--gold); padding: 4px;'>'Spontaneous Accident' spell - Make Wisdom save or experience embarrassing effects</td></tr><tr style='background: rgba(218, 172, 23, 0.1);'><td style='border: 1px solid var(--gold); padding: 4px;'>6-10</td><td style='border: 1px solid var(--gold); padding: 4px;'>Study Habits</td><td style='border: 1px solid var(--gold); padding: 4px;'>Academic Excellence</td><td style='border: 1px solid var(--gold); padding: 4px;'>'Sudden Urgency' spell - Constitution save or immediate potty check needed</td></tr><tr><td style='border: 1px solid var(--gold); padding: 4px;'>11-15</td><td style='border: 1px solid var(--gold); padding: 4px;'>First Infraction</td><td style='border: 1px solid var(--gold); padding: 4px;'>Minor Rule Breaking</td><td style='border: 1px solid var(--gold); padding: 4px;'>Temporary curse effects - Various magical mishaps for 1d4 turns</td></tr><tr style='background: rgba(218, 172, 23, 0.1);'><td style='border: 1px solid var(--gold); padding: 4px;'>16-20</td><td style='border: 1px solid var(--gold); padding: 4px;'>Dormitory Life</td><td style='border: 1px solid var(--gold); padding: 4px;'>Social Adjustment</td><td style='border: 1px solid var(--gold); padding: 4px;'>POSITIVE: Advance 1d6 extra spaces - 'Little Miracle' effect grants comfort</td></tr><tr><td style='border: 1px solid var(--gold); padding: 4px;'>21-25</td><td style='border: 1px solid var(--gold); padding: 4px;'>Magical Mishap</td><td style='border: 1px solid var(--gold); padding: 4px;'>Experimental Accident</td><td style='border: 1px solid var(--gold); padding: 4px;'>Don 'Diaper Cover of Irresistible Itchiness' - Disadvantage on concentration until game ends</td></tr><tr style='background: rgba(218, 172, 23, 0.1);'><td style='border: 1px solid var(--gold); padding: 4px;'>26-30</td><td style='border: 1px solid var(--gold); padding: 4px;'>Academic Recognition</td><td style='border: 1px solid var(--gold); padding: 4px;'>Honor Roll Achievement</td><td style='border: 1px solid var(--gold); padding: 4px;'>POSITIVE: Remove 2 Fluff Counters and advance 5 spaces - Teacher's pet status</td></tr><tr><td style='border: 1px solid var(--gold); padding: 4px;'>31-35</td><td style='border: 1px solid var(--gold); padding: 4px;'>Contraband Discovery</td><td style='border: 1px solid var(--gold); padding: 4px;'>Forbidden Items Found</td><td style='border: 1px solid var(--gold); padding: 4px;'>Forced to wear 'The Leaky Sieve' cursed diaper - Constant care needed</td></tr><tr style='background: rgba(218, 172, 23, 0.1);'><td style='border: 1px solid var(--gold); padding: 4px;'>36-40</td><td style='border: 1px solid var(--gold); padding: 4px;'>Extracurricular Excellence</td><td style='border: 1px solid var(--gold); padding: 4px;'>Club Leadership</td><td style='border: 1px solid var(--gold); padding: 4px;'>POSITIVE: Choose another player to gain 1 Fluff Counter while you advance 1d10 spaces</td></tr><tr><td style='border: 1px solid var(--gold); padding: 4px;'>41-45</td><td style='border: 1px solid var(--gold); padding: 4px;'>Public Embarrassment</td><td style='border: 1px solid var(--gold); padding: 4px;'>Demonstration Gone Wrong</td><td style='border: 1px solid var(--gold); padding: 4px;'>All players cast 'Spank!' on you - Move back 1d6 spaces and gain 2 Fluff Counters</td></tr><tr style='background: rgba(218, 172, 23, 0.1);'><td style='border: 1px solid var(--gold); padding: 4px;'>46-50</td><td style='border: 1px solid var(--gold); padding: 4px;'>Mentorship Role</td><td style='border: 1px solid var(--gold); padding: 4px;'>Helping Underclassmen</td><td style='border: 1px solid var(--gold); padding: 4px;'>POSITIVE: All players remove 1 Fluff Counter, you advance 8 spaces - Inspiring leadership</td></tr><tr><td style='border: 1px solid var(--gold); padding: 4px;'>51-55</td><td style='border: 1px solid var(--gold); padding: 4px;'>Final Examination Crisis</td><td style='border: 1px solid var(--gold); padding: 4px;'>Academic Pressure</td><td style='border: 1px solid var(--gold); padding: 4px;'>Stress-induced 'Spontaneous Accident' - All players roll saves or lose turns</td></tr><tr style='background: rgba(218, 172, 23, 0.1);'><td style='border: 1px solid var(--gold); padding: 4px;'>56-60</td><td style='border: 1px solid var(--gold); padding: 4px;'>Graduation Preparation</td><td style='border: 1px solid var(--gold); padding: 4px;'>Academy Completion</td><td style='border: 1px solid var(--gold); padding: 4px;'>POSITIVE: Immune to all negative effects - 'Academy Graduate' status protects you</td></tr></table><h4>Victory Conditions:</h4><p><strong>Winner:</strong> First player to reach exactly space 60<br><strong>Curse Breaking:</strong> Game ends when someone wins, releasing all players from magical effects<br><strong>Overtime Rule:</strong> If you roll past space 60, move backwards by the excess amount</p></div></details>";
+            
+            eventResultEl.style.display = 'block';
+            
+            // Set the location to dormitory since that's where the board game event appears
+            selectedLocation = 'dormitory';
+            selectedLocationTitleEl.textContent = 'Location: Dormitory Common Areas';
+            
+            // Highlight the dormitory button
+            locationButtons.forEach(btn => btn.classList.remove('selected'));
+            const dormButton = document.querySelector('[data-location="dormitory"]');
+            if (dormButton) dormButton.classList.add('selected');
+            
+            // Scroll to the event
+            eventResultEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+    </script>
+</body>
+</html>

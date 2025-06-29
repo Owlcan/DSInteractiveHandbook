@@ -151,6 +151,76 @@
         padding: 10px; /* Reduce padding if iframe is meant to be edge-to-edge */
     }
 
+    /* Board game specific styling for maximum space utilization */
+    #board-game-section.active {
+        display: block;
+        position: fixed; /* Break out of normal flow */
+        top: 0;
+        left: 0;
+        width: 100vw; /* Full viewport width */
+        height: 100vh; /* Full viewport height */
+        z-index: 9999; /* Above everything else */
+        background: #2c2619; /* Match the body background */
+        padding: 0; /* No padding at all */
+        margin: 0; /* No margin */
+        overflow: hidden;
+    }
+
+    #board-game-section .iframe-container {
+        width: 100vw;
+        height: 100vh;
+        padding: 0;
+        margin: 0;
+        border: none;
+        overflow: auto;
+    }
+
+    #board-game-section iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Hide the h2 title when board game is active to save space */
+    #board-game-section.active h2 {
+        display: none;
+    }
+
+    /* Close button for full-screen board game */
+    #board-game-close-btn {
+        display: none;
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        z-index: 10000;
+        background: var(--gold);
+        color: var(--ink2);
+        border: 2px solid var(--gold-dark);
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        transition: all 0.3s ease;
+        font-family: 'MedievalSharp', cursive;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #board-game-section.active #board-game-close-btn {
+        display: flex;
+    }
+
+    #board-game-close-btn:hover {
+        background: var(--gold-light);
+        transform: scale(1.1);
+    }
+
 
     .iframe-loading {
       position: absolute;
@@ -379,7 +449,8 @@
     /* #legacy-Regalia.active, Leting specific rule above handle its height */
     /* #fishing-section.active, Leting specific rule above handle its height */
     #pamperlogue.active,
-    #potty-checker.active {
+    #potty-checker.active,
+    #achievement-tracker.active {
         display: block;
     }
 
@@ -387,7 +458,7 @@
       text-align: center;
     }
     
-    #legacy-Weapons, #legacy-Regalia, #pamperlogue, #potty-checker {
+    #legacy-Weapons, #legacy-Regalia, #pamperlogue, #potty-checker, #achievement-tracker {
       background-color: #2c2619; 
       position: relative; 
       z-index: 10; 
@@ -404,6 +475,7 @@
     #code-of-conduct-section strong { font-size: 1.84rem; color: #e4bd12; font-weight: bold; }
     
     #potty-checker-iframe-container { max-width: 1000px; margin: 0 auto; padding: 0; }
+    #achievement-tracker-iframe-container { max-width: 1800px; margin: 0 auto; padding: 0; }
     
     .float-right-image { float: right; margin: 0 0 15px 15px; max-width: 500px; width: 40%; height: auto; border-radius: 5px; border: 3px solid var(--gold-dark); box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2); }
     .center-image { display: block; margin: 15px auto; max-height: 500px; max-width: 100%; height: auto; width: auto; border-radius: 5px; border: 3px solid var(--gold-dark); box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2); }
@@ -452,12 +524,14 @@
       <button id="btn-lore">School Lore</button>
       <button id="btn-spellbook">Spellbook</button>
       <button id="btn-fishing" class="nav-button">Fishing</button>
-      <button id="btn-pamperlogue" class="nav-button">Pamperlogue</button>      
+      <button id="btn-pamperlogue" class="nav-button">Pamperlogue</button>
       <button id="btn-potty-checker" class="nav-button">Potty Checker</button>
-      <button id="btn-book-reader" class="nav-button">Book Reader</button>
+      <button id="btn-achievement-tracker" class="nav-button">Achievement Tracker</button>
       <button id="btn-races" class="nav-button">Races</button>
       <button id="btn-backgrounds" class="nav-button">Backgrounds</button>
       <button id="btn-origin-feats" class="nav-button">Origin Feats</button>
+      <button id="btn-school-events" class="nav-button">School Events</button>
+      <button id="btn-board-game" class="nav-button">Board Game</button>
     </nav>
     
     <div id="welcome-section" class="content-section active">
@@ -1334,6 +1408,12 @@
         </div>
     </div>
 
+    <div id="achievement-tracker" class="content-section">
+      <h2>Achievement Tracker</h2>
+      <div id="achievement-tracker-iframe-container" class="iframe-container">
+        </div>
+    </div>
+
     <div id="lore-section" class="content-section">
       <h2>Academy History & Lore</h2>
       <p>Over the last 900 years, the academy has been a bulkwark of education against the misuse of power and an institution of consistent renown in the business of training up generations upon generations of heroes and champions of just causes.</p>
@@ -1444,19 +1524,28 @@
       <h2>Origin Feats</h2>
       <div id="origin-feats-iframe-container" class="iframe-container">
         </div>
-    </div>    <div id="spellbook-section" class="content-section">
+    </div>
+
+    <div id="school-events-section" class="content-section">
+      <h2>School Events Generator</h2>
+      <div id="school-events-iframe-container" class="iframe-container">
+        </div>
+    </div>
+
+    <div id="board-game-section" class="content-section">
+      <button id="board-game-close-btn" title="Close Board Game">×</button>
+      <h2>Road to Graduation Board Game</h2>
+      <div id="board-game-iframe-container" class="iframe-container">
+        </div>
+    </div>
+
+    <div id="spellbook-section" class="content-section">
       <h2>Spellbook</h2>
       <div id="spellbook-iframe-container" class="iframe-container">
         </div>
     </div>
 
-    <div id="book-reader-section" class="content-section">
-      <h2>Book Reader</h2>
-      <div id="book-reader-iframe-container" class="iframe-container">
-        </div>
-    </div>
-
-  </div><script>
+  </div> <script>
     // DOM elements (sections - no need to declare all if accessed directly via ID by functions)
     const welcomeSection = document.getElementById('welcome-section');
     const codeOfConductSection = document.getElementById('code-of-conduct-section');
@@ -1470,13 +1559,15 @@
     function hideAllSections() {
       const sections = document.querySelectorAll('.content-section');
       sections.forEach(section => section.classList.remove('active'));
-        const iframeConfigs = [
+      
+      const iframeConfigs = [
         // Dynamically created iframes (container will be cleared)
         { containerId: 'bestiary-iframe-container', iframeId: 'bestiary-iframe', type: 'dynamic' },
         { containerId: 'items-iframe-container', iframeId: 'items-iframe', type: 'dynamic' },
         { containerId: 'spellbook-iframe-container', iframeId: 'spellbook-iframe', type: 'dynamic' },
-        { containerId: 'book-reader-iframe-container', iframeId: 'book-reader-iframe', type: 'dynamic' },
-        { containerId: 'potty-checker-iframe-container', iframeId: 'potty-checker-iframe', type: 'dynamic' },        { containerId: 'races-iframe-container', iframeId: 'races-iframe', type: 'dynamic' },
+        { containerId: 'potty-checker-iframe-container', iframeId: 'potty-checker-iframe', type: 'dynamic' },
+        { containerId: 'achievement-tracker-iframe-container', iframeId: 'achievement-tracker-iframe', type: 'dynamic' },
+        { containerId: 'races-iframe-container', iframeId: 'races-iframe', type: 'dynamic' },
         { containerId: 'backgrounds-iframe-container', iframeId: 'backgrounds-iframe', type: 'dynamic' },
         { containerId: 'origin-feats-iframe-container', iframeId: 'origin-feats-iframe', type: 'dynamic' },
         // Statically placed iframes (src will be blanked, loading div handled by its own onload or reset)
@@ -1592,13 +1683,14 @@
             // Pamperlogue specific: rely on its internal onload and hideAllSections reset for loader.
             // The hideAllSections already makes its loader visible. Refresh just sets src.
             refreshStaticIframe('pamperlogue-iframe', '../pamperlogue.html', true); // Pass true for isPamperlogue
-        },        'btn-potty-checker': () => {
+        },
+        'btn-potty-checker': () => {
             document.getElementById('potty-checker').classList.add('active');
             createOrRefreshIframe('potty-checker-iframe-container', 'potty-checker-iframe', '../pottychecker.html', 'Potty Checker');
         },
-        'btn-book-reader': () => {
-            document.getElementById('book-reader-section').classList.add('active');
-            createOrRefreshIframe('book-reader-iframe-container', 'book-reader-iframe', 'BookReader.html', 'Book Reader');
+        'btn-achievement-tracker': () => {
+            document.getElementById('achievement-tracker').classList.add('active');
+            createOrRefreshIframe('achievement-tracker-iframe-container', 'achievement-tracker-iframe', '../Academy Excellence Tracker.html', 'Achievement Tracker');
         },
         'btn-races': () => { 
             document.getElementById('races-section').classList.add('active');
@@ -1610,6 +1702,14 @@
         'btn-origin-feats': () => { 
             document.getElementById('origin-feats-section').classList.add('active');
             createOrRefreshIframe('origin-feats-iframe-container', 'origin-feats-iframe', '../originfeats.html', 'Origin Feats');
+        },
+        'btn-school-events': () => { 
+            document.getElementById('school-events-section').classList.add('active');
+            createOrRefreshIframe('school-events-iframe-container', 'school-events-iframe', '../School Events Generator.html', 'School Events Generator');
+        },
+        'btn-board-game': () => { 
+            document.getElementById('board-game-section').classList.add('active');
+            createOrRefreshIframe('board-game-iframe-container', 'board-game-iframe', '../Road to Graduation Boardgame.html', 'Road to Graduation Board Game');
         },
       };
 
@@ -1625,6 +1725,15 @@
         } else {
             console.warn(`Button with ID ${btnId} not found.`);
         }
+      }
+      
+      // Add event listener for board game close button
+      const boardGameCloseBtn = document.getElementById('board-game-close-btn');
+      if (boardGameCloseBtn) {
+        boardGameCloseBtn.addEventListener('click', () => {
+          hideAllSections();
+          document.getElementById('welcome-section').classList.add('active');
+        });
       }
       
       initializeAccordions(document); 

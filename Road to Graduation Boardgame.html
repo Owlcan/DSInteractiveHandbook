@@ -1,0 +1,1418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diaper School: The Academic Race</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&family=MedievalSharp&display=swap" rel="stylesheet">
+    <style>
+        /* CSS variables from your provided style */
+        :root {
+            --gold: #daac17;
+            --gold-light: #fae791;
+            --gold-dark: #97740a;
+            --parchment: #8E8159;
+            --parchment-dark: #2C2614;
+            --ink: #3a321d;
+            --ink2: #8f770d;
+            --accent: #D0811B;
+            --shadow: rgba(0, 0, 0, 0.5);
+            --zone1-color: rgba(173, 216, 230, 0.6); /* Light Blue */
+            --zone2-color: rgba(144, 238, 144, 0.6); /* Light Green */
+            --zone3-color: rgba(255, 182, 193, 0.6); /* Light Pink */
+            --zone4-color: rgba(255, 255, 224, 0.6); /* Light Yellow */
+            --zone5-color: rgba(221, 160, 221, 0.6); /* Plum */
+            --zone6-color: rgba(240, 230, 140, 0.6); /* Khaki */
+        }
+
+        /* Base styles for the body */
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #2c2619;
+            background-image: url('https://www.transparenttextures.com/patterns/dark-wood.png');
+            color: var(--ink);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* Main title styling */
+        h1 {
+            text-align: center;
+            color: var(--gold-light);
+            font-family: 'MedievalSharp', cursive;
+            font-size: 3rem;
+            margin: 0;
+            text-shadow: 2px 2px 4px var(--parchment-dark);
+        }        .game-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+                        align-items: center;
+        }
+          /* Game Board Styling */
+        .board-container {
+            width: 100%;
+            background-color: var(--parchment);
+            background-image: url('https://www.transparenttextures.com/patterns/parchment.png');
+            border-radius: 8px;
+            box-shadow: 0 4px 20px var(--shadow);
+            padding: 30px;
+            border: 12px solid var(--gold-dark);
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .board {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            grid-template-rows: repeat(6, 1fr);
+            gap: 50px;
+            width: 100%;
+            padding: 40px;
+            max-width: 2400px;
+            box-sizing: border-box;
+            background: linear-gradient(135deg, #2F261A, #503F2C);
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+            min-height: 1200px;
+            justify-items: center;
+            align-items: center;
+            place-items: center;
+        }
+
+        .space {
+            aspect-ratio: 1 / 1;
+            border: 4px solid var(--gold-dark);
+            border-radius: 12px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'MedievalSharp', cursive;
+            font-size: 1.6rem;
+            color: var(--ink);
+            box-shadow: 
+                inset 0 0 12px rgba(0,0,0,0.3),
+                0 4px 8px rgba(0,0,0,0.2),
+                0 0 0 2px rgba(255,215,0,0.3);
+            background-size: auto 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+            width: 160px;
+            height: 160px;
+            box-sizing: border-box;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            flex-shrink: 0;
+            flex-grow: 0;
+        }
+
+        .space:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                inset 0 0 12px rgba(0,0,0,0.3),
+                0 6px 12px rgba(0,0,0,0.3),
+                0 0 0 2px rgba(255,215,0,0.5);
+        }
+
+        .space::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(255,255,255,0.1) 100%);
+            border-radius: inherit;
+            pointer-events: none;
+        }        .space .space-number {
+            position: absolute;
+            top: 2px;
+            left: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            opacity: 0.9;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 2px 4px;
+            border-radius: 3px;
+            text-shadow: none;
+            color: #333;
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+            z-index: 5;
+        }
+        
+        /* Enhanced text visibility with background overlay */
+        .space {
+            position: relative;
+        }
+        
+        .space::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                135deg, 
+                rgba(255, 255, 255, 0.15) 0%, 
+                rgba(255, 255, 255, 0.05) 25%, 
+                rgba(0, 0, 0, 0.05) 50%, 
+                rgba(255, 255, 255, 0.05) 75%, 
+                rgba(255, 255, 255, 0.15) 100%
+            );
+            border-radius: inherit;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        /* Ensure space numbers and tokens appear above overlay */
+        .space > * {
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* Victory space gets special text treatment */
+        .victory-space .space-number {
+            background-color: rgba(255, 215, 0, 0.9);
+            color: #8B4513;
+            border: 2px solid #B8860B;
+            font-size: 1rem;
+            padding: 4px 8px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            font-weight: bold;
+        }
+          /* Enhanced contrast for different zone types */
+        .zone-1 .space-number,
+        .zone-3 .space-number,
+        .zone-5 .space-number {
+            background-color: rgba(255, 255, 255, 0.95);
+            color: #222;
+            border: 1px solid rgba(0, 0, 0, 0.3);
+        }
+        
+        .zone-2 .space-number,
+        .zone-4 .space-number,
+        .zone-6 .space-number {
+            background-color: rgba(0, 0, 0, 0.85);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        
+        .player-token-area {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 8px;
+            width: 100%;
+            height: 120%;
+            z-index: 10;
+            pointer-events: none;
+        }
+        
+        .player-token {
+            width: 70px;
+            height: 90px;
+            border-radius: 8px;
+            border: 2px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 
+                0 4px 8px rgba(0,0,0,0.6),
+                0 2px 4px rgba(0,0,0,0.4),
+                inset 0 1px 2px rgba(255,255,255,0.3);
+            transition: all 0.5s ease-in-out;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            transform: translateY(-5px);
+            position: relative;
+        }
+        
+        .player-token::before {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 8px;
+            background: radial-gradient(ellipse, rgba(0,0,0,0.4) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: -1;
+        }
+        
+        .player-token:hover {
+            transform: translateY(-8px) scale(1.1);
+            box-shadow: 
+                0 6px 12px rgba(0,0,0,0.7),
+                0 3px 6px rgba(0,0,0,0.5),
+                inset 0 1px 2px rgba(255,255,255,0.4);
+        }
+        
+        /* Positioning for multiple tokens on same space */
+        .player-token:nth-child(1) { grid-area: 1 / 2 / 2 / 3; } /* Center top */
+        .player-token:nth-child(2) { grid-area: 2 / 2 / 3 / 3; } /* Center bottom */
+        .player-token:nth-child(3) { grid-area: 1 / 1 / 2 / 2; } /* Top left */
+        .player-token:nth-child(4) { grid-area: 1 / 3 / 2 / 4; } /* Top right */
+        .player-token:nth-child(5) { grid-area: 2 / 1 / 3 / 2; } /* Bottom left */
+        .player-token:nth-child(6) { grid-area: 2 / 3 / 3 / 4; } /* Bottom right */
+        
+        .player-color-box {
+            width: 30px;
+            height: 35px;
+            border: 2px solid rgba(255, 255, 255, 0.9);
+            border-radius: 6px;
+            margin-right: 10px;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            flex-shrink: 0;
+        }
+        
+        /* Control Panel Styling - Now horizontal below board */
+        .controls-container {
+            width: 100%;
+            max-width: 1600px;
+            background-color: var(--parchment);
+            background-image: url('https://www.transparenttextures.com/patterns/parchment.png');
+            border-radius: 8px;
+            box-shadow: 0 4px 20px var(--shadow);
+            padding: 20px;
+            border: 12px solid var(--gold-dark);
+            font-size: 1.2rem;
+            display: flex;
+            gap: 30px;
+            align-items: flex-start;
+            flex-wrap: wrap;
+        }
+
+        .controls-container h2 {
+            font-family: 'MedievalSharp', cursive;
+            color: var(--accent);
+            border-bottom: 2px solid var(--gold);
+            padding-bottom: 5px;
+            text-align: center;
+            margin-top: 0;
+            width: 100%;
+        }
+        
+        .player-setup {
+            flex: 1;
+            min-width: 300px;
+            margin-bottom: 0;
+        }
+        
+        .game-controls {
+            flex: 1;
+            min-width: 300px;
+            margin-bottom: 0;
+        }
+        
+        .player-list-section {
+            flex: 2;
+            min-width: 400px;
+        }
+        
+        .player-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .player-list li {
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            border-bottom: 1px solid var(--gold);
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.9) 0%, rgba(240, 240, 240, 0.8) 100%);
+            border: 1px solid rgba(139, 69, 19, 0.3);
+            border-radius: 5px;
+            margin-bottom: 5px;
+            text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);
+            flex: 1;
+            min-width: 180px;
+            max-width: 250px;
+        }
+        
+        .player-list li.active-player {
+            background: linear-gradient(90deg, rgba(255, 215, 0, 0.9) 0%, rgba(255, 193, 7, 0.8) 100%);
+            border: 2px solid var(--gold-dark);
+            box-shadow: 0 2px 8px rgba(255, 215, 0, 0.4);
+            font-weight: bold;
+        }
+        
+        .player-name {
+            color: var(--ink);
+            font-weight: bold;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+        }
+        
+        .player-info {
+            color: var(--accent);
+            text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);
+        }
+        
+        button {
+            width: 100%;
+            max-width: 250px;
+            padding: 12px 25px;
+            background: linear-gradient(to bottom, var(--gold-light), var(--gold));
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            font-family: 'MedievalSharp', cursive;
+            color: var(--ink2);
+            box-shadow: 0 2px 5px var(--shadow);
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+            color: var(--ink);
+            font-weight: bold;
+        }
+        
+        button:hover:not(:disabled) {
+            background: linear-gradient(to bottom, var(--gold), var(--gold-dark));
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px var(--shadow);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+        }        button:disabled {
+            background: #aaa;
+            cursor: not-allowed;
+            color: #666;
+        }
+        
+        select {
+            width: 100%;
+            max-width: 300px;
+            padding: 8px;
+            background-color: var(--parchment);
+            border: 2px solid var(--gold-dark);
+            border-radius: 5px;
+            color: var(--ink);
+            font-family: 'MedievalSharp', cursive;
+            font-size: 14px;
+            margin-bottom: 10px;
+            text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);
+        }
+        
+        select option:disabled {
+            color: #999;
+            background-color: #ddd;
+        }
+        
+        label {
+            display: block;
+            color: var(--accent);
+            font-family: 'MedievalSharp', cursive;
+            margin-bottom: 5px;
+            font-weight: bold;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.7) 0%, transparent 100%);
+            padding: 2px 8px;
+            border-radius: 3px;
+            display: inline-block;
+        }
+
+        #roll-result {
+            text-align: center;
+            font-family: 'MedievalSharp', cursive;
+            font-size: 1.5rem;
+            margin-top: 15px;
+            color: var(--accent);
+            min-height: 50px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(240, 240, 240, 0.8) 100%);
+            border: 2px solid var(--gold);
+            border-radius: 8px;
+            padding: 10px;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Modal styling */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.6);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: var(--parchment);
+            background-image: url('https://www.transparenttextures.com/patterns/parchment.png');
+            margin: auto;
+            padding: 30px;
+            border: 12px solid var(--gold-dark);
+            border-radius: 8px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 5px 25px var(--shadow);
+            color: var(--ink);
+            text-align: center;
+            position: relative;
+            text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);
+        }
+
+        .modal-space-image {
+            width: 350px;
+            height: 350px;
+            border: 4px solid var(--gold-dark);
+            border-radius: 12px;
+            margin: 0 auto 20px auto;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            box-shadow: 
+                inset 0 0 12px rgba(0,0,0,0.3),
+                0 4px 8px rgba(0,0,0,0.2),
+                0 0 0 2px rgba(255,215,0,0.3);
+        }
+
+        .modal-content h2, .modal-content h3 {
+             font-family: 'MedievalSharp', cursive;
+             color: var(--accent);
+             border-bottom: 2px solid var(--gold);
+             padding-bottom: 5px;
+             margin-top: 0;
+             text-shadow: 0 2px 3px rgba(255, 255, 255, 0.9);
+        }
+        
+        .modal-content p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: -5px;
+            right: 5px;
+            color: var(--ink2);
+            font-size: 35px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .modal-close:hover {
+            color: var(--accent);
+        }
+
+        /* Special styling for space 60 (graduation space) to accommodate wider image */
+        .space[data-space="60"] {
+            aspect-ratio: 1.4 / 3;
+            width: 240px !important;
+            height: 150px !important;
+            margin: 0 5px; /* Add horizontal margin to prevent crowding with adjacent spaces */
+        }
+        
+
+    </style>
+</head>
+<body>
+
+    <h1>Diaper School: The Academic Race</h1>
+
+    <div class="game-container">
+        <div class="board-container">
+            <div id="board" class="board"></div>
+        </div>
+        <div class="controls-container">
+            <div class="player-setup">
+                <h2>Player Setup</h2>
+                <label for="class-select">Choose Class:</label>
+                <select id="class-select">
+                    <option value="fighter">Fighter - Roll 2d20 once per game</option>
+                    <option value="wizard">Wizard - Move 10 spaces once per game</option>
+                    <option value="rogue">Rogue - Move 5 spaces twice per game</option>
+                    <option value="monk">Monk - Start with 5 DC, +1d6 movement always</option>
+                    <option value="ranger">Ranger - Snipe other players twice per game</option>
+                    <option value="cleric">Cleric - Restore 2 DC twice per game</option>
+                </select>
+                <button id="add-player-btn">Add Player (2-6)</button>
+                <button id="start-game-btn" disabled>Start Game</button>
+            </div>
+            <div class="game-controls" style="display: none;">
+                <h2>Game Controls</h2>
+                <div id="current-player-display"></div>
+                <div id="class-abilities"></div>
+                <button id="roll-dice-btn">Roll Dice</button>
+                <div id="roll-result"></div>
+            </div>
+            <div class="player-list-section">
+                <h2>Players</h2>
+                <ul id="player-list" class="player-list"></ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Event Modal -->
+    <div id="event-modal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" id="event-modal-close">&times;</span>
+            <div id="modal-space-image" class="modal-space-image"></div>
+            <h2 id="event-title">Event!</h2>
+            <p id="event-description">Event details will appear here.</p>
+        </div>
+    </div>
+    
+    <!-- Game Over Modal -->
+    <div id="game-over-modal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" id="game-over-modal-close">&times;</span>
+            <h2 id="game-over-title">Game Over!</h2>
+            <p id="game-over-message">Winner/Loser message.</p>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- CONFIGURATION & STATE ---
+
+            const boardSize = 60;
+            let players = [];
+            let currentPlayerIndex = 0;
+            let gameStarted = false;            // Player colors for tokens
+            const playerColors = ['#e53935', '#1e88e5', '#43a047', '#fdd835', '#8e24aa', '#fb8c00'];
+
+            // Class definitions
+            const classData = {
+                fighter: { 
+                    name: 'Fighter', 
+                    color: '#e53935', 
+                    startingDC: 7, 
+                    abilities: { doubleRoll: 1 },
+                    description: 'Can roll 2d20 once per game'
+                },
+                wizard: { 
+                    name: 'Wizard', 
+                    color: '#1e88e5', 
+                    startingDC: 7, 
+                    abilities: { teleport: 1 },
+                    description: 'Can move 10 spaces once per game'
+                },
+                rogue: { 
+                    name: 'Rogue', 
+                    color: '#43a047', 
+                    startingDC: 7, 
+                    abilities: { quickStep: 2 },
+                    description: 'Can move 5 spaces twice per game'
+                },
+                monk: { 
+                    name: 'Monk', 
+                    color: '#fdd835', 
+                    startingDC: 5, 
+                    abilities: { bonusMovement: true },
+                    description: 'Starts with 5 DC, +1d6 movement always'
+                },
+                ranger: { 
+                    name: 'Ranger', 
+                    color: '#8e24aa', 
+                    startingDC: 7, 
+                    abilities: { snipe: 2 },
+                    description: 'Can snipe other players twice per game'
+                },
+                cleric: { 
+                    name: 'Cleric', 
+                    color: '#fb8c00', 
+                    startingDC: 7, 
+                    abilities: { heal: 2 },
+                    description: 'Can restore 2 DC twice per game'
+                }
+            };
+
+            // Class-specific player token images - 6 different students per class
+            const tokenImages = {
+                fighter: [
+                    'url("src/assets/images/boardgame/tokens/Fighter/fighters (1).png")',
+                    'url("src/assets/images/boardgame/tokens/Fighter/fighters (2).png")',
+                    'url("src/assets/images/boardgame/tokens/Fighter/fighters (3).png")',
+                    'url("src/assets/images/boardgame/tokens/Fighter/fighters (4).png")',
+                    'url("src/assets/images/boardgame/tokens/Fighter/fighters (5).png")',
+                    'url("src/assets/images/boardgame/tokens/Fighter/fighters (6).png")'
+                ],
+                wizard: [
+                    'url("src/assets/images/boardgame/tokens/Wizard/Wizard (1).png")',
+                    'url("src/assets/images/boardgame/tokens/Wizard/Wizard (2).png")',
+                    'url("src/assets/images/boardgame/tokens/Wizard/Wizard (3).png")',
+                    'url("src/assets/images/boardgame/tokens/Wizard/Wizard (4).png")',
+                    'url("src/assets/images/boardgame/tokens/Wizard/Wizard (5).png")',
+                    'url("src/assets/images/boardgame/tokens/Wizard/Wizard (6).png")'
+                ],
+                rogue: [
+                    'url("src/assets/images/boardgame/tokens/Rogue/Rogue (1).png")',
+                    'url("src/assets/images/boardgame/tokens/Rogue/Rogue (2).png")',
+                    'url("src/assets/images/boardgame/tokens/Rogue/Rogue (3).png")',
+                    'url("src/assets/images/boardgame/tokens/Rogue/Rogue (4).png")',
+                    'url("src/assets/images/boardgame/tokens/Rogue/Rogue (5).png")',
+                    'url("src/assets/images/boardgame/tokens/Rogue/Rogue (6).png")'
+                ],
+                monk: [
+                    'url("src/assets/images/boardgame/tokens/Monk/Monk (1).png")',
+                    'url("src/assets/images/boardgame/tokens/Monk/Monk (2).png")',
+                    'url("src/assets/images/boardgame/tokens/Monk/Monk (3).png")',
+                    'url("src/assets/images/boardgame/tokens/Monk/Monk (4).png")',
+                    'url("src/assets/images/boardgame/tokens/Monk/Monk (5).png")',
+                    'url("src/assets/images/boardgame/tokens/Monk/Monk (6).png")'
+                ],
+                ranger: [
+                    'url("src/assets/images/boardgame/tokens/Ranger/Ranger (1).png")',
+                    'url("src/assets/images/boardgame/tokens/Ranger/Ranger (2).png")',
+                    'url("src/assets/images/boardgame/tokens/Ranger/Ranger (3).png")',
+                    'url("src/assets/images/boardgame/tokens/Ranger/Ranger (4).png")',
+                    'url("src/assets/images/boardgame/tokens/Ranger/Ranger (5).png")',
+                    'url("src/assets/images/boardgame/tokens/Ranger/Ranger (6).png")'
+                ],
+                cleric: [
+                    'url("src/assets/images/boardgame/tokens/Cleric/cleric (1).png")',
+                    'url("src/assets/images/boardgame/tokens/Cleric/cleric (2).png")',
+                    'url("src/assets/images/boardgame/tokens/Cleric/cleric (3).png")',
+                    'url("src/assets/images/boardgame/tokens/Cleric/cleric (4).png")',
+                    'url("src/assets/images/boardgame/tokens/Cleric/cleric (5).png")',
+                    'url("src/assets/images/boardgame/tokens/Cleric/cleric (6).png")'
+                ]
+            };            // Complete space images with alternating variations for every space!
+            // Each space has two image options that will be randomly chosen for variety
+            const spaceImages = {
+                // Zone 1 - Freshman Orientation (Spaces 1-5) - NEGATIVE
+                1: [`url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (1).png")`, `url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (2).png")`], // Spontaneous Accident
+                2: [`url("src/assets/images/boardgame/spacemarkers/neutralspaces/lostgirl.png")`, `url("src/assets/images/boardgame/spacemarkers/neutralspaces/lostgirl2.png")`], // Lost in the Halls (neutral)
+                3: [`url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (5).png")`, `url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (6).png")`], // Uniform Inspection
+                4: [`url("src/assets/images/boardgame/spacemarkers/neutralspaces/cafeteriaconfusion.png")`, `url("src/assets/images/boardgame/spacemarkers/neutralspaces/cafeteriaconfusion (2).png")`], // Cafeteria Calamity (neutral)
+                5: [`url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (9).png")`, `url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (10).png")`], // Spontaneous Accident
+                
+                // Zone 2 - Study Habits (Spaces 6-10) - MIXED
+                6: [`url("src/assets/images/boardgame/spacemarkers/positivespaces/goodbabs (1).png")`, `url("src/assets/images/boardgame/spacemarkers/positivespaces/goodbabs (2).png")`], // Successful Study Group (positive)
+                7: [`url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (11).png")`, `url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (12).png")`], // Sudden Urgency (trap)
+                8: [`url("src/assets/images/boardgame/spacemarkers/neutralspaces/overduebook.png")`, `url("src/assets/images/boardgame/spacemarkers/neutralspaces/overduebook2.png")`], // Library Overdue (neutral)
+                9: [`url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (15).png")`, `url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (16).png")`], // Sudden Urgency (trap)
+                10: [`url("src/assets/images/boardgame/spacemarkers/positivespaces/goodbabs (3).png")`, `url("src/assets/images/boardgame/spacemarkers/positivespaces/goodbabs (4).png")`], // Professor's Praise (positive)
+                
+                // Zone 3 - First Infraction (Spaces 11-15) - NEGATIVE
+                11: [`url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (17).png")`, `url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (18).png")`], // Minor Infraction: Running
+                12: [`url("src/assets/images/boardgame/spacemarkers/neutralspaces/closecall.png")`, `url("src/assets/images/boardgame/spacemarkers/neutralspaces/closecall2.png")`], // Close Call (neutral)
+                13: [`url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (21).png")`, `url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (22).png")`], // Curse of Clumsiness
+                14: [`url("src/assets/images/boardgame/spacemarkers/neutralspaces/detention.png")`, `url("src/assets/images/boardgame/spacemarkers/neutralspaces/detention2.png")`], // Detention Duty (neutral)
+                15: [`url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (25).png")`, `url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (26).png")`], // Minor Infraction: Talking back
+                
+                // Zone 4 - Dormitory Life (Spaces 16-20) - POSITIVE
+                16: [`url("src/assets/images/boardgame/spacemarkers/positivespaces/goodbabs (5).png")`, `url("src/assets/images/boardgame/spacemarkers/positivespaces/goodbabs (6).png")`], // Dorm Movie Night
+                17: [`url("src/assets/images/boardgame/spacemarkers/positivespaces/goodbabs (7).png")`, `url("src/assets/images/boardgame/spacemarkers/positivespaces/goodbabs (8).png")`], // Care Package from Home
+                18: [`url("src/assets/images/boardgame/spacemarkers/positivespaces/goodbabs (9).png")`, `url("src/assets/images/boardgame/spacemarkers/positivespaces/goodbabs (10).png")`], // Little Miracle
+                19: [`url("src/assets/images/boardgame/spacemarkers/positivespaces/goodbabs (11).png")`, `url("src/assets/images/boardgame/spacemarkers/positivespaces/goodbabs (12).png")`], // Pillow Fort
+                20: [`url("src/assets/images/boardgame/spacemarkers/positivespaces/goodbabs (13).png")`, `url("src/assets/images/boardgame/spacemarkers/positivespaces/goodbabs (14).png")`], // Deep Sleep
+                
+                // Zone 5 - Magical Mishap (Spaces 21-25) - NEGATIVE
+                21: [`url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (27).png")`, `url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (28).png")`], // Magical Mishap
+                22: [`url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (29).png")`, `url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (30).png")`], // Polymorph Potion
+                23: [`url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (31).png")`, `url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (32).png")`], // Failed Teleport
+                24: [`url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (33).png")`, `url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (34).png")`], // Animated Backpack
+                25: [`url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (35).png")`, `url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (36).png")`], // Itchy Padding
+                
+                // Zone 6 - Academic Recognition (Spaces 26-30) - POSITIVE
+                26: [`url("src/assets/images/boardgame/spacemarkers/positivespaces/goodbabs (15).png")`, `url("src/assets/images/boardgame/spacemarkers/positivespaces/goodbabs (16).png")`], // Honor Roll
+                27: [`url("src/assets/images/boardgame/spacemarkers/positivespaces/goodbabs (17).png")`, `url("src/assets/images/boardgame/spacemarkers/positivespaces/goodbabs (18).png")`], // Teacher's Pet
+                28: [`url("src/assets/images/boardgame/spacemarkers/positivespaces/goodbabs (19).png")`, `url("src/assets/images/boardgame/spacemarkers/positivespaces/goodbabs (20).png")`], // Art Project Displayed
+                29: [`url("src/assets/images/boardgame/spacemarkers/positivespaces/goodbabs (21).png")`, `url("src/assets/images/boardgame/spacemarkers/positivespaces/goodbabs (22).png")`], // Scholarship Award
+                30: [`url("src/assets/images/boardgame/spacemarkers/positivespaces/goodbabs (23).png")`, `url("src/assets/images/boardgame/spacemarkers/positivespaces/goodbabs (24).png")`], // Perfect Score
+                
+                // Zone 7 - Contraband Discovery (Spaces 31-35) - NEGATIVE
+                31: [`url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (37).png")`, `url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (38).png")`], // Contraband Discovery
+                32: [`url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (39).png")`, `url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (40).png")`], // Unauthorized Potion
+                33: [`url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (41).png")`, `url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (42).png")`], // The Leaky Sieve Fails
+                34: [`url("src/assets/images/boardgame/spacemarkers/neutralspaces/confiscated.png")`, `url("src/assets/images/boardgame/spacemarkers/neutralspaces/confiscated2.png")`], // Confiscated (neutral)
+                35: [`url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (45).png")`, `url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (46).png")`], // Caught with Wild Magic
+                
+                // Zone 8 - Extracurricular Excellence (Spaces 36-40) - POSITIVE
+                36: [`url("src/assets/images/boardgame/spacemarkers/positivespaces/goodbabs (25).png")`, `url("src/assets/images/boardgame/spacemarkers/positivespaces/goodbabs (26).png")`], // Club President
+                37: [`url("src/assets/images/boardgame/spacemarkers/positivespaces/goodbabs (27).png")`, `url("src/assets/images/boardgame/spacemarkers/positivespaces/goodbabs (28).png")`], // Debate Team Victory
+                38: [`url("src/assets/images/boardgame/spacemarkers/positivespaces/goodbabs (29).png")`, `url("src/assets/images/boardgame/spacemarkers/positivespaces/goodbabs (30).png")`], // Lead in School Play
+                39: [`url("src/assets/images/boardgame/spacemarkers/positivespaces/goodbabs (31).png")`, `url("src/assets/images/boardgame/spacemarkers/positivespaces/goodbabs (32).png")`], // Sports Hero
+                40: [`url("src/assets/images/boardgame/spacemarkers/positivespaces/goodbabs (33).png")`, `url("src/assets/images/boardgame/spacemarkers/positivespaces/goodbabs (34).png")`], // Bake Sale Success
+                
+                // Spaces 41-45: Public Embarrassment (Zone 9)
+                41: [`url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (47).png")`, `url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (48).png")`], // Public Embarrassment
+                42: [`url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (49).png")`, `url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (50).png")`], // Wardrobe Malfunction
+                43: [`url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (51).png")`, `url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (52).png")`], // Loudest Tummy-Rumble
+                44: [`url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (53).png")`, `url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (54).png")`], // Tripped on Stage
+                45: [`url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (1).png")`, `url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (3).png")`], // The Ultimate Humiliation (reusing early ones)
+                
+                // Zone 10 - Mentorship Role (Spaces 46-50) - POSITIVE (using fresh goodbabs)
+                46: [`url("src/assets/images/boardgame/spacemarkers/positivespaces/goodbabs (35).png")`, `url("src/assets/images/boardgame/spacemarkers/positivespaces/goodbabs (36).png")`], // Mentorship Role
+                47: [`url("src/assets/images/boardgame/spacemarkers/positivespaces/goodbabs (37).png")`, `url("src/assets/images/boardgame/spacemarkers/positivespaces/goodbabs (38).png")`], // Peer Tutor
+                48: [`url("src/assets/images/boardgame/spacemarkers/positivespaces/goodbabs (39).png")`, `url("src/assets/images/boardgame/spacemarkers/positivespaces/goodbabs (40).png")`], // Hall Monitor Deputy
+                49: [`url("src/assets/images/boardgame/spacemarkers/positivespaces/goodbabs (41).png")`, `url("src/assets/images/boardgame/spacemarkers/positivespaces/goodbabs (42).png")`], // Guiding Light
+                50: [`url("src/assets/images/boardgame/spacemarkers/positivespaces/goodbabs (1).png")`, `url("src/assets/images/boardgame/spacemarkers/positivespaces/goodbabs (2).png")`], // Role Model (reusing first ones)
+                
+                // Zone 11 - Final Examination Crisis (Spaces 51-55) - NEGATIVE (reusing badbabs)
+                51: [`url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (5).png")`, `url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (7).png")`], // Final Exam Crisis (reusing)
+                52: [`url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (9).png")`, `url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (11).png")`], // All-Nighter (reusing)
+                53: [`url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (13).png")`, `url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (15).png")`], // Group Hysteria (reusing)
+                54: [`url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (17).png")`, `url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (19).png")`], // Mind Blank (reusing)
+                55: [`url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (21).png")`, `url("src/assets/images/boardgame/spacemarkers/negativespaces/badbabs (23).png")`], // The Final Accident (reusing)
+                
+                // Zone 12 - Graduation Preparation (Spaces 56-60) - POSITIVE (using special graduation goodbabs!)
+                56: [`url("src/assets/images/boardgame/spacemarkers/positivespaces/gradgoodbabs (1).png")`, `url("src/assets/images/boardgame/spacemarkers/positivespaces/gradgoodbabs (2).png")`], // Graduation Gown Fitting
+                57: [`url("src/assets/images/boardgame/spacemarkers/positivespaces/gradgoodbabs (3).png")`, `url("src/assets/images/boardgame/spacemarkers/positivespaces/gradgoodbabs (4).png")`], // Yearbook Photos
+                58: [`url("src/assets/images/boardgame/spacemarkers/positivespaces/gradgoodbabs (5).png")`, `url("src/assets/images/boardgame/spacemarkers/positivespaces/gradgoodbabs (6).png")`], // Signing Day
+                59: [`url("src/assets/images/boardgame/spacemarkers/positivespaces/gradgoodbabs (7).png")`, `url("src/assets/images/boardgame/spacemarkers/positivespaces/gradgoodbabs (8).png")`], // Graduation Rehearsal
+                60: [`url("src/assets/images/boardgame/spacemarkers/babduation.png")`, `url("src/assets/images/boardgame/spacemarkers/babduation.png")`] // Graduation Day! (special graduation images)
+            };// NOTE TO USER: Complete event descriptions for all 60 spaces!
+            // Events are based on the "Academic Race" rules, expanded with lore from the handbook.
+            const spaceEvents = {
+                // Spaces 1-5: Freshman Orientation (Zone 1)
+                1: { type: 'trap', title: 'Spontaneous Accident!', fluff: 1, description: 'Welcome, freshman! The stress of orientation proves too much. A wave of nervous energy results in a magical mishap. You automatically fail your Wisdom save in this cursed game! The magical backlash is embarrassing.', chargesLost: 1 },
+                2: { type: 'neutral', title: 'Lost in the Halls', fluff: 0, description: 'You take a wrong turn trying to find the lecture hall and end up in a deserted corridor. It takes a while to find your way back. No penalty, but you feel a bit silly.' },
+                3: { type: 'trap', title: 'Uniform Inspection', fluff: 1, description: "A stern Hall Monitor stops you. Your uniform is perfect, but they notice your diaper isn't regulation thickness. You receive a lecture and a Fluff Counter for the oversight.", chargesLost: 0 },
+                4: { type: 'neutral', title: 'Cafeteria Calamity', fluff: 0, description: 'You slip on a puddle of spilled juice in the cafeteria. You land softly, but your pride is bruised.' },
+                5: { type: 'trap', title: 'Spontaneous Accident!', fluff: 1, description: 'Another wave of freshman anxiety hits! The pressure to make a good impression leads to another embarrassing magical accident.', chargesLost: 1 },
+                
+                // Spaces 6-10: Study Habits (Zone 2)
+                6: { type: 'positive', title: 'Successful Study Group', fluff: 0, description: 'You ace your study session! You feel prepared and confident. Move ahead 1d4 spaces!', move: () => rollDie(4)},
+                7: { type: 'trap', title: 'Sudden Urgency', fluff: 1, description: "All that studying makes a student need a break. You fail your Constitution save against the game's magic and feel a sudden, undeniable urge.", chargesLost: 1 },
+                8: { type: 'neutral', title: 'Library Overdue', fluff: 0, description: 'You realize a book is almost overdue! You rush to the library to return it, losing no real progress but getting a good workout.'},
+                9: { type: 'trap', title: 'Sudden Urgency', fluff: 1, description: "Late-night cramming and too much juice lead to another urgent situation. Your focus slips, and so does your control.", chargesLost: 1 },
+                10: { type: 'positive', title: "Professor's Praise", fluff: 0, description: 'A professor praises your insightful question in class. You feel brilliant! Advance 3 spaces.', move: () => 3 },
+
+                // Spaces 11-15: First Infraction (Zone 3)
+                11: { type: 'trap', title: 'Minor Infraction: Running', fluff: 1, description: "You're caught running in the hallways to get to class on time. A Hall Monitor gives you a demerit and a Fluff Counter.", chargesLost: 1 },
+                12: { type: 'neutral', title: 'Close Call', fluff: 0, description: 'You almost get caught chewing gum in the library, but you swallow it just in time. You feel a bit queasy, but otherwise fine.' },
+                13: { type: 'trap', title: 'Curse of Clumsiness', fluff: 1, description: "You try a minor shortcut spell that backfires, cursing you with clumsiness. For your next turn, you can't roll higher than a 10 on your movement die.", chargesLost: 1, special: 'clumsy' },
+                14: { type: 'neutral', title: 'Detention Duty', fluff: 0, description: "You have to stay after class to clean the chalkboards. It's boring, but you find a cool-looking rock in the chalk dust." },
+                15: { type: 'trap', title: 'Minor Infraction: Talking back', fluff: 1, description: 'A sassy remark to a teacher earns you a glare, a lecture on respect, and a Fluff Counter to remind you of your place.', chargesLost: 1 },
+                
+                // Spaces 16-20: Dormitory Life (Zone 4 - POSITIVE)
+                16: { type: 'positive', title: 'Dorm Movie Night!', fluff: -1, description: 'It\'s movie night in the common room! A cozy, happy evening. Remove 1 Fluff Counter and the comforting atmosphere restores 1 Diaper Charge.', chargesRestored: 1 },
+                17: { type: 'positive', title: 'Care Package from Home', fluff: 0, description: 'A package arrives! It\'s full of your favorite snacks and some ultra-premium diapers. Restore 2 Diaper Charges.', chargesRestored: 2 },
+                18: { type: 'positive', title: 'Little Miracle', fluff: 0, description: 'You help a friend with their homework. The act of kindness feels good, like a \'Little Miracle\'. Advance 1d6 spaces.', move: () => rollDie(6) },
+                19: { type: 'positive', title: 'Pillow Fort!', fluff: -1, description: 'You and your dorm mates build an epic pillow fort in the common area. It\'s the coziest place on campus! Remove 1 Fluff Counter.', chargesRestored: 0 },
+                20: { type: 'positive', title: 'Deep Sleep', fluff: 0, description: 'You get a full night of uninterrupted sleep. You wake up feeling refreshed and ready for anything. Restore 2 Diaper Charges.', chargesRestored: 2 },
+
+                // Spaces 21-25: Magical Mishap (Zone 5)
+                21: { type: 'trap', title: 'Magical Mishap', fluff: 2, description: "An alchemy experiment goes awry, covering you in itchy foam! It's terribly distracting and requires special padding to contain. You must wear the 'Diaper Cover of Irresistible Itchiness'. Gain 2 Fluff Counters.", chargesLost: 2 },
+                22: { type: 'trap', title: 'Polymorph Potion', fluff: 0, description: 'You accidentally drink a potion that turns your head into a pumpkin for one turn. It\'s hard to see. Miss your next turn.', special: 'missTurn' },
+                23: { type: 'trap', title: 'Failed Teleport', fluff: 1, description: 'You try to teleport to your next class but end up in the laundry room, stuck in a pile of wet diapers. Eww. Gain a Fluff Counter from the experience.', chargesLost: 1 },
+                24: { type: 'trap', title: 'Animated Backpack', fluff: 0, description: 'Your backpack comes to life and runs away! You spend the rest of the day chasing it down. Move back 1d4 spaces.', move: () => -rollDie(4) },                25: { type: 'trap', title: 'Itchy Padding', fluff: 2, description: 'The "Diaper Cover of Irresistible Itchiness" flares up again! The constant squirming is undignified and requires extra padding. This is a very trying time.', chargesLost: 2 },
+
+                // Spaces 26-30: Academic Recognition (Zone 6 - POSITIVE)
+                26: { type: 'positive', title: 'Honor Roll!', fluff: -2, description: 'You made the honor roll! Your hard work pays off. Remove 2 Fluff Counters and advance 5 spaces!', move: () => 5 },
+                27: { type: 'positive', title: 'Teacher\'s Pet', fluff: -1, description: 'A teacher takes a shine to you, offering extra help and encouragement. Remove 1 Fluff Counter.', chargesRestored: 1 },
+                28: { type: 'positive', title: 'Art Project Displayed', fluff: 0, description: 'Your art project is chosen to be displayed in the main hall! You feel incredibly proud. Advance 4 spaces.', move: () => 4 },
+                29: { type: 'positive', title: 'Scholarship Award', fluff: -2, description: 'You win a small scholarship for your academic excellence! Your confidence soars. Remove 2 Fluff Counters.', chargesRestored: 1 },
+                30: { type: 'positive', title: 'Perfect Score!', fluff: 0, description: 'You get a perfect score on a difficult exam! You\'re the talk of the school. Advance 1d6 spaces.', move: () => rollDie(6) },
+                
+                // Spaces 31-35: Contraband Discovery (Zone 7)
+                31: { type: 'trap', title: 'Contraband Discovery!', fluff: 2, description: 'Your stash of forbidden comics is found! You\'re sentenced to wear "The Leaky Sieve," a cursedly thin diaper, for the next few turns.', chargesLost: 2 },
+                32: { type: 'trap', title: 'Unauthorized Potion', fluff: 0, description: 'A self-brewed energy drink gives you the shakes. Disadvantage on your next roll (reroll if higher than 10).' , special: 'disadvantage'},
+                33: { type: 'trap', title: 'The Leaky Sieve Fails', fluff: 1, description: 'The cursed diaper lives up to its name at the most inopportune moment. This is mortifying.', chargesLost: 2 },
+                34: { type: 'neutral', title: 'Confiscated!', fluff: 0, description: 'Your cool, non-regulation magic wand is confiscated. You get it back at the end of the day with a warning.'},
+                35: { type: 'trap', title: 'Caught with Wild Magic', fluff: 2, description: 'You\'re caught practicing wild magic in the dorms. As punishment, you\'re fitted with an extra-thick, extra-crinkly diaper that\'s impossible to hide.', chargesLost: 1 },
+
+                // Spaces 36-40: Extracurricular Excellence (Zone 8 - POSITIVE)
+                36: { type: 'positive', title: 'Club President!', fluff: 0, description: 'You\'re elected president of the Gardening Club. Advance 1d10 spaces and give another player 1 Fluff Counter out of jealousy.', move: () => rollDie(10), special: 'giveFluff' },
+                37: { type: 'positive', title: 'Debate Team Victory!', fluff: -1, description: 'You win a major debate tournament for the school! Your eloquence is legendary. Remove 1 Fluff Counter.', chargesRestored: 1 },
+                38: { type: 'positive', title: 'Lead in the School Play', fluff: 0, description: 'You land the lead role in the school play. Your performance receives a standing ovation. Advance 6 spaces.', move: () => 6 },
+                39: { type: 'positive', title: 'Sports Hero', fluff: -1, description: 'You score the winning goal in the big game! The crowd cheers your name. Remove 1 Fluff Counter and restore 1 charge.', chargesRestored: 1 },
+                40: { type: 'positive', title: 'Bake Sale Success', fluff: 0, description: 'Your enchanted cupcakes are a huge hit at the school bake sale. All the teachers love you. Advance 1d8 spaces.', move: () => rollDie(8) },
+
+                // Spaces 41-45: Public Embarrassment (Zone 9)
+                41: { type: 'trap', title: 'Public Embarrassment!', fluff: 2, description: "A practical joke backfires spectacularly in front of the whole school. All other players point and cast 'Spank!' on you. Move back 1d6 spaces.", move: () => -rollDie(6), chargesLost: 3 },
+                42: { type: 'trap', title: 'Wardrobe Malfunction', fluff: 1, description: 'Your enchanted uniform decides to become transparent during a school assembly. The shame is immense.', chargesLost: 2 },
+                43: { type: 'trap', title: 'Loudest Tummy-Rumble', fluff: 1, description: 'During a silent exam, your stomach lets out a roar worthy of a manticore. Everyone stares. Gain a Fluff Counter from the stress.', chargesLost: 1 },
+                44: { type: 'trap', title: 'Tripped on Stage', fluff: 1, description: 'You trip while walking across the stage to receive an award. The award is fine, but your dignity is shattered.', chargesLost: 2, move: () => -rollDie(4) },
+                45: { type: 'trap', title: 'The Ultimate Humiliation', fluff: 2, description: 'A powerful "Spontaneous Accident" spell hits you during lunch. It\'s so bad that the Headmaster has to come change you personally. This is the worst day ever.', chargesLost: 3 },
+
+                // Spaces 46-50: Mentorship Role (Zone 10 - POSITIVE)
+                46: { type: 'positive', title: 'Mentorship Role', fluff: -99, description: "You help a struggling freshman. Your kindness inspires everyone. All players (including you) remove 1 Fluff Counter. Advance 8 spaces.", chargesRestored: 2, move: () => 8, special: 'allRemoveFluff' },
+                47: { type: 'positive', title: 'Peer Tutor', fluff: -1, description: 'You become a peer tutor, and your student gets a perfect grade! Restore 2 Diaper Charges.', chargesRestored: 2 },
+                48: { type: 'positive', title: 'Hall Monitor Deputy', fluff: 0, description: 'A Hall Monitor makes you their deputy for the day. You feel important and respected. Advance 5 spaces.', move: () => 5 },
+                49: { type: 'positive', title: 'Guiding Light', fluff: -99, description: 'You lead a group of lost first-years back to their dorm during a storm. All players may remove 2 Fluff Counters.', special: 'allRemoveFluff' },
+                50: { type: 'positive', title: 'Role Model', fluff: 0, description: 'Your good deeds have been noticed by the faculty. You are named "Student of the Month"! Restore all your Diaper Charges to 7.', chargesRestored: 99 },
+
+                // Spaces 51-55: Final Examination Crisis (Zone 11)
+                51: { type: 'trap', title: 'Final Exam Crisis!', fluff: 1, description: "The pressure of final exams causes a campus-wide wave of 'Spontaneous Accidents'. You're not immune. The stress is immense.", chargesLost: 2 },
+                52: { type: 'trap', title: 'All-Nighter', fluff: 1, description: 'You pull an all-nighter to study, but you fall asleep during the test and have an accident. You pass, but at what cost?', chargesLost: 2 },
+                53: { type: 'trap', title: 'Group Hysteria', fluff: 1, description: 'The collective stress of the student body manifests as a mass magical mishap. Everyone in the game loses 1 Diaper Charge!', special: 'allLoseCharge' },
+                54: { type: 'trap', title: 'Mind Blank', fluff: 0, description: 'You walk into the exam, and your mind goes completely blank. You have to guess on every question. Go back to the start of this zone (space 51).', move: (pos) => 51 - pos },
+                55: { type: 'trap', title: 'The Final Accident', fluff: 2, description: 'Just as you hand in your last exam, the relief is so overwhelming it triggers one last, catastrophic "Spontaneous Accident".', chargesLost: 2 },
+
+                // Spaces 56-60: Graduation Preparation (Zone 12 - POSITIVE)
+                56: { type: 'positive', title: 'Graduation Gown Fitting', fluff: -99, description: 'You\'re being fitted for your graduation gown! You are immune to all negative effects until your next turn. Remove all Fluff Counters.', special: 'immunity' },
+                57: { type: 'positive', title: 'Yearbook Photos', fluff: -1, description: 'It\'s time for yearbook photos! You have a great hair day and your photo looks amazing. Remove 1 Fluff Counter.', chargesRestored: 0 },
+                58: { type: 'positive', title: 'Signing Day', fluff: 0, description: 'Everyone wants you to sign their yearbook. You feel popular and loved. Advance 1d4 spaces.', move: () => rollDie(4) },
+                59: { type: 'positive', title: 'Graduation Rehearsal', fluff: 0, description: 'You flawlessly execute your part in the graduation rehearsal. You can almost taste victory! Advance to space 59 if you are not already past it.', move: (pos) => (pos < 59 ? 59 - pos : 0) },
+                60: { type: 'win', title: 'Graduation Day!', description: 'You\'ve done it! You\'ve crossed the stage and received your diploma! You\'ve graduated from the Diaper School Academy! Congratulations!' }
+            };            // --- DOM ELEMENTS ---
+            const boardEl = document.getElementById('board');
+            const addPlayerBtn = document.getElementById('add-player-btn');
+            const classSelect = document.getElementById('class-select');
+            const startGameBtn = document.getElementById('start-game-btn');
+            const playerListEl = document.getElementById('player-list');            const gameControlsEl = document.querySelector('.game-controls');
+            const rollDiceBtn = document.getElementById('roll-dice-btn');
+            const rollResultEl = document.getElementById('roll-result');
+            const currentPlayerDisplayEl = document.getElementById('current-player-display');
+            const classAbilitiesEl = document.getElementById('class-abilities');
+            
+            // Modals
+            const eventModal = document.getElementById('event-modal');
+            const eventTitleEl = document.getElementById('event-title');
+            const eventDescEl = document.getElementById('event-description');
+            const modalSpaceImageEl = document.getElementById('modal-space-image');
+            const eventModalClose = document.getElementById('event-modal-close');
+            
+            const gameOverModal = document.getElementById('game-over-modal');
+            const gameOverTitleEl = document.getElementById('game-over-title');
+            const gameOverMessageEl = document.getElementById('game-over-message');
+            const gameOverModalClose = document.getElementById('game-over-modal-close');
+
+
+            // --- FUNCTIONS ---
+
+            /** Creates the game board squares */            const createBoard = () => {
+                boardEl.innerHTML = '';                // Simple inward spiral: start from top-left, spiral clockwise inward to center
+                const path = [
+                     1,  2,  3,  4,  5,  6,  7,  8,  9, 10,
+                    28, 29, 30, 31, 32, 33, 34, 35, 36, 11,
+                    27, 48, 49, 50, 51, 52, 53, 54, 37, 12,
+                    26, 47, 60, 59, 58, 57, 56, 55, 38, 13,
+                    25, 46, 45, 44, 43, 42, 41, 40, 39, 14,
+                    24, 23, 22, 21, 20, 19, 18, 17, 16, 15
+                ];
+
+                // Create grid layout
+                boardEl.style.gridTemplateColumns = 'repeat(10, 1fr)';
+
+                for (let i = 0; i < boardSize; i++) {
+                    const space = document.createElement('div');
+                    const spaceNum = path[i];
+                    space.classList.add('space');
+                    space.id = `space-${spaceNum}`;
+                    space.setAttribute('data-space', spaceNum); // For CSS targeting
+                    
+                    // Make the victory space (60) special but not grid-breaking
+                    if (spaceNum === 60) {
+                        space.classList.add('victory-space');
+                        space.style.fontSize = '2.2em';
+                        space.style.fontWeight = 'bold';
+                        space.style.background = 'linear-gradient(45deg, #FFD700, #FFA500, #FFD700)';
+                        space.style.border = '5px solid #B8860B';
+                        space.style.boxShadow = '0 0 25px rgba(255, 215, 0, 0.9), inset 0 0 15px rgba(255,255,255,0.4)';
+                        space.style.zIndex = '10';
+                        space.style.borderRadius = '15px';
+                        space.style.position = 'relative';
+                    }
+
+                    // Add space number
+                    const spaceNumberDiv = document.createElement('div');
+                    spaceNumberDiv.classList.add('space-number');
+                    spaceNumberDiv.textContent = spaceNum;
+                    space.appendChild(spaceNumberDiv);
+                    
+                    // Add player token area
+                    const tokenArea = document.createElement('div');
+                    tokenArea.classList.add('player-token-area');
+                    tokenArea.id = `token-area-${spaceNum}`;
+                    space.appendChild(tokenArea);
+                      // Apply zone coloring (except for victory space)
+                    if (spaceNum !== 60) {
+                        const zoneIndex = Math.floor((spaceNum - 1) / 5) % 6;
+                        space.style.backgroundColor = `var(--zone${zoneIndex + 1}-color)`;
+                        
+                        // Add contrast class for better text visibility
+                        space.classList.add(`zone-${zoneIndex + 1}`);
+                    }
+                    
+                    // Apply custom space image if defined - randomly choose between two options for variety
+                    if (spaceImages[spaceNum]) {
+                        const imageOptions = spaceImages[spaceNum];
+                        const selectedImage = Array.isArray(imageOptions) 
+                            ? imageOptions[Math.floor(Math.random() * imageOptions.length)]
+                            : imageOptions;
+                        space.style.backgroundImage = selectedImage;
+                        space.style.backgroundSize = 'cover';
+                        space.style.backgroundPosition = 'center';
+                        space.style.backgroundRepeat = 'no-repeat';
+                    } else {
+                        // Default placeholder for spaces without custom images
+                        space.style.backgroundImage = `url("https://placehold.co/80x80/DDDDDD/000000?text=${spaceNum}")`;
+                        space.style.backgroundSize = 'cover';
+                        space.style.backgroundPosition = 'center';
+                        space.style.backgroundRepeat = 'no-repeat';
+                    }
+
+                    boardEl.appendChild(space);
+                }
+            };
+              /** Updates the player list display in the control panel */
+            const updatePlayerList = () => {
+                playerListEl.innerHTML = '';
+                players.forEach((player, index) => {
+                    const li = document.createElement('li');
+                    if (index === currentPlayerIndex && gameStarted) {
+                        li.classList.add('active-player');
+                    }
+                    
+                    // Create ability status display
+                    let abilityStatus = '';
+                    if (player.abilities.doubleRoll !== undefined) {
+                        abilityStatus = `2d20: ${player.abilities.doubleRoll}`;
+                    } else if (player.abilities.teleport !== undefined) {
+                        abilityStatus = `TP: ${player.abilities.teleport}`;
+                    } else if (player.abilities.quickStep !== undefined) {
+                        abilityStatus = `QS: ${player.abilities.quickStep}`;
+                    } else if (player.abilities.bonusMovement) {
+                        abilityStatus = `+1d6`;
+                    } else if (player.abilities.snipe !== undefined) {
+                        abilityStatus = `Snipe: ${player.abilities.snipe}`;
+                    } else if (player.abilities.heal !== undefined) {
+                        abilityStatus = `Heal: ${player.abilities.heal}`;
+                    }
+                    
+                    li.innerHTML = `
+                        <div class="player-color-box" style="background-color: ${player.color}; background-image: ${player.tokenImage}"></div>
+                        <div class="player-name">${player.name}</div>
+                        <div class="player-info" style="margin-left: auto;">
+                            FC: ${player.fluffCounters} | DC: ${player.diaperCharges}<br>
+                            <small style="color: var(--gold);">${abilityStatus}</small>
+                        </div>
+                    `;
+                    playerListEl.appendChild(li);
+                });
+            };            /** Add a new player to the game */
+            const addPlayer = () => {
+                if (players.length >= 6) {
+
+                    alert("Maximum of 6 players allowed.");
+                    return;
+                }
+                
+
+                const selectedClass = classSelect.value;
+
+                const classInfo = classData[selectedClass];
+                const playerId = players.length;
+                const playerName = `${classInfo.name} ${playerId + 1}`;
+                
+                // Get the count of players with this class to select the right token image
+                const classCount = players.filter(p => p.class === selectedClass).length;
+                const tokenImageIndex = classCount % 6; // Cycle through 6 available images
+                
+                players.push({
+                    id: playerId,
+                    name: playerName,
+                    class: selectedClass,
+                    color: classInfo.color,
+                    tokenImage: tokenImages[selectedClass][tokenImageIndex],
+                    currentPosition: 0,
+                    fluffCounters: 0,
+                    diaperCharges: classInfo.startingDC,
+                    isImmune: false,
+                    pendingBonusMove: null,
+                    abilities: { ...classInfo.abilities } // Copy abilities
+                });
+
+               
+
+                // Don't disable class selection - allow multiple of same class
+                if (players.length >= 2) {
+                    startGameBtn.disabled = false;
+                }
+                if (players.length >= 6) {
+                    addPlayerBtn.disabled = true;
+                }
+                
+                updatePlayerList();
+                placeTokens();
+            };
+
+            /** Start the game */
+            const startGame = () => {
+                if (players.length < 2) {
+                    alert("You need at least 2 players to start.");
+                    return;
+                }
+                gameStarted = true;
+                document.querySelector('.player-setup').style.display = 'none';
+                gameControlsEl.style.display = 'block';
+                currentPlayerIndex = 0;
+                updateTurnDisplay();
+                updatePlayerList();
+            };
+              /** Update the display for whose turn it is */
+            const updateTurnDisplay = () => {
+                const player = players[currentPlayerIndex];
+                currentPlayerDisplayEl.innerHTML = `
+                    <h3 style="margin-bottom: 5px; text-align: center; color: var(--accent);">${player.name}'s Turn</h3>
+                `;
+                
+                // Show class abilities
+                classAbilitiesEl.innerHTML = '';
+                
+                if (player.abilities.doubleRoll > 0) {
+                    const btn = document.createElement('button');
+                    btn.textContent = `Fighter: Roll 2d20 (${player.abilities.doubleRoll} left)`;
+                    btn.onclick = () => useFighterAbility();
+                    btn.style.marginTop = '5px';
+                    classAbilitiesEl.appendChild(btn);
+                }
+                
+                if (player.abilities.teleport > 0) {
+                    const btn = document.createElement('button');
+                    btn.textContent = `Wizard: Move 10 spaces (${player.abilities.teleport} left)`;
+                    btn.onclick = () => useWizardAbility();
+                    btn.style.marginTop = '5px';
+                    classAbilitiesEl.appendChild(btn);
+                }
+                
+                if (player.abilities.quickStep > 0) {
+                    const btn = document.createElement('button');
+                    btn.textContent = `Rogue: Move 5 spaces (${player.abilities.quickStep} left)`;
+                    btn.onclick = () => useRogueAbility();
+                    btn.style.marginTop = '5px';
+                    classAbilitiesEl.appendChild(btn);
+                }
+                
+                if (player.abilities.snipe > 0) {
+                    const btn = document.createElement('button');
+                    btn.textContent = `Ranger: Snipe player (${player.abilities.snipe} left)`;
+                    btn.onclick = () => useRangerAbility();
+                    btn.style.marginTop = '5px';
+                    classAbilitiesEl.appendChild(btn);
+                }
+                
+                if (player.abilities.heal > 0) {
+                    const btn = document.createElement('button');
+                    btn.textContent = `Cleric: Heal 2 DC (${player.abilities.heal} left)`;
+                    btn.onclick = () => useClericAbility();
+                    btn.style.marginTop = '5px';
+                    classAbilitiesEl.appendChild(btn);
+                }
+            }
+            
+            /** Place player tokens on the board */
+            const placeTokens = () => {
+                // Clear all token areas first
+                document.querySelectorAll('.player-token').forEach(t => t.remove());
+
+                // Group players by position
+                const playersAtPosition = {};
+                players.forEach(player => {
+                    const pos = player.currentPosition;
+                    if (!playersAtPosition[pos]) playersAtPosition[pos] = [];
+                    playersAtPosition[pos].push(player);
+                });
+
+                // Place tokens for each position
+                Object.keys(playersAtPosition).forEach(position => {
+                    const playersHere = playersAtPosition[position];
+                    const targetSpace = position == 0 ? null : document.getElementById(`token-area-${position}`);
+                    
+                    if (position == 0 || !targetSpace) return; // Skip start position or invalid spaces
+                    
+                    playersHere.forEach((player, index) => {
+                        const token = document.createElement('div');
+                        token.classList.add('player-token');
+                        token.id = `player-${player.id}`;
+                        token.style.backgroundImage = player.tokenImage;
+                        token.title = `${player.name} (${player.class})`;
+                        
+                        // Add class-specific border color
+                        token.style.borderColor = player.color;
+                        
+                        targetSpace.appendChild(token);
+                    });
+                });
+            }
+
+            /** Roll a die of a given size */
+            const rollDie = (sides) => Math.floor(Math.random() * sides) + 1;            /** Main function to handle a player's turn */
+            const playTurn = () => {
+                rollDiceBtn.disabled = true;
+
+                const player = players[currentPlayerIndex];
+                const roll = rollDie(20);
+                let move = Math.max(1, roll - player.fluffCounters);
+                
+                // Monk gets bonus movement
+                if (player.abilities.bonusMovement) {
+                    const bonusMove = rollDie(6);
+                    move += bonusMove;
+                    rollResultEl.innerHTML = `Rolled a ${roll}! Monk Bonus: +${bonusMove}<br>Fluff Penalty: -${player.fluffCounters}<br>Moving ${move} spaces.`;
+                } else {
+                    rollResultEl.innerHTML = `Rolled a ${roll}!<br>Fluff Penalty: -${player.fluffCounters}<br>Moving ${move} spaces.`;
+                }
+                
+                // Animate movement
+                movePlayer(player, move);
+            };
+              /** Fighter ability: Roll 2d20 */
+            const useFighterAbility = () => {
+                const player = players[currentPlayerIndex];
+                if (player.abilities.doubleRoll <= 0) return;
+                
+                player.abilities.doubleRoll--;
+                rollDiceBtn.disabled = true;
+                
+                const roll1 = rollDie(20);
+                const roll2 = rollDie(20);
+                const bestRoll = Math.max(roll1, roll2);
+                // Fighter's special ability: can potentially move up to 40 spaces!
+                const totalRoll = roll1 + roll2;
+                const move = Math.max(1, totalRoll - player.fluffCounters);
+                
+                rollResultEl.innerHTML = `Fighter 2d20: ${roll1} + ${roll2} = ${totalRoll}!<br>Fluff Penalty: -${player.fluffCounters}<br>Moving ${move} spaces.`;
+                
+                movePlayer(player, move);
+                updateTurnDisplay();
+            };
+            
+            /** Wizard ability: Move 10 spaces */
+            const useWizardAbility = () => {
+                const player = players[currentPlayerIndex];
+                if (player.abilities.teleport <= 0) return;
+                
+                player.abilities.teleport--;
+                rollDiceBtn.disabled = true;
+                
+                rollResultEl.innerHTML = `Wizard Teleport: Moving 10 spaces!`;
+                
+                movePlayer(player, 10);
+                updateTurnDisplay();
+            };
+            
+            /** Rogue ability: Move 5 spaces */
+            const useRogueAbility = () => {
+                const player = players[currentPlayerIndex];
+                if (player.abilities.quickStep <= 0) return;
+                
+                player.abilities.quickStep--;
+                rollDiceBtn.disabled = true;
+                
+                rollResultEl.innerHTML = `Rogue Quick Step: Moving 5 spaces!`;
+                
+                movePlayer(player, 5);
+                updateTurnDisplay();
+            };
+            
+            /** Ranger ability: Snipe another player */
+            const useRangerAbility = () => {
+                const player = players[currentPlayerIndex];
+                if (player.abilities.snipe <= 0) return;
+                
+                player.abilities.snipe--;
+                
+                // Pick random other player
+                const otherPlayers = players.filter((p, index) => index !== currentPlayerIndex && p.diaperCharges > 0);
+                if (otherPlayers.length === 0) {
+                    alert("No valid targets!");
+                    return;
+                }
+                
+                const target = otherPlayers[Math.floor(Math.random() * otherPlayers.length)];
+                target.diaperCharges = Math.max(0, target.diaperCharges - 1);
+                
+                rollResultEl.innerHTML = `Ranger Snipe: ${target.name} loses 1 Diaper Charge!<br>Now roll normally or use another ability.`;
+                updatePlayerList();
+                updateTurnDisplay();
+            };
+            
+            /** Cleric ability: Heal self */
+            const useClericAbility = () => {
+                const player = players[currentPlayerIndex];
+                if (player.abilities.heal <= 0) return;
+                
+                player.abilities.heal--;
+                player.diaperCharges = Math.min(7, player.diaperCharges + 2);
+                
+                rollResultEl.innerHTML = `Cleric Heal: Restored 2 Diaper Charges!<br>Now roll normally or use another ability.`;
+                updatePlayerList();
+                updateTurnDisplay();
+            };/** Animate and handle player movement */
+            const movePlayer = (player, spaces, isBonusMove = false) => {
+                let newPosition = player.currentPosition + spaces;
+
+                // If player reaches or exceeds space 60, they win!
+                if (newPosition >= boardSize) {
+                    newPosition = boardSize; // Set to exactly space 60
+                }
+                
+                player.currentPosition = newPosition;
+                  setTimeout(() => {
+                    placeTokens();
+                    updatePlayerList();
+                    
+                    // Always handle landing events, regardless of move type
+                    handleLanding(player);
+                }, 1000);
+            };
+              /** Handle events when a player lands on a space */
+            const handleLanding = (player) => {
+                // Deactivate immunity after one turn
+                if (player.isImmune) player.isImmune = false;
+                
+                const event = spaceEvents[player.currentPosition];
+                if (!event) {
+                    endTurn();
+                    return;
+                }
+                
+                // Apply event effects if not immune
+                if (!player.isImmune) {
+                    player.fluffCounters = Math.max(0, player.fluffCounters + (event.fluff || 0));
+                    player.diaperCharges -= (event.chargesLost || 0);
+                    player.diaperCharges += (event.chargesRestored || 0);
+                }
+
+                // Show modal with space image
+                eventTitleEl.textContent = event.title;
+                eventDescEl.textContent = event.description;
+                
+                // Set the space image in the modal
+                const spaceImageOptions = spaceImages[player.currentPosition];
+                if (spaceImageOptions) {
+                    const selectedImage = Array.isArray(spaceImageOptions) 
+                        ? spaceImageOptions[Math.floor(Math.random() * spaceImageOptions.length)]
+                        : spaceImageOptions;
+                    modalSpaceImageEl.style.backgroundImage = selectedImage;
+                } else {
+                    // Default placeholder for spaces without custom images
+                    modalSpaceImageEl.style.backgroundImage = `url("https://placehold.co/120x120/DDDDDD/000000?text=${player.currentPosition}")`;
+                }
+                
+                eventModal.style.display = 'flex';
+                
+                if (event.type === 'win') {
+                    showGameOver(player, true);
+                    return;
+                }
+
+                if (player.diaperCharges <= 0) {
+                    showGameOver(player, false);
+                    return;
+                }
+                
+                // Handle special events
+                if (event.special === 'giveFluff') {
+                    // In a real game, you'd let the player choose. Here we pick randomly.
+                    let targetPlayerIndex;
+                    do {
+                        targetPlayerIndex = Math.floor(Math.random() * players.length);
+                    } while (targetPlayerIndex === currentPlayerIndex);
+                    players[targetPlayerIndex].fluffCounters++;
+                } else if (event.special === 'allRemoveFluff') {
+                    players.forEach(p => p.fluffCounters = Math.max(0, p.fluffCounters - 1));
+                } else if (event.special === 'immunity') {
+                    player.isImmune = true;
+                    player.fluffCounters = 0;
+                }
+                  // Handle bonus moves - store the move for later execution
+                if (event.move) {
+                    player.pendingBonusMove = event.move();
+                } else {
+                    player.pendingBonusMove = null;
+                }
+            };            /** Ends the current player's turn and moves to the next */
+            const endTurn = () => {
+                const player = players[currentPlayerIndex];
+                
+                // Handle bonus movement after modal is closed (with delay for readability)
+                if (player.pendingBonusMove) {
+                    const bonusMove = player.pendingBonusMove;
+                    player.pendingBonusMove = null; // Clear the pending move
+                    
+                    // Add a 2-second delay so players can read the event before bonus movement
+                    setTimeout(() => {
+                        rollResultEl.innerHTML += `<br><strong>Bonus movement: ${bonusMove} spaces!</strong>`;
+                        setTimeout(() => movePlayer(player, bonusMove, true), 1000);
+                    }, 2000);
+                    return; // Don't end turn yet, bonus movement will handle it
+                }
+                
+                // No more bonus moves, actually end the turn
+                updatePlayerList();
+                if (checkLoseCondition()) return;
+
+                currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
+                updateTurnDisplay();
+                updatePlayerList(); // To highlight the new active player
+                rollResultEl.innerHTML = '';
+                rollDiceBtn.disabled = false;
+            };
+
+            const checkLoseCondition = () => {
+                const player = players[currentPlayerIndex];
+                if (player.diaperCharges <= 0) {
+                     showGameOver(player, false);
+                     return true;
+                }
+                return false;
+            }
+
+            /** Show the game over modal */
+            const showGameOver = (player, isWinner) => {
+                 if (isWinner) {
+                    gameOverTitleEl.textContent = "Congratulations!";
+                    gameOverMessageEl.textContent = `${player.name} has graduated! You are the winner!`;
+                } else {
+                    gameOverTitleEl.textContent = "Oh No! A Leak!";
+                    gameOverMessageEl.textContent = `${player.name}'s diaper has leaked! They are out of the game and suffer the "Curse of the Loser's Padding" for one week.`;
+                }
+                gameControlsEl.style.display = 'none'; // Hide game controls
+                gameOverModal.style.display = 'flex';
+            };
+
+            // --- EVENT LISTENERS ---
+            addPlayerBtn.addEventListener('click', addPlayer);
+            startGameBtn.addEventListener('click', startGame);
+            rollDiceBtn.addEventListener('click', playTurn);
+
+            eventModalClose.onclick = () => {
+                eventModal.style.display = "none";
+                endTurn();
+            }
+            
+            gameOverModalClose.onclick = () => {
+                 gameOverModal.style.display = "none";
+                 // Optionally, you could reset the game here
+            }
+
+            window.onclick = (event) => {
+                if (event.target == eventModal) {
+                    eventModal.style.display = "none";
+                    endTurn();
+                }
+                 if (event.target == gameOverModal) {
+                    gameOverModal.style.display = "none";
+                }
+            }
+            
+            // --- INITIALIZATION ---
+            createBoard();
+        });
+    </script>
+</body>
+</html>
+

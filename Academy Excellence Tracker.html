@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scholia Diaspros - Achievement Tracker</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=MedievalSharp&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #daac17;
+      --gold-light: #fae791;
+      --gold-dark: #97740a;
+      --parchment: #2C2614;
+      --parchment-dark: #1E1C12;
+      --ink: #C7A81D;
+      --ink2: #B69E32;
+      --accent: #B47018;
+      --shadow: rgba(0, 0, 0, 0.5);
+      --bronze: #cd7f32;
+      --silver: #c0c0c0;
+    }
+    body {
+      font-family: 'Cormorant Garamond', serif;
+      margin: 0;
+      padding: 20px;
+      background-color: var(--parchment);
+      background-image: url('https://www.transparenttextures.com/patterns/dark-wood.png');
+      color: var(--ink);
+      line-height: 1.6;
+    }
+    #tracker-app {
+      width: 100%;
+      max-width: 1800px;
+      min-height: 95vh;
+      margin: 0 auto;
+      background-color: var(--parchment-dark);
+      background-image: url('https://www.transparenttextures.com/patterns/parchment.png');
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      padding: 20px;
+      border: 12px solid var(--gold-dark);
+      position: relative;
+    }
+    h1 {
+      text-align: center;
+      color: var(--accent);
+      font-family: 'MedievalSharp', cursive;
+      font-size: 3rem;
+      margin: 10px 0 20px;
+      text-shadow: 1px 1px 3px var(--shadow);
+    }
+    h1::after {
+      content: "";
+      display: block;
+      width: 80%;
+      height: 3px;
+      background: linear-gradient(to right, transparent, var(--gold), transparent);
+      margin: 10px auto;
+    }
+    .controls {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      margin: 20px 0;
+      border-bottom: 3px solid var(--gold-dark);
+      padding-bottom: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      background: linear-gradient(to bottom, var(--gold-light), var(--gold));
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      font-family: 'MedievalSharp', cursive;
+      color: var(--ink2);
+      box-shadow: 0 2px 5px var(--shadow);
+      transition: all 0.3s ease;
+    }
+    button:hover {
+      background: linear-gradient(to bottom, var(--gold), var(--gold-dark));
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px var(--shadow);
+    }
+    button:disabled {
+        background: #555;
+        color: #999;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
+    nav button.active {
+        background: linear-gradient(to bottom, var(--gold), var(--gold-dark));
+        box-shadow: 0 4px 8px var(--shadow);
+        color: #fff;
+    }
+    .content-tab {
+      display: none;
+    }
+    .content-tab.active {
+      display: block;
+      animation: fadeIn 0.5s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .achievements-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+      gap: 20px;
+      padding: 20px 0;
+    }
+    .achievement-card {
+      background-color: rgba(0,0,0,0.1);
+      border: 1px solid var(--gold);
+      border-radius: 8px;
+      padding: 15px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      transition: all 0.3s ease;
+      filter: grayscale(80%) opacity(0.7);
+      cursor: pointer;
+    }
+    .achievement-card.unlocked {
+      filter: none;
+      background-color: rgba(218, 165, 32, 0.1);
+      box-shadow: 0 0 10px var(--gold-light);
+      cursor: default;
+    }
+    .coin {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      background-size: cover;
+      border: 2px solid var(--gold-dark);
+      box-shadow: inset 0 0 5px rgba(0,0,0,0.4);
+      filter: grayscale(1);
+      transition: filter 0.3s ease;
+    }
+    .achievement-card.unlocked .coin {
+        filter: none;
+    }
+    .coin.bronze { background-color: var(--bronze); }
+    .coin.silver { background-color: var(--silver); }
+    .coin.gold { background-color: var(--gold); }
+    .coin.legendary { background: linear-gradient(45deg, #f0e68c, #ffd700, #ffec8b, #b8860b); }
+    .coin.very-rare { background: linear-gradient(45deg, #c3aed6, #a06ee1, #d6b4f7, #663399); }
+    .achievement-details h3 {
+      margin: 0 0 5px 0;
+      font-family: 'MedievalSharp', cursive;
+      color: var(--accent);
+      font-size: 1.4rem;
+    }
+    .achievement-details p {
+      margin: 0;
+      font-size: 0.95rem;
+      line-height: 1.4;
+    }
+    .achievement-details .reward {
+        margin-top: 5px;
+        font-weight: bold;
+        color: var(--gold-light);
+    }
+
+    /* Modal Styles */
+    #modal-backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+    #modal-content {
+        background: var(--parchment-dark) url('https://www.transparenttextures.com/patterns/parchment.png');
+        padding: 30px;
+        border-radius: 10px;
+        border: 5px solid var(--gold-dark);
+        width: 90%;
+        max-width: 500px;
+        text-align: center;
+        box-shadow: 0 5px 25px rgba(0,0,0,0.5);
+    }
+    #modal-content h2 {
+        font-family: 'MedievalSharp', cursive;
+        color: var(--accent);
+        margin-top: 0;
+    }
+    #modal-content p { color: var(--ink); }
+    #modal-content input {
+        width: calc(100% - 20px);
+        padding: 10px;
+        margin-top: 15px;
+        border: 1px solid var(--gold);
+        background-color: var(--parchment);
+        color: var(--ink);
+        border-radius: 4px;
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 1rem;
+    }
+    #modal-buttons {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+    }
+    #modal-buttons button {
+        width: 120px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="tracker-app">
+    <h1>Achievement Tracker</h1>
+    
+    <div class="controls">
+      <button id="save-progress">Save Progress</button>
+      <label for="load-progress-input">
+        <button id="load-progress-btn">Load Progress</button>
+      </label>
+      <input type="file" id="load-progress-input" accept=".json" style="display: none;">
+    </div>
+
+    <nav id="tabs-nav">
+      </nav>
+
+    <div id="achievements-container">
+      </div>
+  </div>
+
+  <div id="modal-backdrop">
+      <div id="modal-content">
+          <h2 id="modal-title"></h2>
+          <p id="modal-description"></p>
+          <p>Please provide proof of completion.</p>
+          <input type="text" id="modal-link-input" placeholder="https://discord.com/channels/...">
+          <div id="modal-buttons">
+              <button id="modal-unlock-btn" disabled>Unlock</button>
+              <button id="modal-cancel-btn">Cancel</button>
+          </div>
+      </div>
+  </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // Data sourced from "Diaper School Achievements" document provided by user.
+    const achievementsData = {
+        "Getting Started": [
+            { id: "ach_ready", name: "I'm Ready!", rarity: "Common", gp: 10, description: "Have a completed and approved character sheet." },
+            { id: "ach_hi_name", name: "Hi! My Name is...", rarity: "Common", gp: 10, description: "Posted an introductory interaction in a roleplay channel." },
+            { id: "ach_first_steps", name: "First Steps", rarity: "Common", gp: 10, description: "Stepped off the main campus into the school woods or along the path to another location." },
+            { id: "ach_first_word", name: "First Word", rarity: "Common", gp: 10, description: "Roleplayed more than 100 words of dialogue in 5+ different channels. (Must provide chat logs as proof.)" },
+            { id: "ach_new_friend", name: "A New Friend?", rarity: "Common", gp: 25, description: "Asked another non-staff/non-hall monitor character for help or to accompany you on-campus." },
+            { id: "ach_first_purchase", name: "First Purchase", rarity: "Common", gp: 10, description: "Made your first purchase from the Foundry or student commissary." },
+            { id: "ach_dressed_success", name: "Dressed for Success", rarity: "Common", gp: 10, description: "Acquired and wore an official Scholia Diaspros student uniform." },
+            { id: "ach_padding_up", name: "Padding Up", rarity: "Common", gp: 10, description: "Used a diaper booster for the first time." },
+            { id: "ach_scene_seeker", name: "Scene Seeker", rarity: "Common", gp: 10, description: "Posted in a 'Looking for Scene' channel to initiate a roleplay interaction." },
+            { id: "ach_taste_wilds", name: "A Taste of the Wilds", rarity: "Common", gp: 25, description: "Consumed one of the unique magical berries found in the Academy's environs." },
+            { id: "ach_bookworm", name: "Bookworm", rarity: "Common", gp: 25, description: "Visited the Great Library for the first time." },
+            { id: "ach_first_draft", name: "First Draft", rarity: "Common", gp: 25, description: "Successfully crafted your first item." },
+            { id: "ach_crinkle_power", name: "Crinkle of Power", rarity: "Common", gp: 25, description: "Wore a magical diaper for the first time." },
+            { id: "ach_first_punishment", name: "Rules and Consequences", rarity: "Common", gp: 20, description: "Receive your first official Diaper Punishment for a minor infraction." },
+            { id: "ach_meet_the_weavers", name: "Meet the Weavers", rarity: "Common", gp: 25, description: "Have a non-hostile interaction with one of the ancient Diaparachnid artisans." },
+            { id: "ach_moo_friend", name: "How Now, Brown Cow?", rarity: "Common", gp: 20, description: "Interact with one of the Cowbuddy students for the first time." },
+            { id: "ach_that_stinks", name: "Well, That Stinks", rarity: "Common", gp: 20, description: "Be subjected to the Stink Spray of a Skunkiddo and survive the aroma." },
+            { id: "ach_first_infusion", name: "A Little Something Extra", rarity: "Uncommon", gp: 50, description: "Use a Diaper Infusion for the first time to enhance your padding." },
+            { id: "ach_sweet_dreams", name: "Sweet Dreams...?", rarity: "Common", gp: 25, description: "Get tucked into a Web Hammock spun by a Diaparachnid for a short or long rest." },
+            { id: "ach_field_trip", name: "Field Trip!", rarity: "Common", gp: 30, description: "Visit The Outreach, the satellite campus on the Prime Material Plane." },
+            { id: "ach_uh_oh_stinky", name: "Uh Oh, Stinky", rarity: "Common", gp: 15, description: "Be the target of a 'Foul Fragrance' or 'Rancid Rumble' spell." }
+        ],
+        "The Adventurer's Path": [
+            { id: "ach_worthy_opponent", name: "A Worthy Opponent", rarity: "Common", gp: 50, description: "Completed your first combat encounter of any kind." },
+            { id: "ach_lady_luck", name: "Lady Luck Smiled", rarity: "Common", gp: 10, description: "Successfully passed your first skill check." },
+            { id: "ach_fumble", name: "A Fumble!", rarity: "Common", gp: 10, description: "Failed your first skill check." },
+            { id: "ach_phew_madeit", name: "Phew, Made It!", rarity: "Common", gp: 10, description: "Successfully passed your first potty check." },
+            { id: "ach_oopsie_daisy", name: "Oopsie-Daisy!", rarity: "Common", gp: 10, description: "Failed your first potty check." },
+            { id: "ach_max_capacity", name: "Maximum Capacity", rarity: "Common", gp: 15, description: "Experience a 'Full Diaper' status for the first time and deal with the consequences." },
+            { id: "ach_containment_breach", name: "Containment Breach", rarity: "Common", gp: 20, description: "Suffer the consequences of a 'Leaking Diaper' and successfully get changed." },
+            { id: "ach_deans_office", name: "Sent to the Dean's Office", rarity: "Common", gp: 15, description: "Get caught breaking a rule and be formally reprimanded by a staff member." },
+            { id: "ach_tastes_funny", name: "Tastes Funny...", rarity: "Common", gp: 25, description: "Consume one of the 'Fool's Berries' and deal with the after-effects." },
+        ],
+        "Campus Life & Activities": [
+            { id: "ach_reel_em_in", name: "Reel 'em In!", rarity: "Common", gp: 25, description: "Went fishing for the first time." },
+            { id: "ach_splish_splash", name: "Splish, Splash!", rarity: "Common", gp: 25, description: "Took a bath, either in the dorms or one of the student bathhouses." },
+            { id: "ach_feel_the_burn", name: "Feel the Burn!", rarity: "Common", gp: 25, description: "Completed a workout session in one of the campus training rooms." },
+            { id: "ach_en_garde", name: "En Garde!", rarity: "Common", gp: 25, description: "Sparred with another player character (win or lose)." },
+            { id: "ach_victorious", name: "Victorious!", rarity: "Uncommon", gp: 50, description: "Won your first sparring match against another player." },
+            { id: "ach_padded_presti", name: "Padded Prestidigitation", rarity: "Common", gp: 25, description: "Cast a Diaper School-specific spell on any character, including yourself." },
+            { id: "ach_and_scene", name: "And... Scene!", rarity: "Common", gp: 25, description: "Finished a short roleplaying scene with at least one other player." },
+            { id: "ach_helping_hand", name: "A Helping Hand", rarity: "Common", gp: 25, description: "Change another player character's diaper for the first time." },
+            { id: "ach_i_survived", name: "I Survived!", rarity: "Common", gp: 30, description: "Successfully complete a punishment assigned by a staff member (e.g., corner time, extra duties)." },
+            { id: "ach_study_buddy", name: "Study Buddy", rarity: "Common", gp: 20, description: "Participate in a study group session in the library with at least one other student." },
+            { id: "ach_dorm_life", name: "Dorm Life", rarity: "Common", gp: 15, description: "Participate in a common room event within your dormitory (e.g., movie night, game night)." },
+            { id: "ach_artsy", name: "Artsy", rarity: "Common", gp: 15, description: "Participate in an art class or creative activity (e.g., painting, sculpting, music)." }
+        ],
+        "Milestones": [
+            { id: "ach_virtual_app", name: "Virtual Apprentice", rarity: "Common", gp: 50, description: "Completed your first session in the Virtual Combat Trainer." },
+            { id: "ach_explorer_train", name: "Explorer in Training", rarity: "Common", gp: 50, description: "Embarked on your first official Expedition." },
+            { id: "ach_well_awkward", name: "Well, This is Awkward...", rarity: "Common", gp: 50, description: "Got put into diapers for the first time by another character due to rule-breaking or an unfortunate incident." },
+            { id: "ach_beginner_luck", name: "Beginner's Luck", rarity: "Uncommon", gp: 50, description: "Rolled a natural 20 on a Continence Check, demonstrating Exceptional Control." },
+            { id: "ach_vr_style", name: "That's Just My Style", rarity: "Uncommon", gp: 100, description: "Earn one of the special named achievements from the list within the VR Simulator." },
+            { id: "ach_locked_in", name: "Locked In", rarity: "Common", gp: 25, description: "Get placed into a set of locking diapers for the first time." },
+            { id: "ach_all_thumbs", name: "All Thumbs", rarity: "Common", gp: 25, description: "Be forced to wear the 'Penitent Mitts' as part of a punishment." }
+        ],
+        // Add this new "Combat" category to your achievementsData object
+"Combat": [
+            { id: "ach_have_a_seat", name: "Have a Seat!", rarity: "Uncommon", gp: 50, description: "Defeat a Darkling by dropping or throwing a piece of furniture on it." },
+            { id: "ach_all_radiant", name: "Oops, All Radiant!", rarity: "Rare", gp: 150, description: "Defeat a Darkling using only radiant damage for the entire fight." },
+            { id: "ach_light_snack", name: "A Light Snack", rarity: "Common", gp: 25, description: "Use a consumable item during combat that leads directly to defeating an enemy." },
+            { id: "ach_stop_hitting", name: "Stop Hitting Yourself", rarity: "Uncommon", gp: 75, description: "Cause a Darkling to defeat another Darkling with collateral or redirected damage." },
+            { id: "ach_darkness_befriends", name: "Darkness Befriends Darkness", rarity: "Uncommon", gp: 75, description: "Successfully charm or otherwise ally a Darkling during a simulation." },
+            { id: "ach_bonked_noggin", name: "Bonked on the Noggin", rarity: "Common", gp: 25, description: "Deliver a finishing blow to a Darkling with a blunt object or improvised weapon." },
+            { id: "ach_bye_buddy", name: "Bye, Buddy!", rarity: "Common", gp: 30, description: "Use a shove action to push a Darkling off a ledge or into environmental hazards." },
+            { id: "ach_big_fish", name: "Big Fish in the Void", rarity: "Uncommon", gp: 100, description: "Defeat a Darkling Brackling while underwater without leaving the pool or water source." },
+            { id: "ach_floor_is_lava", name: "Floor is Lava!", rarity: "Rare", gp: 200, description: "End a combat encounter without touching the ground for the entire fight." },
+            { id: "ach_tactical_feline", name: "Tactical Feline", rarity: "Common", gp: 20, description: "End your turn standing in a position on elevated terrain while adjacent to a Darkling." },
+            { id: "ach_pacifist_irony", name: "Pacifist's Irony", rarity: "Uncommon", gp: 50, description: "Deal the finishing blow with a non-damaging spell or ability." },
+            { id: "ach_silly_slapstick", name: "Silly Slapstick", rarity: "Common", gp: 20, description: "Deliver a finishing blow to a small Darkling with a slap or stomp." },
+            { id: "ach_sour_note", name: "The Sour Note", rarity: "Uncommon", gp: 100, description: "Defeat at least two Darklings in one round using a bard spell or ability." },
+            { id: "ach_call_the_mvp", name: "Call the MVP", rarity: "Rare", gp: 150, description: "Successfully hit with three consecutive ranged attacks in a single round." },
+            { id: "ach_one_two_punch", name: "One-Two Punch", rarity: "Common", gp: 30, description: "Defeat a Darkling using two melee strikes in immediate succession." },
+            { id: "ach_me_myself_i", name: "Me, Myself, and I", rarity: "Uncommon", gp: 100, description: "(Warlock Exclusive): Defeat an enemy while your familiar or Eldritch Invocation lands the final blow." },
+            { id: "ach_shocking_defeat", name: "Shocking Defeat", rarity: "Uncommon", gp: 100, description: "(Sorcerer or Wizard Exclusive): Land a finishing blow with a Shocking Grasp spell against a Darkling." },
+            { id: "ach_no_chill_fire", name: "No Chill, Just Fire", rarity: "Uncommon", gp: 100, description: "(Sorcerer Exclusive): End a combat encounter by exclusively using fire-based spells." },
+            { id: "ach_overachiever", name: "Overachiever", rarity: "Rare", gp: 250, description: "Complete a special VR Sim challenge without taking damage." },
+            { id: "ach_would_you_kindly", name: "Would You Kindly?", rarity: "Uncommon", gp: 75, description: "Succeed in persuading or intimidating NPCs to retreat instead of fighting." },
+            { id: "ach_tendon_snap", name: "Tendon Snap", rarity: "Uncommon", gp: 100, description: "(Martial Classes Exclusive): Critically hit a Darkling with an attack targeting its legs or tendrils." },
+            { id: "ach_pocket_full_posies", name: "Pocket Full of Posies", rarity: "Uncommon", gp: 125, description: "End an encounter with at least three ongoing conditions or effects stacked on a single Darkling." },
+            { id: "ach_more_than_meets", name: "More Than Meets the Eye", rarity: "Rare", gp: 150, description: "Successfully complete combat while polymorphed or wild-shaped for the entire encounter." },
+            { id: "ach_against_all_odds", name: "Against All Odds", rarity: "Very Rare", gp: 300, description: "Survive a combat encounter while the rest of your party is incapacitated." },
+            { id: "ach_shadowboxing_master", name: "Shadowboxing Master", rarity: "Rare", gp: 150, description: "End combat without missing a single melee attack." },
+            { id: "ach_cat_nap_doom", name: "Cat Nap, Darkling Doom", rarity: "Uncommon", gp: 100, description: "(Druid Exclusive): Defeat a Darkling immediately after using Healing Spirit." },
+            { id: "ach_arcane_ricochet", name: "Arcane Ricochet", rarity: "Rare", gp: 150, description: "Land a critical hit on a Darkling using a bouncing or chain spell (e.g., Chain Lightning or Eldritch Blast with Repelling Invocation)." },
+            { id: "ach_slippery_when_wet", name: "Slippery When Wet", rarity: "Common", gp: 30, description: "Knock an enemy prone or incapacitate it using a water or ice-based effect." },
+            { id: "ach_doubly_doomed", name: "Doubly Doomed", rarity: "Uncommon", gp: 100, description: "Defeat two enemies in the same turn with a single area-of-effect spell or ability." },
+            { id: "ach_breaking_point", name: "Breaking Point", rarity: "Uncommon", gp: 125, description: "Inflict a single Darkling with at least three conditions simultaneously (e.g., blinded, restrained, and frightened)." },
+            { id: "ach_call_to_nature", name: "Call to Nature", rarity: "Common", gp: 40, description: "Defeat an enemy while wild-shaped, polymorphed, or using a summoned creature." },
+            { id: "ach_luck_of_draw", name: "Luck of the Draw", rarity: "Uncommon", gp: 75, description: "Roll maximum damage on a die during the finishing blow against an enemy." },
+            { id: "ach_shadow_over_shadow", name: "Shadow Over Shadow", rarity: "Uncommon", gp: 100, description: "Outmaneuver and slay an enemy while standing in an area of magical darkness." },
+            { id: "ach_gilded_guardian", name: "Gilded Guardian", rarity: "Rare", gp: 200, description: "Successfully protect a VR Sim ally or objective for the entirety of an encounter." },
+            { id: "ach_final_countdown", name: "Final Countdown", rarity: "Uncommon", gp: 75, description: "Defeat the last enemy of an encounter with a spell or ability on its final duration round." },
+            { id: "ach_airborne_ace", name: "Airborne Ace", rarity: "Rare", gp: 175, description: "Win a battle without touching the ground for the majority of the encounter." },
+            { id: "ach_overkill_supreme", name: "Overkill Supreme", rarity: "Uncommon", gp: 75, description: "Deal more than double the remaining HP of a Darkling with one attack." },
+            { id: "ach_sniper_elite", name: "Sniper Elite", rarity: "Rare", gp: 150, description: "Successfully hit a target from >60ft twice or more without missing in a round." },
+            { id: "ach_swarm_stopper", name: "Swarm Stopper", rarity: "Uncommon", gp: 100, description: "Eliminate five or more small or tiny enemies in a single round." },
+            { id: "ach_bound_by_blades", name: "Bound by Blades", rarity: "Rare", gp: 175, description: "Defeat an enemy while all of its attacks missed you due to a defensive effect or spell." },
+            { id: "ach_fuel_for_flame", name: "Fuel for the Flame", rarity: "Common", gp: 40, description: "Use a fire-based spell to ignite an environment, causing lasting area damage to enemies." },
+            { id: "ach_spike_trap_specialist", name: "Spike Trap Specialist", rarity: "Uncommon", gp: 75, description: "Lure an enemy into taking damage from its environment or a trap you set up." },
+            { id: "ach_mind_over_magic", name: "Mind Over Magic", rarity: "Rare", gp: 150, description: "Counter or dispel at least two enemy spells in a single encounter." },
+            { id: "ach_electric_finale", name: "Electric Finale", rarity: "Uncommon", gp: 75, description: "End a battle by stunning or incapacitating an enemy with a lightning-based spell or ability." },
+            { id: "ach_resonating_blow", name: "Resonating Blow", rarity: "Uncommon", gp: 75, description: "Land the final hit against an enemy in a VR Sim challenge using a thunder spell or effect." }
+        ],
+        "Advanced & Special": [
+            { id: "ach_my_plus_one", name: "This is My +1", rarity: "Uncommon", gp: 100, description: "Got a friend to join the Diaper School server and complete a character sheet." },
+            { id: "ach_like_friends", name: "I Like Making Friends", rarity: "Uncommon", gp: 150, description: "Got two different people to join and complete a character sheet." },
+            { id: "ach_dm_pay_me", name: "The DM Should Pay Me", rarity: "Rare", gp: 200, description: "Got three different people to join and complete a character sheet." },
+            { id: "ach_celebri_baby", name: "Celebri-baby", rarity: "Rare", gp: 300, description: "Got four different people to join and complete a character sheet." },
+            { id: "ach_do_you_know", name: "Do You Know The Way?", rarity: "Repeatable", gp: 100, description: "Give an orientation-style scene to a new student. (Can be achieved multiple times)." },
+            { id: "ach_tour_guide", name: "Tour Guide Extraordinaire", rarity: "Very Rare", gp: 1000, description: "Gave seven or more orientation scenes to different students without being a Hall Monitor." },
+            { id: "ach_i_made_dis", name: "I Made Dis!", rarity: "Very Rare", gp: 500, description: "Submitted a homebrew creation (item, spell, race, etc.) that was accepted into the official canon." },
+            { id: "ach_crit_success", name: "Critical Success!", rarity: "Rare", gp: 200, description: "Succeeded on a skill check by beating the DC by double the required number." },
+            { id: "ach_magical_realm", name: "Step Into My Magical Realm", rarity: "Legendary", gp: 5000, description: "Organized and successfully ran an event that included at least three other players." }
+        ]
+    };
+    const rarityMap = {
+        "Common": "bronze",
+        "Uncommon": "silver",
+        "Rare": "gold",
+        "Very Rare": "very-rare",
+        "Legendary": "legendary",
+        "Repeatable": "silver"
+    };
+    const tabsNav = document.getElementById('tabs-nav');
+    const achievementsContainer = document.getElementById('achievements-container');
+    const modalBackdrop = document.getElementById('modal-backdrop');
+    const modalTitle = document.getElementById('modal-title');
+    const modalDescription = document.getElementById('modal-description');
+    const modalLinkInput = document.getElementById('modal-link-input');
+    const modalUnlockBtn = document.getElementById('modal-unlock-btn');
+    const modalCancelBtn = document.getElementById('modal-cancel-btn');
+    const saveBtn = document.getElementById('save-progress');
+    const loadBtn = document.getElementById('load-progress-btn');
+    const loadInput = document.getElementById('load-progress-input');
+
+    let achievementState = {};
+    let currentAchievementId = null;
+
+    function renderAchievements() {
+        tabsNav.innerHTML = '';
+        achievementsContainer.innerHTML = '';
+
+        Object.keys(achievementsData).forEach((category, index) => {
+            // Create Tab Button
+            const tabButton = document.createElement('button');
+            tabButton.id = `btn-${category.replace(/\s+/g, '-')}`;
+            tabButton.className = 'tab-button';
+            tabButton.textContent = category;
+            tabButton.dataset.target = `tab-${category.replace(/\s+/g, '-')}`;
+            tabsNav.appendChild(tabButton);
+
+            // Create Content Tab
+            const contentTab = document.createElement('div');
+            contentTab.id = `tab-${category.replace(/\s+/g, '-')}`;
+            contentTab.className = 'content-tab';
+            achievementsContainer.appendChild(contentTab);
+
+            const grid = document.createElement('div');
+            grid.className = 'achievements-grid';
+            contentTab.appendChild(grid);
+
+            // Populate Grid
+            achievementsData[category].forEach(ach => {
+                const card = document.createElement('div');
+                card.className = 'achievement-card';
+                card.id = ach.id;
+                card.dataset.rarity = ach.rarity;
+
+                const coin = document.createElement('div');
+                coin.className = `coin ${rarityMap[ach.rarity] || 'bronze'}`;
+
+                const details = document.createElement('div');
+                details.className = 'achievement-details';
+                
+                const title = document.createElement('h3');
+                title.textContent = ach.name;
+
+                const desc = document.createElement('p');
+                desc.textContent = ach.description;
+
+                const reward = document.createElement('p');
+                reward.className = 'reward';
+                reward.textContent = `${ach.gp} GP`;
+                
+                details.appendChild(title);
+                details.appendChild(desc);
+                details.appendChild(reward);
+                card.appendChild(coin);
+                card.appendChild(details);
+                grid.appendChild(card);
+
+                card.addEventListener('click', () => {
+                    if (!card.classList.contains('unlocked')) {
+                        openModal(ach);
+                    }
+                });
+            });
+
+            if (index === 0) {
+                tabButton.classList.add('active');
+                contentTab.classList.add('active');
+            }
+        });
+        
+        addTabListeners();
+        updateUI();
+    }
+
+    function addTabListeners() {
+        tabsNav.addEventListener('click', (e) => {
+            if (e.target.tagName === 'BUTTON') {
+                document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.content-tab').forEach(tab => tab.classList.remove('active'));
+
+                e.target.classList.add('active');
+                document.getElementById(e.target.dataset.target).classList.add('active');
+            }
+        });
+    }
+
+    function openModal(ach) {
+        currentAchievementId = ach.id;
+        modalTitle.textContent = ach.name;
+        modalDescription.textContent = ach.description;
+        modalLinkInput.value = '';
+        modalUnlockBtn.disabled = true;
+        modalBackdrop.style.display = 'flex';
+    }
+
+    function closeModal() {
+        modalBackdrop.style.display = 'none';
+        currentAchievementId = null;
+    }
+
+    function updateUI() {
+        for (const id in achievementState) {
+            const card = document.getElementById(id);
+            if (card && achievementState[id].unlocked) {
+                card.classList.add('unlocked');
+            }
+        }
+    }
+    
+    function saveState() {
+        localStorage.setItem('achievementProgress', JSON.stringify(achievementState));
+    }
+
+    function loadState() {
+        const savedState = localStorage.getItem('achievementProgress');
+        if (savedState) {
+            achievementState = JSON.parse(savedState);
+            updateUI();
+        }
+    }
+    
+    // Event Listeners for Modal
+    modalLinkInput.addEventListener('input', () => {
+        const linkPattern = /^https:\/\/discord\.com\/channels\/\S+$/;
+        modalUnlockBtn.disabled = !linkPattern.test(modalLinkInput.value);
+    });
+
+    modalUnlockBtn.addEventListener('click', () => {
+        if (currentAchievementId) {
+            achievementState[currentAchievementId] = {
+                unlocked: true,
+                link: modalLinkInput.value,
+                date: new Date().toISOString()
+            };
+            saveState();
+            updateUI();
+            closeModal();
+        }
+    });
+
+    modalCancelBtn.addEventListener('click', closeModal);
+    modalBackdrop.addEventListener('click', (e) => {
+        if (e.target === modalBackdrop) {
+            closeModal();
+        }
+    });
+    
+    // Save/Load to File Logic
+    saveBtn.addEventListener('click', () => {
+        const dataStr = JSON.stringify(achievementState, null, 2);
+        const blob = new Blob([dataStr], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'achievement_progress.json';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    });
+
+    loadBtn.addEventListener('click', () => loadInput.click());
+    
+    loadInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const loadedState = JSON.parse(e.target.result);
+                // Basic validation
+                if (typeof loadedState === 'object' && loadedState !== null) {
+                    achievementState = loadedState;
+                    saveState(); // Save to local storage
+                    // Reset UI before updating
+                    document.querySelectorAll('.achievement-card').forEach(c => c.classList.remove('unlocked'));
+                    updateUI();
+                    alert('Progress loaded successfully!');
+                } else {
+                    alert('Invalid JSON file format.');
+                }
+            } catch (error) {
+                alert('Error reading or parsing file.');
+                console.error(error);
+            }
+        };
+        reader.readAsText(file);
+    });
+
+    // Initial Load
+    renderAchievements();
+    loadState();
+});
+</script>
+
+</body>
+</html>

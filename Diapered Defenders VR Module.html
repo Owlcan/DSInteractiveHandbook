@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diapered Defenders: First Mission</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Roboto+Mono&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #111827; /* Dark Slate Gray */
+            color: #E5E7EB;
+        }
+        .grid-container {
+            display: grid;
+            border: 2px solid #374151;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+        .grid-cell {
+            width: 50px;
+            height: 50px;
+            border: 1px solid rgba(55, 65, 81, 0.5);
+            position: relative;
+        }
+        .token {
+            width: 80%;
+            height: 80%;
+            border-radius: 50%;
+            cursor: grab;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+            color: white;
+            position: absolute;
+            top: 10%;
+            left: 10%;
+            z-index: 10;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+            transition: transform 0.2s;
+            text-shadow: 1px 1px 2px black;
+        }
+        .token:active {
+            cursor: grabbing;
+            transform: scale(1.1);
+            z-index: 20;
+        }
+        .player-yellow { background-color: #FBBF24; border: 2px solid #F59E0B; }
+        .player-red { background-color: #EF4444; border: 2px solid #DC2626; }
+        .player-green { background-color: #10B981; border: 2px solid #059669; }
+        .player-black { background-color: #374151; border: 2px solid #1F2937; }
+        .monster-token { background-color: #7C3AED; border: 2px solid #6D28D9; }
+        .object-token {
+            background-color: #6B7280;
+            border-radius: 8px;
+            border: 2px solid #4B5563;
+            font-size: 9px;
+            width: 90%;
+            height: 90%;
+            top: 5%;
+            left: 5%;
+        }
+        .object-token.puzzle-switch {
+             background-image: radial-gradient(circle, #FCA5A5, #EF4444);
+        }
+        .tooltip {
+            position: relative;
+        }
+        .tooltip:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 105%;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            background-color: #1F2937;
+            color: #E5E7EB;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            z-index: 100;
+            border: 1px solid #4B5563;
+        }
+
+        #text-log-container {
+            height: 350px; /* Increased height */
+        }
+        #text-log {
+            font-family: 'Roboto Mono', monospace;
+            height: 100%;
+            background-color: #1F2937;
+            border: 1px solid #374151;
+            padding: 1rem;
+            overflow-y: auto;
+            border-radius: 8px;
+        }
+        .log-entry span {
+            display: block;
+        }
+        #interaction-panel button {
+            transition: all 0.2s ease-in-out;
+        }
+        #interaction-panel button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        #interaction-panel button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        /* Custom scrollbar for webkit browsers */
+        #text-log::-webkit-scrollbar {
+            width: 8px;
+        }
+        #text-log::-webkit-scrollbar-track {
+            background: #1F2937;
+        }
+        #text-log::-webkit-scrollbar-thumb {
+            background-color: #4B5563;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="max-w-7xl mx-auto flex flex-col gap-8">
+        
+        <!-- Top Section: Game Board and Interaction Panel -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-2 bg-[#1a2333] p-4 rounded-lg shadow-lg">
+                <h1 class="text-2xl font-bold mb-2 text-center text-gray-200">Diapered Defenders: First Mission</h1>
+                <h2 class="text-lg font-semibold mb-4 text-center text-gray-400" id="room-name">Loading VR Simulation...</h2>
+                <div class="flex justify-center">
+                    <div id="grid-container" class="grid-container"></div>
+                </div>
+            </div>
+            
+            <div id="interaction-panel" class="bg-[#1a2333] p-4 rounded-lg shadow-lg text-center flex flex-col">
+                <h3 class="text-xl font-bold mb-4 text-gray-200">Actions</h3>
+                <div id="puzzle-controls" class="hidden flex flex-col gap-2 flex-grow"></div>
+                <button id="next-room-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg mt-auto" disabled>Proceed to Next Chamber</button>
+            </div>
+        </div>
+
+        <!-- Bottom Section: Text Log -->
+        <div id="text-log-container" class="bg-[#1a2333] p-4 rounded-lg shadow-lg">
+             <h3 class="text-xl font-bold mb-2 text-gray-200">System Log & Dialogue</h3>
+            <div id="text-log"></div>
+        </div>
+
+    </div>
+
+    <script>
+        const gameState = {
+            dungeon: [],
+            currentRoomIndex: -1,
+            playerTokens: [],
+            monsterTokens: [],
+            objectTokens: [],
+            puzzleState: {}
+        };
+
+        // --- DATA DEFINITIONS ---
+        // These can be expanded significantly for more variety
+        const MONSTERS = {
+            darkling_lurker: { 
+            name: "Darkling-Lurker", 
+            cr: "1/2", 
+            color: '#7C3AED',
+            description: "Small abomination that stalks from shadows with eerie silence",
+            abilities: ["Shadow Step", "Ambush Strike"]
+            },
+            darkforme_overwatch: { 
+            name: "Darkforme Overwatch", 
+            cr: "2", 
+            color: '#8B5CF6',
+            description: "Medium abomination with distorted form and anxious demeanor, constantly scanning for intruders",
+            abilities: ["Vigilant Gaze", "Shadow Blast"]
+            },
+            darkforged_remnant: { 
+            name: "Darkforged Remnant", 
+            cr: "1", 
+            color: '#6D28D9',
+            description: "Corrupted warforged construct, once guardians now twisted by dark energy",
+            abilities: ["Unstable Core", "Repair Protocol"]
+            },
+            the_castoff: { 
+            name: "The Castoff", 
+            cr: "5", 
+            color: '#4C1D95',
+            description: "A sentient fragment of chronocrystal containing a splinter of Tabitha's obsessive will",
+            abilities: ["Time Distortion", "Memory Extraction", "Reality Warp"]
+            },
+            darkling_yowler: { 
+            name: "Darkling-Yowler", 
+            cr: "1/2", 
+            color: '#7E3AF2',
+            description: "Small abomination with an unnaturally wide mouth capable of emitting disorienting wails",
+            abilities: ["Sonic Disturbance", "Flight"]
+            },
+            darkling_bellowbelly: { 
+            name: "Darkling-Bellowbelly", 
+            cr: "1", 
+            color: '#6D28D9',
+            description: "Medium abomination with a distended abdomen that produces noxious gases",
+            abilities: ["Toxic Cloud", "Gaseous Form"]
+            },
+            darkforme_cavesweller: { 
+            name: "Darkforme-Cavesweller", 
+            cr: "3", 
+            color: '#5B21B6',
+            description: "Large abomination adapted to underground environments with multiple limbs for climbing",
+            abilities: ["Wall Crawling", "Stalactite Drop"]
+            },
+            darkforme_hungore: { 
+            name: "Darkforme-Hungore", 
+            cr: "2", 
+            color: '#7C3AED',
+            description: "Ravenous abomination that drains life essence from victims",
+            abilities: ["Life Drain", "Insatiable Hunger"]
+            },
+            darkling_nightshade: { 
+            name: "Darkling-Nightshade Elemental", 
+            cr: "2", 
+            color: '#4C1D95',
+            description: "A shadow given semi-solid form, capable of manipulating darkness",
+            abilities: ["Shadow Manipulation", "Light Sensitivity"]
+            },
+            the_darkformless: { 
+            name: "The Darkformless", 
+            cr: "4", 
+            color: '#3730A3',
+            description: "Amorphous entity of pure darkness that can shift between solid and incorporeal states",
+            abilities: ["Phase Shift", "Engulfing Darkness"]
+            },
+            darkforme_spinebearer: { 
+            name: "Darkforme-Spinebearer", 
+            cr: "3", 
+            color: '#5B21B6',
+            description: "Thorny abomination capable of launching spines with deadly accuracy",
+            abilities: ["Spine Volley", "Thorn Armor"]
+            },
+            darkaconda: { 
+            name: "Darkaconda", 
+            cr: "4", 
+            color: '#4C1D95',
+            description: "Massive serpentine abomination that constricts and suffocates prey",
+            abilities: ["Constrict", "Swallow Whole"]
+            },
+            night_mare_shadowstorm: { 
+            name: "Night-Mare Shadowstorm", 
+            cr: "9", 
+            color: '#312E81',
+            description: "A towering evolution of the Darkling-Ossuite Charger, embodying both savage brutality and otherworldly allure",
+            abilities: ["Trampling Charge", "Nightmare Aura", "Shadow Storm"]
+            },
+            dark_dimension_auditarch: { 
+            name: "Dark Dimension Auditarch", 
+            cr: "7", 
+            color: '#4338CA',
+            description: "Medium humanoid with domineering presence wielding arcane authority",
+            abilities: ["Reality Audit", "Bureaucratic Curse", "Regulation Enforcement"]
+            }
+        };
+
+        const ROOM_TEMPLATES = [
+            {
+                name: "The Whispering Antechamber",
+                width: 10, height: 8,
+                layout: {
+                    monsters: [{ type: 'darkling_lurker', x: 7, y: 2 }, { type: 'darkling_lurker', x: 8, y: 5 }],
+                    objects: [
+                        { type: 'debris', x: 2, y: 2, flavor: "A pile of crumbling stone and rotted wood." }, 
+                        { type: 'debris', x: 3, y: 6, flavor: "Shattered remnants of an old arcane device." },
+                        { type: 'trap_gas', x: 5, y: 4, flavor: "A rusted grate on the floor occasionally puffs a strange, sweet-smelling vapor. A DC 13 Constitution save is needed to avoid its effects." }
+                    ],
+                    exit: { x: 9, y: 4, flavor: "A crumbling archway leads deeper into the darkness." }
+                },
+                lore: [
+                    { speaker: 'System', text: "You enter a dusty antechamber. The air is heavy with the scent of ozone and forgotten time. The walls are lined with faded frescoes depicting owlish figures and celestial engines." },
+                    { speaker: 'Red', text: "Ugh, smells like old magic and regret in here. Let's make this quick." },
+                    { speaker: 'Green', text: "Steady. The stonework is ancient... unstable. Watch your step." }
+                ]
+            },
+            {
+                name: "The Chamber of Opposition",
+                width: 12, height: 10,
+                layout: {
+                    monsters: [],
+                    objects: [
+                        { type: 'puzzle_dais', x: 3, y: 2, id: 'dais_light', flavor: "A pedestal radiating a soft light." },
+                        { type: 'puzzle_dais', x: 3, y: 5, id: 'dais_heavy', flavor: "A pedestal that seems to warp the floor with its immense weight." },
+                        { type: 'puzzle_dais', x: 3, y: 8, id: 'dais_ephemeral', flavor: "A pedestal that shimmers and fades, as if barely real." },
+                        { type: 'puzzle_object', x: 8, y: 3, id: 'obj_feather', flavor: "A Feather that feels strangely heavy." },
+                        { type: 'puzzle_object', x: 8, y: 5, id: 'obj_shadow', flavor: "A Solidified Shadow that emits a faint light." },
+                        { type: 'puzzle_object', x: 8, y: 7, id: 'obj_lead', flavor: "A Lead Weight that floats an inch off the ground." }
+                    ],
+                    exit: { x: 11, y: 5, flavor: "A section of the far wall slides open upon solving the puzzle."}
+                },
+                puzzle: {
+                    type: 'balance',
+                    prompt: "Three pedestals stand before you: one radiates light, one exudes weight, one shimmers ephemerally. Three objects rest opposite them. Place the objects to create balance.",
+                    dais: [
+                        { id: 'dais_light', label: 'Place on Dais of Light'},
+                        { id: 'dais_heavy', label: 'Place on Dais of Weight'},
+                        { id: 'dais_ephemeral', label: 'Place on Dais of Ephemera'}
+                    ],
+                    objects: [
+                        { id: 'obj_feather', label: 'Select Heavy Feather'},
+                        { id: 'obj_shadow', label: 'Select Luminous Shadow'},
+                        { id: 'obj_lead', label: 'Select Floating Lead Weight'}
+                    ],
+                    solution: { dais_light: 'obj_shadow', dais_heavy: 'obj_lead', dais_ephemeral: 'obj_feather' }
+                },
+                lore: [
+                    { speaker: 'System', text: "This chamber seems to hum with paradoxical energy. Three pedestals stand on one side, three objects on the other. The inscriptions are faded, but speak of 'opposition in harmony'." },
+                    { speaker: 'Yellow', text: "It's a puzzle... Tabitha was always fond of these. She believed true understanding came from reconciling opposites." },
+                    { speaker: 'Black', text: "A test of perception, not just logic. Observe the objects carefully. What they appear to be may not be their true nature." }
+                ]
+            },
+            {
+                name: "The Ruined Scriptorium",
+                width: 15, height: 12,
+                layout: {
+                    monsters: [
+                        { type: 'darkforme_overwatch', x: 7, y: 6 },
+                        { type: 'darkforged_remnant', x: 4, y: 3 },
+                        { type: 'darkforged_remnant', x: 10, y: 9 }
+                    ],
+                    objects: [
+                        { type: 'debris', x: 1, y: 1, flavor: "A shattered lectern." }, { type: 'debris', x: 13, y: 2, flavor: "A pile of burnt scrolls." }, { type: 'debris', x: 2, y: 10, flavor: "An overturned bookshelf." },
+                        { type: 'puzzle_switch', x: 7, y: 1, flavor: "A glowing, pulsating crystal on the wall seems to empower the constructs. It must be deactivated." }
+                    ],
+                    exit: { x: 14, y: 6, flavor: "A large, reinforced door, its lock mechanism glowing faintly." }
+                },
+                lore: [
+                    { speaker: 'System', text: "This was once a scriptorium, now ruined. Shattered desks and torn scrolls litter the floor. Several hulking constructs, their forms flickering with dark energy, stand guard. A central crystal pulses with a malevolent light, seeming to repair any damage they take." },
+                    { speaker: 'Green', text: "More of Tabitha's old warforged... corrupted. That crystal is sustaining them. We need to shut it down." },
+                    { speaker: 'Red', text: "I'll keep them busy! You two figure out how to smash that glowing rock!" }
+                ]
+            },
+            {
+                name: "The Chamber of Resolution",
+                width: 12, height: 12,
+                layout: {
+                    monsters: [
+                        { type: 'the_castoff', x: 6, y: 3 },
+                        { type: 'darkforged_remnant', x: 3, y: 6 },
+                        { type: 'darkforged_remnant', x: 9, y: 6 }
+                    ],
+                     objects: [{ type: 'crystal_altar', x: 6, y: 2, flavor: "A large, jagged chronocrystal pulses with sorrowful energy on a central altar." }],
+                     exit: null // Final room
+                },
+                lore: [
+                    { speaker: 'System', text: "You have reached the heart of the disturbance. The air crackles with chronal energy and raw emotion. On a raised dais in the center of the chamber rests a massive, fractured crystal, pulsing with a sickly purple light. It is The Castoff, a sentient fragment of Tabitha's will. It is not alone." },
+                    { speaker: 'The Castoff', text: "You.. feel her ambition... her desire to protect... to *control*. You will be made safe. You will be made eternal children under my care!" },
+                    { speaker: 'Black', text: "This is it. The source. That crystal... it's radiating sorrow and obsession. We have to shatter it, release the trapped energy! For Yara!" }
+                ]
+            }
+        ];
+
+        // --- DOM ELEMENTS ---
+        const gridContainer = document.getElementById('grid-container');
+        const textLog = document.getElementById('text-log');
+        const nextRoomBtn = document.getElementById('next-room-btn');
+        const roomNameEl = document.getElementById('room-name');
+        const puzzleControlsEl = document.getElementById('puzzle-controls');
+        
+        // --- GAME LOGIC ---
+
+        function logMessage(speaker, text) {
+            const entry = document.createElement('div');
+            entry.classList.add('log-entry', 'mb-2');
+            let color = '#E5E7EB'; // Default
+            let displayName = speaker;
+
+            switch(speaker) {
+                case 'System': color = '#10B981'; displayName = '[SYSTEM]'; break;
+                case 'Yellow': color = '#FBBF24'; displayName = '[Defender Yellow]'; break;
+                case 'Red':    color = '#F472B6'; displayName = '[Defender Red]'; break;
+                case 'Green':  color = '#34D399'; displayName = '[Defender Green]'; break;
+                case 'Black':  color = '#9CA3AF'; displayName = '[Defender Black]'; break;
+                case 'The Castoff': color = '#A78BFA'; displayName = '[The Castoff]'; break;
+            }
+
+            entry.innerHTML = `<span style="color: ${color}; font-weight: bold;">${displayName}:</span> <span class="text-gray-300">${text}</span>`;
+            textLog.appendChild(entry);
+            textLog.scrollTop = textLog.scrollHeight;
+        }
+
+        function createToken(type, id, label, tooltipText) {
+            const token = document.createElement('div');
+            token.id = id;
+            token.className = 'token tooltip';
+            token.classList.add(type);
+            token.draggable = true;
+            token.textContent = label;
+            token.setAttribute('data-tooltip', tooltipText);
+            return token;
+        }
+        
+        function handleTokenInteraction(token) {
+             token.addEventListener('dragstart', (e) => {
+                e.dataTransfer.setData('text/plain', e.target.id);
+                setTimeout(() => {
+                    e.target.style.visibility = 'hidden';
+                }, 0);
+            });
+            token.addEventListener('dragend', (e) => {
+                e.target.style.visibility = 'visible';
+            });
+            
+            if (token.classList.contains('monster-token')) {
+                 token.addEventListener('contextmenu', (e) => {
+                    e.preventDefault();
+                    if (confirm(`Defeat ${token.getAttribute('data-tooltip')}?`)) {
+                        token.parentElement.removeChild(token);
+                        gameState.monsterTokens = gameState.monsterTokens.filter(m => m.id !== token.id);
+                        checkRoomCompletion();
+                    }
+                });
+            }
+        }
+
+        function renderRoom(roomData) {
+            // Clear previous room state
+            gridContainer.innerHTML = '';
+            puzzleControlsEl.innerHTML = '';
+            puzzleControlsEl.classList.add('hidden');
+            textLog.innerHTML = '';
+            gameState.monsterTokens = [];
+            gameState.objectTokens = [];
+            gameState.puzzleState = {};
+
+            // Setup new room
+            roomNameEl.textContent = roomData.name;
+            gridContainer.style.gridTemplateColumns = `repeat(${roomData.width}, 1fr)`;
+            gridContainer.style.width = `${roomData.width * 50}px`;
+            
+            for (let i = 0; i < roomData.width * roomData.height; i++) {
+                const cell = document.createElement('div');
+                cell.classList.add('grid-cell');
+                cell.dataset.x = i % roomData.width;
+                cell.dataset.y = Math.floor(i / roomData.width);
+
+                cell.addEventListener('dragover', (e) => e.preventDefault());
+                cell.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    const id = e.dataTransfer.getData('text/plain');
+                    const draggable = document.getElementById(id);
+                    if (draggable && e.target.classList.contains('grid-cell')) {
+                       e.target.appendChild(draggable);
+                    }
+                });
+                gridContainer.appendChild(cell);
+            }
+            
+            // Log messages
+            roomData.lore.forEach(line => logMessage(line.speaker, line.text));
+
+            // Place players (only once at the start)
+            if (gameState.currentRoomIndex === 0) {
+                 gameState.playerTokens = [
+                    { id: 'p_yellow', class: 'player-yellow', label: 'Y', x: 1, y: 3 },
+                    { id: 'p_red', class: 'player-red', label: 'R', x: 1, y: 4 },
+                    { id: 'p_green', class: 'player-green', label: 'G', x: 1, y: 5 },
+                    { id: 'p_black', class: 'player-black', label: 'B', x: 2, y: 4 },
+                 ];
+                 gameState.playerTokens.forEach(p => {
+                    const token = createToken(p.class, p.id, p.label, `Defender ${p.class.split('-')[1]}`);
+                    gridContainer.querySelector(`[data-x='${p.x}'][data-y='${p.y}']`).appendChild(token);
+                    handleTokenInteraction(token);
+                });
+            } else {
+                 // On subsequent rooms, just render the existing tokens in a starting area
+                 gameState.playerTokens.forEach(p => {
+                     const token = document.getElementById(p.id);
+                     if (token) gridContainer.querySelector(`[data-x='1'][data-y='${p.y}']`).appendChild(token);
+                 });
+            }
+
+            // Place monsters and objects
+            roomData.layout.monsters.forEach((m, i) => {
+                const monsterData = MONSTERS[m.type];
+                const token = createToken('monster-token', `m_${i}`, monsterData.name.substring(0, 3).toUpperCase(), `${monsterData.name} (CR: ${monsterData.cr})`);
+                token.style.backgroundColor = monsterData.color;
+                gridContainer.querySelector(`[data-x='${m.x}'][data-y='${m.y}']`).appendChild(token);
+                handleTokenInteraction(token);
+                gameState.monsterTokens.push({id: `m_${i}`, data: monsterData});
+            });
+            if(gameState.monsterTokens.length > 0) logMessage('System', `${gameState.monsterTokens.length} hostile signatures detected.`);
+
+
+            roomData.layout.objects.forEach((o, i) => {
+                 let label = o.type.split('_')[0];
+                 label = label.charAt(0).toUpperCase() + label.slice(1);
+                 const objToken = createToken('object-token', `o_${i}`, label, o.flavor);
+                 if (o.type === 'puzzle_switch') objToken.classList.add('puzzle-switch');
+                 gridContainer.querySelector(`[data-x='${o.x}'][data-y='${o.y}']`).appendChild(objToken);
+                 gameState.objectTokens.push({id: `o_${i}`, data: o});
+            });
+
+
+            // Setup puzzle if it exists
+            if (roomData.puzzle) {
+                setupPuzzle(roomData.puzzle);
+            }
+
+            // Initial check for completion
+            checkRoomCompletion();
+        }
+
+        function setupPuzzle(puzzleData) {
+            puzzleControlsEl.classList.remove('hidden');
+            
+            const prompt = document.createElement('p');
+            prompt.className = 'text-gray-300 mb-4';
+            prompt.textContent = puzzleData.prompt;
+            puzzleControlsEl.appendChild(prompt);
+            
+            const objectSelector = document.createElement('div');
+            objectSelector.className = 'mb-2';
+            puzzleData.objects.forEach(obj => {
+                const btn = document.createElement('button');
+                btn.className = 'bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded m-1';
+                btn.textContent = obj.label;
+                btn.dataset.objectId = obj.id;
+                btn.onclick = () => {
+                    gameState.puzzleState.selectedObject = obj.id;
+                    // Visual feedback
+                    puzzleControlsEl.querySelectorAll('[data-object-id]').forEach(b => b.classList.remove('ring-2', 'ring-yellow-400'));
+                    btn.classList.add('ring-2', 'ring-yellow-400');
+                };
+                objectSelector.appendChild(btn);
+            });
+            puzzleControlsEl.appendChild(objectSelector);
+
+            const daisSelector = document.createElement('div');
+            puzzleData.dais.forEach(dais => {
+                const btn = document.createElement('button');
+                btn.className = 'bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-1';
+                btn.textContent = dais.label;
+                btn.dataset.daisId = dais.id;
+                btn.onclick = () => {
+                     if (!gameState.puzzleState.selectedObject) {
+                        logMessage('System', "Select an object first.");
+                        return;
+                    }
+                    if (!gameState.puzzleState.placements) {
+                        gameState.puzzleState.placements = {};
+                    }
+                    gameState.puzzleState.placements[dais.id] = gameState.puzzleState.selectedObject;
+                    logMessage('System', `You placed the ${gameState.puzzleState.selectedObject} on the ${dais.id}.`);
+                    
+                    const objBtn = puzzleControlsEl.querySelector(`[data-object-id="${gameState.puzzleState.selectedObject}"]`);
+                    if(objBtn) objBtn.disabled = true;
+
+                    btn.disabled = true;
+
+                    gameState.puzzleState.selectedObject = null;
+                    puzzleControlsEl.querySelectorAll('[data-object-id]').forEach(b => b.classList.remove('ring-2', 'ring-yellow-400'));
+                    checkPuzzleCompletion(puzzleData.solution);
+                };
+                daisSelector.appendChild(btn);
+            });
+             puzzleControlsEl.appendChild(daisSelector);
+        }
+        
+        function checkPuzzleCompletion(solution) {
+            const placements = gameState.puzzleState.placements || {};
+            const keys = Object.keys(solution);
+            if(Object.keys(placements).length !== keys.length) return;
+
+            let correct = true;
+            for(const key of keys) {
+                if(placements[key] !== solution[key]) {
+                    correct = false;
+                    break;
+                }
+            }
+            
+            if (correct) {
+                logMessage('System', "A low hum resonates through the chamber as the mechanism activates. The way forward is clear!");
+                gameState.puzzleState.solved = true;
+                checkRoomCompletion();
+            } else {
+                logMessage('System', "A discordant chime echoes. The arrangement is incorrect. The objects reset themselves.");
+                puzzleControlsEl.querySelectorAll('button').forEach(b => b.disabled = false);
+                gameState.puzzleState.placements = {};
+            }
+        }
+
+        function checkRoomCompletion() {
+            const roomData = gameState.dungeon[gameState.currentRoomIndex];
+            const monstersDefeated = gameState.monsterTokens.length === 0;
+            const puzzleSolved = !roomData.puzzle || (gameState.puzzleState && gameState.puzzleState.solved);
+
+            if (monstersDefeated && puzzleSolved) {
+                 if (roomData.layout.exit) {
+                    nextRoomBtn.disabled = false;
+                    logMessage('System', roomData.layout.exit.flavor);
+                 } else {
+                     nextRoomBtn.disabled = true;
+                     logMessage('System', 'The Castoff is defeated! The oppressive aura lifts. Mission successful.');
+                 }
+            } else {
+                nextRoomBtn.disabled = true;
+            }
+        }
+
+        function generateDungeon() {
+            gameState.dungeon = [
+                ROOM_TEMPLATES[0],
+                ROOM_TEMPLATES[2],
+                ROOM_TEMPLATES[1],
+                ROOM_TEMPLATES[3]
+            ];
+        }
+
+        function advanceToNextRoom() {
+            if (gameState.currentRoomIndex < gameState.dungeon.length - 1) {
+                gameState.currentRoomIndex++;
+                renderRoom(gameState.dungeon[gameState.currentRoomIndex]);
+            }
+        }
+
+        // --- INITIALIZATION ---
+        function init() {
+            generateDungeon();
+            nextRoomBtn.onclick = advanceToNextRoom;
+            advanceToNextRoom();
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
