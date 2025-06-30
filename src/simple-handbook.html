@@ -526,6 +526,7 @@
       <button id="btn-fishing" class="nav-button">Fishing</button>
       <button id="btn-pamperlogue" class="nav-button">Pamperlogue</button>
       <button id="btn-potty-checker" class="nav-button">Potty Checker</button>
+      <button id="btn-book-reader" class="nav-button">Book Reader</button>
       <button id="btn-achievement-tracker" class="nav-button">Achievement Tracker</button>
       <button id="btn-races" class="nav-button">Races</button>
       <button id="btn-backgrounds" class="nav-button">Backgrounds</button>
@@ -1401,13 +1402,17 @@
         <iframe id="pamperlogue-iframe" src="../pamperlogue.html" data-original-src="../pamperlogue.html" onload="this.previousElementSibling.style.display='none'"></iframe>
       </div>
     </div>
-
-    <div id="potty-checker" class="content-section">
+</div>
+     <div id="potty-checker" class="content-section">
       <h2>Potty Checker</h2>
       <div id="potty-checker-iframe-container" class="iframe-container">
         </div>
     </div>
-
+ <div id="book-reader-section" class="content-section">
+      <h2>Book Reader</h2>
+      <div id="book-reader-iframe-container" class="iframe-container">
+        </div>
+    </div>
     <div id="achievement-tracker" class="content-section">
       <h2>Achievement Tracker</h2>
       <div id="achievement-tracker-iframe-container" class="iframe-container">
@@ -1565,6 +1570,7 @@
         { containerId: 'bestiary-iframe-container', iframeId: 'bestiary-iframe', type: 'dynamic' },
         { containerId: 'items-iframe-container', iframeId: 'items-iframe', type: 'dynamic' },
         { containerId: 'spellbook-iframe-container', iframeId: 'spellbook-iframe', type: 'dynamic' },
+        { containerId: 'book-reader-iframe-container', iframeId: 'book-reader-iframe', type: 'dynamic' },
         { containerId: 'potty-checker-iframe-container', iframeId: 'potty-checker-iframe', type: 'dynamic' },
         { containerId: 'achievement-tracker-iframe-container', iframeId: 'achievement-tracker-iframe', type: 'dynamic' },
         { containerId: 'races-iframe-container', iframeId: 'races-iframe', type: 'dynamic' },
@@ -1687,6 +1693,10 @@
         'btn-potty-checker': () => {
             document.getElementById('potty-checker').classList.add('active');
             createOrRefreshIframe('potty-checker-iframe-container', 'potty-checker-iframe', '../pottychecker.html', 'Potty Checker');
+        },
+        'btn-book-reader': () => {
+            document.getElementById('book-reader-section').classList.add('active');
+            createOrRefreshIframe('book-reader-iframe-container', 'book-reader-iframe', 'BookReader.html', 'Book Reader');
         },
         'btn-achievement-tracker': () => {
             document.getElementById('achievement-tracker').classList.add('active');
