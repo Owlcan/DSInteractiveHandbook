@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Generation Tool (Advanced)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .loader {
+            border-top-color: #3498db;
+            -webkit-animation: spin 1s linear infinite;
+            animation: spin 1s linear infinite;
+        }
+        @-webkit-keyframes spin {
+            0% { -webkit-transform: rotate(0deg); }
+            100% { -webkit-transform: rotate(360deg); }
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200 flex items-center justify-center min-h-screen py-12">
+    <div class="w-full max-w-3xl p-6 md:p-8 bg-gray-800 rounded-2xl shadow-2xl">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-white">Direct Image Generation Tool</h1>
+            <p class="text-gray-400 mt-2">Using Imagen with Advanced Controls</p>
+        </div>
+
+        <!-- Input Form -->
+        <div class="space-y-6">
+            <div>
+                <label for="prompt" class="block text-sm font-medium text-gray-300 mb-2">Prompt</label>
+                <textarea id="prompt" rows="3" class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="e.g., A majestic lion in a futuristic city, photorealistic"></textarea>
+            </div>
+            <div>
+                <label for="negativePrompt" class="block text-sm font-medium text-gray-300 mb-2">Negative Prompt (Optional)</label>
+                <textarea id="negativePrompt" rows="2" class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="e.g., blurry, cartoon, text, watermark"></textarea>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                    <label for="modelSelection" class="block text-sm font-medium text-gray-300 mb-2">Model Version</label>
+                    <select id="modelSelection" class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                        <option value="gemini-1.5-flash">Gemini 1.5 Flash</option>
+                        <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
+                        <option value="gemini-pro">Gemini Pro</option>
+                        <option value="gemini-pro-vision">Gemini Pro Vision</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="aspectRatio" class="block text-sm font-medium text-gray-300 mb-2">Aspect Ratio</label>
+                    <select id="aspectRatio" class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                        <option value="1:1">Square (1:1)</option>
+                        <option value="16:9">Landscape (16:9)</option>
+                        <option value="9:16">Portrait (9:16)</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="sampleCount" class="block text-sm font-medium text-gray-300 mb-2">Number of Images</label>
+                    <input type="number" id="sampleCount" min="1" max="4" value="1" class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                </div>
+            </div>
+
+            <button id="generateBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-transform transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-800">
+                Generate Image(s)
+            </button>
+        </div>
+
+        <!-- Status and Result Display -->
+        <div id="status" class="mt-6 text-center"></div>
+        <div id="image-container" class="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
+             <p id="placeholder" class="text-gray-500 col-span-full text-center">Your generated images will appear here</p>
+        </div>
+    </div>
+
+    <script>
+        // --- Configuration ---
+        const apiKey = "AIzaSyBT8jhfsRN71Q_VRDZt_g98ZwlJViE3Y2U";
+
+        // Get references to the DOM elements
+        const generateBtn = document.getElementById('generateBtn');
+        const promptInput = document.getElementById('prompt');
+        const negativePromptInput = document.getElementById('negativePrompt');
+        const modelSelect = document.getElementById('modelSelection');
+        const aspectRatioSelect = document.getElementById('aspectRatio');
+        const sampleCountInput = document.getElementById('sampleCount');
+        const imageContainer = document.getElementById('image-container');
+        const statusDiv = document.getElementById('status');
+        const placeholder = document.getElementById('placeholder');
+
+        // Add event listener to the generate button
+        generateBtn.addEventListener('click', async () => {
+            const prompt = promptInput.value;
+            const negativePrompt = negativePromptInput.value;
+            const selectedModel = modelSelect.value;
+            const aspectRatio = aspectRatioSelect.value;
+            const sampleCount = parseInt(sampleCountInput.value, 10);
+
+            // --- Basic Input Validation ---
+            if (!prompt.trim()) {
+                displayError('The prompt cannot be empty.');
+                return;
+            }
+            if (apiKey === "// INSERT YOUR GOOGLE AI API KEY HERE //" || !apiKey.trim()) {
+                displayError('Please paste your API key into the script section of this HTML file.');
+                return;
+            }
+             if (isNaN(sampleCount) || sampleCount < 1 || sampleCount > 4) {
+                displayError('Number of images must be between 1 and 4.');
+                return;
+            }
+
+            // --- Start Generation Process ---
+            clearResult();
+            setLoading(true, 'Generating, please wait...');
+
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${selectedModel}:generateContent?key=${apiKey}`;
+            
+            // Build the prompt with negative prompt if provided
+            let fullPrompt = prompt;
+            if (negativePrompt.trim()) {
+                fullPrompt += `. Avoid: ${negativePrompt}`;
+            }
+            
+            const payload = {
+                contents: [{
+                    parts: [{
+                        text: fullPrompt
+                    }]
+                }],
+                generationConfig: {
+                    candidateCount: sampleCount,
+                    maxOutputTokens: 2048,
+                    temperature: 0.7
+                }
+            };
+            
+            // --- API Call with Retry Logic ---
+            const maxRetries = 3;
+            let lastError = null;
+
+            try {
+                for (let attempt = 1; attempt <= maxRetries; attempt++) {
+                    try {
+                        if (attempt > 1) {
+                            setLoading(true, `Retrying... (Attempt ${attempt}/${maxRetries})`);
+                            await new Promise(resolve => setTimeout(resolve, 1000 * (attempt - 1))); // 0s, 1s, 2s delay
+                        }
+
+                        const response = await fetch(apiUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload),
+                        });
+
+                        if (!response.ok) {
+                            const errorData = await response.json();
+                            const errorMessage = errorData?.error?.message || `HTTP error! Status: ${response.status}`;
+                            throw new Error(errorMessage); // Definitive error, don't retry.
+                        }
+
+                        const result = await response.json();
+                        console.log(`API Response (Attempt ${attempt}):`, result);
+
+                        if (Object.keys(result).length === 0) {
+                            throw new Error('The API returned an empty response.'); // Retryable error.
+                        }
+
+                        // --- SUCCESS CASE ---
+                        if (result.candidates && result.candidates.length > 0) {
+                            placeholder.classList.add('hidden');
+                            result.candidates.forEach(candidate => {
+                                if (candidate.content && candidate.content.parts) {
+                                    candidate.content.parts.forEach(part => {
+                                        if (part.inlineData && part.inlineData.data) {
+                                            const imageData = part.inlineData.data;
+                                            const mimeType = part.inlineData.mimeType || 'image/png';
+                                            const imageUrl = `data:${mimeType};base64,${imageData}`;
+                                            const img = document.createElement('img');
+                                            img.src = imageUrl;
+                                            img.alt = prompt;
+                                            img.className = 'rounded-lg max-w-full h-auto shadow-lg';
+                                            imageContainer.appendChild(img);
+                                        }
+                                    });
+                                }
+                            });
+                            setLoading(false); // Turn off loading indicator on success
+                            return; // Exit function successfully
+                        } else {
+                            // Handle other non-image but valid JSON responses
+                            if (result.promptFeedback && result.promptFeedback.blockReason) {
+                                const reason = result.promptFeedback.blockReason;
+                                throw new Error(`Request blocked by safety filters. Reason: ${reason}`);
+                            } else {
+                                throw new Error('API response did not contain valid image data.');
+                            }
+                        }
+                    } catch (error) {
+                        lastError = error;
+                        console.error(`Attempt ${attempt} failed:`, error.message);
+                        if (error.message !== 'The API returned an empty response.') {
+                            break;
+                        }
+                    }
+                }
+                throw lastError;
+            } catch (error) {
+                console.error('Error generating image:', error);
+                displayError(`Generation failed: ${error.message}`);
+            } finally {
+                setLoading(false);
+            }
+        });
+
+        // --- Helper Functions ---
+        function setLoading(isLoading, message = '') {
+            generateBtn.disabled = isLoading;
+            if (isLoading) {
+                generateBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                statusDiv.innerHTML = `
+                    <div class="flex items-center justify-center text-blue-400">
+                        <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-500 h-6 w-6 mr-3"></div>
+                        <span>${message}</span>
+                    </div>`;
+            } else {
+                generateBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                if (!statusDiv.querySelector('.text-red-400')) {
+                   statusDiv.innerHTML = '';
+                }
+            }
+        }
+
+        function displayError(message) {
+            statusDiv.innerHTML = `<p class="text-red-400 font-semibold">${message}</p>`;
+            placeholder.classList.remove('hidden');
+        }
+
+        function clearResult() {
+            imageContainer.innerHTML = '';
+            const p = document.createElement('p');
+            p.id = 'placeholder';
+            p.className = 'text-gray-500 col-span-full text-center';
+            p.textContent = 'Your generated images will appear here';
+            imageContainer.appendChild(p);
+            statusDiv.innerHTML = '';
+        }
+    </script>
+</body>
+</html>

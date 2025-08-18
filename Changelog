@@ -1,0 +1,363 @@
+# DS Interactive Handbook Changelog
+*Last Updated: August 18, 2025*
+
+## Major Game Updates & New Features
+
+### Diapered Defenders: VR Module — Handbook-Themed Overhaul (New)
+- Visuals/Theme:
+  - Full handbook style applied (parchment browns, warm gold accents, MedievalSharp/Cormorant typography), gold-lined panels, and textured parchment backgrounds.
+  - Themed hover cards for monsters/objects with rollable actions (when runtime bestiary is available) and concise traits preview otherwise.
+- Board/UX:
+  - No scroll containers. The board now fits the available width first and only shrinks for height overflow; keyboard zoom (+/−/0) supported.
+  - Hard-coded player spawns per room are always used on entry; drag/drop is purely visual and does not persist positions across rooms.
+  - Next button starts disabled each room and only enables when all room requirements are satisfied.
+- Gameplay/Logic:
+  - Room completion now requires all monsters defeated and any room puzzle requirements met. Crystal switches (e.g., Scriptorium) must be deactivated before proceeding.
+  - Scriptorium fix: You can no longer leave immediately; deactivating the sustaining crystal and clearing the room is required.
+  - Malodorous Balance: Debris layering adjusted so player tokens can stand on the central debris as intended.
+  - Trap interactions surfaced in the log (e.g., gas vents) when stepped on or triggered.
+- Data & Integrations:
+  - Supports runtime bestiary (full stat cards) with graceful fallback to built-in monster previews.
+  - Puzzle system supports both room-level and layout-level definitions (dais/object placements), with immediate validation and reset on failure.
+
+### Old War Defense - Complete Overhaul
+- **Cleric Tower Added:** New support tower with 6 unique cleric tokens and a champion ("The Holy Protector"). Buffs nearby towers, can cleanse debuffs, and grants immunity to curse/disable.
+- **Game Modes:**
+  - **Hard Mode:** Shorter, straighter path, 600 starting essence, more intense gameplay.
+  - **Chaos/Horde Mode:** Endless waves of titans, titan beasts, hordes, diggers, fliers, and non-path enemies. Start with 10,000 essence.
+- **Portal System Overhaul:**
+  - Portals spawn from early waves, with more locations and frequency as the game progresses.
+  - All non-boss, non-digger enemies can exit portals at high levels.
+- **Enemy Variety:**
+  - All 101 monster sprites implemented and used in spawn patterns.
+  - Titan beasts and abominations now move straight, are larger, and have theatrical movement.
+  - Improved spawn spacing for large enemies and hordes to prevent clustering.
+- **UI/UX Improvements:**
+  - Essence, lives, and wave counters moved below the game board, styled for clarity.
+  - Mode buttons (Hard/Chaos) moved below the map for better access.
+  - Wave details and notifications now appear in a fixed box under the board.
+  - Tower purchase buttons shrunk to fit more options.
+  - Tower token borders replaced with glowing underlays for a sharper look.
+  - PNG scaling improved for crisp visuals.
+- **Cheat Console:**
+  - Activate with ` and =, enter codes for instant essence, upgrades, or wave skips.
+
+---
+
+### Shifting Rune Maze
+- **Visual Overhaul:**
+  - Mystical black pyramid theme with gold-lined walls and sparkling black tile floors.
+  - Subtle gold glimmer and arcane particle effects.
+  - Elegant typography and UI for an immersive, arcane feel.
+- **Gameplay:**
+  - Maze shifting, rune shatter ability, and progressive difficulty remain unchanged.
+
+---
+
+### Mystical Runeslider Challenge
+- **Arcane Redesign:**
+  - Deep purple and gold mystical theme with glowing runes and rings.
+  - Animated light beams and rune marks for a magical puzzle feel.
+  - Difficulty selector and par system for replayability.
+- **Features:**
+  - Interactive runeslider with smooth animations and sound toggle.
+  - Responsive design for desktop and mobile.
+
+---
+
+### Mystical Sundial Challenge
+- **Aesthetic Upgrade:**
+  - Elegant sundial with gold and indigo gradients, glowing runes, and soft shadows.
+  - Animated transitions and status box for feedback.
+- **Features:**
+  - Rotating runes, time-based puzzles, and difficulty selector.
+  - Uses Tone.js for mystical sound effects.
+
+---
+
+### Obelisk’s Gaze
+- **Visuals:**
+  - Black and gold theme with classic fonts and glowing UI.
+  - Canvas-based board with smooth animations.
+- **Gameplay:**
+  - Strategic movement, cover/wall mechanics, and obelisk gaze countdown.
+
+---
+
+### Magical Duel
+- **Visuals:**
+  - Sandstone and gold dueling field, magical projectiles, and shield effects.
+  - Touch controls for mobile.
+- **Gameplay:**
+  - Fast-paced magical duels with charge, shield, and beam mechanics.
+
+---
+
+### Gravity Runner (Expedition Runner)
+- **Visuals:**
+  - Clean, modern UI with animated backgrounds and responsive controls.
+- **Gameplay:**
+  - Fast-paced obstacle dodging, score tracking, and jump mechanics.
+
+---
+
+### Magic Vortex Defense
+- **Visuals:**
+  - Starry background, glowing vortex, and magical UI.
+- **Features:**
+  - Hard mode with unique visual cues.
+  - Modal overlays for start/game over.
+
+---
+
+### New Pages & Tools (New)
+- Utilities and Hubs:
+  - VR Sim Challenge Hub, Game Launcher, AutoDM App
+  - Forest Events Generator, Trinket Generator, Image Generator
+- New/Updated Game Entries:
+  - Plains Mini-Battle (and copy), Darkling Roundup, Obelisk’s Gaze
+  - Magic Vortex Defense, Expedition Runner, Runeshift, Runeslider Challenge
+- Character & Systems:
+  - Character Creator, Diaper Clicker, Expeditions
+
+---
+
+**Summary:**
+You’ve added new towers, game modes, and a huge variety of monsters to Old War Defense, overhauled the visuals of your puzzle and action minigames for a mystical/arcane feel, and improved UI/UX across the board. The Diapered Defenders: VR Module received a full handbook-themed overhaul with puzzle gating, spawn rules, and token layering fixes. Every minigame now has a distinct, polished look and unique gameplay features!
+
+---
+
+## App-Wide Improvements & New Features
+
+- **Unified Visual Theme:**
+  - All minigames and UI panels now use a consistent mystical/arcane style with gold, black, and deep jewel tones for a cohesive experience.
+  - Elegant serif and display fonts (Cinzel, Cormorant Garamond, EB Garamond, Old Standard TT) used throughout for a magical, ancient feel.
+
+- **Navigation & Layout:**
+  - Improved navigation between minigames and handbooks.
+  - Responsive layouts for desktop and mobile, with touch controls where appropriate.
+  - Game containers and info panels now have matching gold-lined borders and subtle glows.
+
+- **Handbook & Reference Data:**
+  - Expanded bestiary, item, and race data with new entries and improved formatting.
+  - Added new PDF and HTML handbook documents to the reference library.
+  - Enhanced search and quick-jump features for handbook content.
+
+- **Performance & Accessibility:**
+  - Faster load times and optimized asset delivery for all games and handbooks.
+  - Improved keyboard navigation and ARIA labels for accessibility.
+  - All interactive elements have larger hitboxes and clearer focus states.
+
+- **Quality of Life:**
+  - Message and notification system standardized across all games.
+  - All important game events and errors now appear in styled message boxes below the main play area.
+  - Added tooltips and help text to buttons and controls.
+
+- **Assets & Data Pipeline:**
+  - Migrated many monster sprites from PNG to WebP for faster loading; removed superseded PNGs.
+  - Large batch of new item/resource images added and optimized.
+  - Boardgame token sets refreshed (Cleric, Fighter, Monk, Ranger, Rogue, Wizard).
+  - Added .gitignore and asset housekeeping.
+
+- **Start Scripts & Dev:**
+  - Windows helpers for local runs: start_server.bat, start_server_powershell.bat, start_tower_defense.bat, start_handbook.bat.
+
+- **Content Expansion:**
+  - New lore entries, event generators, and random tables for worldbuilding.
+  - Additional boardgame modules and minigame variants added to the app.
+  - More backgrounds, images, and audio assets for richer immersion.
+
+---
+
+## Granular Feature & Content Additions
+
+### Bestiary & Reference (Detailed)
+- Runtime bestiary integration:
+  - src/data/monsters-runtime.js (runtime loader/utilities)
+  - src/data/Diaper-School-Full-Bestiary.json (dataset)
+  - src/Main-Bestiary.json (compiled/reference)
+- bestiary.html: updated to support richer cards and runtime-backed rollable actions.
+
+### Assets & Media (Detailed)
+- Monsters: Converted many PNGs to WebP (Brackling, Darkforme variants, Darkling variants, etc.); removed redundant PNGs.
+- Items/Resources: Added numerous new PNGs (ores, essences, herbs, sweets, potions, components, etc.).
+- Boardgame Tokens: Updated class token sets with refreshed images.
+- Removed unused spacemarker asset and reorganized legacy folders.
+
+### New Pages & Utilities (Detailed)
+- AutoDM App
+  - Quick encounter/scene prompts, treasure hooks, and improv aides; copy-to-clipboard; handbook-themed UI.
+- Forest Events Generator
+  - Weighted daytime/nighttime tables for hazards, creatures, curios, and travel beats; one-click reroll cycles.
+- VR Sim Challenge Hub
+  - Central launcher for VR Module challenges; quick-jump links into specific rooms/scenarios; handbook style.
+- Game Launcher
+  - Unified landing with tiles to open each minigame; light, fast navigation; consistent styling.
+- Trinket Generator
+  - Procedural trinkets with rarity tags and flavor snippets; generate lists and export to clipboard.
+- Image Generator
+  - Compose simple tokens/badges from local assets; export WebP/PNG; basic layout and sizing controls.
+- Character Creator
+  - Form-based builder; outputs a compact summary; saves/restores from local storage.
+- Diaper Clicker
+  - Idle/clicker prototype with upgrades and soft reset; playful visuals; responsive layout.
+- Expeditions
+  - Index page for expedition-style modes with brief rules and direct launch links.
+
+- New/Updated Game Entries
+  - plainsminibattle.html (+ copy)
+    - Quick skirmish on a Plains grid; duplicate copy for sandbox/experimentation.
+  - obeliskgaze.html
+    - Themed entry page for Obelisk’s Gaze with consolidated instructions/links.
+  - magicvortexdefense.html
+    - Entry wrapper for Magic Vortex Defense with start modal and controls.
+  - expeditionrunner.html (Gravity Runner)
+    - Arcade runner entry: obstacles, scoring, and responsive view.
+  - runeshift.html
+    - Shifting-rune puzzle entry; modern theme and controls.
+  - runesliderchallenge.html
+    - Runeslider puzzle entry with difficulty/par display and polished layout.
+
+### Diapered Defenders: VR Module (Detailed)
+- Visuals & Theme:
+  - Adopted handbook parchment/gold palette and typography across panels and controls.
+  - Hover cards for monsters/objects: shows stats/traits, with rollable actions when bestiary runtime is loaded.
+- Board & Tokens:
+  - Dynamic grid sizing favors width; only shrinks to prevent height overflow. Keyboard zoom supported.
+  - Player tokens respawn from hard-coded coordinates per room on every entry; no cross-room persistence.
+  - Debris tokens render beneath players so defenders can stand on central debris in Malodorous Balance.
+- Interactions & Gating:
+  - Next-room progression requires: all monsters defeated AND all puzzle/switch requirements met.
+  - Scriptorium: crystal “puzzle_switch” must be deactivated; constructs collapse thereafter, and exit becomes available.
+  - Trap gas vents log saving throws when stepped on or manually triggered; pit traps can be covered.
+- Puzzles & Data:
+  - Balance puzzles with button-based selection/placement; instant validation; auto-reset on failure.
+  - Supports puzzle definitions at room or layout level.
+- Bestiary Integration:
+  - Uses runtime bestiary for rich monster cards when running locally; falls back to built-in previews otherwise.
+
+### Old War Defense (Detailed)
+- **Towers:**
+  - Cleric: 6 unique token images, champion/capstone logic, buff/cleanse/immunity mechanics, new hotkey and UI icon.
+  - Animal Fighters: Now use random beast token images, melee-only, larger range, no upgrades.
+  - Artillerists: Reduced damage to non-fliers/non-bosses, improved targeting logic.
+  - Beastriders/Beast Empress: Reduced damage to airborne, ground AOE no longer hits fliers.
+- **Enemies:**
+  - All 101 monster sprites mapped to spawn patterns; no unused assets.
+  - Empress forms cycle correctly, first two forms 10% slower.
+  - Titans, titan beasts, abominations: Move straight, larger size, no zigzag, spawn with delay/offset to prevent clustering.
+  - Darkforged horde: Spawns in titan/portal positions, improved spacing.
+  - Drill teams, diggers, shadow minions, emergency reinforcements: Special behaviors implemented, unwanted spawns removed.
+  - Champion immunities: Curse/disable effects do not affect champions.
+- **Portals:**
+  - Spawn earlier, more frequently, at more locations, with more enemies as waves progress.
+  - Never spawn near the gate; all non-boss, non-digger enemies can exit portals at high levels.
+- **Waves:**
+  - Endless mode, post-40 fliers, recurring radiant Queen boss with sparkle effects and horde support.
+  - Wave details auto-filled in info box at start of each wave.
+- **UI/UX:**
+  - Essence/lives/wave counters restyled and moved below board.
+  - Queue button text never line-breaks.
+  - Tower purchase buttons shrunk, more fit on screen.
+  - Message log removed; all important messages routed to new wave details box.
+  - Token border replaced with glowing underlay; PNG scaling improved.
+- **Modes:**
+  - Hard Mode: Shorter path, 600 starting essence, UI updates on mode switch.
+  - Chaos Mode: Only special enemies, 10k starting essence, unique wave logic.
+- **Cheats:**
+  - Console toggled with ` and =, supports instant essence, upgrades, wave skips.
+
+### Shifting Rune Maze (Detailed)
+- **Visuals:**
+  - Black pyramid theme: Gold-glimmering walls, sparkling black tile floors, subtle arcane particles.
+  - Elegant serif fonts, gold UI borders, mystical message box.
+- **Gameplay:**
+  - Maze shifting logic: Random walls/paths change every few seconds, never traps player.
+  - Rune Shatter: One-use per level, toggled with space/S, breaks adjacent wall.
+  - Level scaling: Maze grows, cell size shrinks, shifting speeds up at key levels.
+  - Touch controls: On-screen buttons for mobile, including shatter/reset.
+  - Animation loop: Canvas redraws for glimmer/sparkle effects.
+
+### Mystical Runeslider Challenge (Detailed)
+- **Visuals:**
+  - Deep purple/gold theme, glowing runes, animated rings, light beams.
+- **Features:**
+  - Par system, difficulty selector, sound toggle, responsive layout.
+  - Smooth slider and rune animations.
+
+### Mystical Sundial Challenge (Detailed)
+- **Visuals:**
+  - Gold/indigo gradients, glowing runes, soft shadows, animated transitions.
+- **Features:**
+  - Rotating runes, time-based puzzles, difficulty selector, Tone.js sound.
+
+### Obelisk’s Gaze (Detailed)
+- **Visuals:**
+  - Black/gold theme, classic fonts, glowing UI, canvas board.
+- **Gameplay:**
+  - Strategic movement, cover/wall mechanics, obelisk gaze countdown.
+
+### Magical Duel (Detailed)
+- **Visuals:**
+  - Sandstone/gold field, magical projectiles, shield effects, mobile touch controls.
+- **Gameplay:**
+  - Charge, shield, and beam mechanics, fast-paced duels.
+
+### Gravity Runner (Expedition Runner) (Detailed)
+- **Visuals:**
+  - Animated backgrounds, modern UI, responsive controls.
+- **Gameplay:**
+  - Obstacle dodging, score tracking, jump mechanics, fast fade transitions.
+
+### Magic Vortex Defense (Detailed)
+- **Visuals:**
+  - Starry background, glowing vortex, magical UI, hard mode cues.
+- **Features:**
+  - Modal overlays for start/game over, responsive design.
+
+### App-Wide (Granular)
+- **Visual Theme:**
+  - Unified gold/black/arcane style, consistent font usage, matching borders and glows.
+- **Navigation:**
+  - Improved minigame switching, responsive layouts, touch support.
+- **Handbook/Reference:**
+  - Expanded bestiary, item, and race data; new PDFs/HTML docs; improved search and quick-jump.
+- **Performance:**
+  - Faster load times, optimized assets, improved accessibility and keyboard navigation.
+- **Quality of Life:**
+  - Standardized message/notification system, tooltips, larger hitboxes, clearer focus states.
+- **Content:**
+  - New lore, event generators, random tables, boardgame modules, backgrounds, images, and audio assets.
+
+### App-Wide (Ultra-Granular)
+- **Infrastructure & Workflow:**
+  - Modular file structure: All minigames, handbooks, and assets organized by type for easier maintenance and expansion.
+  - Consistent use of Tailwind CSS and Google Fonts for rapid prototyping and visual consistency.
+  - All HTML files use meta viewport and mobile-friendly layouts.
+  - Versioned changelog and README for tracking updates and onboarding.
+- **Accessibility:**
+  - All interactive elements (buttons, controls, links) have descriptive ARIA labels and keyboard navigation support.
+  - High-contrast color schemes and large font options for visually impaired users.
+  - All images and icons have alt text or descriptive labels.
+- **Asset Management:**
+  - Centralized assets folder for images, audio, fonts, and documents.
+  - PNG, SVG, and audio assets optimized for web delivery (compression, scaling, lazy loading).
+  - New backgrounds, audio, and font files added for richer minigame and handbook experiences.
+- **Developer & UX Improvements:**
+  - All scripts and styles separated from HTML for easier updates and debugging.
+  - Inline documentation and comments in all major scripts and data files.
+  - Consistent naming conventions for all classes, IDs, and data keys.
+  - Error handling and fallback logic for missing assets or unsupported browsers.
+- **User Experience:**
+  - All message boxes, notifications, and tooltips use a unified style and appear in predictable locations.
+  - Game state (score, level, settings) persists across reloads where appropriate.
+  - All minigames and handbooks are accessible from a single unified menu or dashboard.
+  - Quick-jump and search features for all major data tables and handbooks.
+  - Print-friendly and PDF export options for handbook/reference content.
+- **Localization & Internationalization:**
+  - All UI text and messages stored in variables for future translation/localization.
+  - Unicode and special character support throughout the app.
+- **Testing & Quality Assurance:**
+  - Manual and automated testing of all minigames and UI flows.
+  - Linting and formatting enforced for all scripts and styles.
+  - Regular accessibility audits and user feedback incorporated into updates.

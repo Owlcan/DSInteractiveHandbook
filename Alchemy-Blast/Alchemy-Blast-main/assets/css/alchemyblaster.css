@@ -1,0 +1,166 @@
+.game-over-screen {
+    font-family: Arial, sans-serif;
+}
+
+.game-over-content h2 {
+    color: #ff4444;
+    font-size: 24px;
+    margin: 15px 0;
+}
+
+.game-over-content p {
+    color: #ffffff;
+    margin: 10px 0;
+}
+
+.game-over-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.game-over-buttons button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.retry-btn {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.retry-btn:hover {
+    background-color: #45a049;
+}
+
+.menu-btn {
+    background-color: #2196F3;
+    color: white;
+}
+
+.menu-btn:hover {
+    background-color: #1e87db;
+}
+
+.exit-btn {
+    background-color: #f44336;
+    color: white;
+}
+
+.exit-btn:hover {
+    background-color: #da190b;
+}
+
+.rewards-list {
+    max-height: 200px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #666 #333;
+}
+
+.rewards-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.rewards-list::-webkit-scrollbar-track {
+    background: #333;
+}
+
+.rewards-list::-webkit-scrollbar-thumb {
+    background: #666;
+    border-radius: 4px;
+}
+
+.reward-item img {
+    image-rendering: pixelated;
+}
+
+.expedition-content {
+    background-color: #333;
+    padding: 20px;
+    max-width: 900px;
+    width: 95%;
+    height: 95vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 4px solid #555;
+    border-radius: 8px;
+}
+
+#expedition-container {
+    width: 640px;
+    height: 800px;
+    position: relative;
+    box-sizing: border-box;
+    background-color: #222;
+    border: 2px solid #555;
+    border-radius: 5px;
+    overflow: hidden;
+    display: none;
+    margin: 0 auto;
+}
+
+#expedition-container canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    image-rendering: pixelated;
+    cursor: none;
+}
+
+#expedition-level-select {
+    width: 100%;
+    display: block;
+}
+
+.level-list {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    padding: 20px;
+}
+
+.level-thumbnail {
+    background: #444;
+    border-radius: 8px;
+    padding: 15px;
+    cursor: pointer;
+    transition: transform 0.2s;
+    max-width: 300px;
+}
+
+.level-thumbnail:hover {
+    transform: scale(1.05);
+    background: #555;
+}
+
+.level-thumbnail img {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+}
+
+.level-info {
+    padding: 10px;
+    text-align: center;
+}
+
+.level-info h3 {
+    color: #fff;
+    margin: 0 0 10px 0;
+}
+
+.level-info p {
+    color: #ccc;
+    margin: 0;
+    font-size: 14px;
+}

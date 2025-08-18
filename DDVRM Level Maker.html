@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DDVRM Level Maker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Roboto+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ring-t0: #22c55e; --ring-t1: #a3e635; --ring-t2: #f59e0b; --ring-t3: #f97316; --ring-t4: #ef4444;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+            color: #e2e8f0;
+        }
+        .grid-container {
+            display: grid;
+            border: 2px solid #374151;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        .grid-cell {
+            width: 30px;
+            height: 30px;
+            border: 1px solid rgba(55, 65, 81, 0.3);
+            position: relative;
+            cursor: pointer;
+        }
+        .grid-cell:hover {
+            background-color: rgba(59, 130, 246, 0.2);
+        }
+        .grid-cell.selected {
+            background-color: rgba(59, 130, 246, 0.4);
+        }
+        .token {
+            width: 90%;
+            height: 90%;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8px;
+            font-weight: bold;
+            color: white;
+            position: absolute;
+            top: 5%;
+            left: 5%;
+            z-index: 10;
+            text-shadow: 1px 1px 2px black;
+            cursor: move;
+    }        .monster-token { background-color: #7C3AED; border: 2px solid #6D28D9; }
+    .monster-token[data-tier="t0"] { outline: 2px solid var(--ring-t0); outline-offset: -2px; }
+    .monster-token[data-tier="t1"] { outline: 2px solid var(--ring-t1); outline-offset: -2px; }
+    .monster-token[data-tier="t2"] { outline: 2px solid var(--ring-t2); outline-offset: -2px; }
+    .monster-token[data-tier="t3"] { outline: 2px solid var(--ring-t3); outline-offset: -2px; }
+    .monster-token[data-tier="t4"] { outline: 2px solid var(--ring-t4); outline-offset: -2px; }
+    .large-token {
+            border-radius: 25% !important; /* Less rounded for larger tokens */
+            font-size: 14px !important;
+            top: 0 !important;
+            left: 0 !important;
+            /* Remove width/height overrides to allow JS sizing */
+        }
+        .object-token { 
+            background-color: #6B7280; 
+            border-radius: 6px; 
+            border: 2px solid #4B5563;
+            font-size: 14px;
+        }.exit-token { background-color: #10B981; border: 2px solid #059669; }
+        .player-spawn { background-color: #F59E0B; border: 2px solid #D97706; }
+        .spawn-area { 
+            background-color: rgba(245, 158, 11, 0.2); 
+            border: 2px dashed #F59E0B;
+        }
+        
+        .tool-button {
+            transition: all 0.2s;
+        }
+        .tool-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        .tool-button.active {
+            background-color: #3B82F6;
+            color: white;
+        }
+        
+        .panel {
+            background-color: #1e293b;
+            border: 1px solid #334155;
+        }
+        
+        .code-output {
+            font-family: 'Roboto Mono', monospace;
+            background-color: #0f172a;
+            border: 1px solid #334155;
+            color: #e2e8f0;
+        }
+        
+        .scrollbar-thin::-webkit-scrollbar {
+            width: 6px;
+        }
+        .scrollbar-thin::-webkit-scrollbar-track {
+            background: #1e293b;
+        }        .scrollbar-thin::-webkit-scrollbar-thumb {
+            background-color: #475569;
+            border-radius: 3px;
+        }
+        
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.75);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 1.5rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body class="p-4">
+    <div class="max-w-7xl mx-auto">
+        <div class="mb-6">
+            <h1 class="text-3xl font-bold text-center mb-2">DDVRM Level Maker</h1>
+            <p class="text-center text-gray-400">Create rooms and encounters for Diapered Defenders VR Module</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <!-- Tools Panel -->
+            <div class="lg:col-span-1">
+                <div class="panel rounded-lg p-4 mb-4">
+                    <h3 class="text-lg font-semibold mb-3">Tools</h3>
+                    <div class="space-y-2">
+                        <button id="tool-select" class="tool-button w-full bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded active">
+                            Select/Move
+                        </button>
+                        <button id="tool-monster" class="tool-button w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded">
+                            Place Monster
+                        </button>
+                        <button id="tool-object" class="tool-button w-full bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                            Place Object
+                        </button>                        <button id="tool-exit" class="tool-button w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                            Place Exit
+                        </button>
+                        <button id="tool-spawn" class="tool-button w-full bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">
+                            Player Spawn
+                        </button>
+                        <button id="tool-erase" class="tool-button w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                            Erase
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Room Settings -->
+                <div class="panel rounded-lg p-4 mb-4">
+                    <h3 class="text-lg font-semibold mb-3">Room Settings</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Room Name</label>
+                            <input id="room-name" type="text" class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white" placeholder="The Mysterious Chamber">
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label for="room-width" class="block text-sm font-medium mb-1">Width</label>
+                                <input id="room-width" type="number" min="5" max="20" value="12" class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white" title="Room width" placeholder="Width">
+                            </div>
+                            <div>
+                                <label for="room-height" class="block text-sm font-medium mb-1">Height</label>
+                                <input id="room-height" type="number" min="5" max="20" value="10" class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white" title="Room height" placeholder="Height">
+                            </div>
+                        </div>
+                        <button id="resize-grid" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            Resize Grid
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Current Selection -->
+                <div class="panel rounded-lg p-4">
+                    <h3 class="text-lg font-semibold mb-3">Current Selection</h3>
+                    <div id="current-selection">
+                        <div id="monster-selector" class="hidden">
+                            <label for="monster-type" class="block text-sm font-medium mb-1">Monster Type</label>
+                            <select id="monster-type" class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white mb-2">
+                                <!-- Will be populated by JavaScript -->
+                            </select>
+                        </div>
+                        <div id="object-selector" class="hidden">
+                            <label for="object-type" class="block text-sm font-medium mb-1">Object Type</label>
+                            <select id="object-type" class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white mb-2">
+                                <option value="debris">Debris</option>
+                                <option value="trap_gas">Gas Trap</option>
+                                <option value="trap_pit">Pit Trap</option>
+                                <option value="puzzle_switch">Puzzle Switch</option>
+                                <option value="puzzle_dais">Puzzle Dais</option>
+                                <option value="puzzle_object">Puzzle Object</option>
+                                <option value="crystal_altar">Crystal Altar</option>
+                            </select>
+                            <label for="object-flavor" class="block text-sm font-medium mb-1">Flavor Text</label>
+                            <textarea id="object-flavor" class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white" rows="3" placeholder="Describe this object..."></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grid Editor -->
+            <div class="lg:col-span-2">
+                <div class="panel rounded-lg p-4">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold">Room Layout</h3>
+                        <div class="flex items-center space-x-2">
+                            <div id="encounter-summary" class="text-xs text-gray-300 mr-2 hidden"></div>
+                            <button id="clear-grid" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                                Clear Grid
+                            </button>
+                            <button id="auto-populate" class="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">
+                                Auto Populate
+                            </button>
+                        </div>
+                    </div>
+                    <div class="flex justify-center">
+                        <div id="grid-container" class="grid-container"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Properties and Output -->
+            <div class="lg:col-span-1">
+                <!-- Selected Item Properties -->
+                <div class="panel rounded-lg p-4 mb-4">
+                    <h3 class="text-lg font-semibold mb-3">Properties</h3>
+                    <div id="properties-panel">
+                        <p class="text-gray-400 text-sm">Select an item to edit properties</p>
+                    </div>
+                </div>
+
+                <!-- Lore & Dialogue -->
+                <div class="panel rounded-lg p-4 mb-4">
+                    <h3 class="text-lg font-semibold mb-3">Lore & Dialogue</h3>
+                    <div class="space-y-2 mb-3">
+                        <div class="flex space-x-2">
+                            <select id="lore-speaker" class="bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white">
+                                <option value="System">System</option>
+                                <option value="Yellow">Yellow</option>
+                                <option value="Red">Red</option>
+                                <option value="Green">Green</option>
+                                <option value="Black">Black</option>
+                                <option value="Custom">Custom</option>
+                            </select>
+                            <button id="add-lore" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                Add
+                            </button>
+                        </div>
+                        <textarea id="lore-text" class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white" rows="3" placeholder="Enter dialogue or description..."></textarea>
+                    </div>
+                    <div id="lore-list" class="space-y-2 max-h-32 overflow-y-auto scrollbar-thin">
+                        <!-- Lore entries will be added here -->
+                    </div>
+                </div>
+
+                <!-- Puzzle Configuration -->
+                <div class="panel rounded-lg p-4 mb-4">
+                    <h3 class="text-lg font-semibold mb-3">Puzzle</h3>
+                    <div class="space-y-2">
+                        <select id="puzzle-type" class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white">
+                            <option value="">No Puzzle</option>
+                            <option value="balance">Balance Puzzle</option>
+                            <option value="switch">Switch Puzzle</option>
+                        </select>
+                        <textarea id="puzzle-prompt" class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white" rows="2" placeholder="Puzzle description..."></textarea>
+                        <button id="configure-puzzle" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded">
+                            Configure Puzzle
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Output Section -->
+        <div class="mt-6">
+            <div class="panel rounded-lg p-4">                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-semibold">Generated Code</h3>
+                    <div class="flex space-x-2">
+                        <button id="load-room" class="bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded">
+                            Load Room
+                        </button>
+                        <button id="generate-code" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                            Generate Code
+                        </button>
+                        <button id="copy-code" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            Copy to Clipboard
+                        </button>
+                        <button id="save-room" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded">
+                            Save Room
+                        </button>
+                    </div>
+                </div>
+                <pre id="code-output" class="code-output rounded p-4 max-h-96 overflow-y-auto scrollbar-thin text-sm">Click "Generate Code" to see the room template...</pre>            </div>
+        </div>
+    </div>
+
+    <!-- Load Room Modal -->
+    <div id="load-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold">Load Room Code</h3>
+                <button id="close-modal" class="text-gray-400 hover:text-white text-2xl">&times;</button>
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm font-medium mb-2">Paste your room template code below:</label>
+                <textarea id="load-code-input" class="w-full h-64 bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white font-mono text-sm" placeholder="Paste the room template object here..."></textarea>
+            </div>
+            <div class="flex justify-end space-x-2">
+                <button id="cancel-load" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                    Cancel
+                </button>
+                <button id="confirm-load" class="bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded">
+                    Load Room
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>// Monster definitions from the main module
+        const MONSTERS = {
+            darkling_lurker: { name: "Darkling-Lurker", cr: "1/2", color: '#7C3AED', symbol: null, size: 1 },
+            darkforme_overwatch: { name: "Darkforme Overwatch", cr: "2", color: '#8B5CF6', symbol: null, size: 1 },
+            darkforged_remnant: { name: "Darkforged Remnant", cr: "3", color: '#6D28D9', symbol: null, size: 1 },
+            the_castoff: { name: "The Castoff", cr: "10", color: '#4C1D95', symbol: null, size: 1 },
+            darkling_yowler: { name: "Darkling-Yowler", cr: "1/2", color: '#7E3AF2', symbol: null, size: 1 },
+            darkling_bellyacher: { name: "Darkling-Bellyacher", cr: "1", color: '#6D28D9', symbol: null, size: 1 },
+            darkforme_cavesweller: { name: "Darkforme-Corridorcrusher", cr: "5", color: '#5B21B6', symbol: 'ϖ', size: 2 },
+            darkforme_hungore: { name: "Darkforme-Hungore", cr: "2", color: '#7C3AED', symbol: null, size: 1 },
+            darkling_nightshade: { name: "Darkling-Nightshade Elemental", cr: "2", color: '#4C1D95', symbol: null, size: 1 },
+            the_darkformless: { name: "The Darkformless", cr: "4", color: '#3730A3', symbol: null, size: 1 },
+            darkforme_nailbearer: { name: "Darkforme-Nailbearer", cr: "3", color: '#5B21B6', symbol: null, size: 1 },
+            darkspanner: { name: "Darkspanner", cr: "4", color: '#4C1D95', symbol: 'ζ', size: 2 },
+            nightmare_sire_reaver: { name: "Nightmare Sire Reaver", cr: "9", color: '#312E81', symbol: 'Ж', size: 2 },
+            dark_dimension_abandonite: { name: "Dark Dimension Abandonite", cr: "7", color: '#4338CA', symbol: null, size: 1 },
+            darkforme_brute: { name: "Darkforme-Brute", cr: "6", color: '#4C1D95', symbol: 'Д', size: 2 },
+            // New monsters from bestiary
+            darkling_caller: { name: "Darkling-Caller", cr: "1/4", color: '#9F7AEA', symbol: null, size: 1 },
+            darkling_slurper: { name: "Darkling-Slurper", cr: "1/2", color: '#8B5CF6', symbol: null, size: 1 },
+            darkling_paralurker: { name: "Darkling-Paralurker", cr: "1/2", color: '#7C3AED', symbol: null, size: 1 },
+            darkling_hungerer: { name: "Darkling-Hungerer", cr: "1/2", color: '#8B5CF6', symbol: null, size: 1 },
+            darkling_cactine: { name: "Darkling-Cactine", cr: "1/2", color: '#7C3AED', symbol: null, size: 1 },
+            darkling_slitherscale: { name: "Darkling-Slitherscale", cr: "1/2", color: '#8B5CF6', symbol: null, size: 1 },
+            darkling_hooter: { name: "Darkling-Hooter", cr: "1/8", color: '#A78BFA', symbol: null, size: 1 },
+            darkling_ossokin: { name: "Darkling-Ossokin", cr: "1/8", color: '#A78BFA', symbol: null, size: 1 },
+            darkling_brackling: { name: "Darkling-Brackling", cr: "1", color: '#6D28D9', symbol: null, size: 1 },
+            darkling_bellowbelly: { name: "Darkling-Bellowbelly", cr: "1", color: '#7C3AED', symbol: null, size: 1 },
+            darkling_shark: { name: "Darkling-Shark", cr: "1", color: '#6D28D9', symbol: null, size: 1 },
+            darkforme_suffocator: { name: "Darkforme-Suffocator", cr: "2", color: '#5B21B6', symbol: null, size: 1 },
+            darkforme_nightpinyon: { name: "Darkforme-Nightpinyon", cr: "2", color: '#5B21B6', symbol: null, size: 1 },
+            darkforme_ossokin_aegisite: { name: "Darkforme-Ossokin-Aegisite", cr: "2", color: '#4C1D95', symbol: null, size: 1 },
+            darkforme_cavesweller_true: { name: "Darkforme-Cavesweller", cr: "3", color: '#5B21B6', symbol: 'Φ', size: 1 },
+            darkforme_spinebearer: { name: "Darkforme-Spinebearer", cr: "3", color: '#4C1D95', symbol: null, size: 1 },
+            darkforme_shark: { name: "Darkforme-Shark", cr: "3", color: '#5B21B6', symbol: null, size: 1 },
+            darkaconda: { name: "Darkaconda", cr: "4", color: '#4338CA', symbol: '⌇', size: 2 },
+            darkforme_nightsipper: { name: "Darkforme Nightsipper", cr: "4", color: '#3730A3', symbol: null, size: 1 },
+            shadow_slimepress: { name: "Shadow Slimepress", cr: "10", color: '#312E81', symbol: '≈', size: 2 },
+            night_mare_shadowstorm: { name: "Night-Mare Shadowstorm", cr: "9", color: '#312E81', symbol: '♞', size: 2 },
+            dark_dimension_auditarch: { name: "Dark Dimension Auditarch", cr: "7", color: '#3730A3', symbol: '§', size: 1 },
+            // Additional monsters from bestiary
+            darkling_bellowbelly_cubling: { name: "Darkling Bellowbelly Cubling", cr: "1/4", color: '#9F7AEA', symbol: null, size: 1 },
+            darkling_cactine_biggo_boy: { name: "Darkling-Cactine-Biggo-Boy", cr: "1", color: '#6D28D9', symbol: null, size: 1 },
+            weirdling_paralurker: { name: "Weirdling-Paralurker", cr: "1", color: '#7C3AED', symbol: null, size: 1 },
+            darkling_ossokin_proselyte: { name: "Darkling-Ossokin-Proselyte", cr: "1", color: '#6D28D9', symbol: null, size: 1 },
+            darkling_ossuite_charger: { name: "Darkling-Ossuite Charger", cr: "2", color: '#5B21B6', symbol: null, size: 1 },
+            darkforme_enforcer: { name: "Darkform Enforcer", cr: "5", color: '#5B21B6', symbol: 'Ф', size: 2 },
+            sky_darkener_nightveil: { name: "Sky-Darkener Nightveil", cr: "5", color: '#4C1D95', symbol: '♠', size: 2 },
+            dark_dimension_project_auditor: { name: "Dark Dimension Project Auditor", cr: "5", color: '#4C1D95', symbol: '¶', size: 1 },
+            darkling_ossuite_charger_omega: { name: "Darkling-Ossuite Charger Omega", cr: "6", color: '#4338CA', symbol: '♘', size: 2 },
+            darkforme_ossuarian: { name: "Darkforme-Ossuarian", cr: "7", color: '#3730A3', symbol: '⚕', size: 2 },
+            chap_hell: { name: "Chap'Hell", cr: "9", color: '#312E81', symbol: '♰', size: 2 },
+            // Low CR enemies
+            deranged_diaper_check_bot: { name: "Deranged Diaper-check Bot", cr: "1/8", color: '#A78BFA', symbol: null, size: 1 },
+            dark_dimension_nannybot: { name: "Dark Dimension Nannybot Bratnapper", cr: "1", color: '#7C3AED', symbol: null, size: 1 },
+            dark_dimension_trainee_auditor: { name: "Dark Dimension Trainee Auditor", cr: "2", color: '#5B21B6', symbol: null, size: 1 },
+            dark_dimension_matronbot: { name: "Dark Dimension Matronbot", cr: "3", color: '#4C1D95', symbol: '⚙', size: 1 },
+            // New enemies
+            primordial_bottle: { name: "Primordial Bottle Beast", cr: "4", color: '#4338CA', symbol: '⚱', size: 1 },
+            pacifier_golem: { name: "Pacifier Golem", cr: "5", color: '#5B21B6', symbol: '⚒', size: 2 },
+            dark_dimension_changebot: { name: "Dark Dimension Changebot", cr: "2", color: '#7C3AED', symbol: '⚙', size: 1 },
+            darkling_ghostiby: { name: "Darkling-Ghostiby", cr: "1/4", color: '#A78BFA', symbol: '⚇', size: 1 },
+            darkling_ticklefinger: { name: "Darkling-Ticklefinger", cr: "1/2", color: '#9F7AEA', symbol: null, size: 1 },
+            darkforme_punishment_maid: { name: "Darkforme Punishment Maid", cr: "3", color: '#6D28D9', symbol: '♀', size: 1 },
+            darkling_liquid_legion: { name: "Darkling Liquid Legion", cr: "2", color: '#8B5CF6', symbol: '≈', size: 1 },
+            dark_dimension_regressor_field: { name: "Dark Dimension Regressor Field", cr: "6", color: '#4338CA', symbol: '⚠', size: 2 },
+            lost_plushie: { name: "Lost Plushie", cr: "1/8", color: '#C4B5FD', symbol: '⚈', size: 1 },
+            sentient_crib: { name: "Sentient Crib", cr: "3", color: '#5B21B6', symbol: '⛌', size: 2 },
+            nightmare_lullaby: { name: "Nightmare Lullaby", cr: "7", color: '#3730A3', symbol: '♪', size: 1 },
+            regression_fog: { name: "Regression Fog", cr: "5", color: '#4C1D95', symbol: '☁', size: 2 },
+            temporal_crib_guardian: { name: "Temporal Crib Guardian", cr: "8", color: '#312E81', symbol: '⛨', size: 2 },
+            teddy_abomination: { name: "Teddy Abomination", cr: "6", color: '#4338CA', symbol: '☠', size: 2 },
+            diaper_dimension_rift: { name: "Diaper Dimension Rift", cr: "10", color: '#1E1B4B', symbol: '⛥', size: 2 },
+            crying_starmass: { name: "Crying Starmass", cr: "9", color: '#312E81', symbol: '★', size: 2 },
+            crawling_onesie: { name: "Crawling Onesie", cr: "1", color: '#8B5CF6', symbol: null, size: 1 },
+            shadow_babysitter: { name: "Shadow Babysitter", cr: "4", color: '#4C1D95', symbol: '⛓', size: 1 },
+            forgotten_rattle: { name: "Forgotten Rattle", cr: "1/2", color: '#9F7AEA', symbol: '✧', size: 1 },
+            bottle_elemental: { name: "Bottle Elemental", cr: "2", color: '#7C3AED', symbol: '♨', size: 1 },
+            dream_stealer: { name: "Dream Stealer", cr: "8", color: '#3730A3', symbol: '☽', size: 1 }
+        };
+
+        // Application state
+        const state = {
+            currentTool: 'select',
+            selectedCell: null,
+            selectedToken: null,
+            roomData: {
+                name: "The Mysterious Chamber",
+                width: 12,
+                height: 10,                layout: {
+                    monsters: [],
+                    objects: [],
+                    exit: null,
+                    playerSpawns: [
+                        { x: 1, y: 3 },
+                        { x: 1, y: 4 },
+                        { x: 1, y: 5 },
+                        { x: 2, y: 4 }
+                    ]
+                },
+                lore: [],
+                puzzle: null
+            }
+        };
+
+        // DOM elements
+        const gridContainer = document.getElementById('grid-container');
+        const roomNameInput = document.getElementById('room-name');
+        const roomWidthInput = document.getElementById('room-width');
+        const roomHeightInput = document.getElementById('room-height');
+        const monsterTypeSelect = document.getElementById('monster-type');
+        const objectTypeSelect = document.getElementById('object-type');
+        const objectFlavorInput = document.getElementById('object-flavor');
+        const codeOutput = document.getElementById('code-output');
+
+        // Initialize
+        async function init() {
+            // Try loading runtime bestiary to build selector
+            try {
+                const script = document.createElement('script');
+                script.src = './src/data/monsters-runtime.js';
+                document.head.appendChild(script);
+                await new Promise((res, rej) => { script.onload = res; script.onerror = rej; });
+                if (window.MonstersRuntime) {
+                    await window.MonstersRuntime.loadMonsters('/src/data/Diaper-School-Full-Bestiary.json');
+                    populateMonsterSelectRuntime();
+                } else {
+                    populateMonsterSelect();
+                }
+            } catch(e) {
+                console.warn('Runtime bestiary failed, using static list.', e);
+                populateMonsterSelect();
+            }
+            setupToolButtons();
+            setupEventListeners();
+            createGrid();
+        }
+
+        function populateMonsterSelect() {
+            Object.entries(MONSTERS).forEach(([key, monster]) => {
+                const option = document.createElement('option');
+                option.value = key;
+                option.textContent = `${monster.name} (CR ${monster.cr})`;
+                monsterTypeSelect.appendChild(option);
+            });
+        }
+
+        function populateMonsterSelectRuntime() {
+            const all = window.MonstersRuntime.all();
+            const alias = window.MonstersRuntime.cache.alias || {};
+            const used = new Set();
+            all.forEach(m => {
+                const key = m.key;
+                const option = document.createElement('option');
+                option.value = key;
+                option.textContent = `${m.name} (CR ${m.crStr || m.cr})`;
+                monsterTypeSelect.appendChild(option);
+                used.add(key);
+            });
+            // Add legacy alias options pointing to normalized keys for compatibility with export/import
+            Object.entries(alias).forEach(([legacy, key]) => {
+                if (key && !used.has(legacy)) {
+                    const norm = window.MonstersRuntime.get(key);
+                    if (norm) {
+                        const option = document.createElement('option');
+                        option.value = key; // ensure placing normalized
+                        option.textContent = `${norm.name} (alias: ${legacy})`;
+                        monsterTypeSelect.appendChild(option);
+                    }
+                }
+            });
+        }
+
+        function setupToolButtons() {
+            const tools = ['select', 'monster', 'object', 'exit', 'spawn', 'erase'];
+            tools.forEach(tool => {
+                const button = document.getElementById(`tool-${tool}`);
+                button.addEventListener('click', () => setCurrentTool(tool));
+            });
+        }
+
+        function setCurrentTool(tool) {
+            state.currentTool = tool;
+            
+            // Update button states
+            document.querySelectorAll('.tool-button').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`tool-${tool}`).classList.add('active');
+            
+            // Show/hide relevant selectors
+            document.getElementById('monster-selector').classList.toggle('hidden', tool !== 'monster');
+            document.getElementById('object-selector').classList.toggle('hidden', tool !== 'object');
+            
+            // Clear selection
+            state.selectedCell = null;
+            state.selectedToken = null;
+            updateSelection();
+        }        function setupEventListeners() {
+            document.getElementById('resize-grid').addEventListener('click', () => {
+                state.roomData.width = parseInt(roomWidthInput.value);
+                state.roomData.height = parseInt(roomHeightInput.value);
+                createGrid();
+            });
+
+            document.getElementById('clear-grid').addEventListener('click', clearGrid);
+            document.getElementById('auto-populate').addEventListener('click', autoPopulate);
+            document.getElementById('generate-code').addEventListener('click', generateCode);
+            document.getElementById('copy-code').addEventListener('click', copyCode);
+            document.getElementById('add-lore').addEventListener('click', addLore);
+            document.getElementById('load-room').addEventListener('click', showLoadModal);            // Modal event listeners
+            document.getElementById('close-modal').addEventListener('click', hideLoadModal);
+            document.getElementById('cancel-load').addEventListener('click', hideLoadModal);
+            document.getElementById('confirm-load').addEventListener('click', loadRoomFromCode);
+            
+            // Close modal when clicking overlay
+            document.getElementById('load-modal').addEventListener('click', (e) => {
+                if (e.target.id === 'load-modal') {
+                    hideLoadModal();
+                }
+            });
+
+            roomNameInput.addEventListener('input', () => {
+                state.roomData.name = roomNameInput.value;
+            });
+        }
+
+        function createGrid() {
+            gridContainer.innerHTML = '';
+            gridContainer.style.gridTemplateColumns = `repeat(${state.roomData.width}, 1fr)`;
+            
+            for (let y = 0; y < state.roomData.height; y++) {
+                for (let x = 0; x < state.roomData.width; x++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'grid-cell';
+                    cell.dataset.x = x;
+                    cell.dataset.y = y;
+                    cell.addEventListener('click', () => handleCellClick(x, y, cell));
+                    gridContainer.appendChild(cell);
+                }
+            }
+            
+            // Re-render existing items
+            renderGridItems();
+        }
+
+        function handleCellClick(x, y, cell) {
+            const existingToken = cell.querySelector('.token');
+            
+            switch (state.currentTool) {
+                case 'select':
+                    if (existingToken) {
+                        selectToken(existingToken, x, y);
+                    } else {
+                        clearSelection();
+                    }
+                    break;
+                    
+                case 'monster':
+                    if (existingToken) {
+                        removeToken(existingToken, x, y);
+                    }
+                    placeMonster(x, y);
+                    break;
+                    
+                case 'object':
+                    if (existingToken) {
+                        removeToken(existingToken, x, y);
+                    }
+                    placeObject(x, y);
+                    break;
+                      case 'exit':
+                    // Remove existing exit
+                    state.roomData.layout.exit = null;
+                    document.querySelectorAll('.exit-token').forEach(token => token.remove());
+                    // Place new exit
+                    placeExit(x, y);
+                    break;
+                    
+                case 'spawn':
+                    togglePlayerSpawn(x, y);
+                    break;
+                    
+                case 'erase':
+                    if (existingToken) {
+                        removeToken(existingToken, x, y);
+                    }
+                    break;
+            }
+        }
+        function placeMonster(x, y) {
+            const monsterType = monsterTypeSelect.value;
+            const monsterNorm = (window.MonstersRuntime && window.MonstersRuntime.cache.loaded && window.MonstersRuntime.get(monsterType)) || null;
+            const monsterData = monsterNorm || MONSTERS[monsterType];
+            
+            // Add to room data
+            state.roomData.layout.monsters.push({ type: monsterType, x, y });
+            
+            // Create visual token with symbol support
+            let displayText = monsterNorm && monsterNorm.emoji ? monsterNorm.emoji : (monsterData.symbol || monsterData.name.substring(0, 3).toUpperCase());
+                            const token = createToken('monster-token', displayText);
+            token.style.backgroundColor = monsterData.color || '#6D28D9';
+            if (monsterNorm && monsterNorm.tier) token.setAttribute('data-tier', monsterNorm.tier);
+            token.dataset.type = 'monster';
+            token.dataset.monsterType = monsterType;
+            
+            // Handle 2x2 sizing
+            if (monsterData.size === 2) {
+                token.style.width = '60px';  // 2 * 30px grid size
+                token.style.height = '60px';
+                token.style.fontSize = '14px';
+                token.classList.add('large-token');
+            }
+            
+            const cell = gridContainer.querySelector(`[data-x='${x}'][data-y='${y}']`);
+            cell.appendChild(token);
+            updateEncounterSummary();
+        }
+
+        function placeObject(x, y) {
+            const objectType = objectTypeSelect.value;
+            const flavor = objectFlavorInput.value || "A mysterious object.";
+            
+            // Add to room data
+            const objectData = { type: objectType, x, y, flavor };
+            state.roomData.layout.objects.push(objectData);
+            
+            // Create visual token
+            const label = objectEmoji(objectType);
+            const token = createToken('object-token', label);
+            token.dataset.type = 'object';
+            token.dataset.objectType = objectType;
+            
+            const cell = gridContainer.querySelector(`[data-x='${x}'][data-y='${y}']`);
+            cell.appendChild(token);
+        }        function placeExit(x, y) {
+            const flavor = "The way forward.";
+            
+            // Add to room data
+            state.roomData.layout.exit = { x, y, flavor };
+            
+            // Create visual token
+            const token = createToken('exit-token', 'EXIT');
+            token.dataset.type = 'exit';
+            
+            const cell = gridContainer.querySelector(`[data-x='${x}'][data-y='${y}']`);
+            cell.appendChild(token);
+        }
+
+        function togglePlayerSpawn(x, y) {
+            const existingSpawnIndex = state.roomData.layout.playerSpawns.findIndex(spawn => spawn.x === x && spawn.y === y);
+            
+            if (existingSpawnIndex !== -1) {
+                // Remove existing spawn
+                state.roomData.layout.playerSpawns.splice(existingSpawnIndex, 1);
+            } else {
+                // Add new spawn (limit to 4 players)
+                if (state.roomData.layout.playerSpawns.length < 4) {
+                    state.roomData.layout.playerSpawns.push({ x, y });
+                } else {
+                    // Replace oldest spawn
+                    state.roomData.layout.playerSpawns.shift();
+                    state.roomData.layout.playerSpawns.push({ x, y });
+                }
+            }
+            
+            renderGridItems();
+        }
+
+        function createToken(className, text) {
+            const token = document.createElement('div');
+            token.className = `token ${className}`;
+            token.textContent = text;
+            return token;
+        }
+
+        function removeToken(token, x, y) {
+            const type = token.dataset.type;
+            
+            if (type === 'monster') {
+                state.roomData.layout.monsters = state.roomData.layout.monsters.filter(
+                    m => !(m.x === x && m.y === y)
+                );
+            } else if (type === 'object') {
+                state.roomData.layout.objects = state.roomData.layout.objects.filter(
+                    o => !(o.x === x && o.y === y)
+                );            } else if (type === 'exit') {
+                state.roomData.layout.exit = null;
+            } else if (type === 'spawn') {
+                const spawnIndex = state.roomData.layout.playerSpawns.findIndex(spawn => spawn.x === x && spawn.y === y);
+                if (spawnIndex !== -1) {
+                    state.roomData.layout.playerSpawns.splice(spawnIndex, 1);
+                }
+            }
+            
+            token.remove();
+        }
+
+        function selectToken(token, x, y) {
+            clearSelection();
+            state.selectedToken = token;
+            state.selectedCell = { x, y };
+            token.parentElement.classList.add('selected');
+            showTokenProperties(token, x, y);
+        }
+
+        function clearSelection() {
+            document.querySelectorAll('.grid-cell').forEach(cell => cell.classList.remove('selected'));
+            state.selectedToken = null;
+            state.selectedCell = null;
+            document.getElementById('properties-panel').innerHTML = '<p class="text-gray-400 text-sm">Select an item to edit properties</p>';
+        }
+
+        function updateSelection() {
+            clearSelection();
+        }
+
+        function showTokenProperties(token, x, y) {
+            const propertiesPanel = document.getElementById('properties-panel');
+            const type = token.dataset.type;
+            
+            let html = `<div class="space-y-2">`;
+            html += `<p><strong>Position:</strong> (${x}, ${y})</p>`;
+            
+            if (type === 'monster') {
+                const monsterType = token.dataset.monsterType;
+                const monster = MONSTERS[monsterType];
+                html += `<p><strong>Type:</strong> ${monster.name}</p>`;
+                html += `<p><strong>CR:</strong> ${monster.cr}</p>`;
+            } else if (type === 'object') {
+                const objectType = token.dataset.objectType;
+                const objectData = state.roomData.layout.objects.find(o => o.x === x && o.y === y);
+                html += `<p><strong>Type:</strong> ${objectType}</p>`;
+                if (objectData) {
+                    html += `<label class="block text-sm font-medium mt-2">Flavor Text:</label>`;
+                    html += `<textarea id="edit-flavor" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-1 text-white text-sm" rows="3">${objectData.flavor}</textarea>`;
+                    html += `<button onclick="updateObjectFlavor(${x}, ${y})" class="mt-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded text-sm">Update</button>`;
+                }            } else if (type === 'exit') {
+                html += `<p><strong>Type:</strong> Exit</p>`;
+                html += `<label class="block text-sm font-medium mt-2">Flavor Text:</label>`;
+                html += `<textarea id="edit-exit-flavor" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-1 text-white text-sm" rows="3">${state.roomData.layout.exit.flavor}</textarea>`;
+                html += `<button onclick="updateExitFlavor()" class="mt-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded text-sm">Update</button>`;
+            } else if (type === 'spawn') {
+                html += `<p><strong>Type:</strong> Player Spawn</p>`;
+                html += `<p class="text-gray-400 text-sm mt-2">Click again to remove this spawn point. Max 4 spawn points allowed.</p>`;
+            }
+            
+            html += `</div>`;
+            propertiesPanel.innerHTML = html;
+        }
+
+        function updateObjectFlavor(x, y) {
+            const newFlavor = document.getElementById('edit-flavor').value;
+            const objectData = state.roomData.layout.objects.find(o => o.x === x && o.y === y);
+            if (objectData) {
+                objectData.flavor = newFlavor;
+            }
+        }
+
+        function updateExitFlavor() {
+            const newFlavor = document.getElementById('edit-exit-flavor').value;
+            if (state.roomData.layout.exit) {
+                state.roomData.layout.exit.flavor = newFlavor;
+            }
+        }
+
+        function renderGridItems() {
+            // Clear existing tokens
+            document.querySelectorAll('.token').forEach(token => token.remove());
+            // Render monsters (runtime-aware)
+            state.roomData.layout.monsters.forEach(monster => {
+                const norm = (window.MonstersRuntime && window.MonstersRuntime.cache.loaded && window.MonstersRuntime.get(monster.type)) || null;
+                const legacy = MONSTERS[monster.type];
+                const monsterData = norm || legacy;
+                if (!monsterData) return;
+                const label = (norm && norm.emoji) ? norm.emoji : (monsterData.symbol || monsterData.name.substring(0,3).toUpperCase());
+                const token = createToken('monster-token', label);
+                token.style.backgroundColor = monsterData.color || '#6D28D9';
+                const tier = norm ? norm.tier : monsterData.tier;
+                if (tier) token.setAttribute('data-tier', tier);
+                token.dataset.type = 'monster';
+                token.dataset.monsterType = monster.type;
+                const sizeTiles = norm ? norm.tiles : monsterData.size;
+                if (sizeTiles === 2) {
+                    token.style.width = '60px';
+                    token.style.height = '60px';
+                    token.style.fontSize = '14px';
+                    token.classList.add('large-token');
+                }
+                const cell = gridContainer.querySelector(`[data-x='${monster.x}'][data-y='${monster.y}']`);
+                if (cell) cell.appendChild(token);
+            });
+            
+            // Render objects
+            state.roomData.layout.objects.forEach(object => {
+                const label = objectEmoji(object.type);
+                const token = createToken('object-token', label);
+                token.dataset.type = 'object';
+                token.dataset.objectType = object.type;
+                
+                const cell = gridContainer.querySelector(`[data-x='${object.x}'][data-y='${object.y}']`);
+                if (cell) cell.appendChild(token);
+            });
+              // Render exit
+            if (state.roomData.layout.exit) {
+                const token = createToken('exit-token', 'EXIT');
+                token.dataset.type = 'exit';
+                
+                const cell = gridContainer.querySelector(`[data-x='${state.roomData.layout.exit.x}'][data-y='${state.roomData.layout.exit.y}']`);
+                if (cell) cell.appendChild(token);
+            }
+            
+            // Render player spawns
+            state.roomData.layout.playerSpawns.forEach((spawn, index) => {
+                const token = createToken('player-spawn', `P${index + 1}`);
+                token.dataset.type = 'spawn';
+                
+                const cell = gridContainer.querySelector(`[data-x='${spawn.x}'][data-y='${spawn.y}']`);
+                if (cell) cell.appendChild(token);
+            });
+            updateEncounterSummary();
+        }
+
+        function objectEmoji(type) {
+            if (!type) return '❓';
+            if (type === 'debris') return '🧱';
+            if (type === 'crystal_altar') return '🗿';
+            if (type && type.startsWith('trap')) {
+                if (type === 'trap_gas') return '💨';
+                if (type === 'trap_pit') return '🕳️';
+                return '⚠️';
+            }
+            if (type === 'puzzle_switch') return '🎚️';
+            if (type === 'puzzle_dais') return '🗿';
+            if (type === 'puzzle_object') return '🧩';
+            return type.split('_')[0].charAt(0).toUpperCase();
+        }
+        function clearGrid() {
+            state.roomData.layout.monsters = [];
+            state.roomData.layout.objects = [];
+            state.roomData.layout.exit = null;
+            state.roomData.layout.playerSpawns = [
+                { x: 1, y: 3 },
+                { x: 1, y: 4 },
+                { x: 1, y: 5 },
+                { x: 2, y: 4 }
+            ];
+            state.roomData.lore = [];
+            state.roomData.puzzle = null;
+            
+            renderGridItems();
+            clearSelection();
+            
+            // Clear lore list
+            document.getElementById('lore-list').innerHTML = '';
+            updateEncounterSummary();
+        }
+
+        function autoPopulate() {
+            clearGrid();
+            
+            // Add some random monsters
+            const monsterTypes = Object.keys(MONSTERS);
+            const numMonsters = Math.floor(Math.random() * 5) + 2;
+            
+            for (let i = 0; i < numMonsters; i++) {
+                const x = Math.floor(Math.random() * state.roomData.width);
+                const y = Math.floor(Math.random() * state.roomData.height);
+                const type = monsterTypes[Math.floor(Math.random() * monsterTypes.length)];
+                
+                // Check if cell is empty
+                const existingMonster = state.roomData.layout.monsters.find(m => m.x === x && m.y === y);
+                if (!existingMonster) {
+                    state.roomData.layout.monsters.push({ type, x, y });
+                }
+            }
+            
+            // Add some random objects
+            const objectTypes = ['debris', 'trap_gas', 'puzzle_switch'];
+            const numObjects = Math.floor(Math.random() * 3) + 1;
+            
+            for (let i = 0; i < numObjects; i++) {
+                const x = Math.floor(Math.random() * state.roomData.width);
+                const y = Math.floor(Math.random() * state.roomData.height);
+                const type = objectTypes[Math.floor(Math.random() * objectTypes.length)];
+                
+                // Check if cell is empty
+                const existingItem = state.roomData.layout.monsters.find(m => m.x === x && m.y === y) ||
+                                   state.roomData.layout.objects.find(o => o.x === x && o.y === y);
+                if (!existingItem) {
+                    state.roomData.layout.objects.push({ 
+                        type, 
+                        x, 
+                        y, 
+                        flavor: "Auto-generated object." 
+                    });
+                }
+            }
+            
+            // Add exit
+            state.roomData.layout.exit = {
+                x: state.roomData.width - 1,
+                y: Math.floor(state.roomData.height / 2),
+                flavor: "The way forward."
+            };
+            
+            renderGridItems();
+            updateEncounterSummary();
+        }
+
+        function addLore() {
+            const speaker = document.getElementById('lore-speaker').value;
+            const text = document.getElementById('lore-text').value.trim();
+            
+            if (!text) return;
+            
+            const loreEntry = { speaker, text };
+            state.roomData.lore.push(loreEntry);
+            
+            // Add to visual list
+            const loreList = document.getElementById('lore-list');
+            const loreItem = document.createElement('div');
+            loreItem.className = 'bg-gray-700 rounded p-2 text-sm';
+            loreItem.innerHTML = `
+                <div class="flex justify-between items-start">
+                    <div>
+                        <strong class="text-blue-400">${speaker}:</strong>
+                        <p class="text-gray-300 mt-1">${text}</p>
+                    </div>
+                    <button onclick="removeLore(${state.roomData.lore.length - 1})" class="text-red-400 hover:text-red-300">×</button>
+                </div>
+            `;
+            loreList.appendChild(loreItem);
+            
+            // Clear input
+            document.getElementById('lore-text').value = '';
+        }
+
+        function removeLore(index) {
+            state.roomData.lore.splice(index, 1);
+            refreshLoreList();
+        }        function refreshLoreList() {
+            const loreList = document.getElementById('lore-list');
+            loreList.innerHTML = '';
+            
+            state.roomData.lore.forEach((lore, index) => {
+                addLoreEntry(lore.speaker, lore.text, index);
+            });
+        }
+
+        function addLoreEntry(speaker, text, index) {
+            const loreList = document.getElementById('lore-list');
+            const loreItem = document.createElement('div');
+            loreItem.className = 'bg-gray-700 rounded p-2 text-sm';
+            loreItem.innerHTML = `
+                <div class="flex justify-between items-start">
+                    <div>
+                        <strong class="text-blue-400">${speaker}:</strong>
+                        <p class="text-gray-300 mt-1">${text}</p>
+                    </div>
+                    <button onclick="removeLore(${index})" class="text-red-400 hover:text-red-300">×</button>
+                </div>
+            `;
+            loreList.appendChild(loreItem);
+        }
+
+        function updateEncounterSummary() {
+            const el = document.getElementById('encounter-summary');
+            const monsters = state.roomData.layout.monsters;
+            if (!monsters || monsters.length === 0) { el.classList.add('hidden'); el.textContent = ''; return; }
+            let totalCR = 0;
+            monsters.forEach(m => {
+                const norm = (window.MonstersRuntime && window.MonstersRuntime.cache.loaded && window.MonstersRuntime.get(m.type)) || null;
+                if (norm) totalCR += (typeof norm.cr === 'number' ? norm.cr : (parseFloat(norm.crStr) || 0));
+                else {
+                    const legacy = MONSTERS[m.type];
+                    if (legacy) {
+                        const map = { '1/8': 0.125, '1/4': 0.25, '1/2': 0.5 };
+                        const v = map[legacy.cr] ?? parseFloat(legacy.cr);
+                        totalCR += (isNaN(v) ? 0 : v);
+                    }
+                }
+            });
+            el.classList.remove('hidden');
+            el.textContent = `Encounter: ${monsters.length} monsters, ~CR budget ≈ ${totalCR.toFixed(2)}`;
+        }
+
+        function generateCode() {
+            const roomTemplate = {
+                name: state.roomData.name,
+                width: state.roomData.width,
+                height: state.roomData.height,                layout: {
+                    monsters: state.roomData.layout.monsters,
+                    objects: state.roomData.layout.objects,
+                    exit: state.roomData.layout.exit,
+                    playerSpawns: state.roomData.layout.playerSpawns
+                },
+                lore: state.roomData.lore
+            };
+            
+            // Add puzzle if configured
+            const puzzleType = document.getElementById('puzzle-type').value;
+            if (puzzleType) {
+                roomTemplate.puzzle = {
+                    type: puzzleType,
+                    prompt: document.getElementById('puzzle-prompt').value || "Solve this puzzle to proceed."
+                };
+                
+                if (puzzleType === 'switch') {
+                    roomTemplate.puzzle.switches = [
+                        { id: 'main_switch', label: 'Activate Switch' }
+                    ];
+                    roomTemplate.puzzle.solution = { main_switch: true };
+                }
+            }
+            
+            const codeString = JSON.stringify(roomTemplate, null, 4);
+            codeOutput.textContent = codeString;
+        }
+
+        function copyCode() {
+            const code = codeOutput.textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                // Show feedback
+                const copyBtn = document.getElementById('copy-code');
+                const originalText = copyBtn.textContent;
+                copyBtn.textContent = 'Copied!';
+                copyBtn.classList.add('bg-green-600');
+                setTimeout(() => {
+                    copyBtn.textContent = originalText;
+                    copyBtn.classList.remove('bg-green-600');
+                }, 2000);
+            });        }
+
+        function showLoadModal() {
+            document.getElementById('load-modal').classList.remove('hidden');
+            document.getElementById('load-code-input').value = '';
+        }
+
+        function hideLoadModal() {
+            document.getElementById('load-modal').classList.add('hidden');
+        }
+
+        function loadRoomFromCode() {
+            const codeInput = document.getElementById('load-code-input').value.trim();
+            
+            if (!codeInput) {
+                alert('Please paste room code to load.');
+                return;
+            }
+
+            try {
+                // Try to parse the JavaScript object
+                let roomTemplate;
+                
+                // Handle different input formats
+                if (codeInput.startsWith('{')) {
+                    // Direct object format
+                    roomTemplate = eval('(' + codeInput + ')');
+                } else if (codeInput.includes('name:')) {
+                    // Extract object from template code
+                    const match = codeInput.match(/\{[\s\S]*\}/);
+                    if (match) {
+                        roomTemplate = eval('(' + match[0] + ')');
+                    } else {
+                        throw new Error('Could not find room object in code');
+                    }
+                } else {
+                    throw new Error('Invalid room code format');
+                }
+
+                // Validate required properties
+                if (!roomTemplate.name || !roomTemplate.width || !roomTemplate.height || !roomTemplate.layout) {
+                    throw new Error('Invalid room template - missing required properties');
+                }
+
+                // Load the room data
+                state.roomData = {
+                    name: roomTemplate.name,
+                    width: roomTemplate.width,
+                    height: roomTemplate.height,
+                    layout: {
+                        monsters: roomTemplate.layout.monsters || [],
+                        objects: roomTemplate.layout.objects || [],
+                        exit: roomTemplate.layout.exit || null,
+                        playerSpawns: roomTemplate.layout.playerSpawns || [
+                            { x: 1, y: 3 },
+                            { x: 1, y: 4 },
+                            { x: 1, y: 5 },
+                            { x: 2, y: 4 }
+                        ]
+                    },
+                    lore: roomTemplate.lore || [],
+                    puzzle: roomTemplate.puzzle || null
+                };
+
+                // Update UI elements
+                roomNameInput.value = state.roomData.name;
+                roomWidthInput.value = state.roomData.width;
+                roomHeightInput.value = state.roomData.height;
+
+                // Recreate grid and render items
+                createGrid();
+                
+                // Load lore entries
+                const loreList = document.getElementById('lore-list');
+                loreList.innerHTML = '';
+                state.roomData.lore.forEach((entry, index) => {
+                    addLoreEntry(entry.speaker, entry.text, index);
+                });
+
+                // Load puzzle configuration
+                if (state.roomData.puzzle) {
+                    document.getElementById('puzzle-type').value = state.roomData.puzzle.type || '';
+                    document.getElementById('puzzle-prompt').value = state.roomData.puzzle.prompt || '';
+                }
+
+                hideLoadModal();
+                
+                // Show success message
+                alert('Room loaded successfully!');
+                
+            } catch (error) {
+                alert('Error loading room code: ' + error.message + '\n\nPlease make sure you\'ve pasted valid room template code.');
+                console.error('Load error:', error);
+            }
+        }
+
+        // Global functions for onclick handlers
+        window.updateObjectFlavor = updateObjectFlavor;
+        window.updateExitFlavor = updateExitFlavor;
+        window.removeLore = removeLore;
+
+        // Initialize the application
+        init();
+    </script>
+</body>
+</html>

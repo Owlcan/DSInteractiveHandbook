@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arcane Tonal Beacon</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=EB+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'EB Garamond', serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #000000 100%);
+            color: #d4af37;
+            overflow: hidden;
+            transition: background-color 0.5s ease;
+            position: relative;
+        }
+
+        /* Subtle mystical particles */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(1px 1px at 30px 50px, rgba(212, 175, 55, 0.2), transparent),
+                radial-gradient(1px 1px at 80px 30px, rgba(255, 215, 0, 0.15), transparent),
+                radial-gradient(1px 1px at 150px 90px, rgba(184, 134, 11, 0.25), transparent);
+            background-repeat: repeat;
+            background-size: 200px 150px;
+            animation: shimmer 15s infinite linear;
+            opacity: 0.4;
+            z-index: -1;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(-100px, -75px) rotate(360deg); }
+        }
+
+        .sundial-container {
+            position: relative;
+            width: 120vw;
+            height: 120vw;
+            max-width: 600px;
+            max-height: 600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .sundial-base {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(145deg, #1a1a1a 0%, #0f0f0f 100%);
+            border-radius: 50%;
+            border: 4px solid #d4af37;
+            box-shadow: 
+                0 0 20px rgba(212, 175, 55, 0.4),
+                inset 0 0 30px rgba(0, 0, 0, 0.8);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.5s ease;
+        }
+        
+        .sundial-center {
+            width: 20%;
+            height: 20%;
+            background: radial-gradient(circle, #d4af37 0%, #b8860b 100%);
+            border-radius: 50%;
+            border: 3px solid #ffd700;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
+            position: relative;
+            z-index: 10;
+            transition: all 0.5s ease;
+            --dial-rotation: 15deg;
+        }
+        
+        .sundial-center::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -100%) rotate(var(--dial-rotation));
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 60px solid #8b4513;
+            filter: drop-shadow(2px 2px 5px rgba(0,0,0,0.7));
+            transition: transform 0.8s ease-in-out;
+            transform-origin: 50% 100%;
+        }
+
+        .sundial-center.pointing::before {
+            border-bottom-color: #d4af37;
+            filter: drop-shadow(2px 2px 8px rgba(212, 175, 55, 0.8));
+        }
+
+        .rune {
+            position: absolute;
+            width: 18%;
+            height: 18%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease-in-out;
+            border-radius: 50%;
+            font-size: 3rem;
+            line-height: 1;
+            color: #d4af37;
+            text-shadow: 0 0 5px rgba(212, 175, 55, 0.6);
+            background: linear-gradient(145deg, #2a2a1a 0%, #1a1a0f 100%);
+            border: 2px solid rgba(212, 175, 55, 0.4);
+        }
+
+        .rune:hover {
+            transform: scale(1.1);
+            border-color: rgba(212, 175, 55, 0.8);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+        }
+
+        /* --- Hard Mode Theme --- */
+        .hard-mode .sundial-base {
+            background: linear-gradient(145deg, #2a1a1a 0%, #1a0f0f 100%);
+            border-color: #cd853f;
+        }
+        .hard-mode .rune {
+            color: #cd853f;
+            background: linear-gradient(145deg, #2a1a1a 0%, #1a0f0f 100%);
+            border-color: rgba(205, 133, 63, 0.4);
+            text-shadow: 0 0 5px rgba(205, 133, 63, 0.6);
+        }
+        .hard-mode .rune:hover {
+            border-color: rgba(205, 133, 63, 0.8);
+            box-shadow: 0 0 15px rgba(205, 133, 63, 0.4);
+        }
+        .hard-mode .sundial-center {
+            background: radial-gradient(circle, #cd853f 0%, #a0522d 100%);
+            border-color: #daa520;
+        }
+        .hard-mode .sundial-center::before {
+            border-bottom-color: #654321;
+        }
+
+
+        .shake {
+            animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+        }
+
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+
+        .status-box {
+            min-height: 6rem; /* fixed height to prevent layout shift */
+        }
+
+        .song-button {
+            background: linear-gradient(145deg, #1a1a3a 0%, #0f0f1a 100%);
+            color: #d4af37;
+            border: 2px solid rgba(212, 175, 55, 0.6);
+            font-family: 'Cinzel', serif;
+            font-weight: bold;
+            padding: 12px 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-align: left;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .song-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(212, 175, 55, 0.3);
+            border-color: rgba(212, 175, 55, 0.8);
+        }
+
+        .song-button.selected {
+            background: linear-gradient(145deg, #2a2a1a 0%, #1a1a0f 100%);
+            border-color: #ffd700;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+        }
+
+        .song-control-button {
+            background: linear-gradient(145deg, #2a1a3a 0%, #1a0f1a 100%);
+            color: #dda0dd;
+            border: 2px solid rgba(221, 160, 221, 0.6);
+            font-family: 'Cinzel', serif;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .song-control-button:hover {
+            transform: scale(1.05);
+            border-color: rgba(221, 160, 221, 0.8);
+            box-shadow: 0 0 10px rgba(221, 160, 221, 0.3);
+        }
+
+        .rune.timing-glow {
+            animation: timingGlow 2s ease-in-out;
+        }
+
+        @keyframes timingGlow {
+            0% { 
+                box-shadow: 0 0 5px rgba(212, 175, 55, 0.3);
+                transform: scale(1);
+            }
+            50% { 
+                box-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
+                transform: scale(1.05);
+            }
+            100% { 
+                box-shadow: 0 0 25px rgba(212, 175, 55, 1), 0 0 40px rgba(255, 215, 0, 0.8);
+                transform: scale(1.1);
+            }
+        }
+
+        .rune.perfect-hit {
+            animation: perfectHit 0.5s ease-out;
+        }
+
+        @keyframes perfectHit {
+            0% { 
+                box-shadow: 0 0 25px rgba(0, 255, 0, 1);
+                transform: scale(1.2);
+            }
+            100% { 
+                box-shadow: none;
+                transform: scale(1);
+            }
+        }
+
+        .metronome-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(212, 175, 55, 0.3);
+            border: 3px solid rgba(212, 175, 55, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: all 0.1s ease;
+        }
+
+        .metronome-indicator.beat {
+            background: rgba(255, 215, 0, 0.8);
+            border-color: #ffd700;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+            transform: scale(1.1);
+        }
+
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen p-4">
+
+    <div id="game-container" class="text-center">
+        <h1 class="text-4xl md:text-6xl font-bold mb-4 tracking-widest" style="font-family: 'Cinzel', serif; background: linear-gradient(45deg, #d4af37, #ffd700, #b8860b); background-size: 200% 200%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-shadow: 0 0 10px rgba(212, 175, 55, 0.6);">Arcane Tone Beacon</h1>
+        <div id="status-box" class="flex flex-col justify-center items-center my-6 bg-gradient-to-br from-gray-900 to-black border-2 border-yellow-600 rounded-lg p-4 shadow-lg" style="background: linear-gradient(145deg, #1a1a1a 0%, #0f0f0f 100%); border-color: rgba(212, 175, 55, 0.6); box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);">
+            <p id="message" class="text-xl md:text-2xl h-8" style="color: #d4af37; text-shadow: 0 0 5px rgba(212, 175, 55, 0.6);"></p>
+            <p id="level-display" class="text-lg md:text-xl h-7" style="color: #ffd700; text-shadow: 0 0 5px rgba(255, 215, 0, 0.6);"></p>
+        </div>
+
+        <div class="sundial-container mx-auto">
+            <div class="sundial-base">
+                <div class="sundial-center"></div>
+                <!-- Runes will be dynamically inserted here -->
+            </div>
+        </div>
+
+        <div id="difficulty-selector" class="mt-8 flex justify-center space-x-4">
+             <button data-mode="normal" class="difficulty-button font-bold py-3 px-8 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105 text-xl tracking-wider" style="background: linear-gradient(145deg, #1a1a3a 0%, #0f0f1a 100%); color: #d4af37; border: 2px solid rgba(212, 175, 55, 0.6); font-family: 'Cinzel', serif;">
+                Normal
+            </button>
+            <button data-mode="hard" class="difficulty-button font-bold py-3 px-8 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105 text-xl tracking-wider" style="background: linear-gradient(145deg, #2a1a1a 0%, #1a0f0f 100%); color: #cd853f; border: 2px solid rgba(205, 133, 63, 0.6); font-family: 'Cinzel', serif;">
+                Hard
+            </button>
+        </div>
+
+        <div class="mt-6 flex justify-center">
+            <button id="melody-mode-button" class="font-bold py-3 px-8 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105 text-xl tracking-wider" style="background: linear-gradient(145deg, #1a3a1a 0%, #0f1a0f 100%); color: #90ee90; border: 2px solid rgba(144, 238, 144, 0.6); font-family: 'Cinzel', serif;">
+                🎵 Melody Mode
+            </button>
+        </div>
+
+        <!-- Song Library for Melody Mode -->
+        <div id="song-library" class="hidden mt-6 max-w-2xl mx-auto">
+            <h3 class="text-2xl font-bold mb-4 text-center" style="color: #d4af37; font-family: 'Cinzel', serif;">Song Library</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <button class="song-button" data-song="twinkle">⭐ Twinkle Twinkle Little Star</button>
+                <button class="song-button" data-song="mary">🐑 Mary Had a Little Lamb</button>
+                <button class="song-button" data-song="birthday">🎂 Happy Birthday</button>
+                <button class="song-button" data-song="jingle">🔔 Jingle Bells</button>
+                <button class="song-button" data-song="old-macdonald">🚜 Old MacDonald</button>
+                <button class="song-button" data-song="row-boat">🚣 Row Your Boat</button>
+                <button class="song-button" data-song="london-bridge">🌉 London Bridge</button>
+                <button class="song-button" data-song="frere-jacques">🔔 Frère Jacques</button>
+                <button class="song-button" data-song="ahead-on-our-way">🎶 Ahead On Our Way</button>
+                <button class="song-button" data-song="for-the-savior">⭐ For the Savior</button>
+                <button class="song-button" data-song="omen-opening-theme">🎵 Omen (Opening Theme)</button> 
+                <button class="song-button" data-song="glennecia-ritual">🔮 La Marie Glennecia (Complete Vocal Arc)</button>
+            </div>
+            <div class="mt-4 flex justify-center space-x-4">
+                <button id="play-song-button" class="hidden song-control-button">▶️ Play Song</button>
+                <button id="play-along-button" class="hidden song-control-button">🎯 Play Along</button>
+                <button id="stop-song-button" class="hidden song-control-button">⏹️ Stop</button>
+                <button id="clear-song-button" class="song-control-button">🗑️ Clear Selection</button>
+            </div>
+            
+            <!-- Play-along scoring display -->
+            <div id="play-along-score" class="hidden mt-4 p-4 rounded-lg mx-auto" style="background: linear-gradient(145deg, #1a1a3a 0%, #0f0f1a 100%); border: 2px solid rgba(212, 175, 55, 0.6);">
+                <div class="flex justify-between items-center">
+                    <div class="text-center">
+                        <p class="text-lg font-bold" style="color: #d4af37;">Score</p>
+                        <p id="current-score" class="text-2xl font-bold" style="color: #ffd700;">0</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-lg font-bold" style="color: #d4af37;">Notes Hit</p>
+                        <p id="notes-hit" class="text-xl" style="color: #90ee90;"><span id="hit-count">0</span>/<span id="total-notes">0</span></p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-lg font-bold" style="color: #d4af37;">Accuracy</p>
+                        <p id="accuracy" class="text-xl" style="color: #87ceeb;">0%</p>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <div class="text-center">
+                        <p class="text-sm" style="color: #dda0dd;">Perfect: 10pts | Great: 7pts | Good: 5pts | OK: 2pts | Miss: 0pts</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-8 flex justify-center space-x-4">
+            <button id="start-button" class="hidden font-bold py-3 px-8 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105 text-xl tracking-wider" style="background: linear-gradient(145deg, #2a2a1a 0%, #1a1a0f 100%); color: #ffd700; border: 2px solid rgba(255, 215, 0, 0.6); font-family: 'Cinzel', serif; box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);">
+                Begin Challenge
+            </button>
+            <button id="back-to-menu-button" class="hidden font-bold py-3 px-8 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105 text-xl tracking-wider" style="background: linear-gradient(145deg, #3a1a1a 0%, #1a0f0f 100%); color: #ff6b6b; border: 2px solid rgba(255, 107, 107, 0.6); font-family: 'Cinzel', serif;">
+                ← Back to Menu
+            </button>
+        </div>
+    </div>
+
+    <!-- Metronome indicator -->
+    <div id="metronome-indicator" class="metronome-indicator hidden">♪</div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Game Configuration ---
+            const RUNE_COUNT = 8;
+            const RUNE_CHARS = ['Ж', 'Ѱ', 'Ω', 'Ϯ', 'Ф', 'Ҵ', '₶', '₴'];
+            const WIN_LEVEL = 5;
+            const RUNE_COLORS = ['#d4af37', '#ffd700', '#b8860b', '#daa520', '#cd853f', '#f4a460', '#deb887', '#d2691e'];
+
+            // --- Song Library (using C major scale mapping) ---
+            // Rune indices: 0=C, 1=D, 2=E, 3=F, 4=G, 5=A, 6=B, 7=C(high)
+            const SONG_LIBRARY = {
+                'twinkle': {
+                    name: 'Twinkle Twinkle Little Star',
+                    notes: [0, 0, 4, 4, 5, 5, 4, 3, 3, 2, 2, 1, 1, 0, 4, 4, 3, 3, 2, 2, 1, 4, 4, 3, 3, 2, 2, 1, 0, 0, 4, 4, 5, 5, 4, 3, 3, 2, 2, 1, 1, 0],
+                    tempo: 500,
+                    playAlongTempo: 750
+                },
+                'mary': {
+                    name: 'Mary Had a Little Lamb',
+                    notes: [2, 1, 0, 1, 2, 2, 2, 1, 1, 1, 2, 4, 4, 2, 1, 0, 1, 2, 2, 2, 2, 1, 1, 2, 1, 0],
+                    tempo: 400,
+                    playAlongTempo: 600
+                },
+                'birthday': {
+                    name: 'Happy Birthday',
+                    notes: [0, 0, 1, 0, 3, 2, 0, 0, 1, 0, 4, 3, 0, 0, 7, 5, 3, 2, 1, 6, 6, 5, 3, 4, 3],
+                    tempo: 600,
+                    playAlongTempo: 900
+                },
+                'jingle': {
+                    name: 'Jingle Bells',
+                    notes: [2, 2, 2, 2, 2, 2, 2, 4, 0, 1, 2, 3, 3, 3, 3, 3, 2, 2, 2, 2, 1, 1, 2, 1, 4],
+                    tempo: 400,
+                    playAlongTempo: 600
+                },
+                'old-macdonald': {
+                    name: 'Old MacDonald',
+                    notes: [0, 0, 0, 4, 2, 2, 1, 4, 4, 3, 3, 2, 0, 0, 0, 4, 2, 2, 1],
+                    tempo: 450,
+                    playAlongTempo: 675
+                },
+                'row-boat': {
+                    name: 'Row Your Boat',
+                    notes: [0, 0, 0, 1, 2, 2, 1, 2, 3, 4, 4, 4, 4, 4, 3, 4, 2, 1, 2, 3, 4, 0, 0, 0],
+                    tempo: 500,
+                    playAlongTempo: 750
+                },
+                'london-bridge': {
+                    name: 'London Bridge',
+                    notes: [4, 3, 2, 3, 4, 4, 4, 3, 3, 3, 4, 6, 6, 4, 3, 2, 3, 4, 4, 4, 3, 3, 4, 3, 2],
+                    tempo: 450,
+                    playAlongTempo: 675
+                },
+                'frere-jacques': {
+                    name: 'Frère Jacques',
+                    notes: [0, 1, 2, 0, 0, 1, 2, 0, 2, 3, 4, 2, 3, 4, 4, 5, 4, 3, 2, 0, 4, 5, 4, 3, 2, 0, 0, 4, 0, 0, 4, 0],
+                    tempo: 400,
+                    playAlongTempo: 600
+                },
+                'ahead-on-our-way': {
+                    name: 'Ahead On Our Way',
+                    notes: [0, 2, 4, 5, 4, 2, 0, 4, 5, 6, 7, 6, 5, 4, 7, 7, 7, 6, 5, 4, 2, 4, 5, 6, 7, 6, 0, 2, 4, 0, 2, 5, 6, 5, 4, 2, 0, 2, 4, 5, 6, 7, 7, 7, 6, 5, 4],
+                    tempo: 500,
+                    playAlongTempo: 750
+                },
+                'for-the-savior': {
+                    name: 'The Savior of Those on Earth (Complete Intro)',
+                    notes: [0, 4, 5, 4, 3, 1, 0, 3, 5, 6, 5, 3, 4, 6, 7, 6, 4, 3, 1, 0, 2, 3, 5, 6, 4, 3, 1, 0, 1, 2, 3, 5, 4, 2, 1, 0, 2, 3, 2, 0, 3, 4, 4, 3, 1, 0, 2, 3, 1, 0, 1, 3],
+                    tempo: 290,
+                    playAlongTempo: 435
+                },
+
+'omen-opening-theme': {
+    name: 'Omen (Opening Theme)',
+    notes: [0, 3, 4, 5, 4, 3, 1, 3, 4, 5, 6, 5, 4, 3, 1, 3, 4, 5, 6, 7, 6, 5, 4, 3, 1, 3, 4, 5, 6, 5, 4, 3, 3, 4, 3, 2, 0, 0, 2, 3, 4, 5, 4, 3, 1, 0, 1, 3, 4, 6, 5, 4, 3, 1, 0, 1, 3, 4, 6, 7, 5, 3, 2],
+    tempo: 360,
+    playAlongTempo: 540
+},
+'glennecia-ritual': {
+    name: 'La Marie Glennecia (Complete Vocal Arc)',
+    notes: [0, 2, 4, 2, 1, 0, 3, 5, 3, 2, 0, 1, 2, 3, 5, 3, 1, 0, 2, 3, 2, 1, 0, 1, 2, 4, 2, 0, 1, 2, 3, 2, 0, 1, 2, 3, 2, 0, 1, 2, 3],
+    tempo: 750,
+    playAlongTempo: 1125
+}
+
+
+
+
+
+
+            };
+
+            // --- DOM Elements ---
+            const sundialBase = document.querySelector('.sundial-base');
+            const startButton = document.getElementById('start-button');
+            const melodyModeButton = document.getElementById('melody-mode-button');
+            const backToMenuButton = document.getElementById('back-to-menu-button');
+            const messageEl = document.getElementById('message');
+            const levelDisplayEl = document.getElementById('level-display');
+            const gameContainer = document.getElementById('game-container');
+            const difficultySelector = document.getElementById('difficulty-selector');
+            const difficultyButtons = document.querySelectorAll('.difficulty-button');
+            const songLibrary = document.getElementById('song-library');
+            const songButtons = document.querySelectorAll('.song-button');
+            const playSongButton = document.getElementById('play-song-button');
+            const playAlongButton = document.getElementById('play-along-button');
+            const stopSongButton = document.getElementById('stop-song-button');
+            const clearSongButton = document.getElementById('clear-song-button');
+            const playAlongScoreEl = document.getElementById('play-along-score');
+            const currentScoreEl = document.getElementById('current-score');
+            const notesHitEl = document.getElementById('notes-hit');
+            const hitCountEl = document.getElementById('hit-count');
+            const totalNotesEl = document.getElementById('total-notes');
+            const accuracyEl = document.getElementById('accuracy');
+            const metronomeIndicator = document.getElementById('metronome-indicator');
+
+            // --- Game State ---
+            let sequence = [];
+            let playerSequence = [];
+            let level = 0;
+            let playerTurn = false;
+            let gameInProgress = false;
+            let gameMode = 'normal';
+            let melodyMode = false;
+            let selectedSong = null;
+            let currentSongPlayback = null;
+            let playAlongMode = false;
+            let playAlongScore = 0;
+            let notesHit = 0;
+            let totalNotes = 0;
+            let currentNoteIndex = 0;
+            let expectedHitTime = 0;
+            let metronomeInterval = null;
+            let anticipationTimeout = null;
+
+            // --- Audio Synthesis (Tone.js) ---
+            const synth = new Tone.PolySynth(Tone.Synth, {
+                oscillator: { type: 'sine' },
+                envelope: { attack: 0.01, decay: 0.2, sustain: 0.1, release: 0.5 },
+            }).toDestination();
+            
+            const successSound = () => {
+                const now = Tone.now();
+                synth.triggerAttackRelease(['C4', 'E4', 'G4'], '8n', now);
+            };
+            
+            const errorSound = () => {
+                const now = Tone.now();
+                synth.triggerAttackRelease(['C3', 'C#3'], '4n', now);
+            };
+
+            // --- Game Logic ---
+
+            function pointDialToRune(runeIndex) {
+                const dial = document.querySelector('.sundial-center::before');
+                const sundialCenter = document.querySelector('.sundial-center');
+                
+                // Calculate the angle for this rune (runes are positioned around the circle)
+                const anglePerRune = (2 * Math.PI) / RUNE_COUNT;
+                const runeAngle = runeIndex * anglePerRune;
+                
+                // Convert to degrees and adjust for CSS transform
+                // Add 90 degrees to account for the default pointing direction
+                const angleDegrees = (runeAngle * 180 / Math.PI) + 90;
+                
+                // Apply the rotation to the dial
+                if (sundialCenter) {
+                    sundialCenter.style.setProperty('--dial-rotation', `${angleDegrees}deg`);
+                    sundialCenter.classList.add('pointing');
+                }
+            }
+
+            function resetDial() {
+                const sundialCenter = document.querySelector('.sundial-center');
+                if (sundialCenter) {
+                    sundialCenter.style.setProperty('--dial-rotation', '15deg');
+                    sundialCenter.classList.remove('pointing');
+                }
+            }
+
+            function selectSong(songKey) {
+                selectedSong = songKey;
+                // Clear previous selections first
+                document.querySelectorAll('.song-button').forEach(btn => {
+                    btn.classList.remove('selected');
+                });
+                
+                // Set new selection
+                const songButton = document.querySelector(`[data-song="${songKey}"]`);
+                if (songButton) {
+                    songButton.classList.add('selected');
+                }
+                
+                playSongButton.classList.remove('hidden');
+                playAlongButton.classList.remove('hidden');
+                stopSongButton.classList.add('hidden');
+                
+                const song = SONG_LIBRARY[songKey];
+                messageEl.textContent = `Selected: ${song.name}`;
+                levelDisplayEl.textContent = 'Choose "Play Song" or "Play Along" for a challenge!';
+            }
+
+            function playSong() {
+                if (!selectedSong || currentSongPlayback) return;
+                
+                // Ensure audio context is started
+                Tone.start();
+                
+                const song = SONG_LIBRARY[selectedSong];
+                playSongButton.classList.add('hidden');
+                playAlongButton.classList.add('hidden');
+                stopSongButton.classList.remove('hidden');
+                
+                messageEl.textContent = `Now playing: ${song.name}`;
+                
+                let noteIndex = 0;
+                currentSongPlayback = setInterval(() => {
+                    if (noteIndex >= song.notes.length) {
+                        stopCurrentSong();
+                        return;
+                    }
+                    
+                    glowRune(song.notes[noteIndex]);
+                    noteIndex++;
+                }, song.tempo);
+            }
+
+            function startPlayAlong() {
+                if (!selectedSong || currentSongPlayback) return;
+                
+                // Ensure audio context is started
+                Tone.start();
+                
+                playAlongMode = true;
+                playAlongScore = 0;
+                notesHit = 0;
+                currentNoteIndex = 0;
+                
+                const song = SONG_LIBRARY[selectedSong];
+                totalNotes = song.notes.length;
+                
+                playSongButton.classList.add('hidden');
+                playAlongButton.classList.add('hidden');
+                stopSongButton.classList.remove('hidden');
+                playAlongScoreEl.classList.remove('hidden');
+                metronomeIndicator.classList.remove('hidden');
+                
+                // Update display
+                updatePlayAlongDisplay();
+                messageEl.textContent = `Play Along: ${song.name}`;
+                levelDisplayEl.textContent = 'Hit the glowing runes at the perfect moment!';
+                
+                // Start metronome
+                startMetronome(song.playAlongTempo);
+                
+                // Start the play-along sequence
+                scheduleNextNote();
+            }
+
+            function startMetronome(tempo) {
+                let beatCount = 0;
+                metronomeInterval = setInterval(() => {
+                    metronomeIndicator.classList.add('beat');
+                    setTimeout(() => metronomeIndicator.classList.remove('beat'), 100);
+                    beatCount++;
+                }, tempo);
+            }
+
+            function scheduleNextNote() {
+                if (!playAlongMode || !selectedSong) return;
+                
+                const song = SONG_LIBRARY[selectedSong];
+                if (currentNoteIndex >= song.notes.length) {
+                    endPlayAlong();
+                    return;
+                }
+                
+                const runeIndex = song.notes[currentNoteIndex];
+                const anticipationTime = 2000; // 2 seconds to anticipate
+                
+                // Point the dial to the upcoming note
+                pointDialToRune(runeIndex);
+                
+                // Start the timing glow
+                anticipationTimeout = setTimeout(() => {
+                    const rune = document.querySelector(`.rune[data-index='${runeIndex}']`);
+                    if (rune) {
+                        rune.classList.add('timing-glow');
+                        expectedHitTime = Date.now() + 2000; // Perfect hit time
+                        
+                        // Remove timing glow after the window
+                        setTimeout(() => {
+                            rune.classList.remove('timing-glow');
+                            if (playAlongMode) {
+                                // Miss - no points
+                                currentNoteIndex++;
+                                updatePlayAlongDisplay();
+                                scheduleNextNote();
+                            }
+                        }, 2500);
+                    }
+                }, 0);
+                
+                // Schedule next note
+                setTimeout(() => {
+                    if (playAlongMode) {
+                        // Auto-advance if player didn't hit
+                        currentNoteIndex++;
+                        scheduleNextNote();
+                    }
+                }, song.playAlongTempo);
+            }
+
+            function handlePlayAlongHit(runeIndex) {
+                if (!playAlongMode || !selectedSong) return;
+                
+                const song = SONG_LIBRARY[selectedSong];
+                const expectedRune = song.notes[currentNoteIndex];
+                
+                if (runeIndex !== expectedRune) return; // Wrong rune
+                
+                const hitTime = Date.now();
+                const timeDiff = Math.abs(hitTime - expectedHitTime);
+                
+                let points = 0;
+                let hitType = 'Miss';
+                
+                if (timeDiff <= 100) { // Perfect - within 100ms
+                    points = 10;
+                    hitType = 'Perfect!';
+                    notesHit++;
+                } else if (timeDiff <= 200) { // Great - within 200ms
+                    points = 7;
+                    hitType = 'Great!';
+                    notesHit++;
+                } else if (timeDiff <= 350) { // Good - within 350ms
+                    points = 5;
+                    hitType = 'Good';
+                    notesHit++;
+                } else if (timeDiff <= 500) { // OK - within 500ms
+                    points = 2;
+                    hitType = 'OK';
+                    notesHit++;
+                }
+                
+                playAlongScore += points;
+                
+                // Visual feedback
+                const rune = document.querySelector(`.rune[data-index='${runeIndex}']`);
+                if (rune && points > 0) {
+                    rune.classList.add('perfect-hit');
+                    setTimeout(() => rune.classList.remove('perfect-hit'), 500);
+                }
+                
+                // Show hit feedback
+                if (points > 0) {
+                    messageEl.textContent = `${hitType} +${points} points!`;
+                    setTimeout(() => {
+                        if (playAlongMode) {
+                            messageEl.textContent = `Play Along: ${song.name}`;
+                        }
+                    }, 800);
+                }
+                
+                updatePlayAlongDisplay();
+                
+                // Advance to next note
+                currentNoteIndex++;
+                if (currentNoteIndex < song.notes.length) {
+                    scheduleNextNote();
+                } else {
+                    endPlayAlong();
+                }
+            }
+
+            function updatePlayAlongDisplay() {
+                currentScoreEl.textContent = playAlongScore;
+                hitCountEl.textContent = notesHit;
+                totalNotesEl.textContent = totalNotes;
+                const accuracy = totalNotes > 0 ? Math.round((notesHit / totalNotes) * 100) : 0;
+                accuracyEl.textContent = `${accuracy}%`;
+            }
+
+            function endPlayAlong() {
+                playAlongMode = false;
+                resetDial();
+                
+                const finalAccuracy = totalNotes > 0 ? Math.round((notesHit / totalNotes) * 100) : 0;
+                let grade = 'Try Again';
+                if (finalAccuracy >= 90) grade = 'Perfect!';
+                else if (finalAccuracy >= 80) grade = 'Excellent!';
+                else if (finalAccuracy >= 70) grade = 'Great!';
+                else if (finalAccuracy >= 60) grade = 'Good';
+                else if (finalAccuracy >= 50) grade = 'OK';
+                
+                messageEl.textContent = `Song Complete! ${grade}`;
+                levelDisplayEl.textContent = `Final Score: ${playAlongScore} | Accuracy: ${finalAccuracy}%`;
+                
+                stopCurrentSong();
+            }
+
+            function stopCurrentSong() {
+                if (currentSongPlayback) {
+                    clearInterval(currentSongPlayback);
+                    currentSongPlayback = null;
+                }
+                if (metronomeInterval) {
+                    clearInterval(metronomeInterval);
+                    metronomeInterval = null;
+                }
+                if (anticipationTimeout) {
+                    clearTimeout(anticipationTimeout);
+                    anticipationTimeout = null;
+                }
+                
+                playAlongMode = false;
+                resetDial();
+                playSongButton.classList.remove('hidden');
+                playAlongButton.classList.remove('hidden');
+                stopSongButton.classList.add('hidden');
+                playAlongScoreEl.classList.add('hidden');
+                metronomeIndicator.classList.add('hidden');
+                
+                // Remove any timing glows
+                document.querySelectorAll('.rune').forEach(rune => {
+                    rune.classList.remove('timing-glow', 'perfect-hit');
+                });
+                
+                if (selectedSong) {
+                    const song = SONG_LIBRARY[selectedSong];
+                    messageEl.textContent = `Selected: ${song.name}`;
+                    levelDisplayEl.textContent = 'Choose "Play Song" or "Play Along" for a challenge!';
+                }
+            }
+
+            function clearSongSelection() {
+                document.querySelectorAll('.song-button').forEach(btn => {
+                    btn.classList.remove('selected');
+                });
+                playSongButton.classList.add('hidden');
+                playAlongButton.classList.add('hidden');
+                stopSongButton.classList.add('hidden');
+                playAlongScoreEl.classList.add('hidden');
+                selectedSong = null;
+                stopCurrentSong();
+                
+                if (melodyMode) {
+                    messageEl.textContent = 'Click the runes to play melodies, or select a song!';
+                    levelDisplayEl.textContent = 'Free Play Mode - Create your own music or learn songs';
+                }
+            }
+
+            function setMelodyMode() {
+                Tone.start(); // Ensure audio context is started
+                melodyMode = true;
+                gameInProgress = false;
+                difficultySelector.classList.add('hidden');
+                startButton.classList.add('hidden');
+                melodyModeButton.classList.add('hidden');
+                backToMenuButton.classList.remove('hidden');
+                songLibrary.classList.remove('hidden');
+                messageEl.textContent = 'Click the runes to play melodies, or select a song!';
+                levelDisplayEl.textContent = 'Free Play Mode - Create your own music or learn songs';
+            }
+
+            function backToMenu() {
+                melodyMode = false;
+                gameInProgress = false;
+                selectedSong = null;
+                stopCurrentSong();
+                difficultySelector.classList.remove('hidden');
+                startButton.classList.add('hidden');
+                melodyModeButton.classList.remove('hidden');
+                backToMenuButton.classList.add('hidden');
+                songLibrary.classList.add('hidden');
+                messageEl.textContent = '';
+                levelDisplayEl.textContent = '';
+                document.body.classList.remove('hard-mode');
+                clearSongSelection();
+            }
+
+            function setGameMode(mode) {
+                gameMode = mode;
+                document.body.classList.toggle('hard-mode', mode === 'hard');
+                difficultySelector.classList.add('hidden');
+                melodyModeButton.classList.add('hidden');
+                startButton.classList.remove('hidden');
+                startButton.textContent = `Begin ${mode.charAt(0).toUpperCase() + mode.slice(1)} Challenge`;
+            }
+
+            function createSundial() {
+                for (let i = 0; i < RUNE_COUNT; i++) {
+                    const angle = (i / RUNE_COUNT) * 2 * Math.PI;
+                    const radius = '42%'; 
+                    const x = `calc(50% + ${radius} * ${Math.cos(angle)} - 10%)`;
+                    const y = `calc(50% + ${radius} * ${Math.sin(angle)} - 10%)`;
+
+                    const runeEl = document.createElement('div');
+                    runeEl.classList.add('rune');
+                    runeEl.dataset.index = i;
+                    runeEl.style.left = x;
+                    runeEl.style.top = y;
+                    runeEl.textContent = RUNE_CHARS[i];
+                    runeEl.addEventListener('click', () => handleRuneClick(i));
+                    sundialBase.appendChild(runeEl);
+                }
+            }
+
+            function startGame() {
+                Tone.start();
+                gameInProgress = true;
+                level = 0;
+                sequence = [];
+                startButton.classList.add('hidden');
+                levelDisplayEl.textContent = '';
+                nextLevel();
+            }
+
+            function nextLevel() {
+                level++;
+                playerSequence = [];
+                playerTurn = false;
+                levelDisplayEl.textContent = `Level: ${level}`;
+                messageEl.textContent = 'Decipher the pattern...';
+
+                if (gameMode === 'hard' && level === 1) {
+                    // Start with 3 notes in hard mode
+                    for(let i = 0; i < 3; i++) {
+                        sequence.push(Math.floor(Math.random() * RUNE_COUNT));
+                    }
+                } else {
+                    sequence.push(Math.floor(Math.random() * RUNE_COUNT));
+                }
+
+                setTimeout(() => playSequence(), 1500);
+            }
+
+            function playSequence() {
+                let i = 0;
+                const speed = gameMode === 'hard' ? 500 : 800; // Faster for hard mode
+                const interval = setInterval(() => {
+                    if (i >= sequence.length) {
+                        clearInterval(interval);
+                        playerTurn = true;
+                        messageEl.textContent = 'Your turn...';
+                        return;
+                    }
+                    glowRune(sequence[i]);
+                    i++;
+                }, speed);
+            }
+
+            function handleRuneClick(index) {
+                // Play-along mode - check timing and scoring
+                if (playAlongMode) {
+                    handlePlayAlongHit(index);
+                    glowRune(index);
+                    return;
+                }
+                
+                // Melody mode - just play the note
+                if (melodyMode) {
+                    glowRune(index);
+                    return;
+                }
+
+                // Game mode logic
+                if (!playerTurn || !gameInProgress) return;
+
+                glowRune(index);
+                playerSequence.push(index);
+
+                const currentStep = playerSequence.length - 1;
+
+                if (playerSequence[currentStep] !== sequence[currentStep]) {
+                    handleFailure();
+                    return;
+                }
+
+                if (playerSequence.length === sequence.length) {
+                    handleSuccess();
+                }
+            }
+            
+            function handleSuccess() {
+                playerTurn = false;
+                successSound();
+
+                if (level === WIN_LEVEL && gameMode === 'normal') {
+                    messageEl.textContent = 'You have deciphered the Sundial!';
+                    levelDisplayEl.textContent = 'Continue for a high score...';
+                    setTimeout(nextLevel, 2500);
+                } else {
+                    messageEl.textContent = 'Correct!';
+                    setTimeout(nextLevel, 1500);
+                }
+            }
+
+            function handleFailure() {
+                playerTurn = false;
+                gameInProgress = false;
+                messageEl.textContent = 'The pattern is broken!';
+                errorSound();
+                gameContainer.classList.add('shake');
+                
+                const runes = document.querySelectorAll('.rune');
+                const errorColor = '#e74c3c';
+
+                runes.forEach(rune => {
+                    rune.style.color = errorColor;
+                    rune.style.textShadow = `0 0 8px ${errorColor}, 0 0 15px ${errorColor}, 1px 1px 2px rgba(0,0,0,0.7)`;
+                });
+
+                setTimeout(() => {
+                    gameContainer.classList.remove('shake');
+                    runes.forEach(rune => {
+                        rune.style.color = '';
+                        rune.style.textShadow = '';
+                    });
+
+                    // Show difficulty selection again
+                    difficultySelector.classList.remove('hidden');
+                    melodyModeButton.classList.remove('hidden');
+                    startButton.classList.add('hidden');
+                    
+                    if (level > WIN_LEVEL) {
+                        levelDisplayEl.textContent = `Your journey ended at Level ${level}.`;
+                    } else {
+                        levelDisplayEl.textContent = `You reached Level ${level}.`;
+                    }
+                    sequence = [];
+                }, 2000);
+            }
+
+            function glowRune(index) {
+                const rune = document.querySelector(`.rune[data-index='${index}']`);
+                if (!rune) return;
+                
+                // Enhanced note mapping for better melody playing
+                const notes = ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5'];
+                const note = notes[index];
+                
+                // In melody mode, use longer sustain for better musical expression
+                const duration = melodyMode ? '4n' : '8n';
+                synth.triggerAttackRelease(note, duration, Tone.now());
+
+                const glowColor = RUNE_COLORS[index];
+                
+                const originalColor = rune.style.color;
+                const originalTextShadow = rune.style.textShadow;
+                const originalTransform = rune.style.transform;
+
+                rune.style.transform = 'scale(1.2)';
+                rune.style.color = glowColor;
+                rune.style.textShadow = `0 0 12px ${glowColor}, 0 0 20px ${glowColor}, 1px 1px 2px rgba(0,0,0,0.7)`;
+
+                // Longer glow duration in melody mode
+                const glowDuration = melodyMode ? 600 : 400;
+                
+                setTimeout(() => {
+                    rune.style.transform = originalTransform;
+                    rune.style.color = originalColor;
+                    rune.style.textShadow = originalTextShadow;
+                }, glowDuration);
+            }
+
+            // --- Event Listeners ---
+            startButton.addEventListener('click', startGame);
+            melodyModeButton.addEventListener('click', setMelodyMode);
+            backToMenuButton.addEventListener('click', backToMenu);
+            difficultyButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    setGameMode(e.target.dataset.mode);
+                });
+            });
+
+            // Song library event listeners
+            document.querySelectorAll('.song-button').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    selectSong(e.target.dataset.song);
+                });
+            });
+
+            playSongButton.addEventListener('click', playSong);
+            playAlongButton.addEventListener('click', startPlayAlong);
+            stopSongButton.addEventListener('click', stopCurrentSong);
+            clearSongButton.addEventListener('click', clearSongSelection);
+
+            // Add keyboard support for melody mode (optional)
+            document.addEventListener('keydown', (e) => {
+                if (!melodyMode) return;
+                
+                const keyMap = {
+                    '1': 0, '2': 1, '3': 2, '4': 3,
+                    '5': 4, '6': 5, '7': 6, '8': 7,
+                    'q': 0, 'w': 1, 'e': 2, 'r': 3,
+                    't': 4, 'y': 5, 'u': 6, 'i': 7
+                };
+                
+                const runeIndex = keyMap[e.key.toLowerCase()];
+                if (runeIndex !== undefined) {
+                    glowRune(runeIndex);
+                }
+            });
+
+            // --- Initialization ---
+            createSundial();
+        });
+    </script>
+</body>
+</html>

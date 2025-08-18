@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scholia Diaspros Loot Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #2c1e12;
+            color: #f0e68c;
+        }
+        .font-title {
+            font-family: 'IM Fell English SC', serif;
+        }
+        .container-bg {
+            background-color: #3e2e1e;
+            border: 4px solid #b8860b;
+            box-shadow: 0 0 20px rgba(218, 165, 32, 0.5);
+        }
+        .btn-sleek {
+            background-color: #8B4513;
+            color: #f0e68c;
+            border: 2px solid #DAA520;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3), inset 0 -2px 4px rgba(0,0,0,0.2);
+            text-shadow: 1px 1px 2px #2c1e12;
+        }
+        .btn-sleek:hover {
+            background-color: #a0522d;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0,0,0,0.4), inset 0 -1px 2px rgba(0,0,0,0.1);
+        }
+        .btn-sleek:disabled {
+            background-color: #5a3d2b;
+            border-color: #8B4513;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        .input-area, .config-section, .results-area {
+            background-color: #4a3a2a;
+            border: 2px solid #8B4513;
+        }
+        .loot-item {
+            background-color: #3e2e1e;
+            border-left: 4px solid #DAA520;
+        }
+        .loot-item-img {
+            width: 64px;
+            height: 64px;
+            object-fit: cover;
+            border: 2px solid #8B4513;
+            border-radius: 0.5rem;
+        }
+        input[type="file"]::file-selector-button {
+            background-color: #8B4513;
+            color: #f0e68c;
+            border: 1px solid #DAA520;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        input[type="file"]::file-selector-button:hover {
+            background-color: #a0522d;
+        }
+        /* Coin pile styles */
+        .coin-display-container {
+            display: flex;
+            flex-wrap: wrap; /* Changed to wrap */
+            justify-content: center; /* Center the piles */
+            gap: 1.5rem;
+            align-items: flex-end;
+        }
+        .coin-type-pile {
+            width: auto; /* Allow piles to size themselves */
+        }
+        .coin-stacks-container {
+            position: relative;
+            height: 140px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 16px;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            min-width: 60px;
+        }
+        .coin-stack-group {
+            position: relative;
+            width: fit-content;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            margin: 0 -12px; /* Overlap groups */
+        }
+        .coin-stack {
+            position: relative;
+            width: 48px;
+            height: 100%;
+        }
+        .coin-stack img {
+            width: 48px;
+            height: auto;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            transition: all 0.3s ease-out;
+            pointer-events: none;
+        }
+        .coin-label {
+            margin-top: 4px;
+            font-weight: bold;
+            color: #ffd700;
+            text-align: center;
+        }
+        #total-value-display {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 2px solid #8B4513;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <!-- Audio Elements -->
+    <audio id="click-sound" src="https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/368203__kermite607__coin-dropped.wav" preload="auto"></audio>
+    <audio id="success-sound" src="https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/404359__kagateni__success2.wav" preload="auto"></audio>
+
+    <div class="container-bg rounded-lg p-6 max-w-4xl mx-auto">
+        <header class="text-center mb-6">
+            <h1 class="font-title text-4xl md:text-5xl text-yellow-300">Scholia Diaspros Loot Generator</h1>
+            <p class="text-yellow-100 opacity-80 mt-2">Upload your JSON item lists and find your fortune!</p>
+        </header>
+
+        <main>
+            <!-- File Upload Section -->
+            <section class="input-area p-4 rounded-lg mb-6">
+                <h2 class="font-title text-2xl text-yellow-200 mb-3">Load Your Treasures</h2>
+                <div id="file-inputs-container">
+                    <div class="flex items-center space-x-2 mb-2">
+                        <input type="file" class="item-json-upload w-full text-sm text-yellow-100 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold" accept=".json" multiple>
+                    </div>
+                </div>
+                <div class="flex justify-between items-center mt-4">
+                    <button id="load-files-btn" class="btn-sleek font-title text-lg py-2 px-6 rounded-md">Load Items</button>
+                    <p id="item-pool-count" class="text-yellow-100 font-semibold">Item Pool: 0</p>
+                </div>
+                 <p class="text-xs text-gray-400 mt-2">You can select multiple files at once. Each time you click "Load Items", new items will be added to the existing pool.</p>
+            </section>
+
+            <!-- Loot Configuration Section -->
+            <section id="config-controls" class="config-section p-4 rounded-lg mb-6">
+                <h2 class="font-title text-2xl text-yellow-200 mb-4">Configure Your Hoard</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Coins -->
+                    <div>
+                        <label for="generate-coins" class="flex items-center space-x-2 mb-2 text-yellow-100">
+                            <input type="checkbox" id="generate-coins" class="form-checkbox h-5 w-5 rounded bg-gray-700 border-gray-600 text-yellow-500 focus:ring-yellow-400" checked>
+                            <span>Generate Coins</span>
+                        </label>
+                        <input type="number" id="coin-gp-target" value="500" min="0" class="w-full p-2 rounded-md bg-gray-800 border border-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-yellow-400" placeholder="Target Coin Value (GP)...">
+                    </div>
+                    <!-- Gems -->
+                    <div>
+                        <label for="generate-gems" class="flex items-center space-x-2 mb-2 text-yellow-100">
+                            <input type="checkbox" id="generate-gems" class="form-checkbox h-5 w-5 rounded bg-gray-700 border-gray-600 text-yellow-500 focus:ring-yellow-400" checked>
+                            <span>Generate Gems</span>
+                        </label>
+                         <input type="number" id="gem-count" value="3" min="0" class="w-full p-2 rounded-md bg-gray-800 border border-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-yellow-400" placeholder="Number of gems...">
+                    </div>
+                    <!-- Items -->
+                    <div>
+                        <label for="generate-items" class="flex items-center space-x-2 mb-2 text-yellow-100">
+                            <input type="checkbox" id="generate-items" class="form-checkbox h-5 w-5 rounded bg-gray-700 border-gray-600 text-yellow-500 focus:ring-yellow-400" checked>
+                            <span>Generate Items</span>
+                        </label>
+                         <input type="number" id="item-count" value="5" min="0" class="w-full p-2 rounded-md bg-gray-800 border border-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-yellow-400" placeholder="Number of items...">
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Generate Button -->
+            <div class="text-center mb-6">
+                <button id="generate-loot-btn" class="btn-sleek font-title text-2xl py-3 px-12 rounded-lg" disabled>Generate Loot</button>
+            </div>
+
+            <!-- Results Section -->
+            <section id="results-container" class="results-area p-4 rounded-lg hidden">
+                <h2 class="font-title text-2xl text-yellow-200 mb-4 border-b-2 border-yellow-700 pb-2">Generated Loot</h2>
+                <div id="loot-results" class="space-y-4">
+                    <!-- Loot will be dynamically inserted here -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        const fileInputsContainer = document.getElementById('file-inputs-container');
+        const loadFilesBtn = document.getElementById('load-files-btn');
+        const itemPoolCountEl = document.getElementById('item-pool-count');
+        const generateLootBtn = document.getElementById('generate-loot-btn');
+        const resultsContainer = document.getElementById('results-container');
+        const lootResultsEl = document.getElementById('loot-results');
+        const configControls = document.getElementById('config-controls');
+
+        let itemPool = [];
+
+        // --- Sound Logic ---
+        function playSound(soundId, volume = 1.0) {
+            const sound = document.getElementById(soundId);
+            if (sound) {
+                sound.currentTime = 0;
+                sound.volume = volume;
+                sound.play().catch(e => console.error("Audio play failed:", e));
+            }
+        }
+        
+        // --- Event Listeners for Sounds ---
+        generateLootBtn.addEventListener('click', () => playSound('click-sound', 1.0));
+        loadFilesBtn.addEventListener('click', () => playSound('click-sound', 0.5));
+        
+        configControls.querySelectorAll('input, select').forEach(el => {
+            el.addEventListener('change', () => playSound('click-sound', 0.3));
+        });
+
+
+        // --- File Loading Logic ---
+        loadFilesBtn.addEventListener('click', async () => {
+            const fileInputs = document.querySelectorAll('.item-json-upload');
+            let newItemsLoaded = 0;
+
+            for (const input of fileInputs) {
+                if (input.files.length > 0) {
+                    for (const file of input.files) {
+                        try {
+                            const fileContent = await file.text();
+                            const data = JSON.parse(fileContent);
+                            let items = [];
+
+                            if (Array.isArray(data)) {
+                                items = data;
+                            } else if (typeof data === 'object' && data !== null) {
+                                const arrayKey = Object.keys(data).find(key => Array.isArray(data[key]));
+                                if (arrayKey) {
+                                    items = data[arrayKey];
+                                }
+                            }
+
+                            if (items.length > 0) {
+                                itemPool.push(...items);
+                                newItemsLoaded += items.length;
+                            } else {
+                                throw new Error("File does not contain a valid JSON array or an object with an array.");
+                            }
+                        } catch (error) {
+                            console.error(`Error processing file ${file.name}:`, error);
+                            alert(`Could not load ${file.name}.\nReason: ${error.message}\n\nPlease ensure it's a valid JSON file containing an array of items, or an object with a top-level key that holds an array.`);
+                        }
+                    }
+                    input.value = ''; 
+                }
+            }
+            
+            updateItemPoolCount();
+            if (newItemsLoaded > 0) {
+                playSound('success-sound', 0.8);
+                alert(`${newItemsLoaded} new items have been added to the loot pool!`);
+            }
+        });
+
+        function updateItemPoolCount() {
+            itemPoolCountEl.textContent = `Item Pool: ${itemPool.length}`;
+            
+            const canGenerateCoins = document.getElementById('generate-coins').checked;
+            const canGenerateGems = document.getElementById('generate-gems').checked;
+            const canGenerateItems = document.getElementById('generate-items').checked && itemPool.length > 0;
+
+            generateLootBtn.disabled = !canGenerateCoins && !canGenerateGems && !canGenerateItems;
+        }
+
+        document.getElementById('generate-coins').addEventListener('change', updateItemPoolCount);
+        document.getElementById('generate-gems').addEventListener('change', updateItemPoolCount);
+        document.getElementById('generate-items').addEventListener('change', updateItemPoolCount);
+        updateItemPoolCount();
+
+        // --- Loot Generation Logic ---
+        const gemData = {
+            'Azurite': { value: 10, color: '#007FFF' }, 'Banded Agate': { value: 10, color: '#D2691E' }, 'Blue Quartz': { value: 10, color: '#6a5acd' },
+            'Eye Agate': { value: 10, color: '#808080' }, 'Hematite': { value: 10, color: '#6c757d' }, 'Lapis Lazuli': { value: 10, color: '#000080' },
+            'Malachite': { value: 10, color: '#0BDA51' }, 'Moss Agate': { value: 10, color: '#3f704d' }, 'Obsidian': { value: 10, color: '#343a40' },
+            'Rhodochrosite': { value: 10, color: '#ffc0cb' }, 'Tiger Eye': { value: 10, color: '#b8860b' }, 'Turquoise': { value: 10, color: '#40e0d0' },
+            'Bloodstone': { value: 50, color: '#8b0000' }, 'Carnelian': { value: 50, color: '#b22222' }, 'Chalcedony': { value: 50, color: '#add8e6' },
+            'Chrysoprase': { value: 50, color: '#32cd32' }, 'Citrine': { value: 50, color: '#e4d00a' }, 'Jasper': { value: 50, color: '#d73b3e' },
+            'Moonstone': { value: 50, color: '#f0f8ff' }, 'Onyx': { value: 50, color: '#353839' }, 'Rock Crystal': { value: 50, color: '#ffffff' },
+            'Sardonyx': { value: 50, color: '#800000' }, 'Star Rose Quartz': { value: 50, color: '#f4c2c2' }, 'Zircon': { value: 50, color: '#87ceeb' },
+            'Amber': { value: 100, color: '#ffbf00' }, 'Amethyst': { value: 100, color: '#9966cc' }, 'Chrysoberyl': { value: 100, color: '#e9ffdb' },
+            'Coral': { value: 100, color: '#ff7f50' }, 'Garnet': { value: 100, color: '#990000' }, 'Jade': { value: 100, color: '#00a86b' },
+            'Jet': { value: 100, color: '#343434' }, 'Pearl': { value: 100, color: '#fdeef4' }, 'Spinel': { value: 100, color: '#e0115f' },
+            'Tourmaline': { value: 100, color: '#ffc0cb' }, 'Alexandrite': { value: 500, color: '#7f00ff' }, 'Aquamarine': { value: 500, color: '#7fffd4' },
+            'Black Pearl': { value: 500, color: '#1b1b1b' }, 'Blue Spinel': { value: 500, color: '#0000ff' }, 'Peridot': { value: 500, color: '#e6e200' },
+            'Topaz': { value: 500, color: '#ffc87c' }, 'Black Opal': { value: 1000, color: '#28282B' }, 'Blue Sapphire': { value: 1000, color: '#0f52ba' },
+            'Emerald': { value: 1000, color: '#50c878' }, 'Fire Opal': { value: 1000, color: '#ff4500' }, 'Opal': { value: 1000, color: '#e0ffff' },
+            'Star Ruby': { value: 1000, color: '#e0115f' }, 'Star Sapphire': { value: 1000, color: '#00008b' }, 'Black Sapphire': { value: 5000, color: '#0e1111' },
+            'Diamond': { value: 5000, color: '#b9f2ff' }, 'Jacinth': { value: 5000, color: '#ff4500' }, 'Ruby': { value: 5000, color: '#e0115f' }
+        };
+
+        const gemTiers = {
+            10: Object.keys(gemData).filter(k => gemData[k].value === 10),
+            50: Object.keys(gemData).filter(k => gemData[k].value === 50),
+            100: Object.keys(gemData).filter(k => gemData[k].value === 100),
+            500: Object.keys(gemData).filter(k => gemData[k].value === 500),
+            1000: Object.keys(gemData).filter(k => gemData[k].value === 1000),
+            5000: Object.keys(gemData).filter(k => gemData[k].value === 5000),
+        };
+
+        const coinImages = {
+            pp: 'https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/platinumcoin.png',
+            gp: 'https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/goldcoin.png',
+            sp: 'https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/silvercoin.png',
+            cp: 'https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/coppercoin.png',
+        };
+
+        function generateCoins(targetGP) {
+            let remainingValue = targetGP * 100; // Work in copper pieces
+            let pp = 0, gp = 0, sp = 0, cp = 0;
+
+            if (remainingValue >= 1000) {
+                pp = Math.floor(remainingValue / 1000 * (0.7 + Math.random() * 0.2)); // 70-90% in PP
+                remainingValue -= pp * 1000;
+            }
+            if (remainingValue >= 100) {
+                gp = Math.floor(remainingValue / 100);
+                remainingValue -= gp * 100;
+            }
+            if (remainingValue >= 10) {
+                sp = Math.floor(remainingValue / 10);
+                remainingValue -= sp * 10;
+            }
+            cp = remainingValue;
+
+            // Make it less exact for flavor
+            let gpToBreak = Math.floor(gp * (Math.random() * 0.3)); // Break up to 30% of GP
+            gp -= gpToBreak;
+            sp += gpToBreak * 10;
+
+            let spToBreak = Math.floor(sp * (Math.random() * 0.4)); // Break up to 40% of SP
+            sp -= spToBreak;
+            cp += spToBreak * 10;
+            
+            return { cp: Math.round(cp), sp: Math.round(sp), gp: Math.round(gp), pp: Math.round(pp) };
+        }
+
+        function generateGems(count) {
+            const gems = [];
+            for (let i = 0; i < count; i++) {
+                const roll = Math.random() * 100;
+                let value;
+                if (roll < 25) value = 10;
+                else if (roll < 50) value = 50;
+                else if (roll < 75) value = 100;
+                else if (roll < 90) value = 500;
+                else if (roll < 99) value = 1000;
+                else value = 5000;
+                
+                const gemType = gemTiers[value][Math.floor(Math.random() * gemTiers[value].length)];
+                gems.push({ name: gemType, value: value, color: gemData[gemType].color });
+            }
+            return gems;
+        }
+
+        function generateItems(count) {
+            const items = [];
+            if (itemPool.length === 0) return items;
+            for (let i = 0; i < count; i++) {
+                const randomIndex = Math.floor(Math.random() * itemPool.length);
+                items.push(itemPool[randomIndex]);
+            }
+            return items;
+        }
+        
+        generateLootBtn.addEventListener('click', () => {
+            lootResultsEl.innerHTML = ''; 
+            
+            const shouldGenerateCoins = document.getElementById('generate-coins').checked;
+            const shouldGenerateGems = document.getElementById('generate-gems').checked;
+            const shouldGenerateItems = document.getElementById('generate-items').checked;
+            let lootGenerated = false;
+            let totalCoinGP = 0;
+            let totalTreasureValue = 0;
+
+            if (shouldGenerateCoins) {
+                const targetGP = parseInt(document.getElementById('coin-gp-target').value) || 0;
+                if (targetGP > 0) {
+                    const coins = generateCoins(targetGP);
+                    displayCoinPiles(coins);
+                    totalCoinGP = (coins.pp * 10) + coins.gp + (coins.sp / 10) + (coins.cp / 100);
+                    lootGenerated = true;
+                }
+            }
+
+            if (shouldGenerateGems) {
+                const gemCount = parseInt(document.getElementById('gem-count').value) || 0;
+                if(gemCount > 0) {
+                    const gems = generateGems(gemCount);
+                    gems.forEach(gem => {
+                        displayLoot({ type: 'gem', content: gem });
+                        totalTreasureValue += gem.value;
+                    });
+                    lootGenerated = true;
+                }
+            }
+
+            if (shouldGenerateItems && itemPool.length > 0) {
+                const itemCount = parseInt(document.getElementById('item-count').value) || 0;
+                if(itemCount > 0) {
+                    const items = generateItems(itemCount);
+                    items.forEach(item => {
+                        displayLoot({ type: 'item', content: item });
+                        const valueMatch = item.meta?.match(/(\d+)\s*(?:VRP|gp)/i);
+                        if (valueMatch) {
+                            totalTreasureValue += parseInt(valueMatch[1]);
+                        }
+                    });
+                    lootGenerated = true;
+                }
+            }
+            
+            if (lootGenerated) {
+                displayTotalValues(totalCoinGP, totalTreasureValue);
+                resultsContainer.classList.remove('hidden');
+            } else {
+                resultsContainer.classList.add('hidden');
+                alert("Nothing to generate! Please check at least one box and ensure counts are above zero.");
+            }
+        });
+        
+        function displayCoinPiles(coins) {
+            const container = document.createElement('div');
+            container.className = 'loot-item p-3 rounded-lg';
+            
+            const title = document.createElement('h3');
+            title.className = 'font-title text-xl text-yellow-200 mb-4 text-center';
+            title.textContent = 'Coinage';
+            container.appendChild(title);
+
+            const pilesContainer = document.createElement('div');
+            pilesContainer.className = 'coin-display-container flex-row flex-wrap'; // Changed to row wrap
+            
+            const coinData = [
+                { type: 'pp', count: coins.pp },
+                { type: 'gp', count: coins.gp },
+                { type: 'sp', count: coins.sp },
+                { type: 'cp', count: coins.cp }
+            ];
+
+            coinData.forEach(data => {
+                if (data.count > 0) {
+                    const pileDiv = document.createElement('div');
+                    pileDiv.className = 'coin-type-pile';
+
+                    const label = document.createElement('p');
+                    label.className = 'coin-label';
+                    label.textContent = `${data.count} ${data.type.toUpperCase()}`;
+                    
+                    const stacksContainer = document.createElement('div');
+                    stacksContainer.className = 'coin-stacks-container';
+                    stacksContainer.onclick = () => playSound('click-sound', 0.5);
+                    
+                    const maxPerStack = 15;
+                    const totalStacks = Math.ceil(data.count / maxPerStack);
+                    
+                    let stackCounter = 0;
+                    const groupContainer = document.createElement('div');
+                    groupContainer.className = 'flex justify-center items-end flex-wrap';
+
+                    while(stackCounter < totalStacks) {
+                        const stackDiv = document.createElement('div');
+                        stackDiv.className = 'coin-stack';
+                        
+                        let coinsInStack = Math.min(maxPerStack, data.count - (stackCounter * maxPerStack));
+
+                        for (let i = 0; i < coinsInStack; i++) {
+                            const coinImg = document.createElement('img');
+                            coinImg.src = coinImages[data.type];
+                            coinImg.alt = `${data.type} coin`;
+                            coinImg.style.bottom = `${i * 6}px`; 
+                            coinImg.style.left = `${Math.random() * 4 - 2}px`;
+                            stackDiv.appendChild(coinImg);
+                        }
+                        groupContainer.appendChild(stackDiv);
+                        stackCounter++;
+                    }
+                    stacksContainer.appendChild(groupContainer);
+                    pileDiv.appendChild(stacksContainer);
+                    pileDiv.appendChild(label);
+                    pilesContainer.appendChild(pileDiv);
+                }
+            });
+
+            container.appendChild(pilesContainer);
+            lootResultsEl.appendChild(container);
+        }
+
+        function displayLoot(loot) {
+            const lootDiv = document.createElement('div');
+            lootDiv.className = 'loot-item p-3 rounded-lg flex items-start space-x-4';
+
+            let innerHTML = '';
+
+            switch(loot.type) {
+                case 'gem':
+                    innerHTML = `
+                        <div class="flex-shrink-0 pt-1">
+                             <svg class="w-12 h-12" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <radialGradient id="gemGradient-${loot.content.name.replace(/\s+/g, '')}" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+                                        <stop offset="0%" style="stop-color:white; stop-opacity:0.7"/>
+                                        <stop offset="100%" style="stop-color:${loot.content.color}; stop-opacity:1"/>
+                                    </radialGradient>
+                                </defs>
+                                <path d="M50 2 L98 35 L79 98 L21 98 L2 35 Z" fill="url(#gemGradient-${loot.content.name.replace(/\s+/g, '')})" stroke="${loot.content.color}" stroke-width="2"/>
+                                <path d="M50 2 L2 35 L21 98 M50 2 L98 35 L79 98 M50 2 L50 98 M2 35 L79 98 M98 35 L21 98" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-title text-xl text-yellow-200">${loot.content.name}</h3>
+                            <p class="text-yellow-100">Value: ${loot.content.value} GP</p>
+                        </div>
+                    `;
+                    break;
+                case 'item':
+                    const placeholderUrl = `https://placehold.co/64x64/4a3a2a/f0e68c?text=${encodeURIComponent(loot.content.name.charAt(0))}`;
+                    innerHTML = `
+                        <div class="flex-shrink-0">
+                            <img src="${loot.content.image || ''}" alt="${loot.content.name}" class="loot-item-img" onerror="this.onerror=null;this.src='${placeholderUrl}';">
+                        </div>
+                        <div class="flex-grow">
+                            <h3 class="font-title text-xl text-yellow-200">${loot.content.name}</h3>
+                            <p class="text-sm text-yellow-100 opacity-80 italic">${loot.content.meta || 'Item'}</p>
+                            <p class="text-yellow-100 mt-2 text-sm">${loot.content.desc || 'No description available.'}</p>
+                        </div>
+                    `;
+                    break;
+            }
+            lootDiv.innerHTML = innerHTML;
+            lootResultsEl.appendChild(lootDiv);
+        }
+
+        function displayTotalValues(coinGP, treasureGP) {
+            const totalsDiv = document.createElement('div');
+            totalsDiv.id = 'total-value-display';
+            
+            let html = '';
+            if (coinGP > 0) {
+                html += `<p class="text-yellow-200"><strong class="font-title text-yellow-100">Total Coin Value:</strong> ${coinGP.toFixed(2)} GP</p>`;
+            }
+            if (treasureGP > 0) {
+                html += `<p class="text-yellow-200"><strong class="font-title text-yellow-100">Total Treasure Value:</strong> ${treasureGP} GP</p>`;
+            }
+            
+            totalsDiv.innerHTML = html;
+            lootResultsEl.appendChild(totalsDiv);
+        }
+    </script>
+</body>
+</html>

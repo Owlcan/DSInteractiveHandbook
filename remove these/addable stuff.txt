@@ -69,3 +69,245 @@ Cost: 1, Type: Academy
 
 - **Recess Energy Reserves** - Stored playful energy enhances performance. Once per short rest, as a bonus action, you can expend one hit die to gain **advantage on all Strength, Dexterity, and Constitution checks** for 1 minute.
 Cost: 1, Type: Academy
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"C:\Users\Lulu\Desktop\InteractiveHandbook\src\assets\images\expeditionandgames\shiftingrunemaze\goldcrown.webp
+"C:\Users\Lulu\Desktop\InteractiveHandbook\src\assets\images\expeditionandgames\shiftingrunemaze\goldpile.webp
+"C:\Users\Lulu\Desktop\InteractiveHandbook\src\assets\images\expeditionandgames\shiftingrunemaze\rattlescepter.webp
+"C:\Users\Lulu\Desktop\InteractiveHandbook\src\assets\images\expeditionandgames\shiftingrunemaze\silvercrown.webp
+"C:\Users\Lulu\Desktop\InteractiveHandbook\src\assets\images\expeditionandgames\shiftingrunemaze\silverpile.webp
+"C:\Users\Lulu\Desktop\InteractiveHandbook\src\assets\images\expeditionandgames\shiftingrunemaze\treasurechest.webp
+"C:\Users\Lulu\Desktop\InteractiveHandbook\src\assets\images\expeditionandgames\shiftingrunemaze\treasuregrimoire.webp
+"C:\Users\Lulu\Desktop\InteractiveHandbook\src\assets\images\expeditionandgames\shiftingrunemaze\treasurepamp.webp
+"C:\Users\Lulu\Desktop\InteractiveHandbook\src\assets\images\expeditionandgames\shiftingrunemaze\bronzecrown.webp
+"C:\Users\Lulu\Desktop\InteractiveHandbook\src\assets\images\expeditionandgames\shiftingrunemaze\bronzepile.webp
+
+
+
+
+"C:\Users\Lulu\Desktop\InteractiveHandbook\src\assets\images\expeditionandgames\shiftingrunemaze\colorlock.webp
+"C:\Users\Lulu\Desktop\InteractiveHandbook\src\assets\images\expeditionandgames\shiftingrunemaze\key.webp
+"C:\Users\Lulu\Desktop\InteractiveHandbook\src\assets\images\expeditionandgames\shiftingrunemaze\lock.webp
+"C:\Users\Lulu\Desktop\InteractiveHandbook\src\assets\images\expeditionandgames\shiftingrunemaze\redkey.webp
+"C:\Users\Lulu\Desktop\InteractiveHandbook\src\assets\images\expeditionandgames\shiftingrunemaze\bluekey.webp
+
+
+
+
+
+
+
+
+
+I want to make a darkling target shooting game. It would use a layout much like the one being used in #vortexdefense but would be black, gold, and red in colors.
+
+~A red target reticle is the player. 
+~Mouse button shoots.   
+~The player can move the reticle around the screen to aim at targets. 
+~Midbosses and bosses can launch colored orbs like those found in the vortex defense game.
+~Players earn points by defeating as many targets as possible.
+~Powerups (rainbow orbs) can provide a scaling powerup, doing slightly more damage. And then becomes an automatic (hold to) fire weapon that can be upgraded with more damage and speed to a maximum level of 6 for a total of 6 upgrades
+~Glowing red hearts can be collected to restore health- but should be rare, normally appearing after midbosses or bosses, or from flyer-type enemies. They must be shot to be collected
+~Shots from the player are hit-scan, but an unobtrusive "muzzle flash" effect will be displayed when firing- it should be created with a simple particle effect system.
+
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/08/vortex.webp the gameplay area background
+
+High HP, stays on screen a while, moves slowly.
+
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darklingtitanbeast-1.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darklingtitanbeast-2.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darklingtitanbeast-3.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darklingtitanbeast-4.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darklingtitanbeast-5.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darklingtitanbeast-6.png
+
+
+Medium HP Boss-like, appears on screen, launches magic projectiles that can hit the player and remove HP but can be targetted and destroyed.
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darkmidboss1.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darkmidboss2.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darkmidboss3.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darkmidboss4.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darkmidboss5.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darkmidboss6.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darkmidboss7.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darkmidboss8.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darkmidboss9.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darkmidboss10.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darkmidboss11.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darkmidboss12.png
+
+
+Common monster targets, low HP, medium movement. Make up the majority of each round.
+
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darklingmob26.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darklingmob26.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darklingmob26.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darklingmob26.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darklingmob26.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darklingmob26.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darklingmob01.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darklingmob2.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darklingmob3.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darklingmob4.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darklingmob5.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darklingmob6.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darklingmob7.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darklingmob8.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darklingmob9.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darklingmob10.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darklingmob11.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darklingmob12.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darklingmob13.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darklingmob14.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darklingmob15.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darklingmob16.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darklingmob17.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darklingmob18.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darklingmob19.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darklingmob20.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darklingmob21.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darklingmob22.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darklingmob23.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darklingmob24.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darklingmob25.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darklingmob26.png
+
+Bonus point monsters, fly horizontally across the screen at quick speed with low-medium HP.
+
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darklingflyer1.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darklingflyer2.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darklingflyer3.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darklingflyer4.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darklingflyer5.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darklingflyer6.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darklingflyer7.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darklingflyer8.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darklingflyer9.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darklingflyer10.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darklingflyer11.png
+
+
+Bosses, high HP, more frequent shots at the player. Uses larger red shots as a primary and a smaller spread shot.
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darkforgedtitan-1.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darkforgedtitan-2.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darkforgedtitan-3.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darkforgedtitan-4.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darkforgedtitan-5.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darkforgedtitan-6.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darkforgedtitan-7.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darkforgedtitan-8.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darkforgedtitan-9.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darkforgedtitan-10.png
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darkforgedtitan-11.png
+
+
+
+
+
+
+Want to add a box with character imagery off the side, bottom left corner. OUTSIDE the game box. The images change as different states occur:
+"C:\Users\Lulu\Desktop\InteractiveHandbook\src\assets\images\expeditionandgames\marianabase.webp Mariana's base imagery. Glows blue when under the effect of the invulnerability powerup.
+"C:\Users\Lulu\Desktop\InteractiveHandbook\src\assets\images\expeditionandgames\marianavictory.webp For the pause screen.
+"C:\Users\Lulu\Desktop\InteractiveHandbook\src\assets\images\expeditionandgames\marianadefeat.webp The defeat screen imagery before new game is initiated.
+"C:\Users\Lulu\Desktop\InteractiveHandbook\src\assets\images\expeditionandgames\marianaouch.webp The hurt imagery when taking damage. shakes a little and then changes back to base after taking damage.
+"C:\Users\Lulu\Desktop\InteractiveHandbook\src\assets\images\expeditionandgames\marianapowerup.webp The power-up imagery when gaining a new ability. Shakes a little, glows blue, and then changes back to the base imagery.
+
+
+
+Also, potions need to be larger and to use these images. We need to add a potion that grants temporary invincibility and is depicted with a blue glow around the player reticle.
+"C:\Users\Lulu\Desktop\InteractiveHandbook\src\assets\images\expeditionandgames\healthpotion.webp Restores 25 HP.
+"C:\Users\Lulu\Desktop\InteractiveHandbook\src\assets\images\expeditionandgames\invulnpotion.webp Grants temporary invincibility.
+
+
+
+
+
+~The trackers move around when the numbers change, they should not.
+~the Rounds bar in the center, word "rounds" centered above the number, at a slightly larger font. 
+~Move the shield availability dialogue to centered ABOVE Mariana's box and to only appear when she has a shield purchased/active.
+~after level 7, give a chance that bosses and mid-bosses may drop a shield power-up.
+~treasure is still not large enough, double its size again.
+~ weapon system overhaul: allow users to choose between an automatic weapon and a slightly more powerful AOE upon reaching weapon level 3, then they can continue on to level 10 with their choice. The rapidfire gun gets faster and slightly stronger as it levels up to level 10. The high-power version stays click-to-fire, has a charge shot that charges up to do 3x damage by holding the charge button for 1 second, and the AOE and damage size increase progressively to the weapon level 10.
+Rapidfire choice image for menu: "C:\Users\Lulu\Desktop\InteractiveHandbook\src\assets\images\expeditionandgames\rapidfire.webp
+single-shot-high-damage choice image for menu: "C:\Users\Lulu\Desktop\InteractiveHandbook\src\assets\images\expeditionandgames\longgun.webp
+~raise maximum radiant wave capacity to 10.
+~allow player to "charge" radiant wave, holding spacebar for >1 second uses 2 charges but at 2.5x power, up to 3 levels after holding for 2 seconds. Level 2 is a blue glow around the reticle that turns gold at level 3 charge.
+====================================================================================================================
+
+
+Archer Animations:
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/08/windarrow.webp comes in from the right, flashes green, fades out
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/08/archerattack.webp comes in from the left, flashes white, fades out
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/08/archerdefend.webp comes up from the bottom, flashes green, fades out
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/08/archermark.webp Comes down from the top, flashes green, fades out
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/08/arrowrain.webp Fades in already in center, pulses green three times, fades out
+
+Cleric:
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/08/holylight.webp comes in from the right, flashes white-blue, fades out
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/08/partyheal.webp fades in already in center, pulses white once, fades out
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/08/derestrike.webp (already implemented)
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/08/grandintervention.webp fades in already in center, pulses white gold white, and fades out
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/08/heal.webp comes in from the right, flashes white-blue, fades out
+
+Monk:
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/08/tempestflurry.webp comes in from the right, pulses red three times, fades out
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/08/chiboost.webp Comes up from the bottom, pulses white twice, fades out
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/08/earthslam.webp Comes down from the top, flashes orange, fades out
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/08/flurry.webp Fades in from center, pulses white three times, fades out
+
+Sorceress:
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/08/tidalwave.webp comes up from the bottom, pulses blue twice, fades out
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/08/alizabolt.webp comes down from the top, pulses light purple and white, fades out
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/08/earthspike.webp Comes down from the top, flashes gold, fades out
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/08/magicmissile.webp Comes in from the right, flashes white, fades out
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/08/meteor.webp Comes down from the top, pulses white gold white, then fades out
+
+Bard:
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/08/shinnywave.webp comes up from the bottom, flashes blue, fades out
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/08/melodicstrike.webp comes in from the right, flashes gold, fades out
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/08/mpheal.webp Comes in from the right, pulses white, fades out
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/08/shinnyattack.webp comes in from the left, flashes white, fades out
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/08/shinnyultimate.webp comes up from the bottom, flashes blue white gold then fades out
+
+Ninja:
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/08/sneakattack.webp Comes up from the bottom, flashes black, fades out
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/08/assassinate.webp Comes up from the bottom, screen goes black, flashes red, and then the black fades out
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/08/fireshuriken.webp Comes up from the bottom, screen flashes red, fades out
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/08/hide.webp Fades in from the center, pulses image opacity, then fades out
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/08/kagurattac.webp Comes in from the right, pulses white, then fades out
+
+Purrchant:
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/08/restock.webp comes up from the bottom, flashes pink, fades out
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/08/bap.webp comes in from the right, flashes white, fades out
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/08/catnap.webp fades in from the center, pulses pink, then fades out
+https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/08/flashsale.webp comes up from the bottom, flashes gold pink gold and fades out
+
+
+
+
+
+
+

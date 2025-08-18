@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scholia Diaspros VR Sim Compendium</title>
+    <!-- Google Fonts for Cormorant Garamond and MedievalSharp -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&family=MedievalSharp&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS for utility classes (layout, spacing, etc. - colors are custom) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load bestiary data directly -->
+    <script src="src/data/Diaper-School-Full-Bestiary.json" type="application/json" id="bestiary-data"></script>
+    <style>
+        /* Define custom CSS variables for the color scheme */
+        :root {
+            --gold: #daac17;
+            --gold-light: #fae791;
+            --gold-dark: #97740a;
+            --parchment: #2C2614;
+            --parchment-dark: #1E1C12;
+            --ink: #c7a81d;
+            --ink2: #8f770d;
+            --accent: #b47018;
+            --shadow: rgba(0, 0, 0, 0.5);
+        }
+        
+        /* Global Body Styles */
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #2c2619; /* Specific body background color */
+            background-image: url('https://www.transparenttextures.com/patterns/dark-wood.png');
+            color: var(--ink); /* Main text color */
+            line-height: 1.6;
+        }
+        
+        /* Main App Container Styles */
+        #app {
+            max-width: 1600px;
+            margin: 0 auto;
+            background-color: var(--parchment); /* Parchment background */
+            background-image: url('https://www.transparenttextures.com/patterns/parchment.png');
+            border-radius: 8px;
+            box-shadow: 0 4px 20px var(--shadow);
+            padding: 20px;
+            border: 12px solid var(--gold-dark); /* Gold-dark border */
+            position: relative;
+        }
+        
+        /* Corner Decorations */
+        .corner-decoration {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background-color: var(--gold);
+            background-image: url('https://www.transparenttextures.com/patterns/asfalt-light.png');
+            z-index: 1;
+        }
+        .top-left { top: -6px; left: -6px; border-top-left-radius: 15px; }
+        .top-right { top: -6px; right: -6px; border-top-right-radius: 15px; }
+        .bottom-left { bottom: -6px; left: -6px; border-bottom-left-radius: 15px; }
+        .bottom-right { bottom: -6px; right: -6px; border-bottom-right-radius: 15px; }
+        
+        /* Heading Styles */
+        h1 {
+            text-align: center;
+            color: var(--accent); /* Accent color for H1 */
+            font-family: 'MedievalSharp', cursive;
+            font-size: 3.45rem;
+            margin: 10px 0 20px;
+            text-shadow: 1px 1px 3px var(--shadow);
+            position: relative;
+        }
+        h1::after {
+            content: "";
+            display: block;
+            width: 80%;
+            height: 3px;
+            background: linear-gradient(to right, transparent, var(--gold), transparent);
+            margin: 10px auto;
+        }
+        
+        h2 {
+            font-family: 'MedievalSharp', cursive;
+            color: var(--accent); /* Accent color for H2 */
+            border-bottom: 2px solid var(--gold); /* Gold border */
+            padding-bottom: 5px;
+            font-size: 2.3rem; 
+            margin-top: 20px;
+            margin-bottom: 15px;
+        }
+        h3 {
+            font-size: 1.73rem; 
+            color: var(--accent); /* Accent color for H3 */
+            font-family: 'MedievalSharp', cursive;
+        }
+        h4 {
+            font-size: 1.38rem; 
+            color: var(--accent); /* Accent color for H4 */
+            font-family: 'MedievalSharp', cursive;
+        }
+
+        /* Table of Contents Styles */
+        #toc-container {
+            background-color: var(--parchment-dark);
+            border: 1px solid var(--gold);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px var(--shadow);
+        }
+        #toc-container h2 {
+            text-align: center;
+            margin-top: 0;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+        .toc-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            align-items: start;
+        }
+        .toc-column {
+            background-color: var(--parchment);
+            border: 1px solid var(--gold-dark);
+            border-radius: 8px;
+            padding: 20px;
+        }
+        .toc-column h3 {
+            font-size: 1.7rem;
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: var(--accent);
+            text-align: center;
+            border-bottom: 2px solid var(--gold);
+            padding-bottom: 10px;
+        }
+        .challenge-button {
+            display: block;
+            background: linear-gradient(135deg, var(--parchment) 0%, var(--parchment-dark) 100%);
+            border: 2px solid var(--gold-dark);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            text-decoration: none;
+            color: var(--ink);
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px var(--shadow);
+            overflow: hidden;
+            position: relative;
+        }
+        .challenge-button:hover {
+            background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 100%);
+            color: var(--parchment-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px var(--shadow);
+            border-color: var(--accent);
+        }
+        .challenge-button-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .challenge-thumbnail {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            border: 2px solid var(--gold);
+            object-fit: cover;
+            flex-shrink: 0;
+            background: var(--parchment-dark);
+        }
+        .challenge-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .challenge-title {
+            font-family: 'MedievalSharp', cursive;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin: 0 0 5px 0;
+            line-height: 1.2;
+        }
+        .challenge-description {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            line-height: 1.3;
+            margin: 0;
+        }
+        .challenge-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        .challenge-button:hover::before {
+            left: 100%;
+        }
+        
+        /* Extreme/Hard Challenge Button Styling */
+        .challenge-button.extreme {
+            background: linear-gradient(135deg, #3a3a3a 0%, #1a1a1a 100%);
+            border: 2px solid #8b0000;
+            box-shadow: 0 0 0 2px var(--gold-dark);
+        }
+        .challenge-button.extreme:hover {
+            background: linear-gradient(135deg, #8b0000 0%, #660000 100%);
+            color: var(--gold-light);
+            border-color: #ff0000;
+            box-shadow: 0 0 0 2px var(--gold), 0 4px 12px var(--shadow);
+        }
+        .challenge-button.extreme .challenge-thumbnail {
+            border-color: #8b0000;
+        }
+        .challenge-button.extreme:hover .challenge-thumbnail {
+            border-color: var(--gold);
+        }
+        
+        /* Page Navigation */
+        .page-container {
+            display: none;
+        }
+        .page-container.active {
+            display: block;
+        }
+        
+        .back-button {
+            background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 100%);
+            border: 2px solid var(--gold-dark);
+            border-radius: 8px;
+            padding: 12px 24px;
+            color: var(--parchment-dark);
+            font-family: 'MedievalSharp', cursive;
+            font-size: 1.1rem;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .back-button:hover {
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px var(--shadow);
+        }
+        
+        @media (max-width: 768px) {
+            .toc-columns {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+
+
+        /* File Upload Section */
+        #file-upload-section {
+            background-color: var(--parchment-dark); /* Darker parchment for upload area */
+            border: 1px solid var(--gold); /* Gold border */
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px var(--shadow);
+        }
+        #file-upload-section label {
+            color: var(--gold-light); /* Lighter gold for label */
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        #file-upload-section input[type="file"] {
+            background-color: var(--parchment);
+            color: var(--ink);
+            border: 1px solid var(--gold-dark);
+            padding: 8px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #file-upload-section input[type="file"]::file-selector-button {
+            background: linear-gradient(to bottom, var(--gold-light), var(--gold));
+            color: var(--ink2);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'MedievalSharp', cursive;
+            transition: all 0.2s ease;
+        }
+        #file-upload-section input[type="file"]::file-selector-button:hover {
+            background: linear-gradient(to bottom, var(--gold), var(--gold-dark));
+        }
+        #upload-status {
+            color: var(--ink);
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        /* Challenges Container */
+        #challenges-container {
+            min-height: 200px; /* To show loading message */
+            text-align: center;
+            padding-top: 50px;
+        }
+        #loading-message {
+            color: var(--ink);
+            font-size: 1.5rem;
+            font-family: 'MedievalSharp', cursive;
+        }
+
+        /* Challenge Group (Solo/Party container) */
+        .challenge-group-header {
+            text-align: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--gold);
+            color: var(--accent);
+            font-family: 'MedievalSharp', cursive;
+            font-size: 2.3rem;
+        }
+
+        /* Challenge Page Styling - Enforce paging */
+        .challenge-page {
+            background-color: var(--parchment-dark); /* Darker parchment for challenge background */
+            border: 6px solid var(--gold); /* Gold border for challenges */
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px var(--shadow);
+            position: relative; /* Needed for corner decorations if applied here */
+            page-break-inside: avoid;
+        }
+        
+        .challenge-page h3 { /* Challenge Title */
+            color: var(--accent);
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--gold);
+            padding-bottom: 10px;
+        }
+        .challenge-page strong {
+            color: var(--gold-light); /* Lighter gold for strong text */
+        }
+        .challenge-page ul {
+            list-style-type: disc;
+            padding-left: 25px;
+            color: var(--ink);
+        }
+        .challenge-page ul li {
+            margin-bottom: 5px;
+        }
+
+        /* Monster Card Styling within Challenges */
+        .monster-card {
+            background-color: var(--parchment); /* Lighter parchment for monster cards */
+            border: 2px dashed var(--gold-dark); /* Dashed gold border */
+            border-radius: 6px;
+            padding: 15px;
+            margin-top: 20px;
+            box-shadow: 0 2px 8px var(--shadow);
+        }
+        .monster-card h3 { /* Monster Name */
+            color: var(--accent);
+            font-size: 1.5rem;
+            text-align: left;
+            margin-bottom: 10px;
+            border-bottom: 1px solid var(--gold);
+            padding-bottom: 5px;
+        }
+        .monster-card .monster-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            border: 1px solid var(--gold);
+        }
+        .stat-block p, .stat-block li {
+            color: var(--ink); /* Ink color for stat block text */
+            font-size: 0.95rem;
+        }
+        .stat-block strong {
+            color: var(--ink2); /* Darker ink for stat block bold */
+        }
+        .stat-block h4 { /* Abilities, Actions, etc. headers */
+            color: var(--accent);
+            font-size: 1.1rem;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        .stat-block ul {
+            list-style-type: none; /* Remove default list bullets for ability scores */
+            padding-left: 0;
+        }
+        .stat-block ul li {
+            margin-bottom: 0.1rem;
+        }
+
+        /* Print-specific styles */
+        @media print {
+            body {
+                background-color: white !important;
+                background-image: none !important;
+                color: black !important;
+                font-size: 10pt;
+            }
+            #app {
+                box-shadow: none !important;
+                border: none !important;
+                padding: 0 !important;
+                background-color: white !important;
+                background-image: none !important;
+            }
+            .corner-decoration, .no-print {
+                display: none !important;
+            }
+            h1, h2, h3, h4 {
+                color: #5C4B45 !important; /* Darker brown for headings */
+                text-shadow: none !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            h1::after, h2, .monster-card h3 {
+                background: none !important; /* Remove gradients/borders */
+                border-color: #5C4B45 !important; /* Darker brown borders */
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .challenge-page {
+                page-break-after: always; /* Each challenge on a new page */
+                border: 1px solid #A0522D !important; /* Sienna-like border for print */
+                background-color: white !important;
+                box-shadow: none !important;
+                padding: 15px !important;
+                margin-bottom: 15px !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .challenge-page:last-of-type {
+                page-break-after: auto !important;
+            }
+            .challenge-page strong, .monster-card strong {
+                color: #8B4513 !important; /* SaddleBrown for strong text */
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .challenge-page p, .challenge-page ul li, .stat-block p, .stat-block li {
+                color: black !important;
+            }
+            .monster-card {
+                border: 1px dashed #A0522D !important; /* Dashed border for monster cards */
+                background-color: #F8F8F8 !important; /* Light grey background for monster cards */
+                box-shadow: none !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .monster-image {
+                border: 1px solid #A0522D !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+    </style>
+</head>
+<body class="p-4">
+    <div id="app">
+        <!-- Corner Decorations -->
+        <div class="corner-decoration top-left"></div>
+        <div class="corner-decoration top-right"></div>
+        <div class="corner-decoration bottom-left"></div>
+        <div class="corner-decoration bottom-right"></div>
+
+        <!-- Header -->
+        <header class="p-6 rounded-lg mb-8">
+            <h1>Scholia Diaspros VR Sim</h1>
+            <p class="text-center text-xl" style="color: var(--ink);">Monster Compendium & Challenge Overview</p>
+        </header>
+        
+        <!-- Table of Contents Container -->
+        <nav id="toc-container" class="no-print page-container active"></nav>
+
+        <!-- File Upload Section -->
+        <section id="file-upload-section" class="mb-8 no-print page-container active">
+            <label for="bestiaryUpload" class="block text-lg font-semibold mb-2">Upload Bestiary JSON File:</label>
+            <input type="file" id="bestiaryUpload" accept=".json">
+            <p id="upload-status" class="mt-2 text-sm"></p>
+        </section>
+
+        <!-- Challenges Container - Dynamically populated -->
+        <div id="challenges-container" class="page-container active">
+            <p class="text-center text-2xl" id="loading-message" style="color: var(--ink);">Please upload the 'Diaper-School-Full-Bestiary.json' file to view challenges and monster stat blocks.</p>
+        </div>
+        
+        <!-- Individual Challenge Pages -->
+        <div id="challenge-pages"></div>
+    </div>
+
+    <script>
+        let allMonstersData = {}; // To store all monsters from the uploaded JSON, keyed by name for easy lookup
+
+        // Load bestiary data directly from JSON file
+        async function loadBestiaryData() {
+            try {
+                const response = await fetch('src/data/Diaper-School-Full-Bestiary.json');
+                const data = await response.json();
+                
+                if (data && data.creatures) {
+                    // Process creatures into allMonstersData for easy lookup
+                    data.creatures.forEach(creature => {
+                        if (creature.name) {
+                            allMonstersData[creature.name] = creature;
+                        }
+                    });
+                    
+                    // Remove loading message and render Table of Contents
+                    document.getElementById('loading-message').style.display = 'none';
+                    document.getElementById('challenges-container').innerHTML = '<p style="text-align: center; color: var(--ink); font-size: 1.2rem;">Select a challenge from the compendium above to begin your simulation.</p>';
+                    renderTOC();
+                } else {
+                    console.error('Invalid bestiary data structure');
+                }
+            } catch (error) {
+                console.error('Error loading bestiary data:', error);
+                document.getElementById('upload-status').textContent = 'Error loading bestiary data. Please check the file path.';
+            }
+        }
+
+        // Function to render all challenges grouped by type
+        function renderAllChallenges() {
+            const challengesContainer = document.getElementById('challenges-container');
+            challengesContainer.innerHTML = ''; // Clear previous content
+            
+            // Group challenges by type for rendering the main content
+            const groupedChallenges = challenges.reduce((acc, challenge) => {
+                if (!acc[challenge.type]) {
+                    acc[challenge.type] = [];
+                }
+                acc[challenge.type].push(challenge);
+                return acc;
+            }, {});
+
+            // Render grouped challenges with their headers
+            for (const type in groupedChallenges) {
+                challengesContainer.innerHTML += `<h2 class="challenge-group-header">${type}</h2>`;
+                groupedChallenges[type].forEach(challenge => {
+                    challengesContainer.innerHTML += renderChallenge(challenge);
+                });
+            }
+        }
+
+        // Page navigation functions
+        function showMainPage() {
+            // Hide all pages
+            document.querySelectorAll('.page-container').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show main pages
+            document.getElementById('toc-container').classList.add('active');
+            document.getElementById('file-upload-section').classList.add('active');
+            document.getElementById('challenges-container').classList.add('active');
+        }
+
+        function showChallenge(challengeId) {
+            // Hide all pages
+            document.querySelectorAll('.page-container').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Find the challenge
+            const challenge = challenges.find(c => c.id === challengeId);
+            if (!challenge) return;
+            
+            // Create or show challenge page
+            let challengePage = document.getElementById(`page-${challengeId}`);
+            if (!challengePage) {
+                challengePage = document.createElement('div');
+                challengePage.id = `page-${challengeId}`;
+                challengePage.className = 'page-container';
+                
+                challengePage.innerHTML = `
+                    <button class="back-button" onclick="showMainPage()">← Back to Challenge List</button>
+                    ${renderChallenge(challenge)}
+                `;
+                
+                document.getElementById('challenge-pages').appendChild(challengePage);
+            }
+            
+            challengePage.classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        // Load bestiary data automatically when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadBestiaryData();
+        });
+
+        // Define the challenges with monster names and mechanics
+        const challenges = [
+            {
+                type: "Extreme Solo Challenges",
+                id: "guardians_dark_spaces",
+                title: "Guardians of the Dark Spaces",
+                setting: "A custom hard-mode scenario designed to push your limits and earn exclusive rewards.",
+                objective: "Defeat the following foes **in the same combat** to complete this challenge:",
+                monsters: ["Darkforme-Cavesweller", "Darkling-Yowler", "Darkling-Yowler", "Darkforme-Sleek-Lurker Pack Alpha", "Darkform Enforcer"],
+                mechanics: "These simulation hunts are not for the faint-hearted. Each custom scenario features unique combinations of monsters that require advanced strategy, teamwork, and resilience to overcome. Triumph in this hunt to unlock exclusive VR Sim points and coveted academy recognition."
+            },
+            {
+                type: "3-Person Party Combat Challenges",
+                id: "corridor_crusher",
+                title: "The Corridor Crusher",
+                setting: "Desert Worship map - Bridge and Statue ascent create natural choke points",
+                objective: "Navigate the temple corridors and defeat the Darkforme forces.",
+                difficulty: "Hard",
+                totalXP: "1300 XP",
+                monsters: ["Darkforme-Ossokin-Aegisite", "Darkforme-Ossokin-Aegisite", "Darkling-Slitherscale", "Darkling-Slitherscale", "Darkling-Slitherscale", "Darkling-Slitherscale"],
+                mechanics: "Bridge and Statue ascent create natural choke points. Slitherscales can be baited into single-file approaches. Aegisites provides pressure but can be managed if wise."
+            },
+            {
+                type: "Solo Combat Challenges",
+                id: "bottletop_defense",
+                title: "Bottletop Hill: The Ossified Defense",
+                setting: "Bottletop Hill - A strategic hill position that must be defended against waves of undead forces.",
+                objective: "Hold the high ground against successive waves of Ossokin forces.",
+                difficulty: "Medium-Hard",
+                totalXP: "1,800 XP",
+                monsters: ["Darkling-Ossokin", "Darkling-Ossokin", "Darkling-Ossokin", "Darkling-Ossokin", "Darkling-Ossokin-Proselyte", "Darkforme-Ossokin-Aegisite", "Darkling-Ossuite Charger", "Darkling-Ossuite Charger"],
+                mechanics: "Wave 1 - Initial Assault (750 XP): 4x Darkling-Ossokin, 1x Darkling-Ossokin-Proselyte, 1x Darkforme-Ossokin-Aegisite. Wave 2 - Where Are Our Minions?! (1050 XP): 1x Darkforme-Ossokin-Aegisite, 2x Darkling-Ossuite Charger. After minions are dealt with, and the player has the high-ground, the aegisite and its charger allies appear and immediately identify the player as the assailant unless they are capable of expertly hiding in the space of 2d4-1 (minimum 1) rounds."
+            },
+            {
+                type: "Solo Combat Challenges",
+                id: "suffocator_den",
+                title: "The Suffocator's Den",
+                setting: "Desert Worship - Temple's narrow passages favor the Suffocator's constricting abilities",
+                objective: "Defeat the Darkforme-Suffocator in close quarters combat.",
+                difficulty: "Level 5 SOLO Arena",
+                totalXP: "450 XP",
+                monsters: ["Darkforme-Suffocator"],
+                mechanics: "Tight corridors limit movement options. Temple's narrow passages favor the Suffocator's constricting abilities. Limited escape routes. Trapped in close quarters with a grappling specialist."
+            },
+            {
+                type: "Solo Combat Challenges",
+                id: "night_wings",
+                title: "The Night's Wings",
+                setting: "Land-Sea-Cliff-and-Sky - Open air battlefield with limited cover",
+                objective: "Defeat the flying Darkforme-Nightpinyon while managing environmental hazards.",
+                difficulty: "Level 5 SOLO Arena",
+                totalXP: "450 XP",
+                monsters: ["Darkforme-Nightpinyon"],
+                mechanics: "Open air battlefield with limited cover. Enemy has flight advantage. Cliff edges create fall hazards. Player must manage positioning to avoid being knocked off."
+            },
+            {
+                type: "Extreme Solo Challenges",
+                id: "bone_lord_lesson",
+                title: "The Bone Lord's Painful Lesson",
+                setting: "Class Battle - An enclosed classroom space with a larger foe holding the high ground",
+                objective: "Defeat the massive Darkling-Ossuite Charger Omega in an arena disadvantage scenario.",
+                difficulty: "Level 5 SOLO Arena",
+                totalXP: "2300 XP",
+                monsters: ["Darkling-Ossuite Charger Omega"],
+                mechanics: "Limited terrain and cover in an enclosed space with a larger foe. Enemy has high ground advantage, starting on the dais. Multiple elevation changes favor the ranged capabilities. Limited approach options for melee characters, barring frontal assault."
+            },
+            {
+                type: "Extreme Solo Challenges",
+                id: "crypt_despair",
+                title: "Crypt of Dreaded Despair",
+                setting: "Crypt of the Damned - Cramped, labyrinthine corridors with hidden ambush points",
+                objective: "Navigate the crypt and eliminate all hostile forces.",
+                difficulty: "Extreme",
+                totalXP: "2,350 XP",
+                monsters: ["Darkforme-Ossokin-Aegisite", "Darkling-Ossuite Charger", "Darkling-Ossuite Charger", "Darkling-Hungerer", "Darkling-Hungerer", "Darkling-Slitherscale"],
+                mechanics: "Cramped, labyrinthine corridors force enemies into close-quarters fights. Hidden niches and shadowy recesses allow for sudden ambushes. Tight, claustrophobic spaces favor coordinated enemy strikes over isolated defenses."
+            },
+            {
+                type: "Solo Combat Challenges",
+                id: "marshland_bones",
+                title: "Marshland of Miasmic Bones",
+                setting: "Mistmire Marsh - Murky, boggy terrain that slows movement and creates natural choke points",
+                objective: "Clear the marsh of Darkforme forces while navigating difficult terrain.",
+                difficulty: "Medium-Hard",
+                totalXP: "1,500 XP",
+                monsters: ["Darkforme-Ossokin-Aegisite", "Darkforme-Ossokin-Aegisite", "Darkling-Ossokin-Proselyte", "Darkling-Ossokin-Proselyte", "Darkling-Slitherscale", "Darkling-Slitherscale"],
+                mechanics: "Murky, boggy terrain slows movement and creates natural choke points. Swampy conditions favor ambushes and force close-range combat. Dense, twisted vegetation hampers ranged attacks and reveals enemy approaches."
+            },
+            {
+                type: "Solo Combat Challenges",
+                id: "isolated_isle",
+                title: "Ebbing Shadows: The Isolated Isle",
+                setting: "Forsaken Atoll - Rugged, confined island terrain creates natural chokepoints",
+                objective: "Defend the island position against successive waves of attackers.",
+                difficulty: "Hard",
+                totalXP: "1,900 XP",
+                monsters: ["Darkling-Ossokin", "Darkling-Ossokin", "Darkling-Ossokin", "Darkling-Ossokin", "Darkling-Ossokin-Proselyte", "Darkforme-Ossokin-Aegisite", "Darkling-Ossuite Charger"],
+                mechanics: "Wave 1 – Tidal Ambush (750 XP): 4x Darkling-Ossokin, 1x Darkling-Ossokin-Proselyte, 1x Darkforme-ossokin-aegisite. Wave 2 – Drowning Reprisal (1,150 XP): 1x Darkforme-ossokin-aegisite, 1x Upgraded Darkling-Ossuite Charger. Rugged, confined island terrain creates natural chokepoints. Securing high ground quickly is critical to avoid being overwhelmed."
+            },
+            {
+                type: "Solo Combat Challenges",
+                id: "shadows_mire",
+                title: "Shadows of the Mire",
+                setting: "Foggy Swampland - Natural concealment and slowed movement create tactical challenges",
+                objective: "Navigate the swamp and eliminate the Darkforme threat.",
+                difficulty: "Medium",
+                totalXP: "850 XP",
+                monsters: ["Darkling-Slitherscale", "Darkling-Slitherscale", "Darkling-Slitherscale", "Darkling-Slitherscale", "Darkforme-Suffocator"],
+                mechanics: "The swampy terrain provides natural concealment and slows movement. Darkling-Slitherscales use Slithering Escape to harass and retreat, while the Suffocator pressures one player with its Crushing Grip. Victory hinges on isolating the Suffocator early to avoid its devastating grapples."
+            },
+            {
+                type: "Extreme Solo Challenges",
+                id: "umbral_mark_marshland",
+                title: "The Umbral Mark On the Marshland",
+                setting: "Foggy Swampland - Enhanced swamp encounter with apex predator",
+                objective: "Survive the marshland while facing multiple threats including an apex predator.",
+                difficulty: "Hard",
+                totalXP: "1950 XP",
+                monsters: ["Darkling-Slitherscale", "Darkling-Slitherscale", "Darkling-Slitherscale", "Darkling-Slitherscale", "Darkforme-Suffocator", "Darkaconda"],
+                mechanics: "The swampy terrain provides natural concealment and slows movement. Darkling-Slitherscales use Slithering Escape to harass and retreat, while the Suffocator pressures one player with its Crushing Grip. Victory hinges on locking down the Darkaconda, if possible, and taking out the Suffocator early to prevent it from providing advantageous aide to the Darkaconda."
+            },
+            {
+                type: "Solo Combat Challenges",
+                id: "blocked_airway",
+                title: "The Blocked Airway",
+                setting: "A cramped, dusty ventilation shaft beneath the Academy, with grimy pipes and flickering emergency lights. The air feels heavy and stale, and strange, wheezing echoes can be heard.",
+                objective: "Clear the debris blocking a vital air vent to restore proper circulation, while neutralizing the Darkformes guarding it.",
+                monsters: ["Darkforme-Suffocator", "Darkling-Yowler", "Darkling-Lurker"], // Lurker is potential reinforcement
+                mechanics: "Suffocating Air (DC 13 Con save each round for exhaustion), Blocked Vent (AC 12, 30 HP, DC 15 Str check to clear), Yowler's Ordure Wail (incapacitate, 25% chance to call 1d4 Darkling-Lurkers)."
+            },
+            {
+                type: "Solo Combat Challenges",
+                id: "flooded_lower_docks",
+                title: "The Flooded Lower Docks",
+                setting: "A heavily submerged section of the Academy's ancient, lower-level docks. Murky, stagnant water fills most of the area, with only a few precarious, slippery platforms and rusted metal structures remaining above the waterline. The air is thick with a chilling dampness and the faint scent of decay.",
+                objective: "Eliminate the predatory Darkforme-Sharks that have established a dangerous hunting ground in the flooded docks.",
+                monsters: ["Darkforme-Shark", "Darkling-Brackling"],
+                mechanics: "Murky Waters (obscured, Stealth advantage for monsters), Unsettling Presence (DC 14 Con save for lost reactions), Slippery Platforms (DC 12 Dex save or prone), Brackling's Obscuring Ink (blindness)."
+            },
+            {
+                type: "Solo Combat Challenges",
+                id: "hungry_hallway",
+                title: "The Hungry Hallway",
+                setting: "A long, narrow, and dimly lit hallway in a derelict section of the Academy, filled with discarded supplies and broken magical apparatus.",
+                objective: "Survive a relentless assault from Darkling-Hungerers.",
+                monsters: ["Darkling-Hungerer", "Darkforme-Hungore"], // Hungore is final wave
+                mechanics: "Waves: Wave 1 (2x Darkling-Hungerer), Wave 2 (2x Darkling-Hungerer after 2 rounds or 1 defeated), Wave 3 (1x Darkforme-Hungore after 2 rounds or 2 defeated from Wave 2)."
+            },
+            {
+                type: "Solo Combat Challenges",
+                id: "spinebearers_gauntlet",
+                title: "The Spinebearer's Gauntlet",
+                setting: "A training courtyard covered in sharp, jagged, shadow-infused spikes that seem to grow from the ground. Patches of dim light and deep shadows dot the area.",
+                objective: "Defeat the Spinebearers and clear the courtyard.",
+                monsters: ["Darkforme-Spinebearer"],
+                mechanics: "Waves: Initial (2x Darkforme-Spinebearer), Reinforcements (1x Darkforme-Spinebearer after 2 rounds or 1 defeated). Spiked Ground (difficult terrain, 1d4 piercing damage), Heel ¡Lucha! (grapple + damage + restrained)."
+            },
+            {
+                type: "Solo Combat Challenges",
+                id: "overwatch_ambush",
+                title: "The Overwatch Ambush",
+                setting: "A large, open lecture hall with tiered seating, broken lecterns, and scattered academic scrolls. Dim light from overhead fixtures.",
+                objective: "Survive a coordinated assault from Darkforme Overwatches and their minions.",
+                monsters: ["Darkforme Overwatch", "Darkling-Lurker"],
+                mechanics: "Waves: Round 1 (2x Darkforme Overwatch), Round 2 (2x Darkling-Lurker), Round 3 (1x Darkforme Overwatch). Degenerate Regenerator, Pack Tactician, Shadowmist Jaunt."
+            },
+            {
+                type: "Solo Combat Challenges",
+                id: "nightshades_domain",
+                title: "The Nightshade's Domain",
+                setting: "A circular chamber with a floor made of shifting shadows and faint, unsettling brown notes emanating from the walls.",
+                objective: "Defeat the Darkling-Nightshade Elementals.",
+                monsters: ["Darkling-Nightshade Elemental"],
+                mechanics: "Waves: Initial (2x Darkling-Nightshade Elemental), Reinforcements (1x Darkling-Nightshade Elemental after 2 rounds or 1 defeated). Eerie Brown Note (reaction denial), Shifting Shadows (difficult terrain, 1d4 necrotic damage)."
+            },
+            {
+                type: "Solo Combat Challenges",
+                id: "caveswellers_lair",
+                title: "The Cavesweller's Lair",
+                setting: "A large, echoing cavern system with uneven terrain, stalagmites, and deep fissures. Patches of bioluminescent fungi provide dim light.",
+                objective: "Clear out a Darkforme-Cavesweller.",
+                monsters: ["Darkforme-Cavesweller", "Darkling-Paralurker"],
+                mechanics: "Tormented Wail (psychic damage, disadvantage on attacks), Shadowmist Jaunt (teleportation), Paralurker's Unsettling Reconfiguration (brown note incident)."
+            },
+            {
+                type: "Solo Combat Challenges",
+                id: "callers_den",
+                title: "The Caller's Den",
+                setting: "A small, damp cave chamber with a high ceiling, filled with strange, glowing spores and the faint sound of distant wails.",
+                objective: "Silence the Darkling-Callers before they summon too many reinforcements.",
+                monsters: ["Darkling-Caller", "Darkforme Overwatch", "Darkforme-Suffocator"],
+                mechanics: "Waves: Round 1 (2x Darkling-Caller), Round 2 (1x Darkforme Overwatch if Piercing Call succeeded), Round 3 (1x Darkforme-Suffocator if another Piercing Call succeeded). Piercing Call (deafen, 50% chance to attract Darkformes), Clumsy Flier."
+            },
+            {
+                type: "Solo Combat Challenges",
+                id: "sleek_lurker_alpha_hunt",
+                title: "The Sleek-Lurker Alpha Hunt",
+                setting: "A dense, overgrown section of the Academy's abandoned botanical gardens, filled with thick foliage, winding paths, and patches of dim light.",
+                objective: "Track and eliminate a Darkforme-Sleek-Lurker Pack Alpha.",
+                monsters: ["Darkforme-Sleek-Lurker Pack Alpha", "Darkling-Lurker"],
+                mechanics: "Shadow Stalker (hide as bonus action), Pounce (knock prone + bonus attack), Pack Tactics, Shadow Ambush (teleport + attack)."
+            },
+            {
+                type: "Solo Combat Challenges",
+                id: "nightsippers_mire",
+                title: "The Nightsipper's Mire",
+                setting: "A swampy, foul-smelling section of the Academy's neglected drainage system, filled with acidic pools and slippery, narrow walkways.",
+                objective: "Eliminate the Darkforme Nightsipper.",
+                monsters: ["Darkforme Nightsipper", "Darkling-Slurper"],
+                mechanics: "Life Drain (regeneration), Engulf (restrain + acid damage), Brown-Note Screech (incapacitate + frighten), Acidic Pools (1d6 acid damage)."
+            },
+            {
+                type: "Solo Combat Challenges",
+                id: "chap_hells_echo",
+                title: "The Chap'Hell's Echo",
+                setting: "A vast, desecrated hall deep within the Academy's oldest foundations, filled with broken statues and the lingering scent of fear.",
+                objective: "Defeat a manifestation resembling a lesser Chap'Hell.",
+                monsters: ["Chap'Hell"],
+                mechanics: "Scaled HP, AC, and attack/spell DCs. Still retains core abilities like Pants-Crapping Fear Presence and Living Ossuary Spellcasting (limited)."
+            },
+            {
+                type: "Solo Combat Challenges",
+                id: "cactine_patch",
+                title: "The Cactine Patch",
+                setting: "A simulated desert environment filled with oversized, spiky cacti and shimmering heat haze.",
+                objective: "Endure the relentless reinforcements of the Cactine.",
+                monsters: ["Darkling-Cactine", "Darkling-Cactine-Biggo-Boy"],
+                mechanics: "Starts with 3 Darkling-Cactine. They will use their Grab Backup ability. After 3 rounds, a Darkling-Cactine-Biggo-Boy appears, who uses Relentless Backup."
+            },
+            {
+                type: "Solo Combat Challenges",
+                id: "slithering_dark",
+                title: "The Slithering Dark",
+                setting: "A pitch-black, maze-like series of tunnels. The floor is slick with an unknown slime.",
+                objective: "Hunt the Darkaconda while avoiding its smaller kin.",
+                monsters: ["Darkaconda", "Darkling-Slitherscale"],
+                mechanics: "The area is heavily obscured. The player must rely on senses other than sight or provide their own light. 4 Darkling-Slitherscales patrol the maze. The Darkaconda uses its Serpent-Lance Lunge from the darkness."
+            },
+            {
+                type: "Extreme Solo Challenges",
+                id: "enforcers_proving_ground",
+                title: "The Enforcer's Proving Ground",
+                setting: "A large, circular combat arena with several large, destructible pillars providing cover. The floor is scarred from countless battles.",
+                objective: "Survive the gauntlet and defeat the Darkform Enforcer.",
+                monsters: ["Darkform Enforcer", "Darkforme Overwatch"],
+                mechanics: "The challenge begins with the Darkform Enforcer. Waves of 2 Darkforme Overwatches join the fight every 2 rounds. The Enforcer's Pound attack can destroy the pillars (AC 15, 50 HP)."
+            },
+            {
+                type: "Extreme Solo Challenges",
+                id: "the_omegas_charge",
+                title: "The Omega's Charge",
+                setting: "A long, rectangular hall lined with statues. The floor is polished obsidian, making it difficult to stand your ground.",
+                objective: "Defeat the Darkling-Ossuite Charger Omega and its honor guard.",
+                monsters: ["Darkling-Ossuite Charger Omega", "Darkling-Ossokin-Aegisite"],
+                mechanics: "The Charger Omega begins at one end of the hall with two Aegisites. It will use its Charging Lance ability whenever possible. The Aegisites will use Bony Bulwark to protect the Omega. The polished floor requires a DC 10 Dexterity saving throw to avoid being pushed back 10 feet when hit by a charge attack."
+            },
+            {
+                type: "Extreme Solo Challenges",
+                id: "echoes_of_hell",
+                title: "Echoes of Hell",
+                setting: "A spectral recreation of a desecrated chapel, filled with shadowy pews and a blood-stained altar. The air is unnaturally cold.",
+                objective: "Survive the onslaught and banish the echo of Chap'Hell.",
+                monsters: ["Chap'Hell", "Darkling-Ossokin"],
+                mechanics: "A scaled-down version of Chap'Hell (HP 120, AC 17, spell save DC 14) is the primary foe. Every round, 1d4 Darkling-Ossokin rise from the ground. The Chap'Hell echo will use its Animate Dead spell on any fallen Ossokin that are not consecrated."
+            },
+            {
+                type: "Extreme Solo Challenges",
+                id: "sky_darkeners_roost",
+                title: "Sky-Darkener's Roost",
+                setting: "A series of floating platforms high above the Academy, shrouded in thick clouds. Strong winds buffet the area.",
+                objective: "Defeat the Sky-Darkener Nightveil and its screeching minions.",
+                monsters: ["Sky-Darkener Nightveil", "Darkling-Hooter"],
+                mechanics: "The Nightveil uses its Swoop and Dive attack from the clouds. 3 Darkling-Hooters are present, using their Gutwrenching Hootery to deny reactions. Every round, players must make a DC 12 Strength saving throw or be pushed 5 feet by the wind."
+            },
+            {
+                type: "Extreme Solo Challenges",
+                id: "darkformless_ritual",
+                title: "The Darkformless Ritual",
+                setting: "A chamber at the heart of a swirling vortex of shadow energy. Four large, glowing runes pulse on the floor.",
+                objective: "Disrupt the ritual before The Darkformless can summon a powerful entity.",
+                monsters: ["The Darkformless", "Darkforme-Shade-Sneak"],
+                mechanics: "The Darkformless mage stands in the center, invulnerable. Each round, it channels energy into one of the four runes. The player must deal 20 damage to a rune to deactivate it. Two Shade-Sneaks appear each round to harass the player. If all four runes are active at the end of a round, the ritual completes and the player fails."
+            },
+            {
+                type: "3-Person Party Combat Challenges",
+                id: "ossuarys_last_stand",
+                title: "The Ossuary's Last Stand",
+                setting: "A vast, crumbling chamber deep beneath the Academy, filled with piles of ancient bones, broken sarcophagi, and eerie, glowing runes on the walls. A central altar pulses with dim, necrotic energy, and a chilling hum pervades the air.",
+                objective: "Destroy the Darkling-Ossuite Charger Omega and prevent its Ossokin allies from endlessly reassembling, while also dealing with the Proselytes' support.",
+                monsters: ["Darkling-Ossuite Charger Omega", "Darkling-Ossokin-Proselyte", "Darkling-Ossokin"],
+                mechanics: "Ossokin Reassembly (requires consecration), Proselyte Support (buffs/healing), Charger Omega's Charging Lance & Shadow Snare, Necrotic Altar (damage, can be suppressed)."
+            },
+            {
+                type: "3-Person Party Combat Challenges",
+                id: "enforcers_patrol",
+                title: "The Enforcer's Patrol",
+                setting: "A series of interconnected, shadowed corridors and large, open common rooms in a restricted, dimly lit wing of the Academy. Broken furniture, overturned bookshelves, and scattered documents provide ample cover and create a complex battlefield.",
+                objective: "Eliminate a patrol of Darkformes led by a powerful Enforcer, who are attempting to secure a sensitive area and gather intelligence.",
+                monsters: ["Darkform Enforcer", "Darkforme Overwatch", "Darkforme-Shade-Sneak"],
+                mechanics: "Degenerate Regenerator, Pack Tactician & Umbral Empowerment, Shadow Stalker & Ambushes, Environmental Obstacles, Optional: Shadow Nodes objective."
+            },
+            {
+                type: "3-Person Party Combat Challenges",
+                id: "bellowbellys_choir",
+                title: "The Bellowbelly's Choir",
+                setting: "A large, acoustically resonant cavern. The echoes of dripping water are occasionally interrupted by discordant, wailing cries.",
+                objective: "Neutralize the Darkling-Bellowbellies before their combined wails overwhelm the party.",
+                monsters: ["Darkling-Bellowbelly", "Darkling-Yowler"],
+                mechanics: "Starts with 2 Bellowbellies. Their Distracting Wail imposes disadvantage. A Yowler is perched on a high ledge, using its Ordure Wail to incapacitate. If three wails (from any combination of creatures) occur in the same round, all players must succeed a DC 14 Constitution save or be stunned for 1 round."
+            },
+            {
+                type: "3-Person Party Combat Challenges",
+                id: "darkening_spire",
+                title: "The Darkening Spire",
+                setting: "The crumbling, winding staircase of a tall, abandoned observatory tower. Gaps in the stairs require athletic checks to cross, and open windows offer perches for aerial foes.",
+                objective: "Ascend the tower and defeat the enemies on each level.",
+                monsters: ["Weirdling-Paralurker", "Darkling-Brackling", "Sky-Darkener Nightveil"],
+                mechanics: "Floor 1: 3 Weirdling-Paralurkers. Floor 2: 2 Darkling-Bracklings using their flight and Ink Spray. Floor 3 (Roof): 1 Sky-Darkener Nightveil. A DC 12 Athletics check is required to jump the gaps between floors."
+            },
+            {
+                type: "3-Person Party Combat Challenges",
+                id: "last_stand_nursery",
+                title: "Last Stand at the Nursery Gate",
+                setting: "A barricaded nursery doorway. The party must defend this position against waves of Darklings trying to break through.",
+                objective: "Survive for as long as possible, defeating as many Darklings as you can. The simulation ends when the party is defeated.",
+                monsters: ["Darkling Bellowbelly Cubling", "Darkling-Lurker", "Darkforme Overwatch", "Darkforme-Spinebearer", "Darkform Enforcer"],
+                mechanics: "A barricade (AC 15, 100 HP) protects the gate. Enemies spawn in waves at set intervals. Wave 1 (Round 1): 4 Darkling-Lurkers. Wave 2 (Round 3): 2 Darkforme Overwatches. Wave 3 (Round 5): 2 Darkforme-Spinebearers. Wave 4 (Round 7): 1 Darkform Enforcer. After Wave 4, repeat the cycle, adding one additional Lurker each time."
+            },
+            {
+                type: "3-Person Party Combat Challenges",
+                id: "ambush_in_the_stacks",
+                title: "Ambush in the Stacks",
+                setting: "A section of the Great Library with towering, tightly packed bookshelves that create a maze of narrow aisles. Some shelves are unstable.",
+                objective: "Survive an ambush and eliminate the lurking Darkformes.",
+                monsters: ["Darkforme-Sleek-Lurker Pack Alpha", "Darkforme-Shade-Sneak", "The Darkformless"],
+                mechanics: "The area is dimly lit and provides ample hiding spots. 2 Shade-Sneaks and the Pack Alpha use stealth and pack tactics. The Darkformless mage uses Shadow Bolt from a distance. Players can use an action to make a DC 13 Strength check to topple a bookshelf, creating difficult terrain and forcing a DC 13 Dexterity save for anyone in a 10-foot line."
+            },
+            {
+                type: "3-Person Party Combat Challenges",
+                id: "academy_courtyard_breach",
+                title: "The Academy Courtyard Breach",
+                setting: "The main academy courtyard has been overrun. Stone pillars provide cover, while a central fountain creates difficult terrain around its edges. The setting sun casts long shadows across the battlefield.",
+                objective: "Retake the courtyard by eliminating the Darkforme occupation force that has established a foothold.",
+                difficulty: "Hard",
+                totalXP: "2,000 XP",
+                monsters: ["Darkform Enforcer", "Darkforme Overwatch", "Darkforme Overwatch", "Darkling-Bellowbelly"],
+                mechanics: "The Enforcer commands from the center while Overwatches provide ranged support from elevated positions. The Bellowbelly's Distracting Wail creates tactical complications. Stone pillars can be used for cover but may be destroyed by the Enforcer's Pound attack (AC 15, 25 HP each)."
+            },
+            {
+                type: "3-Person Party Combat Challenges",
+                id: "twisted_laboratory_escape",
+                title: "The Twisted Laboratory Escape",
+                setting: "A corrupted magical laboratory with bubbling alchemical vats, crackling arcane equipment, and unstable magical energies. Broken glass and spilled reagents cover the floor.",
+                objective: "Fight through the laboratory's mutated guardians while avoiding environmental hazards.",
+                difficulty: "Medium-Hard",
+                totalXP: "1,800 XP",
+                monsters: ["Darkforme-Cavesweller", "Darkling-Brackling", "Darkling-Brackling", "Darkling-Lurker", "Darkling-Lurker"],
+                mechanics: "Alchemical Hazards: DC 12 Dex save or 1d6 acid damage when moving through spilled reagents. Unstable Magic: At the start of each round, roll 1d6 - on a 1, a random creature takes 1d4 force damage. The Cavesweller uses its Tormented Wail while Bracklings provide aerial harassment with Ink Spray."
+            },
+            {
+                type: "3-Person Party Combat Challenges",
+                id: "sunken_archive_depths",
+                title: "The Sunken Archive Depths",
+                setting: "The lower levels of the academy archives have flooded. Waterlogged bookshelves rise like islands from knee-deep murky water, while floating debris creates unpredictable cover.",
+                objective: "Navigate the flooded archives and eliminate the aquatic Darkformes that have made it their hunting ground.",
+                difficulty: "Medium",
+                totalXP: "1,650 XP",
+                monsters: ["Darkforme-Shark", "Darkling-Shark", "Darkling-Shark", "Weirdling-Paralurker", "Weirdling-Paralurker"],
+                mechanics: "Flooded Terrain: Movement through water is difficult terrain. Swimming creatures have advantage on attacks against land-bound targets. Unstable Shelves: DC 13 Strength check to avoid toppling when climbing (creates difficult terrain). The Darkforme-Shark uses its Aquatic Ambush while Paralurkers strike from above."
+            },
+            {
+                type: "3-Person Party Combat Challenges",
+                id: "corrupted_garden_maze",
+                title: "The Corrupted Garden Maze",
+                setting: "Once-beautiful academy gardens now twisted into a dark maze of thorny hedges and poisonous flowers. Narrow pathways force tactical movement while hidden alcoves provide ambush opportunities.",
+                objective: "Find your way through the maze while battling the creatures that have claimed it as their territory.",
+                difficulty: "Hard",
+                totalXP: "2,100 XP",
+                monsters: ["Darkforme-Sleek-Lurker Pack Alpha", "Darkforme-Shade-Sneak", "Darkforme-Shade-Sneak", "Darkling-Yowler", "Darkling-Lurker", "Darkling-Lurker"],
+                mechanics: "Maze Navigation: DC 15 Survival check to avoid dead ends (wastes 1 round). Poisonous Thorns: Moving through hedge walls requires DC 13 Con save or 1d4 poison damage. Pack Alpha uses Pack Tactics and Pounce while Shade-Sneaks employ hit-and-run tactics from the shadows."
+            },
+            {
+                type: "3-Person Party Combat Challenges", 
+                id: "bell_tower_ascension",
+                title: "The Bell Tower Ascension",
+                setting: "The academy's ancient bell tower, with a spiral staircase winding around the central column. Broken sections require climbing, while the bell chamber at the top provides a dramatic final battleground.",
+                objective: "Ascend the tower and silence the corrupted creatures that are using the bells to summon more Darklings.",
+                difficulty: "Medium-Hard",
+                totalXP: "1,900 XP",
+                monsters: ["Darkling-Caller", "Darkling-Caller", "Darkling-Yowler", "Darkforme-Hungore", "Darkling-Paralurker"],
+                mechanics: "Vertical Combat: Creatures above have advantage on attacks against those below. Piercing Call: Callers can potentially summon reinforcements (50% chance for 1d4 Darkling-Lurkers). Bell Hazard: Using the bells requires DC 15 Con save or be deafened for 1 minute, but successfully ringing them prevents reinforcements for 3 rounds."
+            },
+            {
+                type: "3-Person Party Combat Challenges",
+                id: "dining_hall_Last_supper",
+                title: "The Dining Hall's Last Supper",
+                setting: "The great dining hall with long wooden tables and benches. A massive chandelier hangs overhead, while kitchen doors lead to side areas. The tables provide cover but can be overturned for better protection.",
+                objective: "Clear the dining hall of the ravenous creatures that have turned it into their feeding ground.",
+                difficulty: "Hard",
+                totalXP: "2,200 XP",
+                monsters: ["Darkforme-Hungore", "Darkling-Hungerer", "Darkling-Hungerer", "Darkling-Slurper", "Darkling-Bellowbelly"],
+                mechanics: "Furniture Tactics: Tables can be overturned for cover (AC 15, 15 HP). Chandelier Hazard: DC 15 attack to drop it, dealing 2d6 damage in a 10-foot radius (DC 15 Dex save for half). The Hungore's Ventral Maw poses extreme danger, while Hungerers attempt to swallow party members."
+            }
+        ];
+
+        // Function to calculate HP based on CR rule
+        function getDisplayHP(monster) {
+            if (monster.stats.numHitDie && monster.stats.hitDieSize !== undefined) {
+                if (monster.challengeRating < 5) {
+                    // For CR < 5, calculate max HP
+                    const numDice = monster.stats.numHitDie;
+                    const dieSize = monster.stats.hitDieSize;
+                    // Ensure extraHealthFromConstitution is treated as a number, defaulting to 0 if null/undefined
+                    const modifier = monster.stats.extraHealthFromConstitution !== undefined ? monster.stats.extraHealthFromConstitution : 0;
+                    return (numDice * dieSize) + modifier;
+                }
+            }
+            // For CR >= 5, or if hit die info is missing, use the provided hitPoints (average)
+            return monster.stats.hitPoints;
+        }
+
+        // Function to render a single monster stat block
+        function renderMonsterStatBlock(monster) {
+            if (!monster) {
+                return '<p style="color: red;">Monster data not found.</p>';
+            }
+
+            const displayHP = getDisplayHP(monster);
+            const abilityScoresHtml = Object.entries(monster.stats.abilityScores || {}).map(([key, value]) => `
+                <li><strong>${key.substring(0, 3).toUpperCase()}:</strong> ${value} (${Math.floor((value - 10) / 2) >= 0 ? '+' : ''}${Math.floor((value - 10) / 2)})</li>
+            `).join('');
+
+            const savingThrowsHtml = monster.stats.savingThrows && monster.stats.savingThrows.length > 0 ? `
+                <p><strong>Saving Throws:</strong> ${monster.stats.savingThrows.map(s => `${s.ability.substring(0, 3).toUpperCase()} ${s.modifierStr.replace(`${s.ability.substring(0, 3).toUpperCase()} `, '')}`).join(', ')}</p>
+            ` : '';
+
+            const skillsHtml = monster.stats.skills && monster.stats.skills.length > 0 ? `
+                <p><strong>Skills:</strong> ${monster.stats.skills.map(s => `${s.name} ${s.modifierStr.replace(`${s.name} `, '')}`).join(', ')}</p>
+            ` : '';
+
+            const damageVulnerabilitiesHtml = monster.stats.damageVulnerabilities && monster.stats.damageVulnerabilities.length > 0 ? `
+                <p><strong>Damage Vulnerabilities:</strong> ${monster.stats.damageVulnerabilities.join(', ')}</p>
+            ` : '';
+
+            const damageResistancesHtml = monster.stats.damageResistances && monster.stats.damageResistances.length > 0 ? `
+                <p><strong>Damage Resistances:</strong> ${monster.stats.damageResistances.join(', ')}</p>
+            ` : '';
+
+            const damageImmunitiesHtml = monster.stats.damageImmunities && monster.stats.damageImmunities.length > 0 ? `
+                <p><strong>Damage Immunities:</strong> ${monster.stats.damageImmunities.join(', ')}</p>
+            ` : '';
+
+            const conditionImmunitiesHtml = monster.stats.conditionImmunities && monster.stats.conditionImmunities.length > 0 ? `
+                <p><strong>Condition Immunities:</strong> ${monster.stats.conditionImmunities.join(', ')}</p>
+            ` : '';
+
+            const languagesHtml = monster.stats.languages && monster.stats.languages.length > 0 ? `
+                <p><strong>Languages:</strong> ${monster.stats.languages.join(', ')}</p>
+            ` : '';
+
+            const additionalAbilitiesHtml = monster.stats.additionalAbilities && monster.stats.additionalAbilities.length > 0 ? `
+                <h4>Abilities</h4>
+                ${monster.stats.additionalAbilities.map(ability => `
+                    <p><strong>${ability.name}:</strong> ${ability.description}</p>
+                `).join('')}
+            ` : '';
+
+            const actionsHtml = monster.stats.actions && monster.stats.actions.length > 0 ? `
+                <h4>Actions</h4>
+                ${monster.stats.actions.map(action => `
+                    <p><strong>${action.name}:</strong> ${action.description}</p>
+                `).join('')}
+            ` : '';
+
+            const reactionsHtml = monster.stats.reactions && monster.stats.reactions.length > 0 ? `
+                <h4>Reactions</h4>
+                ${monster.stats.reactions.map(reaction => `
+                    <p><strong>${reaction.name}:</strong> ${reaction.description}</p>
+                `).join('')}
+            ` : '';
+
+            const legendaryActionsHtml = monster.stats.legendaryActions && monster.stats.legendaryActions.length > 0 ? `
+                <h4>Legendary Actions</h4>
+                ${monster.stats.legendaryActionsDescription ? `<p>${monster.stats.legendaryActionsDescription}</p>` : ''}
+                ${monster.stats.legendaryActions.map(legAction => `
+                    <p><strong>${legAction.name}:</strong> ${legAction.description}</p>
+                `).join('')}
+            ` : '';
+
+            return `
+                <div class="monster-card p-6 rounded-lg shadow-md">
+                    <h3>${monster.name}</h3>
+                    ${monster.flavor.imageUrl ? `<img src="${monster.flavor.imageUrl}" onerror="this.onerror=null; this.src='https://placehold.co/300x200/2C2614/daac17?text=Image+Not+Found';" alt="${monster.name}" class="monster-image">` : ''}
+                    <p>${monster.flavor.description}</p>
+                    <hr class="border-t-2 border-[var(--gold)] my-3">
+                    <div class="stat-block">
+                        <p><strong>Size:</strong> ${monster.stats.size}</p>
+                        <p><strong>Race:</strong> ${monster.stats.race}</p>
+                        <p><strong>Alignment:</strong> ${monster.stats.alignment}</p>
+                        <p><strong>Armor Class:</strong> ${monster.stats.armorClass} ${monster.stats.armorTypeStr ? `(${monster.stats.armorTypeStr.replace(/[()]/g, '')})` : ''}</p>
+                        <p><strong>Hit Points:</strong> ${displayHP} (${monster.stats.hitPointsStr})</p>
+                        <p><strong>Speed:</strong> ${monster.stats.speed}</p>
+                        <p><strong>Challenge Rating:</strong> ${monster.challengeRating}</p>
+                        <p><strong>Ability Scores:</strong></p>
+                        <ul class="grid grid-cols-2 sm:grid-cols-3 gap-y-1">
+                            ${abilityScoresHtml}
+                        </ul>
+
+                        ${savingThrowsHtml}
+                        ${skillsHtml}
+                        ${damageVulnerabilitiesHtml}
+                        ${damageResistancesHtml}
+                        ${damageImmunitiesHtml}
+                        ${conditionImmunitiesHtml}
+                        <p><strong>Senses:</strong> ${monster.stats.senses.join(', ')}</p>
+                        ${languagesHtml}
+
+                        ${additionalAbilitiesHtml}
+                        ${actionsHtml}
+                        ${reactionsHtml}
+                        ${legendaryActionsHtml}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Function to render a challenge page
+        function renderChallenge(challenge) {
+            let monsterHtml = '';
+            const uniqueMonsterNamesInChallenge = [...new Set(challenge.monsters)]; // Get unique monster names
+            uniqueMonsterNamesInChallenge.forEach(monsterName => {
+                const monster = allMonstersData[monsterName];
+                if (monster) {
+                    monsterHtml += renderMonsterStatBlock(monster);
+                } else {
+                    monsterHtml += `<p style="color: red; margin-top: 1rem;">Monster "${monsterName}" not found in bestiary data. Please ensure the bestiary JSON is correct.</p>`;
+                }
+            });
+
+            return `
+                <div id="${challenge.id}" class="challenge-page p-5 rounded-lg shadow-md">
+                    <h3>${challenge.title}</h3>
+                    <p style="color: var(--ink);"><strong>Setting:</strong> ${challenge.setting}</p>
+                    <p style="color: var(--ink);"><strong>Objective:</strong> ${challenge.objective}</p>
+                    <p style="color: var(--ink);"><strong>Monsters:</strong></p>
+                    <ul class="list-disc list-inside ml-4 mb-4" style="color: var(--ink);">
+                        ${challenge.monsters.map(m => `<li>${m}</li>`).join('')}
+                    </ul>
+                    ${challenge.mechanics ? `<p style="color: var(--ink);"><strong>Mechanics Snippet:</strong> ${challenge.mechanics}</p>` : ''}
+
+                    <h4 class="mt-6 mb-4 text-center">Monster Details for this Challenge</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        ${monsterHtml}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Function to render the Table of Contents
+        function renderTOC() {
+            const tocContainer = document.getElementById('toc-container');
+            
+            // Define challenge descriptions for TOC
+            const challengeDescriptions = {
+                "guardians_dark_spaces": "Face multiple elite Darkforme enemies in a brutal endurance test.",
+                "corridor_crusher": "Navigate temple corridors against Darkforme forces with tactical positioning.",
+                "bottletop_defense": "Defend high ground against successive waves of undead Ossokin forces.",
+                "suffocator_den": "Close quarters combat against a grappling specialist in narrow passages.",
+                "night_wings": "Aerial combat with environmental hazards and fall risks.",
+                "bone_lord_lesson": "Face a massive foe with arena disadvantage in an enclosed space.",
+                "crypt_despair": "Navigate cramped corridors with hidden ambush points.",
+                "marshland_bones": "Clear murky, boggy terrain while fighting Darkforme forces.",
+                "isolated_isle": "Defend an island position against successive attacker waves.",
+                "shadows_mire": "Navigate swampland with concealment and slowed movement challenges.",
+                "umbral_mark_marshland": "Enhanced swamp encounter featuring an apex predator.",
+                "blocked_airway": "Clear debris while fighting in suffocating, cramped conditions.",
+                "flooded_lower_docks": "Combat predatory sharks in submerged, slippery conditions.",
+                "hungry_hallway": "Survive relentless waves of Hungerer assaults.",
+                "spinebearers_gauntlet": "Navigate spiked terrain while fighting armored opponents.",
+                "overwatch_ambush": "Survive coordinated Overwatch assault with regenerating enemies.",
+                "nightshades_domain": "Battle elemental forces in shifting shadow terrain.",
+                "caveswellers_lair": "Clear echoing caverns with uneven terrain and ambush points.",
+                "callers_den": "Silence summoners before they call too many reinforcements.",
+                "sleek_lurker_alpha_hunt": "Track and eliminate a pack leader in overgrown gardens.",
+                "nightsippers_mire": "Fight life-draining predators in acidic, dangerous terrain.",
+                "chap_hells_echo": "Face a manifestation of ultimate evil in desecrated halls.",
+                "cactine_patch": "Endure endless reinforcements in a desert environment.",
+                "slithering_dark": "Hunt a massive serpent in pitch-black maze conditions.",
+                "enforcers_proving_ground": "Survive waves of enemies while facing elite Enforcers.",
+                "the_omegas_charge": "Face charging cavalry in a hall designed for their advantage.",
+                "echoes_of_hell": "Banish undead echoes while preventing endless reinforcements.",
+                "sky_darkeners_roost": "Aerial combat on floating platforms with wind hazards.",
+                "darkformless_ritual": "Race against time to disrupt a powerful summoning ritual.",
+                "ossuarys_last_stand": "Destroy elite undead while preventing endless reassembly.",
+                "enforcers_patrol": "Eliminate a tactical patrol with regenerating leadership.",
+                "bellowbellys_choir": "Stop coordinated wailing before it overwhelms the party.",
+                "darkening_spire": "Ascend a crumbling tower fighting enemies on each level.",
+                "last_stand_nursery": "Endless wave defense at a critical chokepoint.",
+                "ambush_in_the_stacks": "Survive a library ambush with environmental traps.",
+                "academy_courtyard_breach": "Retake the main courtyard from occupying forces.",
+                "twisted_laboratory_escape": "Fight through hazardous magical laboratory conditions.",
+                "sunken_archive_depths": "Navigate flooded archives against aquatic predators.",
+                "corrupted_garden_maze": "Find your way through a poisonous, twisted maze.",
+                "bell_tower_ascension": "Climb the tower while silencing summoning creatures.",
+                "dining_hall_Last_supper": "Clear the great hall of ravenous feeding creatures."
+            };
+
+            // Function to get the first monster image from a challenge
+            function getMonsterThumbnail(challenge) {
+                if (challenge.monsters && challenge.monsters.length > 0) {
+                    const firstMonster = allMonstersData[challenge.monsters[0]];
+                    if (firstMonster && firstMonster.flavor && firstMonster.flavor.imageUrl) {
+                        return firstMonster.flavor.imageUrl;
+                    }
+                }
+                // Fallback to a placeholder if no image found
+                return 'https://placehold.co/60x60/2C2614/daac17?text=?';
+            }
+
+            // Separate challenges into solo and party categories
+            const soloChallenges = challenges.filter(challenge => 
+                challenge.type === "Solo Combat Challenges" || challenge.type === "Extreme Solo Challenges"
+            );
+            
+            const partyChallenges = challenges.filter(challenge => 
+                challenge.type === "3-Person Party Combat Challenges"
+            );
+
+            let tocHtml = '<h2>Challenge Compendium</h2>';
+            tocHtml += '<div class="toc-columns">';
+            
+            // Solo Challenges Column
+            tocHtml += '<div class="toc-column">';
+            tocHtml += '<h3>Solo Challenges</h3>';
+            soloChallenges.forEach(challenge => {
+                const description = challengeDescriptions[challenge.id] || "A challenging solo encounter.";
+                const thumbnail = getMonsterThumbnail(challenge);
+                const isExtreme = challenge.type === "Extreme Solo Challenges";
+                const extremeClass = isExtreme ? " extreme" : "";
+                tocHtml += `
+                    <a href="#" onclick="showChallenge('${challenge.id}'); return false;" class="challenge-button${extremeClass}">
+                        <div class="challenge-button-content">
+                            <img src="${thumbnail}" 
+                                 onerror="this.src='https://placehold.co/60x60/2C2614/daac17?text=?';" 
+                                 alt="${challenge.title}" 
+                                 class="challenge-thumbnail">
+                            <div class="challenge-info">
+                                <div class="challenge-title">${challenge.title}</div>
+                                <div class="challenge-description">${description}</div>
+                            </div>
+                        </div>
+                    </a>
+                `;
+            });
+            tocHtml += '</div>';
+
+            // Party Challenges Column
+            tocHtml += '<div class="toc-column">';
+            tocHtml += '<h3>Party Challenges</h3>';
+            partyChallenges.forEach(challenge => {
+                const description = challengeDescriptions[challenge.id] || "A tactical party encounter.";
+                const thumbnail = getMonsterThumbnail(challenge);
+                tocHtml += `
+                    <a href="#" onclick="showChallenge('${challenge.id}'); return false;" class="challenge-button">
+                        <div class="challenge-button-content">
+                            <img src="${thumbnail}" 
+                                 onerror="this.src='https://placehold.co/60x60/2C2614/daac17?text=?';" 
+                                 alt="${challenge.title}" 
+                                 class="challenge-thumbnail">
+                            <div class="challenge-info">
+                                <div class="challenge-title">${challenge.title}</div>
+                                <div class="challenge-description">${description}</div>
+                            </div>
+                        </div>
+                    </a>
+                `;
+            });
+            tocHtml += '</div>';
+            
+            tocHtml += '</div>'; // Close toc-columns
+            tocContainer.innerHTML = tocHtml;
+        }
+
+
+        // Function to handle file upload
+        document.getElementById('bestiaryUpload').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            const statusElement = document.getElementById('upload-status');
+            const challengesContainer = document.getElementById('challenges-container');
+            const loadingMessage = document.getElementById('loading-message');
+
+            if (file) {
+                if (file.name !== 'Diaper-School-Full-Bestiary.json') {
+                    statusElement.textContent = 'Error: Please upload "Diaper-School-Full-Bestiary.json".';
+                    statusElement.style.color = 'red';
+                    challengesContainer.innerHTML = `<p class="text-center text-red-400 mt-8" style="color: red;">Incorrect file uploaded. Please upload "Diaper-School-Full-Bestiary.json".</p>`;
+                    return;
+                }
+
+                statusElement.textContent = 'Loading...';
+                statusElement.style.color = 'var(--ink)';
+                loadingMessage.style.display = 'block'; // Show loading message
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const json = JSON.parse(e.target.result);
+                        allMonstersData = {};
+                        json.creatures.forEach(creature => {
+                            allMonstersData[creature.name] = creature;
+                        });
+
+                        // Clear previous content
+                        challengesContainer.innerHTML = '<p style="text-align: center; color: var(--ink); font-size: 1.2rem;">Select a challenge from the compendium above to begin your simulation.</p>';
+                        
+                        // Render the Table of Contents
+                        renderTOC();
+
+                        statusElement.textContent = 'Bestiary loaded successfully!';
+                        statusElement.style.color = 'var(--ink)';
+                        loadingMessage.style.display = 'none'; // Hide loading message
+                    } catch (error) {
+                        statusElement.textContent = `Error parsing JSON: ${error.message}`;
+                        statusElement.style.color = 'red';
+                        challengesContainer.innerHTML = `<p class="text-center text-red-400 mt-8" style="color: red;">Error loading bestiary data. Please ensure it's a valid JSON file.</p>`;
+                        loadingMessage.style.display = 'none'; // Hide loading message
+                    }
+                };
+                reader.readAsText(file);
+            } else {
+                statusElement.textContent = 'No file selected.';
+                statusElement.style.color = 'var(--ink)';
+                challengesContainer.innerHTML = `<p class="text-center text-2xl" id="loading-message" style="color: var(--ink);">Please upload the 'Diaper-School-Full-Bestiary.json' file to view challenges and monster stat blocks.</p>`;
+                document.getElementById('toc-container').innerHTML = ''; // Clear TOC if no file
+            }
+        });
+    </script>
+</body>
+</html>

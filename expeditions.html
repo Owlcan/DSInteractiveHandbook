@@ -1,0 +1,1395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scholia Diaspros Expedition System</title>
+    <style>
+        /* Base styles for the body, setting font, background, and centering the app */
+        body {
+            font-family: 'Georgia', serif; /* Classic serif font */
+            background-color: #3e3023; /* Dark brown woodgrain base color */
+            color: #F5DEB3; /* Wheat color for general text, providing good contrast */
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center; /* Center content horizontally */
+            align-items: flex-start; /* Align content to the top */
+            min-height: 100vh; /* Minimum height of the viewport */
+            box-sizing: border-box; /* Include padding and border in the element's total width and height */
+            background-image: url('https://www.transparenttextures.com/patterns/wood-pattern.png'); /* Woodgrain texture for background */
+            background-repeat: repeat; /* Repeat the texture to cover the entire background */
+        }
+
+        /* Container for the entire application, with a themed border and shadow */
+        .app-container {
+            background-color: rgba(46, 20, 15, 0.95); /* Slightly lighter, more opaque brown for the app background */
+            border: 5px solid #DAA520; /* Gold trim border */
+            border-radius: 10px; /* Rounded corners for the container */
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.7); /* Soft shadow for depth */
+            padding: 30px;
+            width: 100%;
+            max-width: 800px; /* Maximum width for readability on larger screens */
+            box-sizing: border-box;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        /* Header section styling */
+        .app-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #DAA520; /* Gold line separator */
+            padding-bottom: 15px;
+        }
+
+        /* Styling for individual steps/sections of the app */
+        .app-section {
+            margin-bottom: 25px;
+            padding: 20px;
+            border: 1px solid rgba(218, 165, 32, 0.5); /* Lighter gold border for sections */
+            border-radius: 8px; /* Rounded corners for sections */
+            background-color: rgba(30, 13, 9, 0.8); /* Even darker background for inner sections */
+        }
+
+        /* Gold colored headers */
+        .gold-header {
+            color: #FFD700; /* Bright gold for headers */
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); /* Text shadow for readability */
+            font-size: 1.8em;
+        }
+
+        /* Slightly smaller gold headers for sub-sections */
+        h3.gold-header {
+            font-size: 1.4em;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        /* General text styling with wheat color */
+        .gold-text {
+            color: #F5DEB3; /* Wheat color for body text */
+            line-height: 1.6; /* Improved readability with line height */
+            margin-bottom: 15px;
+        }
+
+        /* Smaller text for notes or secondary information */
+        .small-text {
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        /* Styling for input groups (label and input field) */
+        .input-group {
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group label {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        /* Styling for number input fields */
+        .input-group input[type="number"] {
+            background-color: #4e342e; /* Darker brown for input fields */
+            border: 1px solid #DAA520; /* Gold border */
+            color: #F5DEB3; /* Wheat text color */
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 1em;
+            width: 100%; /* Full width within its container */
+            box-sizing: border-box;
+        }
+
+        /* General styling for gold-themed buttons */
+        .gold-button {
+            background-color: #DAA520; /* Gold button color */
+            color: #3e2723; /* Dark brown text on gold */
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-top: 20px;
+            margin-right: 15px;
+            transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transitions for hover effects */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Shadow for button depth */
+        }
+
+        /* Hover effect for gold buttons */
+        .gold-button:hover {
+            background-color: #FFD700; /* Brighter gold on hover */
+            transform: translateY(-2px); /* Slight lift effect */
+        }
+
+        /* Styling for "back" buttons, with a more muted brown theme */
+        .gold-button.back-button {
+            background-color: #6d4c41; /* Muted brown for back button */
+            color: #F5DEB3; /* Wheat text color */
+        }
+
+        /* Hover effect for back buttons */
+        .gold-button.back-button:hover {
+            background-color: #8d6e63;
+        }
+
+        /* Styling for tables, with collapse borders for a clean look */
+        .gold-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        /* Table cell and header borders and padding */
+        .gold-table th, .gold-table td {
+            border: 1px solid rgba(218, 165, 32, 0.3); /* Semi-transparent gold border */
+            padding: 12px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        /* Table header specific styling */
+        .gold-table th {
+            background-color: rgba(218, 165, 32, 0.2); /* Light gold background */
+            color: #FFD700; /* Bright gold text */
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.9em;
+        }
+
+        /* Alternating row background for better readability */
+        .gold-table tr:nth-child(even) {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        /* Button styling within tables */
+        .gold-table button {
+            padding: 8px 15px;
+            font-size: 0.9em;
+            margin-top: 0;
+        }
+
+        /* Styling for result display boxes */
+        .results-box {
+            background-color: rgba(0, 0, 0, 0.3); /* Semi-transparent dark background */
+            border: 1px dashed #DAA520; /* Dashed gold border */
+            padding: 15px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+
+        .results-box p, .results-box ul {
+            margin: 5px 0;
+            padding-left: 20px;
+        }
+
+        /* Utility class to hide elements */
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <h1 class="gold-header">Scholia Diaspros Expedition System</h1>
+        </header>
+
+        <!-- Step 1: Character Preparedness -->
+        <div id="step1" class="app-section">
+            <h2 class="gold-header">Step 1: Character Preparedness</h2>
+            <p class="gold-text">Welcome, adventurer! To begin your expedition, please enter your character's relevant skill bonuses and ability scores.</p>
+
+            <div class="input-group">
+                <label for="survivalSkill" class="gold-text">Survival Skill Bonus:</label>
+                <input type="number" id="survivalSkill" value="0" min="-5" max="30">
+            </div>
+            <div class="input-group">
+                <label for="natureSkill" class="gold-text">Nature Skill Bonus:</label>
+                <input type="number" id="natureSkill" value="0" min="-5" max="30">
+            </div>
+            <div class="input-group">
+                <label for="historySkill" class="gold-text">Knowledge (History) Skill Bonus:</label>
+                <input type="number" id="historySkill" value="0" min="-5" max="30">
+            </div>
+            <div class="input-group">
+                <label for="localSkill" class="gold-text">Knowledge (Local) Skill Bonus:</label>
+                <input type="number" id="localSkill" value="0" min="-5" max="30">
+            </div>
+            <div class="input-group">
+                <label for="arcanaSkill" class="gold-text">Knowledge (Arcana) Skill Bonus:</label>
+                <input type="number" id="arcanaSkill" value="0" min="-5" max="30">
+            </div>
+            <div class="input-group">
+                <label for="dungeoneeringSkill" class="gold-text">Knowledge (Dungeoneering) Skill Bonus:</label>
+                <input type="number" id="dungeoneeringSkill" value="0" min="-5" max="30">
+            </div>
+            <div class="input-group">
+                <label for="herbalismSkill" class="gold-text">Herbalism Skill Bonus:</label>
+                <input type="number" id="herbalismSkill" value="0" min="-5" max="30">
+            </div>
+            <div class="input-group">
+                <label for="conModifier" class="gold-text">Constitution Modifier:</label>
+                <input type="number" id="conModifier" value="0" min="-5" max="10">
+            </div>
+            <div class="input-group">
+                <label for="proficiencyBonus" class="gold-text">Proficiency Bonus:</label>
+                <input type="number" id="proficiencyBonus" value="2" min="2" max="6">
+            </div>
+            <p class="gold-text">Your character will be considered *indisposed* for the period of the Expedition*. They cannot be used for other activities, such as dungeons, during this time.</p>
+            <p class="gold-text small-text"><strong>Note</strong>: Herbalism is considered a *Knowledge* skill for the purposes of this Expedition- and proficiency is granted by those with proficiency with the Herbalism kit and its related skills.</p>
+            <button onclick="nextStep(2)" class="gold-button">Next: Choose Expedition Type</button>
+        </div>
+
+        <!-- Step 2: Choose Expedition Type -->
+        <div id="step2" class="app-section hidden">
+            <h2 class="gold-header">Step 2: Choose Your Expedition Type</h2>
+            <p class="gold-text">Expeditions fall into one of two categories. Select the type that best suits your goals:</p>
+
+            <h3 class="gold-header">Expanded Reconnaissance</h3>
+            <p class="gold-text">This is the "getting out and seeing the world" part of expeditions. By undertaking these expeditions, a character will map a chosen region, putting up beacons and tracking devices. This unlocks more specific locations for future expeditions and other activities.</p>
+            <button onclick="selectExpeditionType('recon')" class="gold-button">Select Expanded Reconnaissance</button>
+
+            <h3 class="gold-header">Speculation</h3>
+            <p class="gold-text">For those who are after more than the sights, Speculative Expeditions focus on securing locations, resources, and items either for one's own needs or at the behest of officials attendant to the functions of the Realm. These expeditions reward tangible resources and reward items based on survivalist and combat performance.</p>
+            <button onclick="selectExpeditionType('speculation')" class="gold-button">Select Speculation</button>
+
+            <button onclick="nextStep(1)" class="gold-button back-button">Back</button>
+        </div>
+
+        <!-- Step 3: Choose Zone & Goals (Magical Plains) -->
+        <div id="step3" class="app-section hidden">
+            <h2 class="gold-header">Step 3: Choose Your Zone & Goals (Magical Plains)</h2>
+            <p class="gold-text">You have selected the **Magical Plains** for your expedition. Now, choose a specific goal.</p>
+
+            <h3 class="gold-header">Required Checks, Suggested Skills, and Valuable Tools</h3>
+            <p class="gold-text">Throughout your expedition, you may face challenges requiring specific skills or tools:</p>
+            <ul class="gold-text">
+                <li>*Adventuring Kits, Climbing Packs,* and *Cartography Tools* are essential for overcoming most lack of training in the **Survival** skill.</li>
+                <li>Similarly, *knowledge of **Nature*** replaces the need for Survival skills in certain circumstances, such as locating flora and fauna and recognizing them.</li>
+                <li>*Local knowledge* can also aide in figuring out if you are in the right location for any given encounter or desired materials/creatures/sites.</li>
+            </ul>
+
+            <h3 class="gold-header">Expedition Goals and Approximate Difficulty</h3>
+            <table class="gold-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>DC</th>
+                        <th>Required Skills</th>
+                        <th>Difficulty</th>
+                        <th>Encounter Rolls</th>
+                        <th>Select</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Scout Chosen Specified</td>
+                        <td>12</td>
+                        <td>Knowledge (Nature, Local, Arcana), Herbalism, Survival</td>
+                        <td>Best of 3</td>
+                        <td>2</td>
+                        <td><button onclick="selectGoal('Scout Chosen Specified', 12, ['natureSkill', 'localSkill', 'arcanaSkill', 'survivalSkill'])">Select</button></td>
+                    </tr>
+                    <tr>
+                        <td>Source Uncommon Materials</td>
+                        <td>14</td>
+                        <td>Knowledge (Nature, Local, Dungeoneering)</td>
+                        <td>Best of 5</td>
+                        <td>2</td>
+                        <td><button onclick="selectGoal('Source Uncommon Materials', 14, ['natureSkill', 'localSkill', 'dungeoneeringSkill'])">Select</button></td>
+                    </tr>
+                    <tr>
+                        <td>Locate Uncommon Fauna</td>
+                        <td>14</td>
+                        <td>Knowledge (Nature, Local, Arcana)</td>
+                        <td>Best of 5</td>
+                        <td>2</td>
+                        <td><button onclick="selectGoal('Locate Uncommon Fauna', 14, ['natureSkill', 'localSkill', 'arcanaSkill'])">Select</button></td>
+                    </tr>
+                    <tr>
+                        <td>Archaeological Expedition</td>
+                        <td>16</td>
+                        <td>Knowledge (Dungeoneering, Arcana), Survival</td>
+                        <td>Best of 5</td>
+                        <td>3</td>
+                        <td><button onclick="selectGoal('Archaeological Expedition', 16, ['dungeoneeringSkill', 'arcanaSkill', 'survivalSkill'])">Select</button></td>
+                    </tr>
+                    <tr>
+                        <td>Source Rare Materials</td>
+                        <td>17</td>
+                        <td>Knowledge (Dungeoneering, Arcana), Survival</td>
+                        <td>Best of 5</td>
+                        <td>3</td>
+                        <td><button onclick="selectGoal('Source Rare Materials', 17, ['dungeoneeringSkill', 'arcanaSkill', 'survivalSkill'])">Select</button></td>
+                    </tr>
+                    <tr>
+                        <td>Locate Legendary Fauna</td>
+                        <td>17</td>
+                        <td>Knowledge (Nature, Local, Arcana)</td>
+                        <td>Best of 5</td>
+                        <td>3</td>
+                        <td><button onclick="selectGoal('Locate Legendary Fauna', 17, ['natureSkill', 'localSkill', 'arcanaSkill'])">Select</button></td>
+                    </tr>
+                </tbody>
+            </table>
+            <button onclick="nextStep(2)" class="gold-button back-button">Back</button>
+        </div>
+
+        <!-- Step 4: Expedition Details -->
+        <div id="step4" class="app-section hidden">
+            <h2 class="gold-header">Step 4: Expedition Details</h2>
+            <p class="gold-text">You have chosen the goal: <strong id="selectedGoalDisplay"></strong> (DC: <span id="goalDCDisplay"></span>).</p>
+            <p class="gold-text">This expedition requires <span id="requiredChecksDisplay"></span> successful checks.</p>
+            <p class="gold-text">You also have <span id="encounterRollsDisplay"></span> free encounter rolls.</p>
+
+            <h3 class="gold-header">Optional: Increase Difficulty for More Encounter Rolls</h3>
+            <p class="gold-text">You are allowed to roll 2 of these encounters for free on every expedition. By raising the DC of the Expedition by 1, you may roll 2 more. Their bonuses and benefits stack for so long as you successfully complete the expedition.</p>
+            <button id="increaseDCOption" class="gold-button" onclick="increaseDifficulty()">Increase DC (+1 DC, +2 Rolls)</button>
+            <p class="gold-text">Current Expedition DC: <span id="currentDCDiplay"></span></p>
+            <p class="gold-text">Total Encounter Rolls: <span id="totalEncounterRollsDisplay"></span></p>
+            <button onclick="confirmStartExpedition()" class="gold-button">Start Expedition!</button>
+            <button onclick="nextStep(3)" class="gold-button back-button">Back</button>
+        </div>
+
+        <!-- Step 5: Running the Expedition -->
+        <div id="step5" class="app-section hidden">
+            <h2 class="gold-header">Step 5: Running the Expedition</h2>
+            <p class="gold-text">Let the dice roll! Click the button below to attempt your checks for the expedition goal.</p>
+            <p class="gold-text">Each check will use a relevant skill you entered earlier. The goal is to get <span id="successNeededDisplay"></span> successes out of <span id="totalChecksDisplay"></span> checks.</p>
+            <p class="gold-text">Remember, your chosen skills for this goal are: <strong id="goalSkillsDisplay"></strong>.</p>
+            <button id="rollChecksButton" class="gold-button" onclick="rollExpeditionChecks()">Roll Expedition Checks</button>
+            <div id="checkResults" class="results-box"></div>
+            <p class="gold-text">Successful Checks: <span id="successfulChecksCount">0</span> / <span id="successNeededDisplay2"></span></p>
+
+            <h3 class="gold-header">Encounter Rolls</h3>
+            <p class="gold-text">You have <span id="remainingEncounterRolls"></span> encounter rolls remaining.</p>
+            <button id="rollEncounterButton" class="gold-button" onclick="rollEncounter()">Roll Random Encounter</button>
+            <div id="encounterResults" class="results-box"></div>
+            
+            <h3 class="gold-header">Active Expedition Variables</h3>
+            <div id="activeVariables" class="results-box">
+                <p class="gold-text"><em>No expedition variables currently active.</em></p>
+            </div>
+            
+            <button onclick="endExpedition()" class="gold-button">End Expedition & See Summary</button>
+            <button onclick="nextStep(4)" class="gold-button back-button">Back</button>
+        </div>
+
+        <!-- Step 6: Expedition Summary -->
+        <div id="step6" class="app-section hidden">
+            <h2 class="gold-header">Step 6: Expedition Summary</h2>
+            <p class="gold-text">Your expedition has concluded!</p>
+            <p class="gold-text"><strong>Expedition Type:</strong> <span id="summaryExpeditionType"></span></p>
+            <p class="gold-text"><strong>Expedition Goal:</strong> <span id="summaryExpeditionGoal"></span></p>
+            <p class="gold-text"><strong>Final DC:</strong> <span id="summaryFinalDC"></span></p>
+            <p class="gold-text"><strong>Successful Checks:</strong> <span id="summarySuccessfulChecks"></span></p>
+            <div id="expeditionOutcome" class="results-box"></div>
+            <h3 class="gold-header">Encountered Events:</h3>
+            <ul id="summaryEncounterEvents" class="gold-text"></ul>
+            <button onclick="resetApp()" class="gold-button">Start New Expedition</button>
+        </div>
+    </div>
+    <script>
+        // Global variables to store application state
+        let characterStats = {};
+        let expeditionType = '';
+        let selectedGoal = null;
+        let currentExpeditionDC = 0;
+        let baseEncounterRolls = 0;
+        let totalEncounterRolls = 0;
+        let successfulChecks = 0;
+        let checksAttempted = 0;
+        let encounterEvents = [];
+        let activeBuffs = {}; // New object to track active buffs and pass/fail variables
+        let naturalTwenties = 0; // Track natural 20s rolled during expedition checks
+
+        // Konami Code debug sequence
+        let konamiSequence = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'KeyB', 'KeyA', 'KeyS'];
+        let konamiIndex = 0;
+        let konamiEnabled = false;
+
+        // Data for Magical Plains Random Encounters (from provided document)
+        const plainsEncounters = [
+            { roll: 1, name: "Plains Combat Encounter", effect: "A generic combat scenario erupts among the rolling, enchanted grasses." },
+            { roll: 2, name: "Arcane Winds Traversal", effect: "Sudden magical gusts buffet the players, demanding quick skill checks to maintain footing." },
+            { roll: 3, name: "Mysterious Glyph Field", effect: "The ground is etched with shifting arcane runes. Timing is key to safely crossing the illuminated patches." },
+            { roll: 4, name: "Illusory Mirage", effect: "Mirages blur the distance. The party must discern the real path amid deceptive visions." },
+            { roll: 5, name: "Floating Spell Totem", effect: "A solitary totem drifts above the plains, periodically releasing bursts of magic that may threaten or aid." },
+            { roll: 6, name: "Wild Magic Surge", effect: "Unpredictable surges of raw magical energy ripple through the area, altering the battlefield on a whim." },
+            { roll: 7, name: "Shifting Rune Maze", effect: "Glowing runes form a transient maze. Navigate quickly before the pattern entirely shifts." },
+            { roll: 8, name: "Enchanted Beast Ambush", effect: "A creature infused with arcane energy appears unexpectedly, challenging the party with a brief skirmish." },
+            { roll: 9, name: "Spellbound Rift", effect: "A small tear in the fabric of magic pulses with energy. Evasion or direct confrontation is inevitable." },
+            { roll: 10, name: "Phantom Footprints", effect: "Mysterious, glowing tracks lure the party into a zone rife with latent magical hazards." },
+            { roll: 11, name: "Mystic Fog of Confusion", effect: "A dense, enchanted fog rolls in, disorienting senses and obscuring landmarks." },
+            { roll: 12, name: "Wind-swept Spell Cache", effect: "The howling wind uncovers scattered magical items; a quick guard or minor combat might follow." },
+            { roll: 13, name: "Inverted Gravity Field", effect: "Gravity flips in a pocket of the plains. A spatial puzzle challenges proper movement." },
+            { roll: 14, name: "Arcane Obelisk", effect: "A towering obelisk emits a low hum and flashes of energy. Interact—with caution." },
+            { roll: 15, name: "Murmuring Plains", effect: "Whispering winds carry elusive voices through the grass. Are they mere echoes or a summons to conflict?" },
+            { roll: 16, name: "Meteoric Spell Shower", effect: "Small enchanted meteors pelt the ground in brief bursts of arcane impact. Dodge or brace for impact." },
+            { roll: 17, name: "Temporal Rift Maneuver", effect: "A distortion in time briefly alters the expedition's pace, forcing players to adapt their flow." },
+            { roll: 18, name: "Obsidian Orb Defense", effect: "A dark, levitating orb creates a protective barrier. Overcoming it demands clever tactics or raw force." },
+            { roll: 19, name: "Spectral Duel", effect: "Ethereal warriors from a bygone era materialize, challenging the party to a fleeting trial by combat." },
+            { roll: 20, name: "Mystical Sundial Challenge", effect: "A giant, rune-carved sundial projects shifting patterns of light. Decipher its clues to proceed." }
+        ];
+
+        // Data for Magical Plains Expedition Events (from provided document)
+        const expeditionEvents = [
+            { roll: 1, name: "Spatial Distortion", effect: "Travel time increases, but no effect on the expedition's outcome." },
+            { roll: 2, name: "Enemy Encounter", effect: "Handle a minor skirmish, easily overcome with teamwork (no lasting harm)." },
+            { roll: 3, name: "Friendly Fireflies", effect: "No mechanical effect, but their soothing light makes the journey more pleasant." },
+            { roll: 4, name: "Lost Compass Herb", effect: "Gain an uncommon resource for the commissary." },
+            { roll: 5, name: "Overexcited Critters", effect: "Party retrieves the item but loses time chasing the mischievous critters." },
+            { roll: 6, name: "Wildflower Bloom", effect: "Gain a temporary buff: Advantage on Survival checks for the remainder of the expedition.", buff: { type: 'advantage', skill: 'survival' } },
+            { roll: 7, name: "Enchanting Breeze", effect: "No mechanical effect, but it lifts morale and eases the journey." },
+            { roll: 8, name: "Twinkling Glowmoths", effect: "Mystical moths flutter about, creating a beautiful display." },
+            { roll: 9, name: "Playful Stream Sprite", effect: "Gain a temporary 1d4 bonus to a Knowledge (Nature) check during this expedition.", buff: { type: 'bonus', skill: 'nature', value: '1d4' } },
+            { roll: 10, name: "Distant Song", effect: "Party members must pass a Wisdom (Insight) check (DC 12) or feel compelled to wander toward its source." },
+            { roll: 11, name: "Celestial Meadow", effect: "A short rest here restores an extra 1d6 hit points." },
+            { roll: 12, name: "Friendly Farm Spirits", effect: "Gain 1d4 additional expedition resources for the commissary." },
+            { roll: 13, name: "Bounding Bunnies", effect: "No mechanical effect, but the scene lightens the mood." },
+            { roll: 14, name: "Wisp's Trail", effect: "Discover a small cache of uncommon resources." },
+            { roll: 15, name: "Pollen Puffs", effect: "Party members must pass a Constitution (Save DC 12) or lose 10 minutes to sneezing fits." },
+            { roll: 16, name: "Fey Pranksters", effect: "Minor delay, but nothing is stolen or damaged." },
+            { roll: 17, name: "Blessed Dew", effect: "Each party member recovers 1d4 hit points." },
+            { roll: 18, name: "Mirage Meadow", effect: "Wisdom (Perception) check (DC 14) to determine the correct path; failure adds minor travel delay." },
+            { roll: 19, name: "Dancing Lights", effect: "A dazzling display of harmless magical energy entertains the group." },
+            { roll: 20, name: "Megafauna Bunnies", effect: "Gain a rare resource and a unique story to tell (DM's discretion)." }
+        ];
+
+        // Data for Negative Expedition Pass Variables (from provided document)
+        const negativeVariables = [
+            { name: "Bizarre Illumination", modifier: -1 },
+            { name: "Blighted Vegetation", modifier: -2 },
+            { name: "Bloodthirsty Midges", modifier: -1 },
+            { name: "Choking Smog", modifier: -2 },
+            { name: "Collapsed Tunnel (Underground)", modifier: -3 },
+            { name: "Cursed Pathway", modifier: -2 },
+            { name: "Deep Snow", modifier: -2 },
+            { name: "Dense Fog", modifier: -1 },
+            { name: "Disorienting Echoes", modifier: -2 },
+            { name: "Drifting Sands", modifier: -2 },
+            { name: "Dust Storm", modifier: -2 },
+            { name: "Eerie Stillness", modifier: -1 },
+            { name: "Energy Draining Field", modifier: -2 },
+            { name: "Enchanted Murk", modifier: -1 },
+            { name: "Ethereal Rift", modifier: -2 },
+            { name: "Flash Floods", modifier: -3 },
+            { name: "Flooded Passage", modifier: -3 },
+            { name: "Frozen Waterways", modifier: -3 },
+            { name: "Fungal Spores", modifier: -1 },
+            { name: "Haunted Remnants", modifier: -1 },
+            { name: "Heavy Rain", modifier: -1 },
+            { name: "Hostile Fungal Network", modifier: -2 },
+            { name: "Icy Slipperiness", modifier: -2 },
+            { name: "Insect Swarms", modifier: -1 },
+            { name: "Irritating Glowflies", modifier: -1 },
+            { name: "Localized Gravity Flux", modifier: -2 },
+            { name: "Magic Anomaly (Chaotic)", modifier: -1 },
+            { name: "Magical Echoes", modifier: -1 },
+            { name: "Magical Whispers", modifier: -1 },
+            { name: "Mudslides", modifier: -3 },
+            { name: "Nocturnal Predator Activity", modifier: -1 },
+            { name: "Overgrown Vegetation", modifier: -1 },
+            { name: "Overwhelming Darkness", modifier: -3 },
+            { name: "Overwhelming Heat Haze", modifier: -2 },
+            { name: "Poisonous Brambles", modifier: -2 },
+            { name: "Poisonous Vapors", modifier: -2 },
+            { name: "Polar Cold", modifier: -2 },
+            { name: "Quagmire", modifier: -2 },
+            { name: "Rockfall", modifier: -2 },
+            { name: "Rocky Terrain", modifier: -1 },
+            { name: "Sapping Miasma", modifier: -2 },
+            { name: "Scalding Desert Heat", modifier: -2 },
+            { name: "Shadowy Menace", modifier: "disadvantage" },
+            { name: "Shifting Sands", modifier: -2 },
+            { name: "Slick Moss Growth", modifier: -1 },
+            { name: "Sticky Tar Pit", modifier: -2 },
+            { name: "Strong Winds", modifier: -2 },
+            { name: "Sudden Landslide", modifier: -3 },
+            { name: "Sweltering Humidity", modifier: -1 },
+            { name: "Temporal Lag", modifier: -1 },
+            { name: "Thunderstorm", modifier: -3 },
+            { name: "Unfriendly Wildlife", modifier: -2 },
+            { name: "Unstable Ground", modifier: -2 },
+            { name: "Volcanic Ash", modifier: -3 },
+            { name: "Volcanic Ground Tremors", modifier: -2 }
+        ];
+
+        // Data for Positive Expedition Pass Variables (from provided document)
+        const positiveVariables = [
+            { name: "Ancient Food Forest", modifier: 2 },
+            { name: "Arcane Insight", modifier: 2 },
+            { name: "Benevolent Spirits", modifier: 2 },
+            { name: "Blooming Canopy", modifier: 1 },
+            { name: "Bright Firefly Swarm", modifier: 1 },
+            { name: "Buried Treasure", modifier: 2 },
+            { name: "Calm Weather", modifier: 1 },
+            { name: "Celestial Blessing", modifier: "advantage" },
+            { name: "Clear Trail", modifier: 1 },
+            { name: "Crystalline Formations", modifier: 1 },
+            { name: "Dappled Sunlight", modifier: 1 },
+            { name: "Enchanted Stream", modifier: 2 },
+            { name: "Favorable Breeze", modifier: 1 },
+            { name: "Flowing Streams", modifier: 1 },
+            { name: "Food Forest", modifier: 2 },
+            { name: "Friendly Locals", modifier: 2 },
+            { name: "Friendly Wildlife", modifier: 1 },
+            { name: "Gentle Meadow", modifier: 1 },
+            { name: "Good Omen", modifier: 1 },
+            { name: "Guiding Aurora", modifier: 2 },
+            { name: "Guiding Wisp", modifier: 2 },
+            { name: "Healing Pools", modifier: 2 },
+            { name: "Heavenly Chorus", modifier: 2 },
+            { name: "Herbal Cache", modifier: 2 },
+            { name: "Hidden Cache", modifier: 2 },
+            { name: "Hidden Refuge", modifier: 1 },
+            { name: "Lively Birds", modifier: 1 },
+            { name: "Lucky Find", modifier: 2 },
+            { name: "Lush Oasis", modifier: 2 },
+            { name: "Magical Canopy", modifier: 1 },
+            { name: "Mild Sunshine", modifier: 1 },
+            { name: "Mystic Echoes", modifier: 1 },
+            { name: "Mystical Lichen", modifier: 1 },
+            { name: "Nature’s Bounty", modifier: 2 },
+            { name: "Nurturing Glade", modifier: 1 },
+            { name: "Pleasant Mist", modifier: 1 },
+            { name: "Rare Relic", modifier: 2 },
+            { name: "Restful Glade", modifier: 1 },
+            { name: "Restorative Meadow", modifier: 1 },
+            { name: "Seasonal Equinox", modifier: 2 },
+            { name: "Sparkling Dew", modifier: 1 },
+            { name: "Starlit Guidance", modifier: 1 },
+            { name: "Sweet Fragrance", modifier: 1 },
+            { name: "Temporal Distortion", modifier: 3 },
+            { name: "Unobstructed Trail", modifier: 1 },
+            { name: "Unusual Shortcut", modifier: 2 },
+            { name: "Verdant Glade", modifier: 1 },
+            { name: "Warm Campfire", modifier: 1 }
+        ];
+
+        // Lissome Plains Items for Expedition Rewards
+        const lissomePlainsItems = {
+            common: [
+                // Original Items
+                { name: "Adhesive", type: "Essence", skill: "nature", value: "12 VRP", description: "A highly effective, sticky substance with powerful bonding properties.", image: "src/assets/images/adhesive.png" },
+                { name: "Egg", type: "Food", skill: "nature", value: "5 VRP", description: "A common binding agent used in cooking and baking.", image: "src/assets/images/Egg.png" },
+                { name: "Vanilla", type: "Botanical", skill: "herbalism", value: "5 VRP", description: "A fragrant flavoring extracted from vanilla pods.", image: "src/assets/images/Vanilla.png" },
+                { name: "White Sugar", type: "Food", skill: "nature", value: "5 VRP", description: "Refined sugar that adds sweetness to any recipe.", image: "src/assets/images/White Sugar.png" },
+                { name: "Yarn", type: "Textile", skill: "nature", value: "7 VRP", description: "Finely spun fiber used in weaving and knitting.", image: "src/assets/images/Yarn.png" },
+                
+                // New Items from Plains Data
+                { name: "Shimmering Dust", type: "Component", skill: "nature", value: "1 VRP", description: "Can be used as a component for Light or Minor Illusion spells, or to add a subtle sparkle to crafted items.", image: "src/assets/images/shimmeringdust.png" },
+                { name: "Temporal Grass Blade", type: "Botanical", skill: "herbalism", value: "2 VRP", description: "If chewed, grants advantage on next Wisdom (Perception) check (lasts 1 minute, then becomes regular grass).", image: "src/assets/images/temporalgrassblade.png" },
+                { name: "Darkling Residue", type: "Component", skill: "survival", value: "5 VRP", description: "Can be used as a component for Stench Strike or Foul Fragrance spells.", image: "src/assets/images/darklingresidue.png" },
+                { name: "Wild Bee Pollen Sac", type: "Food", skill: "nature", value: "3 VRP", description: "Can be consumed as an action to regain 1d4 hit points, once per day.", image: "src/assets/images/wildbeepollensac.png" },
+                { name: "Warped Pebble", type: "Trinket", skill: "nature", value: "1 VRP", description: "Can be used as a focus for a Prestidigitation cantrip, or as a trinket; subtly shifts color/temperature.", image: "src/assets/images/warpedpebble.png" },
+                { name: "Petrified Dino Scat", type: "Component", skill: "survival", value: "1 VRP", description: "Ground into powder: potent fertilizer (doubles crop yield for one planting). Ignited: produces thick, acrid smoke for 1 round.", image: "src/assets/images/petrifieddinoscat.png" },
+                { name: "Whisperweeds Stalk", type: "Botanical", skill: "herbalism", value: "1 VRP", description: "When snapped, emits a faint, unsettling whisper causing disadvantage on next Wisdom (Perception) check made to hear sounds.", image: "src/assets/images/whisperweedsstalk.png" },
+                { name: "Aether-Wing Feather", type: "Component", skill: "nature", value: "10 VRP", description: "A feather from an Aether-Wing Finch. Can be used as a component for Misty Step or Blur spells.", image: "src/assets/images/aetherwingfeather.png" },
+                { name: "Chronos-Hare Foot", type: "Component", skill: "survival", value: "15 VRP", description: "A dried foot from a Chronos-Hare. Once per day, as a bonus action, you can rub it to gain a +2 bonus to your next initiative roll.", image: "src/assets/images/chronosharefoot.png" }
+            ],
+            uncommon: [
+                { name: "Echo Crystal Shard", type: "Component", skill: "nature", value: "25 VRP", description: "Holding to ear allows hearing faint, disembodied whispers/echoes of past sounds. Can add a psychic element to illusions.", image: "src/assets/images/echocrystalshard.png" },
+                { name: "Warped Seed Pod", type: "Botanical", skill: "herbalism", value: "30 VRP", description: "If planted, 50% chance of growing into a normal plant, 50% chance of growing into a slightly mutated version.", image: "src/assets/images/warpedseedpod.png" },
+                { name: "Warforged Carapace Fragment", type: "Component", skill: "survival", value: "40 VRP", description: "Retains faint abjuration aura. Can be used as a component for defensive spells or to reinforce mundane armor.", image: "src/assets/images/warforgedcarapace.png" },
+                { name: "Jackalope Antler Shard", type: "Component", skill: "nature", value: "35 VRP", description: "When consumed, grants +10 ft walking speed for 1 minute (once per day).", image: "src/assets/images/jackalopeantlershard.png" },
+                { name: "Whisper Hound Fang", type: "Component", skill: "survival", value: "50 VRP", description: "When used as a component in a spell causing the frightened condition, the spell's DC increases by 1.", image: "src/assets/images/whisperhoundfang.png" },
+                { name: "Glimmer-Ghast Essence", type: "Essence", skill: "nature", value: "60 VRP", description: "A viscous, faintly glowing liquid. Can be applied to a weapon; the next hit deals an extra 1d4 radiant damage and may blind the target.", image: "src/assets/images/glimmerghastessence.png" },
+                { name: "Temporal Thistle Bloom", type: "Botanical", skill: "herbalism", value: "75 VRP", description: "When crushed and inhaled, you can choose to gain advantage on your next Dexterity saving throw or impose disadvantage on a creature's next Dexterity saving throw.", image: "src/assets/images/temporalthistlebloom.png" }
+            ],
+            rare: [
+                { name: "Temporal Bloom", type: "Botanical", skill: "herbalism", value: "150 VRP", description: "When consumed, grants advantage on one attack roll, ability check, or saving throw within the next minute (once per long rest). Withers after use.", image: "src/assets/images/temporalbloom.png" },
+                { name: "Planar Tear Dust", type: "Component", skill: "nature", value: "180 VRP", description: "If thrown, creates a momentary Blur effect on a single target, or causes a 5-ft radius area to become difficult terrain.", image: "src/assets/images/planarteardust.png" },
+                { name: "Umbral Weave Fragment", type: "Component", skill: "survival", value: "200 VRP", description: "Powerful component for necrotic/fear-based spells, or imbues a weapon with 1d4 necrotic damage for one attack.", image: "src/assets/images/umbralweavefragment.png" },
+                { name: "Temporal Stag Velvet", type: "Component", skill: "nature", value: "250 VRP", description: "If worn, grants advantage on initiative rolls for 1 hour (once per long rest).", image: "src/assets/images/temporalstagvelvet.png" },
+                { name: "Megafaunal Bunny Paw", type: "Component", skill: "survival", value: "300 VRP", description: "When consumed (e.g., as stew), grants advantage on Strength (Athletics) checks made to jump for 1 hour.", image: "src/assets/images/megafaunalbunnypaw.png" },
+                { name: "Warden's Core Shard", type: "Component", skill: "nature", value: "350 VRP", description: "A fragment of a Planar Warden's core. Can be used as a component for Dimensional Anchor or Banishment spells.", image: "src/assets/images/warden'scoreshard.png" },
+                { name: "Psychic Bloom Spore", type: "Component", skill: "herbalism", value: "400 VRP", description: "When crushed, all creatures in a 10-foot radius must succeed on a DC 13 Wisdom saving throw or be frightened until the end of their next turn.", image: "src/assets/images/psychicbloomspore.png" }
+            ],
+            legendary: [
+                // Original Items
+                { name: "Distillation of a Night Sky", type: "Essence", skill: "nature", value: "250 VRP", description: "The essence of a perfect night sky captured in a bottle. Contains stardust and dreams.", image: "src/assets/images/Distillation of a Night Sky.png" },
+                { name: "Lunar-Dodo Egg", type: "Food", skill: "nature", value: "250 VRP", description: "An egg from the rare Lunar-Dodo bird. Emits a soft blue glow.", image: "src/assets/images/Lunar-Dodo Egg.png" },
+                
+                // New Items from Plains Data
+                { name: "Heart of the Lissome Plains", type: "Artifact", skill: "nature", value: "Priceless", description: "While held, wielder gains advantage on all saves vs. fear. Once per long rest, can cast Dimension Door. Prolonged attunement causes fleeting sadness/anxiety.", image: "src/assets/images/heartofthelissomeplains.png" },
+                { name: "Chronos-Weave Silk", type: "Component", skill: "nature", value: "Priceless", description: "Used to craft legendary items manipulating time or space (e.g., Robe of Temporal Shifting, Cloak of Planar Step).", image: "src/assets/images/chronosweavesilk.png" },
+                { name: "Echo Inquisitor's Eye", type: "Component", skill: "survival", value: "Priceless", description: "A detached, still-flickering eye from an Echo Inquisitor. Grants advantage on Intelligence (History) checks related to the Old War.", image: "src/assets/images/echoinquisitoreye.png" }
+            ]
+        };
+
+        /**
+         * Activates debug mode and immediately passes the expedition
+         */
+        function activateDebugMode() {
+            console.log('🎮 Debug mode activated! Expedition auto-completed.');
+            
+            // Set expedition as successful
+            successfulChecks = selectedGoal.requiredChecks;
+            checksAttempted = selectedGoal.totalChecks;
+            
+            // Add some natural 20s for legendary rewards
+            naturalTwenties = 2;
+            
+            // Add a debug encounter event
+            encounterEvents.push({
+                name: "Debug Override",
+                effect: "Konami code activated - expedition auto-completed successfully!",
+                isVariable: false
+            });
+            
+            // Immediately end the expedition
+            endExpedition();
+        }
+
+        /**
+         * Handles keydown events for Konami code detection
+         */
+        function handleKonamiCode(event) {
+            // Only listen for Konami code on step 5
+            if (document.getElementById('step5').classList.contains('hidden')) {
+                konamiIndex = 0;
+                return;
+            }
+            
+            if (event.code === konamiSequence[konamiIndex]) {
+                konamiIndex++;
+                if (konamiIndex === konamiSequence.length) {
+                    konamiIndex = 0;
+                    activateDebugMode();
+                }
+            } else {
+                konamiIndex = 0;
+            }
+        }
+
+        /**
+         * Hides all app sections and then displays the specified step.
+         * @param {number} stepNumber - The ID of the step to display.
+         */
+        function showStep(stepNumber) {
+            document.querySelectorAll('.app-section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            document.getElementById(`step${stepNumber}`).classList.remove('hidden');
+        }
+
+        /**
+         * Advances the app to the next step. If moving to step 2, it first collects
+         * character statistics from the input fields.
+         * @param {number} stepNumber - The ID of the next step to navigate to.
+         */
+        function nextStep(stepNumber) {
+            if (stepNumber === 2) {
+                // Collect character stats before moving to step 2
+                characterStats = {
+                    survival: parseInt(document.getElementById('survivalSkill').value),
+                    nature: parseInt(document.getElementById('natureSkill').value),
+                    history: parseInt(document.getElementById('historySkill').value),
+                    local: parseInt(document.getElementById('localSkill').value),
+                    arcana: parseInt(document.getElementById('arcanaSkill').value),
+                    dungeoneering: parseInt(document.getElementById('dungeoneeringSkill').value),
+                    herbalism: parseInt(document.getElementById('herbalismSkill').value),
+                    conModifier: parseInt(document.getElementById('conModifier').value),
+                    proficiencyBonus: parseInt(document.getElementById('proficiencyBonus').value)
+                };
+            }
+            showStep(stepNumber);
+        }
+
+        /**
+         * Sets the chosen expedition type and moves to the goal selection step.
+         * @param {string} type - The type of expedition ('recon' or 'speculation').
+         */
+        function selectExpeditionType(type) {
+            expeditionType = type;
+            nextStep(3); // Move to zone and goal selection
+        }
+
+        /**
+         * Selects an expedition goal, updates global state, and displays details for the next step.
+         * @param {string} name - The name of the selected goal.
+         * @param {number} dc - The base difficulty class for the goal.
+         * @param {string[]} skills - An array of skill IDs relevant to this goal.
+         */
+        function selectGoal(name, dc, skills) {
+            selectedGoal = {
+                name: name,
+                dc: dc,
+                skills: skills,
+                requiredChecks: getRequiredChecksForGoal(name), // Successes needed
+                totalChecks: getTotalChecksForGoal(name), // Total checks to roll
+                encounterRolls: getEncounterRollsForGoal(name) // Dynamically get base encounter rolls
+            };
+            currentExpeditionDC = dc;
+            baseEncounterRolls = selectedGoal.encounterRolls;
+            totalEncounterRolls = baseEncounterRolls;
+
+            // Update display elements in Step 4
+            document.getElementById('selectedGoalDisplay').textContent = selectedGoal.name;
+            document.getElementById('goalDCDisplay').textContent = selectedGoal.dc;
+            document.getElementById('requiredChecksDisplay').textContent = `${selectedGoal.requiredChecks} successes out of ${selectedGoal.totalChecks} checks`;
+            document.getElementById('encounterRollsDisplay').textContent = selectedGoal.encounterRolls;
+
+            document.getElementById('currentDCDiplay').textContent = currentExpeditionDC;
+            document.getElementById('totalEncounterRollsDisplay').textContent = totalEncounterRolls;
+
+            nextStep(4); // Move to expedition details confirmation
+        }
+
+        /**
+         * Returns the total number of checks to roll for a given goal.
+         * @param {string} goalName - The name of the expedition goal.
+         * @returns {number} The total number of checks to roll.
+         */
+        function getTotalChecksForGoal(goalName) {
+            switch (goalName) {
+                case 'Scout Chosen Specified': return 3; // "Best of 3"
+                case 'Source Uncommon Materials': return 5; // "Best of 5"
+                case 'Locate Uncommon Fauna': return 5; // "Best of 5"
+                case 'Archaeological Expedition': return 2; // "2 checks to pass"
+                case 'Source Rare Materials': return 5; // "Best of 5"
+                case 'Locate Legendary Fauna': return 3; // Assuming 3 checks for legendary
+                default: return 0;
+            }
+        }
+
+        /**
+         * Returns the number of successful checks required for a given goal.
+         * This is based on the "Difficulty" column in the provided table (e.g., "Best of 3" means 2 successes).
+         * @param {string} goalName - The name of the expedition goal.
+         * @returns {number} The number of successful checks needed.
+         */
+        function getRequiredChecksForGoal(goalName) {
+            switch (goalName) {
+                case 'Scout Chosen Specified': return 2; // "Best of 3"
+                case 'Source Uncommon Materials': return 3; // "Best of 5"
+                case 'Locate Uncommon Fauna': return 3; // "Best of 5"
+                case 'Archaeological Expedition': return 2; // "2 checks to pass"
+                case 'Source Rare Materials': return 3; // "Best of 5" - need majority
+                case 'Locate Legendary Fauna': return 2; // "After lairs... for analysis"
+                default: return 0;
+            }
+        }
+
+        /**
+         * Returns the base number of free encounter rolls for a given goal.
+         * @param {string} goalName - The name of the expedition goal.
+         * @returns {number} The number of free encounter rolls.
+         */
+        function getEncounterRollsForGoal(goalName) {
+            switch (goalName) {
+                case 'Scout Chosen Specified': return 2;
+                case 'Source Uncommon Materials': return 2;
+                case 'Locate Uncommon Fauna': return 2;
+                case 'Archaeological Expedition': return 3;
+                case 'Source Rare Materials': return 3;
+                case 'Locate Legendary Fauna': return 3;
+                default: return 0;
+            }
+        }
+
+        /**
+         * Increases the expedition's DC by 1 and grants 2 additional encounter rolls.
+         * This button is typically disabled after one use to prevent infinite stacking.
+         */
+        function increaseDifficulty() {
+            currentExpeditionDC += 1;
+            totalEncounterRolls += 2;
+            document.getElementById('currentDCDiplay').textContent = currentExpeditionDC;
+            document.getElementById('totalEncounterRollsDisplay').textContent = totalEncounterRolls;
+            document.getElementById('increaseDCOption').disabled = true; // Disable after one use
+        }
+
+        /**
+         * Confirms the expedition details and prepares the UI for rolling checks and encounters.
+         */
+        function confirmStartExpedition() {
+            document.getElementById('successNeededDisplay').textContent = selectedGoal.requiredChecks;
+            document.getElementById('successNeededDisplay2').textContent = selectedGoal.requiredChecks;
+            document.getElementById('totalChecksDisplay').textContent = selectedGoal.totalChecks;
+            document.getElementById('remainingEncounterRolls').textContent = totalEncounterRolls;
+
+            // Map skill IDs back to readable names for display
+            const skillNames = selectedGoal.skills.map(skillId => {
+                const label = document.querySelector(`label[for="${skillId}"]`);
+                // Remove " Skill Bonus:" from the label text for a cleaner display
+                return label ? label.textContent.replace(' Skill Bonus:', '') : skillId;
+            }).join(', ');
+            document.getElementById('goalSkillsDisplay').textContent = skillNames;
+            
+            // Reset active variables display
+            updateActiveVariablesDisplay();
+
+            showStep(5);
+        }
+
+        /**
+         * Simulates rolling D&D skill checks for the expedition goal.
+         * Displays the results and updates the successful checks count.
+         */
+        function rollExpeditionChecks() {
+            const checkResultsDiv = document.getElementById('checkResults');
+            checkResultsDiv.innerHTML = ''; // Clear previous results
+            successfulChecks = 0;
+            checksAttempted = 0;
+            naturalTwenties = 0; // Reset natural 20 counter
+
+            const totalChecksRequired = selectedGoal.totalChecks;
+
+            for (let i = 0; i < totalChecksRequired; i++) {
+                checksAttempted++;
+                // Randomly select one of the relevant skills for the check
+                const skillToUseId = selectedGoal.skills[Math.floor(Math.random() * selectedGoal.skills.length)];
+                // Convert the HTML element ID (e.g., 'survivalSkill') to the characterStats key (e.g., 'survival')
+                const skillKey = skillToUseId.replace('Skill', ''); 
+                let skillBonus = characterStats[skillKey]; // Access the correct numerical bonus
+
+                let roll1 = Math.floor(Math.random() * 20) + 1; // First d20 roll
+                let roll2 = Math.floor(Math.random() * 20) + 1; // Second d20 roll for advantage/disadvantage
+
+                let finalRoll = roll1;
+                let rollText = roll1;
+                let advantageStatus = "";
+
+                // Apply advantage if active for this skill
+                if (activeBuffs.advantage && activeBuffs.advantage.skill === skillKey) {
+                    finalRoll = Math.max(roll1, roll2);
+                    rollText = `${roll1}, ${roll2} (Advantage, took ${finalRoll})`;
+                    advantageStatus = " (with Advantage)";
+                }
+
+                let result = finalRoll + skillBonus;
+                
+                // Apply pass/fail variable modifiers
+                let variableModifiers = 0;
+                let variableText = "";
+                let hasAdvantage = false;
+                let hasDisadvantage = false;
+                
+                if (activeBuffs.passFailVariables) {
+                    for (let variable of activeBuffs.passFailVariables) {
+                        if (variable.modifier === "advantage") {
+                            hasAdvantage = true;
+                            if (!advantageStatus) { // Only apply if not already having advantage
+                                finalRoll = Math.max(roll1, roll2);
+                                rollText = `${roll1}, ${roll2} (Advantage from ${variable.name}, took ${finalRoll})`;
+                                advantageStatus = ` (with Advantage from ${variable.name})`;
+                                result = finalRoll + skillBonus; // Recalculate with new roll
+                            }
+                        } else if (variable.modifier === "disadvantage") {
+                            hasDisadvantage = true;
+                            if (!advantageStatus && !hasAdvantage) { // Only apply if no advantage
+                                finalRoll = Math.min(roll1, roll2);
+                                rollText = `${roll1}, ${roll2} (Disadvantage from ${variable.name}, took ${finalRoll})`;
+                                advantageStatus = ` (with Disadvantage from ${variable.name})`;
+                                result = finalRoll + skillBonus; // Recalculate with new roll
+                            }
+                        } else if (typeof variable.modifier === 'number') {
+                            variableModifiers += variable.modifier;
+                            variableText += ` + ${variable.modifier >= 0 ? variable.modifier : '(' + variable.modifier + ')'} (${variable.name})`;
+                        }
+                    }
+                }
+                
+                result += variableModifiers;
+                
+                // Track natural 20s (check the actual die roll, not the final result)
+                if (finalRoll === 20) {
+                    naturalTwenties++;
+                }
+                
+                let success = result >= currentExpeditionDC;
+
+                // For display, use a more readable name for the skill
+                let displaySkillName = skillToUseId.replace('Skill', '');
+                if (displaySkillName === 'dungeoneering') displaySkillName = 'Knowledge (Dungeoneering)';
+                if (displaySkillName === 'history') displaySkillName = 'Knowledge (History)';
+                if (displaySkillName === 'local') displaySkillName = 'Knowledge (Local)';
+                if (displaySkillName === 'arcana') displaySkillName = 'Knowledge (Arcana)';
+                // The other skills like 'survival' and 'nature' are fine as is.
+
+                let checkResultText = `Attempt ${checksAttempted} (${displaySkillName}): Rolled ${rollText} + ${skillBonus} (Bonus)${variableText} = ${result}. DC: ${currentExpeditionDC}. <strong>${success ? 'SUCCESS!' : 'FAILURE.'}</strong>${advantageStatus}`;
+                
+                const p = document.createElement('p');
+                p.innerHTML = checkResultText;
+                p.style.color = success ? '#7CFC00' : '#FF4500'; // Green for success, Red for failure
+                checkResultsDiv.appendChild(p);
+
+                if (success) {
+                    successfulChecks++;
+                }
+            }
+            document.getElementById('successfulChecksCount').textContent = successfulChecks;
+        }
+
+        /**
+         * Calculates expedition rewards based on skill bonuses and natural 20s rolled
+         */
+        function calculateExpeditionRewards() {
+            const rewards = [];
+            
+            // Get character skill bonuses
+            const herbalismBonus = characterStats.herbalism || 0;
+            const survivalBonus = characterStats.survival || 0;
+            const natureBonus = characterStats.nature || 0;
+            
+            // Helper function to roll dice
+            function rollDice(diceExpression) {
+                if (diceExpression.includes('d4')) {
+                    const parts = diceExpression.split('d4');
+                    const numDice = parseInt(parts[0]) || 1;
+                    const modifier = parts[1] ? parseInt(parts[1]) : 0;
+                    let total = modifier;
+                    for (let i = 0; i < numDice; i++) {
+                        total += Math.floor(Math.random() * 4) + 1;
+                    }
+                    return total;
+                }
+                return 1; // fallback
+            }
+            
+            // Helper function to get skill bonus for item type
+            function getSkillBonusForItem(item) {
+                switch(item.skill) {
+                    case 'herbalism': return herbalismBonus;
+                    case 'survival': return survivalBonus;
+                    case 'nature': return natureBonus;
+                    default: return natureBonus;
+                }
+            }
+            
+            // Helper function to determine dice based on skill level
+            function getDiceForSkill(skillBonus) {
+                if (skillBonus >= 6) return '2d4+2';
+                if (skillBonus >= 3) return '1d4+2';
+                return '1d4';
+            }
+            
+            // Helper function to get half dice for uncommon/rare items
+            function getHalfDiceForSkill(skillBonus) {
+                if (skillBonus >= 6) return '1d4+1';
+                if (skillBonus >= 3) return '1d4+1';
+                return '1d4';
+            }
+            
+            // Roll for common items
+            lissomePlainsItems.common.forEach(item => {
+                const skillBonus = getSkillBonusForItem(item);
+                const diceExpression = getDiceForSkill(skillBonus);
+                const quantity = rollDice(diceExpression);
+                
+                if (quantity > 0) {
+                    rewards.push({
+                        name: item.name,
+                        quantity: quantity,
+                        rarity: 'Common',
+                        value: item.value,
+                        description: item.description,
+                        image: item.image
+                    });
+                }
+            });
+            
+            // Roll for uncommon items (half quantity of common)
+            lissomePlainsItems.uncommon.forEach(item => {
+                const skillBonus = getSkillBonusForItem(item);
+                const diceExpression = getHalfDiceForSkill(skillBonus);
+                const quantity = Math.max(1, Math.floor(rollDice(diceExpression) / 2));
+                
+                if (quantity > 0) {
+                    rewards.push({
+                        name: item.name,
+                        quantity: quantity,
+                        rarity: 'Uncommon',
+                        value: item.value,
+                        description: item.description,
+                        image: item.image
+                    });
+                }
+            });
+            
+            // Roll for rare items (half quantity of uncommon)
+            lissomePlainsItems.rare.forEach(item => {
+                const skillBonus = getSkillBonusForItem(item);
+                const diceExpression = getHalfDiceForSkill(skillBonus);
+                const quantity = Math.max(1, Math.floor(rollDice(diceExpression) / 4));
+                
+                if (quantity > 0) {
+                    rewards.push({
+                        name: item.name,
+                        quantity: quantity,
+                        rarity: 'Rare',
+                        value: item.value,
+                        description: item.description,
+                        image: item.image
+                    });
+                }
+            });
+            
+            // Roll for legendary items based on natural 20s
+            if (naturalTwenties >= 2) {
+                // Guaranteed legendary item
+                const legendaryItem = lissomePlainsItems.legendary[Math.floor(Math.random() * lissomePlainsItems.legendary.length)];
+                rewards.push({
+                    name: legendaryItem.name,
+                    quantity: 1,
+                    rarity: 'Legendary',
+                    value: legendaryItem.value,
+                    description: legendaryItem.description,
+                    image: legendaryItem.image
+                });
+            } else if (naturalTwenties >= 1) {
+                // 50% chance for legendary item
+                if (Math.random() < 0.5) {
+                    const legendaryItem = lissomePlainsItems.legendary[Math.floor(Math.random() * lissomePlainsItems.legendary.length)];
+                    rewards.push({
+                        name: legendaryItem.name,
+                        quantity: 1,
+                        rarity: 'Legendary',
+                        value: legendaryItem.value,
+                        description: legendaryItem.description,
+                        image: legendaryItem.image
+                    });
+                }
+            }
+            
+            return rewards;
+        }
+
+        /**
+         * Displays expedition rewards in the summary section
+         */
+        function displayExpeditionRewards(rewards, goldReward = 0) {
+            // Create rewards section if it doesn't exist
+            let rewardsSection = document.getElementById('expeditionRewards');
+            if (!rewardsSection) {
+                rewardsSection = document.createElement('div');
+                rewardsSection.id = 'expeditionRewards';
+                rewardsSection.innerHTML = '<h3 class="gold-header">Expedition Rewards:</h3>';
+                
+                // Insert after expedition outcome but before encounter events
+                const outcomeDiv = document.getElementById('expeditionOutcome');
+                outcomeDiv.parentNode.insertBefore(rewardsSection, outcomeDiv.nextSibling);
+            }
+            
+            // Clear existing rewards
+            const existingRewards = rewardsSection.querySelector('.rewards-list');
+            if (existingRewards) {
+                existingRewards.remove();
+            }
+            
+            const rewardsList = document.createElement('div');
+            rewardsList.className = 'rewards-list results-box';
+            
+            // Display gold reward if any
+            if (goldReward > 0) {
+                const goldDisplay = document.createElement('div');
+                goldDisplay.style.cssText = 'display: flex; align-items: center; margin-bottom: 20px; padding: 15px; border-left: 3px solid #FFD700; padding-left: 12px; background-color: rgba(255, 215, 0, 0.1); border-radius: 5px;';
+                goldDisplay.innerHTML = `
+                    <div style="font-size: 2em; margin-right: 15px;">💰</div>
+                    <div>
+                        <p class="gold-text" style="margin: 0; color: #FFD700; font-size: 1.3em;"><strong>${goldReward} Gold Pieces</strong></p>
+                        <p class="gold-text" style="margin: 2px 0; font-size: 0.9em; opacity: 0.8;">Expedition completion reward</p>
+                    </div>
+                `;
+                rewardsList.appendChild(goldDisplay);
+            }
+            
+            if (rewards.length === 0) {
+                const noItemsMsg = document.createElement('p');
+                noItemsMsg.className = 'gold-text';
+                noItemsMsg.innerHTML = '<em>No items were discovered during this expedition.</em>';
+                if (goldReward === 0) {
+                    noItemsMsg.innerHTML = '<em>No rewards were gained from this expedition.</em>';
+                }
+                rewardsList.appendChild(noItemsMsg);
+            } else {
+                let rewardsHTML = '';
+                rewards.forEach(reward => {
+                    // Set colors based on rarity
+                    let rarityColor;
+                    switch(reward.rarity) {
+                        case 'Legendary': rarityColor = '#FFD700'; break;  // Gold
+                        case 'Rare': rarityColor = '#0070DD'; break;       // Blue
+                        case 'Uncommon': rarityColor = '#1EFF00'; break;   // Green
+                        case 'Common': 
+                        default: rarityColor = '#F5DEB3'; break;          // Wheat
+                    }
+                    rewardsHTML += `
+                        <div style="display: flex; align-items: center; margin-bottom: 15px; padding: 10px; border-left: 3px solid ${rarityColor}; padding-left: 12px; background-color: rgba(0,0,0,0.1); border-radius: 5px;">
+                            <img src="${reward.image}" alt="${reward.name}" style="width: 60px; height: 60px; object-fit: contain; margin-right: 15px; border: 2px solid ${rarityColor}; border-radius: 5px; background-color: rgba(0,0,0,0.2);" onerror="this.style.display='none';">
+                            <div style="flex: 1;">
+                                <p class="gold-text" style="margin: 0; color: ${rarityColor}; font-size: 1.1em;"><strong>${reward.quantity}x ${reward.name}</strong> (${reward.rarity})</p>
+                                <p class="gold-text" style="margin: 2px 0; font-size: 0.9em; opacity: 0.8;">Value: ${reward.value}</p>
+                                <p class="gold-text" style="margin: 2px 0; font-size: 0.9em; font-style: italic;">${reward.description}</p>
+                            </div>
+                        </div>
+                    `;
+                });
+                rewardsList.innerHTML = rewardsHTML;
+                
+                // Add natural 20s information if applicable
+                if (naturalTwenties > 0) {
+                    const nat20Info = document.createElement('p');
+                    nat20Info.className = 'gold-text';
+                    nat20Info.style.borderTop = '1px dashed #DAA520';
+                    nat20Info.style.paddingTop = '10px';
+                    nat20Info.style.marginTop = '10px';
+                    nat20Info.innerHTML = `<strong>🎲 Natural 20s Rolled:</strong> ${naturalTwenties} ${naturalTwenties >= 2 ? '(Guaranteed Legendary!)' : '(Chance for Legendary!)'}`;
+                    rewardsList.appendChild(nat20Info);
+                }
+            }
+            
+            rewardsSection.appendChild(rewardsList);
+        }
+
+        /**
+         * Rolls a random encounter from the Magical Plains Expedition Events table.
+         * Displays the event and decrements the remaining encounter rolls.
+         */
+        function rollEncounter() {
+            if (totalEncounterRolls <= 0) {
+                alert("No encounter rolls remaining!");
+                return;
+            }
+
+            const roll = Math.floor(Math.random() * 20) + 1; // Roll a d20 for the encounter
+            const encounter = expeditionEvents.find(e => e.roll === roll); // Find the corresponding event
+            
+            if (encounter) {
+                const p = document.createElement('p');
+                p.classList.add('gold-text');
+                p.innerHTML = `<strong>Roll ${roll}: ${encounter.name}</strong> - ${encounter.effect}`;
+                document.getElementById('encounterResults').appendChild(p);
+                encounterEvents.push(encounter); // Store the encountered event for summary
+
+                // Apply buff if the encounter has one
+                if (encounter.buff) {
+                    activeBuffs[encounter.buff.type] = {
+                        skill: encounter.buff.skill,
+                        value: encounter.buff.value // For future use with flat bonuses
+                    };
+                    alert(`Buff Applied: ${encounter.buff.type.charAt(0).toUpperCase() + encounter.buff.type.slice(1)} on ${encounter.buff.skill} checks!`);
+                }
+            }
+
+            // 40% chance to roll for a pass/fail variable (adjust probability as needed)
+            const variableRoll = Math.random();
+            if (variableRoll < 0.4) {
+                rollPassFailVariable();
+            }
+
+            totalEncounterRolls--;
+            document.getElementById('remainingEncounterRolls').textContent = totalEncounterRolls;
+            if (totalEncounterRolls === 0) {
+                document.getElementById('rollEncounterButton').disabled = true; // Disable button if no rolls left
+            }
+        }
+
+        /**
+         * Rolls for a random pass/fail variable that affects the expedition
+         */
+        function rollPassFailVariable() {
+            // 50/50 chance for positive or negative variable
+            const isPositive = Math.random() < 0.5;
+            let variable;
+            
+            if (isPositive) {
+                variable = positiveVariables[Math.floor(Math.random() * positiveVariables.length)];
+            } else {
+                variable = negativeVariables[Math.floor(Math.random() * negativeVariables.length)];
+            }
+            
+            // Store the variable effect
+            if (!activeBuffs.passFailVariables) {
+                activeBuffs.passFailVariables = [];
+            }
+            activeBuffs.passFailVariables.push(variable);
+            
+            // Display the variable
+            const p = document.createElement('p');
+            p.classList.add('gold-text');
+            let modifierText;
+            if (variable.modifier === "advantage") {
+                modifierText = "Advantage on Pass rolls";
+            } else if (variable.modifier === "disadvantage") {
+                modifierText = "Disadvantage on Pass rolls";
+            } else {
+                modifierText = `${variable.modifier >= 0 ? '+' : ''}${variable.modifier} to Pass rolls`;
+            }
+            
+            p.innerHTML = `<strong>🌟 Expedition Variable: ${variable.name}</strong><br>
+                          <em>${modifierText}</em>`;
+            p.style.borderLeft = isPositive ? "3px solid #4CAF50" : "3px solid #F44336";
+            p.style.paddingLeft = "10px";
+            p.style.marginLeft = "10px";
+            document.getElementById('encounterResults').appendChild(p);
+            
+            // Add to encounter events for summary
+            encounterEvents.push({
+                name: `Variable: ${variable.name}`,
+                effect: modifierText,
+                isVariable: true
+            });
+            
+            // Update the active variables display
+            updateActiveVariablesDisplay();
+        }
+
+        /**
+         * Updates the display of currently active expedition variables
+         */
+        function updateActiveVariablesDisplay() {
+            const activeVariablesDiv = document.getElementById('activeVariables');
+            
+            if (!activeBuffs.passFailVariables || activeBuffs.passFailVariables.length === 0) {
+                activeVariablesDiv.innerHTML = '<p class="gold-text"><em>No expedition variables currently active.</em></p>';
+                return;
+            }
+            
+            let html = '';
+            for (let variable of activeBuffs.passFailVariables) {
+                let modifierText;
+                if (variable.modifier === "advantage") {
+                    modifierText = "Advantage on expedition checks";
+                } else if (variable.modifier === "disadvantage") {
+                    modifierText = "Disadvantage on expedition checks";
+                } else {
+                    modifierText = `${variable.modifier >= 0 ? '+' : ''}${variable.modifier} to expedition checks`;
+                }
+                
+                const isPositive = variable.modifier === "advantage" || (typeof variable.modifier === 'number' && variable.modifier > 0);
+                const borderColor = isPositive ? "#4CAF50" : "#F44336";
+                
+                html += `<p class="gold-text" style="border-left: 3px solid ${borderColor}; padding-left: 10px; margin-left: 10px;">
+                    <strong>${variable.name}:</strong> ${modifierText}
+                </p>`;
+            }
+            
+            activeVariablesDiv.innerHTML = html;
+        }
+
+        /**
+         * Ends the expedition, calculates success/failure, and displays a summary.
+         */
+        function endExpedition() {
+            // Update summary display elements
+            document.getElementById('summaryExpeditionType').textContent = expeditionType === 'recon' ? 'Expanded Reconnaissance' : 'Speculation';
+            document.getElementById('summaryExpeditionGoal').textContent = selectedGoal.name;
+            document.getElementById('summaryFinalDC').textContent = currentExpeditionDC;
+            document.getElementById('summarySuccessfulChecks').textContent = `${successfulChecks} / ${selectedGoal.requiredChecks}`;
+
+            const outcomeDiv = document.getElementById('expeditionOutcome');
+            if (successfulChecks >= selectedGoal.requiredChecks) {
+                outcomeDiv.innerHTML = '<p class="gold-text" style="color: #7CFC00;"><strong>Expedition Successful!</strong> You have achieved your goal.</p>';
+            } else {
+                outcomeDiv.innerHTML = '<p class="gold-text" style="color: #FF4500;"><strong>Expedition Failed.</strong> You did not achieve your goal.</p>';
+            }
+
+            // Display encountered events in the summary
+            const summaryEventsList = document.getElementById('summaryEncounterEvents');
+            summaryEventsList.innerHTML = '';
+            if (encounterEvents.length > 0) {
+                encounterEvents.forEach(event => {
+                    const li = document.createElement('li');
+                    li.classList.add('gold-text');
+                    li.innerHTML = `<strong>${event.name}:</strong> ${event.effect}`;
+                    summaryEventsList.appendChild(li);
+                });
+            } else {
+                const li = document.createElement('li');
+                li.classList.add('gold-text');
+                li.textContent = "No special encounters occurred.";
+                summaryEventsList.appendChild(li);
+            }
+
+            // Calculate and display expedition rewards
+            const expeditionRewards = calculateExpeditionRewards();
+            
+            // Calculate gold reward for successful expeditions
+            let goldReward = 0;
+            if (successfulChecks >= selectedGoal.requiredChecks) {
+                const baseDC = 12;
+                const baseGold = 500;
+                const goldPerTier = 125;
+                
+                // Calculate tier based on DC difference from base
+                const dcDifference = Math.floor((selectedGoal.dc - baseDC) / 2);
+                goldReward = baseGold + (dcDifference * goldPerTier);
+            }
+            
+            displayExpeditionRewards(expeditionRewards, goldReward);
+
+            showStep(6); // Show the summary step
+        }
+
+        /**
+         * Resets the entire application to its initial state, clearing all inputs and results.
+         */
+        function resetApp() {
+            // Reset all global variables to their default values
+            characterStats = {};
+            expeditionType = '';
+            selectedGoal = null;
+            currentExpeditionDC = 0;
+            baseEncounterRolls = 0;
+            totalEncounterRolls = 0;
+            successfulChecks = 0;
+            checksAttempted = 0;
+            encounterEvents = [];
+            activeBuffs = {}; // Reset active buffs
+            naturalTwenties = 0; // Reset natural 20s counter
+            konamiIndex = 0; // Reset Konami code progress
+
+            // Clear all input fields by setting them to their default values
+            document.getElementById('survivalSkill').value = 0;
+            document.getElementById('natureSkill').value = 0;
+            document.getElementById('historySkill').value = 0;
+            document.getElementById('localSkill').value = 0;
+            document.getElementById('arcanaSkill').value = 0;
+            document.getElementById('dungeoneeringSkill').value = 0;
+            document.getElementById('herbalismSkill').value = 0;
+            document.getElementById('conModifier').value = 0;
+            document.getElementById('proficiencyBonus').value = 2;
+
+            // Clear all dynamic content displayed in the app
+            document.getElementById('selectedGoalDisplay').textContent = '';
+            document.getElementById('goalDCDisplay').textContent = '';
+            document.getElementById('requiredChecksDisplay').textContent = '';
+            document.getElementById('encounterRollsDisplay').textContent = '';
+            document.getElementById('currentDCDiplay').textContent = '';
+            document.getElementById('totalEncounterRollsDisplay').textContent = '';
+            document.getElementById('checkResults').innerHTML = '';
+            document.getElementById('successfulChecksCount').textContent = '0';
+            document.getElementById('encounterResults').innerHTML = '';
+            document.getElementById('summaryEncounterEvents').innerHTML = '';
+            document.getElementById('expeditionOutcome').innerHTML = '';
+
+            // Re-enable any buttons that might have been disabled during gameplay
+            document.getElementById('increaseDCOption').disabled = false;
+            document.getElementById('rollEncounterButton').disabled = false;
+
+            // Return to the first step of the application
+            showStep(1);
+        }
+
+        // Initialize the app by showing the first step when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            showStep(1);
+            
+            // Add Konami code listener
+            document.addEventListener('keydown', handleKonamiCode);
+        });
+    </script>
+</body>
+</html>

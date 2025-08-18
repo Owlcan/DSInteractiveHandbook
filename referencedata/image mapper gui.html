@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Static Image Map Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        canvas {
+            cursor: crosshair;
+            border-radius: 0.5rem;
+        }
+        .region-item.active {
+            background-color: #3b82f6; /* bg-blue-600 */
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white flex flex-col md:flex-row h-screen overflow-hidden">
+
+    <div class="w-full md:w-1/3 lg:w-1/4 p-6 bg-gray-800 overflow-y-auto flex flex-col space-y-6">
+        <div>
+            <h1 class="text-2xl font-bold text-white">Static Image Map Generator</h1>
+            <p class="text-sm text-gray-400 mt-1">Create clickable regions on your static image to launch minigames.</p>
+        </div>
+
+        <div class="space-y-2">
+            <label for="imageLoader" class="block text-lg font-semibold text-gray-200">1. Load Your Static Image</label>
+            <input type="file" id="imageLoader" accept="image/*" class="block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"/>
+        </div>
+
+        <div class="flex-grow flex flex-col min-h-0">
+             <h2 class="text-lg font-semibold text-gray-200 mb-2">2. Define Clickable Regions</h2>
+             <p class="text-sm text-gray-400 mb-4">Click and drag on the image to create clickable areas. Each area will launch a different minigame.</p>
+            <div id="region-list-container" class="flex-grow bg-gray-900 p-3 rounded-lg overflow-y-auto">
+                <div id="region-list">
+                    <p class="text-gray-500 text-center py-4">No regions defined yet.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div id="edit-panel" class="space-y-4 hidden">
+            <h2 class="text-lg font-semibold text-gray-200">Configure Clickable Region</h2>
+            <div>
+                <label for="minigameName" class="block text-sm font-medium text-gray-300">Button Name</label>
+                <input type="text" id="minigameName" placeholder="e.g., Fishing Game" class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm text-white focus:ring-blue-500 focus:border-blue-500 sm:text-sm p-2">
+            </div>
+            <div>
+                <label for="minigameFile" class="block text-sm font-medium text-gray-300">Target HTML File</label>
+                <input type="text" id="minigameFile" placeholder="e.g., fishingminigame.html" class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm text-white focus:ring-blue-500 focus:border-blue-500 sm:text-sm p-2">
+            </div>
+            <div>
+                <label for="iframeTarget" class="block text-sm font-medium text-gray-300">Target Iframe ID</label>
+                <input type="text" id="iframeTarget" placeholder="e.g., game-iframe" value="game-iframe" class="mt-1 block w-full bg-gray-700 border-gray-600 rounded-md shadow-sm text-white focus:ring-blue-500 focus:border-blue-500 sm:text-sm p-2">
+            </div>
+            <button id="deleteRegionBtn" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition-colors">Delete Region</button>
+        </div>
+
+
+        <div class="space-y-4">
+            <button id="generateCodeBtn" class="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-500 disabled:cursor-not-allowed text-white font-bold py-3 px-4 rounded-lg transition-colors text-lg">
+                3. Generate Static Image Map Code
+            </button>
+            <div id="code-output-container" class="hidden">
+                 <div class="flex justify-between items-center mb-2">
+                    <h2 class="text-lg font-semibold text-gray-200">Generated HTML Code</h2>
+                    <button id="copyCodeBtn" class="bg-gray-600 hover:bg-gray-500 text-sm text-white font-bold py-1 px-3 rounded-lg transition-colors">Copy</button>
+                </div>
+                <pre class="bg-gray-900 p-4 rounded-lg text-sm overflow-x-auto max-h-96"><code id="code-output"></code></pre>
+                <p id="copy-feedback" class="text-green-400 text-xs mt-2 h-4"></p>
+                <div class="mt-4 p-3 bg-blue-900 rounded-lg">
+                    <h3 class="text-sm font-semibold text-blue-200 mb-2">Usage Notes:</h3>
+                    <ul class="text-xs text-blue-300 space-y-2 list-disc list-inside">
+                        <li>Paste the generated code into your HTML file where you want the clickable image to appear.</li>
+                        <li>Add an `<iframe>` to your page yourself. The ID of this iframe must match the "Target Iframe ID" you configured (e.g., `<iframe id="game-iframe" ...></iframe>`).</li>
+                        <li>Ensure the paths to your minigame HTML files are correct relative to the page where you paste the code.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <main class="w-full md:w-2/3 lg:w-3/4 bg-gray-900 flex items-center justify-center p-6 overflow-auto">
+        <div id="canvas-container" class="relative w-full h-full flex items-center justify-center">
+            <canvas id="imageCanvas"></canvas>
+            <div id="canvas-placeholder" class="text-center text-gray-500">
+                <svg class="mx-auto h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <h3 class="mt-2 text-sm font-medium text-white">No image loaded</h3>
+                <p class="mt-1 text-sm text-gray-400">Please select an image file to begin.</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- 
+      This template holds the JavaScript function that will be included in the generated code.
+      Storing it here avoids issues with the browser's HTML parser trying to close the main
+      <script> tag when it sees "</script>" inside a JavaScript string.
+    -->
+    <template id="generated-script-template">
+        function loadMinigame(filename, iframeId) {
+            const iframe = document.getElementById(iframeId);
+            if (iframe) {
+                iframe.src = filename;
+                iframe.style.display = "block";
+            }
+        }
+    </template>
+
+    <script>
+        // --- DOM Element References ---
+        const imageLoader = document.getElementById('imageLoader');
+        const canvas = document.getElementById('imageCanvas');
+        const ctx = canvas.getContext('2d');
+        const canvasPlaceholder = document.getElementById('canvas-placeholder');
+        const regionList = document.getElementById('region-list');
+        const editPanel = document.getElementById('edit-panel');
+        const minigameNameInput = document.getElementById('minigameName');
+        const minigameFileInput = document.getElementById('minigameFile');
+        const iframeTargetInput = document.getElementById('iframeTarget');
+        const deleteRegionBtn = document.getElementById('deleteRegionBtn');
+        const generateCodeBtn = document.getElementById('generateCodeBtn');
+        const codeOutputContainer = document.getElementById('code-output-container');
+        const codeOutput = document.getElementById('code-output');
+        const copyCodeBtn = document.getElementById('copyCodeBtn');
+        const copyFeedback = document.getElementById('copy-feedback');
+
+        // --- State Variables ---
+        let image = null;
+        let regions = [];
+        let isDrawing = false;
+        let startX, startY;
+        let currentRect = {};
+        let activeRegionId = null;
+        let imageBase64 = '';
+
+        // --- Core Drawing and State Management ---
+
+        function draw() {
+            if (!image) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+
+            regions.forEach(region => {
+                ctx.strokeStyle = '#3b82f6'; // blue-500
+                ctx.lineWidth = 3;
+                if (region.id === activeRegionId) {
+                    ctx.fillStyle = 'rgba(59, 130, 246, 0.5)';
+                    ctx.strokeStyle = '#ffffff';
+                } else {
+                    ctx.fillStyle = 'rgba(59, 130, 246, 0.3)';
+                }
+                ctx.fillRect(region.x, region.y, region.width, region.height);
+                ctx.strokeRect(region.x, region.y, region.width, region.height);
+            });
+
+            if (isDrawing && currentRect.width && currentRect.height) {
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 2;
+                ctx.fillRect(currentRect.x, currentRect.y, currentRect.width, currentRect.height);
+                ctx.strokeRect(currentRect.x, currentRect.y, currentRect.width, currentRect.height);
+            }
+        }
+
+        function updateRegionListUI() {
+            regionList.innerHTML = '';
+            if (regions.length === 0) {
+                regionList.innerHTML = '<p class="text-gray-500 text-center py-4">No minigame regions defined yet.</p>';
+                generateCodeBtn.disabled = true;
+                return;
+            }
+
+            generateCodeBtn.disabled = false;
+            regions.forEach((region, index) => {
+                const item = document.createElement('div');
+                item.className = `region-item p-3 rounded-lg cursor-pointer mb-2 transition-colors hover:bg-blue-700 ${region.id === activeRegionId ? 'active' : 'bg-gray-700'}`;
+                item.dataset.id = region.id;
+                item.innerHTML = `
+                    <p class="font-semibold text-white">${region.minigameName || `Region ${index + 1}`}</p>
+                    <p class="text-xs text-gray-300 truncate">File: ${region.minigameFile || 'Not set'}</p>
+                    <p class="text-xs text-gray-400 truncate">Target: ${region.iframeTarget || 'Not set'}</p>
+                `;
+                item.addEventListener('click', () => {
+                    setActiveRegion(region.id);
+                });
+                regionList.appendChild(item);
+            });
+        }
+
+        function setActiveRegion(id) {
+            activeRegionId = id;
+            const region = regions.find(r => r.id === id);
+
+            if (region) {
+                editPanel.classList.remove('hidden');
+                minigameNameInput.value = region.minigameName || '';
+                minigameFileInput.value = region.minigameFile || '';
+                iframeTargetInput.value = region.iframeTarget || 'game-iframe';
+            } else {
+                editPanel.classList.add('hidden');
+            }
+            updateRegionListUI();
+            draw();
+        }
+
+        // --- Event Listeners ---
+
+        imageLoader.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    image = new Image();
+                    image.onload = () => {
+                        canvas.width = image.width;
+                        canvas.height = image.height;
+                        canvasPlaceholder.classList.add('hidden');
+                        regions = [];
+                        activeRegionId = null;
+                        setActiveRegion(null);
+                        updateRegionListUI();
+                        draw();
+                    };
+                    image.src = event.target.result;
+                    imageBase64 = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        canvas.addEventListener('mousedown', (e) => {
+            if (!image) return;
+            isDrawing = true;
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            startX = (e.clientX - rect.left) * scaleX;
+            startY = (e.clientY - rect.top) * scaleY;
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+            if (!isDrawing || !image) return;
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            const mouseX = (e.clientX - rect.left) * scaleX;
+            const mouseY = (e.clientY - rect.top) * scaleY;
+
+            const x = Math.min(mouseX, startX);
+            const y = Math.min(mouseY, startY);
+            const width = Math.abs(mouseX - startX);
+            const height = Math.abs(mouseY - startY);
+            currentRect = { x, y, width, height };
+            draw();
+        });
+
+        canvas.addEventListener('mouseup', () => {
+            if (!isDrawing || !image) return;
+            isDrawing = false;
+            
+            if (currentRect.width > 5 && currentRect.height > 5) {
+                const newRegion = {
+                    id: Date.now(),
+                    ...currentRect,
+                    minigameName: '',
+                    minigameFile: '',
+                    iframeTarget: 'game-iframe'
+                };
+                regions.push(newRegion);
+                setActiveRegion(newRegion.id);
+            }
+            currentRect = {};
+            draw();
+        });
+        
+        minigameNameInput.addEventListener('input', (e) => {
+            if (!activeRegionId) return;
+            const region = regions.find(r => r.id === activeRegionId);
+            if(region) {
+                region.minigameName = e.target.value;
+                updateRegionListUI();
+            }
+        });
+
+        minigameFileInput.addEventListener('input', (e) => {
+            if (!activeRegionId) return;
+            const region = regions.find(r => r.id === activeRegionId);
+            if(region) {
+                region.minigameFile = e.target.value;
+                updateRegionListUI();
+            }
+        });
+        
+        iframeTargetInput.addEventListener('input', (e) => {
+            if (!activeRegionId) return;
+            const region = regions.find(r => r.id === activeRegionId);
+            if(region) {
+                region.iframeTarget = e.target.value;
+                updateRegionListUI();
+            }
+        });
+
+        deleteRegionBtn.addEventListener('click', () => {
+            if (!activeRegionId) return;
+            regions = regions.filter(r => r.id !== activeRegionId);
+            activeRegionId = null;
+            setActiveRegion(null);
+            draw();
+        });
+
+        generateCodeBtn.addEventListener('click', () => {
+            if (regions.length === 0) return;
+
+            const mapName = `static-map-${Date.now()}`;
+            
+            // Generate area tags
+            const areaTags = regions.map(region => {
+                // Sanitize user input to prevent HTML/JS injection and script-breaking sequences.
+                // For JS strings, escape characters and break up any "</" sequence.
+                const safeMinigameFile = (region.minigameFile || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/`/g, "\\`").replace(/<\//g, '<\\/');
+                const safeIframeTarget = (region.iframeTarget || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/`/g, "\\`").replace(/<\//g, '<\\/');
+                // For the HTML 'title' attribute, escape HTML special characters.
+                const safeMinigameName = (region.minigameName || 'Launch Game').replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+                const coords = `${Math.round(region.x)},${Math.round(region.y)},${Math.round(region.x + region.width)},${Math.round(region.y + region.height)}`;
+                const onclick = `loadMinigame('${safeMinigameFile}', '${safeIframeTarget}'); return false;`;
+                return `    <area shape="rect" coords="${coords}" href="#" onclick="${onclick}" title="${safeMinigameName}">`;
+            }).join('\n');
+            
+            // Get the script content from the template to avoid parsing errors.
+            const scriptContent = document.getElementById('generated-script-template').innerHTML.trim();
+
+            // Generate the complete, self-contained HTML code using string concatenation.
+            // This is the most robust method to avoid browser parsing issues with <script> tags
+            // and template literals inside an inline script.
+            const htmlCode =
+                '<!-- Static Image Map -->\n' +
+                '<img src="' + imageBase64 + '" usemap="#' + mapName + '" alt="Game Selection" style="max-width: 100%; height: auto;">\n\n' +
+                '<map name="' + mapName + '">\n' +
+                areaTags + '\n' +
+                '</map>\n\n' +
+                '<script>\n' +
+                scriptContent + '\n' +
+                '<' + '/script>'; // Break up the closing tag to prevent parsing errors.
+            
+            codeOutputContainer.classList.remove('hidden');
+            codeOutput.textContent = htmlCode;
+        });
+        
+        copyCodeBtn.addEventListener('click', () => {
+            // Use the modern, asynchronous Clipboard API which is more secure and reliable.
+            navigator.clipboard.writeText(codeOutput.textContent).then(() => {
+                copyFeedback.textContent = 'Copied to clipboard!';
+            }).catch(err => {
+                copyFeedback.textContent = 'Failed to copy.';
+                console.error('Could not copy text: ', err);
+            });
+
+            setTimeout(() => { copyFeedback.textContent = ''; }, 2000);
+        });
+
+        generateCodeBtn.disabled = true;
+
+    </script>
+</body>
+</html>

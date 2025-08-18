@@ -1,0 +1,1723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Diaper Clicker</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=MedievalSharp&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #daac17;
+      --gold-light: #fae791;
+      --gold-dark: #97740a;
+      --parchment: #2C2614;
+      --parchment-light: #f5e8c8;
+      --parchment-dark: #1E1C12;
+      --ink: #c7a81d;
+      --ink-dark: #3a2d0c;
+      --accent: #b47018;
+      --shadow: rgba(0,0,0,0.5);
+    }
+
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      padding: 16px;
+      background: var(--parchment) url('https://www.transparenttextures.com/patterns/dark-wood.png');
+      color: var(--ink);
+      font-family: 'Cormorant Garamond', serif;
+    }
+
+    .app {
+      max-width: 1600px;
+      margin: 0 auto;
+      border: 12px solid var(--gold-dark);
+      border-radius: 8px;
+      background: var(--parchment) url('https://www.transparenttextures.com/patterns/parchment.png');
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .corners { pointer-events: none; }
+    .corner { position: absolute; width: 60px; height: 60px; background: var(--gold) url('https://www.transparenttextures.com/patterns/asfalt-light.png'); }
+    .tl { top: -6px; left: -6px; border-top-left-radius: 15px; }
+    .tr { top: -6px; right: -6px; border-top-right-radius: 15px; }
+    .bl { bottom: -6px; left: -6px; border-bottom-left-radius: 15px; }
+    .br { bottom: -6px; right: -6px; border-bottom-right-radius: 15px; }
+
+  header {
+      padding: 20px;
+      text-align: center;
+      position: relative;
+    }
+    header h1 {
+      font-family: 'MedievalSharp', cursive;
+      color: var(--accent);
+      font-size: 3rem;
+      margin: 6px 0 4px;
+      text-shadow: 1px 1px 3px var(--shadow);
+    }
+    header h1::after {
+      content: ""; display: block; width: 60%; height: 3px; margin: 10px auto;
+      background: linear-gradient(to right, transparent, var(--gold), transparent);
+    }
+  header .subtitle { color: var(--gold-light); margin-top: 6px; }
+  header .empire { color: var(--gold); font-weight: 600; margin-top: 6px; }
+  .mute-btn { position: absolute; right: 16px; top: 16px; border: 2px solid var(--gold-dark); background: #1c160b; color: var(--gold-light); border-radius: 6px; cursor: pointer; padding: 6px 10px; }
+
+  .tabs { display: flex; justify-content: center; gap: 10px; padding: 0 20px 12px; }
+  .tab-btn { padding: 8px 14px; border: 2px solid var(--gold-dark); background: #1c160b; color: var(--gold-light); border-radius: 6px; cursor: pointer; }
+  .tab-btn.active { background: var(--gold-dark); color: #1a140a; font-weight: 700; }
+
+  .page { display: none; }
+  .page.active { display: block; }
+
+    .top-bar {
+      display: grid;
+      grid-template-columns: 1fr minmax(460px, 32%);
+      gap: 12px;
+      padding: 0 20px 20px;
+    }
+
+    .clicker-area {
+      display: block;
+    }
+
+    .click-panel {
+      background: rgba(0,0,0,0.15);
+      border: 2px solid var(--gold-dark);
+      border-radius: 8px;
+      padding: 16px;
+      display: grid;
+      grid-template-rows: auto auto 1fr;
+      gap: 12px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr;
+      justify-items: center;
+      gap: 12px;
+    }
+    .stat {
+      background: var(--parchment-dark);
+      border: 2px solid var(--gold-dark);
+      border-radius: 8px; padding: 10px; text-align: center;
+    }
+    .stat .label { color: var(--accent); font-family: 'MedievalSharp', cursive; font-size: 1.05rem; }
+  .stat .value { font-size: 1.4rem; color: var(--gold-light); }
+  .stat.big { text-align: center; padding: 16px; }
+  .stat.big .label { font-size: 1.2rem; }
+  .stat.big .value { font-size: 2.4rem; }
+
+    .click-target {
+      display: flex; justify-content: center; align-items: center;
+      padding: 8px; min-height: 420px;
+      position: relative;
+    }
+    .click-target img {
+      width: clamp(240px, 70%, 600px);
+      max-height: 430px;
+      object-fit: contain;
+      border: 4px solid var(--gold);
+      background: rgba(0,0,0,0.2);
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+      cursor: pointer;
+      transition: transform 80ms ease;
+      -webkit-user-select: none;
+      user-select: none;
+      position: relative; z-index: 2;
+    }
+    .click-target img:active { transform: scale(0.98); }
+
+  /* Ghostly hands behind the click image */
+  .ghost-layer { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
+  .ghost-overlay { position: absolute; left: 0; top: 0; width: 0; height: 0; pointer-events: none; }
+  /* Register animatable custom properties so float doesn't overwrite scale */
+  @property --floatY { syntax: '<length>'; inherits: false; initial-value: 0px; }
+  @property --baseX { syntax: '<length-percentage>'; inherits: false; initial-value: 0%; }
+  @property --baseY { syntax: '<length-percentage>'; inherits: false; initial-value: 0%; }
+  .ghost-hand {
+    position: absolute; left: 0; top: 0;
+    opacity: 0.45; filter: saturate(0.9) brightness(1.1);
+    border: none !important; box-shadow: none !important; background: transparent !important;
+  transform: translate(var(--baseX), calc(var(--baseY) + var(--floatY)));
+    transform-origin: top left;
+    will-change: transform;
+  }
+  /* Ghost wrapper for debug and positioning */
+  .ghost-item { position: absolute; left: 0; top: 0; pointer-events: auto; }
+  .ghost-label { display: none; position: absolute; left: 0; bottom: 100%; transform: translateY(-4px); background: rgba(255,0,0,0.8); color: #fff; font: 12px/1.2 monospace; padding: 2px 4px; border-radius: 3px; white-space: nowrap; z-index: 10; }
+  .ghost-debug .ghost-item { outline: 2px solid red; cursor: move; }
+  .ghost-debug .ghost-label { display: block; }
+  @keyframes floatUpDown { from { --floatY: 4px; } to { --floatY: -4px; } }
+  .float { animation: floatUpDown 3.6s ease-in-out infinite alternate; }
+
+  .earth-panel, .upgrades-panel, .achievements-panel, .units-panel, .owned-upgrades-panel {
+      background: rgba(0,0,0,0.15);
+      border: 2px solid var(--gold-dark);
+      border-radius: 8px; padding: 12px;
+    }
+    .panel-title { font-family: 'MedievalSharp', cursive; color: var(--accent); font-size: 1.4rem; margin: 0 0 8px; }
+
+    .earth {
+      display: flex; align-items: center; gap: 12px;
+    }
+    .globe {
+      position: relative; width: 220px; height: 220px; border-radius: 50%;
+      background: radial-gradient(circle at 60% 40%, #2aa7ff 0%, #2aa7ff 45%, #2ecc71 46%, #2ecc71 60%, #2aa7ff 61%, #2aa7ff 100%);
+      box-shadow: inset 0 0 40px rgba(0,0,0,0.5), 0 0 10px rgba(0,0,0,0.3);
+      overflow: hidden; flex: 0 0 auto;
+      filter: saturate(0.8) brightness(0.9);
+    }
+    .coverage {
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255,0.1) 6px, rgba(255,255,255,0.18) 6px, rgba(255,255,255,0.18) 12px);
+      opacity: 0; transition: opacity 0.6s ease;
+    }
+  .earth-stats { display: grid; gap: 6px; }
+  .earth-stats .line { font-size: 1.2rem; }
+    .goal-tag { color: var(--gold-light); }
+
+  .upgrades-list { display: grid; gap: 8px; max-height: 260px; overflow-y: auto; overflow-x: hidden; grid-template-columns: repeat(auto-fill, 76px); justify-content: start; }
+  .achievements-list { display: grid; gap: 8px; }
+    .achievement {
+      display: grid; grid-template-columns: 62px 1fr auto; align-items: center; gap: 10px;
+      background: var(--parchment-dark); border: 2px solid var(--gold-dark); border-radius: 8px; padding: 8px 10px;
+    }
+    .achievement img { width: 62px; height: 62px; object-fit: contain; border-radius: 6px; border: 2px solid var(--gold); background: rgba(0,0,0,0.2); }
+    .upgrade { width: 76px; height: 76px; display: flex; align-items: center; justify-content: center; background: var(--parchment-dark); border: 2px solid var(--gold-dark); border-radius: 10px; padding: 4px; position: relative; }
+    .upgrade img { width: 66px; height: 66px; object-fit: contain; border-radius: 6px; border: 2px solid var(--gold); background: rgba(0,0,0,0.2); }
+    .upgrade .meta, .upgrade .buy { display: none !important; }
+    .upgrade:hover { box-shadow: 0 0 0 2px var(--gold); }
+    .upgrade.owned img { opacity: 0.7; filter: grayscale(0.15); }
+  .upgrade.unaffordable img { filter: grayscale(0.55) saturate(0.7); opacity: 0.8; }
+    .upgrade.locked { opacity: 0.6; }
+    .upgrade .meta small { color: #d5c49e; }
+    .upgrade .buy { display: none; }
+    .achievement.unlocked { border-color: #3da85a; }
+    .row .sell { margin-left: 6px; background:#3a2d1c; color:#f7e3b5; border:1px solid #6a5430; padding:4px 8px; border-radius:6px; }
+    .row .sell:disabled { opacity:0.5; cursor:not-allowed; }
+    .upgrade.toggle { outline: 2px dashed rgba(255,255,255,0.15); }
+    .upgrade.toggle.active { box-shadow: 0 0 0 2px #3da85a inset; }
+    .upgrade.toggle.cooldown { opacity: 0.6; }
+    body.light-brown { background:#b08d5a; color:#241a10; }
+
+  /* Owned upgrades panel */
+  .owned-upgrades-panel { margin-top: 12px; }
+  .owned-header { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .owned-box.collapsed { display: none; }
+
+  /* Minimal modal styling for ModalHandler (no overlay, no close button) */
+  #modal-container.hidden { display: none; }
+  #modal-container { position: fixed; inset: 0; background: transparent; z-index: 99999; pointer-events: none; }
+  #modal-content { position: absolute; background: #1c160b; border: 2px solid var(--gold); border-radius: 10px; color: var(--gold-light); width: min(420px, 90vw); max-width: 90vw; padding: 14px; box-shadow: 0 10px 30px rgba(0,0,0,0.6); pointer-events: auto; }
+  #modal-title { font-family: 'MedievalSharp', cursive; color: var(--accent); font-size: 1.3rem; margin: 0 0 8px; }
+  #modal-body p { margin: 6px 0; }
+
+    .units-section { padding: 0 20px 20px; }
+    .units-panel .row {
+      display: grid; grid-template-columns: 62px 1fr auto auto; align-items: center; gap: 12px;
+      background: var(--parchment-dark); border: 2px solid var(--gold-dark); border-radius: 8px; padding: 8px 10px; margin-bottom: 10px;
+    }
+    .units-panel img { width: 62px; height: 62px; object-fit: contain; border-radius: 6px; border: 2px solid var(--gold); background: rgba(0,0,0,0.2); }
+    .units-panel .name { font-weight: 600; color: var(--gold-light); }
+    .units-panel .desc { font-size: 0.95rem; opacity: 0.9; }
+    .units-panel .levels { text-align: right; }
+    .units-panel .levels .lvl { font-weight: 600; }
+    .units-panel .buy { padding: 6px 10px; border: 2px solid var(--gold); background: #1c160b; color: var(--gold-light); border-radius: 6px; cursor: pointer; }
+    .units-panel .buy[disabled] { opacity: 0.6; cursor: not-allowed; }
+
+    .ticker {
+      border-top: 2px solid var(--gold-dark);
+      background: #1a140a;
+      padding: 8px 12px; font-size: 1.05rem; color: var(--gold-light);
+      position: relative; overflow: hidden; white-space: nowrap; height: 42px;
+    }
+  .ticker-track { position: absolute; top: 0; left: 0; will-change: transform; white-space: nowrap; }
+    .ticker-item { display: inline-flex; align-items: center; margin-right: 48px; }
+  .ticker-ctrl { position: absolute; right: 8px; top: 6px; padding: 2px 8px; border: 1px solid var(--gold-dark); background: #2b2215; color: var(--gold-light); border-radius: 4px; cursor: pointer; font-size: 0.9rem; }
+    .badge { background: var(--gold-dark); color: #1a140a; padding: 2px 6px; border-radius: 4px; font-weight: 700; margin-right: 8px; }
+
+    .ghost { opacity: 0.7; font-size: 0.95rem; }
+
+    /* Achievements & Stats page */
+    .ach-page {
+      padding: 0 20px 20px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .card {
+      background: rgba(0,0,0,0.15);
+      border: 2px solid var(--gold-dark);
+      border-radius: 8px; padding: 12px;
+    }
+    .card .title { font-family: 'MedievalSharp', cursive; color: var(--accent); font-size: 1.4rem; margin: 0 0 8px; }
+    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; }
+    .statline { display: flex; justify-content: space-between; border-bottom: 1px dashed var(--gold-dark); padding: 4px 0; }
+    .save-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+  .btn { padding: 8px 12px; border: 2px solid var(--gold); background: #1c160b; color: var(--gold-light); border-radius: 6px; cursor: pointer; }
+    .btn.secondary { border-color: var(--gold-dark); }
+    .empire-form { display: flex; gap: 8px; align-items: center; }
+    .empire-form input { padding: 6px 10px; background: var(--parchment-dark); color: var(--ink); border: 1px solid var(--gold); border-radius: 6px; }
+  .audio-controls { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+  .audio-controls input[type="range"] { width: 220px; }
+
+  /* Skin chooser */
+  .skin-item { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 6px; border: 1px solid var(--gold-dark); border-radius: 6px; background: #1c160b; min-width: 92px; }
+  .skin-item.selected { outline: 2px solid var(--gold); }
+  .skin-item img { width: 72px; height: 72px; object-fit: contain; border-radius: 4px; border: 2px solid var(--gold); background: rgba(0,0,0,0.2); }
+  .skin-item.locked img { filter: grayscale(1) brightness(0.6); }
+  .skin-item .name { font-size: 0.9rem; color: var(--gold-light); text-align: center; }
+  .skin-item .tag { font-size: 0.8rem; color: #d5c49e; }
+
+    /* Floating heart particles */
+    .heart-fx { position: fixed; width: 36px; height: 36px; transform: rotate(-45deg); pointer-events: none; z-index: 9999; }
+    .heart-fx::before, .heart-fx::after { content: ""; position: absolute; width: 36px; height: 36px; border-radius: 50%; background: inherit; }
+    .heart-fx::before { top: -18px; left: 0; }
+    .heart-fx::after { left: 18px; top: 0; }
+    .heart-label { position: fixed; color: #fff; font-weight: 700; text-shadow: 0 0 6px rgba(0,0,0,0.8); pointer-events: none; z-index: 10000; }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 10px; height: 10px; }
+    ::-webkit-scrollbar-track { background: var(--parchment-dark); }
+    ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 5px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+    @media (max-width: 1100px) {
+      .top-bar { grid-template-columns: 1fr; }
+      .clicker-area { grid-template-columns: 1fr; }
+    }
+
+    /* Upgrade image hover preview */
+    .img-preview {
+      position: fixed;
+      display: none;
+      width: 280px; height: 280px;
+      border: 3px solid var(--gold);
+      border-radius: 8px;
+      background: rgba(0,0,0,0.8);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+      padding: 6px;
+      z-index: 99999;
+      pointer-events: none;
+    }
+    .img-preview img {
+      width: 100%; height: 100%; object-fit: contain; border-radius: 4px;
+      background: rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body>
+  <div class="app" id="app">
+    <div class="corners">
+      <div class="corner tl"></div>
+      <div class="corner tr"></div>
+      <div class="corner bl"></div>
+      <div class="corner br"></div>
+    </div>
+
+    <header>
+      <h1>Diaper Clicker</h1>
+      <div class="subtitle">Put the world in diapers. Click to diaper butts. Build your empire to automate the crinkle.</div>
+      <div class="empire" id="empireTitle">Amazing Padbutt's Diaper Empire</div>
+      <button id="muteToggle" class="mute-btn" title="Mute/Unmute Audio">Mute</button>
+    </header>
+    <nav class="tabs">
+      <button class="tab-btn active" id="tabPlay">Play</button>
+  <button class="tab-btn" id="tabAch">Stats & Options</button>
+    </nav>
+
+    <div class="page active" id="pagePlay">
+      <div class="top-bar">
+        <div class="clicker-area">
+          <div class="click-panel">
+            <div class="stats">
+              <div class="stat big"><div class="label">Butts Diapered</div><div class="value" id="buttsValue">0</div></div>
+            </div>
+            <div class="click-target">
+              <div id="ghostLayer" class="ghost-layer"></div>
+              <img id="clickImg" alt="Diaper Clicker" title="Click to diaper a butt!" src="src/assets/images/expeditionandgames/diaperclicker/whitediaper.webp" />
+            </div>
+            <div class="earth-panel">
+              <div class="panel-title">World Coverage</div>
+              <div class="earth">
+                <div class="globe">
+                  <div class="coverage" id="coverage"></div>
+                </div>
+                <div class="earth-stats">
+                  <div class="line">Coverage: <span id="coveragePct">0%</span></div>
+                  <div class="line">Run Time: <span id="runTime">00:00:00</span> <span class="goal-tag">(to 9B: <span id="timeTo9B">--:--:--</span>)</span></div>
+                  <div class="line">Rates: <strong><span id="perClickValue2">1</span></strong> per click • <strong><span id="perSecondValue2">0</span></strong> per second</div>
+                  <div class="line">Clicks: <span id="clicks">0</span> • Idle Streak: <span id="idleBD">0</span> BD</div>
+                </div>
+              </div>
+            </div>
+            <div class="ghost">Tip: Buy upgrades and units on the right. Hit 9B to record your run time. The world keeps going to 92T+</div>
+          </div>
+          <!-- Owned Upgrades panel under the clicker/world coverage area -->
+          <div class="owned-upgrades-panel">
+            <div class="owned-header">
+              <div class="panel-title">Owned Upgrades</div>
+              <button class="btn secondary" id="ownedToggleBtn" aria-expanded="true">Collapse</button>
+            </div>
+            <div id="ownedUpgradesBox" class="owned-box">
+              <div class="upgrades-list" id="ownedUpgradesList"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="units-section">
+          <div class="upgrades-panel">
+            <div class="panel-title">Milestone Upgrades</div>
+            <div class="upgrades-list" id="upgradesList"></div>
+          </div>
+          <div class="units-panel">
+            <div class="panel-title">Units & Buildings</div>
+            <div id="unitsList"></div>
+          </div>
+        </div>
+      </div>
+
+  <div class="ticker" id="ticker"><div id="tickerTrack" class="ticker-track"></div><button id="tickerPause" class="ticker-ctrl" title="Pause/Resume News">Pause</button></div>
+    </div>
+
+    <div class="page" id="pageAch">
+      <div class="ach-page">
+        <div class="card">
+          <div class="title">Achievements</div>
+          <div class="achievements-list" id="achievementsList"></div>
+        </div>
+        <div class="card">
+          <div class="title">Stats & Options</div>
+          <div class="empire-form">
+            <label for="empireInput"><strong>Empire Name:</strong></label>
+            <input id="empireInput" type="text" placeholder="Amazing Padbutt" maxlength="40" />
+            <button class="btn" id="empireSetBtn">Set</button>
+          </div>
+          <div class="stats-grid" style="margin-top:8px;">
+            <div class="statline"><span>Empire</span><span id="empireNameStat">Amazing Padbutt</span></div>
+            <div class="statline"><span>Total Butts Diapered</span><span id="statTotal">0</span></div>
+            <div class="statline"><span>Clicks</span><span id="statClicks">0</span></div>
+            <div class="statline"><span>Play Time</span><span id="statTime">00:00:00</span></div>
+            <div class="statline"><span>Peak DPS</span><span id="statPeakDps">0</span></div>
+            <div class="statline"><span>Cookies</span><span id="statCookies">0</span></div>
+          </div>
+          <hr style="border: none; border-top: 1px solid var(--gold-dark); margin: 10px 0;"/>
+          <div class="audio-controls">
+            <button id="muteToggle2" class="btn secondary">Mute/Unmute</button>
+            <label for="volumeRange"><strong>Volume:</strong></label>
+            <input id="volumeRange" type="range" min="0" max="1" step="0.01" value="1" />
+          </div>
+          <hr style="border: none; border-top: 1px solid var(--gold-dark); margin: 10px 0;"/>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <label><input type="checkbox" id="ghostDebugToggle"> Ghost Hands Debug</label>
+            <button class="btn secondary" id="ghostResetBtn">Reset Ghost Positions</button>
+          </div>
+          <small style="opacity:0.85; display:block; margin-top:4px;">Drag hands when debug is ON. Live coords show relative to the clicker box.</small>
+          <div>
+            <div style="margin-bottom:6px;" class="title">Clicker Appearance</div>
+            <div id="skinChooser" aria-label="Clicker Appearance Chooser" style="display:flex; gap:10px; flex-wrap:wrap;"></div>
+          </div>
+          <hr style="border: none; border-top: 1px solid var(--gold-dark); margin: 10px 0;"/>
+          <div class="save-actions">
+            <button class="btn" id="manualSaveBtn">Save to Browser</button>
+            <button class="btn" id="exportBtn">Export Save</button>
+            <input type="file" id="importFile" accept="application/json" style="display:none"/>
+            <button class="btn secondary" id="importBtn">Import Save</button>
+            <button class="btn secondary" id="resetBtn2">Delete Save / Start Over</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shared hover preview container -->
+  <div id="imgPreview" class="img-preview"><img alt="Preview" id="imgPreviewImg" /></div>
+
+  <!-- Modal container for ModalHandler reuse -->
+  <div id="modal-container" class="hidden">
+    <div id="modal-content">
+      <h3 id="modal-title"></h3>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
+  <script src="./upgrades.js"></script>
+  <script src="src/components/modalHandler.js"></script>
+  <script src="./tickertext.js"></script>
+  <script>
+    // Initialize modal handler on this page if available
+    if (typeof ModalHandler === 'function') {
+      window.modalHandler = window.modalHandler || new ModalHandler();
+    }
+    // ----- Utilities -----
+    const fmt = (n) => {
+      if (!isFinite(n)) return '∞';
+      const abs = Math.abs(n);
+      const units = [
+        { v: 1e12, s: 'T' },
+        { v: 1e9, s: 'B' },
+        { v: 1e6, s: 'M' },
+        { v: 1e3, s: 'K' },
+      ];
+      for (const u of units) if (abs >= u.v) return (n / u.v).toFixed(2).replace(/\.00$/, '') + u.s;
+      return Math.floor(n).toLocaleString();
+    };
+
+    const formatTime = (ms) => {
+      const total = Math.floor(ms / 1000);
+      const h = String(Math.floor(total / 3600)).padStart(2, '0');
+      const m = String(Math.floor((total % 3600) / 60)).padStart(2, '0');
+      const s = String(total % 60).padStart(2, '0');
+      return `${h}:${m}:${s}`;
+    };
+
+    // ----- Initial Data -----
+  const GOAL_SOFT = 9_000_000_000; // 9B
+  const GOAL_EXT = 92_000_000_000_000; // 92T
+
+    const UnitDefs = [
+      {
+        id: 'click-power', name: 'Extra Hands', desc: 'Put those extra hands to work.',
+  icon: '🙌', baseCost: 15, baseDps: 0, perClick: 1, maxLevel: 9999,
+      },
+      {
+        id: 'nannybots', name: 'Nannybots', desc: 'They bring the butts, we bring the diapers.',
+  iconImg: 'src/assets/images/Monsters/nannybotmatron.webp', baseCost: 100, baseDps: 1, maxLevel: 9999,
+      },
+      {
+        id: 'factories', name: 'Diaper Factories', desc: 'Industrial crinkle production lines.',
+  icon: '🏭', baseCost: 1200, baseDps: 12, maxLevel: 9999,
+      },
+      {
+        id: 'media', name: 'Diaper Media Networks', desc: 'Farm clicks and sway hearts with 24/7 diaper content.',
+  icon: '📺', baseCost: 9000, baseDps: 80, maxLevel: 9999, partner: 'ministries',
+      },
+      {
+        id: 'ministries', name: 'Diapropaganda Ministries', desc: 'Official statements about the benefits of diapers.',
+  icon: '🏛️', baseCost: 60000, baseDps: 500, maxLevel: 9999, partner: 'media',
+      },
+      {
+        id: 'pampolice', name: 'Pampolice Agencies', desc: 'Compliance checks and gentle reminders.',
+  icon: '👮', baseCost: 450000, baseDps: 3000, maxLevel: 9999,
+      },
+      {
+        id: 'diapocratic', name: 'Diapocratic States', desc: 'Democracy… of Diaperism.',
+  icon: '🗳️', baseCost: 3_500_000, baseDps: 20_000, maxLevel: 9999,
+      },
+      {
+        id: 'churches', name: 'Churches of Diaperism', desc: 'The holy faith of diaper spreads.',
+  icon: '⛪', baseCost: 28_000_000, baseDps: 120_000, maxLevel: 9999,
+      },
+      {
+        id: 'universities', name: 'Diaper Universities', desc: 'Expanding the horizons of diaper life and science.',
+        iconImg: 'src/assets/images/logo.png', baseCost: 220_000_000, baseDps: 900_000, maxLevel: 9999,
+      },
+    ];
+
+  // UpgradeDefs moved to external file
+
+    // ----- Skins -----
+    const SkinDefs = [
+      { id: 'white', name: 'White', img: 'src/assets/images/expeditionandgames/diaperclicker/whitediaper.webp', unlock: (s)=> true, via: 'Default' },
+      { id: 'black', name: 'Black', img: 'src/assets/images/expeditionandgames/diaperclicker/blackdiaper.webp', unlock: (s)=> !!s.upgradesBought['black-dye'], via: 'Dark Essence Dye' },
+      { id: 'princess', name: 'Princess', img: 'src/assets/images/expeditionandgames/diaperclicker/prettyprincessdiaper.webp', unlock: (s)=> !!s.upgradesBought['pink-dye'], via: 'Shimmering Pink Dye (6M+)' },
+      { id: 'pup', name: 'Pup Pamps', img: 'src/assets/images/expeditionandgames/diaperclicker/puppamps.webp', unlock: (s)=> !!s.upgradesBought['pup-dye'], via: 'Pup Pamps License (200M)' },
+      { id: 'holy', name: 'Holy', img: 'src/assets/images/expeditionandgames/diaperclicker/holydiaper.webp', unlock: (s)=> !!s.upgradesBought['holy-dye'], via: 'Holy Anointment (1B)' },
+    ];
+
+    const AchievementDefs = [
+      { id: 'vatican', name: 'Vatican City', img: 'src/assets/images/Designer%20(88).png', desc: 'Diaper the population of Vatican City.', req: (s)=> s.total >= 800_000 },
+      { id: 'uk', name: 'United Kingdom', img: 'src/assets/images/Designer%20(89).png', desc: 'Diaper the UK.', req: (s)=> s.total >= 67_000_000 },
+      { id: 'usa', name: 'United States', img: 'src/assets/images/Designer%20(90).png', desc: 'Diaper the USA.', req: (s)=> s.total >= 331_000_000 },
+      { id: 'asia', name: 'Asia', img: 'src/assets/images/Designer%20(91).png', desc: 'Diaper the continent of Asia.', req: (s)=> s.total >= 4_700_000_000 },
+      { id: 'builder', name: 'Builder', img: 'src/assets/images/Designer%20(92).png', desc: 'Own 25 total unit levels.', req: (s)=> totalLevels(s) >= 25 },
+      { id: 'idle-1m', name: 'Idle Diaperer', img: 'src/assets/images/Designer%20(72).png', desc: 'Earn 1M BD since last click.', req: (s)=> s.sinceLastClickBD >= 1_000_000 },
+      { id: 'soft-goal', name: 'Global Soft Goal', img: 'src/assets/images/logo.png', desc: 'Reach 9B butts diapered.', req: (s)=> s.total >= GOAL_SOFT },
+    ];
+
+    // Hidden achievements (not listed until unlocked)
+    const HiddenAchievements = [
+      { id: 'orig-lulu', name: "I'm so original", img: 'src/assets/images/Designer%20(71).png', desc: 'Yes, I swiped the joke achievement, but I don\'t punish you for it, have 100 cookies.', unlock: (s)=> false },
+      { id: 'we-are-owlcan', name: "We're All Owlcan...", img: 'src/assets/images/logo.png', desc: '...And you have been owl-ssimilated!', unlock: (s)=> false },
+    ];
+
+    // ----- State & Persistence -----
+  const defaultState = () => ({
+      version: 1,
+      total: 0,
+      clickBase: 1,
+      units: Object.fromEntries(UnitDefs.map(u => [u.id, { level: 0 } ])),
+      upgradesBought: {},
+      achievements: {},
+      hiddenAchievements: {},
+      clicks: 0,
+      sinceLastClickBD: 0,
+      elapsedActiveMs: 0,
+      lastTick: Date.now(),
+      startedAt: Date.now(),
+      timeTo9B: null,
+      peakDps: 0,
+      cookies: 0,
+      empireName: 'Amazing Padbutt',
+  multipliers: { global: 1, perClick: 1, units: Object.fromEntries(UnitDefs.map(u=>[u.id,1])) },
+  flags: { synergy_echo: false, darklingStart: null, toggles: {}, status: { marketBuffUntil: 0, marketDebuffUntil: 0, hyperPenaltyUntil: 0, backlashUntil: 0, pampublicUntil: 0 }, nannybotAutonomyFactor: 1, universitiesFirstBuiltAt: null, upgradeCostDiscount: 0, lightMode: false },
+  // Skins
+  skins: { unlocked: { white: true }, current: 'white', autoSwitchOnUnlock: true },
+  now: () => Date.now(),
+  lastClickAt: 0,
+  lastBought: {},
+    });
+
+    let state = load();
+
+    function load(){
+      try {
+        const raw = localStorage.getItem('diaper-clicker-save');
+        if (raw) {
+          const s = JSON.parse(raw);
+          // ensure shape
+          const base = defaultState();
+          s.units = { ...base.units, ...(s.units||{}) };
+          s.upgradesBought = s.upgradesBought || {};
+          s.achievements = s.achievements || {};
+          s.hiddenAchievements = s.hiddenAchievements || {};
+          s.multipliers = { ...base.multipliers, ...(s.multipliers||{}) };
+          s.multipliers.units = { ...base.multipliers.units, ...(s.multipliers?.units||{}) };
+          s.flags = { ...base.flags, ...(s.flags||{}) };
+          s.flags.toggles = { ...(base.flags.toggles||{}), ...(s.flags.toggles||{}) };
+          s.flags.status = { ...(base.flags.status||{}), ...(s.flags.status||{}) };
+          s.cookies = s.cookies ?? 0;
+          s.empireName = s.empireName || 'Amazing Padbutt';
+          s.peakDps = s.peakDps || 0;
+          s.lastClickAt = s.lastClickAt || 0;
+          s.lastBought = s.lastBought || {};
+          // skins shape
+          s.skins = s.skins || { unlocked: { white: true }, current: 'white', autoSwitchOnUnlock: true };
+          if (!s.skins.unlocked) s.skins.unlocked = { white: true };
+          if (!s.skins.current) s.skins.current = 'white';
+          s.now = base.now;
+          s.lastTick = Date.now();
+          // Apply persisted light mode theme
+          try { document.body.classList.toggle('light-brown', !!s.flags.lightMode); } catch(e){}
+          return s;
+        }
+      } catch(e) { console.warn('Load failed', e); }
+      return defaultState();
+    }
+
+    function save(){
+      const copy = { ...state }; copy.now = undefined; // functions not serializable
+      localStorage.setItem('diaper-clicker-save', JSON.stringify(copy));
+    }
+
+    // ----- Core Calculations -----
+    function unitLevel(uId){ return state.units[uId]?.level || 0; }
+    function totalLevels(s){ return Object.values(s.units).reduce((a,b)=>a+(b.level||0),0); }
+
+    function unitDps(uId, lvl){
+      const def = UnitDefs.find(u=>u.id===uId);
+      lvl = lvl ?? unitLevel(uId);
+      if (def.id === 'click-power') return 0;
+      // Simple: DPS = baseDps * level * growth
+      const growth = 1 + (lvl * 0.08);
+      let dps = def.baseDps * lvl * growth;
+      let unitMult = state.multipliers.units[uId] || 1;
+      // Nannybot Autonomy fluctuates output when toggle active
+      if (uId === 'nannybots' && isToggleActive('nannybot-autonomy')){
+        unitMult *= (state.flags.nannybotAutonomyFactor || 1);
+      }
+      // Militarized Pampolice boost
+      if (uId === 'pampolice' && isToggleActive('militarized-pampolice')){
+        const lvlP = unitLevel('pampolice');
+        unitMult *= (3.0 * (1 + Math.floor(lvlP/10) * 0.01));
+      }
+      // Pampul Canon boosts all non-church units
+      if (isToggleActive('pampul-canon') && uId !== 'churches'){
+        const lCh = unitLevel('churches');
+        unitMult *= (1 + 0.01 * lCh);
+      }
+      dps *= unitMult;
+      return dps;
+    }
+
+    function totalDps(){
+      let d = 0;
+      for (const def of UnitDefs) d += unitDps(def.id);
+      let g = state.multipliers.global;
+      const now = Date.now();
+      // Volatile markets
+      if (state.flags.status.marketBuffUntil && now < state.flags.status.marketBuffUntil) g *= 2.0;
+      if (state.flags.status.marketDebuffUntil && now < state.flags.status.marketDebuffUntil) g *= 0.8;
+      // Hyperbliminal bonus/penalty
+      if (isToggleActive('hyperbliminal')) g *= 1.3;
+      if (state.flags.status.hyperPenaltyUntil && now < state.flags.status.hyperPenaltyUntil) g *= 0.7;
+      // Global Indoctrination triples idle
+      if (isToggleActive('global-indoctrination')) g *= 3.0;
+      // Militarized backlash
+      if (state.flags.status.backlashUntil && now < state.flags.status.backlashUntil) g *= 0.2;
+      d *= g;
+      return d;
+    }
+
+    function perClick(){
+      const lvl = unitLevel('click-power');
+      let base = state.clickBase + lvl * (UnitDefs[0].perClick || 1);
+      // Ghostly Pacts
+      if (isToggleActive('ghostly-pacts')) base *= 4.0;
+      // Pampul Canon click power reduction
+      if (isToggleActive('pampul-canon')){
+        const tLevels = totalLevels(state);
+        base *= Math.max(0.1, 1 - 0.001 * tLevels);
+      }
+      // Pampublic referendum click debuff
+      const now = Date.now();
+      if (state.flags.status.pampublicUntil && now < state.flags.status.pampublicUntil) base *= 0.5;
+      base *= state.multipliers.perClick;
+      return Math.max(1, Math.floor(base));
+    }
+
+    function getUpgradeCost(u){
+      let c = u.cost || 0;
+      if (isToggleActive('global-indoctrination')) c = Math.floor(c * 0.95);
+      return c;
+    }
+
+    function canToggle(key){
+      const t = state.flags.toggles[key];
+      return !t || Date.now() >= (t.cooldownUntil||0);
+    }
+    function isToggleActive(key){ return !!(state.flags.toggles[key]?.active); }
+    function setToggle(key, active, cooldownMs){
+      const o = state.flags.toggles[key] || { active:false, cooldownUntil:0 };
+      o.active = !!active; o.cooldownUntil = Date.now() + (cooldownMs||0);
+      state.flags.toggles[key] = o;
+    }
+
+    function maybeTriggerMarketEvent(){
+      // 20% surge chance, 12% dip chance (tunable)
+      const r = Math.random();
+      if (r < 0.20){ state.flags.status.marketBuffUntil = Date.now() + 60*1000; pushNews('Market Surge! Idle doubled for 1m.'); }
+      else if (r < 0.32){ state.flags.status.marketDebuffUntil = Date.now() + 60*1000; pushNews('Market Dip… Idle -20% for 1m.'); }
+    }
+
+    function costFor(uId, nextLevel){
+      const def = UnitDefs.find(u=>u.id===uId);
+      const lvl = nextLevel ?? (unitLevel(uId)+1);
+      // exponential scaling
+      return Math.floor(def.baseCost * Math.pow(1.15, lvl-1));
+    }
+
+    // Refund 50% of the cost of the current level when selling one level
+    function refundFor(uId, currentLevel){
+      if (!currentLevel || currentLevel <= 0) return 0;
+      const priceOfThatLevel = costFor(uId, currentLevel);
+      return Math.floor(priceOfThatLevel * 0.5);
+    }
+
+    function buyUnit(uId){
+      const next = unitLevel(uId)+1;
+      const cost = costFor(uId, next);
+      if (state.total >= cost && unitLevel(uId) < UnitDefs.find(u=>u.id===uId).maxLevel){
+        state.total -= cost; state.sinceLastClickBD += 0; // unchanged
+        state.units[uId].level = next;
+        state.lastBought[uId] = Date.now();
+        if (uId === 'universities' && !state.flags.universitiesFirstBuiltAt){ state.flags.universitiesFirstBuiltAt = Date.now(); }
+        if (uId === 'factories' && isToggleActive('volatile-markets')){ maybeTriggerMarketEvent(); }
+        if (isToggleActive('hyperbliminal') && uId !== 'media' && uId !== 'ministries'){
+          state.flags.status.hyperPenaltyUntil = Date.now() + 20*60*1000;
+          pushNews('Hyperbliminal penalty: -30% idle for 20m (clicking unaffected).');
+        }
+        if (uId === 'pampolice' && isToggleActive('militarized-pampolice')){
+          if (Math.random() < 0.9){ state.flags.status.backlashUntil = Date.now() + 5*60*1000; pushBreaking('Breaking: Public backlash over Pampolice spending — idle -80% for 5m'); }
+        }
+        if (uId === 'diapocratic' && isToggleActive('crinkle-tax')){
+          const lvl = unitLevel('diapocratic'); const chance = Math.min(0.20, Math.floor(lvl/10) * 0.01);
+          if (Math.random() < chance){ state.flags.status.pampublicUntil = Date.now() + 10*60*1000; pushBreaking('Pampublic Referendum! Click power -50% and golden clicks disabled for 10m'); }
+        }
+        pushNews(`Purchased ${UnitDefs.find(u=>u.id===uId).name} Lv${next}.`);
+        refresh();
+      }
+    }
+
+    function sellUnit(uId){
+      const lvl = unitLevel(uId);
+      if (lvl <= 0) return;
+      const refund = Math.max(0, refundFor(uId, lvl));
+      state.units[uId].level = lvl - 1;
+      state.total += refund;
+      if (uId === 'factories' && isToggleActive('volatile-markets')){ maybeTriggerMarketEvent(); }
+      pushNews(`Sold 1 ${UnitDefs.find(u=>u.id===uId).name} for ${fmt(refund)}.`);
+      refresh();
+    }
+
+    function buyUpgrade(id){
+      const up = UpgradeDefs.find(u=>u.id===id); if (!up) return;
+      // Toggle upgrades
+      if (up.type === 'toggle'){
+        const key = up.key || up.id;
+        const cd = key === 'global-indoctrination' ? 10*60*1000 : (up.cooldownMs || 2*60*1000);
+        if (!canToggle(key)) return;
+        const active = isToggleActive(key);
+        // Activation costs
+        if (!active){
+          if (key === 'militarized-pampolice'){
+            const cost = Math.floor(state.total * 0.10);
+            if (state.total < cost) { pushNews('Not enough butts to activate Militarized Pampolice (10% required).'); return; }
+            state.total -= cost;
+          }
+          if (key === 'blind-science'){
+            const t = state.flags.toggles[key] || {};
+            if (!t.paid){ if (state.total < 1){ pushNews('Requires 1 butt to activate.'); return; } state.total -= 1; t.paid = true; state.flags.toggles[key] = t; }
+          }
+        }
+        setToggle(key, !active, cd);
+        if (key === 'global-indoctrination'){
+          state.flags.upgradeCostDiscount = !active ? 0.05 : 0;
+        }
+        if (key === 'blind-science'){
+          state.flags.lightMode = !active; document.body.classList.toggle('light-brown', !active);
+        }
+        refresh();
+        return;
+      }
+      // Normal upgrades
+      if (state.upgradesBought[id]) return;
+      const price = getUpgradeCost(up);
+      if (state.total < price) return;
+      state.total -= price; state.upgradesBought[id] = true;
+      up.effect(state);
+      pushNews(`Upgrade unlocked: ${up.name}.`);
+      if (id.startsWith('ghost-hands')){ updateGhostHandsLayer(); }
+      refresh();
+    }
+
+    // ----- UI -----
+    const el = (id) => document.getElementById(id);
+  const unitsList = el('unitsList');
+  const upgradesList = el('upgradesList');
+  const achievementsList = el('achievementsList');
+  const ticker = el('ticker');
+  const empireTitle = el('empireTitle');
+  const empireInput = el('empireInput');
+  const empireSetBtn = el('empireSetBtn');
+  const empireNameStat = el('empireNameStat');
+  const statTotal = el('statTotal');
+  const statClicks = el('statClicks');
+  const statTime = el('statTime');
+  const statPeakDps = el('statPeakDps');
+  const statCookies = el('statCookies');
+  const tabPlay = el('tabPlay');
+  const tabAch = el('tabAch');
+  const pagePlay = el('pagePlay');
+  const pageAch = el('pageAch');
+  const skinChooser = el('skinChooser');
+
+    function isSkinUnlocked(id){
+      if (state.skins.unlocked[id]) return true;
+      const def = SkinDefs.find(s=>s.id===id); if (!def) return false;
+      return !!def.unlock(state);
+    }
+
+    function applyCurrentSkin(){
+      const cur = state.skins.current || 'white';
+      const def = SkinDefs.find(s=>s.id===cur) || SkinDefs[0];
+      const img = document.getElementById('clickImg');
+      if (img && def) {
+        img.src = def.img;
+        // Recompute ghost hand positions after layout updates
+  requestAnimationFrame(()=> { updateGhostHandsLayer(); repositionGhostHands(); });
+      }
+    }
+
+    function tryUnlockSkins(autoApply=true){
+      let unlockedNew = false;
+      for (const def of SkinDefs){
+        if (!state.skins.unlocked[def.id] && def.unlock(state)){
+          state.skins.unlocked[def.id] = true; unlockedNew = true;
+          pushNews(`New skin unlocked: ${def.name}`);
+          if (state.skins.autoSwitchOnUnlock && autoApply){ state.skins.current = def.id; applyCurrentSkin(); }
+        }
+      }
+      if (unlockedNew){ save(); renderSkinsChooser(); }
+    }
+
+    function renderSkinsChooser(){
+      if (!skinChooser) return;
+      skinChooser.innerHTML = '';
+      for (const def of SkinDefs){
+        const unlocked = isSkinUnlocked(def.id);
+        const wrap = document.createElement('button');
+        wrap.className = 'skin-item' + (def.id===state.skins.current? ' selected':'') + (unlocked?'':' locked');
+        wrap.title = unlocked? def.name : `${def.name} — ${def.via}`;
+        wrap.disabled = !unlocked;
+        const img = document.createElement('img'); img.src = def.img; img.alt = def.name; wrap.appendChild(img);
+        const nm = document.createElement('div'); nm.className='name'; nm.textContent = def.name; wrap.appendChild(nm);
+        if (!unlocked){ const tg = document.createElement('div'); tg.className='tag'; tg.textContent = def.via; wrap.appendChild(tg); }
+        wrap.addEventListener('click', ()=>{ state.skins.current = def.id; applyCurrentSkin(); renderSkinsChooser(); save(); });
+        skinChooser.appendChild(wrap);
+      }
+    }
+
+    function renderUnits(){
+      unitsList.innerHTML = '';
+      for (const def of UnitDefs){
+        const lvl = unitLevel(def.id);
+  const canLevel = lvl < def.maxLevel;
+        const nextCost = canLevel ? costFor(def.id, lvl+1) : null;
+  const row = document.createElement('div'); row.className = 'row'; row.dataset.uid = def.id;
+        const icon = document.createElement('div');
+        if (def.iconImg){
+          const img = document.createElement('img'); img.src = def.iconImg; img.alt = def.name; icon.appendChild(img);
+          attachImagePreview(img, img.src);
+        } else {
+          const img = document.createElement('img'); img.alt = def.name; img.src = 'data:image/svg+xml;utf8,'+encodeURIComponent(`<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"48\" height=\"48\"><rect width=\"100%\" height=\"100%\" rx=\"8\" ry=\"8\" fill=\"#1c160b\"/><text x=\"50%\" y=\"58%\" dominant-baseline=\"middle\" text-anchor=\"middle\" font-size=\"26\">${def.icon||'?'}<\/text><\/svg>`);
+          icon.appendChild(img);
+          attachImagePreview(img, img.src);
+        }
+        const meta = document.createElement('div');
+        meta.innerHTML = `<div class="name">${def.name}</div><div class="desc">${def.desc}</div>`;
+        const levels = document.createElement('div'); levels.className = 'levels';
+  const maxLabel = (def.maxLevel >= 9999) ? '∞' : def.maxLevel;
+  levels.innerHTML = `<div>Level: <span class="lvl">${lvl}/${maxLabel}</span></div><div>DPS: ${fmt(unitDps(def.id))}</div>`;
+  const actions = document.createElement('div');
+  const btn = document.createElement('button'); btn.className='buy'; btn.textContent = canLevel ? `Buy (${fmt(nextCost)})` : 'MAX';
+  btn.disabled = !canLevel || state.total < nextCost; btn.onclick = ()=>buyUnit(def.id);
+  const sellBtn = document.createElement('button'); sellBtn.className='sell'; sellBtn.textContent = lvl > 0 ? `Sell (+${fmt(refundFor(def.id, lvl))})` : 'Sell';
+  sellBtn.disabled = lvl <= 0; sellBtn.onclick = ()=> sellUnit(def.id);
+  actions.append(btn, sellBtn);
+        row.append(icon, meta, levels, actions);
+        unitsList.appendChild(row);
+      }
+    }
+
+    function renderUpgrades(){
+      upgradesList.innerHTML = '';
+      const ownedList = document.getElementById('ownedUpgradesList');
+      if (ownedList) ownedList.innerHTML = '';
+      for (const u of UpgradeDefs){
+        const unlocked = u.unlock(state);
+        const bought = !!state.upgradesBought[u.id];
+        if (!unlocked && !bought) continue;
+        const div = document.createElement('div');
+        const isToggle = u.type === 'toggle';
+        const active = isToggle ? isToggleActive(u.key||u.id) : false;
+        const cooling = isToggle ? !canToggle(u.key||u.id) : false;
+        div.className = 'upgrade' + (bought ? ' owned' : '') + (!unlocked && !bought ? ' locked' : '') + (isToggle? ' toggle' : '') + (active? ' active':'') + (cooling?' cooldown':'');
+        div.dataset.upid = u.id;
+        const img = document.createElement('img'); img.src = u.img; img.alt = u.name; div.appendChild(img);
+        attachImagePreview(img, u.img);
+        // Hover to show modal with details
+        const showDetails = (target)=>{
+          if (!window.modalHandler) return;
+          const lines = [];
+          lines.push(`<p>${u.text||''}</p>`);
+          if (!bought && !isToggle) lines.push(`<p><strong>Cost:</strong> ${fmt(getUpgradeCost(u))}</p>`);
+          if (isToggle){ lines.push(`<p><em>Toggle ${active? 'ON' : 'OFF'}</em>${cooling? ' — cooling down' : ''}</p>`); }
+          // Simple effect summary heuristic
+          const effectText = (u.text||'').match(/\+[0-9]+%|x[0-9.]+/i)?.[0] || '';
+          if (effectText) lines.push(`<p><strong>Effect:</strong> ${effectText}</p>`);
+          const rect = target.getBoundingClientRect();
+          window.modalHandler.showModal(u.name, lines.join(''), { x: rect.right + 12, y: rect.top });
+        };
+  // Show details and begin inside-area tracking; only hide when the cursor truly leaves the tile
+  div.addEventListener('mouseenter', ()=> { if (window.modalHandler) { showDetails(div); trackModalWhileInside(div); } });
+        if (!bought) {
+          if (!isToggle){
+            // Mark unaffordable state
+            const price = getUpgradeCost(u); if (state.total < price) div.classList.add('unaffordable');
+            div.addEventListener('click', ()=> buyUpgrade(u.id));
+            upgradesList.appendChild(div);
+          } else {
+            // Toggle tile: toggles on click (respect cooldown)
+            div.addEventListener('click', ()=> buyUpgrade(u.id));
+            upgradesList.appendChild(div);
+          }
+        } else {
+          if (ownedList) ownedList.appendChild(div);
+        }
+      }
+    }
+
+    // Tracks the cursor and hides the modal only when it leaves the given element's bounds
+    function trackModalWhileInside(tileEl){
+      if (!tileEl || !window.modalHandler) return;
+      const onMove = (e)=>{
+        const r = tileEl.getBoundingClientRect();
+        const x = e.clientX, y = e.clientY;
+        const inside = x >= r.left && x <= r.right && y >= r.top && y <= r.bottom;
+        if (!inside){
+          window.modalHandler.hideModal();
+          window.removeEventListener('mousemove', onMove);
+        }
+      };
+      // Ensure we don't stack multiple listeners per tile
+      window.removeEventListener('mousemove', onMove);
+      window.addEventListener('mousemove', onMove);
+    }
+
+    // ---- Image Hover Preview ----
+    let previewTimer = null;
+    const previewEl = document.getElementById('imgPreview');
+    const previewImg = document.getElementById('imgPreviewImg');
+    let lastMouseX = 0, lastMouseY = 0;
+    document.addEventListener('mousemove', (e)=>{
+      lastMouseX = e.clientX; lastMouseY = e.clientY;
+      if (previewEl && previewEl.style.display === 'block') positionPreviewAt(lastMouseX, lastMouseY);
+    });
+
+    function positionPreviewAt(x, y){
+      if (!previewEl) return;
+      const margin = 12;
+      const w = 280, h = 280;
+      const vw = window.innerWidth, vh = window.innerHeight;
+      let left = x + 16, top = y + 16;
+      if (left + w + margin > vw) left = vw - w - margin;
+      if (top + h + margin > vh) top = vh - h - margin;
+      if (left < margin) left = margin;
+      if (top < margin) top = margin;
+      previewEl.style.left = left + 'px';
+      previewEl.style.top = top + 'px';
+    }
+    function showPreview(src, x, y){
+      if (!previewEl || !previewImg) return;
+      previewImg.src = src;
+      positionPreviewAt(x, y);
+      previewEl.style.display = 'block';
+    }
+    function hidePreview(){ if (previewEl) previewEl.style.display = 'none'; }
+
+    // Hide on global interactions
+    window.addEventListener('scroll', ()=>{ clearTimeout(previewTimer); hidePreview(); }, true);
+    window.addEventListener('resize', ()=>{ clearTimeout(previewTimer); hidePreview(); });
+    document.addEventListener('keydown', ()=>{ clearTimeout(previewTimer); hidePreview(); });
+
+    function attachImagePreview(targetImg, src){
+      if (!previewEl || !previewImg || !targetImg) return;
+      targetImg.addEventListener('mouseenter', (e)=>{
+        clearTimeout(previewTimer);
+        const rect = targetImg.getBoundingClientRect();
+        const x = e.clientX || lastMouseX || (rect.left + rect.width/2);
+        const y = e.clientY || lastMouseY || (rect.top + rect.height/2);
+        previewTimer = setTimeout(()=> showPreview(src, x, y), 600);
+      });
+      targetImg.addEventListener('mousemove', (e)=>{
+        if (previewEl.style.display === 'block'){
+          positionPreviewAt(e.clientX, e.clientY);
+        }
+      });
+      const cancel = ()=>{ clearTimeout(previewTimer); hidePreview(); };
+      targetImg.addEventListener('mouseleave', cancel);
+      targetImg.addEventListener('wheel', cancel, { passive: true });
+      targetImg.addEventListener('click', cancel);
+    }
+
+    function renderAchievements(){
+      achievementsList.innerHTML = '';
+      // Show visible achievements
+      for (const a of AchievementDefs){
+        const unlocked = !!state.achievements[a.id];
+        const div = document.createElement('div'); div.className = 'achievement'+(unlocked?' unlocked':'');
+        const img = document.createElement('img'); img.src = a.img; img.alt=a.name; div.appendChild(img);
+        attachImagePreview(img, a.img);
+        const meta = document.createElement('div'); meta.innerHTML = `<div><strong>${a.name}</strong></div><small>${a.desc}</small>`; div.appendChild(meta);
+        const tag = document.createElement('div'); tag.innerHTML = unlocked ? '<span class="badge">DONE</span>' : '<span class="badge">LOCKED</span>'; div.appendChild(tag);
+        achievementsList.appendChild(div);
+      }
+      // Show unlocked hidden achievements only
+      for (const h of HiddenAchievements){
+        if (state.hiddenAchievements[h.id]){
+          const div = document.createElement('div'); div.className = 'achievement unlocked';
+          const img = document.createElement('img'); img.src = h.img; img.alt=h.name; div.appendChild(img);
+          attachImagePreview(img, h.img);
+          const meta = document.createElement('div'); meta.innerHTML = `<div><strong>${h.name}</strong></div><small>${h.desc}</small>`; div.appendChild(meta);
+          const tag = document.createElement('div'); tag.innerHTML = '<span class="badge">SECRET</span>'; div.appendChild(tag);
+          achievementsList.appendChild(div);
+        }
+      }
+    }
+
+    function refreshTop(){
+      el('buttsValue').textContent = fmt(state.total);
+  const oldPc = document.getElementById('perClickValue');
+  const oldPs = document.getElementById('perSecondValue');
+  if (oldPc) oldPc.textContent = fmt(perClick());
+  if (oldPs) oldPs.textContent = fmt(totalDps());
+  // Duplicate to coverage panel lines
+  const pc2 = document.getElementById('perClickValue2');
+  const ps2 = document.getElementById('perSecondValue2');
+  if (pc2) pc2.textContent = fmt(perClick());
+  if (ps2) ps2.textContent = fmt(totalDps());
+      const cov = Math.min(1, state.total / GOAL_SOFT);
+      el('coverage').style.opacity = (0.08 + cov*0.92).toFixed(2);
+      el('coveragePct').textContent = (cov*100).toFixed(2)+'%';
+      el('clicks').textContent = state.clicks.toLocaleString();
+      el('idleBD').textContent = fmt(state.sinceLastClickBD);
+    }
+
+    function refresh(){
+      refreshTop();
+      renderUnits();
+      renderUpgrades();
+      renderAchievements();
+      updateStatsPanel();
+      updateEmpireUi();
+  renderSkinsChooser();
+  applyCurrentSkin();
+  // Keep theme class in sync with flag
+  document.body.classList.toggle('light-brown', !!state.flags.lightMode);
+      // Wire owned upgrades collapse toggle once
+      const btn = document.getElementById('ownedToggleBtn');
+      const box = document.getElementById('ownedUpgradesBox');
+      if (btn && box && !btn.dataset.wired){
+        btn.dataset.wired = '1';
+        btn.addEventListener('click', ()=>{
+          const collapsed = box.classList.toggle('collapsed');
+          const expanded = !collapsed;
+          btn.textContent = collapsed ? 'Expand' : 'Collapse';
+          btn.setAttribute('aria-expanded', String(expanded));
+        });
+      }
+    }
+
+    function updateStatsPanel(){
+      statTotal.textContent = fmt(state.total);
+      statClicks.textContent = state.clicks.toLocaleString();
+      statTime.textContent = formatTime(state.elapsedActiveMs);
+      statPeakDps.textContent = fmt(state.peakDps);
+      statCookies.textContent = state.cookies.toLocaleString();
+    }
+
+    function updateEmpireUi(){
+      empireTitle.textContent = `${state.empireName}'s Diaper Empire`;
+      empireNameStat.textContent = state.empireName;
+    }
+
+    // ----- Ticker (progressive + marquee) -----
+    // Expect a global `headlines` array loaded from tickertext.js
+    // We'll progressively unlock slices of this list based on diapered totals.
+    const tickerTrack = document.getElementById('tickerTrack');
+  let tickerQueue = [];
+    let tickerIdx = 0;
+    let tickerSpeed = 60; // pixels per second
+    let lastTickerTs = 0;
+    let marqueeX = 0;
+  let lastGateEnd = 0;
+  // Audio state: single source with small clone pool, alt pitch each click
+  const CLICK_SRC = 'src/assets/audio/andersholmrustlingchips.wav';
+  const clickSfx = Array.from({ length: 4 }, () => {
+    const a = new Audio(CLICK_SRC);
+    a.preload = 'auto';
+    a.volume = 1;
+    a.playbackRate = 1;
+    return a;
+  });
+  let sfxIndex = 0;
+  let altLowPitch = false;
+  let muted = false;
+  let masterVolume = 1;
+  function setVolume(v){ masterVolume = Math.max(0, Math.min(1, v)); clickSfx.forEach(a=> a.volume = masterVolume); }
+  function setMuted(m){ muted = !!m; clickSfx.forEach(a=> a.muted = muted); const b1 = document.getElementById('muteToggle'); const b2 = document.getElementById('muteToggle2'); if (b1) b1.textContent = muted? 'Unmute':'Mute'; if (b2) b2.textContent = muted? 'Unmute':'Mute'; }
+
+    // Define gates: each gate unlocks more receptive/diaper-worldly lines
+    const gates = [
+      { limit: 0, end: 60 },                // early, agnostic slice
+      { limit: 10_000, end: 120 },          // mild receptivity
+      { limit: 250_000, end: 200 },         // stronger signals
+      { limit: 5_000_000, end: 280 },       // diaper-positive uptick
+      { limit: 80_000_000, end: 360 },      // widespread acceptance
+      { limit: 1_200_000_000, end: 440 },   // mainstream
+      { limit: 9_000_000_000, end: 520 },   // global soft goal
+      { limit: 50_000_000_000, end: headlines.length } // everything
+    ];
+
+    function currentGateEnd(total){
+      let end = 40; // minimal fallback
+      for (const g of gates){ if (total >= g.limit) end = Math.min(g.end, headlines.length); else break; }
+      return end;
+    }
+
+    function rebuildTickerPool(){
+      const end = currentGateEnd(state.total);
+      lastGateEnd = end;
+      // Always include first 30 neutral lines to keep context, then sample up to `end`.
+      const pool = headlines.slice(0, Math.min(30, headlines.length));
+      for (let i = pool.length; i < end; i++) pool.push(headlines[i]);
+      tickerQueue = shuffle(pool);
+      tickerIdx = 0;
+    }
+
+    function shuffle(arr){
+      const a = arr.slice();
+      for (let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]] = [a[j],a[i]]; }
+      return a;
+    }
+
+    function nextHeadline(){
+      if (tickerQueue.length === 0 || tickerIdx >= tickerQueue.length){ rebuildTickerPool(); }
+      const text = tickerQueue[tickerIdx++ % tickerQueue.length];
+      const item = document.createElement('div');
+      item.className = 'ticker-item';
+      item.innerHTML = `<span class="badge">NEWS</span>${text}`;
+      tickerTrack.appendChild(item);
+      // Position at end
+      const trackWidth = tickerTrack.scrollWidth;
+      item.style.transform = `translateX(${trackWidth}px)`;
+    }
+
+    let tickerPaused = false;
+    function driveMarquee(ts){
+      if (tickerPaused){ requestAnimationFrame(driveMarquee); return; }
+      if (!lastTickerTs) lastTickerTs = ts;
+      const dt = (ts - lastTickerTs) / 1000;
+      lastTickerTs = ts;
+      const px = tickerSpeed * dt;
+      marqueeX -= px;
+      tickerTrack.style.transform = `translateX(${marqueeX}px)`;
+
+      // Remove items that fully left; add new if space available
+      const trackRect = tickerTrack.getBoundingClientRect();
+      const tickerRect = ticker.getBoundingClientRect();
+      // Clean up off-screen leftmost children
+      while (tickerTrack.firstElementChild){
+        const c = tickerTrack.firstElementChild.getBoundingClientRect();
+        if (c.right < tickerRect.left - 20) tickerTrack.firstElementChild.remove(); else break;
+      }
+      // Ensure there is content filling to the right
+      const lastChild = tickerTrack.lastElementChild;
+      const gapRight = lastChild ? (lastChild.getBoundingClientRect().right - tickerRect.right) : -Infinity;
+      if (!lastChild || gapRight < 200){ nextHeadline(); }
+
+      requestAnimationFrame(driveMarquee);
+    }
+
+    // Priority push for events
+    function pushNews(text){
+      const item = document.createElement('div');
+      item.className = 'ticker-item';
+      item.innerHTML = `<span class=\"badge\">NEWS</span>${text}`;
+      tickerTrack.appendChild(item);
+    }
+
+    function pushBreaking(text){
+      const item = document.createElement('div');
+      item.className = 'ticker-item';
+      item.innerHTML = `<span class=\"badge\" style=\"background:#b91c1c\">BREAKING</span><span style=\"color:#b91c1c\"> ${text}</span>`;
+      tickerTrack.appendChild(item);
+    }
+
+    // Seed pool and start marquee
+    rebuildTickerPool();
+    // Preload a few items so it looks filled
+    for (let i=0;i<6;i++) nextHeadline();
+    requestAnimationFrame(driveMarquee);
+
+    // ----- Interaction -----
+    el('clickImg').addEventListener('click', ()=>{
+      if (isToggleActive('global-indoctrination')) return; // clicking disabled
+      const add = perClick();
+      state.lastClickAt = Date.now();
+      // Golden click chance (Crinkle Tax)
+      let addEff = add; let golden = false;
+      if (isToggleActive('crinkle-tax')){
+        const sup = state.flags.status.pampublicUntil && Date.now() < state.flags.status.pampublicUntil;
+        if (!sup){
+          const lvl = unitLevel('diapocratic');
+          const chance = Math.min(0.25, Math.floor(lvl/10) * 0.01);
+          if (Math.random() < chance){ golden = true; addEff = add * 20; }
+        }
+      }
+      state.total += addEff; state.clicks += 1; state.sinceLastClickBD = 0;
+      // floating heart +X (golden if applicable)
+      spawnHeart(addEff, golden);
+      // play alternating click sounds with slight random delay to avoid staccato feel
+      const play = () => {
+        const a = clickSfx[sfxIndex % clickSfx.length];
+        sfxIndex++;
+        try {
+          a.playbackRate = altLowPitch ? 0.92 : 1.0; // subtle pitch drop on alternate clicks
+          altLowPitch = !altLowPitch;
+          a.currentTime = 0;
+          a.play();
+        } catch(e){}
+      };
+      if (!muted) setTimeout(play, Math.random()*40);
+      refreshTop();
+    });
+
+    function spawnHeart(add, golden=false){
+      const img = el('clickImg');
+      const b = img.getBoundingClientRect();
+      const x = b.left + b.width/2 + (Math.random()*80-40);
+      const y = b.top + b.height/2 + (Math.random()*40-20);
+      const heart = document.createElement('div'); heart.className='heart-fx';
+      if (golden){ heart.style.background = '#f5c542'; } else { const hue = 330 + Math.random()*30; const sat = 80 + Math.random()*15; const light = 55 + Math.random()*15; heart.style.background = `hsl(${hue} ${sat}% ${light}%)`; }
+      heart.style.left = x+'px'; heart.style.top = y+'px';
+      const label = document.createElement('div'); label.className='heart-label'; label.textContent = `+${fmt(add)}`;
+      label.style.left = (x-6)+'px'; label.style.top = (y-8)+'px';
+      document.body.append(heart, label);
+      const start = Date.now();
+      const dur = 700 + Math.random()*300;
+      const anim = ()=>{
+        const t = (Date.now()-start)/dur; if (t>=1){ heart.remove(); label.remove(); return; }
+        const dy = -60 * t; const fade = 1 - t;
+        heart.style.transform = `translateY(${dy}px) rotate(-45deg)`;
+        label.style.transform = `translateY(${dy}px)`;
+        heart.style.opacity = String(fade);
+        label.style.opacity = String(fade);
+        requestAnimationFrame(anim);
+      }; anim();
+    }
+
+    // ----- Game Loop -----
+    function tick(){
+      const now = Date.now();
+      const dt = Math.min(2000, now - state.lastTick); // clamp to avoid spikes
+      state.lastTick = now;
+      state.elapsedActiveMs += dt;
+  const dps = (function(){
+    const now = Date.now();
+    let val = totalDps();
+    if (isToggleActive('ghostly-pacts') && (now - (state.lastClickAt||0)) < 200){ val *= 0.5; }
+    return val;
+  })();
+  if (dps > state.peakDps) state.peakDps = dps;
+      const gain = dps * (dt/1000);
+      state.total += gain; state.sinceLastClickBD += gain;
+      if (!state.timeTo9B && state.total >= GOAL_SOFT){ state.timeTo9B = state.elapsedActiveMs; pushNews('Soft Goal achieved: 9B butts diapered!'); }
+
+      // Nannybot Autonomy fluctuation while toggle active: drift factor over time
+      if (isToggleActive('nannybot-autonomy')){
+        const f0 = state.flags.nannybotAutonomyFactor || 1;
+        // smooth random walk toward a target in [0.5, 1.5]
+        if (!state.__nb_target || Math.abs(state.__nb_target - f0) < 0.05){
+          state.__nb_target = 0.5 + Math.random(); // 0.5..1.5
+        }
+        const step = 0.05 * (dt/250); // scale with tick rate
+        const next = f0 + Math.sign(state.__nb_target - f0) * step;
+        state.flags.nannybotAutonomyFactor = Math.max(0.5, Math.min(1.5, next));
+      } else {
+        state.flags.nannybotAutonomyFactor = 1;
+      }
+
+  // Unlock more receptive headlines when crossing new gates
+  const gateEndNow = currentGateEnd(state.total);
+  if (gateEndNow > lastGateEnd){ rebuildTickerPool(); }
+
+      // achievements
+      for (const a of AchievementDefs){ if (!state.achievements[a.id] && a.req(state)) { state.achievements[a.id] = true; pushNews(`Achievement unlocked: ${a.name}`); } }
+
+  // lightweight UI updates to avoid tearing down DOM (preserves hover previews)
+  updateUnitsUI();
+  updateUpgradesUI();
+
+  // skins
+  tryUnlockSkins(true);
+  // periodically ensure ghosts are aligned in case of dynamic layout
+  if (!window.__gh_last || (Date.now() - window.__gh_last) > 1000){ repositionGhostHands(); window.__gh_last = Date.now(); }
+
+      // update timer UI
+      el('runTime').textContent = formatTime(state.elapsedActiveMs);
+      el('timeTo9B').textContent = state.timeTo9B ? formatTime(state.timeTo9B) : '--:--:--';
+
+      refreshTop();
+    }
+
+    const loop = setInterval(tick, 250);
+    const autosave = setInterval(()=>save(), 5000);
+
+    // ----- Render init -----
+    function init(){
+      // Tabs
+      tabPlay.addEventListener('click', ()=> switchPage('play'));
+      tabAch.addEventListener('click', ()=> switchPage('ach'));
+      // Empire naming
+      empireSetBtn.addEventListener('click', ()=> applyEmpireName());
+      empireInput.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ applyEmpireName(); }});
+      // Manual save / export / import / reset
+      document.getElementById('manualSaveBtn').addEventListener('click', ()=>{ save(); pushNews('Manual save complete.'); });
+      document.getElementById('exportBtn').addEventListener('click', exportSave);
+      document.getElementById('importBtn').addEventListener('click', ()=> document.getElementById('importFile').click());
+      document.getElementById('importFile').addEventListener('change', importSave);
+      document.getElementById('resetBtn2').addEventListener('click', ()=>{
+        if (confirm('Delete save and start over?')){ state = defaultState(); save(); refresh(); pushNews('Progress reset.'); switchPage('play'); }
+      });
+  // Ticker pause
+  const pauseBtn = document.getElementById('tickerPause');
+  if (pauseBtn){ pauseBtn.addEventListener('click', ()=>{ tickerPaused = !tickerPaused; pauseBtn.textContent = tickerPaused ? 'Resume' : 'Pause'; }); }
+  // Audio controls
+  const muteBtn1 = document.getElementById('muteToggle');
+  const muteBtn2 = document.getElementById('muteToggle2');
+  const vol = document.getElementById('volumeRange');
+  if (muteBtn1) muteBtn1.addEventListener('click', ()=> setMuted(!muted));
+  if (muteBtn2) muteBtn2.addEventListener('click', ()=> setMuted(!muted));
+  if (vol) vol.addEventListener('input', (e)=> setVolume(parseFloat(e.target.value||'1')));
+  setMuted(false); setVolume(1);
+  // Rebuild ghost hands on load
+  updateGhostHandsLayer();
+  // Hook up ghost debug
+  const dbg = document.getElementById('ghostDebugToggle');
+  const rst = document.getElementById('ghostResetBtn');
+  if (dbg){ dbg.addEventListener('change', ()=>{ setGhostDebug(dbg.checked); }); }
+  if (rst){ rst.addEventListener('click', ()=>{ updateGhostHandsLayer(); if (dbg && dbg.checked) setGhostDebug(true); }); }
+  // Skins initial
+  tryUnlockSkins(false);
+  applyCurrentSkin();
+      refresh();
+    }
+
+    function switchPage(p){
+      if (p==='play'){ pagePlay.classList.add('active'); pageAch.classList.remove('active'); tabPlay.classList.add('active'); tabAch.classList.remove('active'); }
+      else { pageAch.classList.add('active'); pagePlay.classList.remove('active'); tabAch.classList.add('active'); tabPlay.classList.remove('active'); }
+  const pe = document.getElementById('imgPreview'); if (pe) pe.style.display = 'none';
+    }
+
+    // ----- Ghost Hands Layer -----
+    function updateGhostHandsLayer(){
+      const layer = document.getElementById('ghostLayer'); if (!layer) return;
+  layer.innerHTML = '';
+      const clickImg = document.getElementById('clickImg'); if (!clickImg) return;
+  // Create an overlay that matches the click image box
+  const overlay = document.createElement('div');
+  overlay.className = 'ghost-overlay';
+  const anchorX = clickImg.offsetLeft;
+  const anchorY = clickImg.offsetTop;
+  const imgW = clickImg.clientWidth;
+  const imgH = clickImg.clientHeight;
+  overlay.style.left = anchorX + 'px';
+  overlay.style.top = anchorY + 'px';
+  overlay.style.width = imgW + 'px';
+  overlay.style.height = imgH + 'px';
+  layer.appendChild(overlay);
+      // Determine how many tiers purchased
+      const tiers = [
+        // Blue
+        { id: 'ghost-hands-i',   img: 'src/assets/images/expeditionandgames/diaperclicker/blueghosthands.webp',  widthPct: 28, pos: { x: 0,   y: 0   }, anchor: 'top-left',     offsetX: 0,  offsetY: 0,  dur: 3600 },
+        // Red
+  { id: 'ghost-hands-ii',  img: 'src/assets/images/expeditionandgames/diaperclicker/redghosthands.webp',   widthPct: 28, pos: { x: 0,   y: 400 }, anchor: 'top-left',     offsetX: 0,  offsetY: 0,  dur: 3400 },
+        // Green
+  { id: 'ghost-hands-iii', img: 'src/assets/images/expeditionandgames/diaperclicker/greenghosthands.webp', widthPct: 28, pos: { x: 517, y: 0   }, anchor: 'top-right',    offsetX: 0,  offsetY: 0,  dur: 3200 },
+        // Handlers
+  { id: 'ghost-hands-iv',  img: 'src/assets/images/expeditionandgames/diaperclicker/ghosthandlers.webp',   widthPct: 34, pos: { x: 211, y: 389 }, anchor: 'bottom-center',offsetX: 0,  offsetY: 0,  dur: 3000 },
+  // Digihands (last corner; appears after handlers)
+  { id: 'digihands',       img: 'src/assets/images/expeditionandgames/diaperclicker/digihands.webp',       widthPct: 28, pos: { x: 509, y: 368 }, anchor: 'top-left',     offsetX: 0,  offsetY: 0,  dur: 3000 },
+      ];
+      let any = false;
+    tiers.forEach((t,i)=>{
+        if (state.upgradesBought[t.id]){
+          const wrap = document.createElement('div'); wrap.className = 'ghost-item';
+          const label = document.createElement('div'); label.className = 'ghost-label'; label.textContent = '';
+          const img = document.createElement('img');
+          img.src = t.img; img.alt = 'Ghost Hands'; img.className = 'ghost-hand float';
+          img.style.width = 'auto'; img.style.height = 'auto';
+          img.dataset.anchor = t.anchor || 'top-left';
+          img.dataset.offsetX = String(t.offsetX||0);
+          img.dataset.offsetY = String(t.offsetY||0);
+          if (t.widthPct) img.dataset.widthPct = String(t.widthPct);
+          img.style.width = (t.widthPct||28) + '%';
+          img.style.animationDuration = `${t.dur}ms`;
+          wrap.appendChild(label);
+          wrap.appendChild(img);
+          overlay.appendChild(wrap);
+
+          // Place by computing left/top in px using the ghost's scaled size
+          const place = () => {
+            // Reset edge props and set width percent
+            wrap.style.left = '';
+            wrap.style.top = '';
+            wrap.style.right = '';
+            wrap.style.bottom = '';
+      img.style.setProperty('--baseX', '0%');
+      img.style.setProperty('--baseY', '0%');
+            // In debug, size the wrapper to the image width so the red box matches
+            wrap.style.width = '';
+            const dbgOn = !!document.getElementById('ghostDebugToggle')?.checked;
+            const px = Math.round(((t.widthPct||28)/100) * imgW);
+            if (t.pos) {
+              // Fixed-position tiers: always use px width to decouple from container sizing
+              img.style.width = px + 'px';
+              wrap.style.width = dbgOn ? (px + 'px') : '';
+            } else {
+              // Anchor-relative tiers: px in debug, % otherwise
+              if (dbgOn) {
+                img.style.width = px + 'px';
+                wrap.style.width = px + 'px';
+              } else {
+                img.style.width = (t.widthPct||28) + '%';
+                wrap.style.width = '';
+              }
+            }
+            img.style.transformOrigin = 'top left';
+            if (t.pos) {
+              // Fixed pixel positioning: keep image inside the red box (no negative translates)
+              wrap.style.left = t.pos.x + 'px';
+              wrap.style.top = t.pos.y + 'px';
+              img.style.transform = `translate(${t.offsetX||0}px, calc(${t.offsetY||0}px + var(--floatY)))`;
+              wrap.dataset.fixed = '1';
+            } else {
+              switch (t.anchor) {
+                case 'top-right':
+                  wrap.style.left = '100%';
+                  wrap.style.top = '0%';
+                  img.style.transform = `translate(calc(-100% + ${t.offsetX||0}px), calc(0% + ${t.offsetY||0}px + var(--floatY)))`;
+                  break;
+                case 'bottom-center':
+                  wrap.style.left = '50%';
+                  wrap.style.top = '100%';
+                  img.style.transform = `translate(calc(-50% + ${t.offsetX||0}px), calc(-100% + ${t.offsetY||0}px + var(--floatY)))`;
+                  break;
+                case 'top-left':
+                default:
+                  wrap.style.left = '0%';
+                  wrap.style.top = '0%';
+                  img.style.transform = `translate(calc(0% + ${t.offsetX||0}px), calc(0% + ${t.offsetY||0}px + var(--floatY)))`;
+                  break;
+              }
+            }
+            // Update label with live coordinates relative to overlay (in px and %)
+            requestAnimationFrame(()=>{
+              const or = overlay.getBoundingClientRect();
+              const wr = wrap.getBoundingClientRect();
+              const x = Math.round(wr.left - or.left);
+              const y = Math.round(wr.top - or.top);
+              const xp = ((x/or.width)*100).toFixed(2);
+              const yp = ((y/or.height)*100).toFixed(2);
+              label.textContent = `x:${x}px (${xp}%), y:${y}px (${yp}%)`;
+            });
+          };
+          if (img.complete && img.naturalWidth) place(); else img.addEventListener('load', place, { once: true });
+          any = true;
+        }
+      });
+      layer.style.display = any ? 'block' : 'none';
+    }
+
+    // Reposition existing ghosts without rebuilding
+    function repositionGhostHands(){
+      const layer = document.getElementById('ghostLayer'); const clickImg = document.getElementById('clickImg');
+      if (!layer || !clickImg) return;
+      const overlay = layer.querySelector('.ghost-overlay');
+      if (!overlay) return;
+      const anchorX = clickImg.offsetLeft;
+      const anchorY = clickImg.offsetTop;
+      const imgW = clickImg.clientWidth; const imgH = clickImg.clientHeight;
+      overlay.style.left = anchorX + 'px';
+      overlay.style.top = anchorY + 'px';
+      overlay.style.width = imgW + 'px';
+      overlay.style.height = imgH + 'px';
+  // Update wrapper width in debug mode to match image px width
+  const dbgOn = !!document.getElementById('ghostDebugToggle')?.checked;
+      // Re-run placement using the same logic as initial render for consistency
+      // We rebuild transforms but keep the same DOM nodes
+      overlay.querySelectorAll('.ghost-item').forEach(wrap => {
+        const img = wrap.querySelector('.ghost-hand');
+        if (!img) return;
+        const anchor = img.dataset.anchor || 'top-left';
+        const offsetX = parseFloat(img.dataset.offsetX||'0') || 0;
+        const offsetY = parseFloat(img.dataset.offsetY||'0') || 0;
+  const widthPct = img.dataset.widthPct ? parseFloat(img.dataset.widthPct) : 28;
+  const px = Math.round((widthPct/100) * imgW);
+        // Respect debug sizing
+        if (wrap.dataset.fixed === '1') {
+          // Always px for fixed tiers, independent of debug state
+          img.style.width = px + 'px';
+          wrap.style.width = dbgOn ? (px + 'px') : '';
+        } else if (dbgOn) {
+          img.style.width = px + 'px';
+          wrap.style.width = px + 'px';
+        } else {
+          img.style.width = widthPct + '%';
+          wrap.style.width = '';
+        }
+        img.style.transformOrigin = 'top left';
+        if (wrap.dataset.fixed === '1') {
+          // Fixed-position tiers: keep transforms non-negative so image stays inside wrapper
+          img.style.transform = `translate(${offsetX}px, calc(${offsetY}px + var(--floatY)))`;
+        } else {
+          switch (anchor){
+            case 'top-right':
+              img.style.transform = `translate(calc(-100% + ${offsetX}px), calc(0% + ${offsetY}px + var(--floatY)))`;
+              break;
+            case 'bottom-center':
+              img.style.transform = `translate(calc(-50% + ${offsetX}px), calc(-100% + ${offsetY}px + var(--floatY)))`;
+              break;
+            case 'top-left':
+            default:
+              img.style.transform = `translate(calc(0% + ${offsetX}px), calc(0% + ${offsetY}px + var(--floatY)))`;
+              break;
+          }
+        }
+      });
+    }
+
+    // ----- Ghost Debug Dragging -----
+    function setGhostDebug(on){
+      const layer = document.getElementById('ghostLayer'); if (!layer) return;
+      layer.classList.toggle('ghost-debug', !!on);
+      const overlay = layer.querySelector('.ghost-overlay'); if (!overlay) return;
+      const items = overlay.querySelectorAll('.ghost-item');
+      items.forEach(it => {
+        it.onmousedown = on ? startGhostDrag : null;
+      });
+    }
+
+    function startGhostDrag(e){
+      e.preventDefault();
+      const it = e.currentTarget; const overlay = it.parentElement; if (!overlay) return;
+      const label = it.querySelector('.ghost-label');
+      const startX = e.clientX; const startY = e.clientY;
+      const rect = it.getBoundingClientRect();
+      const over = overlay.getBoundingClientRect();
+      const offX = rect.left - over.left; const offY = rect.top - over.top;
+      function onMove(ev){
+        const nx = Math.max(0, Math.min(over.width, offX + (ev.clientX - startX)));
+        const ny = Math.max(0, Math.min(over.height, offY + (ev.clientY - startY)));
+        it.style.left = nx + 'px'; it.style.top = ny + 'px';
+        // Update label
+        const xp = ((nx/over.width)*100).toFixed(2);
+        const yp = ((ny/over.height)*100).toFixed(2);
+        if (label) label.textContent = `x:${Math.round(nx)}px (${xp}%), y:${Math.round(ny)}px (${yp}%)`;
+      }
+      function onUp(){
+        window.removeEventListener('mousemove', onMove);
+        window.removeEventListener('mouseup', onUp);
+      }
+      window.addEventListener('mousemove', onMove);
+      window.addEventListener('mouseup', onUp);
+    }
+
+    // ----- Lightweight UI updaters -----
+    function updateUnitsUI(){
+      // update level, dps, button state and cost without rebuilding rows
+      const rows = unitsList.querySelectorAll('.row');
+      rows.forEach(row => {
+        const id = row.dataset.uid; if (!id) return;
+        const def = UnitDefs.find(u=>u.id===id); if (!def) return;
+        const lvl = unitLevel(id);
+        const canLevel = lvl < def.maxLevel;
+        const nextCost = canLevel ? costFor(id, lvl+1) : null;
+        const levelsDiv = row.querySelector('.levels');
+        if (levelsDiv){
+          const maxLabel = (def.maxLevel >= 9999) ? '∞' : def.maxLevel;
+          levelsDiv.innerHTML = `<div>Level: <span class="lvl">${lvl}/${maxLabel}</span></div><div>DPS: ${fmt(unitDps(id))}</div>`;
+        }
+        const btn = row.querySelector('button.buy');
+        if (btn){
+          btn.textContent = canLevel ? `Buy (${fmt(nextCost)})` : 'MAX';
+          btn.disabled = !canLevel || state.total < nextCost;
+        }
+      });
+    }
+
+    function updateUpgradesUI(){
+      // enable/disable existing tiles, and append newly unlocked upgrades without clearing list
+      const existing = new Set(Array.from(upgradesList.querySelectorAll('.upgrade')).map(d=>d.dataset.upid));
+      // Update existing
+      upgradesList.querySelectorAll('.upgrade').forEach(div => {
+        const id = div.dataset.upid; const u = UpgradeDefs.find(x=>x.id===id); if (!u) return;
+        const bought = !!state.upgradesBought[id];
+        if (bought) {
+          div.classList.add('owned'); div.classList.remove('unaffordable');
+          return;
+        }
+        if (!u.type){ const price = getUpgradeCost(u); if (state.total < price) div.classList.add('unaffordable'); else div.classList.remove('unaffordable'); }
+        if (u.type === 'toggle'){
+          const key = u.key||u.id; const active = isToggleActive(key); const cooling = !canToggle(key);
+          div.classList.toggle('active', active); div.classList.toggle('cooldown', cooling);
+        }
+      });
+      // Append newly unlocked (and not bought) upgrades
+      for (const u of UpgradeDefs){
+        const unlocked = u.unlock(state);
+        const bought = !!state.upgradesBought[u.id];
+        if (unlocked && !bought && !existing.has(u.id)){
+          const div = document.createElement('div'); div.className = 'upgrade'; div.dataset.upid = u.id;
+          const img = document.createElement('img'); img.src = u.img; img.alt = u.name; div.appendChild(img);
+          attachImagePreview(img, u.img);
+          const meta = document.createElement('div'); meta.className='meta'; meta.innerHTML = `<div><strong>${u.name}</strong></div><small>${u.text}</small>`; div.appendChild(meta);
+          const btn = document.createElement('button'); btn.className='buy'; btn.textContent = `Buy (${fmt(u.cost)})`;
+          btn.disabled = state.total < u.cost; btn.onclick = ()=>buyUpgrade(u.id);
+          div.appendChild(btn);
+          upgradesList.appendChild(div);
+        }
+      }
+    }
+
+    function applyEmpireName(){
+      const raw = (empireInput.value || '').trim();
+      if (!raw) return;
+      state.empireName = raw;
+      updateEmpireUi();
+      checkHiddenNameAchievements(raw);
+      save();
+      pushNews(`Empire christened: ${state.empireName}.`);
+    }
+
+    function normalizeNameForOwlcan(s){ return s.toLowerCase().replace(/\s+/g,'').replace(/^the/,''); }
+    function checkHiddenNameAchievements(name){
+      // Lulu => award 100 cookies
+      if (!state.hiddenAchievements['orig-lulu'] && name.trim().toLowerCase() === 'lulu'){
+        state.hiddenAchievements['orig-lulu'] = true; state.cookies += 100;
+        pushNews(`Secret achievement: I'm so original — +100 cookies!`);
+        renderAchievements(); updateStatsPanel();
+      }
+      // Owlcan variants
+      const norm = normalizeNameForOwlcan(name);
+      if (!state.hiddenAchievements['we-are-owlcan'] && norm === 'owlcan'){
+        state.hiddenAchievements['we-are-owlcan'] = true;
+        pushNews(`Secret achievement: We're All Owlcan...`);
+        renderAchievements();
+      }
+    }
+
+    function exportSave(){
+      const data = localStorage.getItem('diaper-clicker-save') || JSON.stringify({});
+      const blob = new Blob([data], { type: 'application/json' });
+      const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+      a.download = 'diaper-clicker-save.json'; a.click(); URL.revokeObjectURL(a.href);
+    }
+    function importSave(e){
+      const file = e.target.files?.[0]; if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const parsed = JSON.parse(reader.result);
+          localStorage.setItem('diaper-clicker-save', JSON.stringify(parsed));
+          state = load();
+          refresh();
+          switchPage('play');
+          pushNews('Save imported.');
+        } catch(err){ alert('Invalid save file.'); }
+      };
+      reader.readAsText(file);
+      e.target.value = '';
+    }
+    init();
+
+    // Reflow ghost hands when layout changes (resize)
+    window.addEventListener('resize', ()=>{
+      // Debounce a bit
+      clearTimeout(window.__gh_resize);
+  window.__gh_resize = setTimeout(()=> { updateGhostHandsLayer(); repositionGhostHands(); }, 50);
+    });
+
+    // ----- Controls -----
+    const sb = document.getElementById('saveBtn');
+    if (sb) sb.addEventListener('click', ()=>{ save(); pushNews('Game saved.'); });
+    const rb = document.getElementById('resetBtn');
+    if (rb) rb.addEventListener('click', ()=>{
+      if (confirm('Hard reset? This will erase your progress.')){
+        state = defaultState(); save(); refresh(); pushNews('Progress reset.');
+      }
+    });
+
+    // Warn before unload (optional)
+    window.addEventListener('beforeunload', ()=>{ save(); });
+  </script>
+  <!-- Minimal, single-file implementation. Future: move to /src, add more upgrades, richer synergy trees, and integrate into launcher. -->
+</body>
+</html>

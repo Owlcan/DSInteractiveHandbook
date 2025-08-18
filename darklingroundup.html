@@ -1,0 +1,1841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Darkling Roundup</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Cinzel Decorative', cursive;
+            background-color: #000000;
+            color: #FFD700;
+            overflow: hidden;
+            touch-action: none;
+        }
+        canvas {
+            background-image: url('https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/08/vortex.webp');
+            background-size: cover;
+            background-position: center;
+            cursor: none;
+            display: block;
+            border-radius: 0.75rem;
+            border: 2px solid #FFD700;
+        }
+        .ui-element {
+            background-color: rgba(50, 0, 0, 0.7);
+            border: 1px solid #DC143C;
+            border-radius: 0.5rem;
+            padding: 0.5rem 1rem;
+            text-shadow: 1px 1px 2px #000;
+        }
+        .modal {
+            background-color: rgba(10, 0, 0, 0.95);
+            border: 2px solid #FFD700;
+            border-radius: 1rem;
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.3);
+        }
+        .btn-primary {
+            background-color: #DC143C;
+            border-bottom: 4px solid #8B0000;
+            transition: all 0.1s ease-in-out;
+            font-family: 'Cinzel Decorative', cursive;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            color: #FFD700;
+        }
+        .btn-primary:hover {
+            background-color: #FF4500;
+            transform: translateY(-2px);
+            border-bottom-width: 6px;
+        }
+         .btn-primary:active {
+            transform: translateY(2px);
+            border-bottom-width: 2px;
+        }
+        /* Small inline button for mute in UI header */
+        .btn-quiet {
+            padding: 0.4rem 0.6rem;
+            font-size: 0.95rem;
+            line-height: 1;
+            border-bottom-width: 3px;
+        }
+        /* Mariana character window: static square, anchored just outside game box */
+        .mariana-box {
+            position: absolute; /* anchor to gameContainer (which is relative) */
+            left: -160px; /* place just outside the left edge, close border */
+            bottom: 0;    /* align with bottom of the game box */
+            width: 250px;
+            height: 250px;
+            background: rgba(20, 0, 0, 0.8);
+            border: 2px solid #FFD700;
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: visible; /* do not crop the image */
+            z-index: 40;
+        }
+        .mariana-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* show entire image without cropping */
+            transition: filter 0.2s ease, transform 0.1s ease;
+        }
+        .glow-blue { filter: drop-shadow(0 0 10px rgba(0,180,255,0.9)) drop-shadow(0 0 20px rgba(0,180,255,0.6)); }
+        @keyframes shake {
+            0% { transform: translate(0, 0); }
+            25% { transform: translate(-2px, 2px); }
+            50% { transform: translate(2px, -2px); }
+            75% { transform: translate(-2px, -1px); }
+            100% { transform: translate(0, 0); }
+        }
+        .shake { animation: shake 0.4s linear; }
+        /* Keep trackers from shifting when numbers change */
+        #ui-container .ui-element span {
+            display: inline-block;
+            min-width: 4.5ch;
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+        }
+        /* Shield hint above Mariana */
+        .shield-hint {
+            position: absolute;
+            left: -160px;
+            bottom: 260px;
+            width: 250px;
+            text-align: center;
+            color: #88DFFF;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center h-screen m-0 p-4">
+
+    <!-- Start Modal -->
+    <div id="startModalEl" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
+        <div class="modal p-8 text-center w-11/12 max-w-md">
+            <h2 class="text-4xl font-bold mb-2 text-red-500">Darkling Roundup</h2>
+            <p class="text-lg mb-8 text-yellow-300">Choose your challenge!</p>
+            <div class="flex flex-col space-y-4">
+                <button id="normalModeButton" class="btn-primary font-bold text-xl">Normal Mode</button>
+                <button id="hardModeButton" class="btn-primary font-bold text-xl">Hard Mode</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Container -->
+    <div id="gameContainer" class="w-full max-w-4xl mx-auto text-center relative z-10 hidden">
+        <h1 class="text-3xl md:text-4xl font-bold mb-4 text-red-500">Darkling Roundup</h1>
+        <div id="ui-container" class="flex justify-around mb-4 text-lg flex-wrap items-start">
+            <button id="muteBtn" class="btn-primary btn-quiet m-1" title="Mute / Unmute">🔊</button>
+            <div class="ui-element m-1 flex items-center gap-2">
+                <label for="musicVolume">Music</label>
+                <input id="musicVolume" type="range" min="0" max="100" value="15" class="w-28" title="Music Volume" aria-label="Music Volume" />
+            </div>
+            <div class="ui-element m-1 flex flex-col items-center" style="min-width:120px">
+                <div class="text-xl">Rounds</div>
+                <div><span id="roundEl">1</span></div>
+            </div>
+            <div class="ui-element m-1">Score: <span id="scoreEl">0</span></div>
+            <div class="ui-element m-1">Health: <span id="healthEl">100</span></div>
+            <div class="ui-element m-1">Weapon Level: <span id="weaponLevelEl">1</span></div>
+            <div class="ui-element m-1">Darklings Contained: <span id="containedEl">0</span></div>
+            <div class="ui-element m-1">Loot Nabbed: <span id="lootEl">0</span></div>
+            <div class="ui-element m-1">Radiant Wave: <span id="radiantWaveEl">0/10</span></div>
+            <div class="ui-element m-1">Shield Charges: <span id="shieldEl">0</span></div>
+        </div>
+        <canvas id="gameCanvas"></canvas>
+        <!-- Mariana Character Window (anchored to game box) -->
+        <div id="marianaBox" class="mariana-box">
+            <img id="marianaImg" src="src/assets/images/expeditionandgames/marianabase.webp" alt="Mariana" />
+        </div>
+    <div id="shieldHint" class="shield-hint hidden">Press E to activate Shield</div>
+    </div>
+
+
+    <!-- Game Over Modal -->
+    <div id="modalEl" class="hidden fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
+        <div class="modal p-8 text-center w-11/12 max-w-md">
+            <h2 id="modalTitle" class="text-4xl font-bold mb-4 text-yellow-300">Game Over</h2>
+            <p id="modalScore" class="text-xl mb-2">Final Score: 0</p>
+            <p id="modalMessage" class="text-lg mb-6">The darklings have overwhelmed you!</p>
+            <button id="restartButton" class="btn-primary font-bold text-xl">
+                Try Again
+            </button>
+        </div>
+    </div>
+
+    <!-- Pause Modal -->
+    <div id="pauseModalEl" class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+        <div class="modal p-8 text-center w-11/12 max-w-md">
+            <h2 class="text-4xl font-bold mb-4 text-yellow-300">Paused</h2>
+            <p class="text-lg mb-6">Press <span style="color:#FFD700">Escape</span> or <span style="color:#FFD700">P</span> to resume.</p>
+            <button id="pauseMuteBtn" class="btn-primary font-bold text-xl">Toggle Mute</button>
+            <div class="mt-6 flex items-center justify-center gap-3">
+                <label for="musicVolumePause" class="text-yellow-200">Music</label>
+                <input id="musicVolumePause" type="range" min="0" max="100" value="15" class="w-40" title="Music Volume" aria-label="Music Volume" />
+            </div>
+        </div>
+    </div>
+
+    <!-- Store Modal -->
+    <div id="storeModalEl" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+        <div class="modal p-6 text-center w-11/12 max-w-lg">
+            <h2 class="text-3xl font-bold mb-2 text-yellow-300">Round Complete</h2>
+        <p class="text-md mb-4 text-yellow-200">Spend loot to power up — see costs below.</p>
+            <div class="grid grid-cols-2 gap-4 mb-6">
+                <button id="buyHealthBtn" class="btn-primary flex flex-col items-center">
+                    <img alt="Health Potion" src="src/assets/images/expeditionandgames/healthpotion.webp" class="mb-2" style="width:64px;height:64px;filter: drop-shadow(0 0 8px rgba(255,64,64,0.9));"/>
+                    <span>+25 HP</span>
+                    <span id="healthCostLabel" class="text-sm">Cost: 10 Loot</span>
+                </button>
+                <button id="buyOrbBtn" class="btn-primary flex flex-col items-center">
+                    <span class="mb-2" style="display:inline-block;width:64px;height:64px;border-radius:50%;background: conic-gradient(red,orange,yellow,green,blue,indigo,violet,red);box-shadow:0 0 10px rgba(255,255,255,0.6);"></span>
+                    <span>+1 Weapon Level</span>
+            <span id="orbCostLabel" class="text-sm">Cost: 25 Loot</span>
+                </button>
+                <button id="buyShieldBtn" class="btn-primary flex flex-col items-center">
+                    <img alt="Shield Potion" src="src/assets/images/expeditionandgames/shieldpotion.webp" class="mb-2" style="width:64px;height:64px;filter: drop-shadow(0 0 8px rgba(0,180,255,0.9));"/>
+                    <span>+1 Shield Charge</span>
+                    <span id="shieldCostLabel" class="text-sm">Cost: 20 Loot</span>
+                </button>
+            </div>
+            <div class="flex justify-center gap-4">
+                <button id="continueBtn" class="btn-primary">Start Next Round</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Weapon Choice Modal (shown at level 3) -->
+    <div id="weaponChoiceModalEl" class="hidden fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
+        <div class="modal p-6 text-center w-11/12 max-w-2xl">
+            <h2 class="text-3xl font-bold mb-2 text-yellow-300">Choose Your Weapon Style</h2>
+            <p class="text-md mb-4 text-yellow-200">Pick one and continue leveling it to 10.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <button id="chooseRapidBtn" class="btn-primary flex flex-col items-center">
+                    <img alt="Rapidfire" src="src/assets/images/expeditionandgames/rapidfire.webp" class="mb-2" style="width:160px;height:160px;object-fit:contain;"/>
+                    <span>Rapidfire</span>
+                    <span class="text-xs text-yellow-200">Fires automatically when held. Gets faster and stronger up to Lv10.</span>
+                </button>
+                <button id="choosePowerBtn" class="btn-primary flex flex-col items-center">
+                    <img alt="Power Shot" src="src/assets/images/expeditionandgames/longgun.webp" class="mb-2" style="width:160px;height:160px;object-fit:contain;"/>
+                    <span>Power Shot</span>
+                    <span class="text-xs text-yellow-200">Click to fire. Hold to charge up to 3x damage by 1s. AOE grows with level.</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+    const scoreEl = document.getElementById('scoreEl');
+        const healthEl = document.getElementById('healthEl');
+        const weaponLevelEl = document.getElementById('weaponLevelEl');
+        const modalEl = document.getElementById('modalEl');
+        const modalScore = document.getElementById('modalScore');
+        const restartButton = document.getElementById('restartButton');
+        const startModalEl = document.getElementById('startModalEl');
+        const gameContainer = document.getElementById('gameContainer');
+        const normalModeButton = document.getElementById('normalModeButton');
+        const hardModeButton = document.getElementById('hardModeButton');
+    const containedEl = document.getElementById('containedEl');
+    const lootEl = document.getElementById('lootEl');
+    const marianaImg = document.getElementById('marianaImg');
+    const roundEl = document.getElementById('roundEl');
+    const shieldEl = document.getElementById('shieldEl');
+    const shieldHint = document.getElementById('shieldHint');
+    // Weapon choice elements
+    const weaponChoiceModalEl = document.getElementById('weaponChoiceModalEl');
+    let weaponMode = 'none'; // 'rapid' | 'power'
+    let chargingShot = false;
+    let shotChargeStart = 0;
+    let chargeShotMultiplier = 1; // power-shot damage multiplier per shot
+    // Radiant Wave charge
+    let rwCharging = false;
+    let rwChargeStart = 0;
+    let rwChargeLevel = 0; // 0,1,2,3
+    // visual cue while charging RW: 1=blue, 2=gold
+    let rwChargeAura = 0; // 0 none, 1 blue, 2 gold
+
+    let score, health, weaponLevel, gameOver, isHardMode, holdingClick;
+    let enemies, particles, projectiles, powerups, loots, potions;
+    let telegraphs = [];
+    let darklingsContained, lootNabbed;
+    let frameCount = 0;
+    let round = 1;
+    let roundState = 'farming'; // 'midboss' | 'boss' | 'store'
+    let bossesDefeatedThisRound = 0; // track midboss then boss
+    let bossIndex = 0; // cycles boss images by index number
+    let empressIndex = 0; // cycles empress forms
+    let containsThisRound = 0; // per-round containment to trigger phases
+    let mousePos = { x: -100, y: -100 };
+    let paused = false;
+    const pauseModalEl = document.getElementById('pauseModalEl');
+    // Invulnerability state
+    let invulnerable = false;
+    let invulnUntil = 0; // frame threshold
+    // Shield system (manual activation using E): stores charges purchased from store
+    let shieldCharges = 0;
+    let shieldActive = false;
+    let shieldUntil = 0; // frame threshold
+
+    // Radiant Wave state
+    let radiantWaveCharge = 0; // 0 to 3
+    let radiantWaveProgress = 0; // 0 to 100 per stack
+    const radiantWaveEl = document.getElementById('radiantWaveEl');
+    let radiantWaveFlashAlpha = 0;
+
+    // Audio
+    let bgAudio = null;
+    let bgLastT = 0;
+    let isMuted = false;
+    const muteBtn = document.getElementById('muteBtn');
+    const pauseMuteBtn = document.getElementById('pauseMuteBtn');
+    const musicVolumeSlider = document.getElementById('musicVolume');
+    const musicVolumePauseSlider = document.getElementById('musicVolumePause');
+    const sfxShot = new Audio('src/assets/audio/roundupblast.wav');
+    sfxShot.volume = 0.175;
+    sfxShot.preload = 'auto';
+    let nextShotSfxAt = 0;
+    let sfxAlt = false;
+
+    // Enemy projectile images
+    const PROJECTILE_IMAGES = {
+        shot7: 'src/assets/images/expeditionandgames/towerD/darklingshot7.png',
+        shot4: 'src/assets/images/expeditionandgames/towerD/darklingshot4.png',
+        shot5: 'src/assets/images/expeditionandgames/towerD/darklingshot5.png'
+    };
+
+    // Loot images in obvious order mapping (bronze -> silver -> gold; coins/piles -> crown -> pamp -> rattle)
+    const LOOT_IMAGES = [
+        'src/assets/images/expeditionandgames/shiftingrunemaze/goldcrown.webp',
+        'src/assets/images/expeditionandgames/shiftingrunemaze/goldpile.webp',
+        'src/assets/images/expeditionandgames/shiftingrunemaze/rattlescepter.webp',
+        'src/assets/images/expeditionandgames/shiftingrunemaze/silvercrown.webp',
+        'src/assets/images/expeditionandgames/shiftingrunemaze/silverpile.webp',
+        'src/assets/images/expeditionandgames/shiftingrunemaze/treasurechest.webp',
+        'src/assets/images/expeditionandgames/shiftingrunemaze/treasurepamp.webp',
+        'src/assets/images/expeditionandgames/shiftingrunemaze/bronzecrown.webp',
+        'src/assets/images/expeditionandgames/shiftingrunemaze/bronzepile.webp'
+    ];
+
+    // Attack range mechanics
+    let baseAttackRadius = 10; // reticle/hit check radius (visual reticle stays 10)
+    let attackRadiusBonus = 0; // +1 per 10 loot nabbed
+    function computeEffectiveRadius() {
+        // Extra radius from weapon levels beyond 6 (levels 7-10)
+        const weaponRangeBonus = Math.max(0, weaponLevel - 6);
+        // Power mode gets additional radius scaling
+        const powerBonus = (typeof weaponMode !== 'undefined' && weaponMode === 'power') ? Math.floor(weaponLevel / 3) : 0;
+        return baseAttackRadius + attackRadiusBonus + weaponRangeBonus + powerBonus;
+    }
+    // Mariana images/state
+    const MARIANA_IMAGES = {
+        base: 'src/assets/images/expeditionandgames/marianabase.webp',
+        victory: 'src/assets/images/expeditionandgames/marianavictory.webp',
+        defeat: 'src/assets/images/expeditionandgames/marianadefeat.webp',
+        ouch: 'src/assets/images/expeditionandgames/marianaouch.webp',
+        powerup: 'src/assets/images/expeditionandgames/marianapowerup.webp'
+    };
+    let marianaState = 'base';
+    let marianaTimeoutId = null;
+    function updateMarianaGlow() {
+        if (invulnerable) marianaImg.classList.add('glow-blue');
+        else marianaImg.classList.remove('glow-blue');
+    }
+    function setMariana(state, tempMs) {
+        if (marianaState === 'defeat') return;
+        marianaState = state;
+        marianaImg.src = MARIANA_IMAGES[state] || MARIANA_IMAGES.base;
+        marianaImg.classList.remove('shake');
+        if (state === 'ouch' || state === 'powerup') {
+            void marianaImg.offsetWidth;
+            marianaImg.classList.add('shake');
+        }
+        if (marianaTimeoutId) { clearTimeout(marianaTimeoutId); marianaTimeoutId = null; }
+        if (tempMs && state !== 'defeat' && state !== 'victory') {
+            marianaTimeoutId = setTimeout(() => {
+                marianaState = 'base';
+                marianaImg.src = MARIANA_IMAGES.base;
+                marianaImg.classList.remove('shake');
+                updateMarianaGlow();
+            }, tempMs);
+        }
+        updateMarianaGlow();
+    }
+
+        const ENEMY_CONFIG = {
+            mob: {
+                images: [
+                    'src/assets/images/expeditionandgames/towerD/darklingmob1.png',
+                    'src/assets/images/expeditionandgames/towerD/darklingmob2.png',
+                    'src/assets/images/expeditionandgames/towerD/darklingmob3.png',
+                    'src/assets/images/expeditionandgames/towerD/darklingmob4.png',
+                    'src/assets/images/expeditionandgames/towerD/darklingmob5.png',
+                    'src/assets/images/expeditionandgames/towerD/darklingmob6.png',
+                    'src/assets/images/expeditionandgames/towerD/darklingmob7.png',
+                    'src/assets/images/expeditionandgames/towerD/darklingmob8.png',
+                    'src/assets/images/expeditionandgames/towerD/darklingmob9.png',
+                    'src/assets/images/expeditionandgames/towerD/darklingmob10.png',
+                    'src/assets/images/expeditionandgames/towerD/darklingmob11.png',
+                    'src/assets/images/expeditionandgames/towerD/darklingmob12.png',
+                    'src/assets/images/expeditionandgames/towerD/darklingmob13.png',
+                    'src/assets/images/expeditionandgames/towerD/darklingmob14.png',
+                    'src/assets/images/expeditionandgames/towerD/darklingmob15.png',
+                    'src/assets/images/expeditionandgames/towerD/darklingmob16.png',
+                    'src/assets/images/expeditionandgames/towerD/darklingmob17.png',
+                    'src/assets/images/expeditionandgames/towerD/darklingmob18.png',
+                    'src/assets/images/expeditionandgames/towerD/darklingmob19.png',
+                    'src/assets/images/expeditionandgames/towerD/darklingmob20.png',
+                    'src/assets/images/expeditionandgames/towerD/darklingmob21.png',
+                    'src/assets/images/expeditionandgames/towerD/darklingmob22.png',
+
+                ],
+                hp: 10,
+                speed: 1.5,
+                score: 10
+            },
+            flyer: {
+                images: [
+                    'src/assets/images/expeditionandgames/towerD/darklingflyer1.png',
+                    'src/assets/images/expeditionandgames/towerD/darklingflyer2.png'
+                ],
+                hp: 15,
+                speed: 3,
+                score: 25
+            },
+            riftFlyer: {
+                images: [
+                    'src/assets/images/expeditionandgames/towerD/darklingflyer1.png',
+                    'src/assets/images/expeditionandgames/towerD/darklingflyer2.png'
+                ],
+                hp: 20,
+                speed: 2.2,
+                score: 50
+            },
+            midboss: {
+                images: [
+                    'src/assets/images/expeditionandgames/towerD/darkmidboss1.png',
+                    'src/assets/images/expeditionandgames/towerD/darkmidboss2.png',
+                    'src/assets/images/expeditionandgames/towerD/darkmidboss3.png',
+                    'src/assets/images/expeditionandgames/towerD/darkmidboss4.png',
+                    'src/assets/images/expeditionandgames/towerD/darkmidboss5.png',
+                    'src/assets/images/expeditionandgames/towerD/darkmidboss6.png',
+                    'src/assets/images/expeditionandgames/towerD/darkmidboss7.png',
+                    'src/assets/images/expeditionandgames/towerD/darkmidboss8.png',
+                    'src/assets/images/expeditionandgames/towerD/darkmidboss9.png',
+                    'src/assets/images/expeditionandgames/towerD/darkmidboss10.png',
+                    'src/assets/images/expeditionandgames/towerD/darkmidboss11.png',
+                    'src/assets/images/expeditionandgames/towerD/darkmidboss12.png'
+                ],
+                hp: 100,
+                speed: 0.5,
+                score: 100
+            },
+            boss: {
+                images: [
+                    'src/assets/images/expeditionandgames/towerD/darkforgedtitans (1).png',
+                    'src/assets/images/expeditionandgames/towerD/darkforgedtitans (2).png',
+                    'src/assets/images/expeditionandgames/towerD/darkforgedtitans (3).png',
+                    'src/assets/images/expeditionandgames/towerD/darkforgedtitans (4).png',
+                    'src/assets/images/expeditionandgames/towerD/darkforgedtitans (5).png',
+                    'src/assets/images/expeditionandgames/towerD/darkforgedtitans (6).png',
+                    'src/assets/images/expeditionandgames/towerD/darkforgedtitans (7).png',
+                    'src/assets/images/expeditionandgames/towerD/darkforgedtitans (8).png',
+                    'src/assets/images/expeditionandgames/towerD/darkforgedtitans (9).png',
+                    'src/assets/images/expeditionandgames/towerD/darkforgedtitans (10).png'
+                ],
+                hp: 500,
+                speed: 0.2,
+                score: 500
+            },
+            empress: {
+                images: [
+                    'src/assets/images/expeditionandgames/towerD/darkempress2.png',
+                    'src/assets/images/expeditionandgames/towerD/darkempress3.png',
+                    'src/assets/images/expeditionandgames/towerD/darkempress4.png',
+                    'src/assets/images/expeditionandgames/towerD/darkempress5.png',
+                    'src/assets/images/expeditionandgames/towerD/darkempress6.png',
+                ],
+                hp: 1000,
+                speed: 0.1,
+                score: 1000
+            }
+        };
+
+        class Enemy {
+            constructor(x, y, type) {
+                this.x = x;
+                this.y = y;
+                this.type = type;
+                this.config = ENEMY_CONFIG[type];
+                // Round-based scaling: +6% HP and +2% speed per round, compounded lightly
+                let hpScale = 1 + Math.min(0.06 * (round - 1), 2.0);
+                // Boss classes get extra scaling from round 5+
+                if ((type === 'midboss' || type === 'boss' || type === 'empress') && round >= 5) {
+                    const extra = 1 + 0.08 * (round - 4); // +8% per round starting round 5
+                    hpScale *= extra;
+                }
+                // From round 4+, bosses/midboss/empress baseline doubled
+                if ((type === 'midboss' || type === 'boss' || type === 'empress') && round >= 4) {
+                    hpScale *= 2.0;
+                }
+                const spdScale = 1 + Math.min(0.02 * (round - 1), 1.0);
+                this.hp = (isHardMode ? this.config.hp * 1.5 : this.config.hp) * hpScale;
+                this.speed = (isHardMode ? this.config.speed * 1.2 : this.config.speed) * spdScale;
+                this.score = this.config.score;
+                this.image = new Image();
+                this.image.src = this.config.images[Math.floor(Math.random() * this.config.images.length)];
+                this.image.onerror = () => {
+                    this.image.src = `https://placehold.co/100x100/000000/FFD700?text=${type}`;
+                };
+                this.width = 50;
+                this.height = 50;
+                this.isFiring = false;
+                this.speedX = 0;
+
+                if (type === 'boss') {
+                    this.width *= 2.5 * 1.5; // +50%
+                    this.height *= 2.5 * 1.5;
+                } else if (type === 'empress') {
+                    this.width *= 2.0 * 1.5; // +50%
+                    this.height *= 2.0 * 1.5;
+                } else if (type === 'midboss') {
+                    this.width *= 1.5 * 1.5; // +50%
+                    this.height *= 1.5 * 1.5;
+                } else if (type === 'mob') {
+                    this.width *= 1.35;
+                    this.height *= 1.35;
+                } else {
+                    this.width *= 1.5;
+                    this.height *= 1.5;
+                }
+                // Mob speed bump starting round 11
+                if (type === 'mob' && round >= 11) {
+                    this.speed *= 1.25;
+                }
+                
+                if (type === 'flyer' || type === 'riftFlyer') {
+                    this.y = Math.random() * (canvas.height - 100) + 50;
+                    this.speedX = this.speed;
+                    if (Math.random() < 0.5) {
+                        this.x = -this.width;
+                    } else {
+                        this.x = canvas.width + this.width;
+                        this.speedX = -this.speedX;
+                    }
+                    if (type === 'riftFlyer') {
+                        // Make it golden glowing, slightly larger, slightly slower
+                        this.speedX *= 0.7;
+                        this.width *= 1.2;
+                        this.height *= 1.2;
+                        // Overlay glow parameters
+                        this.glow = true;
+                    }
+                } else if (type === 'midboss' || type === 'boss' || type === 'empress') {
+                    // Horizontal patrol movement for bigger enemies
+                    this.speedX = (Math.random() < 0.5 ? -1 : 1) * Math.max(0.6, this.speed * 0.9);
+                }
+            }
+
+            draw() {
+                ctx.save();
+                // Universal glow: purple for most (brighter), red for empress
+                if (this.type === 'empress') {
+                    ctx.shadowColor = 'rgba(255,50,50,0.95)';
+                    ctx.shadowBlur = 34;
+                } else {
+                    ctx.shadowColor = 'rgba(128,0,180,0.95)';
+                    ctx.shadowBlur = 28;
+                }
+                ctx.drawImage(this.image, this.x - this.width / 2, this.y - this.height / 2, this.width, this.height);
+                // Rift flyer retains golden aura overlay
+                if (this.type === 'riftFlyer') {
+                    ctx.shadowColor = '#FFD700';
+                    ctx.shadowBlur = 25;
+                    ctx.globalAlpha = 0.9;
+                    ctx.drawImage(this.image, this.x - this.width / 2, this.y - this.height / 2, this.width, this.height);
+                }
+                // If mob-type, draw again to make glow cover sprite more strongly
+                if (this.type && this.type.includes('mob')) {
+                    ctx.shadowColor = 'rgba(160,0,200,1)';
+                    ctx.shadowBlur = 36;
+                    ctx.globalAlpha = 0.95;
+                    ctx.drawImage(this.image, this.x - this.width / 2, this.y - this.height / 2, this.width, this.height);
+                }
+                ctx.restore();
+            }
+
+            update() {
+                if (!this.isFiring) {
+                    if (this.type === 'flyer') {
+                        this.x += this.speedX;
+                    } else if (this.type === 'midboss' || this.type === 'boss' || this.type === 'empress') {
+                        // Patrol left-right near the top
+                        this.x += this.speedX;
+                        const margin = 60;
+                        if (this.x < margin) { this.x = margin; this.speedX *= -1; }
+                        if (this.x > canvas.width - margin) { this.x = canvas.width - margin; this.speedX *= -1; }
+                        // Gentle bobbing
+                        this.y += Math.sin(frameCount / 60) * 0.2;
+                    } else {
+                        this.y += this.speed;
+                    }
+                }
+                this.draw();
+            }
+        }
+
+    class Projectile {
+            constructor(x, y, targetX, targetY, imgKey = 'shot7') {
+                this.x = x;
+                this.y = y;
+                const angle = Math.atan2(targetY - y, targetX - x);
+                const speed = 5 * 0.42; 
+                this.velocity = {
+                    x: Math.cos(angle) * speed,
+                    y: Math.sin(angle) * speed
+                };
+                this.radius = 12;
+                // Image sprite
+                this.imgKey = imgKey;
+                this.img = new Image();
+                this.img.src = PROJECTILE_IMAGES[imgKey] || PROJECTILE_IMAGES.shot7;
+                this.visible = true;
+                this.angle = 0;
+                this.angularVelocity = (imgKey === 'shot7') ? 0.25 : 0; // spin shot7
+            }
+
+            draw() {
+                if (!this.visible) return;
+                const size = this.radius * 2;
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                if (this.angularVelocity) ctx.rotate(this.angle);
+                ctx.shadowColor = '#6b21a8';
+                ctx.shadowBlur = 12;
+                if (this.img && this.img.complete) {
+                    ctx.drawImage(this.img, -size / 2, -size / 2, size, size);
+                } else {
+                    ctx.beginPath();
+                    ctx.arc(0, 0, this.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = 'purple';
+                    ctx.fill();
+                }
+                ctx.restore();
+            }
+
+            update() {
+                // Simple homing: retarget a few times
+                if (this.homing && this.homing.turns > 0) {
+                    const t = this.homing;
+                    if (!t.counter) t.counter = 0;
+                    t.counter++;
+                    if (t.counter % t.every === 0) {
+                        const angle = Math.atan2(mousePos.y - this.y, mousePos.x - this.x);
+                        this.velocity.x = Math.cos(angle) * t.speed;
+                        this.velocity.y = Math.sin(angle) * t.speed;
+                        t.turns--;
+                    }
+                }
+                this.x += this.velocity.x;
+                this.y += this.velocity.y;
+                if (this.angularVelocity) this.angle += this.angularVelocity * 0.1;
+                this.draw();
+            }
+        }
+
+        class Particle {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                this.radius = Math.random() * 2 + 1;
+                this.velocity = {
+                    x: (Math.random() - 0.5) * 3,
+                    y: (Math.random() - 0.5) * 3
+                };
+                this.alpha = 1;
+                this.friction = 0.98;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+                ctx.restore();
+            }
+
+            update() {
+                this.velocity.x *= this.friction;
+                this.velocity.y *= this.friction;
+                this.x += this.velocity.x;
+                this.y += this.velocity.y;
+                this.alpha -= 0.02;
+                this.draw();
+            }
+        }
+        
+    class Powerup {
+            constructor(x, y, type) {
+                this.x = x;
+                this.y = y;
+                this.type = type;
+                this.radius = 20; // 100% larger
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                if (this.type === 'weapon') {
+                    const gradient = ctx.createRadialGradient(this.x, this.y, 1, this.x, this.y, this.radius);
+                    gradient.addColorStop(0, 'red');
+                    gradient.addColorStop(0.2, 'orange');
+                    gradient.addColorStop(0.4, 'yellow');
+                    gradient.addColorStop(0.6, 'green');
+                    gradient.addColorStop(0.8, 'blue');
+                    gradient.addColorStop(1, 'purple');
+                    ctx.fillStyle = gradient;
+                } else { // health
+                    ctx.fillStyle = 'red';
+                }
+                ctx.fill();
+            }
+
+            update() {
+                this.y += 1;
+                this.draw();
+            }
+        }
+
+        // Loot: floating, shoot-to-collect
+        class Loot {
+            constructor(x, y, imageIndex, speedYOverride = null, collectibleDelayFrames = 30, initVX = 0, initVY = 0) {
+                this.x = x;
+                this.y = y;
+                this.radius = 32; // doubled again
+                this.collected = false;
+                this.img = new Image();
+                // Clamp index
+                const idx = Math.max(0, Math.min(LOOT_IMAGES.length - 1, imageIndex));
+                this.img.src = LOOT_IMAGES[idx];
+                this.width = 64;  // doubled again
+                this.height = 64; // doubled again
+                this.floatPhase = Math.random() * Math.PI * 2;
+                this.speedY = speedYOverride != null ? speedYOverride : 0.45; // little faster
+                this.collectibleAfterFrame = frameCount + (collectibleDelayFrames || 0);
+                this.vx = initVX || 0;
+                this.vy = initVY || 0;
+            }
+
+            draw() {
+                const bob = Math.sin(this.floatPhase) * 3;
+                ctx.save();
+                // subtle glow
+                ctx.shadowColor = '#FFD700';
+                ctx.shadowBlur = 12;
+                ctx.drawImage(this.img, this.x - this.width / 2, this.y - this.height / 2 + bob, this.width, this.height);
+                ctx.restore();
+            }
+
+            update() {
+                this.floatPhase += 0.05;
+                if (this.vx || this.vy) {
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    // gravity and damping to settle into normal fall
+                    this.vy += 0.08;
+                    this.vx *= 0.985;
+                    if (this.vy > this.speedY) this.vy = this.speedY;
+                } else {
+                    this.y += this.speedY;
+                }
+                this.draw();
+            }
+        }
+
+        // Potions: floating, shoot-to-collect
+        class Potion {
+            constructor(x, y, type) {
+                this.x = x;
+                this.y = y;
+                this.type = type; // 'health' | 'invuln'
+                this.width = 96;   // 100% larger
+                this.height = 96;  // 100% larger
+                this.radius = 44;  // 100% larger
+                this.img = new Image();
+                this.img.src = type === 'invuln'
+                    ? 'src/assets/images/expeditionandgames/invulnpotion.webp'
+                    : 'src/assets/images/expeditionandgames/healthpotion.webp';
+                this.floatPhase = Math.random() * Math.PI * 2;
+                this.speedY = 0.6;
+            }
+            draw() {
+                const bob = Math.sin(this.floatPhase) * 2;
+                ctx.save();
+                if (this.type === 'invuln') { ctx.shadowColor = '#00B4FF'; ctx.shadowBlur = 20; }
+                else { ctx.shadowColor = '#FF4444'; ctx.shadowBlur = 12; }
+                ctx.drawImage(this.img, this.x - this.width / 2, this.y - this.height / 2 + bob, this.width, this.height);
+                ctx.restore();
+            }
+            update() {
+                this.floatPhase += 0.05;
+                this.y += this.speedY;
+                this.draw();
+            }
+        }
+
+
+        function init() {
+            const container = canvas.parentElement;
+            const size = Math.min(container.clientWidth, window.innerHeight * 0.75);
+            canvas.width = size;
+            canvas.height = size;
+
+            score = 0;
+            health = isHardMode ? 75 : 100;
+            weaponLevel = 1;
+            gameOver = false;
+            holdingClick = false;
+            enemies = [];
+            particles = [];
+            projectiles = [];
+            powerups = [];
+            loots = [];
+            potions = [];
+            telegraphs = [];
+            frameCount = 0;
+            round = 1;
+            roundState = 'farming';
+            bossesDefeatedThisRound = 0;
+            bossIndex = 0;
+            // Reset radiant wave state and rift state
+            radiantWaveCharge = 0;
+            radiantWaveProgress = 0;
+            radiantWaveFlashAlpha = 0;
+            treasureRiftActive = false;
+            treasureRiftUntil = 0;
+            darklingsContained = 0;
+            lootNabbed = 0;
+            attackRadiusBonus = 0;
+            invulnerable = false;
+            invulnUntil = 0;
+            marianaState = 'base';
+            marianaImg.src = MARIANA_IMAGES.base;
+            marianaImg.classList.remove('shake');
+            marianaImg.classList.remove('glow-blue');
+            // Reset weapon mode selection and charge states
+            weaponMode = 'none';
+            chargingShot = false;
+            shotChargeStart = 0;
+            chargeShotMultiplier = 1;
+            rwCharging = false;
+            rwChargeStart = 0;
+            rwChargeLevel = 0;
+            rwChargeAura = 0;
+            // Ensure weapon choice modal is hidden at start
+            weaponChoiceModalEl.classList.add('hidden');
+
+            updateUI();
+            modalEl.classList.add('hidden');
+            animate();
+            // Setup music when the game starts (user gesture satisfied)
+            if (!bgAudio) {
+                bgAudio = new Audio('src/assets/audio/Echoes of Victory.mp3');
+                // Load persisted volume or default to 15%
+                const stored = parseFloat(localStorage.getItem('dr_music_volume') || '0.15');
+                const MUSIC_BASE_VOLUME = Math.max(0, Math.min(1, stored));
+                bgAudio.volume = MUSIC_BASE_VOLUME;
+                bgAudio.loop = true;
+                bgAudio.addEventListener('timeupdate', () => {
+                    if (!bgAudio || !bgAudio.duration) return;
+                    const remaining = bgAudio.duration - bgAudio.currentTime;
+                    // fade out near loop point
+                    if (remaining < 2.0 && !isMuted) {
+                        const factor = Math.max(0, Math.min(1, remaining / 2.0));
+                        const cur = Math.max(0, Math.min(1, parseFloat(localStorage.getItem('dr_music_volume') || '0.15')));
+                        bgAudio.volume = cur * factor;
+                    }
+                    // detect loop and restore volume
+                    if (bgAudio.currentTime < bgLastT) {
+                        const cur = Math.max(0, Math.min(1, parseFloat(localStorage.getItem('dr_music_volume') || '0.15')));
+                        bgAudio.volume = isMuted ? 0 : cur;
+                    }
+                    bgLastT = bgAudio.currentTime;
+                });
+            }
+            refreshAudioMute();
+            bgAudio?.play().catch(() => {});
+        }
+
+        function updateUI() {
+            scoreEl.textContent = score;
+            healthEl.textContent = health;
+            weaponLevelEl.textContent = weaponLevel;
+            radiantWaveEl.textContent = `${radiantWaveCharge}/10`;
+            containedEl.textContent = darklingsContained;
+            lootEl.textContent = lootNabbed;
+            roundEl.textContent = round;
+            if (shieldEl) shieldEl.textContent = shieldCharges;
+            if (shieldHint) {
+                if (shieldActive || shieldCharges > 0) shieldHint.classList.remove('hidden');
+                else shieldHint.classList.add('hidden');
+            }
+        }
+
+        function maybeOpenWeaponChoice() {
+            if (weaponLevel >= 3 && weaponMode === 'none') {
+                // pause and show choice modal once
+                paused = true;
+                if (animationId) { cancelAnimationFrame(animationId); animationId = null; }
+                weaponChoiceModalEl.classList.remove('hidden');
+            }
+        }
+
+        // Treasure Rift state
+        let treasureRiftActive = false;
+        let treasureRiftUntil = 0;
+
+        // Boss materialization effect (black + purple burst)
+        function spawnMaterializeEffect(x, y) {
+            for (let i = 0; i < 60; i++) {
+                const color = Math.random() < 0.6 ? 'purple' : 'black';
+                const p = new Particle(x, y, color);
+                p.velocity.x = (Math.random() - 0.5) * 6;
+                p.velocity.y = (Math.random() - 0.5) * 6;
+                p.radius = Math.random() * 3 + 1.5;
+                particles.push(p);
+            }
+        }
+
+        function spawnEnemies() {
+            const mobMargin = 40; // keep mobs away from extreme edges
+            // Difficulty scaling for spawn cadence
+            let mobInterval = Math.max(30, 100 - round * 4);
+            if (round >= 4) {
+                mobInterval = Math.max(20, Math.floor(mobInterval * 0.66)); // ~50% more frequency
+            }
+            if (round >= 7) {
+                mobInterval = Math.max(14, Math.floor(mobInterval * 0.75));
+            }
+            if (round >= 11) {
+                mobInterval = Math.max(10, Math.floor(mobInterval * 0.6));
+            }
+            let flyerInterval = Math.max(150, 300 - round * 8);
+            flyerInterval = Math.floor(flyerInterval * 1.1); // 10% fewer flyers
+
+            // Farming spawns only during farming phase
+            if (roundState === 'farming') {
+                if (frameCount % mobInterval === 0) {
+                    const x = mobMargin + Math.random() * Math.max(0, canvas.width - mobMargin * 2);
+                    if (treasureRiftActive) {
+                        loots.push(new Loot(x, 0, Math.floor(Math.random() * LOOT_IMAGES.length)));
+                    } else {
+                        enemies.push(new Enemy(x, 0, 'mob'));
+                    }
+                }
+                if (frameCount % flyerInterval === 0) {
+                    const isRift = Math.random() < 0.25;
+                    const type = isRift ? 'riftFlyer' : 'flyer';
+                    enemies.push(new Enemy(0, 0, type));
+                }
+                // Escalate to midboss once target contains reached this round
+                const target = getRoundTarget(round);
+                if (containsThisRound >= target) {
+                    roundState = 'midboss';
+                }
+            }
+
+            // Reduced trickle of mobs during midboss/boss phases
+            if ((roundState === 'midboss' || roundState === 'boss') && frameCount % (mobInterval * 5) === 0) {
+                const x = mobMargin + Math.random() * Math.max(0, canvas.width - mobMargin * 2);
+                enemies.push(new Enemy(x, 0, 'mob'));
+            }
+
+            // Ensure a single midboss is present when phase is active
+            if (roundState === 'midboss' && !enemies.some(e => e.type === 'midboss')) {
+                const x = canvas.width / 2;
+                const y = canvas.height * 0.10;
+                const mb = new Enemy(x, y, 'midboss');
+                enemies.push(mb);
+                spawnMaterializeEffect(x, y);
+            }
+            // Ensure boss presence and cycle image index
+            if (roundState === 'boss' && !enemies.some(e => e.type === 'boss')) {
+                const x = canvas.width / 2;
+                const y = canvas.height * 0.10;
+                const b = new Enemy(x, y, 'boss');
+                const imgs = ENEMY_CONFIG.boss.images;
+                const idx = bossIndex % imgs.length;
+                b.image.src = imgs[idx];
+                enemies.push(b);
+                spawnMaterializeEffect(x, y);
+            }
+            // Empress appears every 3 rounds after boss; cycle forms
+            if (roundState === 'postboss' && enemies.length === 0) {
+                if (round % 3 === 0) {
+                    roundState = 'empress';
+                } else {
+                    openStore();
+                }
+            }
+            if (roundState === 'empress' && !enemies.some(e => e.type === 'empress')) {
+                const x = canvas.width / 2;
+                const y = canvas.height * 0.10;
+                const emp = new Enemy(x, y, 'empress');
+                const imgs = ENEMY_CONFIG.empress.images;
+                const idx = empressIndex % imgs.length;
+                emp.image.src = imgs[idx];
+                enemies.push(emp);
+                spawnMaterializeEffect(x, y);
+            }
+        }
+
+        function getRoundTarget(r) {
+            return 10 + Math.floor(r * 4);
+        }
+
+        function triggerTreasureRain() {
+            // Spawn 10-12 fast-falling treasure pieces immediately
+            const count = 10 + Math.floor(Math.random() * 3);
+            for (let i = 0; i < count; i++) {
+                const x = 30 + Math.random() * (canvas.width - 60);
+                const imgIdx = Math.floor(Math.random() * LOOT_IMAGES.length);
+                // About twice as fast as mobs around round 5 (~1.6 * 2 ≈ 3.2)
+                loots.push(new Loot(x, -20, imgIdx, 3.2, 18));
+            }
+        }
+
+    function drawReticle() {
+            ctx.save();
+            // Subtle AOE visualization (purely visual; not a hitbox)
+            const effectiveRadius = baseAttackRadius + attackRadiusBonus;
+            // Soft bluish halo
+            ctx.save();
+            const halo = ctx.createRadialGradient(
+                mousePos.x, mousePos.y, Math.max(0, effectiveRadius - 8),
+                mousePos.x, mousePos.y, effectiveRadius + 14
+            );
+            halo.addColorStop(0, 'rgba(0,180,255,0)');
+            halo.addColorStop(0.55, 'rgba(0,180,255,0.06)');
+            halo.addColorStop(1, 'rgba(0,180,255,0)');
+            ctx.fillStyle = halo;
+            ctx.beginPath();
+            ctx.arc(mousePos.x, mousePos.y, effectiveRadius + 14, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+
+            // Ultra-faint ring at the effective range
+            ctx.save();
+            ctx.globalAlpha = 0.22;
+            ctx.shadowColor = 'rgba(0,180,255,0.45)';
+            ctx.shadowBlur = 6;
+            ctx.beginPath();
+            ctx.arc(mousePos.x, mousePos.y, effectiveRadius, 0, Math.PI * 2);
+            ctx.strokeStyle = 'rgba(0,180,255,0.45)';
+            ctx.lineWidth = 1.25;
+            ctx.stroke();
+            ctx.restore();
+            // Radiant Wave charging aura (Level 2 blue, Level 3 gold)
+            if (rwCharging && rwChargeLevel >= 2) {
+                ctx.save();
+                const isGold = rwChargeLevel >= 3;
+                const color1 = isGold ? 'rgba(255,215,0,0.22)' : 'rgba(0,180,255,0.22)';
+                ctx.shadowColor = isGold ? 'rgba(255,215,0,0.75)' : 'rgba(0,180,255,0.75)';
+                ctx.shadowBlur = isGold ? 18 : 14;
+                ctx.beginPath();
+                ctx.arc(mousePos.x, mousePos.y, effectiveRadius + 22, 0, Math.PI * 2);
+                ctx.strokeStyle = color1;
+                ctx.lineWidth = 3;
+                ctx.stroke();
+                ctx.restore();
+            }
+            if (invulnerable) {
+                ctx.beginPath();
+                ctx.arc(mousePos.x, mousePos.y, 14, 0, Math.PI * 2);
+                ctx.strokeStyle = '#00B4FF';
+                ctx.lineWidth = 3;
+                ctx.shadowColor = '#00B4FF';
+                ctx.shadowBlur = 12;
+                ctx.stroke();
+            }
+            if (shieldActive) {
+                // subtle outer ring indicating shield is active
+                ctx.beginPath();
+                ctx.arc(mousePos.x, mousePos.y, 18, 0, Math.PI * 2);
+                ctx.strokeStyle = 'rgba(0,180,255,0.6)';
+                ctx.lineWidth = 2;
+                ctx.shadowColor = 'rgba(0,180,255,0.7)';
+                ctx.shadowBlur = 8;
+                ctx.stroke();
+            }
+            ctx.beginPath();
+            ctx.arc(mousePos.x, mousePos.y, 10, 0, Math.PI * 2);
+            ctx.strokeStyle = invulnerable ? '#88DFFF' : 'red';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(mousePos.x - 15, mousePos.y);
+            ctx.lineTo(mousePos.x + 15, mousePos.y);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(mousePos.x, mousePos.y - 15);
+            ctx.lineTo(mousePos.x, mousePos.y + 15);
+            ctx.stroke();
+            ctx.restore();
+        }
+
+        function showGameOverModal() {
+            gameOver = true;
+            modalScore.textContent = `Final Score: ${score}`;
+            modalEl.classList.remove('hidden');
+            marianaState = 'defeat';
+            marianaImg.src = MARIANA_IMAGES.defeat;
+        }
+
+        function shoot() {
+            for (let i = 0; i < 20; i++) {
+                particles.push(new Particle(mousePos.x, mousePos.y, '#66CCFF'));
+            }
+
+            // Base damage scaling and weapon-mode adjustments
+            let damageBase = 5 + (weaponLevel * 2);
+            if (isHardMode) damageBase /= 2;
+            // Power mode shot multiplier applied once per click
+            if (weaponMode === 'power') {
+                damageBase *= chargeShotMultiplier; // default 1
+            } else if (weaponMode === 'rapid') {
+                damageBase *= 0.9; // slightly weaker per pellet
+            }
+            // Additional AOE boost for power charged shots
+            let localRadiusBonus = 0;
+            if (weaponMode === 'power') {
+                if (chargeShotMultiplier >= 3) localRadiusBonus += 6;
+                else if (chargeShotMultiplier >= 2) localRadiusBonus += 4;
+                else if (chargeShotMultiplier > 1) localRadiusBonus += 2;
+            }
+
+            enemies.forEach((enemy, index) => {
+                const dist = Math.hypot(mousePos.x - enemy.x, mousePos.y - enemy.y);
+                const effectiveRadius = computeEffectiveRadius() + localRadiusBonus; // larger range without bigger reticle
+                if (dist - enemy.width / 2 < effectiveRadius) {
+                    enemy.hp -= damageBase;
+                    if (enemy.hp <= 0) {
+                        score += enemy.score;
+                        darklingsContained++;
+                        containsThisRound++;
+                        // Radiant Wave charge logic (capacity 10)
+                        // Faster filling at low stacks, slower at high stacks
+                        const tier = Math.min(radiantWaveCharge, 9);
+                        const baseInc = 20; // baseline ~5 kills per charge at low tiers
+                        const decay = 1 - (tier * 0.06); // reduce increment with more stacks
+                        radiantWaveProgress += Math.max(6, baseInc * decay);
+                        if (radiantWaveCharge < 10 && radiantWaveProgress >= 100) {
+                            radiantWaveCharge++;
+                            radiantWaveProgress = 0;
+                        }
+                        // Stronger enemies drop random loot amounts (increased volume)
+                        if (['flyer','midboss','boss','empress','riftFlyer'].includes(enemy.type)) {
+                            const dropCount = enemy.type === 'flyer' ? (3 + Math.floor(Math.random() * 4)) // 3-6, 2-3x more
+                                : enemy.type === 'midboss' ? (3 + Math.floor(Math.random() * 4)) // 3-6
+                                : enemy.type === 'boss' ? (6 + Math.floor(Math.random() * 5)) // 6-10
+                                : enemy.type === 'empress' ? (9 + Math.floor(Math.random() * 7)) // 9-15
+                                : (2 + Math.floor(Math.random() * 2));
+                            for (let d = 0; d < dropCount; d++) {
+                                const jitterX = enemy.x + (Math.random() - 0.5) * 60;
+                                const jitterY = enemy.y + (Math.random() - 0.5) * 30;
+                                const imgIdx = Math.floor(Math.random() * LOOT_IMAGES.length);
+                                // Initial burst outward for flyers, with slight randomized direction
+                                if (enemy.type === 'flyer' || enemy.type === 'riftFlyer') {
+                                    const angle = Math.random() * Math.PI * 2;
+                                    const speed = 1.2 + Math.random() * 1.2;
+                                    const vx = Math.cos(angle) * speed;
+                                    const vy = Math.sin(angle) * speed * 0.6; // shallow then fall
+                                    loots.push(new Loot(jitterX, jitterY, imgIdx, null, 12, vx, vy));
+                                } else {
+                                    loots.push(new Loot(jitterX, jitterY, imgIdx));
+                                }
+                            }
+                        }
+                        // Mobs have a small chance to drop treasure
+                        if (enemy.type === 'mob' && Math.random() < 0.12) {
+                            const imgIdx = Math.floor(Math.random() * LOOT_IMAGES.length);
+                            loots.push(new Loot(enemy.x, enemy.y, imgIdx));
+                        }
+                        // Rift flyer triggers treasure rift
+                        if (enemy.type === 'riftFlyer') {
+                            triggerTreasureRain();
+                        }
+                        // Drops: weapon orb, rare health/invuln potions
+                        const dropChance = Math.random();
+                        if (dropChance < 0.10) { // 10% chance
+                            powerups.push(new Powerup(enemy.x, enemy.y, 'weapon'));
+                        }
+                        if ((enemy.type === 'midboss' || enemy.type === 'boss' || enemy.type === 'flyer' || enemy.type === 'empress') && Math.random() < 0.06) {
+                            potions.push(new Potion(enemy.x, enemy.y, 'health'));
+                        }
+                        if ((enemy.type === 'midboss' || enemy.type === 'boss' || enemy.type === 'empress') && Math.random() < 0.025) {
+                            potions.push(new Potion(enemy.x, enemy.y, 'invuln'));
+                        }
+                        // Shield drop after level 7 (rare)
+                        if (round >= 7 && (enemy.type === 'midboss' || enemy.type === 'boss') && Math.random() < 0.07) {
+                            // Instead of a potion entity, increment charges directly for immediate clarity
+                            shieldCharges += 1;
+                            setMariana('powerup', 800);
+                            updateUI();
+                        }
+
+                        const defeatedType = enemy.type;
+                        enemies.splice(index, 1);
+                        // Round progression
+                        if (defeatedType === 'midboss') {
+                            roundState = 'boss';
+                        } else if (defeatedType === 'boss') {
+                            bossIndex++;
+                            roundState = 'postboss';
+                        } else if (defeatedType === 'empress') {
+                            empressIndex++;
+                            openStore();
+                        }
+                    }
+                }
+            });
+
+            // Shoot-to-collect loot
+            loots.forEach((loot, lidx) => {
+                const dist = Math.hypot(mousePos.x - loot.x, mousePos.y - loot.y);
+                const effectiveRadius = computeEffectiveRadius() + localRadiusBonus;
+                if (frameCount >= (loot.collectibleAfterFrame || 0) && (dist - loot.radius < effectiveRadius)) {
+                    // Collect
+                    lootNabbed++;
+                    // Every 10 loot nabbed increases attack range slightly
+                    attackRadiusBonus = Math.floor(lootNabbed / 10);
+                    // small collect particles
+                    for (let i = 0; i < 10; i++) {
+                        particles.push(new Particle(loot.x, loot.y, 'yellow'));
+                    }
+                    loots.splice(lidx, 1);
+                }
+            });
+            // Shoot-to-collect potions
+            potions.forEach((potion, pidx) => {
+                const dist = Math.hypot(mousePos.x - potion.x, mousePos.y - potion.y);
+                const effectiveRadius = computeEffectiveRadius() + localRadiusBonus;
+                if (dist - potion.radius < effectiveRadius) {
+                    if (potion.type === 'health') {
+                        health = Math.min(100, health + 25);
+                        setMariana('powerup', 800);
+                    } else if (potion.type === 'invuln') {
+                        invulnerable = true;
+                        invulnUntil = frameCount + Math.floor(60 * 6);
+                        updateMarianaGlow();
+                        setMariana('powerup', 1000);
+                    }
+                    for (let i = 0; i < 12; i++) particles.push(new Particle(potion.x, potion.y, potion.type === 'invuln' ? '#00B4FF' : 'red'));
+                    potions.splice(pidx, 1);
+                }
+            });
+            updateUI();
+            // Reset temporary multipliers for power shot
+            chargeShotMultiplier = 1;
+        }
+
+        let animationId;
+        function animate() {
+            if (gameOver || paused) { animationId = null; return; }
+            animationId = requestAnimationFrame(animate);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            frameCount++;
+
+            spawnEnemies();
+
+            // End treasure rift after duration (legacy behavior retained if set elsewhere)
+            if (treasureRiftActive && frameCount >= treasureRiftUntil) { treasureRiftActive = false; }
+            // Invulnerability timeout
+            if (invulnerable && frameCount >= invulnUntil) {
+                invulnerable = false;
+                updateMarianaGlow();
+            }
+            // Shield timeout
+            if (shieldActive && frameCount >= shieldUntil) {
+                shieldActive = false;
+                invulnerable = false; // turn off invulnerability granted by shield
+                updateMarianaGlow();
+            }
+
+            enemies.forEach((enemy, index) => {
+                enemy.update();
+                if (enemy.y > canvas.height || enemy.x < -enemy.width || enemy.x > canvas.width + enemy.width) {
+                    if (!['flyer','riftFlyer'].includes(enemy.type)) takeDamage(10);
+                    enemies.splice(index, 1);
+                    updateUI();
+                }
+                
+                // Bosses shoot projectiles
+                let bossFireRate = Math.max(60, 120 - round * 4); // faster with rounds, min cap 60
+                if (round >= 6) bossFireRate = Math.max(45, 110 - round * 5);
+                if ((enemy.type === 'midboss' || enemy.type === 'boss' || enemy.type === 'empress') && frameCount % bossFireRate === 0 && !enemy.isFiring) {
+                    enemy.isFiring = true;
+                    setTimeout(() => {
+                        if (!gameOver && enemies.includes(enemy) && !paused) {
+                            // Always create a visible projectile with imagery
+                            const keys = ['shot7','shot4','shot5'];
+                            const imgKey = keys[Math.floor(Math.random() * keys.length)];
+                            const proj = new Projectile(enemy.x, enemy.y, mousePos.x, mousePos.y, imgKey);
+                            proj.visible = true;
+                            projectiles.push(proj);
+                            setTimeout(() => {
+                                enemy.isFiring = false;
+                            }, round >= 6 ? 1200 : 1500);
+                        } else {
+                            enemy.isFiring = false;
+                        }
+                    }, 1000);
+                }
+
+                // Empress extra attack patterns
+                let empressRadialRate = Math.max(90, 150 - round * 5);
+                if (enemy.type === 'empress' && empressIndex % ENEMY_CONFIG.empress.images.length <= 1) {
+                    // Forms 1 & 2: reduce frequency
+                    empressRadialRate += 40;
+                }
+                if (enemy.type === 'empress' && frameCount % empressRadialRate === 0 && !paused) {
+                    // Telegraph then radial 8-way; add staggered waves as rounds rise
+                    const waves = round >= 12 ? 3 : (round >= 9 ? 2 : 1);
+                    for (let w = 0; w < waves; w++) {
+                        const delay = 180 + w * 180;
+                        telegraphs.push({ x: enemy.x, y: enemy.y, r: 70 + w * 6, ttl: Math.floor(delay / 16), maxTtl: Math.floor(delay / 16) });
+                        setTimeout(() => {
+                            if (!paused && enemies.includes(enemy)) {
+                                for (let a = 0; a < Math.PI * 2; a += Math.PI / 4) {
+                                    const tx = enemy.x + Math.cos(a) * 100;
+                                    const ty = enemy.y + Math.sin(a) * 100;
+                                    const imgKey = Math.random() < 0.5 ? 'shot4' : 'shot5';
+                                    projectiles.push(new Projectile(enemy.x, enemy.y, tx, ty, imgKey));
+                                }
+                            }
+                        }, delay);
+                    }
+                }
+                let empressBurstRate = Math.max(120, 200 - round * 6);
+                if (enemy.type === 'empress' && empressIndex % ENEMY_CONFIG.empress.images.length <= 1) {
+                    empressBurstRate += 60;
+                }
+                if (enemy.type === 'empress' && frameCount % empressBurstRate === 0 && !paused) {
+                    // Telegraph then staggered aimed bursts
+                    const waves = round >= 12 ? 3 : (round >= 8 ? 2 : 1);
+                    for (let w = 0; w < waves; w++) {
+                        const delay = 160 + w * 160;
+                        telegraphs.push({ x: enemy.x, y: enemy.y, r: 80 + w * 5, ttl: Math.floor(delay / 16), maxTtl: Math.floor(delay / 16) });
+                        setTimeout(() => {
+                            if (!paused && enemies.includes(enemy)) {
+                                const baseAngle = Math.atan2(mousePos.y - enemy.y, mousePos.x - enemy.x);
+                                const spreads = [-0.15, 0, 0.15];
+                                spreads.forEach(s => {
+                                    const tx = enemy.x + Math.cos(baseAngle + s) * 120;
+                                    const ty = enemy.y + Math.sin(baseAngle + s) * 120;
+                                    projectiles.push(new Projectile(enemy.x, enemy.y, tx, ty, 'shot7'));
+                                });
+                            }
+                        }, delay);
+                    }
+                }
+
+                // Boss additional patterns after round 4 (reduced frequency compared to empress)
+                if ((enemy.type === 'boss' || enemy.type === 'midboss') && round >= 5 && !paused) {
+                    // Occasional 5-way spread
+                    const spreadRate = Math.max(150, 260 - round * 6); // slower than empress
+                    if (frameCount % spreadRate === 0) {
+                        const baseAngle = Math.atan2(mousePos.y - enemy.y, mousePos.x - enemy.x);
+                        const spread = 0.35; // wider than empress burst
+                        const angles = [baseAngle - spread, baseAngle - spread/2, baseAngle, baseAngle + spread/2, baseAngle + spread];
+                        angles.forEach(a => {
+                            const tx = enemy.x + Math.cos(a) * 140;
+                            const ty = enemy.y + Math.sin(a) * 140;
+                            const imgKey = Math.random() < 0.5 ? 'shot4' : 'shot5';
+                            projectiles.push(new Projectile(enemy.x, enemy.y, tx, ty, imgKey));
+                        });
+                    }
+
+                    // Rare homing shot (slow turning): implemented as projectile retargeting a few times
+                    const homingRate = Math.max(240, 380 - round * 8);
+                    if (frameCount % homingRate === 0) {
+                        const proj = new Projectile(enemy.x, enemy.y, mousePos.x, mousePos.y, 'shot7');
+                        // Annotate with simple homing behavior
+                        proj.homing = {
+                            turns: 5,
+                            every: 15,
+                            speed: Math.hypot(proj.velocity.x, proj.velocity.y)
+                        };
+                        projectiles.push(proj);
+                    }
+                }
+            });
+            
+            projectiles.forEach((projectile, index) => {
+                projectile.update();
+                const dist = Math.hypot(mousePos.x - projectile.x, mousePos.y - projectile.y);
+                if (dist <= Math.max(0, projectile.radius + 9)) {
+                    takeDamage(7);
+                    projectiles.splice(index, 1);
+                    updateUI();
+                } else if (projectile.x < -20 || projectile.x > canvas.width + 20 || projectile.y < -20 || projectile.y > canvas.height + 20) {
+                    projectiles.splice(index, 1);
+                }
+            });
+
+            // Draw attack telegraphs (pre-attack flashes)
+            for (let i = telegraphs.length - 1; i >= 0; i--) {
+                const t = telegraphs[i];
+                t.ttl--;
+                const life = Math.max(0, t.ttl) / t.maxTtl;
+                ctx.save();
+                ctx.globalAlpha = 0.15 + 0.35 * life;
+                ctx.shadowColor = t.color || 'rgba(255,60,60,0.9)';
+                ctx.shadowBlur = 20;
+                ctx.beginPath();
+                ctx.arc(t.x, t.y, t.r * (1 + 0.15 * (1 - life)), 0, Math.PI * 2);
+                ctx.strokeStyle = t.stroke || '#FF3C3C';
+                ctx.lineWidth = 5;
+                ctx.stroke();
+                ctx.restore();
+                if (t.ttl <= 0) telegraphs.splice(i, 1);
+            }
+
+            // Update loot
+            loots.forEach((loot, index) => {
+                loot.update();
+                if (loot.y > canvas.height + 50) {
+                    loots.splice(index, 1);
+                }
+            });
+            // Update potions
+            potions.forEach((potion, index) => {
+                potion.update();
+                if (potion.y > canvas.height + 50) {
+                    potions.splice(index, 1);
+                }
+            });
+
+            particles.forEach((particle, index) => {
+                if (particle.alpha <= 0) {
+                    particles.splice(index, 1);
+                } else {
+                    particle.update();
+                }
+            });
+            
+            powerups.forEach((powerup, index) => {
+                powerup.update();
+                const dist = Math.hypot(mousePos.x - powerup.x, mousePos.y - powerup.y);
+                if (dist - powerup.radius < 10) {
+                    if (powerup.type === 'weapon') {
+                        const maxLevel = 10;
+                        if (weaponLevel < maxLevel) { 
+                            weaponLevel++; 
+                            setMariana('powerup', 800); 
+                            maybeOpenWeaponChoice();
+                        }
+                    } else {
+                        health = Math.min(100, health + 20);
+                        setMariana('powerup', 800);
+                    }
+                    powerups.splice(index, 1);
+                    updateUI();
+                } else if (powerup.y > canvas.height) {
+                    powerups.splice(index, 1);
+                }
+            });
+
+            // Rapidfire auto-fire behavior when chosen
+            if (holdingClick && weaponMode === 'rapid' && weaponLevel >= 3) {
+                const interval = Math.max(3, Math.floor(18 - weaponLevel * 1.5));
+                if (frameCount % interval === 0) {
+                    shoot();
+                }
+            }
+
+            // Radiant Wave flash effect
+            if (radiantWaveFlashAlpha > 0) {
+                ctx.save();
+                ctx.globalAlpha = radiantWaveFlashAlpha;
+                ctx.fillStyle = '#FFD700';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.restore();
+                radiantWaveFlashAlpha -= 0.05;
+            }
+            // SFX throttle resets naturally via time check
+            // While holding Space/R, build charge levels for visual cue
+            if (rwCharging) {
+                const held = performance.now() - rwChargeStart;
+                const prev = rwChargeLevel;
+                if (held >= 2000) rwChargeLevel = 3;
+                else if (held >= 1000) rwChargeLevel = 2;
+                else if (held >= 400) rwChargeLevel = 1;
+                if (rwChargeLevel !== prev) {
+                    // flicker slight screen tint to indicate milestone
+                    radiantWaveFlashAlpha = 0.2;
+                }
+            }
+
+            drawReticle();
+        }
+        // Shield activation
+        function activateShield() {
+            if (paused || gameOver) return;
+            if (shieldCharges <= 0 || shieldActive) return;
+            shieldCharges--;
+            // Grant invulnerability for a moderate time
+            shieldActive = true;
+            invulnerable = true;
+            shieldUntil = frameCount + Math.floor(60 * 5); // 5 seconds
+            invulnUntil = shieldUntil; // tie invuln to shield duration
+            updateMarianaGlow();
+            setMariana('powerup', 800);
+            updateUI();
+        }
+        // Radiant Wave activation
+        function activateRadiantWave(multiplier = 1, cost = 1) {
+            if (paused || gameOver || radiantWaveCharge < 1) return;
+            // If not enough charges for desired cost, fallback to what's available
+            if (radiantWaveCharge < cost) {
+                cost = radiantWaveCharge; // use remaining
+            }
+            if (cost <= 0) return;
+            radiantWaveCharge -= cost;
+            updateUI();
+            radiantWaveFlashAlpha = Math.min(0.9, 0.5 + 0.15 * cost);
+            // Damage all enemies (heavy, but not enough to instantly defeat bosses)
+            enemies.forEach((enemy) => {
+                let base = 80;
+                if (enemy.type === 'midboss') base = 120;
+                if (enemy.type === 'boss') base = 180;
+                if (enemy.type === 'empress') base = 300;
+                enemy.hp -= Math.floor(base * multiplier);
+            });
+            // Remove defeated enemies and handle drops/containment
+            for (let i = enemies.length - 1; i >= 0; i--) {
+                const enemy = enemies[i];
+                if (enemy.hp <= 0) {
+                    score += enemy.score;
+                    darklingsContained++;
+                    containsThisRound++;
+                    // Stronger enemies drop random loot amounts
+            if (['flyer','midboss','boss','empress','riftFlyer'].includes(enemy.type)) {
+                        const dropCount = enemy.type === 'flyer' ? (1 + Math.floor(Math.random() * 2))
+                            : enemy.type === 'midboss' ? (2 + Math.floor(Math.random() * 3))
+                            : enemy.type === 'boss' ? (4 + Math.floor(Math.random() * 4))
+                : enemy.type === 'empress' ? (6 + Math.floor(Math.random() * 5))
+                            : (2 + Math.floor(Math.random() * 2));
+                        for (let d = 0; d < dropCount; d++) {
+                            const jitterX = enemy.x + (Math.random() - 0.5) * 60;
+                            const jitterY = enemy.y + (Math.random() - 0.5) * 30;
+                            const imgIdx = Math.floor(Math.random() * LOOT_IMAGES.length);
+                            loots.push(new Loot(jitterX, jitterY, imgIdx));
+                        }
+                    }
+                    // Rift flyer triggers treasure rift
+                    if (enemy.type === 'riftFlyer') {
+                        triggerTreasureRain();
+                    }
+                    enemies.splice(i, 1);
+                }
+            }
+            updateUI();
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Escape' || e.key.toLowerCase() === 'p') {
+                togglePause();
+            }
+            // Space or R for Radiant Wave (charge on hold)
+            if ((e.code === 'Space' || e.key.toLowerCase() === 'r') && !paused && !gameOver) {
+                if (!rwCharging) {
+                    rwCharging = true;
+                    rwChargeStart = performance.now();
+                    rwChargeLevel = 0;
+                    rwChargeAura = 0;
+                }
+            }
+            // E for shield activation
+            if ((e.code === 'KeyE' || e.key.toLowerCase() === 'e') && !paused && !gameOver) {
+                activateShield();
+            }
+        });
+        // Global mute buttons
+        function refreshAudioMute() {
+            const effectiveMute = paused || isMuted;
+            if (bgAudio) bgAudio.muted = effectiveMute;
+            sfxShot.muted = effectiveMute;
+            muteBtn.textContent = effectiveMute ? '🔇' : '🔊';
+            // Sync slider visuals with current stored volume
+            const cur = Math.round(parseFloat(localStorage.getItem('dr_music_volume') || '0.15') * 100);
+            if (musicVolumeSlider) musicVolumeSlider.value = String(cur);
+            if (musicVolumePauseSlider) musicVolumePauseSlider.value = String(cur);
+        }
+        muteBtn?.addEventListener('click', () => {
+            isMuted = !isMuted;
+            refreshAudioMute();
+        });
+        pauseMuteBtn?.addEventListener('click', () => {
+            isMuted = !isMuted;
+            refreshAudioMute();
+        });
+        // Music volume slider handlers
+        function setMusicVolumeFromPercent(pct) {
+            const v = Math.max(0, Math.min(100, pct)) / 100;
+            localStorage.setItem('dr_music_volume', String(v));
+            if (bgAudio) {
+                bgAudio.volume = v;
+                if (!isMuted && !paused) bgAudio.muted = false;
+            }
+            if (musicVolumeSlider && musicVolumeSlider.value !== String(Math.round(pct))) {
+                musicVolumeSlider.value = String(Math.round(pct));
+            }
+            if (musicVolumePauseSlider && musicVolumePauseSlider.value !== String(Math.round(pct))) {
+                musicVolumePauseSlider.value = String(Math.round(pct));
+            }
+        }
+        musicVolumeSlider?.addEventListener('input', (e) => {
+            const pct = parseFloat(e.target.value || '15');
+            setMusicVolumeFromPercent(pct);
+        });
+        musicVolumePauseSlider?.addEventListener('input', (e) => {
+            const pct = parseFloat(e.target.value || '15');
+            setMusicVolumeFromPercent(pct);
+        });
+        document.addEventListener('keyup', (e) => {
+            if ((e.code === 'Space' || e.key.toLowerCase() === 'r') && rwCharging) {
+                // compute level and fire
+                const held = performance.now() - rwChargeStart;
+                let level = 1;
+                if (held >= 2000) level = 3;
+                else if (held >= 1000) level = 2;
+                // Ensure we have charges for the chosen level; fallback if needed
+                if (level === 3 && radiantWaveCharge < 3) level = radiantWaveCharge >= 2 ? 2 : 1;
+                if (level === 2 && radiantWaveCharge < 2) level = 1;
+                const costs = {1:1, 2:2, 3:3};
+                const mults = {1:1.0, 2:2.5, 3:4.0};
+                activateRadiantWave(mults[level], costs[level]);
+                rwCharging = false;
+                rwChargeLevel = 0;
+                rwChargeAura = 0;
+            }
+        });
+        // Pause/resume logic
+    function togglePause() {
+            if (gameOver || gameContainer.classList.contains('hidden')) return;
+            paused = !paused;
+            if (paused) {
+                pauseModalEl.classList.remove('hidden');
+                setMariana('victory');
+        if (animationId) { cancelAnimationFrame(animationId); animationId = null; }
+                refreshAudioMute();
+            } else {
+                pauseModalEl.classList.add('hidden');
+                setMariana('base');
+        if (!animationId) { animationId = requestAnimationFrame(animate); }
+                refreshAudioMute();
+            }
+        }
+
+
+        function getMousePos(event) {
+            const rect = canvas.getBoundingClientRect();
+            return {
+                x: event.clientX - rect.left,
+                y: event.clientY - rect.top
+            };
+        }
+
+        canvas.addEventListener('mousemove', (event) => {
+            mousePos = getMousePos(event);
+        });
+
+    canvas.addEventListener('mousedown', (event) => {
+            mousePos = getMousePos(event);
+            holdingClick = true;
+            // Power mode: begin charge if selected; otherwise shoot immediately
+            if (weaponMode === 'power' && weaponLevel >= 3) {
+                chargingShot = true;
+                shotChargeStart = performance.now();
+            } else {
+                shoot();
+            }
+        });
+        
+    canvas.addEventListener('mouseup', (event) => {
+            holdingClick = false;
+            if (chargingShot) {
+                const heldMs = Math.max(0, performance.now() - shotChargeStart);
+                chargingShot = false;
+                // up to 1s -> 3x damage scaling applied inside shoot via a temporary multiplier flag
+                chargeShotMultiplier = heldMs >= 1000 ? 3 : (heldMs >= 500 ? 2 : 1.4);
+                shoot();
+                chargeShotMultiplier = 1; // reset
+            }
+        });
+
+    function startGame(hardMode) {
+            isHardMode = hardMode;
+            startModalEl.classList.add('hidden');
+            gameContainer.classList.remove('hidden');
+            init();
+        }
+
+        normalModeButton.addEventListener('click', () => startGame(false));
+        hardModeButton.addEventListener('click', () => startGame(true));
+        // Weapon choice handlers
+        document.getElementById('chooseRapidBtn')?.addEventListener('click', () => {
+            weaponMode = 'rapid';
+            weaponChoiceModalEl.classList.add('hidden');
+            // resume
+            paused = false;
+            if (!animationId) { animationId = requestAnimationFrame(animate); }
+        });
+        document.getElementById('choosePowerBtn')?.addEventListener('click', () => {
+            weaponMode = 'power';
+            weaponChoiceModalEl.classList.add('hidden');
+            paused = false;
+            if (!animationId) { animationId = requestAnimationFrame(animate); }
+        });
+        restartButton.addEventListener('click', () => {
+            modalEl.classList.add('hidden');
+            gameContainer.classList.add('hidden');
+            startModalEl.classList.remove('hidden');
+            if (animationId) { cancelAnimationFrame(animationId); animationId = null; }
+            marianaState = 'base';
+            marianaImg.src = MARIANA_IMAGES.base;
+            marianaImg.classList.remove('shake');
+            marianaImg.classList.remove('glow-blue');
+            if (bgAudio) { bgAudio.pause(); bgAudio.currentTime = 0; }
+        });
+
+        // Damage handler respecting invulnerability
+        let lastDamageFrame = -9999;
+        function takeDamage(amount) {
+            if (paused) return;
+            if (invulnerable) {
+                for (let i = 0; i < 6; i++) particles.push(new Particle(mousePos.x, mousePos.y, '#00B4FF'));
+                return;
+            }
+            // brief iFrame against stacked hits in a single frame burst
+            if (frameCount - lastDamageFrame < 6) return;
+            health -= amount;
+            lastDamageFrame = frameCount;
+            setMariana('ouch', 600);
+            if (health <= 0) {
+                cancelAnimationFrame(animationId);
+                showGameOverModal();
+            }
+        }
+
+        window.addEventListener('resize', () => {
+            if (!gameOver && !gameContainer.classList.contains('hidden')) {
+                if (animationId) { cancelAnimationFrame(animationId); animationId = null; }
+                init();
+            }
+        });
+
+        // Play shot SFX on shoot, throttled and with alternating pitch
+        const originalShoot = shoot;
+        shoot = function wrappedShoot() {
+            originalShoot();
+            const now = performance.now();
+            if (now >= nextShotSfxAt) {
+                try {
+                    sfxShot.pause();
+                    sfxShot.currentTime = 0;
+                } catch {}
+                sfxAlt = !sfxAlt;
+                sfxShot.playbackRate = sfxAlt ? 0.92 : 1.00;
+                if (!sfxShot.muted) {
+                    sfxShot.play().catch(() => {});
+                }
+                nextShotSfxAt = now + 500;
+            }
+        };
+    </script>
+    <script>
+        // Store logic
+        const storeModalEl = document.getElementById('storeModalEl');
+        const buyHealthBtn = document.getElementById('buyHealthBtn');
+        const buyOrbBtn = document.getElementById('buyOrbBtn');
+    const buyShieldBtn = document.getElementById('buyShieldBtn');
+        const continueBtn = document.getElementById('continueBtn');
+        const healthCostLabel = document.getElementById('healthCostLabel');
+        const orbCostLabel = document.getElementById('orbCostLabel');
+    const shieldCostLabel = document.getElementById('shieldCostLabel');
+
+        function getStoreCost() { return isHardMode ? 15 : 10; }
+        function getOrbCost() { return isHardMode ? 35 : 25; }
+        function getShieldCost() { return isHardMode ? 25 : 20; }
+        function openStore() {
+            paused = true;
+            if (animationId) { cancelAnimationFrame(animationId); animationId = null; }
+            storeModalEl.classList.remove('hidden');
+            const healthCostText = `Cost: ${getStoreCost()} Loot`;
+            const orbCostText = `Cost: ${getOrbCost()} Loot`;
+            healthCostLabel.textContent = healthCostText;
+            orbCostLabel.textContent = orbCostText;
+            if (shieldCostLabel) shieldCostLabel.textContent = `Cost: ${getShieldCost()} Loot`;
+        }
+        function closeStoreAndNextRound() {
+            storeModalEl.classList.add('hidden');
+            // Advance round and reset state
+            round += 1;
+            roundEl.textContent = round;
+            roundState = 'farming';
+            containsThisRound = 0;
+            // Light difficulty scaling for future spawns is handled via intervals; also bump enemy base stats slightly per round via multipliers at spawn
+            paused = false;
+            if (!animationId) { animationId = requestAnimationFrame(animate); }
+        }
+        function spendLootAndRecalc(cost) {
+            if (lootNabbed < cost) return false;
+            lootNabbed -= cost;
+            // Spending loot reduces attackRadiusBonus (since based on floor(loot/10))
+            attackRadiusBonus = Math.floor(lootNabbed / 10);
+            updateUI();
+            return true;
+        }
+        buyHealthBtn?.addEventListener('click', () => {
+            const cost = getStoreCost();
+            if (spendLootAndRecalc(cost)) {
+                health = Math.min(100, health + 25);
+                setMariana('powerup', 800);
+                updateUI();
+            }
+        });
+        buyOrbBtn?.addEventListener('click', () => {
+            const cost = getOrbCost();
+            if (spendLootAndRecalc(cost)) {
+                let maxLevel = 10;
+                if (weaponLevel < maxLevel) { 
+                    weaponLevel++; 
+                    setMariana('powerup', 800); 
+                    maybeOpenWeaponChoice();
+                }
+                updateUI();
+            }
+        });
+        buyShieldBtn?.addEventListener('click', () => {
+            const cost = getShieldCost();
+            if (spendLootAndRecalc(cost)) {
+                shieldCharges += 1;
+                setMariana('powerup', 800);
+                updateUI();
+            }
+        });
+        continueBtn?.addEventListener('click', () => closeStoreAndNextRound());
+    </script>
+</body>
+</html>

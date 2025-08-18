@@ -5,156 +5,236 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Diapered Defenders: First Mission</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Roboto+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=MedievalSharp&family=Roboto+Mono&display=swap" rel="stylesheet">
     <style>
+        :root {
+            /* Handbook palette (from simple-handbook.html) */
+            --gold: #daac17;
+            --gold-light: #fae791;
+            --gold-dark: #97740a;
+            --parchment: #2C2614;
+            --parchment-dark: #1E1C12;
+            --ink: #c7a81d;
+            --ink2: #8f770d;
+            --accent: #b47018;
+            --shadow: rgba(0, 0, 0, 0.5);
+            /* Derived */
+            --panel: var(--parchment);
+            --panel-2: #352c18;
+            --paper: var(--parchment);
+            --muted: #d8c7a0;
+            --grid-line: rgba(218, 172, 23, 0.16);
+            --grid-border: rgba(218, 172, 23, 0.28);
+            /* CR rings tuned toward warm golds/oranges */
+            --ring-t0: #e0c25a; /* CR <1 */
+            --ring-t1: #daac17; /* <2 */
+            --ring-t2: #b98d12; /* <5 */
+            --ring-t3: #a6790e; /* <9 */
+            --ring-t4: #8f670b; /* 9+ */
+            /* Cell size for bigger board */
+            --cell: 72px;
+        }
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #111827; /* Dark Slate Gray */
-            color: #E5E7EB;
+            font-family: 'Cormorant Garamond', serif;
+            margin: 0;
+            background-color: #2c2619;
+            background-image: url('https://www.transparenttextures.com/patterns/dark-wood.png');
+            color: var(--ink);
+        }
+        .app-panel {
+            background-color: var(--panel);
+            background-image: url('https://www.transparenttextures.com/patterns/parchment.png');
+            border: 2px solid var(--gold-dark);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.03);
+        }
+        .panel-title {
+            color: var(--accent);
+            font-family: 'MedievalSharp', cursive;
         }
         .grid-container {
             display: grid;
-            border: 2px solid #374151;
-            background-image: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-                              linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
-            background-size: 50px 50px;
+            border: 3px solid var(--gold-dark);
+            background-image: linear-gradient(var(--grid-line) 1px, transparent 1px),
+                              linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+            background-size: var(--cell) var(--cell);
         }
         .grid-cell {
-            width: 50px;
-            height: 50px;
-            border: 1px solid rgba(55, 65, 81, 0.5);
+            width: var(--cell);
+            height: var(--cell);
+            border: 1px solid var(--grid-border);
             position: relative;
         }
         .token {
-            width: 80%;
-            height: 80%;
+            width: 86%;
+            height: 86%;
             border-radius: 50%;
             cursor: grab;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 10px;
-            font-weight: bold;
+            font-size: 16px;
+            font-weight: 800;
             color: white;
             position: absolute;
-            top: 10%;
-            left: 10%;
+            top: 7%;
+            left: 7%;
             z-index: 10;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.55);
             transition: transform 0.2s;
-            text-shadow: 1px 1px 2px black;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
         }
+        /* CR ring tint without altering existing backgrounds */
+        .token[data-tier="t0"] { outline: 2px solid var(--ring-t0); outline-offset: -2px; }
+        .token[data-tier="t1"] { outline: 2px solid var(--ring-t1); outline-offset: -2px; }
+        .token[data-tier="t2"] { outline: 2px solid var(--ring-t2); outline-offset: -2px; }
+        .token[data-tier="t3"] { outline: 2px solid var(--ring-t3); outline-offset: -2px; }
+        .token[data-tier="t4"] { outline: 2px solid var(--ring-t4); outline-offset: -2px; }
         .token:active {
             cursor: grabbing;
-            transform: scale(1.1);
+            transform: scale(1.08);
             z-index: 20;
         }
-        .player-yellow { background-color: #FBBF24; border: 2px solid #F59E0B; }
-        .player-red { background-color: #EF4444; border: 2px solid #DC2626; }
-        .player-green { background-color: #10B981; border: 2px solid #059669; }
-        .player-black { background-color: #374151; border: 2px solid #1F2937; }
-        .monster-token { background-color: #7C3AED; border: 2px solid #6D28D9; }
+        /* Keep player colors intact */
+    .player-yellow { background-color: #FBBF24; border: 2px solid #F59E0B; font-size: 24px; }
+    .player-red { background-color: #EF4444; border: 2px solid #DC2626; font-size: 24px; }
+    .player-green { background-color: #10B981; border: 2px solid #059669; font-size: 24px; }
+    .player-black { background-color: #374151; border: 2px solid #1F2937; font-size: 24px; }
+    .monster-token { background-color: #7C3AED; border: 2px solid #6D28D9; font-size: 24px; }
         .object-token {
-            background-color: #6B7280;
-            border-radius: 8px;
-            border: 2px solid #4B5563;
-            font-size: 9px;
+            background-color: #6B5B4A;
+            border-radius: 10px;
+            border: 2px solid #4B3E31;
+            font-size: 30px;
             width: 90%;
             height: 90%;
             top: 5%;
             left: 5%;
+            color: #fff;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
         }
+    /* Let players stand visually on debris/clutter */
+    .object-token.debris { z-index: 6; }
         .object-token.puzzle-switch {
-             background-image: radial-gradient(circle, #FCA5A5, #EF4444);
+             background-image: radial-gradient(circle, #b98d3b, #8a6b2c);
         }
-        .tooltip {
-            position: relative;
-        }
-        .tooltip:hover::after {
-            content: attr(data-tooltip);
+        .tooltip { position: relative; }
+        /* Hover card */
+        .hover-card {
             position: absolute;
-            bottom: 105%;
+            bottom: 110%;
             left: 50%;
             transform: translateX(-50%);
-            white-space: nowrap;
-            background-color: #1F2937;
-            color: #E5E7EB;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-            z-index: 100;
-            border: 1px solid #4B5563;
+            min-width: 260px;
+            max-width: 360px;
+            background: var(--panel-2);
+            color: var(--ink);
+            border: 1px solid var(--gold-dark);
+            border-radius: 10px;
+            padding: 10px;
+            box-shadow: 0 10px 26px rgba(0,0,0,0.6);
+            z-index: 1000;
+            display: none;
         }
 
-        #text-log-container {
-            height: 350px; /* Increased height */
-        }
+        /* Grid wrapper to help compute available size */
+        #grid-outer { width: 100%; }
+        :root { --board-max-h: 70vh; }
+        .hover-card .hc-row { display: flex; justify-content: space-between; font-size: 12px; margin: 2px 0; }
+    .hover-card .hc-name { font-weight: 800; font-size: 14px; color: var(--gold); font-family: 'MedievalSharp', cursive; }
+    .hover-card .hc-sub { color: var(--ink2); font-size: 12px; }
+        .hover-card .hc-actions { margin-top: 6px; display: grid; grid-template-columns: 1fr; gap: 4px; }
+        .hover-card .hc-action-btn { background:#514231; color:#fff; border:1px solid #6b553c; padding:6px 8px; border-radius:6px; cursor:pointer; text-align:left; font-size:12px; }
+        .hover-card .hc-action-btn:hover { background:#6b553c; }
+        .hover-card .hc-roll { margin-top: 6px; font-family: 'Roboto Mono', monospace; font-size: 12px; color:#f6d27a; }
+        .hover-card .hc-list { margin-top: 6px; display: grid; grid-template-columns: 1fr; gap: 2px; }
+        .hover-card .hc-item { font-size: 12px; color:#F3E9D8; }
+        .hover-card .hc-hint { margin-top: 6px; font-size: 11px; color:#bfa77f; }
+
+        /* Narrative log */
+        #text-log-container { height: 360px; overflow: hidden; }
         #text-log {
             font-family: 'Roboto Mono', monospace;
             height: 100%;
-            background-color: #1F2937;
-            border: 1px solid #374151;
+            background-color: var(--paper);
+            border: 2px solid var(--gold-dark);
             padding: 1rem;
             overflow-y: auto;
+            border-radius: 10px;
+            box-sizing: border-box;
+            overflow-x: hidden;
+            word-break: break-word;
+            overflow-wrap: anywhere;
+        }
+        .log-entry span { display: block; }
+        .log-entry.sysinfo span { opacity: 0.85; font-style: italic; color: var(--ink2); }
+
+        /* Actions panel buttons */
+    #interaction-panel button { transition: all 0.2s ease-in-out; border: 2px solid var(--gold-dark); background: linear-gradient(to bottom, var(--gold-light), var(--gold)); color: #2C2614; font-family: 'MedievalSharp', cursive; }
+    #interaction-panel button:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.35); background: linear-gradient(to bottom, var(--gold), var(--gold-dark)); }
+        #interaction-panel button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        /* Custom scrollbar for webkit browsers */
+    /* Cleaner, themed scrollbar (WebKit/Chromium) */
+        #text-log::-webkit-scrollbar { width: 10px; }
+        #text-log::-webkit-scrollbar-track { background: var(--parchment-dark); border-left: 1px solid var(--gold-dark); }
+        #text-log::-webkit-scrollbar-thumb {
+            background-image: linear-gradient(180deg, var(--gold), var(--gold-dark));
+            border: 1px solid var(--gold-dark);
             border-radius: 8px;
         }
-        .log-entry span {
-            display: block;
-        }
-        #interaction-panel button {
-            transition: all 0.2s ease-in-out;
-        }
-        #interaction-panel button:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-        }
-        #interaction-panel button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        /* Custom scrollbar for webkit browsers */
-        #text-log::-webkit-scrollbar {
-            width: 8px;
-        }
-        #text-log::-webkit-scrollbar-track {
-            background: #1F2937;
-        }
-        #text-log::-webkit-scrollbar-thumb {
-            background-color: #4B5563;
-            border-radius: 4px;
-        }
+        #text-log::-webkit-scrollbar-thumb:hover { background-image: linear-gradient(180deg, var(--gold-light), var(--gold)); }
+
+        /* Puzzle controls buttons -> handbook style */
+        #puzzle-controls button { background: linear-gradient(to bottom, var(--gold-light), var(--gold)) !important; border: 2px solid var(--gold-dark) !important; color: #2C2614 !important; font-family: 'MedievalSharp', cursive !important; }
+        #puzzle-controls button:hover { background: linear-gradient(to bottom, var(--gold), var(--gold-dark)) !important; }
     </style>
+    <script src="./src/data/monsters-runtime.js"></script>
 </head>
 <body class="p-4 md:p-8">
 
-    <div class="max-w-7xl mx-auto flex flex-col gap-8">
+    <div class="mx-auto flex flex-col gap-8" style="max-width: min(96vw, 2400px);">
         
         <!-- Top Section: Game Board and Interaction Panel -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div class="lg:col-span-2 bg-[#1a2333] p-4 rounded-lg shadow-lg">
-                <h1 class="text-2xl font-bold mb-2 text-center text-gray-200">Diapered Defenders: First Mission</h1>
-                <h2 class="text-lg font-semibold mb-4 text-center text-gray-400" id="room-name">Loading VR Simulation...</h2>
-                <div class="flex justify-center">
+            <div class="lg:col-span-2 app-panel p-4 rounded-lg">
+                <h1 class="text-3xl font-bold mb-2 text-center" style="color: var(--accent); font-family: 'MedievalSharp', cursive;">Diapered Defenders: First Mission</h1>
+                <h2 class="text-lg font-semibold mb-4 text-center panel-title" id="room-name">Loading VR Simulation...</h2>
+                <div id="grid-outer" class="flex justify-center">
                     <div id="grid-container" class="grid-container"></div>
                 </div>
             </div>
             
-            <div id="interaction-panel" class="bg-[#1a2333] p-4 rounded-lg shadow-lg text-center flex flex-col">
-                <h3 class="text-xl font-bold mb-4 text-gray-200">Actions</h3>
+            <div id="interaction-panel" class="app-panel p-4 rounded-lg text-center flex flex-col">
+                <h3 class="text-xl font-bold mb-4" style="color: var(--accent); font-family: 'MedievalSharp', cursive;">Actions</h3>
                 <div id="puzzle-controls" class="hidden flex flex-col gap-2 flex-grow"></div>
-                <button id="next-room-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg mt-auto" disabled>Proceed to Next Chamber</button>
+                <button id="next-room-btn" class="w-full text-white font-bold py-2 px-4 rounded-lg mt-auto" disabled>Proceed to Next Chamber</button>
             </div>
         </div>
 
         <!-- Bottom Section: Text Log -->
-        <div id="text-log-container" class="bg-[#1a2333] p-4 rounded-lg shadow-lg">
-             <h3 class="text-xl font-bold mb-2 text-gray-200">System Log & Dialogue</h3>
+    <div id="text-log-container" class="app-panel p-4 rounded-lg">
+         <h3 class="text-xl font-bold mb-2" style="color: var(--accent); font-family: 'MedievalSharp', cursive;">System Log & Dialogue</h3>
             <div id="text-log"></div>
         </div>
 
     </div>
 
     <script>
+        // Optional: small loading banner while bestiary loads
+        const ddvrmLoading = document.createElement('div');
+        ddvrmLoading.textContent = 'Loading bestiary...';
+        ddvrmLoading.style.position = 'fixed';
+        ddvrmLoading.style.bottom = '16px';
+        ddvrmLoading.style.right = '16px';
+    ddvrmLoading.style.background = 'var(--parchment)';
+    ddvrmLoading.style.backgroundImage = "url('https://www.transparenttextures.com/patterns/parchment.png')";
+    ddvrmLoading.style.color = 'var(--ink)';
+        ddvrmLoading.style.padding = '6px 10px';
+    ddvrmLoading.style.border = '1px solid var(--gold-dark)';
+        ddvrmLoading.style.borderRadius = '6px';
+        ddvrmLoading.style.fontSize = '12px';
+        ddvrmLoading.style.zIndex = '9999';
+        document.addEventListener('DOMContentLoaded', ()=> document.body.appendChild(ddvrmLoading));
         const gameState = {
             dungeon: [],
             currentRoomIndex: -1,
@@ -166,7 +246,7 @@
 
         // --- DATA DEFINITIONS ---
         // These can be expanded significantly for more variety
-        const MONSTERS = {
+    const MONSTERS = {
             darkling_lurker: { 
             name: "Darkling-Lurker", 
             cr: "1/2", 
@@ -267,12 +347,75 @@
             }
         };
 
+        // Runtime bestiary helpers (non-breaking): prefer runtime data, fallback to static
+        function getMonster(key) {
+            try {
+                if (window.MonstersRuntime && window.MonstersRuntime.cache.loaded) {
+                    let norm = window.MonstersRuntime.get(key);
+                    if (!norm) {
+                        // Try explicit aliases and fuzzy matching
+                        const alias = {
+                            darkling_lurker: 'Darkling Lurker',
+                            darkforme_overwatch: 'Darkforme Overwatch',
+                            darkforged_remnant: 'Darkforged Remnant',
+                            the_castoff: 'The Castoff',
+                            darkling_yowler: 'Darkling Yowler',
+                            darkling_bellowbelly: 'Darkling Bellowbelly',
+                            darkforme_cavesweller: 'Darkforme Cavesweller',
+                            darkforme_hungore: 'Darkforme Hungore',
+                            darkling_nightshade: 'Darkling Nightshade',
+                            the_darkformless: 'The Darkformless',
+                            darkforme_spinebearer: 'Darkforme Spinebearer'
+                        };
+                        const wanted = alias[key];
+                        const list = window.MonstersRuntime.all();
+                        if (wanted) {
+                            norm = list.find(m => m.name.toLowerCase() === wanted.toLowerCase());
+                        }
+                        if (!norm) {
+                            const words = key.replace(/[_-]/g,' ').toLowerCase().split(/\s+/).filter(Boolean);
+                            norm = list.find(m => words.every(w => m.name.toLowerCase().includes(w)));
+                        }
+                    }
+                    if (norm) {
+                        const hasFullStats = Boolean(norm.ac || norm.hpStr || (Array.isArray(norm.actions) && norm.actions.length));
+                        return {
+                            name: norm.name,
+                            cr: norm.crStr || String(norm.cr),
+                            color: '#6D28D9', // keep style parity
+                            description: norm.description || '',
+                            abilities: norm.abilities || [],
+                            emoji: norm.emoji,
+                            tier: norm.tier,
+                            tiles: norm.tiles,
+                            ac: norm.ac,
+                            armorType: norm.armorType,
+                            hpStr: norm.hpStr,
+                            abilityScores: norm.abilityScores,
+                            actions: norm.actions,
+                            size: norm.size,
+                            hasFullStats
+                        };
+                    }
+                }
+            } catch(_) {}
+            const fallback = MONSTERS[key] || null;
+            if (fallback) return { ...fallback, hasFullStats: false };
+            return null;
+        }
+
         const ROOM_TEMPLATES = [
             {
                 name: "The Whispering Antechamber",
                 width: 10, height: 8,
                 layout: {
-                    monsters: [{ type: 'darkling_lurker', x: 7, y: 2 }, { type: 'darkling_lurker', x: 8, y: 5 }],
+                    monsters: [
+                        { type: 'darkling_lurker', x: 7, y: 2 }, 
+                        { type: 'darkling_lurker', x: 8, y: 5 },
+                        { type: 'darkling_yowler', x: 6, y: 1 },
+                        { type: 'darkling_yowler', x: 9, y: 3 },
+                        { type: 'darkling_bellowbelly', x: 5, y: 6 }
+                    ],
                     objects: [
                         { type: 'debris', x: 2, y: 2, flavor: "A pile of crumbling stone and rotted wood." }, 
                         { type: 'debris', x: 3, y: 6, flavor: "Shattered remnants of an old arcane device." },
@@ -319,6 +462,7 @@
                 lore: [
                     { speaker: 'System', text: "This chamber seems to hum with paradoxical energy. Three pedestals stand on one side, three objects on the other. The inscriptions are faded, but speak of 'opposition in harmony'." },
                     { speaker: 'Yellow', text: "It's a puzzle... Tabitha was always fond of these. She believed true understanding came from reconciling opposites." },
+                    { speaker: 'Red', text: "Great, a riddle. Just what our huggies need... Let's get this over with before Yellow smells like brown..." },
                     { speaker: 'Black', text: "A test of perception, not just logic. Observe the objects carefully. What they appear to be may not be their true nature." }
                 ]
             },
@@ -329,36 +473,272 @@
                     monsters: [
                         { type: 'darkforme_overwatch', x: 7, y: 6 },
                         { type: 'darkforged_remnant', x: 4, y: 3 },
-                        { type: 'darkforged_remnant', x: 10, y: 9 }
+                        { type: 'darkforged_remnant', x: 10, y: 9 },
+                        { type: 'darkforme_cavesweller', x: 2, y: 8 },
+                        { type: 'darkforme_hungore', x: 12, y: 4 },
+                        { type: 'darkling_nightshade', x: 8, y: 2 },
+                        { type: 'darkforme_brute', x: 5, y: 10 },
+                        { type: 'darkforged_remnant', x: 6, y: 1 },
+                        { type: 'darkforged_remnant', x: 8, y: 1 },
+                        { type: 'darkforged_remnant', x: 7, y: 2 }
                     ],
                     objects: [
-                        { type: 'debris', x: 1, y: 1, flavor: "A shattered lectern." }, { type: 'debris', x: 13, y: 2, flavor: "A pile of burnt scrolls." }, { type: 'debris', x: 2, y: 10, flavor: "An overturned bookshelf." },
+                        { type: 'debris', x: 1, y: 1, flavor: "A shattered lectern." }, 
+                        { type: 'debris', x: 13, y: 2, flavor: "A pile of burnt scrolls." }, 
+                        { type: 'debris', x: 2, y: 10, flavor: "An overturned bookshelf." },
+                        { type: 'debris', x: 5, y: 4, flavor: "Collapsed stone shelving creates partial cover." },
+                        { type: 'debris', x: 9, y: 5, flavor: "A toppled reading desk blocks movement." },
+                        { type: 'debris', x: 3, y: 6, flavor: "Scattered stone blocks from a fallen pillar." },
+                        { type: 'debris', x: 11, y: 7, flavor: "Rubble from damaged walls creates a barrier." },
+                        { type: 'debris', x: 6, y: 8, flavor: "Broken furniture forms makeshift cover." },
+                        { type: 'debris', x: 14, y: 10, flavor: "A collapsed archway blocks direct passage." },
+                        { type: 'debris', x: 1, y: 5, flavor: "Debris forces movement around this area." },
+                        { type: 'debris', x: 12, y: 2, flavor: "Stone fragments create a tactical chokepoint." },
                         { type: 'puzzle_switch', x: 7, y: 1, flavor: "A glowing, pulsating crystal on the wall seems to empower the constructs. It must be deactivated." }
                     ],
+                    puzzle: {
+                        type: 'switch',
+                        prompt: "The crystal empowers the constructs, making them invulnerable to melee and non-radiant magical attacks. Even radiant powers only do half damage. Find a way to deactivate it!",
+                        switches: [
+                            { id: 'crystal_switch', label: 'Deactivate Crystal', x: 7, y: 1 }
+                        ],
+                        solution: { crystal_switch: true }
+                    },
                     exit: { x: 14, y: 6, flavor: "A large, reinforced door, its lock mechanism glowing faintly." }
                 },
                 lore: [
-                    { speaker: 'System', text: "This was once a scriptorium, now ruined. Shattered desks and torn scrolls litter the floor. Several hulking constructs, their forms flickering with dark energy, stand guard. A central crystal pulses with a malevolent light, seeming to repair any damage they take." },
-                    { speaker: 'Green', text: "More of Tabitha's old warforged... corrupted. That crystal is sustaining them. We need to shut it down." },
-                    { speaker: 'Red', text: "I'll keep them busy! You two figure out how to smash that glowing rock!" }
+                    { speaker: 'System', text: "This was once a scriptorium, now ruined. Shattered desks and torn scrolls litter the floor. Several hulking constructs, their forms flickering with dark energy, stand guard throughout the chamber. Near the back wall, a sparkling crystal of dazzling radiance pulses with malevolent light, with three warforged positioned directly around it as guardians. Debris and rubble create natural chokepoints and cover throughout the room." },
+                    { speaker: 'Green', text: "More of Tabitha's old warforged... corrupted. That crystal is sustaining them, and they've positioned guards right around it. We need to shut it down." },
+                    { speaker: 'Yellow', text: "How could she... all of these... these things... had to be students and faculty and other innocents once... how wickedly cruel..." },                   
+                    { speaker: 'Red', text: "Look at all this debris! We can use it for cover, but it'll funnel our movement. Those constructs guarding that glowing rock won't make this easy!" }
                 ]
             },
             {
-                name: "The Chamber of Resolution",
-                width: 12, height: 12,
+                name: "The Room of Malodorous Balance",
+                width: 12, height: 10,
                 layout: {
+                    monsters: [
+                        { type: 'darkling_yowler', x: 2, y: 4 },
+                        { type: 'darkling_lurker', x: 3, y: 0 },
+                        { type: 'darkling_lurker', x: 4, y: 0 },
+                        { type: 'darkling_lurker', x: 4, y: 1 },
+                        { type: 'darkling_lurker', x: 11, y: 9 },
+                        { type: 'darkling_lurker', x: 10, y: 9 },
+                        { type: 'darkling_lurker', x: 10, y: 8 },
+                        { type: 'darkling_lurker', x: 2, y: 9 },
+                        { type: 'darkling_lurker', x: 1, y: 8 },
+                        { type: 'darkling_lurker', x: 2, y: 8 },
+                        { type: 'darkling_lurker', x: 11, y: 0 },
+                        { type: 'darkling_lurker', x: 10, y: 0 },
+                        { type: 'darkling_lurker', x: 11, y: 1 },
+                        { type: 'darkforged_remnant', x: 7, y: 3 },
+                        { type: 'darkforged_remnant', x: 7, y: 6 },
+                        { type: 'darkforged_remnant', x: 6, y: 9 }
+                    ],
+                    objects: [
+                        { type: 'trap_gas', x: 8, y: 7, flavor: "This gas trap emits a sickly sweet scent of instant potty-time for anyone who inhales it. Walking through the area within 5ft of this square invokes a potty check." },
+                        { type: 'trap_gas', x: 8, y: 2, flavor: "This gas trap emits a sickly sweet scent of instant potty-time for anyone who inhales it. Walking through the area within 5ft of this square invokes a potty check." },
+                        { type: 'puzzle_dais', x: 8, y: 4, id: 'dais_balance1', flavor: "This dais is carved of crude stone and bears the sigil of a droopy diaper upon it." },
+                        { type: 'puzzle_dais', x: 8, y: 5, id: 'dais_balance2', flavor: "This dais is carved of crude stone and bears the sigil of a droopy diaper upon it." },
+                        { type: 'debris', x: 3, y: 5, flavor: "This collapsed section of ceiling is angled perfectly to be a ramp up to the elevated section of fallen ceiling in the center of the room." },
+                        { type: 'debris', x: 4, y: 3, flavor: "The ceiling has caved in providing 3/4s cover, and requiring a DC 12 acrobatics or athletics check to mount or vault up to from the ground." },
+                        { type: 'debris', x: 4, y: 4, flavor: "The ceiling has caved in providing 3/4s cover, and requiring a DC 12 acrobatics or athletics check to mount or vault up to from the ground." },
+                        { type: 'debris', x: 4, y: 5, flavor: "The ceiling has caved in providing 3/4s cover, and requiring a DC 12 acrobatics or athletics check to mount or vault up to from the ground." },
+                        { type: 'debris', x: 4, y: 6, flavor: "The ceiling has caved in providing 3/4s cover, and requiring a DC 12 acrobatics or athletics check to mount or vault up to from the ground." },
+                        { type: 'debris', x: 4, y: 7, flavor: "The ceiling has caved in providing 3/4s cover, and requiring a DC 12 acrobatics or athletics check to mount or vault up to from the ground." },
+                        { type: 'debris', x: 5, y: 7, flavor: "The ceiling has caved in providing 3/4s cover, and requiring a DC 12 acrobatics or athletics check to mount or vault up to from the ground." },
+                        { type: 'debris', x: 5, y: 6, flavor: "The ceiling has caved in providing 3/4s cover, and requiring a DC 12 acrobatics or athletics check to mount or vault up to from the ground." },
+                        { type: 'debris', x: 5, y: 5, flavor: "The ceiling has caved in providing 3/4s cover, and requiring a DC 12 acrobatics or athletics check to mount or vault up to from the ground." },
+                        { type: 'debris', x: 5, y: 4, flavor: "The ceiling has caved in providing 3/4s cover, and requiring a DC 12 acrobatics or athletics check to mount or vault up to from the ground." },
+                        { type: 'debris', x: 5, y: 3, flavor: "The ceiling has caved in providing 3/4s cover, and requiring a DC 12 acrobatics or athletics check to mount or vault up to from the ground." },
+                        { type: 'debris', x: 6, y: 4, flavor: "The ceiling has caved in providing 3/4s cover, and requiring a DC 12 acrobatics or athletics check to mount or vault up to from the ground." },
+                        { type: 'debris', x: 6, y: 5, flavor: "The ceiling has caved in providing 3/4s cover, and requiring a DC 12 acrobatics or athletics check to mount or vault up to from the ground." },
+                        { type: 'debris', x: 6, y: 6, flavor: "The ceiling has caved in providing 3/4s cover, and requiring a DC 12 acrobatics or athletics check to mount or vault up to from the ground." }
+                    ],
+                    exit: { x: 11, y: 5, flavor: "The way forward." }
+                },
+                puzzle: {
+                    type: 'balance',
+                    prompt: "Two users must have the same number of use charges remaining on their diapers and stand at the required places. Until the puzzle is solved, 1d3 darkling lurkers flood into the room every 2 turns. If players take too long (more than 6 turns), Darkeforme Spanners will begin to slither into the room at a rate of 2d2 per two turns.)",
+                    dais: [
+                        { id: 'dais_balance1', label: 'Stand on First Balance Dais'},
+                        { id: 'dais_balance2', label: 'Stand on Second Balance Dais'}
+                    ],
+                    objects: [
+                        { id: 'player_balance1', label: 'First Player with Matching Charges'},
+                        { id: 'player_balance2', label: 'Second Player with Matching Charges'}
+                    ],
+                    solution: { dais_balance1: 'player_balance1', dais_balance2: 'player_balance2' }
+                },
+                lore: [
+                    { speaker: 'Yellow', text: "Ooof, my tummy... what is wrong with the air in this room? I feel like I'm gonna be sick..." },
+                    { speaker: 'Red', text: "Toldja, Yellow's boutta brown-out her pa-" },
+                    { speaker: 'System', text: "Defender Red's tummy turned as quick as Yellow's and from her padded crimson booty came a sonorous toot." },
+                    { speaker: 'Black', text: "For headmaster's sake.... please stop playing around- we need to move quickly... gas isn't the only thing seeping into this room..." },                    { speaker: 'System', text: "A steady stream of darklings appear to be slithering into the chamber from small tubes along the corners of the ceiling. Their amorphous bodies slapping against the floor and reverse-spilling into humanoid and animalistic shapes on the dim tile floors. Whatever this room was previously, it's not anymore, and two odd stone platforms with metal plates upon them sit at the far end of the room. The way is barred." }
+                ]
+            },
+            {
+                name: "The Antechamber of the Sire",
+                width: 15, height: 6,
+                layout: {
+                    monsters: [
+                        { type: 'nightmare_sire_reaver', x: 12, y: 2 }
+                    ],
+                    objects: [],
+                    exit: { x: 14, y: 2, flavor: "Beyond the defeated Sire Reaver, massive doors bearing ancient seals swing open to reveal the heart of the sanctum." }
+                },
+                lore: [
+                    { speaker: 'System', text: "Just beyond the Defenders lies the doors to the Sanctum of the Blessed Engine. The Antechamber is not empty, however- and they are not welcomed in what has become HIS throneroom. At the end of the hall he waits eternal in his vigil, a monstrous behemoth of bone and rot and darkness and machine terror." },
+                    { speaker: 'Red', text: "This is it, the final obstruction... Look smart, brats, no telling what this bastard might be capable of..." },
+                    { speaker: 'Yellow', text: "That terrifying presence is choking me... what in all of the realms is that... creature... thing..." },
+                    { speaker: 'Green', text: "I don't know, Yellow, but we're going to have to hold back from going all out- he's just the last thing in our way..." },
+                    { speaker: 'Black', text: "Exactly, now stay sharp and get ready!" },
+                    { speaker: 'System', text: '"The Sire Reaver, King Progenitor of Shadowbeasts, bids you welcome to the Antechamber Throne. You shall go no further. For you, there is no door beyond me- I am the doorway and the guide, and I lead only to perdition. Prepare yourself- groundlings from afar- you will not return unto whence you came, but instead be added to the cosmic vortex trembling below your feet!" bellows the massive centauroid mass of mechanics, bone, and shadow in the hollow and horrifying mockery of royalty centaur.' }
+                ]
+            },            
+            {
+                name: "The Chamber of Resolution",
+                width: 12, height: 12,                layout: {
                     monsters: [
                         { type: 'the_castoff', x: 6, y: 3 },
                         { type: 'darkforged_remnant', x: 3, y: 6 },
-                        { type: 'darkforged_remnant', x: 9, y: 6 }
+                        { type: 'darkforged_remnant', x: 9, y: 6 },
+                        { type: 'the_darkformless', x: 4, y: 2 },
+                        { type: 'darkforme_nailbearer', x: 8, y: 8 },
+                        { type: 'darkforme_hungore', x: 2, y: 9 }
                     ],
                      objects: [{ type: 'crystal_altar', x: 6, y: 2, flavor: "A large, jagged chronocrystal pulses with sorrowful energy on a central altar." }],
                      exit: null // Final room
                 },
                 lore: [
-                    { speaker: 'System', text: "You have reached the heart of the disturbance. The air crackles with chronal energy and raw emotion. On a raised dais in the center of the chamber rests a massive, fractured crystal, pulsing with a sickly purple light. It is The Castoff, a sentient fragment of Tabitha's will. It is not alone." },
-                    { speaker: 'The Castoff', text: "You.. feel her ambition... her desire to protect... to *control*. You will be made safe. You will be made eternal children under my care!" },
-                    { speaker: 'Black', text: "This is it. The source. That crystal... it's radiating sorrow and obsession. We have to shatter it, release the trapped energy! For Yara!" }
+                    { speaker: 'System', text: "You have reached the heart of the disturbance. The air crackles with chronal energy and raw emotion. On a raised dais in the center of the c                                                                                                hamber rests a massive, fractured crystal, pulsing with a sickly purple light. It is The Castoff, a sentient fragment of Tabitha's will. It is not alone." },
+                    { speaker: 'The Castoff', text: '"You.. feel her ambition... her desire to protect... to *control*. You will be made safe. You will be made eternal children under my care!"' },
+                    { speaker: 'Black', text: "This is it. The source. That crystal... it's radiating sorrow and obsession. We have to shatter it, release the trapped energy!" }                ]
+            },
+            {
+                name: "The First Finale of Forever",
+                width: 20, height: 20,
+                layout: {
+                    monsters: [
+                        { type: 'the_castoff_unyielding', x: 9, y: 3 }
+                    ],
+                    objects: [
+                        { type: 'debris', x: 2, y: 10, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 3, y: 10, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 4, y: 10, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 5, y: 10, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 18, y: 1, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 18, y: 2, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 18, y: 3, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 18, y: 4, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 18, y: 5, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 18, y: 6, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 18, y: 8, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 18, y: 9, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 5, y: 11, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 6, y: 11, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 5, y: 12, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 6, y: 12, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 7, y: 12, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 15, y: 8, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 15, y: 9, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 16, y: 5, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 16, y: 6, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 16, y: 8, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 17, y: 6, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 17, y: 8, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 19, y: 16, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 19, y: 17, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 19, y: 18, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 19, y: 19, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 18, y: 16, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 18, y: 17, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 18, y: 18, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 18, y: 19, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 17, y: 16, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 17, y: 17, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 17, y: 18, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 17, y: 19, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 16, y: 19, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 15, y: 18, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 15, y: 19, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 14, y: 19, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 13, y: 18, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 13, y: 19, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 12, y: 19, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 11, y: 18, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 11, y: 19, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 10, y: 19, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 9, y: 19, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 8, y: 18, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 8, y: 19, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 7, y: 19, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 6, y: 18, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 6, y: 19, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 5, y: 19, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 4, y: 18, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 4, y: 19, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 3, y: 19, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 2, y: 16, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 2, y: 17, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 2, y: 18, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 2, y: 19, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 1, y: 16, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 1, y: 17, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 1, y: 18, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 1, y: 19, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 0, y: 16, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 0, y: 17, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 0, y: 18, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 0, y: 19, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 3, y: 15, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 2, y: 13, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 2, y: 14, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 2, y: 15, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 18, y: 13, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 19, y: 13, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 19, y: 14, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 15, y: 0, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 15, y: 1, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 16, y: 0, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 16, y: 1, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 17, y: 0, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 17, y: 1, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 18, y: 0, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 19, y: 0, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 19, y: 1, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 19, y: 2, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 0, y: 0, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 0, y: 1, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 1, y: 0, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 1, y: 1, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 2, y: 2, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 2, y: 7, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 2, y: 8, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 2, y: 9, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 3, y: 2, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 3, y: 3, flavor: "This section of ceiling has fallen and become a wall that provides full cover." },
+                        { type: 'debris', x: 4, y: 2, flavor: "This section of ceiling has fallen and become a wall that provides full cover." }
+                    ],
+                    exit: null, // Final room
+                    playerSpawns: [
+                        { x: 9, y: 16 },
+                        { x: 10, y: 16 },
+                        { x: 9, y: 17 },
+                        { x: 10, y: 17 }
+                    ]
+                },
+                lore: [
+                    { speaker: 'System', text: "A shudder racks The Castoff's frame, a low groan of stressed metal and pained flesh. With a sharp crack, the ornate crystalline crown atop her head shatters, not falling away but retracting inwards, the glowing fragments burrowing into her skull to fuse directly with her chassis. The arcane halo behind her collapses into a singularity of light and vanishes. Her head snaps up, eyes burning with cold, undiluted power. The nest of red and yellow cables that form her hair writhes to life, each tendril snapping with kinetic energy as they disconnect from the now-absent crown, becoming a writhing, prehensile mane. The plates of her arcane chassis shift and lock into a more robust configuration, her posture changing from that of a distant spellcaster to an apex predator ready to close the distance." },
+                    { speaker: 'The Castoff', text: '"They are mine. My instruments. My future. No one will take them from me. I will be beyond time, beyond life and death... and I will be above all of you!"' },
+                    { speaker: 'Yellow', text: "L-like hell you will be! W-We won't let you hurt or dominate anyone!" },
+                    { speaker: 'Black', text: "Yara?!" },
+                    { speaker: 'Yellow', text: "This is our home, the nursery of our dreams! This is where we worked hard to grow, just like you!" },
+                    { speaker: 'Red', text: "Yeah! That's right!" },
+                    { speaker: 'Yellow', text: "And anyone who tries to take it from us after we worked so hard to become strong...." },
+                    { speaker: 'Green', text: "They don't stand a damned chance against us! Not when we're together- and you, just like Tabby... are so utterly alone!" },
+                    { speaker: 'Defenders', text: "We are the Defenders and- no matter the obstacle or foe- when we fight as one, there will never be a challenge we cannot overcome!" },
+                    { speaker: 'The Castoff', text: '"I HATE ALL OF YOU! THIS UNIVERSE...THIS SADNESS... ALL OF IT. YOUR SICKENING CAMARADERIE ALWAYS FORGETS SOMETHING OR SOMEONE! WHAT WILL YOUR PATHETIC FRIENDSHIP MEAN AFTER ALL OF THIS IS GONE?!\n\nFine then, if you want to be the first four to be remade in a perfect, ageless, and timeless image- so be it! For it is better the strong should reign to protect the weak than the weak should deign to command the strong!"' }
                 ]
             }
         ];
@@ -372,14 +752,15 @@
         
         // --- GAME LOGIC ---
 
-        function logMessage(speaker, text) {
+    function logMessage(speaker, text) {
             const entry = document.createElement('div');
             entry.classList.add('log-entry', 'mb-2');
             let color = '#E5E7EB'; // Default
             let displayName = speaker;
 
             switch(speaker) {
-                case 'System': color = '#10B981'; displayName = '[SYSTEM]'; break;
+                case 'System': color = varColor('--gold'); displayName = '[SYSTEM]'; break;
+                case 'SystemInfo': color = varColor('--muted'); displayName = '[SYSTEM:INFO]'; entry.classList.add('sysinfo'); break;
                 case 'Yellow': color = '#FBBF24'; displayName = '[Defender Yellow]'; break;
                 case 'Red':    color = '#F472B6'; displayName = '[Defender Red]'; break;
                 case 'Green':  color = '#34D399'; displayName = '[Defender Green]'; break;
@@ -387,12 +768,16 @@
                 case 'The Castoff': color = '#A78BFA'; displayName = '[The Castoff]'; break;
             }
 
-            entry.innerHTML = `<span style="color: ${color}; font-weight: bold;">${displayName}:</span> <span class="text-gray-300">${text}</span>`;
+            entry.innerHTML = `<span style="color: ${color}; font-weight: bold;">${displayName}:</span> <span style="color: var(${speaker==='SystemInfo' ? '--ink2' : '--ink'})">${text}</span>`;
             textLog.appendChild(entry);
             textLog.scrollTop = textLog.scrollHeight;
         }
 
-        function createToken(type, id, label, tooltipText) {
+        function varColor(name) {
+            return getComputedStyle(document.documentElement).getPropertyValue(name) || '#E5E7EB';
+        }
+
+        function createToken(type, id, label, tooltipText, details) {
             const token = document.createElement('div');
             token.id = id;
             token.className = 'token tooltip';
@@ -400,7 +785,247 @@
             token.draggable = true;
             token.textContent = label;
             token.setAttribute('data-tooltip', tooltipText);
+            // Build hover card if details provided
+            if (details && (type === 'monster-token' || type === 'object-token')) {
+                const hc = document.createElement('div');
+                hc.className = 'hover-card';
+                hc.innerHTML = type === 'monster-token' ? buildHoverCardHtml(details) : buildObjectHoverCardHtml(details);
+                token.appendChild(hc);
+                token.addEventListener('mouseenter', ()=> hc.style.display = 'block');
+                token.addEventListener('mouseleave', ()=> hc.style.display = 'none');
+                if (type === 'monster-token') {
+                    // Delegate action rolls
+                    hc.addEventListener('click', (e)=>{
+                        const btn = e.target.closest('[data-action-idx]');
+                        if (!btn) return;
+                        const idx = parseInt(btn.getAttribute('data-action-idx'));
+                        const res = rollAction(details.actions[idx]);
+                        const rollOut = hc.querySelector('.hc-roll');
+                        rollOut.textContent = res;
+                    });
+                } else if (type === 'object-token') {
+                    // Object actions
+                    hc.addEventListener('click', (e)=>{
+                        const btn = e.target.closest('[data-obj-action]');
+                        if (!btn) return;
+                        const actionId = btn.getAttribute('data-obj-action');
+                        performObjectAction(token, actionId);
+                        // Refresh hover card state if token still exists
+                        if (token.isConnected) {
+                            const entry = gameState.objectTokens.find(x => x.id === token.id);
+                            if (entry) hc.innerHTML = buildObjectHoverCardHtml(getObjectDetails(entry));
+                        }
+                    });
+                }
+            }
             return token;
+        }
+
+        // Object helpers: names, hover, actions, and triggers
+        function objectName(type) {
+            switch (type) {
+                case 'debris': return 'Debris';
+                case 'trap_gas': return 'Gas Vent Trap';
+                case 'trap_pit': return 'Hidden Pit Trap';
+                case 'puzzle_switch': return 'Crystal Switch';
+                case 'puzzle_dais': return 'Inscribed Dais';
+                case 'puzzle_object': return 'Puzzle Object';
+                case 'crystal_altar': return 'Crystal Altar';
+                default: return type.replace(/_/g, ' ').replace(/\b\w/g, m=>m.toUpperCase());
+            }
+        }
+
+        function getObjectDetails(entry) {
+            const type = entry.data.type;
+            const state = entry.state || {};
+            const name = objectName(type);
+            const actions = [];
+            if (type === 'debris') {
+                if (!state.cleared) actions.push({ id:'clear', name:'Clear debris' }, { id:'search', name:'Search' });
+            } else if (type === 'trap_gas') {
+                if (state.disarmed) {
+                    // no actions when disarmed
+                } else {
+                    actions.push({ id:'disarm', name:'Disarm trap' }, { id:'trigger', name:'Trigger puff' });
+                }
+            } else if (type === 'trap_pit') {
+                if (!state.disarmed) actions.push({ id:'disarm', name:'Cover pit' });
+            } else if (type === 'puzzle_switch') {
+                if (!state.deactivated) actions.push({ id:'deactivate', name:'Deactivate crystal' });
+            } else if (type === 'puzzle_dais' || type === 'puzzle_object') {
+                actions.push({ id:'inspect', name:'Inspect' });
+            } else if (type === 'crystal_altar') {
+                actions.push({ id:'channel', name:'Channel energy' });
+            } else {
+                actions.push({ id:'inspect', name:'Inspect' });
+            }
+            return { id: entry.id, name, type, flavor: entry.data.flavor || '', state, actions };
+        }
+
+        function buildObjectHoverCardHtml(od) {
+            const statusBits = [];
+            if (od.state?.disarmed) statusBits.push('disarmed');
+            if (od.state?.deactivated) statusBits.push('deactivated');
+            if (od.state?.cleared) statusBits.push('cleared');
+            const sub = [od.type.replace(/_/g,' '), ...statusBits].join(' · ');
+            const actionsHtml = (od.actions||[]).map(a=>`<button class="hc-action-btn" data-obj-action="${a.id}">• ${a.name}</button>`).join('');
+            return `
+                <div class="hc-name">${od.name} <span class="hc-sub">(${sub})</span></div>
+                ${od.flavor? `<div class="hc-row" style="white-space:normal">${od.flavor}</div>`:''}
+                ${actionsHtml? `<div class="hc-actions">${actionsHtml}</div>`:''}
+                <div class="hc-roll"></div>
+            `;
+        }
+
+        function performObjectAction(token, actionId) {
+            const entry = gameState.objectTokens.find(x => x.id === token.id);
+            if (!entry) return;
+            entry.state = entry.state || {};
+            const type = entry.data.type;
+            if (type === 'debris') {
+                if (actionId === 'clear') {
+                    logMessage('System', 'You clear the debris, making the space navigable.');
+                    // Remove from board and state
+                    if (token.parentElement) token.parentElement.removeChild(token);
+                    gameState.objectTokens = gameState.objectTokens.filter(x => x.id !== entry.id);
+                    checkRoomCompletion();
+                } else if (actionId === 'search') {
+                    const found = Math.random() < 0.15;
+                    logMessage('System', found ? 'You find a minor trinket among the rubble.' : 'Nothing useful among the rubble.');
+                }
+            } else if (type === 'trap_gas') {
+                if (actionId === 'disarm') {
+                    entry.state.disarmed = true;
+                    token.style.opacity = '0.6';
+                    token.setAttribute('data-disarmed','true');
+                    logMessage('System', 'You carefully jam the valve. The gas trap is disarmed.');
+                } else if (actionId === 'trigger') {
+                    triggerTrapGas(token.parentElement, 'manual');
+                }
+            } else if (type === 'trap_pit') {
+                if (actionId === 'disarm') {
+                    entry.state.disarmed = true;
+                    token.style.opacity = '0.6';
+                    token.setAttribute('data-disarmed','true');
+                    logMessage('System', 'You cover the pit with debris and a spanning plank.');
+                }
+            } else if (type === 'puzzle_switch') {
+                if (actionId === 'deactivate' && !entry.state.deactivated) {
+                    entry.state.deactivated = true;
+                    token.style.filter = 'grayscale(1)';
+                    logMessage('System', 'The crystal dims and the humming subsides. Whatever it powered is now offline.');
+                    // Re-evaluate completion in case this was gating progression
+                    checkRoomCompletion();
+                }
+            } else if (type === 'puzzle_dais' || type === 'puzzle_object') {
+                logMessage('System', 'The inscriptions speak of balance and opposition. Perhaps arrange objects accordingly.');
+            } else if (type === 'crystal_altar') {
+                logMessage('System', 'You channel energy into the altar. The room resonates, but the core resists. Defeat its guardian to shatter it.');
+            } else {
+                logMessage('System', 'You take a closer look, noting nothing unusual.');
+            }
+        }
+
+        function triggerTrapGas(cell, source='step') {
+            if (!cell) return;
+            const trap = Array.from(cell.querySelectorAll('.object-token')).find(t=> (t.dataset.type||'').startsWith('trap_gas'));
+            if (!trap) return;
+            const entry = gameState.objectTokens.find(x=> x.id === trap.id);
+            if (entry?.state?.disarmed) return; // safe
+            const actor = source === 'step' ? 'A defender' : 'You';
+            const roll = 1 + Math.floor(Math.random()*20);
+            const DC = 13;
+            const passed = roll >= DC;
+            logMessage('System', `${actor} disturb${source==='step'?'s':''} a sweet-smelling puff of gas (CON DC ${DC}). Roll: ${roll} — ${passed? 'resists the effect.' : 'coughs and staggers, suffering disadvantage briefly.'}`);
+        }
+
+        // Emoji mapping for clutter/traps/objects
+        function objectEmoji(type) {
+            if (!type) return '❓';
+            if (type === 'debris') return '🧱';
+            if (type === 'crystal_altar') return '🗿';
+            if (type.startsWith('trap')) {
+                if (type === 'trap_gas') return '💨';
+                if (type === 'trap_pit') return '🕳️';
+                return '⚠️';
+            }
+            if (type === 'puzzle_switch') return '🎚️';
+            if (type === 'puzzle_dais') return '🗿';
+            if (type === 'puzzle_object') return '🧩';
+            return type.split('_')[0].charAt(0).toUpperCase();
+        }
+
+        function buildHoverCardHtml(md) {
+            const name = md.name || 'Unknown';
+            const cr = md.cr || '—';
+            const ac = md.ac ? `AC ${md.ac}${md.armorType?` (${md.armorType})`:''}` : '';
+            const hp = md.hpStr ? `HP ${md.hpStr}` : '';
+            const size = md.size || '';
+            const rowTop = [ac, hp].filter(Boolean).join(' | ');
+            const abil = md.abilityScores || {};
+            const abilStr = (['str','dex','con','int','wis','cha']
+                .map(k=> abil[k]!=null? `${k.toUpperCase()}:${abil[k]}`:null).filter(Boolean).join('  '));
+            const actions = Array.isArray(md.actions) ? md.actions : [];
+            const actionsHtml = actions.map((a, i)=> `<button class="hc-action-btn" data-action-idx="${i}">• ${a.name}</button>`).join('');
+            const simpleAbilities = Array.isArray(md.abilities) ? md.abilities : (typeof md.abilities === 'string' ? md.abilities.split(/,\s*/) : []);
+            const traitsHtml = simpleAbilities.length ? `<div class="hc-list">${simpleAbilities.map(n=>`<div class='hc-item'>• ${n}</div>`).join('')}</div>` : '';
+            const descHtml = md.description ? `<div class="hc-row" style="white-space:normal">${md.description}</div>` : '';
+            const hintHtml = (md.hasFullStats ? '' : `<div class="hc-hint">Basic preview shown. Open via local server for full stat blocks and rollable actions.</div>`);
+            return `
+                <div class="hc-name">${name} <span class="hc-sub">(CR ${cr}${size?`, ${size}`:''})</span></div>
+                ${rowTop? `<div class="hc-row">${rowTop}</div>`:''}
+                ${abilStr? `<div class="hc-row">${abilStr}</div>`:''}
+                ${descHtml}
+                ${actions.length? `<div class="hc-actions">${actionsHtml}</div>`:''}
+                ${traitsHtml}
+                ${hintHtml}
+                <div class="hc-roll"></div>
+            `;
+        }
+
+        // Simple roller extracted from bestiary.html conventions
+        function rollAction(action) {
+            if (!action || !action.description) return '';
+            const desc = action.description;
+            const toHitMatch = desc.match(/\+(\d+) to hit/);
+            const damageMatch = desc.match(/Hit: (\d+) \(([^\)]+)\)/);
+            const rolls = [];
+            if (toHitMatch) {
+                const bonus = parseInt(toHitMatch[1]);
+                const d20 = 1 + Math.floor(Math.random()*20);
+                rolls.push(`Attack: d20(${d20}) + ${bonus} = ${d20+bonus}`);
+            }
+            if (damageMatch) {
+                const avg = parseInt(damageMatch[1]);
+                const formula = damageMatch[2];
+                const total = evalDice(formula);
+                rolls.push(`Damage: ${formula} = ${total} (avg ${avg})`);
+            }
+            return rolls.join(' | ');
+        }
+
+        function evalDice(formula) {
+            // very small parser: supports 'NdM [+/- X]' chains
+            let total = 0;
+            const parts = formula.split(/\s*[+\-]\s*/);
+            const ops = formula.match(/[+\-]/g) || [];
+            let sign = +1;
+            for (let i=0;i<parts.length;i++) {
+                const p = parts[i].trim();
+                const m = p.match(/(\d+)d(\d+)(?:\s*([+\-])\s*(\d+))?/i);
+                if (m) {
+                    const n = parseInt(m[1]);
+                    const d = parseInt(m[2]);
+                    let subt = 0;
+                    for (let r=0;r<n;r++) subt += 1 + Math.floor(Math.random()*d);
+                    if (m[3] && m[4]) subt += (m[3]==='-'?-1:1) * parseInt(m[4]);
+                    total += sign * subt;
+                } else if (/^\d+$/.test(p)) {
+                    total += sign * parseInt(p);
+                }
+                sign = ops[i]==='-'? -1 : 1;
+            }
+            return total;
         }
         
         function handleTokenInteraction(token) {
@@ -426,7 +1051,26 @@
             }
         }
 
-        function renderRoom(roomData) {
+        function fitBoardCells(roomData) {
+            const outer = document.getElementById('grid-outer');
+            if (!outer) return;
+            // Favor width: compute ideal cell from width, then constrain by height if needed
+            const availW = outer.clientWidth - 16; // padding safety
+            const maxBoardH = Math.floor(window.innerHeight * 0.86); // generous viewport cap
+            const cellFromW = Math.floor(availW / roomData.width);
+            const cellFromH = Math.floor(maxBoardH / roomData.height);
+            let cell = cellFromW; // prefer width
+            if (cell > cellFromH) cell = cellFromH; // reduce only if height would overflow
+            cell = Math.max(44, Math.min(120, cell));
+            document.documentElement.style.setProperty('--cell', cell + 'px');
+            const gc = document.getElementById('grid-container');
+            if (gc) {
+                gc.style.gridTemplateColumns = `repeat(${roomData.width}, 1fr)`;
+                gc.style.width = `calc(${roomData.width} * var(--cell))`;
+            }
+        }
+
+    function renderRoom(roomData) {
             // Clear previous room state
             gridContainer.innerHTML = '';
             puzzleControlsEl.innerHTML = '';
@@ -435,11 +1079,12 @@
             gameState.monsterTokens = [];
             gameState.objectTokens = [];
             gameState.puzzleState = {};
+            // Always start with Next disabled until objectives are complete
+            if (nextRoomBtn) nextRoomBtn.disabled = true;
 
             // Setup new room
             roomNameEl.textContent = roomData.name;
-            gridContainer.style.gridTemplateColumns = `repeat(${roomData.width}, 1fr)`;
-            gridContainer.style.width = `${roomData.width * 50}px`;
+            fitBoardCells(roomData);
             
             for (let i = 0; i < roomData.width * roomData.height; i++) {
                 const cell = document.createElement('div');
@@ -452,8 +1097,13 @@
                     e.preventDefault();
                     const id = e.dataTransfer.getData('text/plain');
                     const draggable = document.getElementById(id);
-                    if (draggable && e.target.classList.contains('grid-cell')) {
-                       e.target.appendChild(draggable);
+                    const cellEl = e.currentTarget; // ensure we append to the cell
+                    if (draggable && cellEl.classList.contains('grid-cell')) {
+                        cellEl.appendChild(draggable);
+                        // Trigger traps on player entry
+                        if (draggable.classList.contains('player-yellow') || draggable.classList.contains('player-red') || draggable.classList.contains('player-green') || draggable.classList.contains('player-black')) {
+                            triggerTrapOnEntry(cellEl, draggable);
+                        }
                     }
                 });
                 gridContainer.appendChild(cell);
@@ -462,56 +1112,78 @@
             // Log messages
             roomData.lore.forEach(line => logMessage(line.speaker, line.text));
 
-            // Place players (only once at the start)
-            if (gameState.currentRoomIndex === 0) {
-                 gameState.playerTokens = [
-                    { id: 'p_yellow', class: 'player-yellow', label: 'Y', x: 1, y: 3 },
-                    { id: 'p_red', class: 'player-red', label: 'R', x: 1, y: 4 },
-                    { id: 'p_green', class: 'player-green', label: 'G', x: 1, y: 5 },
-                    { id: 'p_black', class: 'player-black', label: 'B', x: 2, y: 4 },
-                 ];
-                 gameState.playerTokens.forEach(p => {
-                    const token = createToken(p.class, p.id, p.label, `Defender ${p.class.split('-')[1]}`);
-                    gridContainer.querySelector(`[data-x='${p.x}'][data-y='${p.y}']`).appendChild(token);
-                    handleTokenInteraction(token);
-                });
-            } else {
-                 // On subsequent rooms, just render the existing tokens in a starting area
-                 gameState.playerTokens.forEach(p => {
-                     const token = document.getElementById(p.id);
-                     if (token) gridContainer.querySelector(`[data-x='1'][data-y='${p.y}']`).appendChild(token);
-                 });
-            }
+            // Place players fresh every room using hard-coded spawns from the room data
+            const spawnList = (roomData.layout && Array.isArray(roomData.layout.playerSpawns)) ? roomData.layout.playerSpawns : null;
+            const defaultSpawns = [ {x:1,y:3}, {x:1,y:4}, {x:1,y:5}, {x:2,y:4} ];
+            const players = [
+                { id: 'p_yellow', class: 'player-yellow', label: 'Y' },
+                { id: 'p_red', class: 'player-red', label: 'R' },
+                { id: 'p_green', class: 'player-green', label: 'G' },
+                { id: 'p_black', class: 'player-black', label: 'B' },
+            ];
+            players.forEach((p, idx) => {
+                const spawn = spawnList && spawnList[idx] ? spawnList[idx] : defaultSpawns[idx] || {x:0,y:0};
+                const token = createToken(p.class, p.id, p.label, `Defender ${p.class.split('-')[1]}`);
+                const cell = gridContainer.querySelector(`[data-x='${spawn.x}'][data-y='${spawn.y}']`);
+                if (cell) cell.appendChild(token);
+                handleTokenInteraction(token);
+            });
 
             // Place monsters and objects
             roomData.layout.monsters.forEach((m, i) => {
-                const monsterData = MONSTERS[m.type];
-                const token = createToken('monster-token', `m_${i}`, monsterData.name.substring(0, 3).toUpperCase(), `${monsterData.name} (CR: ${monsterData.cr})`);
-                token.style.backgroundColor = monsterData.color;
+                const md = getMonster(m.type) || { name: m.type, cr: '—', color: '#6B7280' };
+                const label = (md.emoji ? md.emoji : md.name.substring(0, 3).toUpperCase());
+                const tooltip = `${md.name} (CR: ${md.cr})`;
+                const token = createToken('monster-token', `m_${i}`, label, tooltip, md);
+                token.style.backgroundColor = md.color;
+                if (md.tier) token.setAttribute('data-tier', md.tier);
                 gridContainer.querySelector(`[data-x='${m.x}'][data-y='${m.y}']`).appendChild(token);
                 handleTokenInteraction(token);
-                gameState.monsterTokens.push({id: `m_${i}`, data: monsterData});
+                gameState.monsterTokens.push({id: `m_${i}`, data: md});
             });
             if(gameState.monsterTokens.length > 0) logMessage('System', `${gameState.monsterTokens.length} hostile signatures detected.`);
 
 
-            roomData.layout.objects.forEach((o, i) => {
-                 let label = o.type.split('_')[0];
-                 label = label.charAt(0).toUpperCase() + label.slice(1);
-                 const objToken = createToken('object-token', `o_${i}`, label, o.flavor);
+       roomData.layout.objects.forEach((o, i) => {
+              const label = objectEmoji(o.type);
+              const tempEntry = { id: `o_${i}`, data: o, state: {} };
+              const details = getObjectDetails(tempEntry);
+              const objToken = createToken('object-token', tempEntry.id, label, o.flavor, details);
                  if (o.type === 'puzzle_switch') objToken.classList.add('puzzle-switch');
+           if (o.type === 'debris') objToken.classList.add('debris');
+                 objToken.dataset.type = o.type;
                  gridContainer.querySelector(`[data-x='${o.x}'][data-y='${o.y}']`).appendChild(objToken);
-                 gameState.objectTokens.push({id: `o_${i}`, data: o});
+                 gameState.objectTokens.push(tempEntry);
             });
 
 
-            // Setup puzzle if it exists
-            if (roomData.puzzle) {
-                setupPuzzle(roomData.puzzle);
+            // Setup puzzle if it exists (support both room-level and layout-level definitions)
+            const puzzleData = roomData.puzzle || (roomData.layout && roomData.layout.puzzle) || null;
+            if (puzzleData) {
+                setupPuzzle(puzzleData);
             }
 
             // Initial check for completion
             checkRoomCompletion();
+        }
+
+        function triggerTrapOnEntry(cellEl, draggable) {
+            // Check for active traps in this cell
+            const objTokens = Array.from(cellEl.querySelectorAll('.object-token'));
+            for (const ot of objTokens) {
+                const type = ot.dataset.type || '';
+                if (type === 'trap_gas') {
+                    const entry = gameState.objectTokens.find(x=> x.id === ot.id);
+                    if (entry && !entry.state?.disarmed) {
+                        triggerTrapGas(cellEl, 'step');
+                    }
+                } else if (type === 'trap_pit') {
+                    const entry = gameState.objectTokens.find(x=> x.id === ot.id);
+                    if (entry && !entry.state?.disarmed) {
+                        logMessage('System', 'The floor gives way! You teeter but avoid falling into a concealed pit.');
+                    }
+                }
+            }
         }
 
         function setupPuzzle(puzzleData) {
@@ -596,29 +1268,35 @@
 
         function checkRoomCompletion() {
             const roomData = gameState.dungeon[gameState.currentRoomIndex];
-            const monstersDefeated = gameState.monsterTokens.length === 0;
-            const puzzleSolved = !roomData.puzzle || (gameState.puzzleState && gameState.puzzleState.solved);
+            // Use DOM to verify remaining monsters in case any were removed via UI
+            const remainingMonsters = document.querySelectorAll('#grid-container .monster-token').length;
+            const monstersDefeated = remainingMonsters === 0;
+            // Consider either room-level or layout-level puzzle
+            const hasPuzzle = Boolean(roomData.puzzle || (roomData.layout && roomData.layout.puzzle));
+            const puzzleSolved = !hasPuzzle || (gameState.puzzleState && gameState.puzzleState.solved);
+            // If there are any puzzle_switch objects, require they be deactivated
+            const switchEntries = (gameState.objectTokens || []).filter(o => o.data.type === 'puzzle_switch');
+            const switchesRequirementMet = switchEntries.length === 0 || switchEntries.every(s => s.state && s.state.deactivated);
 
-            if (monstersDefeated && puzzleSolved) {
-                 if (roomData.layout.exit) {
+            const canProceed = monstersDefeated && puzzleSolved && switchesRequirementMet;
+
+            if (canProceed) {
+                if (roomData.layout.exit) {
                     nextRoomBtn.disabled = false;
                     logMessage('System', roomData.layout.exit.flavor);
-                 } else {
-                     nextRoomBtn.disabled = true;
-                     logMessage('System', 'The Castoff is defeated! The oppressive aura lifts. Mission successful.');
-                 }
+                } else {
+                    // Final room: no next button
+                    nextRoomBtn.disabled = true;
+                    logMessage('System', 'The Castoff is defeated! The oppressive aura lifts. Mission successful.');
+                }
             } else {
                 nextRoomBtn.disabled = true;
             }
         }
 
         function generateDungeon() {
-            gameState.dungeon = [
-                ROOM_TEMPLATES[0],
-                ROOM_TEMPLATES[2],
-                ROOM_TEMPLATES[1],
-                ROOM_TEMPLATES[3]
-            ];
+            // Use the provided templates as the exact sequence
+            gameState.dungeon = ROOM_TEMPLATES.slice();
         }
 
         function advanceToNextRoom() {
@@ -629,10 +1307,49 @@
         }
 
         // --- INITIALIZATION ---
-        function init() {
+    async function init() {
+            // Try loading runtime bestiary first
+            try {
+                if (window.MonstersRuntime) {
+                    await window.MonstersRuntime.loadMonsters('src/data/Diaper-School-Full-Bestiary.json');
+                }
+            } catch (e) {
+                console.warn('Runtime bestiary failed to load, using static monsters.', e);
+            } finally {
+                if (ddvrmLoading && ddvrmLoading.parentElement) ddvrmLoading.remove();
+            }
             generateDungeon();
             nextRoomBtn.onclick = advanceToNextRoom;
             advanceToNextRoom();
+
+            // Notify about bestiary source
+            try {
+                if (window.MonstersRuntime && window.MonstersRuntime.cache && window.MonstersRuntime.cache.loaded) {
+                    logMessage('SystemInfo', 'Bestiary runtime loaded. Enhanced monster details enabled.');
+                } else {
+                    logMessage('SystemInfo', 'Using static bestiary. Monster cards show basic abilities; open via the local server for full details.');
+                }
+            } catch(_) {}
+
+            // Keyboard zoom: + / - / 0 (applies to grid container; recompute fit on resize)
+            let scale = 1;
+            const applyScale = () => {
+                const gc = document.getElementById('grid-container');
+                gc.style.transformOrigin = 'center top';
+                gc.style.transform = `scale(${scale})`;
+            };
+            document.addEventListener('keydown', (e) => {
+                if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+                if (e.key === '+' || e.key === '=') { scale = Math.min(2, scale + 0.1); applyScale(); }
+                if (e.key === '-' || e.key === '_') { scale = Math.max(0.6, scale - 0.1); applyScale(); }
+                if (e.key === '0') { scale = 1; applyScale(); }
+            });
+
+            // Re-fit board on resize
+            window.addEventListener('resize', () => {
+                const room = gameState.dungeon[gameState.currentRoomIndex];
+                if (room) fitBoardCells(room);
+            });
         }
 
         window.onload = init;

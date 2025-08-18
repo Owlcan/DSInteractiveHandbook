@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mystical Runeslider Challenge</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap');
+  
+  body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    text-align: center;
+  }
+  
+  #gameContainer {
+    width: 100vw;
+    min-width: 1960px;
+    height: 100vh;
+    background: linear-gradient(to bottom, #1a0a2e, #2c1654);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cinzel', serif;
+    color: #eee;
+    overflow-x: auto;
+    margin: 0;
+    position: relative;
+  }
+  
+  .game-title {
+    position: absolute;
+    top: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 0;
+    font-size: 2.5rem;
+    text-shadow: 0 0 10px #9e7be3;
+    z-index: 10;
+  }
+  
+  .game-layout {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 40px;
+    width: 100%;
+    max-width: 1400px;
+  }
+  
+  .controls-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 30px;
+    min-width: 320px;
+  }
+  
+  #difficultySelector {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: nowrap;
+    width: 100%;
+    min-width: 700px;
+  }
+  
+  .difficulty-label, .mode-label {
+    margin-right: 10px;
+    font-size: 1.1rem;
+    white-space: nowrap;
+  }
+  
+  .mode-label {
+    margin-left: 30px;
+  }
+  
+  .difficulty-btn, .mode-btn {
+    padding: 8px 16px;
+    background: #5d3d92;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Cinzel', serif;
+    font-size: 1rem;
+    box-shadow: 0 0 10px rgba(93, 61, 146, 0.3);
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  
+  .difficulty-btn[data-difficulty="medium"] {
+    background: #3d5d92;
+  }
+  
+  .difficulty-btn[data-difficulty="hard"] {
+    background: #925d3d;
+  }
+  
+  .mode-btn {
+    background: #2c1654;
+    box-shadow: 0 0 10px rgba(44, 22, 84, 0.3);
+  }
+  
+  #controls {
+    margin-top: 0;
+  }
+  
+  .control-btn {
+    padding: 10px 20px;
+    background: #5d3d92;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Cinzel', serif;
+    font-size: 1rem;
+    box-shadow: 0 0 10px rgba(93, 61, 146, 0.3);
+  }
+  
+  .control-btn + .control-btn {
+    margin-left: 10px;
+  }
+  
+  #instructions {
+    max-width: 320px;
+    margin: 20px 0;
+    text-align: left;
+    background: rgba(0,0,0,0.3);
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  }
+  
+  .target-label {
+    position: absolute;
+    top: -160px;
+    left: -150px;
+    width: 220px;
+    text-align: center;
+    font-size: 1rem;
+    color: #eee;
+  }
+  
+  .target-pattern {
+    position: absolute;
+    top: -120px;
+    left: -150px;
+    width: 220px;
+    height: 220px;
+    background: #1a0a2e;
+    border: 2px solid #5d3d92;
+    border-radius: 50%;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 15px rgba(93, 61, 146, 0.5);
+  }
+  
+  .target-display {
+    position: relative;
+    width: 190px;
+    height: 190px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .par-counter {
+    position: absolute;
+    top: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 220px;
+    height: 90px;
+    background: #1a0a2e;
+    border: 2px solid #5d3d92;
+    border-radius: 10px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 15px rgba(93, 61, 146, 0.5);
+    z-index: 12;
+  }
+  
+  .par-counter-content {
+    text-align: center;
+    font-size: 1rem;
+  }
+  
+  .move-label {
+    margin-bottom: 5px;
+  }
+  
+  .move-value {
+    font-size: 1.8rem;
+    font-weight: bold;
+  }
+  
+  .par-label {
+    margin-top: 5px;
+    font-size: 0.9rem;
+    opacity: 0.8;
+  }
+  
+  .sound-toggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+    font-size: 24px;
+  }
+  
+  .ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transform-origin: center center;
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer;
+    background-color: rgba(56, 32, 84, 0.3);
+    border: 2px solid #5d3d92;
+    box-shadow: 0 0 20px rgba(158, 123, 227, 0.3);
+    pointer-events: auto;
+  }
+  
+  .ring:hover {
+    box-shadow: 0 0 40px rgba(158, 123, 227, 0.8), 0 0 80px rgba(158, 123, 227, 0.4);
+    border-color: #9e7be3;
+  }
+  
+  .symbol {
+    position: absolute;
+    transform-origin: center center;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #9e7be3;
+    font-size: 20px;
+    text-shadow: 0 0 5px #9e7be3;
+  }
+  
+  .light-beam {
+    position: absolute;
+    background: radial-gradient(ellipse at center, rgba(158, 123, 227, 0.7) 0%, rgba(158, 123, 227, 0) 70%);
+    border-radius: 50%;
+    transform-origin: center;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+  }
+  
+  .active-beam {
+    animation: pulse 2s infinite;
+  }
+  
+  @keyframes pulse {
+    0% { opacity: 0.2; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.1); }
+    100% { opacity: 0.2; transform: scale(1); }
+  }
+  
+  .target-symbol {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #9e7be3;
+    font-size: 18px;
+    text-shadow: 0 0 5px #9e7be3;
+    transform: translate(-50%, -50%);
+  }
+  
+  .rune-mark {
+    position: absolute;
+    opacity: 0.6;
+    color: #5d3d92;
+    font-size: 14px;
+    text-shadow: 0 0 3px #9e7be3;
+  }
+  
+  .particle {
+    position: absolute;
+    background: radial-gradient(circle, rgba(158, 123, 227, 0.8) 0%, rgba(158, 123, 227, 0) 100%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  
+  button:hover {
+    background: #7d5db2;
+  }
+  
+  button:active {
+    transform: scale(0.98);
+  }
+  
+  .difficulty-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 20px rgba(93, 61, 146, 0.5);
+  }
+  
+  .difficulty-btn.active {
+    background: #7d5db2 !important;
+    box-shadow: 0 0 20px rgba(125, 93, 178, 0.7);
+  }
+  
+  .mode-btn.active {
+    background: #7d5db2 !important;
+    box-shadow: 0 0 20px rgba(125, 93, 178, 0.7);
+  }
+</style>
+</head>
+
+<div id="gameContainer">
+  <h1 class="game-title">Mystical Runeslider</h1>
+  <div class="game-layout">
+    <div id="sundialCtn" style="position:relative; width:700px; height:700px; margin:30px 0;">
+      <div id="sunlightPatternsEl" style="position:absolute; top:0; left:0; width:100%; height:100%; z-index:2; pointer-events:none;"></div>
+      <div id="sundialBase" style="position:absolute; top:50%; left:50%; width:640px; height:640px; transform:translate(-50%, -50%); background:radial-gradient(circle, #2c1654 0%, #1a0a2e 90%); border-radius:50%; box-shadow:0 0 30px rgba(93, 61, 146, 0.5); z-index:0;"></div>
+      <div id="sundialRunesEl" style="position:absolute; top:50%; left:50%; width:680px; height:680px; transform:translate(-50%, -50%); z-index:0; opacity:0.3;"></div>
+      <div id="sundialEl" style="position:absolute; top:0; left:0; width:100%; height:100%; z-index:1;"></div>
+      <div class="target-label">Target Pattern</div>
+      <div id="targetPattern" class="target-pattern">
+        <div id="targetDisplayEl" class="target-display"></div>
+      </div>
+      <div id="parCounter" class="par-counter">
+        <div class="par-counter-content">
+          <div class="move-label">Moves</div>
+          <div class="move-value"><span id="moveCount">0</span> / <span id="parValue">15</span></div>
+          <div class="par-label">Par: <span id="currentDifficultyName">Easy</span></div>
+        </div>
+      </div>
+      <div id="ambientParticlesEl" style="position:absolute; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none;"></div>
+    </div>
+    <div class="controls-panel">
+      <!-- Difficulty & Mode Selection -->
+      <div id="difficultySelector">
+        <span class="difficulty-label">Difficulty:</span>
+        <button id="easyBtn" class="difficulty-btn active" data-difficulty="easy">Easy</button>
+        <button id="mediumBtn" class="difficulty-btn" data-difficulty="medium">Medium</button>
+        <button id="hardBtn" class="difficulty-btn" data-difficulty="hard">Hard</button>
+        <span class="mode-label">Mode:</span>
+        <button id="standardModeBtn" class="mode-btn active" data-mode="standard">Standard</button>
+        <button id="memorizationModeBtn" class="mode-btn" data-mode="memorization">Memorization</button>
+      </div>
+      <div id="controls">
+        <button id="resetBtn" class="control-btn">Reset Runeslider</button>
+        <button id="newChallengeBtn" class="control-btn">New Challenge</button>
+      </div>
+      <div id="instructions">
+        <p>A giant, rune-carved runeslider projects shifting patterns of light. Click on the rings to rotate them and align the runes with the target pattern.</p>
+      </div>
+    </div>
+  </div>
+  
+  <div id="soundToggleEl" class="sound-toggle">🔊</div>
+</div>
+
+
+
+<script>
+  // Game configuration with difficulty levels
+  const difficulties = {
+    easy: {
+      rings: 3,
+      symbolsPerRing: [8, 6, 4],
+      par: 15,
+      playableRings: [0, 1, 2],
+      name: "Easy"
+    },
+    medium: {
+      rings: 4,
+      symbolsPerRing: [10, 8, 6, 4],
+      par: 25,
+      playableRings: [0, 1, 2, 3],
+      name: "Medium"
+    },
+    hard: {
+      rings: 5,
+      symbolsPerRing: [12, 10, 8, 6, 4],
+      par: 35,
+      playableRings: [0, 1, 2, 3, 4],
+      name: "Hard"
+    }
+  };
+
+  // Current difficulty
+  let currentDifficulty = 'easy';
+  
+  // Get current config based on difficulty
+  function getCurrentConfig() {
+    return {
+      ...difficulties[currentDifficulty],
+      symbols: ['⚹', '⚸', '⚷', '⚶', '⚵', '⚴', '☉', '☽', '☿', '♀', '♁', '♃', '♄', '♅', '♆', '♇', '⚛', '⚜', '‽', '⚠'],
+      backgroundRunes: ['᛫', 'ᛰ', 'ᛯ', 'ᛮ', '᛭', '᛬', 'ᛩ', 'ᛨ', 'ᛦ', 'ᛥ', 'ᛣ', 'ᛢ', 'ᛡ', '᛭', 'ᚹ', 'ᚸ', 'ᚷ', 'ᚶ', 'ᚵ', 'ᚳ', 'ᚱ', 'ᚩ'],
+      soundEnabled: true
+    };
+  }
+  
+  // Update the config reference
+  let config = getCurrentConfig();
+  
+  // Game state
+  let gameState = {
+    ringRotations: [],
+    targetRotations: [],
+    completed: false,
+    particles: [],
+    moveCount: 0,
+    mode: 'standard',
+    previewing: false,
+    previewTimeout: null,
+    memorizationFails: 0,
+    memorizationScore: 0
+  };
+  
+  // Audio elements
+  const sounds = {
+    rotate: null,
+    match: null,
+    complete: null
+  };
+  
+  // DOM elements
+  const sundialCtn = document.getElementById('sundialCtn');
+  const sundialEl = document.getElementById('sundialEl');
+  const targetDisplayEl = document.getElementById('targetDisplayEl');
+  const sunlightPatternsEl = document.getElementById('sunlightPatternsEl');
+  const sundialRunesEl = document.getElementById('sundialRunesEl');
+  const ambientParticlesEl = document.getElementById('ambientParticlesEl');
+  const resetBtn = document.getElementById('resetBtn');
+  const newChallengeBtn = document.getElementById('newChallengeBtn');
+  const soundToggleEl = document.getElementById('soundToggleEl');
+  const moveCountEl = document.getElementById('moveCount');
+  const parValueEl = document.getElementById('parValue');
+  // Initialize the game
+  function initGame() {
+    // Stop any playing sounds
+    stopAllSounds();
+    
+    // Clear previous elements
+    sundialEl.innerHTML = '';
+    targetDisplayEl.innerHTML = '';
+    sunlightPatternsEl.innerHTML = '';
+    sundialRunesEl.innerHTML = '';
+
+    // Reset game state
+    gameState.ringRotations = new Array(config.rings).fill(0);
+    gameState.targetRotations = [];
+    gameState.completed = false;
+    gameState.moveCount = 0;
+    gameState.previewing = false;
+    gameState.memorizationFails = 0;
+    gameState.memorizationScore = 0;
+
+    // Generate random target pattern (for all rings)
+    for (let i = 0; i < config.rings; i++) {
+      const segments = config.symbolsPerRing[i];
+      const randomRotation = Math.floor(Math.random() * segments) * (360 / segments);
+      gameState.targetRotations.push(randomRotation);
+    }
+
+    // Update UI
+    updateMoveCounter();
+
+    // Create background runes
+    createBackgroundRunes();
+
+    // Create rings and symbols
+    createSundial();
+    createTargetDisplay();
+    createLightBeams();
+
+    // Initialize particles
+    initParticles();
+
+    // If memorization mode, show preview
+    if (gameState.mode === 'memorization') {
+      startMemorizationPreview();
+    } else {
+      // Check initial state (in case it's already solved by chance)
+      checkCompletion();
+    }
+  }
+
+  // Start memorization preview
+  function startMemorizationPreview() {
+    gameState.previewing = true;
+    // Show target pattern for correct time
+    let previewTime = currentDifficulty === 'hard' ? 5000 : 10000;
+    document.getElementById('targetPattern').style.opacity = '1';
+    document.getElementById('targetPattern').style.pointerEvents = 'auto';
+    // Show message
+    showMemorizationMessage(`Memorize the pattern! (${previewTime/1000} seconds)`);
+    // Hide rings interaction during preview
+    sundialEl.style.pointerEvents = 'none';
+    gameState.previewTimeout = setTimeout(() => {
+      endMemorizationPreview();
+    }, previewTime);
+  }
+
+  function endMemorizationPreview() {
+    gameState.previewing = false;
+    document.getElementById('targetPattern').style.opacity = '0.2';
+    document.getElementById('targetPattern').style.pointerEvents = 'none';
+    sundialEl.style.pointerEvents = 'auto';
+    showMemorizationMessage('Recreate the pattern from memory!');
+    checkCompletion();
+  }
+
+  function showMemorizationMessage(msg) {
+    let msgEl = document.getElementById('memorizationMsg');
+    if (!msgEl) {
+      msgEl = document.createElement('div');
+      msgEl.id = 'memorizationMsg';
+      msgEl.style.position = 'absolute';
+      msgEl.style.top = '10px';
+      msgEl.style.left = '50%';
+      msgEl.style.transform = 'translateX(-50%)';
+      msgEl.style.background = 'rgba(44,22,84,0.8)';
+      msgEl.style.color = '#fff';
+      msgEl.style.padding = '10px 20px';
+      msgEl.style.borderRadius = '8px';
+      msgEl.style.fontFamily = "'Cinzel', serif";
+      msgEl.style.fontSize = '1.2rem';
+      msgEl.style.zIndex = '100';
+      document.body.appendChild(msgEl);
+    }
+    msgEl.textContent = msg;
+    msgEl.style.display = 'block';
+  }
+
+  function hideMemorizationMessage() {
+    let msgEl = document.getElementById('memorizationMsg');
+    if (msgEl) msgEl.style.display = 'none';
+  }
+  
+  // Create background runes
+  function createBackgroundRunes() {
+    for (let i = 0; i < 60; i++) {
+      const rune = document.createElement('div');
+      rune.className = 'rune-mark';
+      
+      // Random position around the circle
+      const angle = Math.random() * 360;
+      const radius = 280 + Math.random() * 10;
+      const radian = angle * Math.PI / 180;
+      const x = Math.cos(radian) * radius;
+      const y = Math.sin(radian) * radius;
+      
+      rune.style.left = `calc(50% + ${x}px)`;
+      rune.style.top = `calc(50% + ${y}px)`;
+      rune.style.transform = `rotate(${angle}deg)`;
+      rune.textContent = config.backgroundRunes[Math.floor(Math.random() * config.backgroundRunes.length)];
+      
+      sundialRunesEl.appendChild(rune);
+    }
+  }
+
+  // Create the runeslider with rings and symbols
+  function createSundial() {
+    // Calculate the scaling factor based on the container sizes
+    // Target display is 190px, main sundial container is 700px
+    // But the effective playable area is more like 640px (sundialBase)
+    const scaleFactor = 640 / 190; // ≈ 3.37
+    
+    for (let i = 0; i < config.rings; i++) {
+      // Use the same sizing logic as target display, scaled appropriately
+      let ringSize;
+      if (config.rings === 5) {
+        // Hard mode: match target display sizing
+        if (i === 0) {
+          ringSize = 175 * scaleFactor;
+        } else if (i === 1) {
+          ringSize = 146 * scaleFactor;
+        } else if (i === 2) {
+          ringSize = 122 * scaleFactor;
+        } else if (i === 3) {
+          ringSize = 98 * scaleFactor;
+        } else if (i === 4) {
+          ringSize = 65 * scaleFactor;
+        }
+      } else if (config.rings === 4) {
+        // Medium mode: match target display sizing
+        ringSize = (170 - (i * 28)) * scaleFactor;
+      } else {
+        // Easy mode: match target display sizing
+        ringSize = (170 - (i * 38)) * scaleFactor;
+      }
+      
+      // Create ring
+      const ringEl = document.createElement('div');
+      ringEl.className = `ring difficulty-${currentDifficulty}`;
+      ringEl.style.width = `${ringSize}px`;
+      ringEl.style.height = `${ringSize}px`;
+      // Set z-index so inner rings are on top for click detection
+      ringEl.style.zIndex = i + 10;
+      ringEl.dataset.ring = i;
+      
+      // Add click handlers to all rings
+      ringEl.addEventListener('click', handleRingClick);
+      
+      // Add symbols to the ring
+      const symbolCount = config.symbolsPerRing[i];
+      for (let j = 0; j < symbolCount; j++) {
+        const symbol = document.createElement('div');
+        symbol.className = 'symbol';
+        symbol.style.pointerEvents = 'none';
+        
+        // Calculate position around the circle
+        const angle = (j * 360 / symbolCount);
+        const radius = ringSize / 2;
+        const radian = angle * Math.PI / 180;
+        // Make symbol offset proportional to ring size for consistent positioning
+        const symbolOffset = ringSize * 0.08; // 8% of ring size
+        const x = Math.cos(radian) * (radius - symbolOffset);
+        const y = Math.sin(radian) * (radius - symbolOffset);
+        
+        // Position the symbol properly centered
+        symbol.style.left = `${50 + (x / ringSize) * 100}%`;
+        symbol.style.top = `${50 + (y / ringSize) * 100}%`;
+        symbol.style.transform = `translate(-50%, -50%)`;
+        
+        // Use different symbols for each ring
+        const symbolIndex = (i * 4 + j) % config.symbols.length;
+        symbol.textContent = config.symbols[symbolIndex];
+        
+        ringEl.appendChild(symbol);
+      }
+      
+      // Apply initial rotation
+      updateRingRotation(ringEl, gameState.ringRotations[i]);
+      
+      sundialEl.appendChild(ringEl);
+    }
+    
+    // Create additional invisible click area for innermost ring
+    let innerRingSize;
+    if (config.rings === 5) {
+      innerRingSize = 65 * scaleFactor;
+    } else if (config.rings === 4) {
+      innerRingSize = (170 - ((config.rings - 1) * 28)) * scaleFactor;
+    } else {
+      innerRingSize = (170 - ((config.rings - 1) * 38)) * scaleFactor;
+    }
+    
+    const clickArea = document.createElement('div');
+    clickArea.style.position = 'absolute';
+    clickArea.style.top = '50%';
+    clickArea.style.left = '50%';
+    clickArea.style.width = `${innerRingSize}px`;
+    clickArea.style.height = `${innerRingSize}px`;
+    clickArea.style.transform = 'translate(-50%, -50%)';
+    clickArea.style.zIndex = '20';
+    clickArea.style.pointerEvents = 'auto';
+    clickArea.style.cursor = 'pointer';
+    clickArea.style.backgroundColor = 'transparent';
+    clickArea.style.borderRadius = '50%';
+    clickArea.dataset.ring = (config.rings - 1).toString();
+    clickArea.addEventListener('click', handleRingClick);
+    
+    sundialEl.appendChild(clickArea);
+  }
+  
+  // Create the target display
+  function createTargetDisplay() {
+    for (let i = 0; i < config.rings; i++) {
+      // Dynamic sizing based on difficulty - balanced spacing without squishing
+      let ringSize;
+      if (config.rings === 5) {
+        // Hard mode: adjust only outermost and innermost rings
+        if (i === 0) {
+          ringSize = 175; // Outermost ring - move out
+        } else if (i === 1) {
+          ringSize = 146; // Second ring - even spacing
+        } else if (i === 2) {
+          ringSize = 122; // Middle ring - even spacing
+        } else if (i === 3) {
+          ringSize = 98; // Fourth ring - even spacing
+        } else if (i === 4) {
+          ringSize = 65; // Innermost ring - pull in
+        }
+      } else if (config.rings === 4) {
+        // Medium mode
+        ringSize = 170 - (i * 28);
+      } else {
+        // Easy mode
+        ringSize = 170 - (i * 38);
+      }
+      
+      // Create symbols
+      const symbolCount = config.symbolsPerRing[i];
+      for (let j = 0; j < symbolCount; j++) {
+        const symbol = document.createElement('div');
+        symbol.className = 'target-symbol';
+        
+        // Calculate position around the circle
+        const angle = (j * 360 / symbolCount) + gameState.targetRotations[i];
+        const radius = ringSize / 2;
+        const radian = angle * Math.PI / 180;
+        // Balanced offset for good spacing without edge squishing
+        let offset;
+        if (config.rings === 5) {
+          // Hard mode: small but adequate offset
+          offset = i === config.rings - 1 ? 4 : 8;
+        } else {
+          // Medium/Easy mode: standard offset
+          offset = i === config.rings - 1 ? 3 : 6;
+        }
+        const x = Math.cos(radian) * (radius - offset);
+        const y = Math.sin(radian) * (radius - offset);
+        
+        symbol.style.left = `calc(50% + ${x}px)`;
+        symbol.style.top = `calc(50% + ${y}px)`;
+        
+        // Use different symbols for each ring
+        const symbolIndex = (i * 4 + j) % config.symbols.length;
+        symbol.textContent = config.symbols[symbolIndex];
+        
+        targetDisplayEl.appendChild(symbol);
+      }
+    }
+  }
+  
+  // Create light beams
+  function createLightBeams() {
+    // Use the same scaling factor as the main sundial
+    const scaleFactor = 640 / 190; // ≈ 3.37
+    
+    for (let i = 0; i < config.rings; i++) {
+      // Use the same sizing logic as target display and main sundial
+      let ringSize;
+      if (config.rings === 5) {
+        // Hard mode: match target display sizing, scaled for light beams
+        if (i === 0) {
+          ringSize = 175 * scaleFactor;
+        } else if (i === 1) {
+          ringSize = 146 * scaleFactor;
+        } else if (i === 2) {
+          ringSize = 122 * scaleFactor;
+        } else if (i === 3) {
+          ringSize = 98 * scaleFactor;
+        } else if (i === 4) {
+          ringSize = 65 * scaleFactor;
+        }
+      } else if (config.rings === 4) {
+        // Medium mode: match target display sizing
+        ringSize = (170 - (i * 28)) * scaleFactor;
+      } else {
+        // Easy mode: match target display sizing
+        ringSize = (170 - (i * 38)) * scaleFactor;
+      }
+      
+      const symbolCount = config.symbolsPerRing[i];
+      
+      for (let j = 0; j < symbolCount; j++) {
+        const beam = document.createElement('div');
+        beam.className = 'light-beam';
+        
+        // Set size and position
+        const beamSize = 80;
+        beam.style.width = `${beamSize}px`;
+        beam.style.height = `${beamSize}px`;
+        
+        // Calculate position around the circle
+        const angle = (j * 360 / symbolCount);
+        const radius = ringSize / 2;
+        const radian = angle * Math.PI / 180;
+        // Make beam offset proportional to ring size for consistent positioning
+        const beamOffset = ringSize * 0.08; // 8% of ring size, same as symbols
+        const x = Math.cos(radian) * (radius - beamOffset);
+        const y = Math.sin(radian) * (radius - beamOffset);
+        
+        // Position relative to the sundial container center
+        beam.style.left = `calc(50% + ${x - beamSize/2}px)`;
+        beam.style.top = `calc(50% + ${y - beamSize/2}px)`;
+        beam.dataset.ring = i;
+        beam.dataset.position = j;
+        
+        sunlightPatternsEl.appendChild(beam);
+      }
+    }
+  }
+  
+  // Initialize ambient particles
+  function initParticles() {
+    gameState.particles = [];
+    ambientParticlesEl.innerHTML = '';
+    
+    for (let i = 0; i < 20; i++) {
+      createParticle();
+    }
+    
+    // Start the animation loop
+    requestAnimationFrame(animateParticles);
+  }
+  
+  // Create a single ambient particle
+  function createParticle() {
+    const particle = document.createElement('div');
+    particle.className = 'particle';
+    
+    // Random size
+    const size = 2 + Math.random() * 5;
+    particle.style.width = `${size}px`;
+    particle.style.height = `${size}px`;
+    
+    // Random position
+    const x = Math.random() * 500;
+    const y = Math.random() * 500;
+    particle.style.left = `${x}px`;
+    particle.style.top = `${y}px`;
+    
+    // Random opacity
+    particle.style.opacity = 0.3 + Math.random() * 0.5;
+    
+    ambientParticlesEl.appendChild(particle);
+    
+    // Store particle data
+    gameState.particles.push({
+      element: particle,
+      x: x,
+      y: y,
+      size: size,
+      speed: 0.2 + Math.random() * 0.5,
+      angle: Math.random() * Math.PI * 2,
+      angleSpeed: (Math.random() - 0.5) * 0.02,
+      opacity: 0.3 + Math.random() * 0.5,
+      fadeDirection: Math.random() > 0.5 ? 1 : -1
+    });
+  }
+  
+  // Animate ambient particles
+  function animateParticles() {
+    gameState.particles.forEach((p, index) => {
+      // Update angle
+      p.angle += p.angleSpeed;
+      
+      // Move in a circular/spiral pattern
+      p.x += Math.cos(p.angle) * p.speed;
+      p.y += Math.sin(p.angle) * p.speed;
+      
+      // Update opacity for twinkling effect
+      p.opacity += 0.01 * p.fadeDirection;
+      if (p.opacity > 0.9) {
+        p.fadeDirection = -1;
+      } else if (p.opacity < 0.3) {
+        p.fadeDirection = 1;
+      }
+      
+      // Apply updates
+      p.element.style.left = `${p.x}px`;
+      p.element.style.top = `${p.y}px`;
+      p.element.style.opacity = p.opacity;
+      
+      // If particle goes out of bounds, reset it
+      if (p.x < -10 || p.x > 510 || p.y < -10 || p.y > 510) {
+        p.x = 250 + (Math.random() - 0.5) * 200;
+        p.y = 250 + (Math.random() - 0.5) * 200;
+      }
+    });
+    
+    // Continue animation loop
+    requestAnimationFrame(animateParticles);
+  }
+  
+  // Handle ring click
+  function handleRingClick(event) {
+    if (gameState.completed || gameState.previewing) return;
+
+    // Stop event propagation to prevent multiple rings from firing
+    event.stopPropagation();
+
+    const ringIndex = parseInt(event.currentTarget.dataset.ring);
+
+    // Get click position relative to ring center
+    const rect = event.currentTarget.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const clickX = event.clientX;
+
+    // Determine if click was on left or right side of ring
+    const isLeftClick = clickX < centerX;
+
+    const segments = config.symbolsPerRing[ringIndex];
+    const rotationStep = 360 / segments;
+
+    // Rotate ring based on click side
+    const direction = isLeftClick ? -1 : 1;
+    gameState.ringRotations[ringIndex] = (gameState.ringRotations[ringIndex] + (direction * rotationStep)) % 360;
+
+    // Normalize negative rotations
+    if (gameState.ringRotations[ringIndex] < 0) {
+      gameState.ringRotations[ringIndex] += 360;
+    }
+
+    // Update the actual ring element rotation
+    const ringEl = document.querySelector(`[data-ring="${ringIndex}"].ring`);
+    if (ringEl) {
+      updateRingRotation(ringEl, gameState.ringRotations[ringIndex]);
+    }
+
+    // Update move counter
+    gameState.moveCount++;
+    updateMoveCounter();
+
+    // Play rotation sound
+    playSound('rotate');
+
+    // Check if pattern matches
+    checkCompletion();
+  }
+  
+  // Update move counter display
+  function updateMoveCounter() {
+    const moveCountEl = document.getElementById('moveCount');
+    if (moveCountEl) {
+      moveCountEl.textContent = gameState.moveCount;
+    }
+    
+    // Update par value display
+    const parValueEl = document.getElementById('parValue');
+    if (parValueEl) {
+      parValueEl.textContent = config.par;
+    }
+  }
+
+  // Update ring rotation
+  function updateRingRotation(ringEl, rotation) {
+    // Apply rotation while preserving the centering transform
+    ringEl.style.transform = `translate(-50%, -50%) rotate(${rotation}deg)`;
+    
+    // Also update the symbols within the ring to maintain their orientation
+    const symbols = ringEl.querySelectorAll('.symbol');
+    symbols.forEach(symbol => {
+      // Counter-rotate the symbols so they stay upright while the ring rotates
+      // Also ensure they maintain their proper centering
+      symbol.style.transform = `translate(-50%, -50%) rotate(${-rotation}deg)`;
+    });
+  }
+  
+  // Check if the current pattern matches the target
+  function checkCompletion() {
+    let allMatch = true;
+    let newlyMatched = false;
+
+    for (let i = 0; i < config.rings; i++) {
+      const wasMatching = isRingMatching(i, gameState.ringRotations[i] - (360 / config.symbolsPerRing[i]));
+      const isMatching = isRingMatching(i);
+
+      if (isMatching && !wasMatching) {
+        newlyMatched = true;
+        playSound('match');
+      }
+
+      updateLightBeams(i, isMatching);
+
+      if (!isMatching) {
+        allMatch = false;
+      }
+    }
+
+    if (gameState.mode === 'memorization') {
+      if (allMatch && !gameState.completed) {
+        gameState.completed = true;
+        hideMemorizationMessage();
+        gameState.memorizationScore++;
+        showMemorizationResult(true);
+      }
+    } else {
+      if (allMatch && !gameState.completed) {
+        gameState.completed = true;
+        setTimeout(() => {
+          celebrateCompletion();
+        }, 500);
+      }
+    }
+  }
+
+  function showMemorizationResult(success) {
+    let resultEl = document.getElementById('memorizationResult');
+    if (!resultEl) {
+      resultEl = document.createElement('div');
+      resultEl.id = 'memorizationResult';
+      resultEl.style.position = 'absolute';
+      resultEl.style.top = '60px';
+      resultEl.style.left = '50%';
+      resultEl.style.transform = 'translateX(-50%)';
+      resultEl.style.background = 'rgba(44,22,84,0.9)';
+      resultEl.style.color = '#fff';
+      resultEl.style.padding = '16px 28px';
+      resultEl.style.borderRadius = '10px';
+      resultEl.style.fontFamily = "'Cinzel', serif";
+      resultEl.style.fontSize = '1.3rem';
+      resultEl.style.zIndex = '101';
+      document.body.appendChild(resultEl);
+    }
+    if (success) {
+      resultEl.innerHTML = `<b>Success!</b> You recreated the pattern.<br>Score: ${gameState.memorizationScore}<br><button id='nextMemorizationBtn' style='margin-top:10px; padding:8px 18px; background:#5d3d92; color:white; border:none; border-radius:5px; cursor:pointer; font-family:inherit;'>Next Pattern</button>`;
+    } else {
+      resultEl.innerHTML = `<b>Failed!</b> You did not match the pattern.<br>Fails: ${gameState.memorizationFails}/3<br><button id='nextMemorizationBtn' style='margin-top:10px; padding:8px 18px; background:#5d3d92; color:white; border:none; border-radius:5px; cursor:pointer; font-family:inherit;'>Try Again</button>`;
+    }
+    resultEl.style.display = 'block';
+    document.getElementById('nextMemorizationBtn').onclick = () => {
+      resultEl.style.display = 'none';
+      if (gameState.memorizationFails >= 3) {
+        showMemorizationGameOver();
+      } else {
+        initGame();
+      }
+    };
+  }
+
+  function showMemorizationGameOver() {
+    let overEl = document.getElementById('memorizationGameOver');
+    if (!overEl) {
+      overEl = document.createElement('div');
+      overEl.id = 'memorizationGameOver';
+      overEl.style.position = 'absolute';
+      overEl.style.top = '120px';
+      overEl.style.left = '50%';
+      overEl.style.transform = 'translateX(-50%)';
+      overEl.style.background = 'rgba(44,22,84,0.95)';
+      overEl.style.color = '#fff';
+      overEl.style.padding = '24px 36px';
+      overEl.style.borderRadius = '12px';
+      overEl.style.fontFamily = "'Cinzel', serif";
+      overEl.style.fontSize = '1.4rem';
+      overEl.style.zIndex = '102';
+      overEl.style.textAlign = 'center';
+      document.body.appendChild(overEl);
+    }
+    overEl.innerHTML = `<b>Game Over!</b><br>Final Score: ${gameState.memorizationScore}<br><button id='restartMemorizationBtn' style='margin-top:16px; padding:10px 24px; background:#5d3d92; color:white; border:none; border-radius:7px; cursor:pointer; font-family:inherit;'>Restart</button>`;
+    overEl.style.display = 'block';
+    document.getElementById('restartMemorizationBtn').onclick = () => {
+      overEl.style.display = 'none';
+      gameState.memorizationFails = 0;
+      gameState.memorizationScore = 0;
+      initGame();
+    };
+  }
+  
+  // Check if a specific ring matches its target
+  function isRingMatching(ringIndex, customRotation) {
+    const currentRotation = customRotation !== undefined ? customRotation : gameState.ringRotations[ringIndex];
+    const targetRotation = gameState.targetRotations[ringIndex];
+    const segments = config.symbolsPerRing[ringIndex];
+    
+    // Check if rotations match, considering the rotation segments
+    return currentRotation % 360 === targetRotation % 360;
+  }
+  
+  // Update light beams based on matching
+  function updateLightBeams(ringIndex, isMatching) {
+    const beams = document.querySelectorAll(`.light-beam[data-ring="${ringIndex}"]`);
+    
+    beams.forEach(beam => {
+      if (isMatching) {
+        beam.style.opacity = '0.7';
+        beam.classList.add('active-beam');
+      } else {
+        beam.style.opacity = '0';
+        beam.classList.remove('active-beam');
+      }
+    });
+  }
+  
+  // Initialize audio
+  function initAudio() {
+    // Create audio elements
+    sounds.rotate = new Audio();
+    sounds.match = new Audio();
+    sounds.complete = new Audio();
+    
+    // Set sources - using simple synthesized sounds
+    sounds.rotate.src = 'data:audio/wav;base64,UklGRnQFAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YVAFAACAgICAgICAgICAgICAgICAgICAgICAgIGAfn5+f4CBg4SFhIOCf3x6eHd4eXt+gouMioiBfHd0cnN0d3yAhYmLi4qHgnt2c3Fxc3Z7gIWJi4uJhoF8d3RycXN2e3+EiIqKiYaDfnl1c3J0dnyAhIeJiYiGgn56dnRzdHZ7f4OGiIiHhYJ/e3h2dXV3en2BhIaHh4WEgX57eXd2d3l8gIOFhoaFg4F+e3l4d3h6fYCDhYWFhIOBfnx6eHh4en2Ag4SEhIOCgH58enh4eHp8gIKDhISDgoB+fHp5eHl7fYCCg4SEg4KAfn17eXl5e32AgoODg4OCgX9+e3p5eXt9gIGDg4ODgoF/fXt6enp7fYCBgoODgoKBf317enp6e32AgYKDg4OCgX9+fHt6ent9gIGCgoOCgoF/fnx7enp7fYCBgoKCgoKBf357e3p7e32AgYKCgoKCgX9+fHt7e3t9f4GCgoKCgYF/fnx8e3t7fX+BgoKCgoGBf359fHt7e31/gYKCgoKBgX9+fXx7e3t9f4GCgoKCgYF/fn18e3t7fX+BgYKCgoGBf359fHt7e31/gYGCgoKBgX9+fXx8e3t9f4GBgoKCgYF/fn18fHt8fn+BgYKCgYGBf359fHx7fH5/gYGCgYGBgX9+fXx8fHx+f4CBgoGBgYF/fn18fHx8fn+AgYKBgYGBf359fHx8fH5/gIGBgYGBgX9+fXx8fHx+f4CBgYGBgYF/fn18fHx8fn+AgYGBgYGBf359fHx8fH5/gIGBgYGBgX9+fXx8fHx+f4CBgYGBgYF/fn18fHx8fn+AgYGBgYGAf359fHx8fH5/gIGBgYGBgH9+fXx8fHx+f4CBgYGBgYB/fn18fHx8fn+AgYGBgYGAf359fHx8fH5/gIGBgYGBgH9+fX18fHx+f4CBgYGBgYB/fn19fHx8fn+AgYGBgYGAf359fXx8fH5/gIGBgYGBgH9+fX18fHx+f4CBgYGBgYB/fn19fHx8fn+AgYGBgYGAf359fXx8fH5+gIGBgYGBgH9+fX18fHx+foCBgYGBgYB/fn19fHx8fn6AgYGBgYGAf359fXx8fH5+gIGBgYGBgH9+fX18fHx+foCBgYGBgYB/fn19fHx8fn6AgYGBgYGAf359fXx8fH5+gIGBgYGBgH9+fX18fHx+foCBgYGBgYB/fn19fHx8fn6AgYGBgYGAf359fXx8fH5+gIGBgYGAf39+fX18fHx+foCBgYGBgH9/fn19fHx8fn6AgYGBgYB/f359fXx8fH5+gIGBgYGAf39+fX18fHx+foCBgYGBgH9/fn19fHx8fn6AgYGBgYB/f359fXx8fH5+gIGBgYGAf39+fX18fHx+foCBgYGBgH9/fn19fHx8fn6AgYGBgYB/f359fXx8fH5+gIGBgYGAf39+fX18fHx+foCBgYGBgH9/fn19fHx8fn6AgYGBgYA=';
+    sounds.match.src = 'data:audio/wav;base64,UklGRlQGAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YTAGAACBgYGCgoKCgoODg4ODg4ODgoKCgYGAgH9+fXx7e3p5eXh3d3Z2dnV1dXV1dXV2dnd3eHl6ent8fX5/gIGCg4SFhoeIiImKiouLjIyMjIyMi4uKiomIh4aFhIOCgYB/fn18e3p5eHd2dXV0c3NycnFxcXFxcnJzdHR1dnd4eXp7fH1+f4CBgoOEhYaHiIiJiouLjIyMjYyNjIyMi4uKiYmIh4aFhIOCgYB/fn18e3p5eHd2dXRzcnJxcXBwcHBwcXFycnN0dXZ3eHl6e3x9fn+AgYKDhIWGh4iJiYqLi4yMjY2NjY2NjIyLi4qJiIeGhYSDgoGAf359fHt6eXh3dnV0c3JxcHBvb29vb3BwcXJzdHV2d3h5ent8fX5/gIGCg4SFhoeIiYqKi4yMjY2Ojo6OjY2MjIuKiYiHhoWEg4KBgH9+fXx7enl4d3Z1dHNycXBvb25ubm5ub3BxcnN0dXZ3eHl6e3x9fn+AgYKDhIWGh4iJiouLjI2Njo6Ojo6OjY2Mi4uKiYiHhoWEg4KBgH9+fXx7enl4d3Z1dHJxcG9ubm1tbW1ubm9wcXJzdHV2d3h5ent8fX5/gIGCg4SFhoeIiYqLi4yNjY6Ojo+Pjo6NjYyLioqJiIeGhYSDgoGAf359fHt6eXh3dnV0c3JxcG9ubWxsbGxtbW5vcHFyc3R1dnd4eXp7fH1+f4CBgoOEhYaHiImKi4uMjY2Ojo+Pj4+OjY2Mi4qJiIeGhYSDgoGAf359fHt6eXh3dnV0c3FwcG9tbGxra2trbG1ub3BxcnN0dXZ3eHl6e3x9fn+AgYKDhIWGh4iJiouMjI2Njo+Pj4+Pj46NjYyLioqJiIeGhYSEg4KBgH9+fXx7enl4d3Z1dHNycXBvbm1sa2tqa2trbG1ucHFyc3R1dnd4eXp7fH1+f4CBgoOEhYaHiImKi4yMjY6Oj4+Pj4+Pjo6NjIyLioqJiIeGhYSEg4KBgH9+fXx7enl4d3Z1dHNycXBvbm1sa2tqamprZnl1cmRkaW53eXp7fH1+f4CBgoOEhYaGh4iJiouMjI2Njo6Pj4+Pj46OjY2Mi4qKiYiIh4aGhYSEg4KBgH9+fXx7enl4d3Z1dHNycXBvbm1sa2tqampqampsbHuBgHZrbHF3eXp7fH1+f4CBgoOEhYWGh4iJiouLjI2Njo6Oj4+Pj46OjY2Mi4uKiYiIh4aGhYSEg4KBgH9+fXx7enl4d3Z1dHNycXBvbm1sa2tqampqamprbG5vcXJzdHV2d3h5ent8fX5/gIGCg4SFhYaHiImJiouMjI2Njo6Oj46OjY2MjIuLioqJiIiHhoaFhISEg4KBgIB/fn18e3p5eHd2dXV0c3JxcG9ubWxramtqampqa2tsbW5vcHFyc3R1dnd4eXp7fH1+f4CBgoODhIWGh4iIiYqLi4yMjY2Njo6Ojo6NjY2Mi4uKiomIiIeHhoWFhISDgoKBgH9/fn18e3p5eXh3dnV1dHNycXBvbm1sa2tqampqa2tsbW5ucHBxcnN0dXZ3eHl6e3x9fn9/gIGCg4OEhYaGh4iJiYqLi4yMjI2NjY2NjY2MjIyLi4qKiYmIiIeHhoaFhYSEg4KCgYGAf359fXx7e3p5eHd3dnV0c3NycXBvbm5tbGxra2tra2xsbW1ucHBxcnJzdHV2dnd4eXp7e3x9fn9/gIGBgoOEhIWFhoaHiIiJiYqKi4uLjIyMjIyMjIyMi4uLioqKiYmJiIiIh4eGhoWFhYSEg4OCgoGBgIB/f359fHx7e3p6eXl4eHd3dnZ1dHRzcnJxcXBwb29ubm5tbW1tbW1ubm5vcHBwcXFycnN0dHR1dXZ2d3d4eHl5enp7e3x8fX19fn5/f3+AgICBgYGBgoKCg4ODg4SEhISEhISEhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWEhISEhISDg4ODg4OCgoKCgoGBgYGBgYCAgICAgH9/f39/f39+fn5+fn19fX19fX19fHx8fHx8fHx7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3t7e3x8fHx8fHx8fHx8fHx8fHx8fHx8fHx9fX19fX19fX19fX19fX19fX19fX5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn9/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f3+AgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIA=';
+    sounds.complete.src = 'data:audio/wav;base64,UklGRiQHAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAHAACAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIA=';
+  }
+  
+  // Stop all sounds
+  function stopAllSounds() {
+    Object.values(sounds).forEach(sound => {
+      if (sound) {
+        sound.pause();
+        sound.currentTime = 0;
+      }
+    });
+  }
+  
+  // Play a sound effect
+  function playSound(name) {
+    if (!config.soundEnabled) return;
+    
+    if (!sounds.rotate) {
+      initAudio();
+    }
+    
+    const sound = sounds[name];
+    if (sound) {
+      sound.currentTime = 0;
+      sound.volume = 0.3; // Reduce volume for less grating sound
+      sound.play().catch(e => console.log("Audio play failed:", e));
+    }
+  }
+  
+  // Celebrate completion
+  function celebrateCompletion() {
+    playSound('complete');
+    
+    // Add celebration visual effects
+    const celebrationEl = document.createElement('div');
+    celebrationEl.style.position = 'absolute';
+    celebrationEl.style.top = '0';
+    celebrationEl.style.left = '0';
+    celebrationEl.style.width = '100%';
+    celebrationEl.style.height = '100%';
+    celebrationEl.style.background = 'radial-gradient(ellipse at center, rgba(158, 123, 227, 0.3) 0%, rgba(158, 123, 227, 0) 70%)';
+    celebrationEl.style.animation = 'pulse 1s infinite';
+    celebrationEl.style.zIndex = '3';
+    celebrationEl.style.pointerEvents = 'none';
+    
+    sundialCtn.appendChild(celebrationEl);
+    
+    // Create light rays around the sundial
+    for (let i = 0; i < 12; i++) {
+      const ray = document.createElement('div');
+      ray.style.position = 'absolute';
+      ray.style.top = '50%';
+      ray.style.left = '50%';
+      ray.style.width = '2px';
+      ray.style.height = '300px';
+      ray.style.background = 'linear-gradient(to top, rgba(158, 123, 227, 0.8) 0%, rgba(158, 123, 227, 0) 100%)';
+      ray.style.transform = `translate(-50%, -100%) rotate(${i * 30}deg)`;
+      ray.style.transformOrigin = 'bottom center';
+      ray.style.zIndex = '1';
+      ray.style.opacity = '0';
+      ray.style.animation = `pulse 2s infinite ${i * 0.2}s`;
+      
+      celebrationEl.appendChild(ray);
+    }
+    
+    // Add completion message
+    const messageEl = document.createElement('div');
+    messageEl.style.position = 'absolute';
+    messageEl.style.top = '50%';
+    messageEl.style.left = '50%';
+    messageEl.style.transform = 'translate(-50%, -50%)';
+    messageEl.style.zIndex = '4';
+    messageEl.style.background = 'rgba(26, 10, 46, 0.9)';
+    messageEl.style.padding = '20px';
+    messageEl.style.borderRadius = '10px';
+    messageEl.style.textAlign = 'center';
+    messageEl.style.boxShadow = '0 0 20px rgba(158, 123, 227, 0.7)';
+    messageEl.innerHTML = `
+      <h2 style="margin-top:0; font-family:'Cinzel', serif;">The Runeslider Aligns!</h2>
+      <p>You have deciphered the ancient pattern and unlocked the runeslider's secret.</p>
+      <button id="continueBtn" style="padding:10px 20px; background:#5d3d92; color:white; border:none; border-radius:5px; cursor:pointer; font-family:'Cinzel', serif; margin-top:10px; box-shadow:0 0 10px rgba(93, 61, 146, 0.3);">Continue</button>
+    `;
+    
+    sundialCtn.appendChild(messageEl);
+    
+    // Add continue button handler
+    document.getElementById('continueBtn').addEventListener('click', () => {
+      sundialCtn.removeChild(celebrationEl);
+      sundialCtn.removeChild(messageEl);
+      initGame();
+    });
+  }
+  
+  // Function to change difficulty
+  function changeDifficulty(newDifficulty) {
+    // Stop any playing sounds
+    stopAllSounds();
+    
+    currentDifficulty = newDifficulty;
+    config = getCurrentConfig();
+    
+    // Update UI
+    document.querySelectorAll('.difficulty-btn').forEach(btn => {
+      btn.classList.remove('active');
+    });
+    document.querySelector(`[data-difficulty="${newDifficulty}"]`).classList.add('active');
+    
+    // Update difficulty name display
+    document.getElementById('currentDifficultyName').textContent = config.name;
+    
+    // Restart game with new difficulty
+    initGame();
+  }
+
+  // Event listeners
+  resetBtn.addEventListener('click', () => {
+    gameState.ringRotations = new Array(config.rings).fill(0);
+    gameState.completed = false;
+    gameState.moveCount = 0;
+    updateMoveCounter();
+    const rings = document.querySelectorAll('.ring');
+    rings.forEach((ring, i) => {
+      updateRingRotation(ring, 0);
+    });
+    checkCompletion();
+  });
+  
+  newChallengeBtn.addEventListener('click', initGame);
+  
+  soundToggleEl.addEventListener('click', () => {
+    config.soundEnabled = !config.soundEnabled;
+    soundToggleEl.textContent = config.soundEnabled ? '🔊' : '🔇';
+  });
+  
+  // Add difficulty button event listeners
+  document.querySelectorAll('.difficulty-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const difficulty = btn.dataset.difficulty;
+      changeDifficulty(difficulty);
+    });
+  });
+  
+  // Mode selector event listeners
+  document.getElementById('standardModeBtn').addEventListener('click', () => {
+    document.getElementById('standardModeBtn').classList.add('active');
+    document.getElementById('memorizationModeBtn').classList.remove('active');
+    gameState.mode = 'standard';
+    hideMemorizationMessage();
+    let resultEl = document.getElementById('memorizationResult');
+    if (resultEl) resultEl.style.display = 'none';
+    let overEl = document.getElementById('memorizationGameOver');
+    if (overEl) overEl.style.display = 'none';
+    initGame();
+  });
+  document.getElementById('memorizationModeBtn').addEventListener('click', () => {
+    document.getElementById('memorizationModeBtn').classList.add('active');
+    document.getElementById('standardModeBtn').classList.remove('active');
+    gameState.mode = 'memorization';
+    hideMemorizationMessage();
+    let resultEl = document.getElementById('memorizationResult');
+    if (resultEl) resultEl.style.display = 'none';
+    let overEl = document.getElementById('memorizationGameOver');
+    if (overEl) overEl.style.display = 'none';
+    initGame();
+  });
+
+  // Patch: In memorization mode, if player fails, increment fails and show result
+  // Patch: If player clicks reset, treat as a fail in memorization mode
+  resetBtn.addEventListener('click', () => {
+    if (gameState.mode === 'memorization' && !gameState.previewing) {
+      gameState.memorizationFails++;
+      showMemorizationResult(false);
+      return;
+    }
+    gameState.ringRotations = new Array(config.rings).fill(0);
+    gameState.completed = false;
+    gameState.moveCount = 0;
+    updateMoveCounter();
+    const rings = document.querySelectorAll('.ring');
+    rings.forEach((ring, i) => {
+      updateRingRotation(ring, 0);
+    });
+    checkCompletion();
+  });
+
+  // Start the game
+  initGame();
+</script>
+</html>

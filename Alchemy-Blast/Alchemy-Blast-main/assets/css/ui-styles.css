@@ -1,0 +1,132 @@
+/**
+ * UI Styles for Alchemy Blaster
+ * Provides retro LCD and chrome-styled UI elements
+ */
+
+/* Retro LCD Font */
+@font-face {
+  font-family: 'Digital-7';
+  src: url('https://fonts.cdnfonts.com/s/12542/digital-7.woff') format('woff');
+}
+
+/* Chrome and LCD Styles for Game UI */
+.lcd-display {
+  font-family: 'Digital-7', monospace;
+  color: #33ff66;
+  text-shadow: 0 0 5px #33ff66;
+  letter-spacing: 1px;
+}
+
+/* Chrome Bar Styles */
+.chrome-bar {
+  background: linear-gradient(to bottom, #f0f0f0, #c0c0c0, #a0a0a0, #c0c0c0);
+  border: 1px solid #333;
+  border-radius: 4px;
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2),
+    0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.chrome-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(to bottom, 
+    rgba(120, 220, 232, 1) 0%, 
+    rgba(0, 140, 210, 1) 50%,
+    rgba(120, 220, 232, 1) 100%);
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+  position: relative;
+  transition: width 0.3s;
+}
+
+.chrome-bar-fill::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 30%;
+  background: linear-gradient(to bottom, 
+    rgba(255, 255, 255, 0.4) 0%,
+    rgba(255, 255, 255, 0) 100%);
+}
+
+/* Shield Bar with Chrome Style */
+.shield-bar {
+  background: linear-gradient(to bottom, #444, #333, #222, #333);
+  border: 2px solid #444;
+}
+
+.shield-bar-fill {
+  background: linear-gradient(to bottom, 
+    rgba(100, 180, 255, 1) 0%, 
+    rgba(30, 80, 170, 1) 50%,
+    rgba(100, 180, 255, 1) 100%);
+}
+
+/* Health Bar with Chrome Style */
+.health-bar {
+  background: linear-gradient(to bottom, #444, #333, #222, #333);
+  border: 2px solid #444;
+}
+
+.health-bar-fill {
+  background: linear-gradient(to bottom, 
+    rgba(255, 100, 100, 1) 0%, 
+    rgba(180, 30, 30, 1) 50%,
+    rgba(255, 100, 100, 1) 100%);
+}
+
+/* Health Segments for Dere character */
+.health-segment {
+  background: linear-gradient(to bottom, #444, #333, #222, #333);
+  border: 2px solid #444;
+  border-radius: 2px;
+  margin: 0 2px;
+}
+
+.health-segment.filled {
+  background: linear-gradient(to bottom, 
+    rgba(255, 100, 100, 1) 0%, 
+    rgba(180, 30, 30, 1) 50%,
+    rgba(255, 100, 100, 1) 100%);
+  box-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+}
+
+/* Canvas-specific styles - these will be applied through JavaScript */
+/* Use these in the game_renderer.js file for reference */
+
+/* 
+ * Example of canvas LCD text style:
+ * ctx.font = "'Digital-7', monospace";
+ * ctx.fillStyle = "#33ff66";
+ * ctx.shadowColor = "#33ff66";
+ * ctx.shadowBlur = 5;
+ * 
+ * Example of canvas chrome bar style:
+ * // Background
+ * let gradient = ctx.createLinearGradient(x, y, x, y + height);
+ * gradient.addColorStop(0, "#444");
+ * gradient.addColorStop(0.5, "#333");
+ * gradient.addColorStop(1, "#222");
+ * ctx.fillStyle = gradient;
+ * ctx.fillRect(x, y, width, height);
+ * ctx.strokeStyle = "#555";
+ * ctx.lineWidth = 2;
+ * ctx.strokeRect(x, y, width, height);
+ *
+ * // Fill
+ * gradient = ctx.createLinearGradient(x, y, x, y + height);
+ * gradient.addColorStop(0, "rgba(255, 100, 100, 1)");
+ * gradient.addColorStop(0.5, "rgba(180, 30, 30, 1)");
+ * gradient.addColorStop(1, "rgba(255, 100, 100, 1)");
+ * ctx.fillStyle = gradient;
+ * ctx.fillRect(x, y, width * fillPercent, height);
+ * 
+ * // Highlight
+ * ctx.fillStyle = "rgba(255, 255, 255, 0.3)";
+ * ctx.fillRect(x, y, width * fillPercent, height / 3);
+ */

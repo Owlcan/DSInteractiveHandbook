@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interactive Handbook — Game Launcher</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=MedievalSharp&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --gold: #daac17;
+      --gold-light: #ecd56f;
+      --gold-dark: #b18503;
+      --parchment: #2C2614;
+      --parchment-dark: #1E1C12;
+      --ink: #c7a81d;
+      --ink2: #a08405;
+      --accent: #eebd1b;
+      --shadow: rgba(0, 0, 0, 0.5);
+    }
+
+    body {
+      font-family: 'Cormorant Garamond', serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #2c2619;
+      background-image: url('https://www.transparenttextures.com/patterns/dark-wood.png');
+      color: var(--ink);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1600px;
+      margin: 0 auto;
+      background-color: var(--parchment);
+      background-image: url('https://www.transparenttextures.com/patterns/parchment.png');
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      padding: 24px;
+      border: 12px solid var(--gold-dark);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .corner-decoration {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      background-color: var(--gold);
+      background-image: url('https://www.transparenttextures.com/patterns/asfalt-light.png');
+      z-index: 1;
+    }
+    .top-left { top: -6px; left: -6px; border-top-left-radius: 15px; }
+    .top-right { top: -6px; right: -6px; border-top-right-radius: 15px; }
+    .bottom-left { bottom: -6px; left: -6px; border-bottom-left-radius: 15px; }
+    .bottom-right { bottom: -6px; right: -6px; border-bottom-right-radius: 15px; }
+
+    h1 {
+      text-align: center;
+      color: var(--accent);
+      font-family: 'MedievalSharp', cursive;
+      font-size: 3.2rem;
+      margin: 10px 0 8px;
+      text-shadow: 1px 1px 3px var(--shadow);
+      position: relative;
+    }
+    h1::after {
+      content: "";
+      display: block;
+      width: 80%;
+      height: 3px;
+      background: linear-gradient(to right, transparent, var(--gold), transparent);
+      margin: 10px auto 4px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: var(--ink2);
+      margin-bottom: 20px;
+      font-size: 1.2rem;
+    }
+
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .game-card {
+      background-color: var(--parchment-dark);
+      border: 2px solid var(--gold-dark);
+      border-radius: 10px;
+      box-shadow: 0 4px 10px var(--shadow);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+    .game-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 16px var(--shadow);
+      border-color: var(--gold);
+    }
+
+    .game-card__header {
+      background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+      color: #1f1605;
+      padding: 10px 14px;
+      font-family: 'MedievalSharp', cursive;
+      font-size: 1.4rem;
+      border-bottom: 2px solid var(--gold-dark);
+    }
+
+    .game-card__body {
+      padding: 14px;
+      color: var(--ink);
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .game-card__banner {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      border: 2px solid var(--gold-dark);
+      border-radius: 6px;
+      box-shadow: 0 2px 6px var(--shadow);
+      background: #231f16;
+    }
+
+    .game-card__desc {
+      color: var(--ink);
+      font-size: 1.05rem;
+      min-height: 3.2em;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+  width: 100%;
+    }
+  /* Center non-stacked action rows and pin them to bottom of card body */
+  .game-card__body .actions { margin-top: auto; }
+  .actions:not(.actions--stack) { justify-content: center; }
+
+    /* Stacked actions variant for multi-download cards */
+    .actions.actions--stack {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    /* Make all action buttons span container width consistently */
+    .actions .btn { display: block; width: 100%; max-width: 100%; box-sizing: border-box; }
+    .btn--primary-large { font-size: 1.15rem; padding: 14px 18px; border-width: 3px; }
+
+    .btn {
+      background: linear-gradient(to bottom, var(--gold-light), var(--gold));
+      border: 2px solid var(--gold-dark);
+      color: #2C2614;
+      font-weight: bold;
+      padding: 10px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      text-decoration: none;
+  text-align: center;
+      display: inline-block;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.06rem;
+      transition: all 0.2s ease;
+      box-sizing: border-box;
+      max-width: 100%;
+    }
+    .btn:hover {
+      background: linear-gradient(to bottom, var(--gold), var(--gold-dark));
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px var(--shadow);
+    }
+  /* Larger primary Play button style */
+  .btn--play { font-size: 1.14rem; font-weight: 800; padding: 12px 18px; }
+
+    .note {
+      margin-top: 18px;
+      color: var(--ink2);
+      text-align: center;
+      font-size: 0.98rem;
+    }
+
+    footer {
+      margin-top: 16px;
+      text-align: center;
+      color: var(--ink2);
+      font-size: 0.95rem;
+    }
+  </style>
+  <script>
+    // Optional: warn when not served via HTTP
+    document.addEventListener('DOMContentLoaded', () => {
+      const isFile = location.protocol === 'file:';
+      if (isFile) {
+        alert('Tip: For all images and features to work (no CORS), start the local server and open this page via http://localhost:PORT');
+      }
+    });
+  </script>
+  <link rel="icon" href="data:," />
+  </head>
+<body>
+  <div class="container">
+    <div class="corner-decoration top-left"></div>
+    <div class="corner-decoration top-right"></div>
+    <div class="corner-decoration bottom-left"></div>
+    <div class="corner-decoration bottom-right"></div>
+
+    <h1>Scholia Diaspros Games Library</h1>
+    <p class="subtitle">Pick a game, put on your pamps, and have fun!~</p>
+
+    <div class="games-grid">
+
+
+
+      <article class="game-card">
+        <header class="game-card__header">Magic Vortex Defense</header>
+        <div class="game-card__body">
+          <img class="game-card__banner" src="./src/assets/images/expeditionandgames/vortexdefense.webp" alt="Magic Vortex Defense banner" loading="lazy">
+          <p class="game-card__desc">Sharpen your aim and reaction time defending against waves of incoming magical ejecta swirling out from the vortex.</p>
+          <div class="actions">
+            <a class="btn btn--play" href="./magicvortexdefense.html">Play</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="game-card">
+        <header class="game-card__header">Old War Defense</header>
+        <div class="game-card__body">
+          <img class="game-card__banner" src="./src/assets/images/expeditionandgames/oldwardefense.webp" alt="Old War Defense banner" loading="lazy">
+          <p class="game-card__desc">Classic tower defense set during the Old War era — hold the line.</p>
+          <div class="actions">
+            <a class="btn btn--play" href="./Old%20War%20Defense.html">Play</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="game-card">
+        <header class="game-card__header">Obelisk Gaze</header>
+        <div class="game-card__body">
+          <img class="game-card__banner" src="./src/assets/images/expeditionandgames/obeliskgaze.webp" alt="Obelisk Gaze banner" loading="lazy">
+          <p class="game-card__desc">Face the obelisk and its trials in this focused challenge inspired by the classic playground game Red-Light-Green-Light.</p>
+          <div class="actions">
+            <a class="btn btn--play" href="./obeliskgaze.html">Play</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="game-card">
+        <header class="game-card__header">Magidueler</header>
+        <div class="game-card__body">
+          <img class="game-card__banner" src="./src/assets/images/expeditionandgames/magidueler.webp" alt="Magidueler banner" loading="lazy">
+          <p class="game-card__desc">Duel with spells and strategy — quick, punchy matches.</p>
+          <div class="actions">
+            <a class="btn btn--play" href="./Magidueler.html">Play</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="game-card">
+        <header class="game-card__header">Scholia Battle RPG</header>
+        <div class="game-card__body">
+          <img class="game-card__banner" src="./src/assets/images/expeditionandgames/scholiarpg.webp" alt="Scholia Battle RPG banner" loading="lazy">
+          <p class="game-card__desc">Turn-based party battles across the plains. Build your team and outwit waves of foes.</p>
+          <div class="actions">
+            <a class="btn btn--play" href="./plainsminibattle copy.html">Play</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="game-card">
+        <header class="game-card__header">Expedition Runner</header>
+        <div class="game-card__body">
+          <img class="game-card__banner" src="./src/assets/images/expeditionandgames/xpedirunner.webp" alt="Expedition Runner banner" loading="lazy">
+          <p class="game-card__desc">Fast-paced side-scrolling runner — jump and double-jump to dodge pits, rocks, bunnies, and birds.</p>
+          <div class="actions">
+            <a class="btn btn--play" href="./expeditionrunner.html">Play</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="game-card">
+        <header class="game-card__header">Fishing Adventure</header>
+        <div class="game-card__body">
+          <img class="game-card__banner" src="./src/assets/images/expeditionandgames/fishinggame.webp" alt="Fishing Adventure banner" loading="lazy">
+          <p class="game-card__desc">Cast your line, time the hook in the golden sweet spot, and reel in loot with a skill-based twist.</p>
+          <div class="actions">
+            <a class="btn btn--play" href="./src/fishingminigame.html">Play</a>
+          </div>
+        </div>
+      </article>
+
+            <!-- Scholia Deckbuilder (Card Game) -->
+      <article class="game-card">
+        <header class="game-card__header">Scholia Deckbuilder</header>
+        <div class="game-card__body">
+          <img class="game-card__banner" src="./src/assets/images/expeditionandgames/TCGbanner.webp" alt="Scholia Deckbuilder banner" loading="lazy">
+          <p class="game-card__desc">Build and export decks, and play on custom interactive gamespace included!</p>
+          <div class="actions actions--stack">
+            <a class="btn" href="https://owlcan.github.io/scholia-diaspros-deckbuilder/" target="_blank" rel="noopener noreferrer">Play on Git</a>
+            <a class="btn" href="#" title="https://drive.google.com/file/d/10MdKWVYTFnGyBwkODZ_wu2zPey7uRlXJ/view?usp=sharing">Download Portable Version</a>
+            <a class="btn btn--primary-large" href="#" title="https://drive.google.com/file/d/1l8FF_CfZd--iiRk-yIbwSpq9vpRYmwwM/view?usp=sharing">Download Full Installer</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="game-card">
+        <header class="game-card__header">Road to Graduation</header>
+        <div class="game-card__body">
+          <img class="game-card__banner" src="./src/assets/images/expeditionandgames/roadtograduation.webp" alt="Road to Graduation Boardgame banner" loading="lazy">
+          <p class="game-card__desc">A multiplayer board-game race to be first place and ace graduation across 60 squares of eventful space! Add players, roll them dice, use your class abilities, and sprint to the finish!</p>
+          <div class="actions">
+            <a class="btn btn--play" href="./Road%20to%20Graduation%20Boardgame.html">Play</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="game-card">
+        <header class="game-card__header">Diaper Clicker</header>
+        <div class="game-card__body">
+          <img class="game-card__banner" src="./src/assets/images/expeditionandgames/diapclick.webp" alt="Diaper Clicker banner" loading="lazy">
+          <p class="game-card__desc">Idle/clicker fun — stack upgrades, auto-clickers, and watch numbers soar.</p>
+          <div class="actions">
+            <a class="btn btn--play" href="./diaperclicker.html">Play</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="game-card">
+        <header class="game-card__header">Shifting Rune Maze</header>
+        <div class="game-card__body">
+          <img class="game-card__banner" src="./src/assets/images/expeditionandgames/shiftingrunemaze.webp" alt="Shifting Rune Maze banner" loading="lazy">
+          <p class="game-card__desc">Navigate a living labyrinth that shifts under your feet. Escape monsters, collect masses of treasure, and use Rune Shatter wisely to reach the exit before the maze reshapes!</p>
+          <div class="actions">
+            <a class="btn btn--play" href="./runeshift.html">Play</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="game-card">
+        <header class="game-card__header">Alchemy Blaster</header>
+        <div class="game-card__body">
+          <img class="game-card__banner" src="./src/assets/images/expeditionandgames/alchemyblast.webp" alt="Alchemy Blaster banner" loading="lazy">
+          <p class="game-card__desc">Arcade shooter action — blast foes with alchemy-powered shots and survive enemy waves.</p>
+          <div class="actions">
+            <a class="btn btn--play" href="./Alchemy-Blast/Alchemy-Blast-main/alchemy_blaster_combat.html">Play</a>
+          </div>
+        </div>
+      </article>
+      
+      <article class="game-card">
+        <header class="game-card__header">Arcane Tonal Beacon</header>
+        <div class="game-card__body">
+          <img class="game-card__banner" src="./src/assets/images/expeditionandgames/arcanetonalbeacon.webp" alt="Arcane Tonal Beacon banner" loading="lazy">
+          <p class="game-card__desc">A Simon-like pattern memorization puzzle. Watch, listen, and recreate the sequence across rotating rune rings.</p>
+          <div class="actions">
+            <a class="btn btn--play" href="./sundialchallenge.html">Play</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="game-card">
+        <header class="game-card__header">Darkling Roundup</header>
+        <div class="game-card__body">
+          <img class="game-card__banner" src="./src/assets/images/expeditionandgames/darklingroundup.webp" alt="Darkling Roundup banner" loading="lazy">
+          <p class="game-card__desc">Contain darklings across rounds with evolving weapons, powerups, and bosses. Loot up and survive.</p>
+          <div class="actions">
+            <a class="btn btn--play" href="./darklingroundup.html">Play</a>
+          </div>
+        </div>
+      </article>
+
+    </div>
+
+
+    
+    <p class="note">Serving via the included launcher starts a local web server to avoid CORS issues.</p>
+    <footer>© Interactive Handbook</footer>
+  </div>
+</body>
+</html>

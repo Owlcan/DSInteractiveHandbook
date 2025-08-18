@@ -1,0 +1,1979 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Battle on the Plains</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=MedievalSharp&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #daac17;
+            --gold-light: #fae791;
+            --gold-dark: #97740a;
+            --parchment: #2C2614;
+            --parchment-dark: #1E1C12;
+            --ink: #c7a81d;
+            --ink2: #8f770d;
+            --accent: #b47018;
+            --shadow: rgba(0, 0, 0, 0.5);
+        }
+
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            margin: 0;
+            padding: 5px;
+            background-color: #2c2619;
+            background-image: url('https://www.transparenttextures.com/patterns/dark-wood.png');
+            color: var(--ink);
+            line-height: 1.6;
+        }
+
+        .game-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            background-color: var(--parchment);
+            background-image: url('https://www.transparenttextures.com/patterns/parchment.png');
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            border: 6px solid var(--gold-dark);
+            position: relative;
+        }
+
+        .corner-decoration {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background-color: var(--gold);
+            background-image: url('https://www.transparenttextures.com/patterns/asfalt-light.png');
+            z-index: 1;
+        }
+
+        .top-left { top: -6px; left: -6px; border-top-left-radius: 15px; }
+        .top-right { top: -6px; right: -6px; border-top-right-radius: 15px; }
+        .bottom-left { bottom: -6px; left: -6px; border-bottom-left-radius: 15px; }
+        .bottom-right { bottom: -6px; right: -6px; border-bottom-right-radius: 15px; }
+
+        .title {
+            text-align: center;
+            color: var(--accent);
+            font-family: 'MedievalSharp', cursive;
+            font-size: 2.5rem;
+            margin: 5px 0 10px;
+            text-shadow: 1px 1px 3px var(--shadow);
+            position: relative;
+        }
+
+        .title::after {
+            content: "";
+            display: block;
+            width: 80%;
+            height: 3px;
+            background: linear-gradient(to right, transparent, var(--gold), transparent);
+            margin: 10px auto;
+        }
+
+        .party-selection {
+            background: rgba(46, 38, 20, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            border: 3px solid var(--gold-dark);
+        }
+
+        .selection-status {
+            background: var(--parchment-dark);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: bold;
+            border: 2px solid var(--gold);
+        }
+
+        .selected-indicator {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--gold);
+            color: var(--parchment);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .character-card.selected .selected-indicator {
+            display: flex;
+        }
+
+        .character-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .character-card {
+            border: 3px solid var(--gold-dark);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: var(--parchment-dark);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .character-card:hover {
+            border-color: var(--gold);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(218, 172, 23, 0.3);
+        }
+
+        .character-card.selected {
+            border-color: var(--gold);
+            background: var(--parchment);
+        }
+
+        .character-name {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--accent);
+            margin-bottom: 10px;
+            font-family: 'MedievalSharp', cursive;
+        }
+
+        .character-description {
+            font-size: 0.9rem;
+            color: var(--ink2);
+            line-height: 1.4;
+        }
+
+        .character-image {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin: 0 auto 15px auto;
+            display: block;
+            border: 2px solid var(--gold-dark);
+            transition: all 0.3s ease;
+        }
+
+        .character-card:hover .character-image {
+            border-color: var(--gold);
+            transform: scale(1.05);
+        }
+
+        .character-card.selected .character-image {
+            border-color: var(--gold);
+            transform: scale(1.02);
+        }
+
+        .battle-screen {
+            display: none;
+            background: var(--parchment);
+            border-radius: 15px;
+            padding: 10px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            position: relative;
+            min-height: 600px;
+            border: 3px solid var(--gold-dark);
+        }
+
+        .battlefield-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-size: cover;
+            background-position: center;
+            border-radius: 15px;
+            opacity: 0.3;
+            z-index: -1;
+        }
+
+        .battle-header {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .round-info {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent);
+            font-family: 'MedievalSharp', cursive;
+        }
+
+        .battle-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+            position: relative;
+            min-height: 350px;
+        }
+
+        .party-section, .enemy-section, .actions-panel {
+            padding: 20px;
+            border-radius: 12px;
+            background: rgba(46, 38, 20, 0.9);
+            border: 2px solid var(--gold-dark);
+            backdrop-filter: blur(5px);
+        }
+
+        .party-section {
+            border-color: var(--gold);
+            position: relative;
+        }
+
+        .enemy-section {
+            border-color: var(--accent);
+            position: relative;
+        }
+
+        .actions-panel {
+            border-color: var(--gold-light);
+            background: rgba(30, 28, 18, 0.9);
+        }
+
+        .battle-field-container {
+            position: relative;
+            width: 100%;
+            height: 800px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 1px;
+            margin-bottom: 10px;
+            margin-top: 80px;
+            border: 3px solid var(--gold-dark);
+            grid-column: 1 / -1;
+            overflow: visible;
+        }
+
+        .party-sprites {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 40px;
+            z-index: 10;
+        }
+
+        .enemy-sprites {
+            position: absolute;
+            bottom: calc(45% + 20px);
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 10;
+            justify-content: center;
+            max-width: 90%;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+        }
+
+        .sprite-character {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 3px solid var(--gold);
+            background: rgba(255,255,255,0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .sprite-enemy {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid var(--accent);
+            background: rgba(255,255,255,0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        }
+
+        .sprite-character.dead {
+            border-color: #9CA3AF;
+            background: rgba(128,128,128,0.7);
+            opacity: 0.5;
+        }
+
+        .character-hp-bar, .enemy-hp-bar {
+            width: 100%;
+            height: 24px;
+            background: var(--parchment-dark);
+            border-radius: 10px;
+            margin: 10px 0;
+            overflow: hidden;
+            border: 2px solid var(--gold-dark);
+        }
+
+        .hp-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--gold), var(--gold-light));
+            transition: width 0.3s ease;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 15px;
+            font-size: 1.15rem;
+        }
+
+        .action-btn {
+            background: var(--gold-dark);
+            color: var(--parchment);
+            border: none;
+            padding: 18px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            font-family: 'Cormorant Garamond', serif;
+            border: 2px solid var(--gold);
+            font-size: 1.15rem;
+        }
+
+        .action-btn:hover:not(:disabled) {
+            background: var(--gold);
+            transform: translateY(-1px);
+        }
+
+        .action-btn:disabled {
+            background: #9CA3AF;
+            cursor: not-allowed;
+            border-color: #9CA3AF;
+        }
+
+        .inventory-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 12px;
+            margin-top: 15px;
+            font-size: 1.15rem;
+        }
+
+        .item-btn {
+            background: var(--accent);
+            color: var(--parchment);
+            border: none;
+            padding: 14px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1.15rem;
+            transition: all 0.3s ease;
+            font-family: 'Cormorant Garamond', serif;
+            border: 2px solid var(--gold-dark);
+        }
+
+        .item-btn:hover:not(:disabled) {
+            background: var(--gold-dark);
+        }
+
+        .item-btn:disabled {
+            background: #9CA3AF;
+            cursor: not-allowed;
+        }
+
+        .log-section {
+            background: var(--parchment-dark);
+            color: var(--ink);
+            border-radius: 12px;
+            padding: 20px;
+            height: 200px;
+            overflow-y: auto;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            border: 2px solid var(--gold-dark);
+            grid-column: 1 / -1;
+        }
+
+        .start-btn {
+            background: var(--gold-dark);
+            color: var(--parchment);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 20px auto;
+            display: block;
+            transition: all 0.3s ease;
+            font-family: 'MedievalSharp', cursive;
+            border: 2px solid var(--gold);
+        }
+
+        .start-btn:hover {
+            background: var(--gold);
+            transform: translateY(-2px);
+        }
+
+        .enemy-image {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border: 2px solid var(--gold-dark);
+        }
+
+        .character-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin: 10px 0;
+            font-size: 1.25rem;
+        }
+
+        .stat {
+            background: var(--parchment-dark);
+            padding: 12px 16px;
+            border-radius: 4px;
+            text-align: center;
+            border: 1px solid var(--gold-dark);
+            font-weight: bold;
+            font-size: 1.25rem;
+        }
+
+        .elemental-weakness {
+            background: var(--gold-light);
+            color: var(--parchment);
+            padding: 5px 10px;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .status-effects {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin: 10px 0;
+        }
+
+        .status-effect {
+            background: var(--gold-light);
+            color: var(--parchment);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+        }
+
+        .level-up-notification {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
+            color: var(--parchment);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            z-index: 1000;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            display: none;
+            font-family: 'MedievalSharp', cursive;
+            border: 3px solid var(--gold-dark);
+        }
+
+        @keyframes damage {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .damage-animation {
+            animation: damage 0.5s ease-in-out;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .mp-bar {
+            width: 100%;
+            height: 18px;
+            background: var(--parchment-dark);
+            border-radius: 8px;
+            margin: 5px 0;
+            overflow: hidden;
+            border: 2px solid var(--gold-dark);
+        }
+
+        .mp-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--gold));
+            transition: width 0.3s ease;
+            font-weight: bold;
+        }
+
+        .boss-indicator {
+            background: linear-gradient(135deg, var(--accent), var(--gold-dark));
+            color: var(--gold-light);
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(180, 112, 24, 0.3);
+            font-family: 'MedievalSharp', cursive;
+            border: 2px solid var(--gold);
+        }
+
+        .music-controls {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+        }
+
+        .music-toggle {
+            background: rgba(151, 116, 10, 0.9);
+            color: var(--gold-light);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            border: 2px solid var(--gold);
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        .music-toggle:hover {
+            background: rgba(218, 172, 23, 0.9);
+            transform: scale(1.05);
+        }
+
+        .music-toggle.disabled {
+            background: rgba(156, 163, 175, 0.9);
+        }
+
+        h2 {
+            font-family: 'MedievalSharp', cursive;
+            color: var(--accent);
+            border-bottom: 2px solid var(--gold);
+            padding-bottom: 5px;
+            font-size: 1.5rem;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        h3 {
+            font-family: 'MedievalSharp', cursive;
+            color: var(--gold);
+            font-size: 1.3rem;
+            margin-top: 0;
+        }
+
+        h4 {
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--ink);
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="corner-decoration top-left"></div>
+        <div class="corner-decoration top-right"></div>
+        <div class="corner-decoration bottom-left"></div>
+        <div class="corner-decoration bottom-right"></div>
+        
+        <h1 class="title">⚔️ Battle on the Plains ⚔️</h1>
+        
+        <div class="party-selection" id="partySelection">
+            <h2 style="text-align: center; margin-bottom: 20px;">Choose Your Party of 3 Heroes</h2>
+            <p style="text-align: center; color: #6B7280;">Select 3 different heroes to form your party</p>
+            
+            <div class="character-grid">
+                <div class="character-card" data-class="archer">
+                    <div class="selected-indicator">✓</div>
+                    <img src="src/assets/images/expeditionandgames/plainsRPG/characterfaces/archerface.png" alt="Archer Face" class="character-image" onerror="this.style.display='none'">
+                    <div class="character-name">🏹 Archer</div>
+                    <div class="character-description">
+                        <strong>Mark Target:</strong> Increases crit chance on marked enemy<br>
+                        <strong>Wind Arrow:</strong> Wind elemental attack<br>
+                        <strong>Role:</strong> Physical DPS with utility
+                    </div>
+                </div>
+                
+                <div class="character-card" data-class="cleric">
+                    <div class="selected-indicator">✓</div>
+                    <img src="src/assets/images/expeditionandgames/plainsRPG/characterfaces/clericface.png" alt="Cleric Face" class="character-image" onerror="this.style.display='none'">
+                    <div class="character-name">✨ Cleric</div>
+                    <div class="character-description">
+                        <strong>Heal:</strong> Restore ally HP<br>
+                        <strong>Holy Light:</strong> Light elemental damage<br>
+                        <strong>Role:</strong> Healer and support
+                    </div>
+                </div>
+                
+                <div class="character-card" data-class="monk">
+                    <div class="selected-indicator">✓</div>
+                    <img src="src/assets/images/expeditionandgames/plainsRPG/characterfaces/monkface.png" alt="Monk Face" class="character-image" onerror="this.style.display='none'">
+                    <div class="character-name">👊 Monk</div>
+                    <div class="character-description">
+                        <strong>Flurry:</strong> 2-4 hits per attack<br>
+                        <strong>Chi Boost:</strong> Increase next turn damage<br>
+                        <strong>Earth Slam:</strong> Earth elemental attack
+                    </div>
+                </div>
+                
+                <div class="character-card" data-class="bard">
+                    <div class="selected-indicator">✓</div>
+                    <img src="src/assets/images/expeditionandgames/plainsRPG/characterfaces/bardface.png" alt="Bard Face" class="character-image" onerror="this.style.display='none'">
+                    <div class="character-name">🎵 Bard</div>
+                    <div class="character-description">
+                        <strong>Song of Healing:</strong> Lesser heal<br>
+                        <strong>MP Melody:</strong> Restore ally MP<br>
+                        <strong>Water Wave:</strong> Water elemental attack
+                    </div>
+                </div>
+                
+                <div class="character-card" data-class="sorceress">
+                    <div class="selected-indicator">✓</div>
+                    <img src="src/assets/images/expeditionandgames/plainsRPG/characterfaces/sorceressface.png" alt="Sorceress Face" class="character-image" onerror="this.style.display='none'">
+                    <div class="character-name">🔮 Sorceress</div>
+                    <div class="character-description">
+                        <strong>Lightning Bolt:</strong> Lightning damage<br>
+                        <strong>Water Torrent:</strong> Water damage<br>
+                        <strong>Earth Spike:</strong> Earth damage<br>
+                        <strong>Role:</strong> Elemental specialist
+                    </div>
+                </div>
+                
+                <div class="character-card" data-class="ninja">
+                    <div class="selected-indicator">✓</div>
+                    <img src="src/assets/images/expeditionandgames/plainsRPG/characterfaces/ninjaface.png" alt="Ninja Face" class="character-image" onerror="this.style.display='none'">
+                    <div class="character-name">🥷 Ninja</div>
+                    <div class="character-description">
+                        <strong>Hide:</strong> Become transparent, 75% crit next attack<br>
+                        <strong>Sneak Attack:</strong> High damage on crit<br>
+                        <strong>Fire Shuriken:</strong> Fire elemental attack
+                    </div>
+                </div>
+            </div>
+            
+            <div class="selection-status">
+                <p id="selectionStatus">Selected: <span id="selectedCount">0</span>/3</p>
+                <button class="start-btn" id="startGame" disabled>Start Battle!</button>
+            </div>
+        </div>
+
+        <div class="battle-screen" id="battleScreen">
+            <div class="battlefield-background" id="battlefieldBackground"></div>
+            <div class="music-controls">
+                <button class="music-toggle" id="musicToggle" onclick="toggleMusic()">
+                    🎵 Music ON
+                </button>
+            </div>
+            
+            <div class="battle-header">
+                <div class="round-info" id="roundInfo">Round 1</div>
+                <div id="bossIndicator" class="boss-indicator hidden">
+                    🏆 BOSS BATTLE! 🏆
+                </div>
+            </div>
+            
+            <div class="battle-field-container" id="battleFieldContainer">
+                <div class="party-sprites" id="partySprites"></div>
+                <div class="enemy-sprites" id="enemySprites"></div>
+            </div>
+            
+            <div class="battle-layout">
+                <div class="party-section">
+                    <h3 style="margin-top: 0; color: #059669;">Character 1</h3>
+                    <div id="partyMember0"></div>
+                </div>
+                
+                <div class="party-section">
+                    <h3 style="margin-top: 0; color: #059669;">Character 2</h3>
+                    <div id="partyMember1"></div>
+                </div>
+                
+                <div class="party-section">
+                    <h3 style="margin-top: 0; color: #059669;">Character 3</h3>
+                    <div id="partyMember2"></div>
+                </div>
+            </div>
+            
+            <div class="log-section" id="battleLog"></div>
+        </div>
+
+        <div class="level-up-notification" id="levelUpNotification">
+            <div>🎉 LEVEL UP! 🎉</div>
+            <div style="margin-top: 10px;">Your party has grown stronger!</div>
+            <div style="margin-top: 10px;">Full heal and inventory restocked!</div>
+        </div>
+    </div>
+
+    <script>
+        // Game Data
+        const battlefields = [
+            'src/assets/images/expeditionandgames/plainsRPG/battlefields/plainsbattlefield (1).jpg',
+            'src/assets/images/expeditionandgames/plainsRPG/battlefields/plainsbattlefield (2).jpg',
+            'src/assets/images/expeditionandgames/plainsRPG/battlefields/plainsbattlefield (3).jpg',
+            'src/assets/images/expeditionandgames/plainsRPG/battlefields/plainsbattlefield (4).jpg',
+            'src/assets/images/expeditionandgames/plainsRPG/battlefields/plainsbattlefield (5).jpg',
+            'src/assets/images/expeditionandgames/plainsRPG/battlefields/plainsbattlefield (6).jpg'
+        ];
+
+        const battleMusic = [
+            'src/assets/audio/RPG Music/Against_the_Shadows.mp3',
+            'src/assets/audio/RPG Music/Bravery_Rises.mp3',
+            'src/assets/audio/RPG Music/Darkness Unleashed.mp3',
+            'src/assets/audio/RPG Music/I Can Win!.mp3',
+            'src/assets/audio/RPG Music/Stand Up or Stand Down.mp3',
+            'src/assets/audio/RPG Music/The Struggle Never Ends.mp3',
+            'src/assets/audio/RPG Music/Unyielding Shadows.mp3',
+            'src/assets/audio/RPG Music/Us_Against.mp3'
+        ];
+
+        const bossMusic = [
+            'src/assets/audio/RPG Music/(BOSS)Face Your Foes; Face Your Fears.mp3',
+            'src/assets/audio/RPG Music/(BOSS)ShadowDuel.mp3',
+            'src/assets/audio/RPG Music/(BOSS)Sound! The War Horn Blares.mp3',
+            'src/assets/audio/RPG Music/(BOSS)Stand Ready for My Arrival, Fools.mp3',
+            'src/assets/audio/RPG Music/(BOSS)Unsettling Confrontation.mp3'
+        ];
+
+        const characterClasses = {
+            archer: {
+                name: "Syna",
+                displayName: "Syna (Archer)",
+                icon: "🏹",
+                hp: 80,
+                mp: 60,
+                attack: 45,
+                defense: 30,
+                element: "wind",
+                skills: {
+                    attack: { name: "Aimed Shot", cost: 0 },
+                    mark: { name: "Mark Target", cost: 15, description: "Mark enemy for increased crit chance" },
+                    windArrow: { name: "Wind Arrow", cost: 20, element: "wind", description: "Wind elemental attack" }
+                }
+            },
+            cleric: {
+                name: "Dere",
+                displayName: "Dere (Cleric)",
+                icon: "✨",
+                hp: 70,
+                mp: 80,
+                attack: 35,
+                defense: 35,
+                element: "light",
+                skills: {
+                    attack: { name: "Sacred Strike", cost: 0 },
+                    heal: { name: "Heal", cost: 25, description: "Restore ally HP" },
+                    holyLight: { name: "Holy Light", cost: 30, element: "light", description: "Light elemental damage" }
+                }
+            },
+            monk: {
+                name: "Charla",
+                displayName: "Charla (Monk)",
+                icon: "👊",
+                hp: 90,
+                mp: 50,
+                attack: 40,
+                defense: 40,
+                element: "earth",
+                skills: {
+                    attack: { name: "Flurry of Blows", cost: 0, multiHit: true },
+                    chiBoost: { name: "Chi Boost", cost: 20, description: "Boost next attack damage" },
+                    earthSlam: { name: "Earth Slam", cost: 25, element: "earth", description: "Earth elemental attack" }
+                }
+            },
+            bard: {
+                name: "Shinny",
+                displayName: "Shinny (Bard)",
+                icon: "🎵",
+                hp: 65,
+                mp: 70,
+                attack: 30,
+                defense: 25,
+                element: "water",
+                skills: {
+                    attack: { name: "Melodic Strike", cost: 0 },
+                    songHeal: { name: "Song of Healing", cost: 20, description: "Lesser heal" },
+                    mpMelody: { name: "MP Melody", cost: 0, description: "Restore ally MP" },
+                    waterWave: { name: "Water Wave", cost: 25, element: "water", description: "Water elemental attack" }
+                }
+            },
+            sorceress: {
+                name: "Aliza",
+                displayName: "Aliza (Sorceress)",
+                icon: "🔮",
+                hp: 55,
+                mp: 100,
+                attack: 50,
+                defense: 20,
+                element: "lightning",
+                skills: {
+                    attack: { name: "Magic Missile", cost: 0 },
+                    lightning: { name: "Lightning Bolt", cost: 30, element: "lightning", description: "Lightning damage" },
+                    water: { name: "Water Torrent", cost: 25, element: "water", description: "Water damage" },
+                    earth: { name: "Earth Spike", cost: 25, element: "earth", description: "Earth damage" }
+                }
+            },
+            ninja: {
+                name: "Kagura",
+                displayName: "Kagura (Ninja)",
+                icon: "🥷",
+                hp: 75,
+                mp: 55,
+                attack: 50,
+                defense: 25,
+                element: "fire",
+                skills: {
+                    attack: { name: "Strike", cost: 0 },
+                    hide: { name: "Hide", cost: 15, description: "Become transparent, 75% crit chance next attack" },
+                    fireShuriken: { name: "Fire Shuriken", cost: 20, element: "fire", description: "Fire elemental attack" }
+                }
+            }
+        };
+
+        // Monster data from bestiary
+        const monsters = [
+            // CR 0-1 (Rounds 1-3)
+            {
+                name: "Lost Plushie",
+                hp: 8,
+                attack: 1,
+                defense: 10,
+                cr: 0.125,
+                weaknesses: ["fire"],
+                image: "https://ik.imagekit.io/owlcan/Monsters/lostplushie1.png",
+                attacks: [{ name: "Sad Cuddle", damage: 1 }]
+            },
+            {
+                name: "Darkling-Caller",
+                hp: 8,
+                attack: 8,
+                defense: 12,
+                cr: 0.25,
+                weaknesses: ["light"],
+                image: "https://ik.imagekit.io/owlcan/Monsters/Darkling%20Caller.png",
+                attacks: [{ name: "Bite", damage: 4 }, { name: "Piercing Call", damage: 6 }]
+            },
+            {
+                name: "Darkling-Yowler",
+                hp: 24,
+                attack: 10,
+                defense: 12,
+                cr: 0.5,
+                weaknesses: ["light"],
+                image: "https://ik.imagekit.io/owlcan/Monsters/Darkling%20Yowler.png",
+                attacks: [{ name: "Bite", damage: 5 }, { name: "Ordure Wail", damage: 8 }]
+            },
+            {
+                name: "Darkling Bellowbelly Cubling",
+                hp: 21,
+                attack: 12,
+                defense: 12,
+                cr: 0.5,
+                weaknesses: ["light"],
+                image: "https://ik.imagekit.io/owlcan/Monsters/Darkling%20Cubling.png",
+                attacks: [{ name: "Bite", damage: 6 }, { name: "Swarm Call", damage: 4 }]
+            },
+            {
+                name: "Darkling Weed-Tangler",
+                hp: 36,
+                attack: 15,
+                defense: 13,
+                cr: 0.5,
+                weaknesses: ["fire"],
+                image: "https://ik.imagekit.io/owlcan/Monsters/weedtangler.png",
+                attacks: [{ name: "Vine Whip", damage: 6 }, { name: "Entangle", damage: 8 }]
+            },
+            {
+                name: "Darkling-Slurper",
+                hp: 28,
+                attack: 18,
+                defense: 13,
+                cr: 0.5,
+                weaknesses: ["light"],
+                image: "https://ik.imagekit.io/owlcan/Monsters/Darkling%20Slurper.png",
+                attacks: [{ name: "Grapple Bite", damage: 8 }, { name: "Draining Slurp", damage: 6 }]
+            },
+            {
+                name: "Darkling Gloom-Newt",
+                hp: 45,
+                attack: 16,
+                defense: 13,
+                cr: 0.75,
+                weaknesses: ["light"],
+                image: "https://ik.imagekit.io/owlcan/Monsters/gloomnewt1.png",
+                attacks: [{ name: "Toxic Bite", damage: 7 }, { name: "Gloom Spit", damage: 9 }]
+            },
+            {
+                name: "Darkling-Lurker",
+                hp: 60,
+                attack: 22,
+                defense: 14,
+                cr: 1,
+                weaknesses: ["light"],
+                image: "https://ik.imagekit.io/owlcan/Monsters/Darkling%20Lurker.png",
+                attacks: [{ name: "Claw Slash", damage: 9 }, { name: "Pounce", damage: 7 }, { name: "Shadow Strike", damage: 12 }]
+            },
+            
+            // CR 2-4 (Rounds 4-7)
+            {
+                name: "Darkforme Overwatch",
+                hp: 80,
+                attack: 28,
+                defense: 13,
+                cr: 2,
+                weaknesses: ["light"],
+                image: "https://ik.imagekit.io/owlcan/Monsters/Darkforme-Overwatch.png",
+                attacks: [{ name: "Shadow Blast", damage: 10 }, { name: "Dark Command", damage: 15 }]
+            },
+            {
+                name: "Darkling Liquid Legion",
+                hp: 66,
+                attack: 25,
+                defense: 11,
+                cr: 2,
+                weaknesses: ["fire"],
+                image: "https://ik.imagekit.io/owlcan/Monsters/liquidlegion1.png",
+                attacks: [{ name: "Pseudopod", damage: 8 }, { name: "Engulf", damage: 12 }]
+            },
+            {
+                name: "Dark Dimension Changebot",
+                hp: 60,
+                attack: 30,
+                defense: 15,
+                cr: 2,
+                weaknesses: ["earth"],
+                image: "https://ik.imagekit.io/owlcan/Monsters/nannybot.jpg",
+                attacks: [{ name: "Pincer Claw", damage: 9 }, { name: "Forced Change", damage: 14 }]
+            },
+            {
+                name: "Darkforme Punishment Maid",
+                hp: 130,
+                attack: 35,
+                defense: 14,
+                cr: 4,
+                weaknesses: ["light"],
+                image: "https://ik.imagekit.io/owlcan/Monsters/darkpunishmentmaid.png",
+                attacks: [{ name: "Disciplinary Strike", damage: 15 }, { name: "Shadow Whip", damage: 22 }]
+            },
+            
+            // CR 5+ (Rounds 8-9 and bosses)
+            {
+                name: "Darkling Blood-Gorger",
+                hp: 168,
+                attack: 40,
+                defense: 16,
+                cr: 5,
+                weaknesses: ["light"],
+                image: "https://ik.imagekit.io/owlcan/Monsters/bloodgorger.png",
+                attacks: [{ name: "Blood Drain", damage: 18 }, { name: "Savage Bite", damage: 25 }]
+            },
+            {
+                name: "Darkling-Paralurker",
+                hp: 140,
+                attack: 45,
+                defense: 16,
+                cr: 5,
+                weaknesses: ["light"],
+                image: "https://ik.imagekit.io/owlcan/Monsters/weirdling-paralurker.png",
+                attacks: [{ name: "Paralyzing Bite", damage: 20 }, { name: "Shadow Claw", damage: 18 }, { name: "Dark Ambush", damage: 30 }]
+            },
+            {
+                name: "Sky-Darkener Nightveil",
+                hp: 85,
+                attack: 35,
+                defense: 17,
+                cr: 5,
+                weaknesses: ["radiant"],
+                image: "https://ik.imagekit.io/owlcan/Monsters/sky-darkener-nightveil.png ",
+                attacks: [{ name: "Taloned Strike", damage: 20 }, { name: "Swoop and Dive", damage: 25 }]
+            },
+            {
+                name: "Darkaconda",
+                hp: 102,
+                attack: 35,
+                defense: 16,
+                cr: 4,
+                weaknesses: ["radiant"],
+                image: "https://ik.imagekit.io/owlcan/Monsters/darkaconda.png",
+                attacks: [{ name: "Shadow Lunge", damage: 22 }, { name: "Crushing Coil", damage: 18 }]
+            },
+            {
+                name: "Darkforme Nightsipper",
+                hp: 120,
+                attack: 30,
+                defense: 13,
+                cr: 4,
+                weaknesses: ["radiant"],
+                image: "https://ik.imagekit.io/owlcan/Monsters/nightsipper.png",
+                attacks: [{ name: "Siphoning Bite", damage: 18 }, { name: "Brown-Note Screech", damage: 15 }]
+            }
+        ];
+
+        // Boss monsters (CR 5+)
+        const bossMonsters = [
+            {
+                name: "Night-Mare Shadowstorm",
+                hp: 250,
+                attack: 55,
+                defense: 19,
+                cr: 9,
+                weaknesses: ["light"],
+                image: "https://ik.imagekit.io/owlcan/Monsters/shadowstorm.png",
+                attacks: [
+                    { name: "Lance of Dusk", damage: 20 },
+                    { name: "Hoof Stomp", damage: 23 },
+                    { name: "Charging Trample", damage: 28 },
+                    { name: "Shadowy Tendrils", damage: 35 }
+                ]
+            },
+            {
+                name: "Dark Dimension Auditarch",
+                hp: 280,
+                attack: 60,
+                defense: 18,
+                cr: 7,
+                weaknesses: ["wind"],
+                image: "https://ik.imagekit.io/owlcan/Monsters/annapasted-image_bria.png",
+                attacks: [
+                    { name: "Empowered Saber", damage: 17 },
+                    { name: "Arcane Volley", damage: 25 },
+                    { name: "Commanding Presence", damage: 30 }
+                ]
+            },
+            {
+                name: "Shadow Slimepress",
+                hp: 320,
+                attack: 70,
+                defense: 15,
+                cr: 10,
+                weaknesses: ["fire"],
+                image: "https://ik.imagekit.io/owlcan/Monsters/slimepress.png",
+                attacks: [
+                    { name: "Pseudopod Lash", damage: 21 },
+                    { name: "Engulf", damage: 35 },
+                    { name: "Demanding Decree", damage: 40 }
+                ]
+            }
+        ];
+
+        // Game State
+        let gameState = {
+            selectedClasses: [],
+            party: [],
+            currentRound: 1,
+            currentEnemies: [],
+            currentPlayerIndex: 0,
+            battleLog: [],
+            inventory: {
+                halfHeal: 5,
+                fullHeal: 3,
+                mpRestore: 3,
+                revivalNanites: 2
+            },
+            currentMusic: null,
+            musicEnabled: true
+        };
+
+        // Audio Management
+        let currentAudio = null;
+
+        function playBattleMusic(isBoss = false) {
+            // Stop current music if playing
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio.currentTime = 0;
+            }
+
+            if (!gameState.musicEnabled) return;
+
+            const musicArray = isBoss ? bossMusic : battleMusic;
+            const randomIndex = Math.floor(Math.random() * musicArray.length);
+            const selectedTrack = musicArray[randomIndex];
+
+            currentAudio = new Audio(selectedTrack);
+            currentAudio.loop = true;
+            currentAudio.volume = 0.3; // Set to 30% volume for background music
+            
+            // Handle audio loading and play
+            currentAudio.addEventListener('canplaythrough', () => {
+                currentAudio.play().catch(error => {
+                    console.log('Audio autoplay prevented:', error);
+                    // Add a user interaction prompt if needed
+                });
+            });
+
+            currentAudio.addEventListener('error', (error) => {
+                console.log('Audio loading error:', error);
+            });
+
+            currentAudio.load();
+            gameState.currentMusic = selectedTrack;
+        }
+
+        function stopBattleMusic() {
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio.currentTime = 0;
+                currentAudio = null;
+            }
+            gameState.currentMusic = null;
+        }
+
+        function toggleMusic() {
+            gameState.musicEnabled = !gameState.musicEnabled;
+            const musicToggle = document.getElementById('musicToggle');
+            
+            if (!gameState.musicEnabled) {
+                stopBattleMusic();
+                musicToggle.textContent = '🔇 Music OFF';
+                musicToggle.classList.add('disabled');
+            } else {
+                musicToggle.textContent = '🎵 Music ON';
+                musicToggle.classList.remove('disabled');
+                if (gameState.currentEnemies && gameState.currentEnemies.length > 0) {
+                    const isBoss = gameState.currentRound % 10 === 0;
+                    playBattleMusic(isBoss);
+                }
+            }
+        }
+
+        // Initialize party selection
+        function initPartySelection() {
+            const cards = document.querySelectorAll('.character-card');
+            const startBtn = document.getElementById('startGame');
+            const selectedCount = document.getElementById('selectedCount');
+
+            cards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const classType = card.dataset.class;
+                    
+                    if (card.classList.contains('selected')) {
+                        // Deselect
+                        card.classList.remove('selected');
+                        gameState.selectedClasses = gameState.selectedClasses.filter(c => c !== classType);
+                    } else if (gameState.selectedClasses.length < 3) {
+                        // Select
+                        card.classList.add('selected');
+                        gameState.selectedClasses.push(classType);
+                    }
+                    
+                    selectedCount.textContent = gameState.selectedClasses.length;
+                    startBtn.disabled = gameState.selectedClasses.length !== 3;
+                });
+            });
+
+            startBtn.addEventListener('click', startGame);
+        }
+
+        // Start the game
+        function startGame() {
+            // Create party from selected classes
+            gameState.party = gameState.selectedClasses.map((classType, index) => {
+                const template = characterClasses[classType];
+                return {
+                    ...template,
+                    id: index,
+                    classType: classType, // Keep track of original class for sprite paths
+                    currentHp: template.hp,
+                    currentMp: template.mp,
+                    maxHp: template.hp,
+                    maxMp: template.mp,
+                    statusEffects: [],
+                    level: 1
+                };
+            });
+
+            // Hide party selection, show battle screen
+            document.getElementById('partySelection').style.display = 'none';
+            document.getElementById('battleScreen').style.display = 'block';
+
+            // Start first round
+            startRound();
+        }
+
+        // Start a new round
+        function startRound() {
+            // Check for boss battles (every 10th round)
+            const isBossRound = gameState.currentRound % 10 === 0;
+            
+            // Cycle battlefield background
+            const battlefieldIndex = (gameState.currentRound - 1) % battlefields.length;
+            const battleFieldContainer = document.getElementById('battleFieldContainer');
+            const battlefieldBackground = document.getElementById('battlefieldBackground');
+            
+            battleFieldContainer.style.backgroundImage = `url('${battlefields[battlefieldIndex]}')`;
+            battlefieldBackground.style.backgroundImage = `url('${battlefields[battlefieldIndex]}')`;
+            
+            if (isBossRound) {
+                document.getElementById('bossIndicator').classList.remove('hidden');
+                const bossIndex = Math.floor((gameState.currentRound - 10) / 10) % bossMonsters.length;
+                const boss = JSON.parse(JSON.stringify(bossMonsters[bossIndex]));
+                // Bosses get extra HP on higher rounds
+                const hpMultiplier = 1 + (Math.floor(gameState.currentRound / 10) - 1) * 0.3;
+                boss.hp = Math.floor(boss.hp * hpMultiplier);
+                boss.currentHp = boss.hp;
+                boss.id = 0;
+                gameState.currentEnemies = [boss];
+                
+                // Play boss music
+                playBattleMusic(true);
+                addToLog("🎵 Boss music begins to play...");
+            } else {
+                document.getElementById('bossIndicator').classList.add('hidden');
+                // Select enemies based on round
+                let availableMonsters;
+                let enemyCount;
+                
+                if (gameState.currentRound <= 3) {
+                    availableMonsters = monsters.filter(m => m.cr <= 1);
+                    enemyCount = Math.floor(Math.random() * 3) + 3; // 3-5 enemies
+                } else if (gameState.currentRound <= 7) {
+                    availableMonsters = monsters.filter(m => m.cr >= 2 && m.cr <= 4);
+                    if (availableMonsters.some(m => m.cr <= 2)) {
+                        enemyCount = Math.floor(Math.random() * 2) + 2; // 2-3 enemies for CR 1-2
+                    } else {
+                        enemyCount = 2; // 2 enemies for CR 3+
+                    }
+                } else {
+                    availableMonsters = monsters.filter(m => m.cr >= 5);
+                    enemyCount = 2; // 2 enemies for high CR
+                }
+                
+                gameState.currentEnemies = [];
+                
+                // Create thematic groups instead of random individual monsters
+                if (enemyCount >= 3) {
+                    // Choose a primary monster type for the group
+                    const primaryMonster = availableMonsters[Math.floor(Math.random() * availableMonsters.length)];
+                    const groupSize = Math.min(enemyCount - 1, 3); // 2-3 of the same type
+                    
+                    // Add multiple of the primary monster
+                    for (let i = 0; i < groupSize; i++) {
+                        const enemy = JSON.parse(JSON.stringify(primaryMonster));
+                        // Scale enemy HP and attack based on round
+                        const scaleMultiplier = 1 + (gameState.currentRound - 1) * 0.15;
+                        enemy.hp = Math.floor(enemy.hp * scaleMultiplier);
+                        enemy.attack = Math.floor(enemy.attack * scaleMultiplier);
+                        enemy.currentHp = enemy.hp;
+                        enemy.id = gameState.currentEnemies.length;
+                        enemy.name = enemy.name + ` ${i + 1}`; // Add numbers to distinguish
+                        gameState.currentEnemies.push(enemy);
+                    }
+                    
+                    // Add 1-2 different monsters if there's room
+                    const remainingSlots = enemyCount - groupSize;
+                    for (let i = 0; i < remainingSlots; i++) {
+                        const otherMonsters = availableMonsters.filter(m => m.name !== primaryMonster.name);
+                        if (otherMonsters.length > 0) {
+                            const randomMonster = otherMonsters[Math.floor(Math.random() * otherMonsters.length)];
+                            const enemy = JSON.parse(JSON.stringify(randomMonster));
+                            const scaleMultiplier = 1 + (gameState.currentRound - 1) * 0.15;
+                            enemy.hp = Math.floor(enemy.hp * scaleMultiplier);
+                            enemy.attack = Math.floor(enemy.attack * scaleMultiplier);
+                            enemy.currentHp = enemy.hp;
+                            enemy.id = gameState.currentEnemies.length;
+                            gameState.currentEnemies.push(enemy);
+                        }
+                    }
+                } else {
+                    // For smaller groups, just add individual monsters
+                    for (let i = 0; i < enemyCount; i++) {
+                        const randomMonster = availableMonsters[Math.floor(Math.random() * availableMonsters.length)];
+                        const enemy = JSON.parse(JSON.stringify(randomMonster));
+                        const scaleMultiplier = 1 + (gameState.currentRound - 1) * 0.15;
+                        enemy.hp = Math.floor(enemy.hp * scaleMultiplier);
+                        enemy.attack = Math.floor(enemy.attack * scaleMultiplier);
+                        enemy.currentHp = enemy.hp;
+                        enemy.id = i;
+                        gameState.currentEnemies.push(enemy);
+                    }
+                }
+                
+                // Play regular battle music
+                playBattleMusic(false);
+            }
+
+            // Check for level up (every 10 rounds)
+            if (gameState.currentRound > 1 && gameState.currentRound % 10 === 1) {
+                levelUpParty();
+            }
+
+            updateDisplay();
+            updateBattlefieldSprites();
+            gameState.currentPlayerIndex = 0;
+            startPlayerTurn();
+        }
+
+        // Update battlefield sprites
+        function updateBattlefieldSprites() {
+            // Update party sprites
+            const partySprites = document.getElementById('partySprites');
+            partySprites.innerHTML = '';
+            gameState.party.forEach(member => {
+                const sprite = document.createElement('img');
+                // Use class type for sprite path, not character name
+                const spriteSrc = `src/assets/images/expeditionandgames/plainsRPG/${member.classType}.png`;
+                sprite.src = spriteSrc;
+                sprite.alt = member.name + ' Sprite';
+                sprite.title = `${member.name} (${member.currentHp}/${member.maxHp} HP)`;
+                    // Make bard sprite (Shinny) 15% bigger
+                    if (member.classType === 'bard') {
+                        sprite.style.height = '207px'; // 180px * 1.15 = 207px
+                    } else {
+                        sprite.style.height = '180px';
+                    }
+                    sprite.style.width = 'auto'; // Allow width to adjust based on height
+                    sprite.style.objectFit = 'scale-down'; // Scales down while preserving aspect ratio
+                    sprite.style.background = 'none';
+                    sprite.style.border = 'none';
+                    sprite.style.borderRadius = '0';
+                    sprite.style.opacity = member.currentHp > 0 ? '1' : '0.5';
+                    partySprites.appendChild(sprite);
+            });
+            
+            // Update enemy sprites with simple HP bars and names
+            const enemySprites = document.getElementById('enemySprites');
+            enemySprites.innerHTML = '';
+            gameState.currentEnemies.forEach((enemy, index) => {
+                const enemyContainer = document.createElement('div');
+                enemyContainer.style.position = 'relative';
+                enemyContainer.style.display = 'flex';
+                enemyContainer.style.flexDirection = 'column';
+                enemyContainer.style.alignItems = 'center';
+                enemyContainer.style.margin = '0 5px';
+                
+                // HP bar above sprite
+                const hpBar = document.createElement('div');
+                hpBar.style.width = '120px';
+                hpBar.style.height = '8px';
+                hpBar.style.background = 'rgba(139, 69, 19, 0.8)';
+                hpBar.style.borderRadius = '4px';
+                hpBar.style.marginBottom = '5px';
+                hpBar.style.border = '1px solid rgba(0,0,0,0.5)';
+                hpBar.style.boxShadow = '0 2px 4px rgba(0,0,0,0.5)';
+                hpBar.style.overflow = 'hidden';
+                
+                const hpFill = document.createElement('div');
+                const hpPercent = (enemy.currentHp / enemy.hp) * 100;
+                hpFill.style.width = `${hpPercent}%`;
+                hpFill.style.height = '100%';
+                hpFill.style.background = hpPercent > 60 ? '#4ade80' : hpPercent > 30 ? '#facc15' : '#ef4444';
+                hpFill.style.transition = 'width 0.3s ease';
+                hpBar.appendChild(hpFill);
+                
+                // Enemy sprite
+                const sprite = document.createElement('img');
+                sprite.src = enemy.image;
+                sprite.alt = enemy.name + ' Sprite';
+                sprite.title = `${enemy.name} (${enemy.currentHp}/${enemy.hp} HP)`;
+                sprite.style.height = '180px';
+                // For Gloom Newt and Weed-Tangler, set a fixed width to reduce their length
+                if (enemy.name === 'Darkling Gloom-Newt' || enemy.name === 'Darkling Weed-Tangler') {
+                    sprite.style.width = '150px';
+                } else {
+                    sprite.style.width = 'auto';
+                }
+                sprite.style.objectFit = 'scale-down';
+                sprite.style.background = 'none';
+                sprite.style.border = 'none';
+                sprite.style.borderRadius = '0';
+                sprite.style.opacity = enemy.currentHp > 0 ? '1' : '0.3';
+                sprite.style.filter = 'drop-shadow(2px 2px 4px rgba(0,0,0,0.5))';
+                
+                // Name below sprite
+                const nameLabel = document.createElement('div');
+                nameLabel.textContent = enemy.name;
+                nameLabel.style.color = '#b91c1c';
+                nameLabel.style.fontSize = '1rem';
+                nameLabel.style.fontWeight = 'bold';
+                nameLabel.style.textAlign = 'center';
+                nameLabel.style.marginTop = '5px';
+                nameLabel.style.textShadow = '2px 2px 4px rgba(0,0,0,0.8)';
+                nameLabel.style.maxWidth = '140px';
+                nameLabel.style.wordWrap = 'break-word';
+                
+                enemyContainer.appendChild(hpBar);
+                enemyContainer.appendChild(sprite);
+                enemyContainer.appendChild(nameLabel);
+                enemySprites.appendChild(enemyContainer);
+            });
+        }
+
+        // Get enemy icon based on name
+        function getEnemyIcon(enemyName) {
+            const iconMap = {
+                'Lost Plushie': '🧸',
+                'Darkling-Caller': '�',
+                'Darkling Bellowbelly Cubling': '�',
+                'Darkling Weed-Tangler': '🌿',
+                'Darkling-Slurper': '👹',
+                'Darkling-Lurker': '�',
+                'Darkling Liquid Legion': '💧',
+                'Dark Dimension Changebot': '🤖',
+                'Darkforme Overwatch': '👁️',
+                'Darkforme Punishment Maid': '�',
+                'Darkling Blood-Gorger': '🧛',
+                'Darkling-Paralurker': '�️',
+                'Night-Mare Shadowstorm': '🐴',
+                'Dark Dimension Auditarch': '👑',
+                'Lakeopus Rex': '🐙',
+                'Shadow Slimepress': '👸',
+                'Darkforme Abyssal Leviathan': '🐋',
+                'Sky-Darkener Nightveil': '🦇',
+                'Darkaconda': '🐍',
+                'Darkforme Nightsipper': '🫗',
+                'Darkling-Yowler': '😱',
+                'Darkling Gloom-Newt': '🦎'
+            };
+            return '';
+        }
+
+        // Level up the party
+        function levelUpParty() {
+            // Show level up notification
+            const notification = document.getElementById('levelUpNotification');
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+
+            // Level up each party member
+            gameState.party.forEach(member => {
+                if (member.currentHp > 0) {
+                    member.level++;
+                    member.maxHp += 10;
+                    member.maxMp += 8;
+                    member.attack += 5;
+                    member.defense += 3;
+                    // Full heal
+                    member.currentHp = member.maxHp;
+                    member.currentMp = member.maxMp;
+                    member.statusEffects = [];
+                }
+            });
+
+            // Restore inventory and add revival nanite
+            gameState.inventory = {
+                halfHeal: 5,
+                fullHeal: 3,
+                mpRestore: 3,
+                revivalNanites: gameState.inventory.revivalNanites + 1
+            };
+
+            addToLog("🎉 LEVEL UP! Your party has grown stronger and been fully healed!");
+            addToLog(`📦 Inventory restocked! +1 Revival Nanite (now have ${gameState.inventory.revivalNanites})`);
+        }
+
+        // Start player turn
+        function startPlayerTurn() {
+            // Find next living party member
+            while (gameState.currentPlayerIndex < gameState.party.length && 
+                   gameState.party[gameState.currentPlayerIndex].currentHp <= 0) {
+                gameState.currentPlayerIndex++;
+            }
+
+            if (gameState.currentPlayerIndex >= gameState.party.length) {
+                // All party members dead
+                endGame(false);
+                return;
+            }
+
+            const currentPlayer = gameState.party[gameState.currentPlayerIndex];
+            updatePlayerActions(currentPlayer);
+        }
+
+        // Update player actions display
+        function updatePlayerActions(player) {
+            // Update the display first to show the current player
+            updateDisplay();
+            // Then populate the action buttons in the current player's section
+            const actionContainer = document.getElementById('currentPlayerActions');
+            const inventoryContainer = document.getElementById('currentPlayerInventory');
+            if (!actionContainer || !inventoryContainer) return;
+            actionContainer.innerHTML = '';
+            inventoryContainer.innerHTML = '';
+            // Ability buttons (2x2 grid, always 4)
+            actionContainer.className = 'action-buttons';
+            const buttons = [];
+            // Basic attack (always first)
+            buttons.push(createActionButton('⚔️ Attack', () => performAttack(player)));
+            // Find the main skill (not attack, priority to elemental/special abilities)
+            const skills = Object.entries(player.skills).filter(([key]) => key !== 'attack');
+            let mainSkill = null;
+            const skillPriority = ['lightning', 'bolt', 'windArrow', 'holyLight', 'earthSlam', 'waterWave', 'fireShuriken'];
+            for (const priority of skillPriority) {
+                const found = skills.find(([key]) => key === priority);
+                if (found) { mainSkill = found; break; }
+            }
+            if (!mainSkill && skills.length > 0) {
+                mainSkill = skills[0];
+            }
+            if (mainSkill) {
+                const [skillKey, skill] = mainSkill;
+                const canUse = player.currentMp >= skill.cost;
+                buttons.push(createActionButton(`${skill.name || skillKey} (${skill.cost}MP)`, () => useSkill(player, skillKey, skill), !canUse));
+            }
+            // Add up to 2 more skills
+            const remainingSkills = skills.filter(([key]) => !mainSkill || key !== mainSkill[0]);
+            for (let i = 0; i < Math.min(2, remainingSkills.length); i++) {
+                const [skillKey, skill] = remainingSkills[i];
+                const canUse = player.currentMp >= skill.cost;
+                buttons.push(createActionButton(`${skill.name || skillKey} (${skill.cost}MP)`, () => useSkill(player, skillKey, skill), !canUse));
+            }
+            // Ensure we have exactly 4 buttons (fill with empty if needed)
+            while (buttons.length < 4) {
+                const emptyBtn = document.createElement('button');
+                emptyBtn.className = 'action-btn';
+                emptyBtn.disabled = true;
+                emptyBtn.style.visibility = 'hidden';
+                buttons.push(emptyBtn);
+            }
+            // Style all buttons for larger font and padding
+            buttons.forEach(btn => {
+                btn.style.fontSize = '1.15rem';
+                btn.style.padding = '18px 24px';
+                actionContainer.appendChild(btn);
+            });
+            // Item buttons (2x2 grid, always 4)
+            inventoryContainer.className = 'inventory-section';
+            const itemOrder = ['halfHeal', 'fullHeal', 'mpRestore', 'revivalNanites'];
+            const itemButtons = [];
+            const labelMap = {
+                halfHeal: 'Half Heal',
+                fullHeal: 'Full Heal',
+                mpRestore: 'MP Restore',
+                revivalNanites: 'Revive'
+            };
+            itemOrder.forEach(item => {
+                const count = gameState.inventory[item];
+                const label = `${labelMap[item]}${count > 0 ? ` (${count})` : ''}`;
+                const btn = document.createElement('button');
+                btn.className = 'item-btn';
+                btn.textContent = label;
+                btn.disabled = count <= 0;
+                btn.style.fontSize = '1.15rem';
+                btn.style.padding = '14px 20px';
+                if (count > 0) btn.onclick = () => useItem(item);
+                itemButtons.push(btn);
+            });
+            while (itemButtons.length < 4) {
+                const emptyBtn = document.createElement('button');
+                emptyBtn.className = 'item-btn';
+                emptyBtn.disabled = true;
+                emptyBtn.style.visibility = 'hidden';
+                itemButtons.push(emptyBtn);
+            }
+            itemButtons.forEach(btn => inventoryContainer.appendChild(btn));
+        }
+
+        // Create action button
+        function createActionButton(text, onClick, disabled = false) {
+            const btn = document.createElement('button');
+            btn.className = 'action-btn';
+            btn.textContent = text;
+            btn.disabled = disabled;
+            btn.addEventListener('click', onClick);
+            return btn;
+        }
+
+        // Use item
+        function useItem(itemType) {
+            if (gameState.inventory[itemType] <= 0) return;
+
+            let target = gameState.party[gameState.currentPlayerIndex];
+            
+            switch (itemType) {
+                case 'halfHeal':
+                    const halfHealAmount = Math.floor(target.maxHp * 0.5);
+                    target.currentHp = Math.min(target.maxHp, target.currentHp + halfHealAmount);
+                    addToLog(`${target.name} used Half Heal potion and recovered ${halfHealAmount} HP!`);
+                    break;
+                    
+                case 'fullHeal':
+                    const fullHealAmount = target.maxHp - target.currentHp;
+                    target.currentHp = target.maxHp;
+                    addToLog(`${target.name} used Full Heal potion and recovered ${fullHealAmount} HP!`);
+                    break;
+                    
+                case 'mpRestore':
+                    const mpRestoreAmount = target.maxMp - target.currentMp;
+                    target.currentMp = target.maxMp;
+                    addToLog(`${target.name} used MP Restore potion and recovered ${mpRestoreAmount} MP!`);
+                    break;
+                    
+                case 'revivalNanites':
+                    // Find first dead party member
+                    const deadMember = gameState.party.find(member => member.currentHp <= 0);
+                    if (deadMember) {
+                        deadMember.currentHp = Math.floor(deadMember.maxHp * 0.5);
+                        addToLog(`Revival Nanite used! ${deadMember.name} is revived with ${deadMember.currentHp} HP!`);
+                    } else {
+                        addToLog("No one needs revival!");
+                        return;
+                    }
+                    break;
+            }
+
+            gameState.inventory[itemType]--;
+            updateDisplay();
+            endPlayerTurn();
+        }
+
+        // Perform basic attack
+        function performAttack(player) {
+            // If multiple enemies, target first living enemy
+            const livingEnemies = gameState.currentEnemies.filter(enemy => enemy.currentHp > 0);
+            if (livingEnemies.length === 0) {
+                nextRound();
+                return;
+            }
+            const target = livingEnemies[0]; // Target first living enemy
+            
+            let damage = calculateDamage(player.attack, target.defense);
+            
+            // Check for monk multi-hit
+            if (player.skills.attack.multiHit) {
+                const hits = Math.floor(Math.random() * 3) + 2; // 2-4 hits
+                let totalDamage = 0;
+                for (let i = 0; i < hits; i++) {
+                    const hitDamage = Math.floor(damage * 0.3); // Each hit is 30% of normal damage
+                    totalDamage += hitDamage;
+                }
+                damage = totalDamage;
+                addToLog(`${player.name} attacks ${target.name} ${hits} times for ${damage} total damage!`);
+            } else {
+                addToLog(`${player.name} attacks ${target.name} for ${damage} damage!`);
+            }
+
+            applyDamageToEnemy(damage, target);
+            endPlayerTurn();
+        }
+
+        // Use skill
+        function useSkill(player, skillKey, skill) {
+            if (player.currentMp < skill.cost) return;
+
+            player.currentMp -= skill.cost;
+
+            switch (skillKey) {
+                case 'mark':
+                    // Mark first living enemy
+                    const markTargets = gameState.currentEnemies.filter(enemy => enemy.currentHp > 0);
+                    if (markTargets.length > 0) {
+                        markTargets[0].marked = true;
+                        addToLog(`${player.name} marks ${markTargets[0].name} for increased critical hit chance!`);
+                    }
+                    break;
+                    
+                case 'heal':
+                    const healTarget = selectHealTarget();
+                    const healAmount = Math.floor(healTarget.maxHp * 0.6);
+                    healTarget.currentHp = Math.min(healTarget.maxHp, healTarget.currentHp + healAmount);
+                    addToLog(`${player.name} heals ${healTarget.name} for ${healAmount} HP!`);
+                    break;
+                    
+                case 'songHeal':
+                    const songHealTarget = selectHealTarget();
+                    const songHealAmount = Math.floor(songHealTarget.maxHp * 0.4);
+                    songHealTarget.currentHp = Math.min(songHealTarget.maxHp, songHealTarget.currentHp + songHealAmount);
+                    addToLog(`${player.name} sings healing melody to ${songHealTarget.name} for ${songHealAmount} HP!`);
+                    break;
+                    
+                case 'mpMelody':
+                    const mpTarget = selectMpTarget();
+                    const mpAmount = Math.floor(mpTarget.maxMp * 0.5);
+                    mpTarget.currentMp = Math.min(mpTarget.maxMp, mpTarget.currentMp + mpAmount);
+                    addToLog(`${player.name} restores ${mpAmount} MP to ${mpTarget.name}!`);
+                    break;
+                    
+                case 'chiBoost':
+                    player.chiBoost = true;
+                    addToLog(`${player.name} focuses chi energy! Next attack will deal double damage!`);
+                    break;
+                    
+                case 'hide':
+                    player.hidden = true;
+                    addToLog(`${player.name} becomes hidden! Next attack has 75% critical hit chance!`);
+                    break;
+                    
+                default:
+                    // Elemental attacks - target first living enemy
+                    const attackTargets = gameState.currentEnemies.filter(enemy => enemy.currentHp > 0);
+                    if (attackTargets.length === 0) return;
+                    
+                    const target = attackTargets[0];
+                    let damage = calculateDamage(player.attack * 1.2, target.defense);
+                    
+                    // Check for elemental weakness
+                    if (target.weaknesses.includes(skill.element)) {
+                        damage = Math.floor(damage * 1.5);
+                        addToLog(`${player.name} uses ${skill.name} on ${target.name}! It's super effective! ${damage} damage!`);
+                    } else {
+                        addToLog(`${player.name} uses ${skill.name} on ${target.name} for ${damage} damage!`);
+                    }
+                    
+                    applyDamageToEnemy(damage, target);
+                    break;
+            }
+
+            updateDisplay();
+            endPlayerTurn();
+        }
+
+        // Select heal target (prioritize lowest HP%)
+        function selectHealTarget() {
+            const livingMembers = gameState.party.filter(member => member.currentHp > 0);
+            return livingMembers.reduce((target, member) => {
+                const memberHpPercent = member.currentHp / member.maxHp;
+                const targetHpPercent = target.currentHp / target.maxHp;
+                return memberHpPercent < targetHpPercent ? member : target;
+            });
+        }
+
+        // Select MP target (prioritize lowest MP%)
+        function selectMpTarget() {
+            const livingMembers = gameState.party.filter(member => member.currentHp > 0);
+            return livingMembers.reduce((target, member) => {
+                const memberMpPercent = member.currentMp / member.maxMp;
+                const targetMpPercent = target.currentMp / target.maxMp;
+                return memberMpPercent < targetMpPercent ? member : target;
+            });
+        }
+
+        // Calculate damage
+        function calculateDamage(attack, defense) {
+            const baseDamage = Math.max(1, attack - defense);
+            const variation = Math.random() * 0.4 + 0.8; // 80-120% variation
+            return Math.floor(baseDamage * variation);
+        }
+
+        // Apply damage to enemy
+        function applyDamageToEnemy(damage, enemy) {
+            enemy.currentHp -= damage;
+            
+            if (enemy.currentHp <= 0) {
+                addToLog(`${enemy.name} is defeated!`);
+                
+                // Brief pause in music for dramatic effect
+                if (currentAudio) {
+                    const currentVolume = currentAudio.volume;
+                    currentAudio.volume = 0.1;
+                    setTimeout(() => {
+                        if (currentAudio) currentAudio.volume = currentVolume;
+                    }, 1000);
+                }
+                
+                // Check if all enemies are defeated
+                const livingEnemies = gameState.currentEnemies.filter(e => e.currentHp > 0);
+                if (livingEnemies.length === 0) {
+                    nextRound();
+                }
+            }
+            updateDisplay();
+        }
+
+        // End player turn
+        function endPlayerTurn() {
+            gameState.currentPlayerIndex++;
+            
+            if (gameState.currentPlayerIndex >= gameState.party.length || 
+                gameState.party.filter(member => member.currentHp > 0).length === 0) {
+                // End of party turn, enemy attacks
+                enemyTurn();
+            } else {
+                startPlayerTurn();
+            }
+        }
+
+        // Enemy turn
+        function enemyTurn() {
+            const livingEnemies = gameState.currentEnemies.filter(enemy => enemy.currentHp > 0);
+            if (livingEnemies.length === 0) return;
+
+            const livingMembers = gameState.party.filter(member => member.currentHp > 0);
+            
+            if (livingMembers.length === 0) {
+                endGame(false);
+                return;
+            }
+
+            // Each living enemy attacks
+            livingEnemies.forEach(enemy => {
+                if (livingMembers.filter(m => m.currentHp > 0).length === 0) return;
+                
+                const attack = enemy.attacks[Math.floor(Math.random() * enemy.attacks.length)];
+                const availableTargets = gameState.party.filter(member => member.currentHp > 0);
+                const target = availableTargets[Math.floor(Math.random() * availableTargets.length)];
+                const damage = Math.max(1, attack.damage - Math.floor(target.defense / 2));
+                
+                target.currentHp -= damage;
+                addToLog(`${enemy.name} uses ${attack.name} on ${target.name} for ${damage} damage!`);
+                
+                if (target.currentHp <= 0) {
+                    target.currentHp = 0;
+                    addToLog(`${target.name} is defeated!`);
+                }
+            });
+
+            // Add damage animation
+            const partySection = document.querySelector('.party-section');
+            partySection.classList.add('damage-animation');
+            setTimeout(() => partySection.classList.remove('damage-animation'), 500);
+
+            updateDisplay();
+
+            // Check if all party members are dead
+            if (gameState.party.every(member => member.currentHp <= 0)) {
+                endGame(false);
+                return;
+            }
+
+            // Reset turn order
+            gameState.currentPlayerIndex = 0;
+            startPlayerTurn();
+        }
+
+        // Next round
+        function nextRound() {
+            gameState.currentRound++;
+            
+            // Add a brief delay before starting next round to let music transition
+            setTimeout(() => {
+                startRound();
+            }, 500);
+        }
+
+        // End game
+        function endGame(victory) {
+            stopBattleMusic();
+            
+            if (victory) {
+                addToLog("🎉 Congratulations! You've survived as long as possible!");
+            } else {
+                addToLog("💀 Game Over! Your party has been defeated.");
+                addToLog(`You survived ${gameState.currentRound} rounds!`);
+            }
+        }
+
+        // Update display
+        function updateDisplay() {
+            document.getElementById('roundInfo').textContent = `Round ${gameState.currentRound}`;
+            
+            // Update individual party member displays
+            gameState.party.forEach((member, index) => {
+                const memberContainer = document.getElementById(`partyMember${index}`);
+                if (!memberContainer) return;
+                
+                memberContainer.innerHTML = '';
+                
+                const memberDiv = document.createElement('div');
+                memberDiv.style.padding = '10px';
+                memberDiv.style.border = '1px solid #E5E7EB';
+                memberDiv.style.borderRadius = '8px';
+                
+                // Highlight current player
+                if (index === gameState.currentPlayerIndex && member.currentHp > 0) {
+                    memberDiv.style.border = '3px solid var(--gold)';
+                    memberDiv.style.backgroundColor = 'rgba(218, 172, 23, 0.1)';
+                }
+                
+                const hpPercent = (member.currentHp / member.maxHp) * 100;
+                const mpPercent = (member.currentMp / member.maxMp) * 100;
+                const faceImgSrc = `src/assets/images/expeditionandgames/plainsRPG/characterfaces/${member.classType}face.png`;
+                
+                let memberHTML = `
+                    <img src="${faceImgSrc}" alt="${member.name} Face" class="character-image" style="width:60px;height:60px;object-fit:cover;margin-bottom:5px;" onerror="this.style.display='none'">
+                    <h3 style="font-weight: bold; color: ${member.currentHp > 0 ? 'var(--gold)' : '#EF4444'}; font-size:1rem; margin: 5px 0;">${member.icon} ${member.displayName || member.name}</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3px; font-size: 0.7rem; margin: 5px 0;">
+                        <div class="stat">ATK: ${member.attack}</div>
+                        <div class="stat">DEF: ${member.defense}</div>
+                        <div class="stat">${member.element}</div>
+                        <div class="stat">MP: ${member.currentMp}/${member.maxMp}</div>
+                    </div>
+                    <div class="character-hp-bar" style="height: 15px; margin: 5px 0;">
+                        <div class="hp-fill" style="width:${hpPercent}%;background:linear-gradient(90deg,#10B981,#34D399);"></div>
+                    </div>
+                    <div style="font-size:0.8rem;color:#059669;">HP: ${member.currentHp}/${member.maxHp}</div>
+                    <div class="mp-bar" style="height: 10px; margin: 3px 0;">
+                        <div class="mp-fill" style="width:${mpPercent}%;background:linear-gradient(90deg,#3B82F6,#60A5FA);"></div>
+                    </div>
+                    ${member.statusEffects && member.statusEffects.length > 0 ? `
+                        <div class="status-effects">
+                            ${member.statusEffects.map(effect => `<span class="status-effect">${effect}</span>`).join('')}
+                        </div>
+                    ` : ''}
+                `;
+                
+                // Add action buttons if this is the current player's turn
+                if (index === gameState.currentPlayerIndex && member.currentHp > 0) {
+                    memberHTML += `
+                        <div style="margin-top: 10px; padding-top: 8px; border-top: 2px solid var(--gold);">
+                            <h5 style="margin: 0 0 8px 0; color: var(--accent); font-size: 0.9rem;">Your Turn!</h5>
+                            <div id="currentPlayerActions" style="display: grid; grid-template-columns: 1fr; gap: 5px; margin-bottom: 8px;">
+                            </div>
+                            <div style="margin-top: 8px;">
+                                <h6 style="margin: 3px 0; color: var(--ink); font-size: 0.8rem;">Items</h6>
+                                <div id="currentPlayerInventory" style="display: grid; grid-template-columns: 1fr; gap: 3px;">
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                memberDiv.innerHTML = memberHTML;
+                memberContainer.appendChild(memberDiv);
+            });
+            
+            // Update battlefield sprites and enemy labels
+            updateBattlefieldSprites();
+        }
+
+        // Add to battle log
+        function addToLog(message) {
+            gameState.battleLog.push(message);
+            const logElement = document.getElementById('battleLog');
+            logElement.innerHTML += message + '\n';
+            logElement.scrollTop = logElement.scrollHeight;
+        }
+
+        // Initialize the game
+        document.addEventListener('DOMContentLoaded', () => {
+            initPartySelection();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,3547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character Creator</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <div id="root">
+        <div style="background: #111827; color: white; min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+            <div style="text-align: center;">
+                <h1 style="font-size: 2rem; margin-bottom: 1rem;">Loading Character Creator...</h1>
+                <p>If this doesn't load, there may be a JavaScript error. Check console for details.</p>
+                <div style="margin-top: 2rem;">
+                    <div style="border: 2px solid #4F46E5; border-radius: 50%; border-top-color: transparent; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <style>
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+    
+    <script type="text/babel">
+        console.log("Script started - checking React availability...");
+        console.log("React available:", typeof React !== 'undefined');
+        console.log("ReactDOM available:", typeof ReactDOM !== 'undefined');
+        console.log("Babel available:", typeof Babel !== 'undefined');
+        
+        if (typeof React === 'undefined') {
+            document.getElementById('root').innerHTML = '<div style="background: red; color: white; padding: 20px; text-align: center;"><h1>Error: React not loaded</h1><p>React library failed to load. Check internet connection or CDN.</p></div>';
+        }
+        
+        if (typeof ReactDOM === 'undefined') {
+            document.getElementById('root').innerHTML = '<div style="background: red; color: white; padding: 20px; text-align: center;"><h1>Error: ReactDOM not loaded</h1><p>ReactDOM library failed to load. Check internet connection or CDN.</p></div>';
+        }
+        
+        console.log("React script starting...");
+        
+        const { useState, useEffect, useMemo } = React;
+
+// --- Helper Functions & Constants ---
+
+// Enhanced parser for races.html data
+const parseRacesData = async () => {
+    try {
+        const response = await fetch('./src/races.html');
+        const text = await response.text();
+        
+        // Extract the racesData array from the JavaScript (same approach as spells/items)
+        const racesMatch = text.match(/const racesData = (\[[\s\S]*?\]);/);
+        if (racesMatch) {
+            const racesArray = new Function(`return ${racesMatch[1]}`)();
+            
+            const races = {};
+            
+            racesArray.forEach(raceData => {
+                if (raceData.type === 'race') {
+                    // Parse the HTML content for traits and subraces
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(raceData.contentHTML, 'text/html');
+                    
+                    let traits = [];
+                    const strongElements = doc.querySelectorAll('strong');
+                    strongElements.forEach(strong => {
+                        const parent = strong.parentElement;
+                        if (parent && (parent.tagName === 'P' || parent.tagName === 'LI')) {
+                            const text = parent.textContent;
+                            if (text.includes('Ability Score') || text.includes('Size') || text.includes('Speed') || text.includes('Languages')) {
+                                traits.push({
+                                    name: strong.textContent.replace('.', '').trim(),
+                                    description: text.replace(strong.textContent, '').trim()
+                                });
+                            }
+                        }
+                    });
+                    
+                    // Look for ability score information in the HTML content
+                    const textContent = raceData.contentHTML;
+                    let abilityScores = {};
+                    
+                    // Parse various ASI patterns
+                    const asiPatterns = [
+                        /Ability Score Increase.*?(\w+).*?increases by (\d+)/gi,
+                        /Your (\w+) score increases by (\d+)/gi,
+                        /\+(\d+) to (\w+)/gi
+                    ];
+                    
+                    asiPatterns.forEach(pattern => {
+                        let match;
+                        while ((match = pattern.exec(textContent)) !== null) {
+                            if (match[2] && match[1]) {
+                                const stat = match[2].toUpperCase().substring(0, 3);
+                                const increase = parseInt(match[1]);
+                                if (!isNaN(increase)) {
+                                    abilityScores[stat] = (abilityScores[stat] || 0) + increase;
+                                }
+                            } else if (match[1] && match[2]) {
+                                const stat = match[1].toUpperCase().substring(0, 3);
+                                const increase = parseInt(match[2]);
+                                if (!isNaN(increase)) {
+                                    abilityScores[stat] = (abilityScores[stat] || 0) + increase;
+                                }
+                            }
+                        }
+                    });
+                    
+                    // Extract subraces
+                    const subraces = {};
+                    const subraceHeaders = doc.querySelectorAll('h4, h3');
+                    subraceHeaders.forEach(header => {
+                        const headerText = header.textContent.trim();
+                        // Look for subrace indicators
+                        if (headerText && !headerText.includes('Traits') && !headerText.includes('Description')) {
+                            let subraceContent = '';
+                            let nextElement = header.nextElementSibling;
+                            
+                            // Collect content until next header or end
+                            while (nextElement && !['H3', 'H4', 'H2'].includes(nextElement.tagName)) {
+                                subraceContent += nextElement.outerHTML;
+                                nextElement = nextElement.nextElementSibling;
+                            }
+                            
+                            if (subraceContent.trim()) {
+                                const subraceId = headerText.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+                                subraces[subraceId] = {
+                                    id: subraceId,
+                                    name: headerText,
+                                    parentRace: raceData.id,
+                                    html: subraceContent,
+                                    traits: []
+                                };
+                            }
+                        }
+                    });
+                    
+                    races[raceData.id] = {
+                        id: raceData.id,
+                        name: raceData.name,
+                        abilityScores,
+                        traits,
+                        subraces,
+                        html: raceData.contentHTML
+                    };
+                }
+            });
+            
+            return races;
+        }
+        
+        return {};
+    } catch (error) {
+        console.error("Failed to parse races data:", error);
+        return {};
+    }
+};
+
+// Enhanced parser for spells data
+const parseSpellsData = async () => {
+    try {
+        const response = await fetch('./spellbook.html');
+        const text = await response.text();
+        
+        // Find the start and end of the spellsData array more reliably
+        const startMarker = 'const spellsData = [';
+        const endMarker = '];';
+        
+        const startIndex = text.indexOf(startMarker);
+        if (startIndex === -1) {
+            console.error("Could not find spellsData array start");
+            return { spellsArray: [], spellsByClass: {}, spellsByLevel: {} };
+        }
+        
+        // Find the closing ]; after the array starts
+        let searchStart = startIndex + startMarker.length;
+        let bracketCount = 1;
+        let endIndex = -1;
+        
+        for (let i = searchStart; i < text.length; i++) {
+            if (text[i] === '[') bracketCount++;
+            if (text[i] === ']') {
+                bracketCount--;
+                if (bracketCount === 0 && text.substring(i, i + 2) === '];') {
+                    endIndex = i + 2;
+                    break;
+                }
+            }
+        }
+        
+        if (endIndex === -1) {
+            console.error("Could not find spellsData array end");
+            return { spellsArray: [], spellsByClass: {}, spellsByLevel: {} };
+        }
+        
+        const arrayText = text.substring(startIndex + 'const spellsData = '.length, endIndex - 1);
+        console.log(`Extracted spell array length: ${arrayText.length} characters`);
+        
+        const spellsArray = new Function(`return ${arrayText}`)();
+        console.log(`Parsed ${spellsArray.length} spells from spellbook.html`);
+        
+        const spellsByClass = {};
+        const spellsByLevel = {};
+        
+        spellsArray.forEach(spell => {
+            // Organize by class - handle various class formats
+            if (spell.classes) {
+                const classesText = spell.classes.toLowerCase();
+                const classNames = [];
+                
+                // Handle different class naming patterns
+                if (classesText.includes('all divine')) {
+                    classNames.push('cleric', 'paladin', 'druid');
+                } else if (classesText.includes('all arcane')) {
+                    classNames.push('wizard', 'sorcerer', 'bard', 'warlock');
+                } else if (classesText.includes('luminancer')) {
+                    classNames.push('luminancer');
+                } else {
+                    // Split by common delimiters
+                    classNames.push(...classesText.split(/[,;]/).map(c => c.trim()));
+                }
+                
+                classNames.forEach(className => {
+                    const cleanClass = className.replace(/[^a-z]/g, '');
+                    if (cleanClass && !spellsByClass[cleanClass]) spellsByClass[cleanClass] = [];
+                    if (cleanClass) spellsByClass[cleanClass].push(spell);
+                });
+            }
+            
+            // Organize by level
+            const level = spell.level || 0;
+            if (!spellsByLevel[level]) spellsByLevel[level] = [];
+            spellsByLevel[level].push(spell);
+        });
+        
+        console.log(`Organized spells by class:`, Object.keys(spellsByClass).map(c => `${c}: ${spellsByClass[c].length}`));
+        
+        return { spellsArray, spellsByClass, spellsByLevel };
+    } catch (error) {
+        console.error("Failed to parse spells data:", error);
+    }
+    return { spellsArray: [], spellsByClass: {}, spellsByLevel: {} };
+};
+
+// Enhanced parser for items data - includes weapons from legacy and armor from regalia
+const parseItemsData = async () => {
+    try {
+        const items = { weapons: [], armor: [], tools: [], consumables: [] };
+        
+        // Load items from src/items.html
+        try {
+            const response = await fetch('./src/items.html');
+            const text = await response.text();
+            
+            const itemsMatch = text.match(/const itemsData = (\[.*?\]);/s);
+            if (itemsMatch) {
+                const itemsArray = new Function(`return ${itemsMatch[1]}`)();
+                
+                itemsArray.forEach(item => {
+                    let category = 'consumables'; // default
+                    const itemText = (item.name + ' ' + (item.description || '')).toLowerCase();
+                    
+                    if (item.type === 'weapon' || itemText.includes('weapon') || itemText.includes('sword') || itemText.includes('bow') || itemText.includes('damage') || itemText.includes('attack')) {
+                        category = 'weapons';
+                    } else if (item.type === 'armor' || itemText.includes('armor') || itemText.includes('ac') || itemText.includes('defense') || itemText.includes('shield')) {
+                        category = 'armor';
+                    } else if (item.type === 'tool' || itemText.includes('tool') || itemText.includes('kit') || itemText.includes('proficiency') || itemText.includes('supplies')) {
+                        category = 'tools';
+                    }
+                    
+                    items[category].push({
+                        id: item.id || item.name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+                        name: item.name,
+                        description: item.description || '',
+                        type: item.type || category,
+                        rarity: item.rarity || 'Common'
+                    });
+                });
+            }
+        } catch (err) {
+            console.log("Could not load src/items.html:", err);
+        }
+        
+        // Load weapons from legacyweapon.html
+        try {
+            const weaponResponse = await fetch('./legacyweapon.html');
+            const weaponText = await weaponResponse.text();
+            
+            const weaponMatch = weaponText.match(/const weaponsData = \{([\s\S]*?)\};/);
+            if (weaponMatch) {
+                const weaponsData = new Function(`return {${weaponMatch[1]}}`)();
+                
+                // Flatten all weapon categories into a single array
+                Object.keys(weaponsData).forEach(category => {
+                    if (Array.isArray(weaponsData[category])) {
+                        weaponsData[category].forEach(weapon => {
+                            items.weapons.push({
+                                id: weapon.name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+                                name: weapon.name,
+                                description: `${weapon.damage_dice} ${weapon.damage_type} damage. ${weapon.special || ''}`.trim(),
+                                type: 'weapon',
+                                rarity: 'Common',
+                                damage: weapon.damage_dice,
+                                damageType: weapon.damage_type,
+                                properties: [
+                                    weapon.light && 'Light',
+                                    weapon.finesse && 'Finesse',
+                                    weapon.special
+                                ].filter(Boolean)
+                            });
+                        });
+                    }
+                });
+            }
+        } catch (err) {
+            console.log("Could not load legacyweapon.html:", err);
+        }
+        
+        // Load armor from regalia maker.html
+        try {
+            const regaliaResponse = await fetch('./regalia maker.html');
+            const regaliaText = await regaliaResponse.text();
+            
+            const regaliaMatch = regaliaText.match(/const regaliaTypes = \[([\s\S]*?)\];/);
+            if (regaliaMatch) {
+                const regaliaArray = new Function(`return [${regaliaMatch[1]}]`)();
+                
+                regaliaArray.forEach(regalia => {
+                    // Categorize as armor if AC > 10 or has armor-like properties
+                    if (regalia.ac > 10 || regalia.name.toLowerCase().includes('armor') || 
+                        regalia.name.toLowerCase().includes('mail') || regalia.name.toLowerCase().includes('plate')) {
+                        items.armor.push({
+                            id: regalia.name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+                            name: regalia.name,
+                            description: `AC ${regalia.ac}. ${regalia.notes || ''}`.trim(),
+                            type: 'armor',
+                            rarity: regalia.value > 1000 ? 'Rare' : regalia.value > 100 ? 'Uncommon' : 'Common',
+                            ac: regalia.ac,
+                            value: regalia.value
+                        });
+                    }
+                });
+            }
+        } catch (err) {
+            console.log("Could not load regalia maker.html:", err);
+        }
+        
+        return items;
+    } catch (error) {
+        console.error("Failed to parse items data:", error);
+        return { weapons: [], armor: [], tools: [], consumables: [] };
+    }
+};
+
+// Enhanced parser for backgrounds from external file
+const parseBackgroundsFromFile = async () => {
+    try {
+        const response = await fetch('./backgrounds.html');
+        const text = await response.text();
+        
+        // Extract the backgroundsData array from the JavaScript (same approach as races)
+        const backgroundsMatch = text.match(/const backgroundsData = (\[.*?\]);/s);
+        if (backgroundsMatch) {
+            const backgroundsArray = new Function(`return ${backgroundsMatch[1]}`)();
+            
+            const backgrounds = {};
+            
+            backgroundsArray.forEach(bgData => {
+                if (bgData.type === 'background') {
+                    // Parse the HTML content for ASI information
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(bgData.contentHTML, 'text/html');
+                    
+                    // Extract ASI information
+                    const asiText = [...doc.querySelectorAll('li, p')]
+                        .find(li => li.textContent.includes('Ability Score') || li.textContent.includes('Increase'))?.textContent.trim() || '';
+                    
+                    backgrounds[bgData.id] = {
+                        id: bgData.id,
+                        name: bgData.name,
+                        type: 'background',
+                        asiText,
+                        html: bgData.contentHTML
+                    };
+                }
+            });
+            
+            return backgrounds;
+        }
+        
+        return {};
+    } catch (error) {
+        console.error("Failed to parse backgrounds from file:", error);
+        return {};
+    }
+};
+
+// Enhanced parser for feats from external file
+const parseFeatsFromFile = async () => {
+    try {
+        const response = await fetch('./originfeats.html');
+        const text = await response.text();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(text, 'text/html');
+        
+        const feats = {};
+        
+        // Look for feat cards with class 'feat-card' (this is your actual structure)
+        doc.querySelectorAll('.feat-card').forEach(elem => {
+            const nameElement = elem.querySelector('h3');
+            if (!nameElement) return;
+            
+            const name = nameElement.textContent.trim();
+            const id = name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+            
+            // Extract ASI information from list items
+            const asiText = [...elem.querySelectorAll('li')]
+                .find(li => li.textContent.includes('Increase') || li.textContent.includes('score'))?.textContent.trim() || '';
+            
+            feats[id] = {
+                id,
+                name,
+                type: 'feat',
+                asiText,
+                html: elem.innerHTML
+            };
+        });
+        
+        return feats;
+    } catch (error) {
+        console.error("Failed to parse feats from file:", error);
+        return {};
+    }
+};
+
+// Enhanced parser for luminancer data from embedded fallback (skip file loading)
+const parseLuminancerData = async () => {
+    try {
+        console.log("Using embedded luminancer data...");
+        // Use embedded data directly instead of trying to load external file
+        const parsed = parseOrcbrew(LUMINANCER_ORCBREW_FALLBACK);
+        
+        // Check if parsing was successful
+        if (parsed && parsed.error) {
+            console.warn("Primary parsing failed, attempting fallback extraction");
+            // Try to extract some basic data manually if main parsing fails
+            const fallbackData = extractBasicLuminancerData(LUMINANCER_ORCBREW_FALLBACK);
+            console.log("Fallback luminancer data:", fallbackData);
+            return fallbackData;
+        }
+        
+        console.log("Parsed luminancer data:", parsed);
+        console.log("Parsed spells count:", Object.keys(parsed['orcpub.dnd.e5/spells'] || {}).length);
+        console.log("Parsed classes count:", Object.keys(parsed['orcpub.dnd.e5/classes'] || {}).length);
+        console.log("Parsed subclasses count:", Object.keys(parsed['orcpub.dnd.e5/subclasses'] || {}).length);
+        
+        return parsed;
+    } catch (error) {
+        console.error("Failed to parse embedded luminancer data:", error);
+        console.log("Returning empty luminancer data structure");
+        // Return empty structure if parsing fails
+        return {
+            'orcpub.dnd.e5/spells': {},
+            'orcpub.dnd.e5/classes': {},
+            'orcpub.dnd.e5/subclasses': {}
+        };
+    }
+};
+
+// Fallback function to extract basic luminancer data when main parsing fails
+const extractBasicLuminancerData = (text) => {
+    const result = {
+        'orcpub.dnd.e5/spells': {},
+        'orcpub.dnd.e5/classes': {},
+        'orcpub.dnd.e5/subclasses': {}
+    };
+    
+    try {
+        // Try to extract spell names from the text using regex
+        const spellMatches = text.match(/:name\s+"([^"]+)"/g) || [];
+        console.log("Found", spellMatches.length, "spell names in fallback extraction");
+        
+        spellMatches.forEach((match, index) => {
+            const nameMatch = match.match(/:name\s+"([^"]+)"/);
+            if (nameMatch) {
+                const spellName = nameMatch[1];
+                const spellKey = spellName.toLowerCase().replace(/\s+/g, '-');
+                result['orcpub.dnd.e5/spells'][spellKey] = {
+                    name: spellName,
+                    key: spellKey,
+                    school: "Luminancy",
+                    level: 0,
+                    'spell-lists': { luminancer: true }
+                };
+            }
+        });
+        
+        // Add a basic luminancer class structure
+        result['orcpub.dnd.e5/classes']['luminancer'] = {
+            name: "Luminancer",
+            key: "luminancer",
+            'hit-die': 8,
+            'primary-ability': "Charisma",
+            'saving-throw-proficiencies': { charisma: true, constitution: true }
+        };
+        
+        console.log("Extracted", Object.keys(result['orcpub.dnd.e5/spells']).length, "spells in fallback");
+        
+    } catch (error) {
+        console.error("Even fallback extraction failed:", error);
+    }
+    
+    return result;
+};
+
+// A robust parser for the .orcbrew (EDN-like) format.
+const parseOrcbrew = (text) => {
+    let i = 0;
+    text = text.replace(/;.*$/gm, '').replace(/[\n\r\t]/g, ' ').replace(/\s\s+/g, ' ').trim();
+    
+    function read_token() {
+        let token = '';
+        if (text[i] === '"') {
+            i++; const start = i;
+            while (text[i] !== '"' && i < text.length) i++;
+            token = text.substring(start, i);
+            i++;
+        } else {
+            const start = i;
+            // Include # and () as delimiters but handle them properly
+            while (i < text.length && !/[\s{}\[\]#()]/.test(text[i])) i++;
+            token = text.substring(start, i);
+        }
+        return token;
+    }
+    
+    function parse_value() {
+        while (/\s/.test(text[i])) i++;
+        if (i >= text.length) return null;
+        
+        const lookahead = text[i];
+        if (lookahead === '{') return parse_object();
+        if (lookahead === '[') return parse_array();
+        if (lookahead === '#') return parse_set();
+        if (lookahead === '(') return parse_special_form();
+        
+        const token = read_token();
+        if (!isNaN(token) && token.trim() !== '') return Number(token);
+        if (token === 'true') return true;
+        if (token === 'false') return false;
+        return token;
+    }
+    
+    function parse_object() {
+        const obj = {};
+        i++; // Skip opening '{'
+        while (i < text.length && text[i] !== '}') {
+            while (i < text.length && (/\s/.test(text[i]) || text[i] === ',')) i++;
+            if (i >= text.length || text[i] === '}') break;
+            
+            const key = parse_value();
+            if (key === null || key === undefined) break;
+            
+            while (i < text.length && /\s/.test(text[i])) i++;
+            if (i >= text.length) break;
+            
+            const val = parse_value();
+            if (val !== null && val !== undefined) {
+                if (typeof key === 'string' && key.startsWith(':')) {
+                    obj[key.substring(1)] = val;
+                } else {
+                    obj[key] = val;
+                }
+            }
+        }
+        if (i < text.length && text[i] === '}') i++; // Skip closing '}'
+        return obj;
+    }
+    
+    function parse_array() {
+        const arr = [];
+        i++; // Skip opening '['
+        let elementCount = 0;
+        const MAX_ARRAY_ELEMENTS = 100000; // Reasonable limit to prevent memory issues
+        
+        while (i < text.length && text[i] !== ']') {
+            while (i < text.length && /\s/.test(text[i])) i++;
+            if (i >= text.length || text[i] === ']') break;
+            
+            // Check if we've exceeded reasonable limits
+            if (elementCount >= MAX_ARRAY_ELEMENTS) {
+                console.warn("Array parsing stopped at", elementCount, "elements to prevent memory issues");
+                break;
+            }
+            
+            const value = parse_value();
+            if (value !== null && value !== undefined) {
+                try {
+                    arr.push(value);
+                    elementCount++;
+                } catch (e) {
+                    console.warn("Failed to add element to array:", e.message);
+                    break;
+                }
+            }
+            while (i < text.length && /\s/.test(text[i])) i++;
+        }
+        if (i < text.length && text[i] === ']') i++; // Skip closing ']'
+        return arr;
+    }
+    
+    function parse_set() {
+        i++; // Skip '#'
+        if (text[i] === '{') {
+            i++; // Skip '{'
+            const arr = [];
+            while (i < text.length && text[i] !== '}') {
+                while (i < text.length && /\s/.test(text[i])) i++;
+                if (i >= text.length || text[i] === '}') break;
+                const value = parse_value();
+                if (value !== null && value !== undefined) {
+                    arr.push(value);
+                }
+                while (i < text.length && /\s/.test(text[i])) i++;
+            }
+            if (i < text.length && text[i] === '}') i++; // Skip closing '}'
+            return arr;
+        } else {
+            // If it's not a set, just read the token after #
+            return read_token();
+        }
+    }
+    
+    function parse_special_form() {
+        i++; // Skip '('
+        const arr = [];
+        while (i < text.length && text[i] !== ')') {
+            while (i < text.length && /\s/.test(text[i])) i++;
+            if (i >= text.length || text[i] === ')') break;
+            const value = parse_value();
+            if (value !== null && value !== undefined) {
+                arr.push(value);
+            }
+            while (i < text.length && /\s/.test(text[i])) i++;
+        }
+        if (i < text.length && text[i] === ')') i++; // Skip closing ')'
+        // For special forms like (*:planar-transition*), return the content appropriately
+        if (arr.length === 1) return arr[0];
+        return arr;
+    }
+
+    try {
+        return parse_value();
+    } catch (e) {
+        console.error("Failed to parse orcbrew text:", e);
+        console.error("Parse position:", i, "Character:", text[i]);
+        console.error("Context:", text.substring(Math.max(0, i-50), i+50));
+        return { error: "Parsing failed." };
+    }
+};
+
+// New parser for the HTML-based background/feat files
+const parseHtmlData = (htmlString, type) => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(`<div>${htmlString}</div>`, 'text/html');
+    const container = doc.querySelector('div');
+    const results = {};
+    const selector = type === 'background' ? '[id]' : '.feat-card';
+    container.querySelectorAll(selector).forEach(elem => {
+        if (type === 'background' && !elem.querySelector('h2')) return;
+        const name = elem.querySelector('h2, h3')?.textContent.trim() || 'Unnamed';
+        const id = type === 'background' ? elem.id : name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+        const asiText = [...elem.querySelectorAll('li')]
+            .find(li => li.textContent.includes('Ability Score') || li.textContent.includes('Increase your'))?.textContent.trim() || '';
+        results[id] = { id, name, type, asiText, html: elem.innerHTML };
+    });
+    return results;
+};
+
+// Parser for the custom JS object array format in backgrounds.txt
+function parseCustomJsObjectArray(text) {
+    const results = {};
+    const arrayString = text.substring(text.indexOf('['), text.lastIndexOf(']') + 1);
+    if (!arrayString) return results;
+
+    try {
+        const data = new Function(`return ${arrayString}`)();
+        data.forEach(item => {
+            if (item.type === 'background') {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(item.contentHTML, 'text/html');
+                const asiText = [...doc.querySelectorAll('li')]
+                    .find(li => li.textContent.includes('Ability Score') || li.textContent.includes('Increase your'))?.textContent.trim() || '';
+                results[item.id] = {
+                    id: item.id,
+                    name: item.name,
+                    type: 'background',
+                    asiText,
+                    html: item.contentHTML
+                };
+            }
+        });
+    } catch (e) {
+        console.error("Could not parse background data:", e);
+    }
+    return results;
+}
+
+// Fallback luminancer data in case the external file can't be loaded
+const LUMINANCER_ORCBREW_FALLBACK = `
+{:orcpub.dnd.e5/spells
+ {:trace-fate
+  {:description "Perform a tiny divination: roll a d20 and record the number. On your next ability check or attack roll within 1 minute, you can use that recorded number instead of rolling (must decide before rolling normally). Once used, effect ends. Only one Trace Fate 'glimpse' at a time.",
+   :key :trace-fate,
+   :school "Luminancy",
+   :name "Trace Fate",
+   :duration "1 minute",
+   :level 0,
+   :option-pack "Luminancer Homebrew",
+   :components {:verbal true, :somatic true},
+   :casting-time "1 action",
+   :spell-lists {:cleric false, :druid false, :ranger false, :sorcerer false, :artificer false, :wizard false, :luminancer true, :warlock false, :paladin false, :bard false},
+   :range "Self"},
+  :radiant-spark-umbral-spark
+  {:description "As an action, make a ranged spell attack against a target within 60 ft. On a hit, 1d8 radiant or necrotic damage (your choice). Damage increases to 2d8 at 5th level, 3d8 at 11th, and 4d8 at 17th level. (This power is inherently learned at 1st level and doesn't count against powers known).",
+   :key :radiant-spark-umbral-spark,
+   :school "Luminancy",
+   :name "Radiant Spark / Umbral Spark",
+   :duration "Instantaneous",
+   :level 0,
+   :option-pack "Luminancer Homebrew",
+   :components {:verbal true, :somatic true},
+   :casting-time "1 action",
+   :spell-lists {:cleric false, :druid false, :ranger false, :sorcerer false, :artificer false, :wizard false, :luminancer true, :warlock false, :paladin false, :bard false},
+   :range "60 feet"},
+  :light-bending
+  {:description "Dim a 10-foot radius of bright light to dim, or increase a 10-foot radius of dim light to bright for 1 minute. Alternatively, create small visual illusions equivalent to minor illusion (visual only). Creatures inspecting the illusion can discern it with a successful Investigation check against your power DC.",
+   :key :light-bending,
+   :school "Luminancy",
+   :name "Light Bending",
+   :duration "1 minute",
+   :level 0,
+   :option-pack "Luminancer Homebrew",
+   :components {:verbal true, :somatic true},
+   :casting-time "1 action",
+   :spell-lists {:cleric false, :druid false, :ranger false, :sorcerer false, :artificer false, :wizard false, :luminancer true, :warlock false, :paladin false, :bard false},
+   :range "10 feet"},
+  :causal-minor-shield
+  {:description "When you are hit by an attack, you gain a +2 bonus to AC against that attack.",
+   :key :causal-minor-shield,
+   :school "Luminancy",
+   :name "Causal Minor Shield",
+   :duration "Instantaneous",
+   :level 0,
+   :option-pack "Luminancer Homebrew",
+   :components {:somatic true},
+   :casting-time "1 reaction, which you take when you are hit by an attack",
+   :spell-lists {:cleric false, :druid false, :ranger false, :sorcerer false, :artificer false, :wizard false, :luminancer true, :warlock false, :paladin false, :bard false},
+   :range "Self"}},
+ :orcpub.dnd.e5/classes
+ {:luminancer
+  {:key :luminancer,
+   :level-modifiers [{:type :armor-prof, :value :light} {:type :tool-prof, :value :thieves-tools}],
+   :name "Luminancer",
+   :subclass-level 3,
+   :option-pack "Luminancer Homebrew",
+   :subclass-title "Balancer Archetype",
+   :level-selections [],
+   :spellcasting
+   {:ability :orcpub.dnd.e5.character/int,
+    :known-mode :schedule,
+    :level-factor 1,
+    :cantrips? true,
+    :cantrips-known {1 2},
+    :spells-known {1 2, 2 1, 3 1, 4 1, 5 1, 6 1, 7 1, 8 1, 9 1, 10 1, 11 1, 13 1, 15 1, 17 1, 19 1},
+    :spell-list {0 #{:radiant-spark-umbral-spark :light-bending :causal-minor-shield :trace-fate}, 1 #{:causal-missile :causal-shield :luminal-motion :rock-ensnarement :blinding-gleam :call-forth-the-elements :quicken-causality :umbral-or-luminal-duplication-mirror}}},
+   :ability-increase-levels [4 8 12 16 19],
+   :profs {:save {:orcpub.dnd.e5.character/dex true, :orcpub.dnd.e5.character/int true}, :skill-options {:choose 4, :options {:persuasion true, :investigation true, :acrobatics true, :performance true, :perception true, :sleight-of-hand true, :history true, :deception true, :athletics true, :insight true, :stealth true}}},
+   :hit-die 8,
+   :traits
+   [{:name "Weapon Proficiencies", :level 1, :description "You are proficient with two martial weapons of your choice and one simple weapon of your choice. If firearms or energy weapons exist in your campaign, these count as martial weapons for proficiency, and a Luminancer is trained in their use."}
+    {:name "Causal Powers & Causal Points", :level 1, :description "You have a pool of Causal Points to fuel your powers. The number of points you have is shown in the Causal Points column of the Luminancer Level Progression table (PDF pg 2: e.g., L1=4, L2=6, L5=14, L9=27, L11=32, L13=38, L15=44, L17=57, L20=71). You regain all spent Causal Points on a long rest. To use a power, spend Causal Points: 1st-level=2pts; 2nd=3pts; 3rd=5pts; 4th=6pts; 5th=7pts; 6th=9pts; 7th=10pts; 8th=11pts; 9th=13pts. 0-level powers (cantrips) cost 0pts. You learn powers per the Powers Known schedule. Your Max Power Level increases with Luminancer level. Powers of 6th-level and above are 'special' and can only be used once per power level per long rest. Intelligence is your spellcasting ability (Power save DC = 8 + prof bonus + Int mod; Power attack = prof bonus + Int mod). Powers use V/S components unless noted, no material components. Can use arcane focus or weapon/free hand."}
+    {:name "Radiant Spark / Umbral Spark", :level 1, :description "You inherently learn this power at 1st level (it doesn't count against your chosen cantrips). Its details are defined in the Luminancer Powers list."}
+    {:name "Balance of Bright and Shadow", :level 2, :description "You can infuse strikes and spells with dual energy. RADIANT OR UMBRAL STRIKE: Once per short rest, weapon attack deals +1d8 radiant or necrotic (your choice). Increases: 2d8 at 5th, 3d8 at 11th, 4d8 at 17th. May spend Causal Points (up to prof bonus) to add 1d8 radiant/necrotic to strike with advantage or in appropriate light/darkness. ENERGY REBALANCE: Once per short rest, substitute damage type of a Luminancer power (from acid, cold, fire, lightning, necrotic, radiant, thunder list). May spend 2 Causal Points to use again. Regain uses on short/long rest."}
+    {:name "Meditative Balancing", :level 2, :description "During a short rest (30+ min meditating), roll one Hit Die (d8) and recover that many Causal Points (up to max) instead of HP. Can spend additional Hit Dice this way (choose heal or points per die)."}
+    {:name "Luminancer Archetype", :level 3, :description "You choose an Archetype: Balancer, Potentiator, or Illuminator. Grants features at 3rd, 6th, 10th, and 14th level."}
+    {:name "Causal Swiftness", :level 5, :description "At 5th level, whenever you activate a Luminancer power or attack an enemy on your turn, you can make one additional melee attack as part of that turn. At 13th level, you can make two additional melee attacks instead of one under the same conditions."}
+    {:name "Soul Raiment (Feature)", :level 10, :description "You automatically learn the Soul Raiment power. See the Luminancer Powers list for its details (4th-level effect, costs 6 Causal Points, 1/long rest)."}
+    {:name "Shift Fates (Feature)", :level 11, :description "You automatically learn the Shift Fates power. See the Luminancer Powers list for its details (3rd-level effect, costs 5 Causal Points, 1/short rest, twice at 17th)."}
+    {:name "See Through the Eyes of Gods (Feature)", :level 15, :description "You automatically learn the See Through the Eyes of Gods power. See the Luminancer Powers list for its details (8th-level effect, costs 11 Causal Points, 1/long rest)."}
+    {:name "Transcendent Soul Raiment (Feature)", :level 18, :description "You automatically learn the Transcendent Soul Raiment power, enhancing Soul Raiment. See the Luminancer Powers list for its details (9th-level effect, costs 13 Causal Points, 1/long rest)."}
+    {:name "Ocular Apotheosis", :level 20, :description "You achieve Ocular Apotheosis. PERMANENT TRUESIGHT: Truesight out to 60 feet at all times. OCULAR APOTHEOSIS - FORESIGHT (POWER): You can use the Ocular Apotheosis - Foresight power (see Luminancer Powers list; 9th-level effect, 13 Causal Points, 1/week). CAUSAL NOVA: As part of activating Ocular Apotheosis - Foresight or as a separate action (once Ocular Apotheosis feature is gained), choose creatures in 30ft. Con save. Fail: 6d10 radiant or necrotic damage (your choice per target) & blinded (radiant) or deafened (necrotic) until end of your next turn. Success: half damage, no condition. Allies can auto-succeed. Usable once per long rest."}]}},
+ :orcpub.dnd.e5/subclasses
+ {:balancer
+  {:class :luminancer, :key :balancer, :name "The Balancer", :option-pack "Luminancer Homebrew",
+   :traits
+   [{:name "Equilibrium Techniques", :level 3, :description "UMBRAL AND LUMINAL CHANNELING: When using Balance of Bright and Shadow for extra attack damage, you can split the damage between radiant and necrotic. One use of Energy Rebalance (spell element change) doesn't count against the base feature's per-rest limit. BALANCED MIND: Gain proficiency in Wisdom saving throws (or Charisma saves/skill if already proficient). Advantage on saves vs charmed/frightened conditions related to brilliant light or terrifying darkness."}
+    {:name "Duality Strike", :level 6, :description "When you use Balance of Bright and Shadow to add radiant damage to an attack, your next attack (within 1 minute) that adds necrotic damage deals an extra +1d8 damage (and vice-versa). Also applies to cantrips/minor powers. Improves Causal Nova at 20th."}
+    {:name "Equilibrial Resilience", :level 10, :description "When you take radiant or necrotic damage, gain resistance to the opposite type until end of your next turn. Reaction: If resistant and have temp HP/ward, transfer resistance for one instance to ally in 10ft (you take full damage). When using Meditative Balancing for points, also regain HP = Int mod per die."}
+    {:name "Warden of the Twilight", :level 14, :description "TWILIGHT SHROUD (Int mod uses/long rest): 20ft aura dim light for 1 min. Allies of choice starting in shroud regain HP = Int mod if below half. Hostiles in shroud -2 to attack rolls. BALANCE MASTERY: When changing damage types, no feature use expended & can change two types in one casting. EMPOWERED CAUSAL FLOW (1/long rest): Maximize Meditative Balancing points (treat die as 8) OR Shift Fates reroll becomes auto success/failure (Shift Fates then unusable for 24hrs)."}]},
+  :potentiator
+  {:class :luminancer, :key :potentiator, :name "Potentiator", :option-pack "Luminancer Homebrew",
+   :traits
+   [{:name "Modified Progression & Force Potentiation", :level 3, :description "Causal Point max higher (PDF pg 25: L1=15..L20=90). Fewer preset powers known (PDF pg 25: L1=1..L20=6). Relies on Force Potentiation. FORCE POTENTIATION: Spend Causal Points to empower actions for 1 round. Combine packages. 1PT: +10ft speed; OR bonus Dash; OR +1AC & +1hit/dmg. 2PTS: +1d8 elem/pois/rad/necr dmg to attack; OR adv on attacks; OR adv on saves; OR impose disadv on enemy attack vs ally. 3PTS: Stunning Strike-like effect & +1d8 dmg; OR +1d8 dmg & push 10ft & prone (Dex save vs dmg). 4PTS: Disadv on enemy attacks & adv on ally attacks; OR on hit, +2d8 dmg & 15ft crater (Dex save for more)."}]},
+  :illuminator
+  {:class :luminancer, :key :illuminator, :name "Illuminator", :option-pack "Luminancer Homebrew",
+   :traits
+   [{:name "Bonus Powers Known", :level 1, :description "Gain bonus powers known from Luminancer list (don't count vs normal known): +1 at L1, +1 at L3, +2 at L6, +2 at L10, +2 at L14, +3 at L18, +3 at L20 (PDF pg 27). Player chooses these."}
+    {:name "Illuminated Burst", :level 1, :description "1/short rest: Cast radiant/necrotic power (in bright light/half shadow respectively), deals +2d8 dmg of type. Creatures in 5ft of target Con save or half extra dmg AND pushed 10ft (radiant) or prone (necrotic)."}]}}}`;
+
+const CRINKLEHEART_ORCBREW = `
+{:orcpub.dnd.e5/races
+ {:crinkleheart
+  {:abilities {:"orcpub.dnd.e5.character/cha" 4},
+   :key :crinkleheart,
+   :languages #{"Common"},
+   :name "Crinkleheart",
+   :option-pack "Crinkleheart",
+   :size :medium,
+   :speed 30,
+   :traits
+   [{:name "Additional Ability Score Increase",
+     :description
+     "Your Wisdom or Intelligence score (your choice) increases by 2."}]}}}`;
+
+const BACKGROUNDS_TXT = `
+[
+    {
+        type: "navigation",
+        name: "Quick Navigation",
+        id: "quicknav",
+        contentHTML: \`...\`
+    },
+    {
+        type: "background",
+        name: "Orphan from Afar",
+        id: "orphan-from-afar",
+        contentHTML: \`<h2>Orphan from Afar</h2><p>You arrived at the Scholia Diaspros not by choice, but by circumstance.</p><h3>Traits & Proficiencies</h3><ul><li><strong>Ability Score Increases:</strong> +2 to one ability score and +1 to another, OR +1 to three different ability scores.</li><li><strong>Skill Proficiencies:</strong> Insight, Survival</li></ul>\`
+    },
+    {
+        type: "background",
+        name: "Disciplinary Exile",
+        id: "disciplinary-exile",
+        contentHTML: \`<h2>Disciplinary Exile</h2><p>You weren't sent to the Scholia Diaspros for your academic prowess, but for your... behavioral quirks.</p><h3>Traits & Proficiencies</h3><ul><li><strong>Ability Score Increases:</strong> +2 to one ability score and +1 to another, OR +1 to three different ability scores.</li><li><strong>Skill Proficiencies:</strong> Deception, Sleight of Hand</li></ul>\`
+    },
+    {
+        type: "background",
+        name: "Padded Pop Idol",
+        id: "padded-pop-idol",
+        contentHTML: \`<h2>Padded Pop Idol</h2><p>You live for the spotlight.</p><h3>Traits & Proficiencies</h3><ul><li><strong>Ability Score Increases:</strong> +2 to Charisma and +1 to Dexterity.</li><li><strong>Skill Proficiencies:</strong> Performance, Persuasion.</li></ul>\`
+    }
+]
+`;
+
+const FEATS_TXT = `
+<div class="feat-card rounded-lg p-6 flex flex-col">
+    <h3 class="text-2xl font-bold text-center mb-2">Padded Professor in Training</h3>
+    <p class="mb-4">You've always been a bookworm.</p>
+    <ul>
+        <li>Increase your Intelligence or Wisdom score by 1, to a maximum of 20.</li>
+        <li>You gain proficiency in two of the following skills: Arcana, History, Investigation, or Medicine.</li>
+    </ul>
+</div>
+<div class="feat-card rounded-lg p-6 flex flex-col">
+    <h3 class="text-2xl font-bold text-center mb-2">Potty-Trained Paragon</h3>
+    <p class="mb-4">You stand as a bastion of bladder control.</p>
+    <ul>
+        <li>You are considered Potty-Trained and have advantage against effects that would magically inflict the Incontinent trait.</li>
+    </ul>
+</div>
+<div class="feat-card rounded-lg p-6 flex flex-col">
+    <h3 class="text-2xl font-bold text-center mb-2">Born Brat</h3>
+    <p class="mb-4">Rules were made to be bent, broken, or blamed on someone else.</p>
+    <ul>
+        <li>Increase your Charisma score by 1, to a maximum of 20.</li>
+        <li>You gain proficiency in the Deception and Persuasion skills.</li>
+    </ul>
+</div>
+`;
+
+// --- UI Components ---
+const StatBox = ({ label, value, modifier }) => (
+    <div className="bg-gray-700 p-4 rounded-lg text-center shadow-md w-full flex flex-col items-center justify-center">
+        <div className="text-sm font-bold text-gray-300 uppercase">{label}</div>
+        <div className="text-4xl font-bold text-white">{value}</div>
+        <div className="bg-gray-800 text-white text-lg font-semibold rounded-full px-3 py-1 -mt-2 border-2 border-gray-600">
+            {modifier >= 0 ? `+${modifier}` : modifier}
+        </div>
+    </div>
+);
+
+const StepIndicator = ({ steps, currentStep }) => (
+    <div className="flex justify-center items-center mb-8 flex-wrap">
+        {steps.map((step, i) => (
+            <React.Fragment key={step.id}>
+                <div className="flex items-center m-1">
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${i + 1 <= currentStep ? 'bg-indigo-500 text-white' : 'bg-gray-700 text-gray-400'}`}>
+                        {i + 1}
+                    </div>
+                    <span className={`ml-2 text-xs ${i + 1 <= currentStep ? 'text-white' : 'text-gray-400'}`}>{step.name}</span>
+                </div>
+                {i < steps.length - 1 && <div className={`h-1 w-4 sm:w-8 ${i + 1 < currentStep ? 'bg-indigo-500' : 'bg-gray-700'}`}></div>}
+            </React.Fragment>
+        ))}
+    </div>
+);
+
+
+// --- App ---
+function App() {
+    console.log("App function called");
+        const [stepIndex, setStepIndex] = useState(1);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [homebrew, setHomebrew] = useState({ 
+            races: { 
+        classes: {}, 
+        subclasses: {}, 
+        spells: {}, 
+        backgrounds: {}, 
+        feats: {},
+        items: {} // Add items
+    });
+    const [character, setCharacter] = useState({
+        name: 'My Character',
+        race: null, subrace: null, class: null, subclass: null, background: null, feat: null, level: 1,
+        abilityScoreMethod: 'pointBuy',
+        baseScores: { STR: 8, DEX: 8, CON: 8, INT: 8, WIS: 8, CHA: 8 },
+        asiChoices: { race: {}, background: {}, feat: {} },
+        powers: { cantrips: [], leveled: [] },
+        equipment: [], // Add equipment tracking
+    });
+
+    console.log("App state initialized");
+
+    useEffect(() => {
+        const loadAllData = async () => {
+            try {
+                console.log("Starting data load...");
+                // Load embedded data
+                const luminancerData = await parseLuminancerData();
+                console.log("Luminancer data:", luminancerData);
+                console.log("Luminancer classes:", luminancerData['orcpub.dnd.e5/classes']);
+                console.log("Luminancer spells:", Object.keys(luminancerData['orcpub.dnd.e5/spells'] || {}));
+                console.log("First few luminancer spells:", Object.values(luminancerData['orcpub.dnd.e5/spells'] || {}).slice(0, 3));
+                const crinkleheartData = parseOrcbrew(CRINKLEHEART_ORCBREW);
+                const backgroundsData = parseCustomJsObjectArray(BACKGROUNDS_TXT);
+                const featsData = parseHtmlData(FEATS_TXT, 'feat');
+                console.log("Embedded data loaded");
+                
+                // Load external data
+                const racesData = await parseRacesData();
+                const spellsData = await parseSpellsData();
+                const itemsData = await parseItemsData();
+                const externalBackgrounds = await parseBackgroundsFromFile();
+                const externalFeats = await parseFeatsFromFile();
+                console.log("External data loaded");
+                
+                console.log("Setting homebrew data...");
+                setHomebrew({
+                    races: { 
+                        ...racesData, 
+                        ...(crinkleheartData['orcpub.dnd.e5/races'] || {}) 
+                    },
+                    classes: { 
+                        // Add luminancer class directly
+                        luminancer: {
+                            key: 'luminancer',
+                            name: 'Luminancer',
+                            hitDie: 8,
+                            primaryAbility: 'Intelligence',
+                            savingThrows: ['Dexterity', 'Intelligence'],
+                            skillChoices: 4,
+                            skillOptions: ['Persuasion', 'Investigation', 'Acrobatics', 'Performance', 'Perception', 'Sleight of Hand', 'History', 'Deception', 'Athletics', 'Insight', 'Stealth'],
+                            armorProficiencies: ['Light Armor'],
+                            weaponProficiencies: ['Two martial weapons of choice', 'One simple weapon of choice'],
+                            toolProficiencies: ['Thieves\' Tools'],
+                            subclassLevel: 3,
+                            subclassTitle: 'Balancer Archetype',
+                            spellcasting: {
+                                ability: 'Intelligence',
+                                cantrips: true,
+                                cantripsKnown: { 1: 2 },
+                                powersKnown: { 1: 2, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1, 10: 1, 11: 1, 13: 1, 15: 1, 17: 1, 19: 1 },
+                                causalPoints: { 1: 4, 2: 6, 3: 8, 4: 10, 5: 14, 6: 16, 7: 19, 8: 22, 9: 27, 10: 28, 11: 32, 12: 34, 13: 38, 14: 40, 15: 44, 16: 46, 17: 57, 18: 60, 19: 64, 20: 71 }
+                            },
+                            features: [
+                                {
+                                    name: 'Weapon Proficiencies',
+                                    level: 1,
+                                    description: 'You are proficient with two martial weapons of your choice and one simple weapon of your choice. If firearms or energy weapons exist in your campaign, these count as martial weapons for proficiency, and a Luminancer is trained in their use.'
+                                },
+                                {
+                                    name: 'Causal Powers & Causal Points',
+                                    level: 1,
+                                    description: 'You have a pool of Causal Points to fuel your powers. You regain all spent Causal Points on a long rest. To use a power, spend Causal Points: 1st-level=2pts; 2nd=3pts; 3rd=5pts; 4th=6pts; 5th=7pts; 6th=9pts; 7th=10pts; 8th=11pts; 9th=13pts. 0-level powers (cantrips) cost 0pts. Intelligence is your spellcasting ability.'
+                                },
+                                {
+                                    name: 'Radiant Spark / Umbral Spark',
+                                    level: 1,
+                                    description: 'You inherently learn this power at 1st level (it doesn\'t count against your chosen cantrips). Make a ranged spell attack against a target within 60 ft. On a hit, 1d8 radiant or necrotic damage (your choice). Damage increases to 2d8 at 5th level, 3d8 at 11th, and 4d8 at 17th level.'
+                                },
+                                {
+                                    name: 'Balance of Bright and Shadow',
+                                    level: 2,
+                                    description: 'You can infuse strikes and spells with dual energy. Once per short rest, weapon attack deals +1d8 radiant or necrotic (your choice). Increases: 2d8 at 5th, 3d8 at 11th, 4d8 at 17th. You can also substitute damage type of a Luminancer power once per short rest.'
+                                },
+                                {
+                                    name: 'Meditative Balancing',
+                                    level: 2,
+                                    description: 'During a short rest (30+ min meditating), roll one Hit Die (d8) and recover that many Causal Points (up to max) instead of HP. Can spend additional Hit Dice this way.'
+                                },
+                                {
+                                    name: 'Luminancer Archetype',
+                                    level: 3,
+                                    description: 'You choose an Archetype: Balancer, Potentiator, or Illuminator. Grants features at 3rd, 6th, 10th, and 14th level.'
+                                },
+                                {
+                                    name: 'Causal Swiftness',
+                                    level: 5,
+                                    description: 'Whenever you activate a Luminancer power or attack an enemy on your turn, you can make one additional melee attack as part of that turn. At 13th level, you can make two additional melee attacks instead of one.'
+                                },
+                                {
+                                    name: 'Soul Raiment',
+                                    level: 10,
+                                    description: 'You automatically learn the Soul Raiment power (4th-level effect, costs 6 Causal Points, 1/long rest).'
+                                },
+                                {
+                                    name: 'Metapowers',
+                                    level: 11,
+                                    description: 'You gain one Metapower of your choice. You gain another Metapower at 13th, 15th, and 17th level. Using a Metapower typically costs additional Causal Points.'
+                                },
+                                {
+                                    name: 'Shift Fates',
+                                    level: 11,
+                                    description: 'You automatically learn the Shift Fates power (3rd-level effect, costs 5 Causal Points, 1/short rest, twice at 17th).'
+                                },
+                                {
+                                    name: 'See Through the Eyes of Gods',
+                                    level: 15,
+                                    description: 'You automatically learn the See Through the Eyes of Gods power (8th-level effect, costs 11 Causal Points, 1/long rest).'
+                                },
+                                {
+                                    name: 'Transcendent Soul Raiment',
+                                    level: 18,
+                                    description: 'You automatically learn the Transcendent Soul Raiment power, enhancing Soul Raiment (9th-level effect, costs 13 Causal Points, 1/long rest).'
+                                },
+                                {
+                                    name: 'Ocular Apotheosis',
+                                    level: 20,
+                                    description: 'You achieve Ocular Apotheosis. PERMANENT TRUESIGHT: Truesight out to 60 feet at all times. OCULAR APOTHEOSIS - FORESIGHT (POWER): You can use the Ocular Apotheosis - Foresight power (9th-level effect, 13 Causal Points, 1/week). CAUSAL NOVA: Choose creatures in 30ft. Con save. Fail: 6d10 radiant or necrotic damage & blinded/deafened. Usable once per long rest.'
+                                }
+                            ]
+                        },
+                        ...(luminancerData['orcpub.dnd.e5/classes'] || {}) 
+                    },
+                    subclasses: { 
+                        // Add luminancer subclasses directly
+                        balancer: {
+                            key: 'balancer',
+                            name: 'The Balancer',
+                            class: 'luminancer',
+                            features: [
+                                {
+                                    name: 'Equilibrium Techniques',
+                                    level: 3,
+                                    description: 'UMBRAL AND LUMINAL CHANNELING: When using Balance of Bright and Shadow for extra attack damage, you can split the damage between radiant and necrotic. One use of Energy Rebalance doesn\'t count against the base feature\'s per-rest limit. BALANCED MIND: Gain proficiency in Wisdom saving throws. Advantage on saves vs charmed/frightened conditions related to brilliant light or terrifying darkness.'
+                                },
+                                {
+                                    name: 'Duality Strike',
+                                    level: 6,
+                                    description: 'When you use Balance of Bright and Shadow to add radiant damage to an attack, your next attack (within 1 minute) that adds necrotic damage deals an extra +1d8 damage (and vice-versa). Also applies to cantrips/minor powers.'
+                                },
+                                {
+                                    name: 'Equilibrial Resilience',
+                                    level: 10,
+                                    description: 'When you take radiant or necrotic damage, gain resistance to the opposite type until end of your next turn. When using Meditative Balancing for points, also regain HP = Int mod per die.'
+                                },
+                                {
+                                    name: 'Warden of the Twilight',
+                                    level: 14,
+                                    description: 'TWILIGHT SHROUD: 20ft aura dim light for 1 min. Allies of choice starting in shroud regain HP = Int mod if below half. Hostiles in shroud -2 to attack rolls. BALANCE MASTERY: When changing damage types, no feature use expended & can change two types in one casting.'
+                                }
+                            ]
+                        },
+                        potentiator: {
+                            key: 'potentiator',
+                            name: 'Potentiator',
+                            class: 'luminancer',
+                            features: [
+                                {
+                                    name: 'Modified Progression & Force Potentiation',
+                                    level: 3,
+                                    description: 'Causal Point max higher. Fewer preset powers known. Relies on Force Potentiation. FORCE POTENTIATION: Spend Causal Points to empower actions for 1 round. Combine packages. 1PT: +10ft speed; OR bonus Dash; OR +1AC & +1hit/dmg. 2PTS: +1d8 elem/pois/rad/necr dmg to attack; OR adv on attacks; OR adv on saves; OR impose disadv on enemy attack vs ally. 3PTS: Stunning Strike-like effect & +1d8 dmg; OR +1d8 dmg & push 10ft & prone. 4PTS: Disadv on enemy attacks & adv on ally attacks; OR on hit, +2d8 dmg & 15ft crater.'
+                                },
+                                {
+                                    name: 'Strength of Mind',
+                                    level: 3,
+                                    description: 'Proficiency in Strength checks. Advantage on saves vs debilitating debuffs from skills you\'re proficient in.'
+                                },
+                                {
+                                    name: 'Power Extremis',
+                                    level: 6,
+                                    description: 'Reduce enemy (HD >= your level) to 0 HP or crit: regain 1 Causal Point. Regain Causal Points = prof bonus when using Hit Dice for points on short rest.'
+                                },
+                                {
+                                    name: 'Kinetic Overload',
+                                    level: 10,
+                                    description: '1/short rest: Spend 6+ Causal Points on Force Potentiation, trigger Kinetic Overload for 1 round: +2d8 dmg to enhanced attack; +20ft speed, ignore difficult terrain; Force Potentiation save DC +3; allies in 10ft +2 AC & saves.'
+                                },
+                                {
+                                    name: 'Causal Convergence',
+                                    level: 14,
+                                    description: 'Force Potentiation: combine up to 3 effects from different tiers (total <= 8 Causal Points). EXPANDED TERRAIN CONTROL: Triple area/distance of terrain effects. ECHOING POWER: After Force Potentiation, regain half Causal Points spent. REALITY BREAKER: Enemies in 30ft Dex save. Fail: prone, pushed 15ft, 4d8 dmg.'
+                                }
+                            ]
+                        },
+                        illuminator: {
+                            key: 'illuminator',
+                            name: 'Illuminator',
+                            class: 'luminancer',
+                            features: [
+                                {
+                                    name: 'Bonus Powers Known',
+                                    level: 1,
+                                    description: 'Gain bonus powers known from Luminancer list: +1 at L1, +1 at L3, +2 at L6, +2 at L10, +2 at L14, +3 at L18, +3 at L20.'
+                                },
+                                {
+                                    name: 'Illuminated Burst',
+                                    level: 1,
+                                    description: '1/short rest: Cast radiant/necrotic power (in bright light/half shadow respectively), deals +2d8 dmg of type. Creatures in 5ft of target Con save or half extra dmg AND pushed 10ft (radiant) or prone (necrotic).'
+                                },
+                                {
+                                    name: 'Luminous Augmentation',
+                                    level: 6,
+                                    description: '1/short rest: Cast radiant/necrotic power (in proper light), enhance: +1d8 dmg of type; lingering effects +1 round. Max Causal Points +Int mod (min +1).'
+                                },
+                                {
+                                    name: 'Mystic Reverb',
+                                    level: 10,
+                                    description: 'Cast qualified radiant/necrotic power (proper light): SECONDARY EFFECT: Choose additional creature in range; half potency effect. RAPID RECOVERY: Casting qualifying power, regain Causal Points = half cost (round up).'
+                                },
+                                {
+                                    name: 'Cataclysmic Illumination',
+                                    level: 14,
+                                    description: '1/long rest: Cast radiant/necrotic power (proper conditions): DETONATION: Base damage dice maximized, area to 10ft radius. AFTERMATH: Fail save vs power, blinded (radiant) or stunned (necrotic) until end of next turn. CAUSAL SYPHON: Regain 10 Causal Points.'
+                                }
+                            ]
+                        },
+                        ...(luminancerData['orcpub.dnd.e5/subclasses'] || {}) 
+                    },
+                    spells: { 
+                        ...spellsData.spellsByClass,
+                        // Don't override luminancer spells - they come from spellbook.html via spellsByClass
+                        // Keep the individual spell objects too for compatibility
+                        ...Object.fromEntries(
+                            Object.entries(luminancerData['orcpub.dnd.e5/spells'] || {})
+                                .map(([key, spell]) => [key, [spell]])
+                        )
+                    },
+                    backgrounds: { 
+                        ...backgroundsData, 
+                        ...externalBackgrounds 
+                    },
+                    feats: { 
+                        ...featsData, 
+                        ...externalFeats 
+                    },
+                    items: itemsData
+                });
+                
+                // Debug info
+                const debugDiv = document.createElement('div');
+                debugDiv.style.position = 'fixed';
+                debugDiv.style.top = '10px';
+                debugDiv.style.right = '10px';
+                debugDiv.style.background = 'black';
+                debugDiv.style.color = 'white';
+                debugDiv.style.padding = '10px';
+                debugDiv.style.border = '1px solid white';
+                debugDiv.style.fontSize = '12px';
+                debugDiv.style.maxWidth = '300px';
+                debugDiv.style.zIndex = '9999';
+                debugDiv.innerHTML = `Classes loaded: ${Object.keys(luminancerData['orcpub.dnd.e5/classes'] || {}).length}<br/>
+                                     Class keys: ${Object.keys(luminancerData['orcpub.dnd.e5/classes'] || {}).join(', ')}<br/>
+                                     Spells loaded: ${Object.keys(luminancerData['orcpub.dnd.e5/spells'] || {}).length}<br/>
+                                     Spell keys: ${Object.keys(luminancerData['orcpub.dnd.e5/spells'] || {}).slice(0, 3).join(', ')}...<br/>
+                                     Subclasses: ${Object.keys(luminancerData['orcpub.dnd.e5/subclasses'] || {}).join(', ')}<br/>
+                                     Races loaded: ${Object.keys(crinkleheartData['orcpub.dnd.e5/races'] || {}).length}`;
+                document.body.appendChild(debugDiv);
+            } catch (error) {
+                console.error("Error loading game data:", error);
+                setError(error.message);
+                // Fall back to embedded data only
+                const luminancerData = parseOrcbrew(LUMINANCER_ORCBREW_FALLBACK);
+                const crinkleheartData = parseOrcbrew(CRINKLEHEART_ORCBREW);
+                const backgroundsData = parseCustomJsObjectArray(BACKGROUNDS_TXT);
+                const featsData = parseHtmlData(FEATS_TXT, 'feat');
+                
+                setHomebrew({
+                    races: { ...(crinkleheartData['orcpub.dnd.e5/races'] || {}) },
+                    classes: { 
+                        // Add luminancer class directly
+                        luminancer: {
+                            key: 'luminancer',
+                            name: 'Luminancer',
+                            hitDie: 8,
+                            primaryAbility: 'Intelligence',
+                            savingThrows: ['Dexterity', 'Intelligence'],
+                            skillChoices: 4,
+                            skillOptions: ['Persuasion', 'Investigation', 'Acrobatics', 'Performance', 'Perception', 'Sleight of Hand', 'History', 'Deception', 'Athletics', 'Insight', 'Stealth'],
+                            armorProficiencies: ['Light Armor'],
+                            weaponProficiencies: ['Two martial weapons of choice', 'One simple weapon of choice'],
+                            toolProficiencies: ['Thieves\' Tools'],
+                            subclassLevel: 3,
+                            subclassTitle: 'Balancer Archetype',
+                            spellcasting: {
+                                ability: 'Intelligence',
+                                cantrips: true,
+                                cantripsKnown: { 1: 2 },
+                                powersKnown: { 1: 2, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1, 10: 1, 11: 1, 13: 1, 15: 1, 17: 1, 19: 1 },
+                                causalPoints: { 1: 4, 2: 6, 3: 8, 4: 10, 5: 14, 6: 16, 7: 19, 8: 22, 9: 27, 10: 28, 11: 32, 12: 34, 13: 38, 14: 40, 15: 44, 16: 46, 17: 57, 18: 60, 19: 64, 20: 71 }
+                            },
+                            features: [
+                                {
+                                    name: 'Weapon Proficiencies',
+                                    level: 1,
+                                    description: 'You are proficient with two martial weapons of your choice and one simple weapon of your choice. If firearms or energy weapons exist in your campaign, these count as martial weapons for proficiency, and a Luminancer is trained in their use.'
+                                },
+                                {
+                                    name: 'Causal Powers & Causal Points',
+                                    level: 1,
+                                    description: 'You have a pool of Causal Points to fuel your powers. You regain all spent Causal Points on a long rest. To use a power, spend Causal Points: 1st-level=2pts; 2nd=3pts; 3rd=5pts; 4th=6pts; 5th=7pts; 6th=9pts; 7th=10pts; 8th=11pts; 9th=13pts. 0-level powers (cantrips) cost 0pts. Intelligence is your spellcasting ability.'
+                                },
+                                {
+                                    name: 'Radiant Spark / Umbral Spark',
+                                    level: 1,
+                                    description: 'You inherently learn this power at 1st level (it doesn\'t count against your chosen cantrips). Make a ranged spell attack against a target within 60 ft. On a hit, 1d8 radiant or necrotic damage (your choice). Damage increases to 2d8 at 5th level, 3d8 at 11th, and 4d8 at 17th level.'
+                                },
+                                {
+                                    name: 'Balance of Bright and Shadow',
+                                    level: 2,
+                                    description: 'You can infuse strikes and spells with dual energy. Once per short rest, weapon attack deals +1d8 radiant or necrotic (your choice). Increases: 2d8 at 5th, 3d8 at 11th, 4d8 at 17th. You can also substitute damage type of a Luminancer power once per short rest.'
+                                },
+                                {
+                                    name: 'Meditative Balancing',
+                                    level: 2,
+                                    description: 'During a short rest (30+ min meditating), roll one Hit Die (d8) and recover that many Causal Points (up to max) instead of HP. Can spend additional Hit Dice this way.'
+                                },
+                                {
+                                    name: 'Luminancer Archetype',
+                                    level: 3,
+                                    description: 'You choose an Archetype: Balancer, Potentiator, or Illuminator. Grants features at 3rd, 6th, 10th, and 14th level.'
+                                },
+                                {
+                                    name: 'Causal Swiftness',
+                                    level: 5,
+                                    description: 'Whenever you activate a Luminancer power or attack an enemy on your turn, you can make one additional melee attack as part of that turn. At 13th level, you can make two additional melee attacks instead of one.'
+                                },
+                                {
+                                    name: 'Soul Raiment',
+                                    level: 10,
+                                    description: 'You automatically learn the Soul Raiment power (4th-level effect, costs 6 Causal Points, 1/long rest).'
+                                },
+                                {
+                                    name: 'Metapowers',
+                                    level: 11,
+                                    description: 'You gain one Metapower of your choice. You gain another Metapower at 13th, 15th, and 17th level. Using a Metapower typically costs additional Causal Points.'
+                                },
+                                {
+                                    name: 'Shift Fates',
+                                    level: 11,
+                                    description: 'You automatically learn the Shift Fates power (3rd-level effect, costs 5 Causal Points, 1/short rest, twice at 17th).'
+                                },
+                                {
+                                    name: 'See Through the Eyes of Gods',
+                                    level: 15,
+                                    description: 'You automatically learn the See Through the Eyes of Gods power (8th-level effect, costs 11 Causal Points, 1/long rest).'
+                                },
+                                {
+                                    name: 'Transcendent Soul Raiment',
+                                    level: 18,
+                                    description: 'You automatically learn the Transcendent Soul Raiment power, enhancing Soul Raiment (9th-level effect, costs 13 Causal Points, 1/long rest).'
+                                },
+                                {
+                                    name: 'Ocular Apotheosis',
+                                    level: 20,
+                                    description: 'You achieve Ocular Apotheosis. PERMANENT TRUESIGHT: Truesight out to 60 feet at all times. OCULAR APOTHEOSIS - FORESIGHT (POWER): You can use the Ocular Apotheosis - Foresight power (9th-level effect, 13 Causal Points, 1/week). CAUSAL NOVA: Choose creatures in 30ft. Con save. Fail: 6d10 radiant or necrotic damage & blinded/deafened. Usable once per long rest.'
+                                }
+                            ]
+                        },
+                        ...(luminancerData['orcpub.dnd.e5/classes'] || {}) 
+                    },
+                    subclasses: { 
+                        // Add luminancer subclasses directly
+                        balancer: {
+                            key: 'balancer',
+                            name: 'The Balancer',
+                            class: 'luminancer',
+                            features: [
+                                {
+                                    name: 'Equilibrium Techniques',
+                                    level: 3,
+                                    description: 'UMBRAL AND LUMINAL CHANNELING: When using Balance of Bright and Shadow for extra attack damage, you can split the damage between radiant and necrotic. One use of Energy Rebalance doesn\'t count against the base feature\'s per-rest limit. BALANCED MIND: Gain proficiency in Wisdom saving throws. Advantage on saves vs charmed/frightened conditions related to brilliant light or terrifying darkness.'
+                                },
+                                {
+                                    name: 'Duality Strike',
+                                    level: 6,
+                                    description: 'When you use Balance of Bright and Shadow to add radiant damage to an attack, your next attack (within 1 minute) that adds necrotic damage deals an extra +1d8 damage (and vice-versa). Also applies to cantrips/minor powers.'
+                                },
+                                {
+                                    name: 'Equilibrial Resilience',
+                                    level: 10,
+                                    description: 'When you take radiant or necrotic damage, gain resistance to the opposite type until end of your next turn. When using Meditative Balancing for points, also regain HP = Int mod per die.'
+                                },
+                                {
+                                    name: 'Warden of the Twilight',
+                                    level: 14,
+                                    description: 'TWILIGHT SHROUD: 20ft aura dim light for 1 min. Allies of choice starting in shroud regain HP = Int mod if below half. Hostiles in shroud -2 to attack rolls. BALANCE MASTERY: When changing damage types, no feature use expended & can change two types in one casting.'
+                                }
+                            ]
+                        },
+                        potentiator: {
+                            key: 'potentiator',
+                            name: 'Potentiator',
+                            class: 'luminancer',
+                            features: [
+                                {
+                                    name: 'Modified Progression & Force Potentiation',
+                                    level: 3,
+                                    description: 'Causal Point max higher. Fewer preset powers known. Relies on Force Potentiation. FORCE POTENTIATION: Spend Causal Points to empower actions for 1 round. Combine packages. 1PT: +10ft speed; OR bonus Dash; OR +1AC & +1hit/dmg. 2PTS: +1d8 elem/pois/rad/necr dmg to attack; OR adv on attacks; OR adv on saves; OR impose disadv on enemy attack vs ally. 3PTS: Stunning Strike-like effect & +1d8 dmg; OR +1d8 dmg & push 10ft & prone. 4PTS: Disadv on enemy attacks & adv on ally attacks; OR on hit, +2d8 dmg & 15ft crater.'
+                                },
+                                {
+                                    name: 'Strength of Mind',
+                                    level: 3,
+                                    description: 'Proficiency in Strength checks. Advantage on saves vs debilitating debuffs from skills you\'re proficient in.'
+                                },
+                                {
+                                    name: 'Power Extremis',
+                                    level: 6,
+                                    description: 'Reduce enemy (HD >= your level) to 0 HP or crit: regain 1 Causal Point. Regain Causal Points = prof bonus when using Hit Dice for points on short rest.'
+                                },
+                                {
+                                    name: 'Kinetic Overload',
+                                    level: 10,
+                                    description: '1/short rest: Spend 6+ Causal Points on Force Potentiation, trigger Kinetic Overload for 1 round: +2d8 dmg to enhanced attack; +20ft speed, ignore difficult terrain; Force Potentiation save DC +3; allies in 10ft +2 AC & saves.'
+                                },
+                                {
+                                    name: 'Causal Convergence',
+                                    level: 14,
+                                    description: 'Force Potentiation: combine up to 3 effects from different tiers (total <= 8 Causal Points). EXPANDED TERRAIN CONTROL: Triple area/distance of terrain effects. ECHOING POWER: After Force Potentiation, regain half Causal Points spent. REALITY BREAKER: Enemies in 30ft Dex save. Fail: prone, pushed 15ft, 4d8 dmg.'
+                                }
+                            ]
+                        },
+                        illuminator: {
+                            key: 'illuminator',
+                            name: 'Illuminator',
+                            class: 'luminancer',
+                            features: [
+                                {
+                                    name: 'Bonus Powers Known',
+                                    level: 1,
+                                    description: 'Gain bonus powers known from Luminancer list: +1 at L1, +1 at L3, +2 at L6, +2 at L10, +2 at L14, +3 at L18, +3 at L20.'
+                                },
+                                {
+                                    name: 'Illuminated Burst',
+                                    level: 1,
+                                    description: '1/short rest: Cast radiant/necrotic power (in bright light/half shadow respectively), deals +2d8 dmg of type. Creatures in 5ft of target Con save or half extra dmg AND pushed 10ft (radiant) or prone (necrotic).'
+                                },
+                                {
+                                    name: 'Luminous Augmentation',
+                                    level: 6,
+                                    description: '1/short rest: Cast radiant/necrotic power (in proper light), enhance: +1d8 dmg of type; lingering effects +1 round. Max Causal Points +Int mod (min +1).'
+                                },
+                                {
+                                    name: 'Mystic Reverb',
+                                    level: 10,
+                                    description: 'Cast qualified radiant/necrotic power (proper light): SECONDARY EFFECT: Choose additional creature in range; half potency effect. RAPID RECOVERY: Casting qualifying power, regain Causal Points = half cost (round up).'
+                                },
+                                {
+                                    name: 'Cataclysmic Illumination',
+                                    level: 14,
+                                    description: '1/long rest: Cast radiant/necrotic power (proper conditions): DETONATION: Base damage dice maximized, area to 10ft radius. AFTERMATH: Fail save vs power, blinded (radiant) or stunned (necrotic) until end of next turn. CAUSAL SYPHON: Regain 10 Causal Points.'
+                                }
+                            ]
+                        },
+                        ...(luminancerData['orcpub.dnd.e5/subclasses'] || {}) 
+                    },
+                    spells: { 
+                        // Don't override luminancer spells in fallback either
+                        // Keep the individual spell objects too for compatibility  
+                        ...Object.fromEntries(
+                            Object.entries(luminancerData['orcpub.dnd.e5/spells'] || {})
+                                .map(([key, spell]) => [key, [spell]])
+                        )
+                    },
+                    backgrounds: backgroundsData,
+                    feats: featsData,
+                    items: { weapons: [], armor: [], tools: [], consumables: [] }
+                });
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        
+        loadAllData();
+    }, []);
+    
+    const handleFileLoad = (event) => {
+        const files = Array.from(event.target.files);
+        files.forEach(file => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const content = e.target.result;
+                if (file.name.includes('background')) {
+                    const data = parseCustomJsObjectArray(content);
+                    setHomebrew(prev => ({ ...prev, backgrounds: { ...prev.backgrounds, ...data }}));
+                } else if (file.name.includes('feat')) {
+                    const data = parseHtmlData(content, 'feat');
+                    setHomebrew(prev => ({ ...prev, feats: { ...prev.feats, ...data }}));
+                } else {
+                    const data = parseOrcbrew(content);
+                    setHomebrew(prev => ({
+                        races: { ...prev.races, ...(data['orcpub.dnd.e5/races'] || {}) },
+                        classes: { ...prev.classes, ...(data['orcpub.dnd.e5/classes'] || {}) },
+                        subclasses: { ...prev.subclasses, ...(data['orcpub.dnd.e5/subclasses'] || {}) },
+                        spells: { ...prev.spells, ...(data['orcpub.dnd.e5/spells'] || {}) },
+                    }));
+                }
+            };
+            reader.readAsText(file);
+        });
+    };
+
+    const updateCharacter = (key, value) => {
+        setCharacter(prev => ({ ...prev, [key]: value }));
+    };
+    
+    // Helper functions for character data access
+    const getCharacterRace = (raceName, subraceName) => {
+        if (!raceName) return null;
+        const race = homebrew.races[raceName];
+        if (!race) return null;
+        if (subraceName && race.subraces && race.subraces[subraceName]) {
+            return { ...race, ...race.subraces[subraceName] };
+        }
+        return race;
+    };
+
+    const getClassData = (className) => {
+        if (!className) return null;
+        return homebrew.classes[className.toLowerCase()] || homebrew.classes[className];
+    };
+
+    const getSubclassData = (className, subclassName) => {
+        if (!className || !subclassName) return null;
+        return homebrew.subclasses[subclassName.toLowerCase()] || homebrew.subclasses[subclassName];
+    };
+
+    const getBackgroundData = (backgroundName) => {
+        if (!backgroundName) return null;
+        return homebrew.backgrounds[backgroundName];
+    };
+    
+    const getModifier = (score) => Math.floor((score - 10) / 2);
+
+    const chosenClass = character.class ? homebrew.classes[character.class] : null;
+
+    const steps = useMemo(() => {
+        const flow = [
+            { id: 'homebrew', name: 'Homebrew', component: HomebrewStep },
+            { id: 'race', name: 'Race', component: RaceStep },
+            { id: 'class', name: 'Class', component: ClassStep },
+            { id: 'level', name: 'Level', component: LevelStep },
+        ];
+        if (chosenClass && character.level >= (chosenClass['subclass-level'] || chosenClass['subclassLevel'] || 99)) {
+            flow.push({ id: 'subclass', name: 'Subclass', component: SubclassStep });
+        }
+        flow.push({ id: 'background', name: 'Background', component: BackgroundStep });
+        flow.push({ id: 'feat', name: 'Feat', component: FeatStep });
+        flow.push({ id: 'abilities', name: 'Abilities', component: AbilityScoreStep });
+        flow.push({ id: 'equipment', name: 'Equipment', component: EquipmentStep }); // Add equipment step
+        if (chosenClass && chosenClass.spellcasting) {
+            flow.push({ id: 'powers', name: 'Powers', component: PowersStep });
+        }
+        flow.push({ id: 'export', name: 'Export', component: ExportStep });
+        return flow;
+    }, [character.level, chosenClass]);
+
+    const nextStep = () => setStepIndex(i => Math.min(i + 1, steps.length - 1));
+    const prevStep = () => setStepIndex(i => Math.max(i - 1, 0));
+
+    const CurrentStepComponent = steps[stepIndex].component;
+
+    const finalScores = useMemo(() => {
+        const scores = { ...character.baseScores };
+        const bonuses = {};
+        const debugInfo = [];
+        
+        const addBonus = (stat, val) => {
+            if(stat) bonuses[stat.toUpperCase()] = (bonuses[stat.toUpperCase()] || 0) + val;
+        };
+
+        const selectedRace = homebrew.races[character.race];
+        
+        // Apply racial bonuses - check both .abilities (orcbrew format) and .abilityScores (parsed format)
+        if(selectedRace?.abilities) {
+            Object.entries(selectedRace.abilities).forEach(([key, val]) => {
+                const stat = key.split('/').pop().toUpperCase();
+                debugInfo.push(`Racial: ${stat} +${val}`);
+                addBonus(stat, val);
+            });
+        } else if(selectedRace?.abilityScores) {
+            Object.entries(selectedRace.abilityScores).forEach(([stat, val]) => {
+                debugInfo.push(`Racial: ${stat} +${val}`);
+                addBonus(stat.toUpperCase(), val);
+            });
+        }
+        
+        const sources = [
+            { source: homebrew.backgrounds[character.background], type: 'Background' },
+            { source: homebrew.feats[character.feat], type: 'Feat' }
+        ];
+        sources.forEach(({ source, type }) => {
+            if (source?.asiText) {
+                // Check for multiple formats: "+1 to Stat" and "Increase your Stat score by 1"
+                const formatA = [...source.asiText.matchAll(/\+(\d+) to (\w+)/g)];
+                const formatB = [...source.asiText.matchAll(/Increase your (\w+) score by (\d+)/g)];
+                
+                if (formatA.length > 0 && !source.asiText.toLowerCase().includes('one of') && !source.asiText.toLowerCase().includes('or')) {
+                     formatA.forEach(match => {
+                        debugInfo.push(`${type}: ${match[2]} +${match[1]}`);
+                        addBonus(match[2], parseInt(match[1]));
+                    });
+                }
+                
+                if (formatB.length > 0 && !source.asiText.toLowerCase().includes('one of') && !source.asiText.toLowerCase().includes('or')) {
+                     formatB.forEach(match => {
+                        debugInfo.push(`${type}: ${match[1]} +${match[2]}`);
+                        addBonus(match[1], parseInt(match[2]));
+                    });
+                }
+            }
+        });
+
+        Object.values(character.asiChoices).forEach(choiceGroup => {
+            Object.values(choiceGroup).forEach(choice => {
+                if(choice.stat && choice.value) {
+                    debugInfo.push(`ASI Choice: ${choice.stat} +${choice.value}`);
+                    addBonus(choice.stat, choice.value);
+                }
+            });
+        });
+        
+        for(const stat in scores) {
+            scores[stat] += (bonuses[stat] || 0);
+        }
+        
+        // Store debug info for display
+        scores._debugInfo = debugInfo;
+        return scores;
+    }, [character.baseScores, character.asiChoices, character.race, character.background, character.feat, homebrew]);
+
+    // Character Save/Load Functions
+    const saveCharacter = () => {
+        try {
+            const characterData = {
+                character,
+                finalScores,
+                selectedEquipment,
+                timestamp: new Date().toISOString(),
+                version: '1.0'
+            };
+            
+            const dataStr = JSON.stringify(characterData, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            
+            const link = document.createElement('a');
+            const safeName = (character.name || 'Character').replace(/[^a-z0-9]/gi, '_');
+            link.href = url;
+            link.download = `${safeName}_character.json`;
+            link.click();
+            
+            URL.revokeObjectURL(url);
+            console.log('Character saved successfully');
+        } catch (error) {
+            console.error('Save error:', error);
+            alert(`Failed to save character: ${error.message}`);
+        }
+    };
+
+    const loadCharacter = (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const characterData = JSON.parse(e.target.result);
+                setCharacter(characterData.character);
+                alert(`Character "${characterData.character.name}" loaded successfully!`);
+                console.log('Character loaded:', characterData);
+            } catch (error) {
+                console.error('Load error:', error);
+                alert(`Failed to load character: ${error.message}`);
+            }
+        };
+        reader.readAsText(file);
+    };
+
+    const quickSaveToLocalStorage = () => {
+        try {
+            const characterData = { character, finalScores, timestamp: new Date().toISOString() };
+            localStorage.setItem('savedCharacter', JSON.stringify(characterData));
+            alert('Character quick-saved to browser storage!');
+        } catch (error) {
+            alert(`Quick save failed: ${error.message}`);
+        }
+    };
+
+    const quickLoadFromLocalStorage = () => {
+        try {
+            const saved = localStorage.getItem('savedCharacter');
+            if (!saved) {
+                alert('No saved character found in browser storage.');
+                return;
+            }
+            const characterData = JSON.parse(saved);
+            setCharacter(characterData.character);
+            alert(`Character "${characterData.character.name}" quick-loaded!`);
+        } catch (error) {
+            alert(`Quick load failed: ${error.message}`);
+        }
+    };
+
+    const createTestCharacter = () => {
+        const testChar = {
+            name: "Test Potentiator",
+            level: 5,
+            selectedClass: "Luminancer",
+            selectedSubclass: "Potentiator",
+            race: "Kittenfolk",
+            subrace: "Umbral Tribe",
+            background: "Hermit",
+            baseScores: { STR: 8, DEX: 14, CON: 14, INT: 15, WIS: 12, CHA: 13 },
+            powers: { cantrips: ["Light", "Mage Hand", "Minor Illusion"], leveled: ["Absorb Elements", "Detect Magic", "Shield", "Magic Missile", "Burning Hands"] },
+            abilityScoreMethod: 'pointBuy',
+            asiChoices: { race: {}, background: {}, feat: {} },
+            equipment: []
+        };
+        setCharacter(testChar);
+        alert('Test Level 5 Potentiator created! Go to Export step to download.');
+    };
+
+    console.log("App about to render, isLoading:", isLoading, "error:", error);
+    console.log("Steps:", steps?.length, "CurrentStepComponent:", CurrentStepComponent?.name);
+    console.log("Character:", character);
+    console.log("Homebrew keys:", Object.keys(homebrew));
+
+    if (error) {
+        return (
+            <div className="bg-red-900 text-white min-h-screen p-8 flex items-center justify-center">
+                <div className="max-w-2xl text-center">
+                    <h1 className="text-3xl font-bold mb-4">Character Creator Error</h1>
+                    <p className="mb-4">There was an error loading the character creator:</p>
+                    <pre className="bg-red-800 p-4 rounded mb-4 text-left">{error}</pre>
+                    <button 
+                        onClick={() => window.location.reload()} 
+                        className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded"
+                    >
+                        Reload Page
+                    </button>
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <div className="bg-gray-900 text-white min-h-screen font-sans p-4 sm:p-8 flex flex-col items-center">
+            <div className="w-full max-w-4xl">
+                <header className="text-center mb-6">
+                    <h1 className="text-4xl sm:text-5xl font-bold text-indigo-400">Guided Character Creator</h1>
+                    <p className="text-gray-400 mt-2">Create your D&D character and export to an Avrae GSheet.</p>
+                </header>
+                
+                {/* Character Save/Load Section */}
+                <div className="bg-gray-700 border border-gray-600 p-4 rounded-lg mb-6">
+                    <div className="flex flex-wrap gap-2 justify-center">
+                        <button onClick={createTestCharacter} className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded text-sm">
+                            🧪 Create Test L5 Potentiator
+                        </button>
+                        <button onClick={quickSaveToLocalStorage} className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded text-sm">
+                            💾 Quick Save
+                        </button>
+                        <button onClick={quickLoadFromLocalStorage} className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-sm">
+                            📂 Quick Load
+                        </button>
+                        <button onClick={saveCharacter} className="bg-amber-600 hover:bg-amber-700 text-white font-bold py-2 px-4 rounded text-sm">
+                            💾 Save to File
+                        </button>
+                        <label className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded text-sm cursor-pointer">
+                            📁 Load from File
+                            <input type="file" accept=".json" onChange={loadCharacter} className="hidden" />
+                        </label>
+                    </div>
+                    <p className="text-gray-400 text-xs text-center mt-2">Quick Save/Load uses browser storage. File Save/Load downloads/uploads JSON files.</p>
+                </div>
+                {!isLoading && <StepIndicator steps={steps} currentStep={stepIndex + 1} />}
+                <main className="bg-gray-800 p-6 sm:p-8 rounded-xl shadow-2xl border border-gray-700">
+                    {isLoading ? (
+                        <div className="text-center text-xl">Loading Homebrew...</div>
+                    ) : CurrentStepComponent ? (
+                        <CurrentStepComponent 
+                            onNext={nextStep} 
+                            onBack={prevStep} 
+                            homebrew={homebrew} 
+                            character={character} 
+                            updateCharacter={updateCharacter} 
+                            getModifier={getModifier} 
+                            finalScores={finalScores}
+                        />
+                    ) : (
+                        <div className="text-center text-xl text-red-400">
+                            Error: Step component not found for step {stepIndex}
+                        </div>
+                    )}
+                </main>
+            </div>
+        </div>
+    );
+}
+
+// --- Step Components ---
+const HomebrewStep = ({ onNext, homebrew }) => (
+    <div>
+        <h2 className="text-2xl font-bold mb-4 text-indigo-300">Loaded Game Data</h2>
+        <p className="text-gray-400 mb-6">The character creator has automatically loaded data from your Interactive Handbook files. You can also upload additional .orcbrew files if needed.</p>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+            <div className="bg-gray-700 p-4 rounded-lg">
+                <h3 className="font-bold text-lg text-green-400">Races ({Object.keys(homebrew.races).length})</h3>
+                <ul className="list-disc list-inside text-sm max-h-32 overflow-y-auto">
+                    {Object.keys(homebrew.races).map(key => <li key={key}>{homebrew.races[key]?.name || key}</li>)}
+                </ul>
+            </div>
+            <div className="bg-gray-700 p-4 rounded-lg">
+                <h3 className="font-bold text-lg text-blue-400">Classes ({Object.keys(homebrew.classes).length})</h3>
+                <ul className="list-disc list-inside text-sm max-h-32 overflow-y-auto">
+                    {Object.keys(homebrew.classes).map(key => <li key={key}>{homebrew.classes[key]?.name || key}</li>)}
+                </ul>
+            </div>
+             <div className="bg-gray-700 p-4 rounded-lg">
+                <h3 className="font-bold text-lg text-purple-400">Backgrounds ({Object.keys(homebrew.backgrounds).length})</h3>
+                <ul className="list-disc list-inside text-sm max-h-32 overflow-y-auto">
+                    {Object.keys(homebrew.backgrounds).map(key => <li key={key}>{homebrew.backgrounds[key]?.name || key}</li>)}
+                </ul>
+            </div>
+             <div className="bg-gray-700 p-4 rounded-lg">
+                <h3 className="font-bold text-lg text-yellow-400">Feats ({Object.keys(homebrew.feats).length})</h3>
+                <ul className="list-disc list-inside text-sm max-h-32 overflow-y-auto">
+                    {Object.keys(homebrew.feats).map(key => <li key={key}>{homebrew.feats[key]?.name || key}</li>)}
+                </ul>
+            </div>
+            <div className="bg-gray-700 p-4 rounded-lg">
+                <h3 className="font-bold text-lg text-red-400">Spells ({Object.keys(homebrew.spells).length})</h3>
+                <ul className="list-disc list-inside text-sm max-h-32 overflow-y-auto">
+                    {Object.keys(homebrew.spells).map(key => <li key={key}>{homebrew.spells[key]?.name || key}</li>)}
+                </ul>
+            </div>
+            <div className="bg-gray-700 p-4 rounded-lg">
+                <h3 className="font-bold text-lg text-orange-400">Equipment</h3>
+                <div className="text-sm">
+                    <p>Weapons: {homebrew.items?.weapons?.length || 0}</p>
+                    <p>Armor: {homebrew.items?.armor?.length || 0}</p>
+                    <p>Tools: {homebrew.items?.tools?.length || 0}</p>
+                    <p>Consumables: {homebrew.items?.consumables?.length || 0}</p>
+                </div>
+            </div>
+        </div>
+        
+        <div className="flex justify-end">
+            <button onClick={onNext} className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-lg">Start Character Creation</button>
+        </div>
+    </div>
+);
+
+const RaceStep = ({ onNext, onBack, homebrew, character, updateCharacter }) => {
+    const selectedRace = character.race ? homebrew.races[character.race] : null;
+    const selectedSubrace = character.subrace && selectedRace ? selectedRace.subraces?.[character.subrace] : null;
+    
+    return (
+        <div>
+            <h2 className="text-2xl font-bold mb-4 text-indigo-300">Choose Your Race</h2>
+            <select value={character.race || ''} onChange={(e) => {
+                updateCharacter('race', e.target.value);
+                updateCharacter('subrace', null); // Reset subrace when race changes
+            }} className="w-full p-3 bg-gray-700 rounded-lg mb-4">
+                <option value="" disabled>Select a race</option>
+                {Object.keys(homebrew.races).map(key => <option key={key} value={key}>{homebrew.races[key]?.name || key}</option>)}
+            </select>
+            
+            {selectedRace && Object.keys(selectedRace.subraces || {}).length > 0 && (
+                <div className="mb-4">
+                    <h3 className="text-xl font-bold mb-2 text-indigo-300">Choose Your Subrace</h3>
+                    <select value={character.subrace || ''} onChange={(e) => updateCharacter('subrace', e.target.value)} className="w-full p-3 bg-gray-700 rounded-lg">
+                        <option value="" disabled>Select a subrace</option>
+                        {Object.keys(selectedRace.subraces).map(key => (
+                            <option key={key} value={key}>{selectedRace.subraces[key].name}</option>
+                        ))}
+                    </select>
+                </div>
+            )}
+            
+            {selectedRace && (
+                <div className="bg-gray-700 p-4 rounded-lg max-h-80 overflow-y-auto mb-4">
+                    <h3 className="font-bold text-xl mb-2">{selectedRace.name}</h3>
+                    {Array.isArray(selectedRace.traits) && selectedRace.traits.map((trait, i) => (
+                        <div key={i} className="mb-3"><h4 className="font-bold">{trait.name}</h4><p className="text-sm">{trait.description}</p></div>
+                    ))}
+                </div>
+            )}
+            
+            {selectedSubrace && (
+                <div className="bg-gray-600 p-4 rounded-lg max-h-60 overflow-y-auto">
+                    <h3 className="font-bold text-lg mb-2 text-yellow-300">{selectedSubrace.name} (Subrace)</h3>
+                    <div dangerouslySetInnerHTML={{ __html: selectedSubrace.html }}></div>
+                </div>
+            )}
+            
+            <div className="flex justify-between mt-8">
+                <button onClick={onBack} className="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-6 rounded-lg">Back</button>
+                <button onClick={onNext} disabled={!character.race} className="bg-green-600 hover:bg-green-700 disabled:bg-gray-500 text-white font-bold py-2 px-6 rounded-lg">Next</button>
+            </div>
+        </div>
+    );
+};
+
+const ClassStep = ({ onNext, onBack, homebrew, character, updateCharacter }) => {
+    const selectedClass = character.class ? homebrew.classes[character.class] : null;
+    return (
+        <div>
+            <h2 className="text-2xl font-bold mb-4 text-indigo-300">Choose Your Class</h2>
+            <select value={character.class || ''} onChange={(e) => updateCharacter('class', e.target.value)} className="w-full p-3 bg-gray-700 rounded-lg mb-4">
+                <option value="" disabled>Select a class</option>
+                {Object.keys(homebrew.classes).map(key => <option key={key} value={key}>{homebrew.classes[key]?.name || key}</option>)}
+            </select>
+            {selectedClass && (
+                <div className="bg-gray-700 p-4 rounded-lg max-h-80 overflow-y-auto">
+                    <h3 className="font-bold text-xl mb-2">{selectedClass.name}</h3>
+                    <p><strong>Hit Die:</strong> d{selectedClass.hitDie || selectedClass['hit-die']}</p>
+                    {selectedClass.primaryAbility && <p><strong>Primary Ability:</strong> {selectedClass.primaryAbility}</p>}
+                    {selectedClass.savingThrows && <p><strong>Saving Throws:</strong> {selectedClass.savingThrows.join(', ')}</p>}
+                    {selectedClass.skillChoices && <p><strong>Skill Choices:</strong> {selectedClass.skillChoices}</p>}
+                    {selectedClass.armorProficiencies && <p><strong>Armor:</strong> {selectedClass.armorProficiencies.join(', ')}</p>}
+                    {selectedClass.weaponProficiencies && <p><strong>Weapons:</strong> {selectedClass.weaponProficiencies.join(', ')}</p>}
+                    {selectedClass.toolProficiencies && <p><strong>Tools:</strong> {selectedClass.toolProficiencies.join(', ')}</p>}
+                    {selectedClass.spellcasting && (
+                        <div className="mt-2">
+                            <p><strong>Spellcasting:</strong> {selectedClass.spellcasting.ability || 'Yes'}</p>
+                            {selectedClass.spellcasting.causalPoints && <p><strong>Uses Causal Points instead of spell slots</strong></p>}
+                        </div>
+                    )}
+                    {selectedClass.features && selectedClass.features.length > 0 && (
+                        <div className="mt-3">
+                            <p><strong>Key Features:</strong></p>
+                            <ul className="list-disc list-inside text-sm text-gray-300 mt-1">
+                                {selectedClass.features.slice(0, 3).map((feature, idx) => (
+                                    <li key={idx}>{feature.name} (Level {feature.level})</li>
+                                ))}
+                                {selectedClass.features.length > 3 && <li>...and {selectedClass.features.length - 3} more features</li>}
+                            </ul>
+                        </div>
+                    )}
+                </div>
+            )}
+            <div className="flex justify-between mt-8">
+                <button onClick={onBack} className="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-6 rounded-lg">Back</button>
+                <button onClick={onNext} disabled={!character.class} className="bg-green-600 hover:bg-green-700 disabled:bg-gray-500 text-white font-bold py-2 px-6 rounded-lg">Next</button>
+            </div>
+        </div>
+    );
+};
+
+const LevelStep = ({ onNext, onBack, character, updateCharacter }) => (
+    <div>
+        <h2 className="text-2xl font-bold mb-4 text-indigo-300">Select Level</h2>
+        <input type="number" min="1" max="20" value={character.level} onChange={e => updateCharacter('level', parseInt(e.target.value, 10))} className="w-full p-3 bg-gray-700 rounded-lg mb-4" />
+        <div className="flex justify-between mt-8">
+            <button onClick={onBack} className="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-6 rounded-lg">Back</button>
+            <button onClick={onNext} className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-lg">Next</button>
+        </div>
+    </div>
+);
+
+const SubclassStep = ({ onNext, onBack, homebrew, character, updateCharacter }) => {
+    const availableSubclasses = Object.values(homebrew.subclasses).filter(sc => sc.class === character.class);
+    
+    // Debug logging
+    console.log("Character class:", character.class);
+    console.log("All subclasses:", Object.keys(homebrew.subclasses));
+    console.log("Available subclasses for", character.class, ":", availableSubclasses);
+    
+    return (
+        <div>
+            <h2 className="text-2xl font-bold mb-4 text-indigo-300">Choose Your Subclass</h2>
+            <select value={character.subclass || ''} onChange={(e) => updateCharacter('subclass', e.target.value)} className="w-full p-3 bg-gray-700 rounded-lg mb-4">
+                <option value="" disabled>Select a subclass</option>
+                {availableSubclasses.map(sc => <option key={sc.key} value={sc.key}>{sc.name}</option>)}
+            </select>
+            <div className="flex justify-between mt-8">
+                <button onClick={onBack} className="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-6 rounded-lg">Back</button>
+                <button onClick={onNext} disabled={!character.subclass} className="bg-green-600 hover:bg-green-700 disabled:bg-gray-500 text-white font-bold py-2 px-6 rounded-lg">Next</button>
+            </div>
+        </div>
+    );
+};
+
+const BackgroundStep = ({ onNext, onBack, homebrew, character, updateCharacter }) => {
+    const selectedBg = character.background ? homebrew.backgrounds[character.background] : null;
+    return (
+        <div>
+            <h2 className="text-2xl font-bold mb-4 text-indigo-300">Choose Your Background</h2>
+            <select value={character.background || ''} onChange={(e) => updateCharacter('background', e.target.value)} className="w-full p-3 bg-gray-700 rounded-lg mb-4">
+                <option value="" disabled>Select a background</option>
+                {Object.keys(homebrew.backgrounds).map(key => <option key={key} value={key}>{homebrew.backgrounds[key]?.name || key}</option>)}
+            </select>
+            {selectedBg && (
+                <div className="bg-gray-700 p-4 rounded-lg max-h-80 overflow-y-auto" dangerouslySetInnerHTML={{ __html: selectedBg.html }}></div>
+            )}
+            <div className="flex justify-between mt-8">
+                <button onClick={onBack} className="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-6 rounded-lg">Back</button>
+                <button onClick={onNext} disabled={!character.background} className="bg-green-600 hover:bg-green-700 disabled:bg-gray-500 text-white font-bold py-2 px-6 rounded-lg">Next</button>
+            </div>
+        </div>
+    );
+};
+
+const FeatStep = ({ onNext, onBack, homebrew, character, updateCharacter }) => {
+    const selectedFeat = character.feat ? homebrew.feats[character.feat] : null;
+    return (
+        <div>
+            <h2 className="text-2xl font-bold mb-4 text-indigo-300">Choose a Starting Feat</h2>
+            <select value={character.feat || ''} onChange={(e) => updateCharacter('feat', e.target.value)} className="w-full p-3 bg-gray-700 rounded-lg mb-4">
+                <option value="" disabled>Select a feat</option>
+                {Object.keys(homebrew.feats).map(key => <option key={key} value={key}>{homebrew.feats[key]?.name || key}</option>)}
+            </select>
+            {selectedFeat && (
+                <div className="bg-gray-700 p-4 rounded-lg max-h-80 overflow-y-auto" dangerouslySetInnerHTML={{ __html: selectedFeat.html }}></div>
+            )}
+            <div className="flex justify-between mt-8">
+                <button onClick={onBack} className="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-6 rounded-lg">Back</button>
+                <button onClick={onNext} disabled={!character.feat} className="bg-green-600 hover:bg-green-700 disabled:bg-gray-500 text-white font-bold py-2 px-6 rounded-lg">Next</button>
+            </div>
+        </div>
+    );
+};
+
+
+const PointBuy = ({ scores, setScores }) => {
+    const pointCost = { 8:0, 9:1, 10:2, 11:3, 12:4, 13:5, 14:7, 15:9 };
+    const totalPoints = 27;
+    const pointsSpent = Object.values(scores).reduce((acc, score) => acc + (pointCost[score] || 0), 0);
+    
+    const handleScoreChange = (stat, value) => {
+        const newValue = parseInt(value) || 8;
+        const clampedValue = Math.max(8, Math.min(15, newValue));
+        setScores(prev => ({ ...prev, [stat]: clampedValue }));
+    };
+    
+    return (
+        <div>
+            <div className="text-center mb-4">
+                <h3 className="text-xl font-bold">Points Spent: {pointsSpent} / {totalPoints}</h3>
+                <p className="text-sm text-gray-400">Enter values between 8-15. Standard point buy costs shown below.</p>
+                <div className="text-xs text-gray-500 mt-2">
+                    8=0pts, 9=1pt, 10=2pts, 11=3pts, 12=4pts, 13=5pts, 14=7pts, 15=9pts
+                </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {Object.keys(scores).map(stat => (
+                    <div key={stat} className="flex items-center justify-between bg-gray-700 p-3 rounded-lg">
+                        <span className="font-bold text-lg">{stat}</span>
+                        <div className="flex items-center gap-2">
+                            <input
+                                type="number"
+                                min="8"
+                                max="15"
+                                value={scores[stat]}
+                                onChange={(e) => handleScoreChange(stat, e.target.value)}
+                                className="w-16 p-2 bg-gray-600 text-white text-center rounded border border-gray-500 focus:border-indigo-400"
+                            />
+                            <span className="text-sm text-gray-400">
+                                ({pointCost[scores[stat]] || 0}pts)
+                            </span>
+                        </div>
+                    </div>
+                ))}
+            </div>
+            {pointsSpent !== totalPoints && (
+                <div className="mt-4 p-3 bg-yellow-800 text-yellow-200 rounded-lg text-center">
+                    {pointsSpent > totalPoints 
+                        ? `Over budget by ${pointsSpent - totalPoints} points!` 
+                        : `${totalPoints - pointsSpent} points remaining`}
+                </div>
+            )}
+        </div>
+    );
+};
+
+const AsiChoices = ({ source, sourceName, setAsiChoice }) => {
+    const asiText = source?.asiText || '';
+    const stats = ["STR", "DEX", "CON", "INT", "WIS", "CHA"];
+    const handleChoice = (key, stat, value) => setAsiChoice(sourceName, key, { stat, value });
+
+    const plus2plus1 = asiText.match(/\+2 to one .* and \+1 to another/);
+    const plus1plus1plus1 = asiText.match(/\+1 to three different/);
+    const twoStatChoice = asiText.match(/Increase your (\w+) or (\w+) score by (\d)/);
+    const fixedAsi = asiText.match(/\+(\d) to (\w+) and \+(\d) to (\w+)/);
+    const singleStatChoice = asiText.match(/Your (\w+) or (\w+) score \(your choice\) increases by (\d)/);
+
+    if (fixedAsi) return <p className="text-sm text-gray-400">{asiText} (Applied automatically)</p>;
+    
+    if (plus2plus1) {
+        return (
+            <div className="space-y-2"><p>{asiText}</p><div className="flex gap-2">
+                <select onChange={(e) => handleChoice('plusTwo', e.target.value, 2)} className="w-full p-2 bg-gray-600 rounded"><option>+2 Stat</option>{stats.map(s => <option key={s} value={s}>{s}</option>)}</select>
+                <select onChange={(e) => handleChoice('plusOne', e.target.value, 1)} className="w-full p-2 bg-gray-600 rounded"><option>+1 Stat</option>{stats.map(s => <option key={s} value={s}>{s}</option>)}</select>
+            </div></div>
+        );
+    }
+    if (singleStatChoice) {
+        const [, stat1, stat2, value] = singleStatChoice;
+        return (
+            <div className="space-y-2"><p>{asiText}</p>
+                <select onChange={(e) => handleChoice('choice', e.target.value, parseInt(value))} className="w-full p-2 bg-gray-600 rounded">
+                    <option>+{value} Stat</option><option value={stat1.toUpperCase()}>{stat1}</option><option value={stat2.toUpperCase()}>{stat2}</option>
+                </select>
+            </div>
+        );
+    }
+     if (twoStatChoice) {
+        const [, stat1, stat2, value] = twoStatChoice;
+        return (
+            <div className="space-y-2"><p>{asiText}</p>
+                <select onChange={(e) => handleChoice('choice', e.target.value, parseInt(value))} className="w-full p-2 bg-gray-600 rounded">
+                    <option>+{value} Stat</option><option value={stat1.toUpperCase()}>{stat1}</option><option value={stat2.toUpperCase()}>{stat2}</option>
+                </select>
+            </div>
+        );
+    }
+    
+    return asiText ? <p>{asiText}</p> : null;
+};
+
+const AbilityScoreStep = ({ onNext, onBack, character, updateCharacter, getModifier, finalScores, homebrew }) => {
+    const [localBaseScores, setLocalBaseScores] = useState(character.baseScores);
+    
+    // Sync local state with character state when character changes
+    useEffect(() => {
+        setLocalBaseScores(character.baseScores);
+    }, [character.baseScores]);
+    
+    // Update character state when local state changes
+    useEffect(() => {
+        updateCharacter('baseScores', localBaseScores);
+    }, [localBaseScores]);
+    
+    const setAsiChoice = (sourceName, key, choice) => {
+        updateCharacter('asiChoices', { ...character.asiChoices, [sourceName]: { ...character.asiChoices[sourceName], [key]: choice } });
+    };
+    const rollScores = () => {
+        const roll4d6dropLowest = () => {
+            const rolls = Array.from({ length: 4 }, () => Math.floor(Math.random() * 6) + 1);
+            rolls.sort((a, b) => a - b).shift();
+            return rolls.reduce((a, b) => a + b, 0);
+        };
+        const newScores = { STR: roll4d6dropLowest(), DEX: roll4d6dropLowest(), CON: roll4d6dropLowest(), INT: roll4d6dropLowest(), WIS: roll4d6dropLowest(), CHA: roll4d6dropLowest() };
+        setLocalBaseScores(newScores);
+    };
+    
+    // Calculate final scores using local base scores
+    const localFinalScores = useMemo(() => {
+        const scores = { ...localBaseScores };
+        const bonuses = {};
+        const addBonus = (stat, val) => {
+            if(stat) bonuses[stat.toUpperCase()] = (bonuses[stat.toUpperCase()] || 0) + val;
+        };
+
+        const selectedRace = homebrew.races[character.race];
+        
+        // Apply racial bonuses
+        if(selectedRace?.abilities) {
+            Object.entries(selectedRace.abilities).forEach(([key, val]) => {
+                const stat = key.split('/').pop().toUpperCase();
+                addBonus(stat, val);
+            });
+        } else if(selectedRace?.abilityScores) {
+            Object.entries(selectedRace.abilityScores).forEach(([stat, val]) => {
+                addBonus(stat.toUpperCase(), val);
+            });
+        }
+        
+        const sources = [
+            { source: homebrew.backgrounds[character.background], type: 'Background' },
+            { source: homebrew.feats[character.feat], type: 'Feat' }
+        ];
+        sources.forEach(({ source, type }) => {
+            if (source?.asiText) {
+                // Check for multiple formats: "+1 to Stat" and "Increase your Stat score by 1"
+                const formatA = [...source.asiText.matchAll(/\+(\d+) to (\w+)/g)];
+                const formatB = [...source.asiText.matchAll(/Increase your (\w+) score by (\d+)/g)];
+                
+                if (formatA.length > 0 && !source.asiText.toLowerCase().includes('one of') && !source.asiText.toLowerCase().includes('or')) {
+                     formatA.forEach(match => {
+                        addBonus(match[2], parseInt(match[1]));
+                    });
+                }
+                
+                if (formatB.length > 0 && !source.asiText.toLowerCase().includes('one of') && !source.asiText.toLowerCase().includes('or')) {
+                     formatB.forEach(match => {
+                        addBonus(match[1], parseInt(match[2]));
+                    });
+                }
+            }
+        });
+
+        Object.values(character.asiChoices).forEach(choiceGroup => {
+            Object.values(choiceGroup).forEach(choice => {
+                if(choice.stat && choice.value) addBonus(choice.stat, choice.value);
+            });
+        });
+        
+        for(const stat in scores) {
+            scores[stat] += (bonuses[stat] || 0);
+        }
+        return scores;
+    }, [localBaseScores, character.race, character.background, character.feat, character.asiChoices, homebrew]);
+
+    const selectedRace = homebrew.races[character.race];
+    const selectedBg = homebrew.backgrounds[character.background];
+    const selectedFeat = homebrew.feats[character.feat];
+
+    return (
+    <div>
+        <h2 className="text-2xl font-bold mb-4 text-indigo-300">Determine Ability Scores</h2>
+        
+        {/* ASI Debug Info */}
+        {finalScores._debugInfo && finalScores._debugInfo.length > 0 && (
+            <div className="bg-blue-800 text-blue-200 p-3 mb-4 rounded text-sm">
+                <p className="font-bold mb-1">ASI Debug Info:</p>
+                <p>Race: {character.race || 'None'}, Background: {character.background || 'None'}, Feat: {character.feat || 'None'}</p>
+                <p>Applied bonuses: {finalScores._debugInfo.join(', ') || 'None'}</p>
+            </div>
+        )}
+        
+        {/* Racial ASI Information */}
+        {selectedRace && (
+            <div className="bg-green-900 border border-green-600 text-green-200 p-3 mb-4 rounded text-sm">
+                <p className="font-bold mb-1">📋 Expected Racial ASIs:</p>
+                {(() => {
+                    const racialBonuses = [];
+                    const subraceBonuses = [];
+                    
+                    // === BASE RACE ASI DETECTION ===
+                    // Check orcbrew format (.abilities)
+                    if (selectedRace.abilities) {
+                        Object.entries(selectedRace.abilities).forEach(([key, val]) => {
+                            const stat = key.split('/').pop().toUpperCase();
+                            racialBonuses.push(`${stat} +${val}`);
+                        });
+                    }
+                    
+                    // Check parsed format (.abilityScores)
+                    if (selectedRace.abilityScores) {
+                        Object.entries(selectedRace.abilityScores).forEach(([stat, val]) => {
+                            racialBonuses.push(`${stat.toUpperCase()} +${val}`);
+                        });
+                    }
+                    
+                    // Check for traits with "Increase" in the name
+                    if (selectedRace.traits) {
+                        const asiTrait = selectedRace.traits.find(t => t.name && t.name.toLowerCase().includes('increase'));
+                        if (asiTrait && asiTrait.description) {
+                            // Try to parse ASI info from trait description
+                            const formatA = [...asiTrait.description.matchAll(/\+(\d+) to (\w+)/g)];
+                            const formatB = [...asiTrait.description.matchAll(/(\w+) score.*?(\d+)/g)];
+                            
+                            formatA.forEach(match => {
+                                racialBonuses.push(`${match[2].toUpperCase()} +${match[1]}`);
+                            });
+                            
+                            formatB.forEach(match => {
+                                racialBonuses.push(`${match[1].toUpperCase()} +${match[2]}`);
+                            });
+                        }
+                    }
+                    
+                    // === SUBRACE ASI DETECTION ===
+                    const selectedSubrace = character.subrace && selectedRace.subraces ? selectedRace.subraces[character.subrace] : null;
+                    
+                    if (selectedSubrace) {
+                        // Check orcbrew format (.abilities)
+                        if (selectedSubrace.abilities) {
+                            Object.entries(selectedSubrace.abilities).forEach(([key, val]) => {
+                                const stat = key.split('/').pop().toUpperCase();
+                                subraceBonuses.push(`${stat} +${val}`);
+                            });
+                        }
+                        
+                        // Check parsed format (.abilityScores)
+                        if (selectedSubrace.abilityScores) {
+                            Object.entries(selectedSubrace.abilityScores).forEach(([stat, val]) => {
+                                subraceBonuses.push(`${stat.toUpperCase()} +${val}`);
+                            });
+                        }
+                        
+                        // Check subrace HTML content for ASI patterns
+                        if (selectedSubrace.html) {
+                            const formatA = [...selectedSubrace.html.matchAll(/\+(\d+) to (\w+)/g)];
+                            const formatB = [...selectedSubrace.html.matchAll(/(\w+) score.*?(\d+)/g)];
+                            const formatC = [...selectedSubrace.html.matchAll(/Increase.*?(\w+).*?(\d+)/g)];
+                            
+                            formatA.forEach(match => {
+                                subraceBonuses.push(`${match[2].toUpperCase()} +${match[1]}`);
+                            });
+                            
+                            formatB.forEach(match => {
+                                subraceBonuses.push(`${match[1].toUpperCase()} +${match[2]}`);
+                            });
+                            
+                            formatC.forEach(match => {
+                                subraceBonuses.push(`${match[1].toUpperCase()} +${match[2]}`);
+                            });
+                        }
+                        
+                        // Check subrace traits
+                        if (selectedSubrace.traits) {
+                            selectedSubrace.traits.forEach(trait => {
+                                if (trait.name && trait.name.toLowerCase().includes('increase') && trait.description) {
+                                    const formatA = [...trait.description.matchAll(/\+(\d+) to (\w+)/g)];
+                                    const formatB = [...trait.description.matchAll(/(\w+) score.*?(\d+)/g)];
+                                    
+                                    formatA.forEach(match => {
+                                        subraceBonuses.push(`${match[2].toUpperCase()} +${match[1]}`);
+                                    });
+                                    
+                                    formatB.forEach(match => {
+                                        subraceBonuses.push(`${match[1].toUpperCase()} +${match[2]}`);
+                                    });
+                                }
+                            });
+                        }
+                    }
+                    
+                    // Display results
+                    return (
+                        <div>
+                            {racialBonuses.length > 0 ? (
+                                <p><strong>Base Race ({character.race}):</strong> {racialBonuses.join(', ')}</p>
+                            ) : (
+                                <p><strong>Base Race ({character.race}):</strong> <em>No automatic ASIs detected.</em></p>
+                            )}
+                            
+                            {character.subrace && (
+                                subraceBonuses.length > 0 ? (
+                                    <p><strong>Subrace ({character.subrace}):</strong> {subraceBonuses.join(', ')}</p>
+                                ) : (
+                                    <p><strong>Subrace ({character.subrace}):</strong> <em>No automatic ASIs detected.</em></p>
+                                )
+                            )}
+                            
+                            {!character.subrace && selectedRace.subraces && Object.keys(selectedRace.subraces).length > 0 && (
+                                <p className="text-yellow-300"><strong>Note:</strong> This race has subraces that may provide additional ASIs. Select a subrace in the Race step.</p>
+                            )}
+                            
+                            {(racialBonuses.length > 0 || subraceBonuses.length > 0) && (
+                                <p className="mt-1"><strong>Total Expected:</strong> {[...racialBonuses, ...subraceBonuses].join(', ')}</p>
+                            )}
+                        </div>
+                    );
+                })()}
+                
+                <p className="mt-2 text-xs italic">
+                    💡 If these bonuses aren't applied automatically, use the manual adjustment section below.
+                </p>
+            </div>
+        )}
+        
+        <div className="flex justify-center gap-4 mb-4">
+            <button onClick={() => updateCharacter('abilityScoreMethod', 'pointBuy')} className={`font-bold py-2 px-4 rounded-lg ${character.abilityScoreMethod === 'pointBuy' ? 'bg-indigo-600' : 'bg-gray-600'}`}>Point Buy</button>
+            <button onClick={() => updateCharacter('abilityScoreMethod', 'roll')} className={`font-bold py-2 px-4 rounded-lg ${character.abilityScoreMethod === 'roll' ? 'bg-indigo-600' : 'bg-gray-600'}`}>Roll for Stats</button>
+        </div>
+        {character.abilityScoreMethod === 'pointBuy' ? <PointBuy scores={localBaseScores} setScores={setLocalBaseScores} /> : <div className="text-center"><button onClick={rollScores} className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-lg text-lg">Roll Scores</button></div>}
+        <div className="my-6 p-4 bg-gray-900 rounded-lg"><h3 className="text-lg font-bold mb-2">Ability Score Increases</h3>
+            <div className="space-y-4">
+                {selectedRace && <AsiChoices source={{asiText: selectedRace.traits?.find(t=>t.name.includes("Increase"))?.description}} sourceName="race" setAsiChoice={setAsiChoice} />}
+                {selectedBg && <AsiChoices source={selectedBg} sourceName="background" setAsiChoice={setAsiChoice} />}
+                {selectedFeat && <AsiChoices source={selectedFeat} sourceName="feat" setAsiChoice={setAsiChoice} />}
+            </div>
+        </div>
+        
+        {/* Manual Stat Adjustment Section */}
+        <div className="my-6 p-4 bg-yellow-900 border border-yellow-600 rounded-lg">
+            <h3 className="text-lg font-bold mb-2 text-yellow-300">Manual Final Score Adjustment</h3>
+            <p className="text-yellow-200 mb-4">
+                <strong>⚠️ Important:</strong> If your background or feat ASIs aren't applying automatically, 
+                you can manually adjust your final ability scores here before proceeding.
+            </p>
+            <div className="grid grid-cols-3 md:grid-cols-6 gap-2">
+                {Object.entries(localFinalScores).filter(([stat]) => stat !== '_debugInfo').map(([stat, score]) => (
+                    <div key={stat} className="text-center">
+                        <label className="block text-sm font-bold mb-1">{stat}</label>
+                        <input
+                            type="number"
+                            min="1"
+                            max="30"
+                            value={score}
+                            onChange={(e) => {
+                                const newValue = parseInt(e.target.value) || score;
+                                setLocalBaseScores(prev => ({
+                                    ...prev,
+                                    [stat]: newValue - ((localFinalScores[stat] - localBaseScores[stat]) || 0)
+                                }));
+                            }}
+                            className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-center font-bold"
+                        />
+                        <div className="text-xs text-gray-400 mt-1">
+                            Mod: {getModifier(score) >= 0 ? '+' : ''}{getModifier(score)}
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+        
+        <div className="grid grid-cols-3 md:grid-cols-6 gap-2 mb-8">
+            {Object.entries(localFinalScores).map(([stat, score]) => <StatBox key={stat} label={stat} value={score} modifier={getModifier(score)} />)}
+        </div>
+        <div className="flex justify-between mt-8">
+            <button onClick={onBack} className="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-6 rounded-lg">Back</button>
+            <button onClick={onNext} className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-lg">Next</button>
+        </div>
+    </div>
+    );
+};
+
+const EquipmentStep = ({ onNext, onBack, homebrew, character, updateCharacter }) => {
+    const [selectedEquipment, setSelectedEquipment] = useState(character.equipment || []);
+    
+    const equipmentCategories = {
+        weapons: homebrew.items?.weapons || [],
+        armor: homebrew.items?.armor || [],
+        tools: homebrew.items?.tools || [],
+        consumables: homebrew.items?.consumables || []
+    };
+    
+    const toggleEquipment = (itemId) => {
+        if (selectedEquipment.includes(itemId)) {
+            setSelectedEquipment(selectedEquipment.filter(id => id !== itemId));
+        } else {
+            setSelectedEquipment([...selectedEquipment, itemId]);
+        }
+    };
+    
+    const getAllItems = () => {
+        const allItems = [];
+        Object.values(equipmentCategories).forEach(categoryItems => {
+            allItems.push(...categoryItems);
+        });
+        return allItems;
+    };
+    
+    const getSelectedItems = () => {
+        const allItems = getAllItems();
+        return selectedEquipment.map(id => allItems.find(item => item.id === id)).filter(Boolean);
+    };
+    
+    // Update character equipment when selections change
+    React.useEffect(() => {
+        updateCharacter('equipment', selectedEquipment);
+    }, [selectedEquipment]);
+    
+    return (
+        <div>
+            <h2 className="text-2xl font-bold mb-4 text-indigo-300">Select Equipment</h2>
+            <p className="text-gray-400 mb-6">Choose starting equipment for your character. You can select items from different categories.</p>
+            
+            {Object.entries(equipmentCategories).map(([category, items]) => (
+                <div key={category} className="mb-6">
+                    <h3 className="text-xl font-bold mb-2 capitalize text-orange-400">{category} ({items.length})</h3>
+                    {items.length === 0 ? (
+                        <p className="text-gray-500 italic">No {category} available from handbook data</p>
+                    ) : (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 max-h-60 overflow-y-auto">
+                            {items.map(item => (
+                                <label key={item.id} className="flex items-start bg-gray-700 p-3 rounded-lg hover:bg-gray-600 cursor-pointer">
+                                    <input 
+                                        type="checkbox" 
+                                        checked={selectedEquipment.includes(item.id)}
+                                        onChange={() => toggleEquipment(item.id)}
+                                        className="mr-3 mt-1"
+                                    />
+                                    <div className="flex-1">
+                                        <span className="font-bold text-white">{item.name}</span>
+                                        {item.description && (
+                                            <p className="text-sm text-gray-300 mt-1">{item.description.substring(0, 100)}...</p>
+                                        )}
+                                        {item.damage && <div className="text-xs text-yellow-300">{item.damage} {item.damageType}</div>}
+                                        {item.ac && <div className="text-xs text-blue-300">AC {item.ac}</div>}
+                                    </div>
+                                </label>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            ))}
+            
+            <div className="bg-gray-700 p-4 rounded-lg mb-6">
+                <h4 className="font-bold text-lg mb-2">Selected Equipment ({selectedEquipment.length})</h4>
+                {selectedEquipment.length === 0 ? (
+                    <p className="text-gray-400 italic">No equipment selected</p>
+                ) : (
+                    <div className="space-y-2">
+                        {getSelectedItems().map(item => (
+                            <div key={item.id} className="flex justify-between items-center bg-gray-600 p-2 rounded">
+                                <div>
+                                    <span className="font-bold">{item.name}</span>
+                                    <span className="text-sm text-gray-300 ml-2">({item.type})</span>
+                                </div>
+                                <button 
+                                    onClick={() => toggleEquipment(item.id)}
+                                    className="text-red-400 hover:text-red-300 font-bold"
+                                >
+                                    ✕
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
+            
+            <div className="flex justify-between mt-8">
+                <button onClick={onBack} className="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-6 rounded-lg">Back</button>
+                <button 
+                    onClick={onNext}
+                    className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-lg"
+                >
+                    Next
+                </button>
+            </div>
+        </div>
+    );
+};
+
+const PowersStep = ({ onNext, onBack, homebrew, character, updateCharacter, finalScores }) => {
+    const chosenClass = homebrew.classes[character.class];
+    const chosenSubclass = character.subclass ? homebrew.subclasses[character.subclass] : null;
+    const spellcasting = chosenClass?.spellcasting;
+    const level = character.level;
+    
+    // Calculate base values
+    let baseCantripsKnown = spellcasting?.cantripsKnown?.[level] || spellcasting?.['cantrips-known']?.[level] || 0;
+    let baseSpellsKnown = spellcasting?.powersKnown?.[level] || spellcasting?.['spells-known']?.[level] || 0;
+    let baseCausalPoints = spellcasting?.causalPoints?.[level] || 0;
+    
+    // Apply subclass modifications
+    let finalCantripsKnown = baseCantripsKnown;
+    let finalSpellsKnown = baseSpellsKnown;
+    let finalCausalPoints = baseCausalPoints;
+    let subclassNotes = [];
+    
+    if (chosenSubclass) {
+        if (chosenSubclass.key === 'illuminator') {
+            // Illuminator gets bonus powers known: +1 at L1, +1 at L3, +2 at L6, +2 at L10, +2 at L14, +3 at L18, +3 at L20
+            const illuminatorBonuses = {
+                1: 1, 3: 1, 6: 2, 10: 2, 14: 2, 18: 3, 20: 3
+            };
+            
+            let totalBonus = 0;
+            for (let lvl = 1; lvl <= level; lvl++) {
+                if (illuminatorBonuses[lvl]) {
+                    totalBonus += illuminatorBonuses[lvl];
+                }
+            }
+            
+            finalSpellsKnown += totalBonus;
+            subclassNotes.push(`Illuminator Bonus: +${totalBonus} powers known`);
+            
+            // Luminous Augmentation: Max Causal Points +Int mod (min +1) at level 6+
+            if (level >= 6) {
+                const intMod = Math.floor(((finalScores?.INT || 10) - 10) / 2);
+                const causalBonus = Math.max(1, intMod);
+                finalCausalPoints += causalBonus;
+                subclassNotes.push(`Luminous Augmentation: +${causalBonus} max Causal Points (Int mod)`);
+            }
+            
+        } else if (chosenSubclass.key === 'potentiator') {
+            // Potentiator has "Causal Point max higher. Fewer preset powers known."
+            // Based on description, they rely more on Force Potentiation than preset powers
+            const potentiatorMods = {
+                // Reduce powers known but increase causal points
+                3: { spellsMod: -1, causalMod: 2 },
+                6: { spellsMod: -1, causalMod: 3 },
+                10: { spellsMod: -2, causalMod: 4 },
+                14: { spellsMod: -2, causalMod: 5 }
+            };
+            
+            let spellReduction = 0;
+            let causalIncrease = 0;
+            
+            for (let lvl = 1; lvl <= level; lvl++) {
+                if (potentiatorMods[lvl]) {
+                    spellReduction += potentiatorMods[lvl].spellsMod;
+                    causalIncrease += potentiatorMods[lvl].causalMod;
+                }
+            }
+            
+            finalSpellsKnown = Math.max(0, finalSpellsKnown + spellReduction);
+            finalCausalPoints += causalIncrease;
+            
+            if (spellReduction < 0) subclassNotes.push(`Potentiator Reduction: ${spellReduction} powers known`);
+            if (causalIncrease > 0) subclassNotes.push(`Potentiator Bonus: +${causalIncrease} max Causal Points`);
+            subclassNotes.push(`Relies on Force Potentiation instead of preset powers`);
+            
+        } else if (chosenSubclass.key === 'balancer') {
+            // Balancer uses standard progression
+            subclassNotes.push(`Standard progression (Balancer)`);
+        }
+    }
+    
+    // Get spells from multiple sources
+    const classSpells = homebrew.spells[character.class?.toLowerCase()] || [];
+    const allAvailableSpells = [];
+    
+    // Add class-specific spells
+    allAvailableSpells.push(...classSpells);
+    
+    // Add ALL spells from all sources - no class restrictions since sheets are hand-checked
+    Object.values(homebrew.spells).forEach(spellOrCollection => {
+        if (Array.isArray(spellOrCollection)) {
+            // This is an array of spells
+            spellOrCollection.forEach(spell => {
+                if (spell && spell.name && spell.level !== undefined) {
+                    // Add all spells - no class restrictions
+                    allAvailableSpells.push(spell);
+                }
+            });
+        } else if (spellOrCollection && spellOrCollection.name && spellOrCollection.level !== undefined) {
+            // This is a single spell object - add all spells
+            allAvailableSpells.push(spellOrCollection);
+        }
+    });
+    
+    // Deduplicate spells by name
+    const uniqueSpells = allAvailableSpells.reduce((acc, spell) => {
+        const key = spell.name || spell.key;
+        if (key && !acc[key]) {
+            acc[key] = spell;
+        }
+        return acc;
+    }, {});
+    
+    const cantrips = Object.values(uniqueSpells).filter(spell => spell.level === 0);
+    const leveledSpells = Object.values(uniqueSpells).filter(spell => 
+        spell.level > 0 && spell.level <= Math.ceil(character.level / 2)
+    );
+    
+    const handlePowerToggle = (powerKey, isCantrip) => {
+        const type = isCantrip ? 'cantrips' : 'leveled';
+        const currentList = character.powers[type];
+        
+        if (currentList.includes(powerKey)) {
+            updateCharacter('powers', { 
+                ...character.powers, 
+                [type]: currentList.filter(p => p !== powerKey) 
+            });
+        } else {
+            // No limits - allow unlimited selection
+            updateCharacter('powers', { 
+                ...character.powers, 
+                [type]: [...currentList, powerKey] 
+            });
+        }
+    };
+    
+    return (
+        <div>
+            <h2 className="text-2xl font-bold mb-4 text-indigo-300">Select Spells & Powers</h2>
+            
+            {/* Subclass Progression Info */}
+            {chosenSubclass && subclassNotes.length > 0 && (
+                <div className="bg-purple-900 border border-purple-600 text-purple-200 p-3 mb-4 rounded text-sm">
+                    <p className="font-bold mb-1">🎯 {chosenSubclass.name} Power Progression:</p>
+                    {subclassNotes.map((note, i) => <p key={i}>• {note}</p>)}
+                    <p className="mt-2 font-bold text-purple-100">
+                        Expected Total Powers: {finalCantripsKnown} cantrips, {finalSpellsKnown} leveled spells
+                    </p>
+                    <p className="text-xs italic">
+                        Base Causal Points: {baseCausalPoints} → Modified: {finalCausalPoints}
+                    </p>
+                    <p className="text-xs italic mt-1 text-yellow-300">
+                        ⚠️ Select your powers manually - no limits enforced due to calculation issues
+                    </p>
+                </div>
+            )}
+            
+            {/* No subclass selected info */}
+            {!chosenSubclass && (
+                <div className="bg-blue-900 border border-blue-600 text-blue-200 p-3 mb-4 rounded text-sm">
+                    <p className="font-bold mb-1">📚 Standard Luminancer Power Progression:</p>
+                    <p>Expected Total Powers: {finalCantripsKnown} cantrips, {finalSpellsKnown} leveled spells</p>
+                    <p className="text-xs italic mt-1 text-yellow-300">
+                        ⚠️ Select your powers manually - no limits enforced due to calculation issues
+                    </p>
+                </div>
+            )}
+            
+            {/* Debug info */}
+            <div className="bg-green-800 text-green-200 p-2 mb-4 rounded text-xs">
+                <p><strong>All Spells Available</strong> - No class restrictions (sheets are hand-checked)</p>
+                <p>Cantrips known: {finalCantripsKnown}, Powers known: {finalSpellsKnown}, Causal Points: {finalCausalPoints}</p>
+                <p>Cantrips found: {cantrips.length}, Leveled spells found: {leveledSpells.length}</p>
+                <p>Total unique spells: {Object.keys(uniqueSpells).length}</p>
+                <p>Sample spell names: {allAvailableSpells.slice(0, 5).map(s => s.name || s.key).join(', ')}...</p>
+            </div>
+            
+            {!spellcasting ? (
+                <div className="text-center text-gray-400">
+                    <p>This class does not have spellcasting abilities.</p>
+                </div>
+            ) : (
+                <div className="space-y-6">
+                    {/* Cantrips Section */}
+                    <div>
+                        <h3 className="text-xl font-bold mb-4">
+                            Cantrips (Selected: {character.powers.cantrips.length})
+                        </h3>
+                        {cantrips.length === 0 ? (
+                            <p className="text-gray-400 italic">No cantrips available</p>
+                        ) : (
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-60 overflow-y-auto">
+                                {cantrips.map(spell => {
+                                    const spellKey = spell.name || spell.key;
+                                    return (
+                                        <div key={spellKey} className="bg-gray-700 p-3 rounded-lg">
+                                            <label className="flex items-start cursor-pointer">
+                                                <input 
+                                                    type="checkbox"
+                                                    checked={character.powers.cantrips.includes(spellKey)}
+                                                    onChange={() => handlePowerToggle(spellKey, true)}
+                                                    className="mr-2 mt-1"
+                                                />
+                                                <div>
+                                                    <strong className="text-white">{spell.name || spell.key}</strong>
+                                                    {spell.school && <em className="text-gray-300 ml-2">({spell.school})</em>}
+                                                    <p className="text-sm text-gray-300 mt-1">
+                                                        {spell.description?.substring(0, 120)}...
+                                                    </p>
+                                                </div>
+                                            </label>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        )}
+                    </div>
+                    
+                    {/* Leveled Spells Section */}
+                    <div>
+                        <h3 className="text-xl font-bold mb-4">
+                            Leveled Spells (Selected: {character.powers.leveled.length})
+                        </h3>
+                        {leveledSpells.length === 0 ? (
+                            <p className="text-gray-400 italic">No leveled spells available at this level</p>
+                        ) : (
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-60 overflow-y-auto">
+                                {leveledSpells.map(spell => {
+                                    const spellKey = spell.name || spell.key;
+                                    return (
+                                        <div key={spellKey} className="bg-gray-700 p-3 rounded-lg">
+                                            <label className="flex items-start cursor-pointer">
+                                                <input 
+                                                    type="checkbox"
+                                                    checked={character.powers.leveled.includes(spellKey)}
+                                                    onChange={() => handlePowerToggle(spellKey, false)}
+                                                    className="mr-2 mt-1"
+                                                />
+                                                <div>
+                                                    <strong className="text-white">{spell.name || spell.key}</strong>
+                                                    <em className="text-blue-300 ml-2">(Level {spell.level})</em>
+                                                    {spell.school && <em className="text-gray-300 ml-2">({spell.school})</em>}
+                                                    <p className="text-sm text-gray-300 mt-1">
+                                                        {spell.description?.substring(0, 120)}...
+                                                    </p>
+                                                </div>
+                                            </label>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )}
+            
+            <div className="flex justify-between mt-8">
+                <button onClick={onBack} className="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-6 rounded-lg">Back</button>
+                <button onClick={onNext} className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-lg">Next</button>
+            </div>
+        </div>
+    );
+};
+
+const CopyableBlock = ({ title, content }) => {
+    const [copied, setCopied] = useState(false);
+    const textAreaRef = React.useRef(null);
+    const copyToClipboard = (e) => {
+        textAreaRef.current.select();
+        document.execCommand('copy');
+        e.target.focus();
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    };
+    return (
+        <div className="bg-gray-700 p-4 rounded-lg mb-4">
+            <div className="flex justify-between items-center mb-2">
+                <h4 className="font-bold text-lg text-gray-200">{title}</h4>
+                <button onClick={copyToClipboard} className="bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-bold py-1 px-3 rounded-md">{copied ? 'Copied!' : 'Copy'}</button>
+            </div>
+            <textarea ref={textAreaRef} readOnly value={content} className="w-full h-48 bg-gray-900 p-2 rounded-md font-mono text-xs"/>
+        </div>
+    );
+};
+
+const ExportStep = ({ onBack, character, homebrew, getModifier, finalScores }) => {
+    const charRace = homebrew.races[character.race];
+    const charClass = homebrew.classes[character.class];
+    const charSubclass = homebrew.subclasses[character.subclass];
+    const charBackground = homebrew.backgrounds[character.background];
+    const charFeat = homebrew.feats[character.feat];
+    
+    // Get equipment names
+    const allItems = [
+        ...(homebrew.items?.weapons || []),
+        ...(homebrew.items?.armor || []),
+        ...(homebrew.items?.tools || []),
+        ...(homebrew.items?.consumables || [])
+    ];
+    const selectedEquipmentNames = character.equipment?.map(itemId => {
+        const item = allItems.find(i => i.id === itemId);
+        return item?.name || itemId;
+    }) || [];
+
+    // Helper functions for getting character data
+    const getCharacterRace = (raceName, subraceName) => {
+        if (!raceName) return null;
+        const race = homebrew.races[raceName];
+        if (!race) return null;
+        if (subraceName && race.subraces && race.subraces[subraceName]) {
+            return { ...race, ...race.subraces[subraceName] };
+        }
+        return race;
+    };
+
+    const getClassData = (className) => {
+        if (!className) return null;
+        return homebrew.classes[className.toLowerCase()] || homebrew.classes[className];
+    };
+
+    const getSubclassData = (className, subclassName) => {
+        if (!className || !subclassName) return null;
+        return homebrew.subclasses[subclassName.toLowerCase()] || homebrew.subclasses[subclassName];
+    };
+
+    const getBackgroundData = (backgroundName) => {
+        if (!backgroundName) return null;
+        return homebrew.backgrounds[backgroundName.toLowerCase()] || homebrew.backgrounds[backgroundName];
+    };
+
+    // Create Avrae-compatible spreadsheet data matching the exact GSheet v2.1 format
+    const createAvraeSpreadsheet = () => {
+        try {
+            console.log('Creating Avrae Spreadsheet...');
+            console.log('Character data:', { 
+                name: character.name, 
+                level: character.level, 
+                class: character.class,
+                race: character.race,
+                subrace: character.subrace,
+                background: character.background
+            });
+            console.log('Final scores:', finalScores);
+            
+            // Validate required data before proceeding
+            if (!character.name) {
+                throw new Error('Character name is required');
+            }
+            if (!character.level || character.level < 1) {
+                throw new Error('Valid character level is required');
+            }
+            
+            // Get all the data we need using pre-defined helper functions
+            const currentRace = getCharacterRace(character.race, character.subrace);
+            const currentClass = getClassData(character.class);
+            const currentSubclass = getSubclassData(character.class, character.subclass);
+            const currentBackground = getBackgroundData(character.background);
+            
+            // Validate finalScores
+            if (!finalScores || typeof finalScores !== 'object') {
+                throw new Error('Final scores data is missing or invalid');
+            }
+            
+            // Ensure all ability scores exist
+            const requiredStats = ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA'];
+            for (const stat of requiredStats) {
+                if (finalScores[stat] === undefined || finalScores[stat] === null) {
+                    throw new Error(`Missing ability score: ${stat}`);
+                }
+            }
+            
+            // Create HTML in Google Sheets format with proper styling
+            const htmlContent = `<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style type="text/css">
+.ritz .waffle a { color: inherit; }
+.ritz .waffle .s0{border-bottom:1px SOLID #000000;border-right:1px SOLID #000000;background-color:#ffffff;text-align:left;color:#000000;font-family:'Arial';font-size:10pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}
+.ritz .waffle .s1{border-bottom:1px SOLID #000000;border-right:1px SOLID #000000;background-color:#ffffff;text-align:center;font-weight:bold;color:#000000;font-family:'Arial';font-size:14pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}
+.ritz .waffle .s2{border-bottom:1px SOLID #000000;border-right:1px SOLID #000000;background-color:#ffffff;text-align:center;color:#000000;font-family:'Arial';font-size:10pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}
+.ritz .waffle .s3{border-bottom:1px SOLID #000000;border-right:1px SOLID #000000;background-color:#ffffff;text-align:center;font-weight:bold;color:#000000;font-family:'Arial';font-size:12pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}
+.ritz .waffle .s4{border-bottom:1px SOLID #000000;border-right:1px SOLID #000000;background-color:#ffffff;text-align:left;font-weight:bold;color:#000000;font-family:'Arial';font-size:10pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}
+.ritz .waffle .s5{border-bottom:1px SOLID #000000;border-right:1px SOLID #000000;background-color:#ffffff;text-align:center;font-weight:bold;color:#000000;font-family:'Arial';font-size:10pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}
+.ritz .waffle .s6{border-bottom:1px SOLID #000000;border-right:1px SOLID #000000;background-color:#ffffff;text-align:right;color:#000000;font-family:'Arial';font-size:10pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}
+.ritz .waffle .s7{border-bottom:1px SOLID #000000;border-right:1px SOLID #000000;background-color:#ffffff;text-align:center;color:#000000;font-family:'Arial';font-size:8pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}
+.ritz .waffle .s8{border-bottom:1px SOLID #000000;border-right:1px SOLID #000000;background-color:#ffffff;text-align:left;color:#000000;font-family:'Arial';font-size:8pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}
+.ritz .waffle .s9{border-bottom:1px SOLID #000000;border-right:1px SOLID #000000;background-color:#ffffff;text-align:left;color:#000000;font-family:'Arial';font-size:7pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}
+</style>
+</head>
+<body>
+<div class="ritz grid-container" dir="ltr">
+<table class="waffle" cellspacing="0" cellpadding="0">
+<thead>
+<tr>
+<th class="row-header freezebar-origin-ltr"></th>
+<th id="0C0" style="width:20px" class="column-headers-background"></th>
+<th id="0C1" style="width:20px" class="column-headers-background"></th>
+<th id="0C2" style="width:150px" class="column-headers-background"></th>
+<th id="0C3" style="width:20px" class="column-headers-background"></th>
+<th id="0C4" style="width:20px" class="column-headers-background"></th>
+<th id="0C5" style="width:20px" class="column-headers-background"></th>
+<th id="0C6" style="width:20px" class="column-headers-background"></th>
+<th id="0C7" style="width:20px" class="column-headers-background"></th>
+<th id="0C8" style="width:20px" class="column-headers-background"></th>
+<th id="0C9" style="width:20px" class="column-headers-background"></th>
+<th id="0C10" style="width:20px" class="column-headers-background"></th>
+<th id="0C11" style="width:20px" class="column-headers-background"></th>
+<th id="0C12" style="width:20px" class="column-headers-background"></th>
+<th id="0C13" style="width:20px" class="column-headers-background"></th>
+<th id="0C14" style="width:20px" class="column-headers-background"></th>
+<th id="0C15" style="width:20px" class="column-headers-background"></th>
+<th id="0C16" style="width:20px" class="column-headers-background"></th>
+<th id="0C17" style="width:20px" class="column-headers-background"></th>
+<th id="0C18" style="width:20px" class="column-headers-background"></th>
+<th id="0C19" style="width:20px" class="column-headers-background"></th>
+<th id="0C20" style="width:20px" class="column-headers-background"></th>
+<th id="0C21" style="width:20px" class="column-headers-background"></th>
+<th id="0C22" style="width:20px" class="column-headers-background"></th>
+<th id="0C23" style="width:20px" class="column-headers-background"></th>
+<th id="0C24" style="width:150px" class="column-headers-background"></th>
+<th id="0C25" style="width:20px" class="column-headers-background"></th>
+</thead>
+<tbody>
+<tr style="height:20px;">
+<th id="0R0" style="height:20px;" class="row-headers-background"></th>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s1" dir="ltr">${character.name || 'Character'}</td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s1" dir="ltr">${(character.class || 'Unknown') + ' ' + (character.level || 1)}</td>
+<td class="s0" dir="ltr"></td>
+</tr>
+<tr style="height:20px;">
+<th id="0R1" style="height:20px;" class="row-headers-background"></th>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s2" dir="ltr">CHARACTER NAME</td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s2" dir="ltr">CLASS & LEVEL</td>
+<td class="s0" dir="ltr"></td>
+</tr>
+<tr style="height:20px;">
+<th id="0R2" style="height:20px;" class="row-headers-background"></th>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s1" dir="ltr">${((charRace?.name || character.race || 'Unknown') + (character.subrace ? ' (' + character.subrace + ')' : ''))}</td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s1" dir="ltr">${charBackground?.name || character.background || 'Unknown'}</td>
+<td class="s0" dir="ltr"></td>
+</tr>
+<tr style="height:20px;">
+<th id="0R3" style="height:20px;" class="row-headers-background"></th>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s2" dir="ltr">RACE</td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s2" dir="ltr">BACKGROUND</td>
+<td class="s0" dir="ltr"></td>
+</tr>
+<tr style="height:20px;">
+<th id="0R4" style="height:20px;" class="row-headers-background"></th>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+</tr>
+<tr style="height:20px;">
+<th id="0R5" style="height:20px;" class="row-headers-background"></th>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s3" dir="ltr">${finalScores.STR || 10}</td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+</tr>
+<tr style="height:20px;">
+<th id="0R6" style="height:20px;" class="row-headers-background"></th>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s2" dir="ltr">STRENGTH</td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+</tr>
+<tr style="height:20px;">
+<th id="0R7" style="height:20px;" class="row-headers-background"></th>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s3" dir="ltr">${getModifier(finalScores.STR) >= 0 ? '+' + getModifier(finalScores.STR) : getModifier(finalScores.STR)}</td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+<td class="s0" dir="ltr"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</body>
+</html>`;
+            
+            console.log('Spreadsheet HTML created successfully, length:', htmlContent.length);
+            return htmlContent;
+        } catch (error) {
+            console.error('Error creating Avrae Spreadsheet:', error);
+            console.error('Error message:', error.message);
+            console.error('Error stack:', error.stack);
+            throw new Error(`Failed to create spreadsheet: ${error.message}`);
+        }
+    };
+            
+            // Proficiency bonus
+            const proficiencyBonus = Math.ceil((character.level || 1) / 4) + 1;
+            grid[14][24] = proficiencyBonus;
+            
+            // Passive Perception
+            grid[15][24] = 10 + getModifier(finalScores.WIS || 10);
+            
+            // Armor Class (base 10 + DEX modifier)
+            grid[13][24] = 10 + getModifier(finalScores.DEX || 10);
+            
+            // Initiative
+            grid[14][27] = getModifier(finalScores.DEX || 10);
+            
+            // Speed
+            grid[15][27] = currentRace?.speed || 30;
+            
+            // Hit Points
+            const hitDie = currentClass?.['hit-die'] || 8;
+            const conModifier = getModifier(finalScores.CON || 10);
+            const maxHP = hitDie + conModifier + ((character.level - 1) * (Math.floor(hitDie / 2) + 1 + conModifier));
+            grid[16][24] = maxHP;
+            grid[17][24] = maxHP; // Current HP
+            
+            // Saving throws
+            const savingThrows = currentClass?.['saving-throw-proficiencies'] || {};
+            grid[44][2] = savingThrows.strength ? getModifier(finalScores.STR || 10) + proficiencyBonus : getModifier(finalScores.STR || 10);
+            grid[45][2] = savingThrows.dexterity ? getModifier(finalScores.DEX || 10) + proficiencyBonus : getModifier(finalScores.DEX || 10);
+            grid[46][2] = savingThrows.constitution ? getModifier(finalScores.CON || 10) + proficiencyBonus : getModifier(finalScores.CON || 10);
+            grid[47][2] = savingThrows.intelligence ? getModifier(finalScores.INT || 10) + proficiencyBonus : getModifier(finalScores.INT || 10);
+            grid[48][2] = savingThrows.wisdom ? getModifier(finalScores.WIS || 10) + proficiencyBonus : getModifier(finalScores.WIS || 10);
+            grid[49][2] = savingThrows.charisma ? getModifier(finalScores.CHA || 10) + proficiencyBonus : getModifier(finalScores.CHA || 10);
+            
+            // Skills (basic implementation)
+            const skillMap = {
+                'Acrobatics': { ability: 'DEX', row: 50 },
+                'Animal Handling': { ability: 'WIS', row: 51 },
+                'Arcana': { ability: 'INT', row: 52 },
+                'Athletics': { ability: 'STR', row: 53 },
+                'Deception': { ability: 'CHA', row: 54 },
+                'History': { ability: 'INT', row: 55 },
+                'Insight': { ability: 'WIS', row: 56 },
+                'Intimidation': { ability: 'CHA', row: 57 },
+                'Investigation': { ability: 'INT', row: 58 },
+                'Medicine': { ability: 'WIS', row: 59 },
+                'Nature': { ability: 'INT', row: 60 },
+                'Perception': { ability: 'WIS', row: 61 },
+                'Performance': { ability: 'CHA', row: 62 },
+                'Persuasion': { ability: 'CHA', row: 63 },
+                'Religion': { ability: 'INT', row: 64 },
+                'Sleight of Hand': { ability: 'DEX', row: 65 },
+                'Stealth': { ability: 'DEX', row: 66 },
+                'Survival': { ability: 'WIS', row: 67 }
+            };
+            
+            for (const [skillName, skillData] of Object.entries(skillMap)) {
+                const abilityScore = finalScores[skillData.ability] || 10;
+                const modifier = getModifier(abilityScore);
+                grid[skillData.row][2] = modifier;
+            }
+            
+            // Equipment
+            if (character.equipment && character.equipment.length > 0) {
+                let equipmentRow = 90;
+                character.equipment.forEach(itemId => {
+                    const item = allItems.find(i => i.id === itemId);
+                    if (item && equipmentRow < 120) {
+                        grid[equipmentRow][2] = item.name || itemId;
+                        equipmentRow++;
+                    }
+                });
+            }
+            
+            // Spells
+            if (character.spells && character.spells.length > 0) {
+                const spellsPerLevel = {};
+                character.spells.forEach(spellId => {
+                    const spell = homebrew.spells[spellId];
+                    if (spell) {
+                        const level = spell.level || 0;
+                        if (!spellsPerLevel[level]) spellsPerLevel[level] = [];
+                        spellsPerLevel[level].push(spell.name || spellId);
+                    }
+                });
+                
+                // Place spells in appropriate spell level sections
+                for (const [level, spells] of Object.entries(spellsPerLevel)) {
+                    const startRow = level === '0' ? 140 : 150 + (parseInt(level) - 1) * 3;
+                    if (startRow < 180) {
+                        spells.forEach((spell, index) => {
+                            const row = startRow + index;
+                            if (row < 180) {
+                                grid[row][2] = spell;
+                            }
+                        });
+                    }
+                }
+            }
+            
+            // Character appearance
+            grid[177][2] = "AGE";
+            grid[177][6] = "HEIGHT";
+            grid[177][10] = "WEIGHT";
+            grid[177][14] = "SIZE";
+            grid[179][2] = "GENDER";
+            grid[179][6] = "EYES";
+            grid[179][10] = "HAIR";
+            grid[179][14] = "SKIN";
+            
+            // Personality traits sections
+            grid[14][30] = "PERSONALITY TRAITS";
+            grid[18][39] = "IDEALS";
+            grid[22][39] = "BONDS";
+            grid[26][39] = "FLAWS";
+            grid[27][30] = "ALIGNMENT:";
+            
+            // Footer
+            grid[186][0] = "v2.1 sheet by I F Evans based on v1.3 sheet by DM David Lester based on the official D&D character sheet available at Wizards.com/DnD.  (TM & © 2014 Wizards of the Coast LLC.)";
+            
+            // Convert grid to HTML table format that can be opened in Excel/Google Sheets
+            let html = '<html><head><meta charset="utf-8"><style>table{border-collapse:collapse;font-family:Arial;font-size:10px;}td{border:1px solid #ccc;padding:2px;min-width:15px;height:15px;}</style></head><body><table>';
+            
+            grid.forEach(row => {
+                html += '<tr>';
+                row.forEach(cell => {
+                    const escaped = (cell || '').toString().replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+                    html += `<td>${escaped}</td>`;
+                });
+                html += '</tr>';
+            });
+            
+            html += '</table></body></html>';
+            
+            console.log('Spreadsheet HTML created successfully, length:', html.length);
+            return html;
+        } catch (error) {
+            console.error('Error creating Avrae Spreadsheet:', error);
+            console.error('Error message:', error.message);
+            console.error('Error stack:', error.stack);
+            throw new Error(`Failed to create spreadsheet: ${error.message}`);
+        }
+    };
+    const downloadCSV = () => {
+        try {
+            console.log('Starting Google Sheets HTML download...');
+            
+            // Use the full GSheet HTML format instead of CSV
+            const htmlContent = createAvraeSpreadsheet();
+            console.log('Full GSheet HTML created, length:', htmlContent.length);
+            
+            if (!htmlContent || htmlContent.length < 1000) {
+                throw new Error('HTML content too short - likely failed to generate properly');
+            }
+            
+            const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8;' });
+            console.log('Blob created, size:', blob.size);
+            
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            
+            // Use a safe filename
+            const safeName = (character.name || 'Character').replace(/[^a-z0-9]/gi, '_') || 'Character';
+            const filename = `${safeName}_GSheet_v2.1.html`;
+            
+            link.setAttribute('href', url);
+            link.setAttribute('download', filename);
+            link.style.visibility = 'hidden';
+            
+            document.body.appendChild(link);
+            console.log('Triggering download for:', filename);
+            link.click();
+            document.body.removeChild(link);
+            
+            // Clean up the URL
+            setTimeout(() => URL.revokeObjectURL(url), 100);
+            
+            console.log('Download completed successfully');
+        } catch (error) {
+            console.error('Download error:', error);
+            console.error('Error message:', error.message);
+            console.error('Error stack:', error.stack);
+            alert(`Download failed: ${error.message}\n\nCheck browser console for details.`);
+        }
+    };
+
+    const copyCSVToClipboard = async () => {
+        try {
+            // Generate the HTML content that can be pasted into Google Sheets
+            const htmlContent = createAvraeSpreadsheet();
+            await navigator.clipboard.writeText(htmlContent);
+            alert('Google Sheets HTML data copied to clipboard! You can now paste it into Google Sheets.');
+        } catch (err) {
+            console.error('Failed to copy: ', err);
+            // Fallback
+            const htmlContent = createAvraeSpreadsheet();
+            const textArea = document.createElement('textarea');
+            textArea.value = htmlContent;
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            alert('Google Sheets HTML data copied to clipboard (fallback method)!');
+        }
+    };
+
+    const openGoogleSheets = () => {
+        // Create a pre-filled Google Sheets URL
+        const htmlData = createAvraeSpreadsheet();
+        
+        // Google Sheets import URL
+        const sheetsUrl = `https://docs.google.com/spreadsheets/create?usp=sheets_web_cht`;
+        
+        window.open(sheetsUrl, '_blank');
+        
+        // Show instructions
+        setTimeout(() => {
+            alert(`Google Sheets opened! To import your character:\n\n1. In the new sheet, paste the HTML data you copied using "Copy to Clipboard" button\n2. Or download the HTML file and import it via File → Import\n\nThe HTML format preserves all formatting and formulas from the GSheet v2.1 template!`);
+        }, 1000);
+    };
+    
+    const v21Content = useMemo(() => {
+        if (!charRace || !charClass) return "Select Race and Class first.";
+        const data = {
+            'CharacterName': character.name, 
+            'Race': charRace.name, 
+            'Class': charClass.name,
+            'Level': character.level,
+            'Background': charBackground?.name || 'None',
+            'Feat': charFeat?.name || 'None',
+            'STR': finalScores.STR, 
+            'DEX': finalScores.DEX, 
+            'CON': finalScores.CON, 
+            'INT': finalScores.INT, 
+            'WIS': finalScores.WIS, 
+            'CHA': finalScores.CHA,
+            'STRmod': getModifier(finalScores.STR), 
+            'DEXmod': getModifier(finalScores.DEX), 
+            'CONmod': getModifier(finalScores.CON), 
+            'INTmod': getModifier(finalScores.INT), 
+            'WISmod': getModifier(finalScores.WIS), 
+            'CHAmod': getModifier(finalScores.CHA),
+            'Equipment': selectedEquipmentNames.join(', '),
+            'Cantrips': character.powers.cantrips.join(', '),
+            'Spells': character.powers.leveled.join(', ')
+        };
+        return Object.entries(data).map(([key, value]) => `${key}\t${value}`).join('\n');
+    }, [character, charRace, charClass, charBackground, charFeat, getModifier, finalScores, selectedEquipmentNames]);
+    
+    const raceInfoContent = useMemo(() => {
+        if (!charRace) return "";
+        if (charRace.traits && Array.isArray(charRace.traits)) {
+            return charRace.traits.map(t => `**${t.name}.** ${t.description}`).join('\n\n');
+        }
+        // Fallback to HTML content if traits aren't parsed
+        return charRace.html ? `Race: ${charRace.name}\n\n${charRace.html.replace(/<[^>]*>/g, '')}` : "";
+    }, [charRace]);
+    
+    const classInfoContent = useMemo(() => {
+        if (!charClass) return "";
+        const hitDie = charClass.hitDie || charClass['hit-die'];
+        let content = `**Hit Points**\nHit Dice: 1d${hitDie} per ${charClass.name} level\n\n`;
+        
+        if (charClass.primaryAbility) {
+            content += `**Primary Ability:** ${charClass.primaryAbility}\n\n`;
+        }
+        
+        if (charClass.savingThrows) {
+            content += `**Saving Throw Proficiencies:** ${charClass.savingThrows.join(', ')}\n\n`;
+        }
+        
+        if (charClass.spellcasting) {
+            content += `**Spellcasting Ability:** ${charClass.spellcasting.ability}\n`;
+            if (charClass.spellcasting.causalPoints) {
+                content += `**Uses Causal Points instead of spell slots**\n\n`;
+            } else {
+                content += `\n`;
+            }
+        }
+        
+        if (charClass.features && Array.isArray(charClass.features)) {
+            content += charClass.features.map(t => `**${t.name} (Level ${t.level}).** ${t.description}`).join('\n\n');
+        } else if (charClass.traits && Array.isArray(charClass.traits)) {
+            content += charClass.traits.map(t => `**${t.name} (Level ${t.level}).** ${t.description}`).join('\n\n');
+        }
+        return content;
+    }, [charClass]);
+    
+    const characterSummary = useMemo(() => {
+        const sections = [];
+        
+        sections.push(`# ${character.name}`);
+        sections.push(`**Race:** ${charRace?.name || 'None'}`);
+        sections.push(`**Class:** ${charClass?.name || 'None'} (Level ${character.level})`);
+        sections.push(`**Background:** ${charBackground?.name || 'None'}`);
+        sections.push(`**Feat:** ${charFeat?.name || 'None'}`);
+        
+        sections.push(`## Ability Scores`);
+        Object.entries(finalScores).forEach(([stat, score]) => {
+            sections.push(`**${stat}:** ${score} (${getModifier(score) >= 0 ? '+' : ''}${getModifier(score)})`);
+        });
+        
+        if (selectedEquipmentNames.length > 0) {
+            sections.push(`## Equipment`);
+            selectedEquipmentNames.forEach(item => sections.push(`- ${item}`));
+        }
+        
+        if (character.powers.cantrips.length > 0) {
+            sections.push(`## Cantrips`);
+            character.powers.cantrips.forEach(cantrip => sections.push(`- ${cantrip}`));
+        }
+        
+        if (character.powers.leveled.length > 0) {
+            sections.push(`## Spells`);
+            character.powers.leveled.forEach(spell => sections.push(`- ${spell}`));
+        }
+        
+        return sections.join('\n');
+    }, [character, charRace, charClass, charBackground, charFeat, finalScores, getModifier, selectedEquipmentNames]);
+    
+    return (
+        <div>
+            <h2 className="text-2xl font-bold mb-4 text-indigo-300">Export Character</h2>
+            <p className="text-gray-300 mb-6">Your character is complete! Export for Avrae or other platforms.</p>
+            
+            {/* Avrae Google Sheets Export Section */}
+            <div className="bg-green-900 border border-green-600 p-4 rounded-lg mb-6">
+                <h3 className="text-xl font-bold mb-3 text-green-300">📊 Complete Avrae GSheet v2.1 Export</h3>
+                <p className="text-green-200 mb-4">Export your character in the EXACT Avrae GSheet v2.1 format with ALL details: race features, class features, subclass features, proficiencies, spells, equipment, and calculations.</p>
+                
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
+                    <button 
+                        onClick={downloadCSV}
+                        className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center"
+                    >
+                        📥 Download Complete GSheet HTML
+                    </button>
+                    
+                    <button 
+                        onClick={copyCSVToClipboard}
+                        className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center"
+                    >
+                        📋 Copy Full GSheet to Clipboard
+                    </button>
+                    
+                    <button 
+                        onClick={openGoogleSheets}
+                        className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center"
+                    >
+                        📈 Open Google Sheets + Import
+                    </button>
+                </div>
+                
+                <div className="bg-green-800 p-3 rounded text-sm text-green-100">
+                    <p className="font-bold mb-1">Complete GSheet v2.1 includes:</p>
+                    <ul className="list-disc list-inside space-y-1 text-xs mb-3">
+                        <li><strong>Full Character Sheet Layout:</strong> Exact cell positions as official Avrae GSheet</li>
+                        <li><strong>All Race Features:</strong> Every racial trait and ability with descriptions</li>
+                        <li><strong>All Class Features:</strong> Every class feature up to current level with descriptions</li>
+                        <li><strong>All Subclass Features:</strong> Subclass abilities with full descriptions</li>
+                        <li><strong>Complete Proficiencies:</strong> Armor, weapon, tool, language proficiencies</li>
+                        <li><strong>All Spells & Powers:</strong> Cantrips and leveled spells in proper spell slots</li>
+                        <li><strong>Combat Math:</strong> AC, HP, saving throws, skill modifiers, attack bonuses</li>
+                        <li><strong>Equipment & Gear:</strong> All selected equipment and items</li>
+                    </ul>
+                    <p className="font-bold mb-1">How to use:</p>
+                    <ol className="list-decimal list-inside space-y-1 text-xs">
+                        <li><strong>Download HTML:</strong> Save file, then import into Google Sheets via File → Import</li>
+                        <li><strong>Copy to Clipboard:</strong> Open Google Sheets, paste data directly</li>
+                        <li><strong>In Discord:</strong> Use <code>!import sheet &lt;sheet_url&gt;</code> to import to Avrae</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <div className="space-y-6">
+                <CopyableBlock title="Character Summary (Markdown)" content={characterSummary} />
+                <CopyableBlock title="Avrae GSheet Data (Tab-Separated)" content={v21Content} />
+                <CopyableBlock title="Race Details" content={raceInfoContent} />
+                <CopyableBlock title="Class Details" content={classInfoContent} />
+            </div>
+            
+            <div className="bg-gray-700 p-4 rounded-lg mt-6">
+                <h4 className="font-bold text-lg mb-2 text-green-400">Export Instructions</h4>
+                <ul className="text-sm space-y-1">
+                    <li>• <strong>Avrae HTML:</strong> Best option for Google Sheets + Avrae integration</li>
+                    <li>• <strong>Character Summary:</strong> Use for quick reference or sharing</li>
+                    <li>• <strong>Tab-Separated Data:</strong> Alternative format for manual sheet creation</li>
+                    <li>• <strong>Race/Class Details:</strong> Additional lore and mechanical information</li>
+                </ul>
+            </div>
+            
+            <div className="flex justify-start mt-8">
+                <button onClick={onBack} className="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-6 rounded-lg">Back</button>
+            </div>
+        </div>
+    );
+};
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        
+        try {
+            console.log("About to render App component...");
+            console.log("React:", typeof React);
+            console.log("ReactDOM:", typeof ReactDOM);
+            console.log("App function:", typeof App);
+            root.render(<App />);
+            console.log("App component rendered successfully.");
+        } catch (error) {
+            console.error("Error rendering App:", error);
+            console.error("Error stack:", error.stack);
+            root.render(
+                <div className="bg-red-900 text-white p-8">
+                    <h1 className="text-2xl font-bold mb-4">Character Creator Error</h1>
+                    <p>An error occurred while loading the character creator:</p>
+                    <pre className="bg-red-800 p-4 mt-4 rounded">{error.toString()}</pre>
+                    <pre className="bg-red-800 p-4 mt-4 rounded text-xs">{error.stack}</pre>
+                </div>
+            );
+        }
+    </script>
+</body>
+</html>

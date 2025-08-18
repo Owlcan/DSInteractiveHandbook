@@ -142,84 +142,14 @@
         overflow: hidden; 
     }
 
-    /* Sections that directly host "static" full-height iframes */
-    #legacy-Weapons.active,
-    #legacy-Regalia.active,
-    #fishing-section.active {
+  /* Sections that directly host "static" full-height iframes */
+  #legacy-Weapons.active,
+  #legacy-Regalia.active {
         display: block; /* or flex if needed for alignment */
         height: 90vh; /* Give these sections a large height */
         padding: 10px; /* Reduce padding if iframe is meant to be edge-to-edge */
     }
 
-    /* Board game specific styling for maximum space utilization */
-    #board-game-section.active {
-        display: block;
-        position: fixed; /* Break out of normal flow */
-        top: 0;
-        left: 0;
-        width: 100vw; /* Full viewport width */
-        height: 100vh; /* Full viewport height */
-        z-index: 9999; /* Above everything else */
-        background: #2c2619; /* Match the body background */
-        padding: 0; /* No padding at all */
-        margin: 0; /* No margin */
-        overflow: hidden;
-    }
-
-    #board-game-section .iframe-container {
-        width: 100vw;
-        height: 100vh;
-        padding: 0;
-        margin: 0;
-        border: none;
-        overflow: auto;
-    }
-
-    #board-game-section iframe {
-        width: 100%;
-        height: 100%;
-        border: none;
-        margin: 0;
-        padding: 0;
-    }
-
-    /* Hide the h2 title when board game is active to save space */
-    #board-game-section.active h2 {
-        display: none;
-    }
-
-    /* Close button for full-screen board game */
-    #board-game-close-btn {
-        display: none;
-        position: fixed;
-        top: 10px;
-        right: 10px;
-        z-index: 10000;
-        background: var(--gold);
-        color: var(--ink2);
-        border: 2px solid var(--gold-dark);
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        font-size: 20px;
-        font-weight: bold;
-        cursor: pointer;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-        transition: all 0.3s ease;
-        font-family: 'MedievalSharp', cursive;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    #board-game-section.active #board-game-close-btn {
-        display: flex;
-    }
-
-    #board-game-close-btn:hover {
-        background: var(--gold-light);
-        transform: scale(1.1);
-    }
 
 
     .iframe-loading {
@@ -412,17 +342,26 @@
         height: 95vh; 
     }
 
+    #trinket-generator-iframe-container {
+        height: 95vh; 
+    }
+
+    #auto-dm-iframe-container {
+        height: 95vh; 
+    }
+
     /* General iframe styling */
-    #bestiary-iframe,
-    #items-iframe,    #races-iframe,
+  #bestiary-iframe,
+  #items-iframe,    #races-iframe,
     #backgrounds-iframe,
     #origin-feats-iframe,
+    #trinket-generator-iframe,
+    #auto-dm-iframe,
     #spellbook-iframe,
     #potty-checker-iframe, 
     #pamperlogue-iframe,
     #legacy-weapon-iframe,
-    #regalia-creator-iframe,
-    #fishing-iframe {
+  #regalia-creator-iframe {
         width: 100%;
         height: 100%; 
         border: none;
@@ -440,23 +379,21 @@
       width: 100%;
     }
     
-    /* Ensure other sections are block when active, unless specified otherwise like spellbook */
+  /* Ensure other sections are block when active, unless specified otherwise like spellbook */
     #bestiary-section.active,
-    #items-section.active,    #races-section.active,
+  #items-section.active,    #races-section.active,
     #backgrounds-section.active,
     #origin-feats-section.active,
+    #trinket-generator-section.active,
+    #auto-dm-section.active,
     /* #legacy-Weapons.active,  Letting specific rule above handle its height */
     /* #legacy-Regalia.active, Leting specific rule above handle its height */
-    /* #fishing-section.active, Leting specific rule above handle its height */
     #pamperlogue.active,
     #potty-checker.active,
     #achievement-tracker.active {
         display: block;
     }
 
-    #fishing-section h2 {
-      text-align: center;
-    }
     
     #legacy-Weapons, #legacy-Regalia, #pamperlogue, #potty-checker, #achievement-tracker {
       background-color: #2c2619; 
@@ -502,6 +439,91 @@
         #pamperlogue-iframe-container { height: 1000px; } /* Ensure container also scales */
     }
     
+      /* Games section styles (scoped) */
+      #games-section .games-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 16px;
+      }
+      #games-section .game-card {
+        background-color: var(--parchment-dark);
+        border: 2px solid var(--gold-dark);
+        border-radius: 10px;
+        box-shadow: 0 4px 10px var(--shadow);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      }
+      #games-section .game-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 16px var(--shadow);
+        border-color: var(--gold);
+      }
+      #games-section .game-card__header {
+        background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+        color: #1f1605;
+        padding: 10px 14px;
+        font-family: 'MedievalSharp', cursive;
+        font-size: 1.4rem;
+        border-bottom: 2px solid var(--gold-dark);
+      }
+      #games-section .game-card__body {
+        padding: 14px;
+        color: var(--ink);
+        flex: 1 1 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      #games-section .game-card__banner {
+        width: 100%;
+        height: 140px;
+        object-fit: cover;
+        border: 2px solid var(--gold-dark);
+        border-radius: 6px;
+        box-shadow: 0 2px 6px var(--shadow);
+        background: #231f16;
+      }
+      #games-section .game-card__desc {
+        color: var(--ink);
+        font-size: 1.05rem;
+        min-height: 3.2em;
+      }
+      #games-section .actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        width: 100%;
+      }
+      #games-section .game-card__body .actions { margin-top: auto; }
+      #games-section .actions:not(.actions--stack) { justify-content: center; }
+      #games-section .actions.actions--stack { flex-direction: column; align-items: stretch; }
+      #games-section .actions .btn { display: block; width: 100%; max-width: 100%; box-sizing: border-box; }
+      #games-section .btn {
+        background: linear-gradient(to bottom, var(--gold-light), var(--gold));
+        border: 2px solid var(--gold-dark);
+        color: #2C2614;
+        font-weight: bold;
+        padding: 10px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        text-decoration: none;
+        text-align: center;
+        display: inline-block;
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 1.06rem;
+        transition: all 0.2s ease;
+        box-sizing: border-box;
+        max-width: 100%;
+      }
+      #games-section .btn:hover {
+        background: linear-gradient(to bottom, var(--gold), var(--gold-dark));
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px var(--shadow);
+      }
+      #games-section .btn--play { font-size: 1.14rem; font-weight: 800; padding: 12px 18px; }
+    
   </style>
 </head>
 <body>
@@ -521,18 +543,19 @@
       <button id="btn-tips" class="nav-button">How to Play</button>
       <button id="btn-legacy-Weapons">Legacy Weapons</button>
       <button id="btn-regalia" class="section-button">Regalia Creator</button>
-      <button id="btn-lore">School Lore</button>
+      <button id="btn-lore">Lore</button>
       <button id="btn-spellbook">Spellbook</button>
-      <button id="btn-fishing" class="nav-button">Fishing</button>
+  <button id="btn-games" class="nav-button">Games</button>
       <button id="btn-pamperlogue" class="nav-button">Pamperlogue</button>
       <button id="btn-potty-checker" class="nav-button">Potty Checker</button>
-      <button id="btn-book-reader" class="nav-button">Book Reader</button>
-      <button id="btn-achievement-tracker" class="nav-button">Achievement Tracker</button>
+      <button id="btn-book-reader" class="nav-button">Library</button>
+      <button id="btn-achievement-tracker" class="nav-button">Achievements</button>
       <button id="btn-races" class="nav-button">Races</button>
       <button id="btn-backgrounds" class="nav-button">Backgrounds</button>
-      <button id="btn-origin-feats" class="nav-button">Origin Feats</button>
-      <button id="btn-school-events" class="nav-button">School Events</button>
-      <button id="btn-board-game" class="nav-button">Board Game</button>
+      <button id="btn-origin-feats" class="nav-button">Feats</button>
+      <button id="btn-school-events" class="nav-button">Events</button>
+      <button id="btn-trinket-generator" class="nav-button">Trinkets</button>
+      <button id="btn-auto-dm" class="nav-button">Auto-DM</button>
     </nav>
     
     <div id="welcome-section" class="content-section active">
@@ -567,11 +590,11 @@
     	 <div class="h2p-accordion-content">
       	 <p>Before you can battle dragons (or maybe just very grumpy dust bunnies), there are a few things every Diaper School student needs:</p>
       	 <ul>
-        	 <li><strong>Our Clubhouse: Discord!</strong> All our games, chats, and super-secret plans happen on Discord! It's like our magical treehouse, but with more dice and fewer splinters. Make sure you've joined our server to get all the latest news and find friends for your quests! <a href="[Link to Your Awesome Discord Server Here!]" target="_blank" rel="noopener noreferrer">[Link to Your Awesome Discord Server Here!]</a></li>
+          <li><strong>Our Clubhouse: Discord!</strong> All our games, chats, and super-secret plans happen on Discord! It's like our magical treehouse, but with more dice and fewer splinters. Make sure you've joined our server to get all the latest news and find friends for your quests! <a href="https://discord.gg/62sNcHRY6h" target="_blank" rel="noopener noreferrer">Join our Discord Server!</a></li>
         	 <li><strong>Your Hero Storybook: Character Sheets!</strong> Every brave adventurer needs a storybook that tells everyone how amazing they are! This is your character sheet. You can make one using:
           	 <ul>
             	 <li><a href="https://www.dndbeyond.com/" target="_blank" rel="noopener noreferrer">D&D Beyond</a>: It's super easy, like coloring by numbers, and helps you keep track of all your cool powers!</li>
-            	 <li>Our Special <a href="[Link to Your GSheet Template Here]" target="_blank" rel="noopener noreferrer">Google Sheet Template</a>: This is another magic scroll that helps you build your hero!</li>
+            	 <li>Our Special <a href="https://docs.google.com/spreadsheets/d/1ApmbXHTln99fPTUpanyQRTXNzXbQ8UBTt3Uq8xInQKw/edit?usp=sharing" target="_blank" rel="noopener noreferrer">Google Sheet Template</a>: This is another magic scroll that helps you build your hero!</li>
           	 </ul>
           	 Both are fantastic for showing off your character!
         	 </li>
@@ -1389,10 +1412,168 @@
       <h2>Regalia Creator</h2>
       <iframe id="regalia-creator-iframe" src="../regalia maker.html" data-original-src="../regalia maker.html"></iframe>
     </div>
-    <div id="fishing-section" class="content-section">
-      <h2>Fishing Adventure</h2>
-      <p>Grab your rod and lure, and test your luck in the academy's lakes and rivers! Catch a variety of fish that can provide special benefits when prepared.</p>
-      <iframe id="fishing-iframe" src="fishingminigame.html" data-original-src="fishingminigame.html"></iframe>
+    <div id="games-section" class="content-section">
+      <h2>Games</h2>
+      <p class="subtitle" style="text-align:center;color:var(--ink2);margin-top:-8px;margin-bottom:18px;">Pick a game, put on your pamps, and have fun!~</p>
+      <div class="games-grid">
+
+        <article class="game-card">
+          <header class="game-card__header">Magic Vortex Defense</header>
+          <div class="game-card__body">
+            <img class="game-card__banner" src="../src/assets/images/expeditionandgames/vortexdefense.webp" alt="Magic Vortex Defense banner" loading="lazy">
+            <p class="game-card__desc">Sharpen your aim and reaction time defending against waves of incoming magical ejecta swirling out from the vortex.</p>
+            <div class="actions">
+              <a class="btn btn--play" href="../magicvortexdefense.html">Play</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="game-card">
+          <header class="game-card__header">Old War Defense</header>
+          <div class="game-card__body">
+            <img class="game-card__banner" src="../src/assets/images/expeditionandgames/oldwardefense.webp" alt="Old War Defense banner" loading="lazy">
+            <p class="game-card__desc">Classic tower defense set during the Old War era — hold the line.</p>
+            <div class="actions">
+              <a class="btn btn--play" href="../Old%20War%20Defense.html">Play</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="game-card">
+          <header class="game-card__header">Obelisk Gaze</header>
+          <div class="game-card__body">
+            <img class="game-card__banner" src="../src/assets/images/expeditionandgames/obeliskgaze.webp" alt="Obelisk Gaze banner" loading="lazy">
+            <p class="game-card__desc">Face the obelisk and its trials in this focused challenge inspired by the classic playground game Red-Light-Green-Light.</p>
+            <div class="actions">
+              <a class="btn btn--play" href="../obeliskgaze.html">Play</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="game-card">
+          <header class="game-card__header">Magidueler</header>
+          <div class="game-card__body">
+            <img class="game-card__banner" src="../src/assets/images/expeditionandgames/magidueler.webp" alt="Magidueler banner" loading="lazy">
+            <p class="game-card__desc">Duel with spells and strategy — quick, punchy matches.</p>
+            <div class="actions">
+              <a class="btn btn--play" href="../Magidueler.html">Play</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="game-card">
+          <header class="game-card__header">Scholia Battle RPG</header>
+          <div class="game-card__body">
+            <img class="game-card__banner" src="../src/assets/images/expeditionandgames/scholiarpg.webp" alt="Scholia Battle RPG banner" loading="lazy">
+            <p class="game-card__desc">Turn-based party battles across the plains. Build your team and outwit waves of foes.</p>
+            <div class="actions">
+              <a class="btn btn--play" href="../plainsminibattle copy.html">Play</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="game-card">
+          <header class="game-card__header">Expedition Runner</header>
+          <div class="game-card__body">
+            <img class="game-card__banner" src="../src/assets/images/expeditionandgames/xpedirunner.webp" alt="Expedition Runner banner" loading="lazy">
+            <p class="game-card__desc">Fast-paced side-scrolling runner — jump and double-jump to dodge pits, rocks, bunnies, and birds.</p>
+            <div class="actions">
+              <a class="btn btn--play" href="../expeditionrunner.html">Play</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="game-card">
+          <header class="game-card__header">Fishing Adventure</header>
+          <div class="game-card__body">
+            <img class="game-card__banner" src="../src/assets/images/expeditionandgames/fishinggame.webp" alt="Fishing Adventure banner" loading="lazy">
+            <p class="game-card__desc">Cast your line, time the hook in the golden sweet spot, and reel in loot with a skill-based twist.</p>
+            <div class="actions">
+              <a class="btn btn--play" href="../src/fishingminigame.html">Play</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="game-card">
+          <header class="game-card__header">Scholia Deckbuilder</header>
+          <div class="game-card__body">
+            <img class="game-card__banner" src="../src/assets/images/expeditionandgames/TCGbanner.webp" alt="Scholia Deckbuilder banner" loading="lazy">
+            <p class="game-card__desc">Build and export decks, and play on custom interactive gamespace included!</p>
+            <div class="actions actions--stack">
+              <a class="btn" href="https://owlcan.github.io/scholia-diaspros-deckbuilder/" target="_blank" rel="noopener noreferrer">Play on Git</a>
+              <a class="btn" href="#" title="https://drive.google.com/file/d/10MdKWVYTFnGyBwkODZ_wu2zPey7uRlXJ/view?usp=sharing">Download Portable Version</a>
+              <a class="btn btn--primary-large" href="#" title="https://drive.google.com/file/d/1l8FF_CfZd--iiRk-yIbwSpq9vpRYmwwM/view?usp=sharing">Download Full Installer</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="game-card">
+          <header class="game-card__header">Road to Graduation</header>
+          <div class="game-card__body">
+            <img class="game-card__banner" src="../src/assets/images/expeditionandgames/roadtograduation.webp" alt="Road to Graduation Boardgame banner" loading="lazy">
+            <p class="game-card__desc">A multiplayer board-game race to be first place and ace graduation across 60 squares of eventful space! Add players, roll them dice, use your class abilities, and sprint to the finish!</p>
+            <div class="actions">
+              <a class="btn btn--play" href="../Road%20to%20Graduation%20Boardgame.html">Play</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="game-card">
+          <header class="game-card__header">Diaper Clicker</header>
+          <div class="game-card__body">
+            <img class="game-card__banner" src="../src/assets/images/expeditionandgames/diapclick.webp" alt="Diaper Clicker banner" loading="lazy">
+            <p class="game-card__desc">Idle/clicker fun — stack upgrades, auto-clickers, and watch numbers soar.</p>
+            <div class="actions">
+              <a class="btn btn--play" href="../diaperclicker.html">Play</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="game-card">
+          <header class="game-card__header">Shifting Rune Maze</header>
+          <div class="game-card__body">
+            <img class="game-card__banner" src="../src/assets/images/expeditionandgames/shiftingrunemaze.webp" alt="Shifting Rune Maze banner" loading="lazy">
+            <p class="game-card__desc">Navigate a living labyrinth that shifts under your feet. Escape monsters, collect masses of treasure, and use Rune Shatter wisely to reach the exit before the maze reshapes!</p>
+            <div class="actions">
+              <a class="btn btn--play" href="../runeshift.html">Play</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="game-card">
+          <header class="game-card__header">Alchemy Blaster</header>
+          <div class="game-card__body">
+            <img class="game-card__banner" src="../src/assets/images/expeditionandgames/alchemyblast.webp" alt="Alchemy Blaster banner" loading="lazy">
+            <p class="game-card__desc">Arcade shooter action — blast foes with alchemy-powered shots and survive enemy waves.</p>
+            <div class="actions">
+              <a class="btn btn--play" href="../Alchemy-Blast/Alchemy-Blast-main/alchemy_blaster_combat.html">Play</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="game-card">
+          <header class="game-card__header">Arcane Tonal Beacon</header>
+          <div class="game-card__body">
+            <img class="game-card__banner" src="../src/assets/images/expeditionandgames/arcanetonalbeacon.webp" alt="Arcane Tonal Beacon banner" loading="lazy">
+            <p class="game-card__desc">A Simon-like pattern memorization puzzle. Watch, listen, and recreate the sequence across rotating rune rings.</p>
+            <div class="actions">
+              <a class="btn btn--play" href="../sundialchallenge.html">Play</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="game-card">
+          <header class="game-card__header">Darkling Roundup</header>
+          <div class="game-card__body">
+            <img class="game-card__banner" src="../src/assets/images/expeditionandgames/darklingroundup.webp" alt="Darkling Roundup banner" loading="lazy">
+            <p class="game-card__desc">Contain darklings across rounds with evolving weapons, powerups, and bosses. Loot up and survive.</p>
+            <div class="actions">
+              <a class="btn btn--play" href="../darklingroundup.html">Play</a>
+            </div>
+          </div>
+        </article>
+
+      </div>
     </div>
 
     <div id="pamperlogue" class="content-section">
@@ -1531,18 +1712,25 @@
         </div>
     </div>
 
+    <div id="trinket-generator-section" class="content-section">
+      <h2>Trinket & Bauble Generator</h2>
+      <div id="trinket-generator-iframe-container" class="iframe-container">
+        </div>
+    </div>
+
+    <div id="auto-dm-section" class="content-section">
+      <h2>Auto-DM</h2>
+      <div id="auto-dm-iframe-container" class="iframe-container">
+        </div>
+    </div>
+
     <div id="school-events-section" class="content-section">
       <h2>School Events Generator</h2>
       <div id="school-events-iframe-container" class="iframe-container">
         </div>
     </div>
 
-    <div id="board-game-section" class="content-section">
-      <button id="board-game-close-btn" title="Close Board Game">×</button>
-      <h2>Road to Graduation Board Game</h2>
-      <div id="board-game-iframe-container" class="iframe-container">
-        </div>
-    </div>
+    
 
     <div id="spellbook-section" class="content-section">
       <h2>Spellbook</h2>
@@ -1575,11 +1763,10 @@
         { containerId: 'achievement-tracker-iframe-container', iframeId: 'achievement-tracker-iframe', type: 'dynamic' },
         { containerId: 'races-iframe-container', iframeId: 'races-iframe', type: 'dynamic' },
         { containerId: 'backgrounds-iframe-container', iframeId: 'backgrounds-iframe', type: 'dynamic' },
-        { containerId: 'origin-feats-iframe-container', iframeId: 'origin-feats-iframe', type: 'dynamic' },
+  { containerId: 'origin-feats-iframe-container', iframeId: 'origin-feats-iframe', type: 'dynamic' },
         // Statically placed iframes (src will be blanked, loading div handled by its own onload or reset)
         { iframeId: 'legacy-weapon-iframe', type: 'static' },
         { iframeId: 'regalia-creator-iframe', type: 'static' },
-        { iframeId: 'fishing-iframe', type: 'static' },
         { containerId: 'pamperlogue-iframe-container', iframeId: 'pamperlogue-iframe', type: 'staticWithExternalLoader' }
       ];
 
@@ -1680,10 +1867,10 @@
             document.getElementById('spellbook-section').classList.add('active');
             createOrRefreshIframe('spellbook-iframe-container', 'spellbook-iframe', '../spellbook.html', 'Spellbook');
         },
-        'btn-fishing': () => {
-            document.getElementById('fishing-section').classList.add('active');
-            refreshStaticIframe('fishing-iframe', 'fishingminigame.html');
-        },
+    'btn-games': () => {
+      document.getElementById('games-section').classList.add('active');
+      // No iframe; launcher is inlined in the DOM.
+    },
         'btn-pamperlogue': () => {
             document.getElementById('pamperlogue').classList.add('active');
             // Pamperlogue specific: rely on its internal onload and hideAllSections reset for loader.
@@ -1713,14 +1900,18 @@
             document.getElementById('origin-feats-section').classList.add('active');
             createOrRefreshIframe('origin-feats-iframe-container', 'origin-feats-iframe', '../originfeats.html', 'Origin Feats');
         },
-        'btn-school-events': () => { 
+        'btn-trinket-generator': () => { 
+            document.getElementById('trinket-generator-section').classList.add('active');
+            createOrRefreshIframe('trinket-generator-iframe-container', 'trinket-generator-iframe', '../trinketgenerator.html', 'Trinket & Bauble Generator');
+        },
+        'btn-auto-dm': () => { 
+            document.getElementById('auto-dm-section').classList.add('active');
+            createOrRefreshIframe('auto-dm-iframe-container', 'auto-dm-iframe', '../AutoDM App.html', 'Auto-DM');
+        },
+  'btn-school-events': () => { 
             document.getElementById('school-events-section').classList.add('active');
             createOrRefreshIframe('school-events-iframe-container', 'school-events-iframe', '../School Events Generator.html', 'School Events Generator');
-        },
-        'btn-board-game': () => { 
-            document.getElementById('board-game-section').classList.add('active');
-            createOrRefreshIframe('board-game-iframe-container', 'board-game-iframe', '../Road to Graduation Boardgame.html', 'Road to Graduation Board Game');
-        },
+  },
       };
 
       for (const btnId in navActions) {
@@ -1737,14 +1928,7 @@
         }
       }
       
-      // Add event listener for board game close button
-      const boardGameCloseBtn = document.getElementById('board-game-close-btn');
-      if (boardGameCloseBtn) {
-        boardGameCloseBtn.addEventListener('click', () => {
-          hideAllSections();
-          document.getElementById('welcome-section').classList.add('active');
-        });
-      }
+  // Board game controls removed; integrated into Games tab launcher
       
       initializeAccordions(document); 
     });

@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obelisk's Gaze</title>
+    <!-- Google Fonts for thematic typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Old+Standard+TT&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS for utility-first styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for the game to achieve the desired aesthetic */
+        body {
+            font-family: 'Old Standard TT', serif; /* Primary font for general text */
+            background: #000; /* Solid black background */
+            /* Gold speckles effect using multiple radial gradients */
+            background-image: radial-gradient(circle at 10% 20%, rgba(255, 215, 0, 0.1) 1px, transparent 1px),
+                              radial-gradient(circle at 70% 80%, rgba(255, 215, 0, 0.15) 1px, transparent 1px),
+                              radial-gradient(circle at 40% 60%, rgba(255, 215, 0, 0.08) 1px, transparent 1px),
+                              radial-gradient(circle at 90% 10%, rgba(255, 215, 0, 0.12) 1px, transparent 1px),
+                              radial-gradient(circle at 20% 90%, rgba(255, 215, 0, 0.05) 1px, transparent 1px);
+            background-size: 10px 10px, 15px 15px, 20px 20px, 25px 25px, 30px 30px; /* Sizes for the speckles */
+            color: #FFD700; /* Gold text color */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Full viewport height */
+            margin: 0;
+            overflow: hidden; /* Prevent scrollbars due to speckles */
+        }
+
+        .game-container {
+            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black for the game container */
+            border: 2px solid #FFD700; /* Gold border */
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); /* Gold glow effect */
+        }
+
+        canvas {
+            background-color: #B8860B; /* Darker gold base for the game board */
+            /* Sandstone texture effect using subtle linear gradients */
+            background-image: linear-gradient(0deg, rgba(0,0,0,0.05) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px);
+            background-size: 10px 10px; /* Size for the grid lines within the texture */
+            border: 1px solid #DAA520; /* Goldenrod border for the canvas */
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.3); /* Inner shadow for depth */
+            display: block;
+            touch-action: none; /* Disable default browser touch actions for better game control */
+        }
+
+        /* Styling for input fields and buttons */
+        .input-group input, .input-group button {
+            background-color: #222; /* Dark background for controls */
+            border: 1px solid #DAA520; /* Goldenrod border */
+            color: #FFD700; /* Gold text */
+            font-family: 'Cormorant Garamond', serif; /* Thematic font for controls */
+            font-weight: 700;
+        }
+
+        .input-group button:hover {
+            background-color: #333; /* Slightly lighter on hover */
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5); /* Gold glow on hover */
+        }
+
+        .message-box {
+            background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent black for message box */
+            border: 1px solid #DAA520; /* Goldenrod border */
+            color: #FFD700; /* Gold text */
+            font-family: 'Cormorant Garamond', serif; /* Thematic font */
+            font-weight: 700;
+        }
+
+        /* Styles for directional buttons */
+        .directional-buttons button {
+            background-color: #444;
+            border: 1px solid #DAA520;
+            color: #FFD700;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s, box-shadow 0.2s;
+        }
+        .directional-buttons button:hover {
+            background-color: #555;
+            box-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
+        }
+        .directional-buttons button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Styles for cover and wall cells */
+        .cover-cell {
+            background-color: rgba(100, 100, 100, 0.5); /* Semi-transparent grey for cover */
+        }
+        .wall-cell {
+            background-color: #5C4033; /* Dark brown for walls */
+            border: 1px solid #36251E;
+        }
+    </style>
+</head>
+<body class="bg-black text-gold">
+    <div class="game-container p-8 rounded-lg shadow-lg flex flex-col items-center">
+        <h1 class="text-4xl font-bold mb-6 text-center">Obelisk's Gaze</h1>
+
+        <!-- Canvas element for drawing the game board and elements -->
+        <canvas id="gameCanvas" width="720" height="720" class="rounded-md mb-6"></canvas>
+
+        <!-- Game Info Display -->
+        <div class="flex justify-between w-full mb-4 text-xl">
+            <span id="levelDisplay">Level: 1</span>
+            <span id="gazeCountdownDisplay">Gaze: Inactive</span> <!-- Default inactive -->
+        </div>
+
+        <!-- Input controls for the player -->
+        <div class="input-group flex flex-col items-center space-y-4 mb-6">
+            <div class="flex space-x-4">
+                <input type="number" id="moveInput" placeholder="Squares to move" class="p-3 rounded-md w-48 text-center" min="1" value="1">
+                <button id="moveButton" class="p-3 rounded-md px-6 cursor-pointer hover:bg-gray-800 transition duration-300">Move</button>
+                <button id="resetButton" class="p-3 rounded-md px-6 cursor-pointer hover:bg-gray-800 transition duration-300">Reset</button>
+            </div>
+            
+            <!-- Directional Movement Buttons -->
+            <div class="directional-buttons grid grid-cols-3 gap-2">
+                <div></div> <!-- Empty div for spacing -->
+                <button id="moveUp" data-direction="up">▲ Up</button>
+                <div></div>
+                <button id="moveLeft" data-direction="left">◀ Left</button>
+                <button id="moveRight" data-direction="right">▶ Right</button>
+                <button id="moveDown" data-direction="down">▼ Down</button>
+            </div>
+        </div>
+
+        <!-- Message display area for game status and instructions -->
+        <div id="messageBox" class="message-box p-4 rounded-md w-full text-center text-lg">
+            Welcome, brave adventurer! Enter your move and choose a direction.
+        </div>
+    </div>
+
+    <script>
+        // Get references to DOM elements
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const moveInput = document.getElementById('moveInput');
+        const moveButton = document.getElementById('moveButton');
+        const resetButton = document.getElementById('resetButton');
+        const messageBox = document.getElementById('messageBox');
+        const levelDisplay = document.getElementById('levelDisplay');
+        const gazeCountdownDisplay = document.getElementById('gazeCountdownDisplay');
+
+        // Directional buttons
+        const moveUpBtn = document.getElementById('moveUp');
+        const moveDownBtn = document.getElementById('moveDown');
+        const moveLeftBtn = document.getElementById('moveLeft');
+        const moveRightBtn = document.getElementById('moveRight');
+
+        // Game configuration constants
+        const GRID_COLS = 12;
+        const GRID_ROWS = 12;
+        const CELL_SIZE = canvas.width / GRID_COLS;
+        const PLAYER_COLOR = '#00BFFF';
+        const OPPONENT_COLORS = ['#FF4500', '#32CD32', '#8A2BE2', '#FFD700'];
+        const OBELISK_COLOR = '#111111';
+
+        // Game state variables
+        let playerPos = { x: 0, y: Math.floor(GRID_ROWS / 2) };
+        let playerLives = 2;
+        let opponentPositions = [];
+        let opponentLives = [];
+        let isMoving = false; // Flag to prevent multiple moves at once
+        let gameActive = true; // Flag to control overall game flow
+        let currentLevel = 1; // Current game level
+        let levelGrid = []; // 2D array representing the current level's map (0: empty, 1: cover, 2: wall)
+        let gazeCountdown = 0; // Turns until the obelisk's gaze shifts
+        let obeliskIsGazing = false; // True if obelisk is currently in its fixed gaze state (Level 5+)
+
+        // Predefined level configurations
+        const levels = {
+            1: {
+                grid: Array(GRID_ROWS).fill(0).map(() => Array(GRID_COLS).fill(0)), // All empty
+                playerStart: { x: 0, y: Math.floor(GRID_ROWS / 2) },
+                numOpponents: 4
+            },
+            2: {
+                grid: [
+                    [0,0,0,0,0,0,0,0,0,0,0,0],
+                    [0,1,0,0,0,0,0,0,0,0,0,0],
+                    [0,0,0,1,0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,1,0,0,0,0,0,0],
+                    [0,1,0,0,0,0,0,0,0,0,0,0],
+                    [0,0,0,1,0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,1,0,0,0,0,0,0],
+                    [0,1,0,0,0,0,0,0,0,0,0,0],
+                    [0,0,0,1,0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,1,0,0,0,0,0,0],
+                    [0,1,0,0,0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,0,0,0,0,0,0]
+                ],
+                playerStart: { x: 0, y: Math.floor(GRID_ROWS / 2) },
+                numOpponents: 4
+            },
+            3: {
+                grid: [
+                    [0,0,0,0,0,0,0,0,0,0,0,0],
+                    [0,1,2,2,0,0,0,0,0,0,0,0],
+                    [0,0,0,2,0,1,0,0,0,0,0,0],
+                    [0,0,0,2,0,0,0,0,0,0,0,0],
+                    [0,1,0,2,0,1,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,2,0,0,0,0,0],
+                    [0,0,1,0,0,0,2,0,0,0,0,0],
+                    [0,0,0,0,0,0,2,0,0,0,0,0],
+                    [0,1,0,0,0,0,2,0,0,0,0,0],
+                    [0,0,0,1,0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,1,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,0,0,0,0,0,0]
+                ],
+                playerStart: { x: 0, y: Math.floor(GRID_ROWS / 2) },
+                numOpponents: 4
+            },
+            4: {
+                grid: [
+                    [0,0,0,0,0,0,0,0,0,0,0,0],
+                    [0,1,2,2,0,0,0,0,0,0,0,0],
+                    [0,0,0,2,0,1,0,0,0,0,0,0],
+                    [0,0,0,2,0,0,0,0,0,0,0,0],
+                    [0,1,0,2,0,1,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,2,0,0,0,0,0],
+                    [0,0,1,0,0,0,2,0,0,0,0,0],
+                    [0,0,0,0,0,0,2,0,0,0,0,0],
+                    [0,1,0,0,0,0,2,0,0,0,0,0],
+                    [0,0,0,1,0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,1,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,0,0,0,0,0,0]
+                ],
+                playerStart: { x: 0, y: Math.floor(GRID_ROWS / 2) },
+                numOpponents: 4
+            },
+            5: {
+                grid: [
+                    [0,0,0,0,0,0,0,0,0,0,0,0],
+                    [0,1,2,2,0,0,0,0,0,0,0,0],
+                    [0,0,0,2,0,1,0,0,0,0,0,0],
+                    [0,0,0,2,0,0,0,0,0,0,0,0],
+                    [0,1,0,2,0,1,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,2,0,0,0,0,0],
+                    [0,0,1,0,0,0,2,0,0,0,0,0],
+                    [0,0,0,0,0,0,2,0,0,0,0,0],
+                    [0,1,0,0,0,0,2,0,0,0,0,0],
+                    [0,0,0,1,0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,1,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,0,0,0,0,0,0]
+                ],
+                playerStart: { x: 0, y: Math.floor(GRID_ROWS / 2) },
+                numOpponents: 4
+            },
+            6: {
+                grid: [
+                    [0,0,0,0,0,0,0,0,0,0,0,0],
+                    [0,1,2,2,0,0,0,0,0,0,0,0],
+                    [0,0,0,2,0,1,0,0,0,0,0,0],
+                    [0,0,0,2,0,0,0,0,0,0,0,0],
+                    [0,1,0,2,0,1,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,2,0,0,0,0,0],
+                    [0,0,1,0,0,0,2,0,0,0,0,0],
+                    [0,0,0,0,0,0,2,0,0,0,0,0],
+                    [0,1,0,0,0,0,2,0,0,0,0,0],
+                    [0,0,0,1,0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,1,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,0,0,0,0,0,0]
+                ],
+                playerStart: { x: 0, y: Math.floor(GRID_ROWS / 2) },
+                numOpponents: 4
+            }
+            // Add more levels here with different grid configurations
+        };
+
+        /**
+         * Initializes the game for a specific level.
+         * Sets up the grid, player/opponent positions, and gaze countdown.
+         * @param {number} level - The level to initialize.
+         */
+        function initializeLevel(level) {
+            const levelConfig = levels[level] || levels[1]; // Default to level 1 if config not found
+            levelGrid = JSON.parse(JSON.stringify(levelConfig.grid)); // Deep copy the grid
+            playerPos = { ...levelConfig.playerStart }; // Copy player start position
+            playerLives = 2; // Reset player lives for new level
+            currentLevel = level;
+
+            // Initialize opponents for the current level
+            opponentPositions = [];
+            opponentLives = [];
+            for (let i = 0; i < levelConfig.numOpponents; i++) {
+                let startY;
+                let attempts = 0;
+                // Ensure opponents don't start on a wall or the player's starting row
+                do {
+                    startY = Math.floor(Math.random() * GRID_ROWS);
+                    attempts++;
+                    if (attempts > 100) { // Prevent infinite loops in case of very dense starting column
+                        console.warn("Could not find a suitable starting position for opponent.");
+                        break;
+                    }
+                } while (startY === playerPos.y || levelGrid[startY][0] === 2); // Check for wall at (0, startY)
+                opponentPositions.push({ x: 0, y: startY });
+                opponentLives.push(2);
+            }
+
+            // Reset gaze state and set countdown only if level supports it
+            if (currentLevel >= 2) { // Gaze mechanics start from Level 2
+                gazeCountdown = Math.floor(Math.random() * 6) + 5; // Gaze in 5-10 turns
+            } else {
+                gazeCountdown = 0; // No gaze countdown for levels without cover
+            }
+            obeliskIsGazing = false; // Always reset this
+
+            gameActive = true;
+            isMoving = false;
+            enableControls();
+            drawGame();
+            showMessage(`Level ${currentLevel} started! Reach the Obelisk.`);
+        }
+
+        /**
+         * Draws the entire game state on the canvas, including the grid, obelisk,
+         * player token, and opponent tokens.
+         */
+        function drawGame() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the entire canvas
+
+            // Draw grid cells (walls and cover)
+            for (let r = 0; r < GRID_ROWS; r++) {
+                for (let c = 0; c < GRID_COLS; c++) {
+                    const cellType = levelGrid[r][c];
+                    if (cellType === 1) { // Cover
+                        ctx.fillStyle = 'rgba(100, 100, 100, 0.5)'; // Semi-transparent grey
+                        ctx.fillRect(c * CELL_SIZE, r * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+                    } else if (cellType === 2) { // Wall
+                        ctx.fillStyle = '#5C4033'; // Dark brown
+                        ctx.fillRect(c * CELL_SIZE, r * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+                        ctx.strokeStyle = '#36251E'; // Darker brown border for walls
+                        ctx.lineWidth = 1;
+                        ctx.strokeRect(c * CELL_SIZE, r * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+                    }
+                }
+            }
+
+            // Draw grid lines
+            ctx.strokeStyle = 'rgba(0, 0, 0, 0.1)'; // Subtle black lines for the grid
+            for (let i = 0; i <= GRID_COLS; i++) {
+                ctx.beginPath();
+                ctx.moveTo(i * CELL_SIZE, 0);
+                ctx.lineTo(i * CELL_SIZE, canvas.height);
+                ctx.stroke();
+            }
+            for (let i = 0; i <= GRID_ROWS; i++) {
+                ctx.beginPath();
+                ctx.moveTo(0, i * CELL_SIZE);
+                ctx.lineTo(canvas.width, i * CELL_SIZE);
+                ctx.stroke();
+            }
+
+            // Draw the Obelisk at the far right of the board
+            const obeliskWidth = CELL_SIZE * 0.8;
+            const obeliskHeight = CELL_SIZE * 1.5;
+            const obeliskX = canvas.width - CELL_SIZE + (CELL_SIZE - obeliskWidth) / 2;
+            const obeliskY = (canvas.height - obeliskHeight) / 2;
+
+            // Obelisk body gradient
+            const obeliskGradient = ctx.createLinearGradient(obeliskX, obeliskY, obeliskX + obeliskWidth, obeliskY + obeliskHeight);
+            obeliskGradient.addColorStop(0, '#333333');
+            obeliskGradient.addColorStop(0.5, '#111111');
+            obeliskGradient.addColorStop(1, '#333333');
+            ctx.fillStyle = obeliskGradient;
+            ctx.fillRect(obeliskX, obeliskY, obeliskWidth, obeliskHeight);
+
+            // Obelisk "eye" (oculus)
+            let eyeColor = '#FFD700'; // Default gold
+            if (currentLevel >= 4 && gazeCountdown <= 3) {
+                eyeColor = '#FF0000'; // Red glow warning
+            }
+            if (obeliskIsGazing && currentLevel >= 5) {
+                 eyeColor = '#B22222'; // Darker red when actively gazing
+            }
+
+            ctx.fillStyle = eyeColor;
+            ctx.shadowColor = eyeColor;
+            // More blur for warning/gazing only if gaze mechanics are active
+            ctx.shadowBlur = (currentLevel >= 2 && ((currentLevel >= 4 && gazeCountdown <= 3) || (obeliskIsGazing && currentLevel >= 5))) ? 20 : 5;
+            ctx.beginPath();
+            const mainEyeX = obeliskX + obeliskWidth / 2;
+            const mainEyeY = obeliskY + obeliskHeight / 4;
+            const mainEyeRadius = obeliskWidth / 4;
+            ctx.arc(mainEyeX, mainEyeY, mainEyeRadius, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Add black iris to the main oculus
+            ctx.fillStyle = '#000000'; // Black for the iris
+            ctx.beginPath();
+            ctx.arc(mainEyeX, mainEyeY, mainEyeRadius * 0.6, 0, Math.PI * 2); // Smaller black circle
+            ctx.fill();
+            ctx.shadowBlur = 0; // Reset shadow blur
+
+            // Add extra oculi for higher levels (aesthetic only, not functional)
+            if (currentLevel >= 6) {
+                const smallEyeRadius = obeliskWidth / 8;
+                const eyePositions = [
+                    { x: obeliskX + obeliskWidth / 4, y: obeliskY + obeliskHeight / 2 },
+                    { x: obeliskX + obeliskWidth * 3 / 4, y: obeliskY + obeliskHeight / 2 },
+                    { x: obeliskX + obeliskWidth / 2, y: obeliskY + obeliskHeight * 3 / 4 }
+                ];
+                ctx.fillStyle = eyeColor;
+                ctx.shadowColor = eyeColor;
+                ctx.shadowBlur = 10;
+                eyePositions.forEach(pos => {
+                    ctx.beginPath();
+                    ctx.arc(pos.x, pos.y, smallEyeRadius, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.fillStyle = '#000000'; // Black iris for small eyes
+                    ctx.beginPath();
+                    ctx.arc(pos.x, pos.y, smallEyeRadius * 0.6, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+                ctx.shadowBlur = 0;
+            }
+
+
+            // Draw the player token
+            drawToken(playerPos.x, playerPos.y, PLAYER_COLOR, 'YOU');
+
+            // Draw opponent tokens if they are still in the game (lives >= 0)
+            opponentPositions.forEach((pos, index) => {
+                if (opponentLives[index] >= 0) {
+                    drawToken(pos.x, pos.y, OPPONENT_COLORS[index], `OP${index + 1}`);
+                }
+            });
+
+            // Update info displays
+            levelDisplay.textContent = `Level: ${currentLevel}`;
+            if (currentLevel >= 2) {
+                gazeCountdownDisplay.textContent = `Gaze in: ${gazeCountdown} turns`;
+            } else {
+                gazeCountdownDisplay.textContent = `Gaze: Inactive`; // Display inactive for levels without cover
+            }
+
+            // Update the message box with current lives information
+            messageBox.innerHTML = `Lives: ${playerLives} | `;
+            opponentLives.forEach((lives, index) => {
+                messageBox.innerHTML += `OP${index + 1} Lives: ${lives} | `;
+            });
+            messageBox.innerHTML += `Enter your move and choose a direction.`;
+        }
+
+        /**
+         * Helper function to draw a single token (player or opponent) on the grid.
+         * @param {number} gridX - The X coordinate on the grid.
+         * @param {number} gridY - The Y coordinate on the grid.
+         * @param {string} color - The fill color of the token.
+         * @param {string} label - The text label to display on the token.
+         */
+        function drawToken(gridX, gridY, color, label) {
+            const centerX = gridX * CELL_SIZE + CELL_SIZE / 2;
+            const centerY = gridY * CELL_SIZE + CELL_SIZE / 2;
+            const radius = CELL_SIZE * 0.4;
+
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+            ctx.fillStyle = color;
+            ctx.fill();
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            ctx.fillStyle = '#FFF';
+            ctx.font = `${CELL_SIZE * 0.25}px 'Cormorant Garamond', serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(label, centerX, centerY);
+        }
+
+        /**
+         * Disables all game controls.
+         */
+        function disableControls() {
+            moveButton.disabled = true;
+            moveInput.disabled = true;
+            moveUpBtn.disabled = true;
+            moveDownBtn.disabled = true;
+            moveLeftBtn.disabled = true;
+            moveRightBtn.disabled = true;
+        }
+
+        /**
+         * Enables all game controls.
+         */
+        function enableControls() {
+            moveButton.disabled = false;
+            moveInput.disabled = false;
+            moveUpBtn.disabled = false;
+            moveDownBtn.disabled = false;
+            moveLeftBtn.disabled = false;
+            moveRightBtn.disabled = false;
+        }
+
+        /**
+         * Handles player movement based on chosen direction and distance.
+         * @param {string} direction - 'up', 'down', 'left', or 'right'.
+         */
+        async function playerMove(direction) {
+            if (!gameActive || isMoving) return;
+
+            const moveDistance = parseInt(moveInput.value);
+            if (isNaN(moveDistance) || moveDistance <= 0) {
+                showMessage("Please enter a valid positive number for your move.");
+                return;
+            }
+
+            isMoving = true;
+            disableControls();
+
+            // Level 5+ fixed gaze logic: check at the START of the turn if moving outside cover is allowed
+            if (currentLevel >= 5 && obeliskIsGazing) {
+                if (levelGrid[playerPos.y][playerPos.x] !== 1) { // If not in cover at the start of the move
+                    showMessage("Caught by the fixed gaze! Cannot move outside cover.");
+                    isMoving = false;
+                    enableControls();
+                    return; // Prevent any movement
+                } else {
+                    showMessage("You are safe in cover during the fixed gaze. Move carefully!");
+                }
+            }
+            obeliskIsGazing = false; // Fixed gaze passes after one player turn, regardless of movement success
+
+            let caught = false;
+            
+            for (let i = 0; i < moveDistance; i++) {
+                let nextX = playerPos.x;
+                let nextY = playerPos.y;
+
+                // Calculate next position based on direction
+                if (direction === 'up') nextY--;
+                else if (direction === 'down') nextY++;
+                else if (direction === 'left') nextX--;
+                else if (direction === 'right') nextX++;
+
+                // Check boundary collision
+                if (nextX < 0 || nextX >= GRID_COLS || nextY < 0 || nextY >= GRID_ROWS) {
+                    showMessage("Cannot move off the board!");
+                    break; // Stop movement if out of bounds
+                }
+
+                // Check wall collision
+                if (levelGrid[nextY][nextX] === 2) {
+                    showMessage("Path blocked by a wall!");
+                    break; // Stop movement if hitting a wall
+                }
+
+                playerPos.x = nextX;
+                playerPos.y = nextY;
+
+                drawGame();
+                await new Promise(resolve => setTimeout(resolve, 150));
+
+                // Check for random gaze only if gaze mechanics are active (Level 2+)
+                // AND the player is NOT in cover
+                // AND it's NOT a Level 5+ fixed gaze turn (fixed gaze is handled at start of turn)
+                if (currentLevel >= 2 && levelGrid[playerPos.y][playerPos.x] !== 1 && (currentLevel < 5 || !obeliskIsGazing)) {
+                    if (Math.random() < 0.3) { // 30% chance per square moved
+                        showMessage("The Obelisk's eye caught you!");
+                        playerLives--;
+                        caught = true;
+                        break; // Stop movement if caught
+                    }
+                }
+            }
+
+            if (caught) {
+                if (playerLives < 0) {
+                    showMessage("The Obelisk's gaze consumes you! Game Over.");
+                    gameActive = false;
+                } else {
+                    playerPos = { x: 0, y: Math.floor(GRID_ROWS / 2) }; // Send player back to start
+                    showMessage(`You were sent back to start! Lives remaining: ${playerLives}`);
+                }
+            }
+
+            drawGame(); // Final redraw after player movement
+
+            // Gaze countdown and fixed gaze state update AFTER player move (only if gaze mechanics are active)
+            if (currentLevel >= 2) {
+                gazeCountdown--;
+                if (gazeCountdown <= 0) {
+                    showMessage("The Obelisk's gaze shifts!");
+                    // If player is not in cover when gaze shifts, they are caught
+                    if (levelGrid[playerPos.y][playerPos.x] !== 1) {
+                        playerLives--;
+                        playerPos = { x: 0, y: Math.floor(GRID_ROWS / 2) }; // Send player back to start
+                        showMessage("The Obelisk caught you out of cover! Sent back. Lives: " + playerLives);
+                    } else {
+                        showMessage("The Obelisk gazed, but you were safe in cover!");
+                    }
+
+                    if (currentLevel >= 5) {
+                        obeliskIsGazing = true; // Set for the *next* player turn
+                    }
+                    gazeCountdown = Math.floor(Math.random() * 6) + 5; // Reset countdown for next gaze
+                }
+            }
+
+            await opponentTurn();
+            checkGameEnd(); // Check for game end after all turns
+            isMoving = false;
+            enableControls();
+        }
+
+        /**
+         * Handles the movement turns for all opponent tokens.
+         * Opponents now attempt to find cover or reach the obelisk.
+         */
+        async function opponentTurn() {
+            showMessage("Opponents are moving...");
+            await new Promise(resolve => setTimeout(resolve, 500));
+
+            for (let i = 0; i < opponentPositions.length; i++) {
+                if (opponentLives[i] < 0) continue; // Skip opponents who are already out
+
+                let opponentCaught = false;
+                const moveDistance = Math.floor(Math.random() * (GRID_COLS / 3)) + 1; // Random distance to attempt
+
+                for (let j = 0; j < moveDistance; j++) {
+                    let currentX = opponentPositions[i].x;
+                    let currentY = opponentPositions[i].y;
+                    let nextX = currentX;
+                    let nextY = currentY;
+                    
+                    // --- Opponent AI Logic ---
+                    // 1. Prioritize finding cover if gaze is imminent and not in cover (only if gaze mechanics are active)
+                    const isInDanger = currentLevel >= 2 && gazeCountdown <= 3 && levelGrid[currentY][currentX] !== 1;
+                    let targetMove = null; // {dx, dy}
+
+                    if (isInDanger) {
+                        // Try to find adjacent cover
+                        const possibleMoves = [];
+                        for (let dy_check = -1; dy_check <= 1; dy_check++) {
+                            for (let dx_check = -1; dx_check <= 1; dx_check++) {
+                                if (dx_check === 0 && dy_check === 0) continue; // Don't check current cell
+
+                                const checkX = currentX + dx_check;
+                                const checkY = currentY + dy_check;
+
+                                // Check bounds and if it's a valid, non-wall cover cell
+                                if (checkX >= 0 && checkX < GRID_COLS && checkY >= 0 && checkY < GRID_ROWS &&
+                                    levelGrid[checkY][checkX] === 1) { // Is cover
+                                    possibleMoves.push({ dx: dx_check, dy: dy_check });
+                                }
+                            }
+                        }
+
+                        if (possibleMoves.length > 0) {
+                            // Pick a random adjacent cover if multiple
+                            targetMove = possibleMoves[Math.floor(Math.random() * possibleMoves.length)];
+                        }
+                    }
+
+                    if (targetMove) {
+                        // Move to cover
+                        nextX = currentX + targetMove.dx;
+                        nextY = currentY + targetMove.dy;
+                    } else {
+                        // 2. If not in danger or no immediate cover, move towards obelisk (right)
+                        // Try moving right first
+                        if (currentX + 1 < GRID_COLS && levelGrid[currentY][currentX + 1] !== 2) {
+                            nextX = currentX + 1;
+                        } else {
+                            // If right is blocked, try moving vertically to find a path
+                            const verticalDirections = [{dy: -1}, {dy: 1}];
+                            let chosenVerticalMove = null;
+                            for (const dir of verticalDirections) {
+                                const checkY = currentY + dir.dy;
+                                if (checkY >= 0 && checkY < GRID_ROWS && levelGrid[checkY][currentX] !== 2) {
+                                    chosenVerticalMove = dir;
+                                    break; // Found a valid vertical move
+                                }
+                            }
+                            if (chosenVerticalMove) {
+                                nextY = currentY + chosenVerticalMove.dy;
+                            } else {
+                                // If all preferred moves are blocked, try moving left (retreat) or stay
+                                if (currentX - 1 >= 0 && levelGrid[currentY][currentX - 1] !== 2) {
+                                    nextX = currentX - 1;
+                                } else {
+                                    // If no valid move, stay in place
+                                    nextX = currentX;
+                                    nextY = currentY;
+                                }
+                            }
+                        }
+                    }
+
+                    // Validate the chosen next position before applying
+                    if (nextX === currentX && nextY === currentY) {
+                        // Opponent couldn't find a valid move this step, stop trying for this turn
+                        break;
+                    }
+
+                    // Apply the move
+                    opponentPositions[i].x = nextX;
+                    opponentPositions[i].y = nextY;
+
+                    drawGame();
+                    await new Promise(resolve => setTimeout(resolve, 100));
+
+                    // Opponent gaze check (only if gaze mechanics are active and not in cover)
+                    // This check is for the *current* position after moving
+                    if (currentLevel >= 2 && levelGrid[opponentPositions[i].y][opponentPositions[i].x] !== 1 && (currentLevel < 5 || !obeliskIsGazing)) {
+                        if (Math.random() < 0.3) {
+                            showMessage(`Opponent ${i + 1} was caught by the Obelisk!`);
+                            opponentLives[i]--;
+                            opponentCaught = true;
+                            break; // Stop movement if caught
+                        }
+                    }
+                }
+
+                if (opponentCaught) {
+                    if (opponentLives[i] < 0) {
+                        showMessage(`Opponent ${i + 1} is out of the game!`);
+                    } else {
+                        showMessage(`Opponent ${i + 1} lost a life! Lives remaining: ${opponentLives[i]}`);
+                    }
+                }
+                drawGame();
+                await new Promise(resolve => setTimeout(resolve, 200));
+            }
+        }
+
+        /**
+         * Checks for game-ending conditions (player win, player lose, or any opponent win).
+         */
+        function checkGameEnd() {
+            if (!gameActive) return;
+
+            // Player wins if they reach the last column
+            if (playerPos.x >= GRID_COLS - 1) {
+                showMessage(`You reached the Obelisk! Level ${currentLevel} complete!`);
+                gameActive = false;
+                disableControls();
+                setTimeout(() => {
+                    currentLevel++;
+                    if (!levels[currentLevel]) {
+                        showMessage("Congratulations! You have completed all available levels! Starting over from Level 1.");
+                        resetGame(); // For continuous play, reset to level 1
+                    } else {
+                        initializeLevel(currentLevel); // Load next level
+                    }
+                }, 1500);
+                return;
+            }
+
+            // Check if any opponent reached the last column (opponent wins)
+            for (let i = 0; i < opponentPositions.length; i++) {
+                if (opponentLives[i] >= 0 && opponentPositions[i].x >= GRID_COLS - 1) {
+                    showMessage(`An opponent reached the Obelisk! You lose!`);
+                    gameActive = false;
+                    disableControls();
+                    return;
+                }
+            }
+
+            // Player loses if they run out of lives
+            if (playerLives < 0) {
+                showMessage("You are out of lives! Game Over.");
+                gameActive = false;
+                disableControls();
+                return;
+            }
+        }
+
+        /**
+         * Displays a message in the message box.
+         * @param {string} msg - The message to display.
+         */
+        function showMessage(msg) {
+            messageBox.textContent = msg;
+        }
+
+        /**
+         * Resets the game to its initial state (Level 1).
+         */
+        function resetGame() {
+            initializeLevel(1);
+        }
+
+        // Event Listeners for user interaction
+        moveButton.addEventListener('click', () => {
+            // Default to 'right' if no directional button was pressed explicitly
+            playerMove('right');
+        });
+
+        // Add event listeners for directional buttons
+        moveUpBtn.addEventListener('click', () => playerMove('up'));
+        moveDownBtn.addEventListener('click', () => playerMove('down'));
+        moveLeftBtn.addEventListener('click', () => playerMove('left'));
+        moveRightBtn.addEventListener('click', () => playerMove('right'));
+
+
+        resetButton.addEventListener('click', resetGame);
+        moveInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                playerMove('right'); // Default to right if Enter is pressed
+            }
+        });
+
+        // Initial game setup when the window loads
+        window.onload = function() {
+            resetGame();
+        };
+
+        window.addEventListener('resize', () => {
+            // Redraw on resize, but canvas size remains fixed for now
+            drawGame();
+        });
+    </script>
+</body>
+</html>

@@ -269,8 +269,9 @@
   #fishing-section .space-y-1 > * + * { margin-top: 0.25rem !important; }
 
 
-  #fishing-section .border-sky-200 { border-color: var(--accent) !important; opacity: 0.7; }
-  #fishing-section .border-emerald-200 { border-color: var(--gold) !important; opacity: 0.7; }
+  /* Solid borders without element opacity to avoid translucent cards */
+  #fishing-section .border-sky-200 { border-color: var(--accent) !important; }
+  #fishing-section .border-emerald-200 { border-color: var(--gold) !important; }
 
 
   #fishing-section .text-xl { font-size: 1.25rem !important; line-height: 1.75rem !important; }
@@ -369,9 +370,10 @@
     margin-left: auto; margin-right: auto; margin-bottom: 1rem;
     border-radius: 0.5rem; box-shadow: 0 2px 4px var(--shadow);
     border: 2px solid var(--gold-light); /* Light gold border for image */
-    width: 12rem;
-    height: 9rem;
-    object-fit: cover;
+  width: 20rem; /* Larger and wider */
+  height: 12rem; /* Taller to keep aspect */
+  object-fit: contain; /* Avoid squish */
+  background-color: var(--parchment-dark); /* Letterbox background */
   }
   /* Titles and text within caught-fish-display, ensuring they are dark on the gold background */
   #fishing-section #caught-fish-display h3 { color: var(--parchment-dark) !important; }
@@ -386,29 +388,31 @@
     padding-right: 0.5rem !important;
   }
   #fishing-section #catalogue-list li {
-   background-color: var(--parchment-dark) !important; /* Darker list items */
-   border: 1px solid var(--gold-dark) !important;
-     padding: 0.75rem;
-     margin-bottom: 0.5rem;
-     display: flex;
-     justify-content: space-between;
-     align-items: center;
+  background-color: var(--parchment-dark) !important; /* Darker list items */
+  border: 1px solid var(--gold-dark) !important;
+    padding: 0.9rem 1rem;
+    margin-bottom: 0.6rem;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    border-radius: 0.5rem;
   }
+  #fishing-section #catalogue-list li:nth-child(odd) { background-color: #241f14 !important; }
 
   #fishing-section #catalogue-list h4 {
    color: var(--accent) !important;
-     font-size: 1.125rem;
-     font-weight: 600;
+     font-size: 1.35rem !important; /* Bigger at-a-glance */
+     font-weight: 700 !important;
   }
 
   #fishing-section #catalogue-list p {
    color: var(--ink) !important; /* Light text for details */
-     font-size: 0.875rem;
+     font-size: 1.05rem !important;
   }
    #fishing-section #catalogue-list img {
     border-radius: 0.375rem;
-    width: 5rem;
-    height: 3.75rem;
+    width: 7rem; /* Larger thumbnail */
+    height: 5rem;
     object-fit: cover;
     margin-left: 1rem;
   }
@@ -458,7 +462,173 @@
     color: var(--gold-light) !important; /* Light gold text */
   }
 
+  /* Readability tweaks: general text +20% (excluding headings) */
+  #fishing-section p,
+  #fishing-section li,
+  #fishing-section label,
+  #fishing-section input,
+  #fishing-section select,
+  #fishing-section button,
+  #fishing-section .region-description-text,
+  #fishing-section #fishing-log {
+    font-size: 1.2em !important;
+  }
+  /* Container titles (h2) +50%; key result title (h3) as well */
+  #fishing-section h2 { font-size: 150% !important; }
+  #fishing-section #caught-fish-display h3 { font-size: 150% !important; }
+
+  /* Distinguish catalogue panel */
+  #fishing-section #catalogue-content {
+    background: rgba(0,0,0,0.25);
+    border: 2px solid var(--gold-dark);
+    border-radius: 10px;
+    padding: 1rem;
+  }
+
 </style>
+
+  <!-- Timing mini-game styles -->
+  <style id="fishing-timing-styles">
+    #timing-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      font-family: 'Cormorant Garamond', serif;
+    }
+    #timing-panel {
+      background: var(--parchment);
+      border: 2px solid var(--gold-dark);
+      border-radius: 10px;
+      padding: 16px;
+      box-shadow: 0 10px 30px var(--shadow);
+      width: min(680px, 92vw);
+      color: var(--ink);
+    }
+    #timing-panel h3 { margin: 0 0 8px 0; color: var(--accent); }
+    #timing-meta { display:flex; align-items:center; justify-content: space-between; margin-bottom: 8px; font-weight: 600; }
+    #timing-track {
+      position: relative;
+      height: 90px;
+      background: var(--parchment-dark);
+      border: 2px solid var(--gold-dark);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.4);
+    }
+    .timing-sweet {
+      position: absolute;
+      top: 18px;
+      height: 54px;
+      background: linear-gradient(90deg, var(--gold-dark), var(--gold), var(--gold-dark));
+      border: 2px solid var(--gold-dark);
+      border-radius: 6px;
+      opacity: 0.9;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    .timing-marker {
+      position: absolute;
+      top: 6px;
+      height: 78px;
+      background: #2d2415;
+      border: 2px solid var(--gold);
+      border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.6);
+    }
+    #timing-instructions { margin-top: 10px; font-size: 0.95rem; color: var(--ink2); }
+    #timing-controls { margin-top: 12px; display:flex; gap: 8px; justify-content: flex-end; }
+    #timing-controls button {
+      background: linear-gradient(to bottom, var(--gold-light), var(--gold));
+      border: 2px solid var(--gold-dark);
+      color: #2C2614;
+      font-weight: bold;
+      padding: 8px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    #timing-feedback { margin-top: 8px; font-weight: 700; }
+  </style>
+  
+  <!-- Catalogue overlay styles -->
+  <style id="catalogue-overlay-styles">
+    #catalogue-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      font-family: 'Cormorant Garamond', serif;
+    }
+    #catalogue-panel {
+      background: var(--parchment);
+      border: 2px solid var(--gold-dark);
+      border-radius: 10px;
+      width: min(960px, 94vw);
+      max-height: 84vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 10px 30px var(--shadow);
+      color: var(--ink);
+    }
+    #catalogue-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      border-bottom: 2px solid var(--gold-dark);
+    }
+    #catalogue-body {
+      padding: 12px 16px;
+      overflow: auto;
+    }
+    #catalogue-close {
+      background: linear-gradient(to bottom, var(--gold-light), var(--gold));
+      border: 2px solid var(--gold-dark);
+      color: #2C2614;
+      font-weight: bold;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  </style>
+  
+  <!-- Mash (line tension) styles -->
+  <style id="fishing-mash-styles">
+    #mash-panel {
+      display: none;
+      background: var(--parchment);
+      border: 2px solid var(--gold-dark);
+      border-radius: 10px;
+      padding: 16px;
+      box-shadow: 0 10px 30px var(--shadow);
+      width: min(680px, 92vw);
+      color: var(--ink);
+    }
+    #mash-panel h3 { margin: 0 0 8px 0; color: var(--accent); }
+    #mash-meta { display:flex; align-items:center; justify-content: space-between; margin-bottom: 8px; font-weight: 600; }
+    #mash-track {
+      position: relative;
+      height: 28px;
+      background: var(--parchment-dark);
+      border: 2px solid var(--gold-dark);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.4);
+    }
+    #mash-fill {
+      position: absolute;
+      top: 0; left: 0; height: 100%; width: 0%;
+      background: linear-gradient(90deg, var(--gold-dark), var(--gold), var(--gold-dark));
+      transition: width 80ms linear;
+    }
+    #mash-instructions { margin-top: 10px; font-size: 0.95rem; color: var(--ink2); }
+  </style>
 
   <body>
   <div id="fishing-section" class="w-full max-w-3xl bg-white shadow-2xl rounded-xl p-6 md:p-8 mx-auto">
@@ -499,7 +669,11 @@
         	 <div class="space-y-4 p-4 bg-emerald-50 rounded-lg border border-emerald-200"> <h2 class="text-xl font-semibold text-emerald-700 mb-3">Go Fishing!</h2> <button id="cast-button" class="w-full text-white font-semibold py-3 px-4 rounded-lg shadow-md transition duration-150 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
                 	 Cast Line
             	 </button>
-            	 <div id="fishing-log" class="mt-4 p-3 bg-white rounded-md border border-gray-200 h-48 overflow-y-auto text-sm space-y-1"> <p class="text-gray-500">Fishing log will appear here...</p> </div>
+               <div id="session-stats" class="mt-2 p-2 bg-white rounded-md border border-gray-200 text-sm flex justify-between items-center">
+                 <span class="text-gray-600">Session Value</span>
+                 <span id="session-stats-value" class="font-bold text-yellow-500">0 gp (0 fish)</span>
+               </div>
+               <div id="fishing-log" class="mt-4 p-3 bg-white rounded-md border border-gray-200 h-48 overflow-y-auto text-sm space-y-1"> <p class="text-gray-500">Fishing log will appear here...</p> </div>
         	 </div>
     	 </div>
 
@@ -512,13 +686,284 @@
     	 </div>
    </div>
 
-   <div id="catalogue-content" class="hidden">
-    	 <h2 class="text-2xl font-semibold text-indigo-700 mb-4">Fish Catalogue</h2> <ul id="catalogue-list" class="space-y-3 max-h-[60vh] overflow-y-auto pr-2">
-             <li class="text-gray-500">Loading catalogue...</li> </ul>
-   </div>
+  <!-- Catalogue is now a modal overlay -->
   </div> 
+  <!-- Timing mini-game overlay -->
+  <div id="timing-overlay" role="dialog" aria-modal="true">
+    <div id="timing-panel">
+      <h3>Hook Tension — Sweet Spot</h3>
+      <div id="timing-meta">
+        <span id="timing-tries">Tries: 0</span>
+        <span id="timing-bonus">Bonus: +0</span>
+      </div>
+      <div id="timing-track">
+        <div class="timing-sweet" id="timing-sweet"></div>
+        <div class="timing-marker" id="timing-marker"></div>
+      </div>
+      <div id="timing-feedback"></div>
+      <div id="timing-instructions">Press Space or click to stop the bar. Land inside gold for +1; bullseye center grants +2.</div>
+      <div id="timing-controls">
+        <button id="timing-skip">Skip</button>
+        <button id="timing-close" style="display:none;">Continue</button>
+      </div>
+    </div>
+    <div id="mash-panel">
+      <h3>Line Tension — Keep It On!</h3>
+      <div id="mash-meta">
+        <span id="mash-timer">Time: 0.0s</span>
+        <span id="mash-progress-label">0%</span>
+      </div>
+      <div id="mash-track"><div id="mash-fill"></div></div>
+      <div id="mash-instructions">Press Space repeatedly to fill the bar before time runs out.</div>
+    </div>
+  </div>
+  
+  <!-- Catalogue overlay -->
+  <div id="catalogue-overlay" role="dialog" aria-modal="true" aria-labelledby="catalogue-title">
+    <div id="catalogue-panel">
+      <div id="catalogue-header">
+        <h3 id="catalogue-title" class="text-2xl font-bold" style="margin:0; color: var(--accent);">Fish Catalogue</h3>
+        <button id="catalogue-close">Close</button>
+      </div>
+      <div id="catalogue-body">
+        <div id="catalogue-content">
+          <ul id="catalogue-list" class="space-y-3 max-h-[60vh] overflow-y-auto pr-2">
+            <li class="text-gray-500">Loading catalogue...</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
   </body>
   <script>
+// Determine extreme rarity for gating
+function isExtremeRare(fish) {
+  const named = new Set([
+    'Deactivated Warforged','Magic Boot','Functional Good-Rod','Broken Good-Rod',
+    'Barnacled Chest','Subterranean Treasure Chest','Saltwater Treasure Chest',
+    'Darkforme Titan-Snapper','Darkforme River Tyrant','Darkforme Abyssal Leviathan',
+    'Lakeopus Rex'
+  ]);
+  return fish && (fish.dc >= 20 || named.has(fish.name));
+}
+
+// Timing mini-game: returns a Promise resolving to numeric bonus for this attempt
+function playTimingMinigame(dc, totalBonuses, isMagiJig) {
+  return new Promise(resolve => {
+    const overlay = document.getElementById('timing-overlay');
+    const sweet = document.getElementById('timing-sweet');
+    const marker = document.getElementById('timing-marker');
+    const track = document.getElementById('timing-track');
+    const triesEl = document.getElementById('timing-tries');
+    const bonusEl = document.getElementById('timing-bonus');
+    const feedback = document.getElementById('timing-feedback');
+    const btnSkip = document.getElementById('timing-skip');
+    const btnClose = document.getElementById('timing-close');
+
+    // Compute tries and sizes
+    const triesTotal = Math.max(1, Math.ceil(dc / 3.5));
+    let triesLeft = triesTotal;
+    let bonus = 0;
+
+    // Sweet spot fraction based on DC and bonuses
+    const sweetFrac = Math.min(0.32, Math.max(0.06, 0.14 + (totalBonuses * 0.01) - ((dc - 10) * 0.008)));
+    const markerFrac = isMagiJig ? 0.09 : 0.06; // Magi-Jig is larger
+
+    // Layout sizes
+    const trackWidth = track.clientWidth || 600;
+    const sweetWidth = Math.round(trackWidth * sweetFrac);
+    const markerWidth = Math.round(trackWidth * markerFrac);
+
+    sweet.style.width = sweetWidth + 'px';
+    sweet.style.left = '50%';
+    marker.style.width = markerWidth + 'px';
+
+    // Animation state
+    let pos = 0.5; // center [0..1]
+    let speed = 0.75 / 60; // fraction per frame (~0.75 per second)
+    let dir = 1;
+    let running = true;
+    let awaitingStop = true;
+
+    function updateHUD() {
+      triesEl.textContent = `Tries: ${triesLeft}/${triesTotal}`;
+      bonusEl.textContent = `Bonus: +${bonus}`;
+    }
+    updateHUD();
+
+    function frame() {
+      if (!running) return;
+      if (awaitingStop) {
+        pos += dir * speed;
+        if (pos <= 0) { pos = 0; dir = 1; }
+        if (pos >= 1) { pos = 1; dir = -1; }
+        const leftPx = Math.round(pos * (trackWidth - markerWidth));
+        marker.style.left = leftPx + 'px';
+        requestAnimationFrame(frame);
+      }
+    }
+
+    function stopAttempt() {
+      if (!awaitingStop) return;
+      awaitingStop = false;
+
+      // Use actual geometry to avoid border-induced bias
+      const trackRect = track.getBoundingClientRect();
+      const sweetRect = sweet.getBoundingClientRect();
+      const markerRect = marker.getBoundingClientRect();
+
+      const markerCenter = (markerRect.left + markerRect.right) / 2 - trackRect.left;
+      const sweetCenter = (sweetRect.left + sweetRect.right) / 2 - trackRect.left;
+      const sweetHalf = sweetRect.width / 2;
+
+      const inSweet = Math.abs(markerCenter - sweetCenter) <= sweetHalf;
+      const criticalWindow = Math.max(6, sweetRect.width * 0.12);
+      const isCrit = Math.abs(markerCenter - sweetCenter) <= criticalWindow;
+
+      if (inSweet) {
+        const gained = isCrit ? 2 : 1;
+        bonus += gained;
+        feedback.textContent = isCrit ? `Bullseye! +2` : `Nice! +1`;
+        feedback.style.color = isCrit ? '#6ee7b7' : '#a7f3d0';
+      } else {
+        feedback.textContent = `Miss...`;
+        feedback.style.color = '#fca5a5';
+      }
+      triesLeft -= 1;
+      updateHUD();
+
+      if (triesLeft > 0) {
+        // Resume for next try after short delay
+        setTimeout(() => {
+          feedback.textContent = '';
+          awaitingStop = true;
+          requestAnimationFrame(frame);
+        }, 450);
+      } else {
+        // Done
+        btnClose.style.display = '';
+      }
+    }
+
+    function cleanup(res) {
+      running = false;
+      document.removeEventListener('keydown', onKey);
+      btnSkip.removeEventListener('click', onSkip);
+      btnClose.removeEventListener('click', onClose);
+      overlay.style.display = 'none';
+      resolve(res);
+    }
+
+    function onKey(e) {
+      if (e.code === 'Space') {
+        e.preventDefault();
+        if (triesLeft > 0) {
+          stopAttempt();
+        } else {
+          // When all tries are done, Space acts as Continue
+          cleanup(bonus);
+        }
+      }
+      if (e.code === 'Escape') { cleanup(0); }
+      if ((e.key === 'Enter' || e.code === 'Enter') && triesLeft === 0) { cleanup(bonus); }
+    }
+    function onSkip() { cleanup(0); }
+    function onClose() { cleanup(bonus); }
+
+    // Start
+    overlay.style.display = 'flex';
+    feedback.textContent = '';
+    btnClose.style.display = 'none';
+    awaitingStop = true;
+    running = true;
+    document.addEventListener('keydown', onKey);
+    btnSkip.addEventListener('click', onSkip);
+    btnClose.addEventListener('click', onClose);
+    requestAnimationFrame(frame);
+    // Click anywhere on track/panel to stop
+    track.onclick = stopAttempt;
+    overlay.onclick = (ev) => { if (ev.target === overlay) stopAttempt(); };
+  });
+}
+
+// Mash mini-game: rapidly hit Space to keep fish on line; returns Promise<boolean>
+function playMashMinigame(dc) {
+  return new Promise(resolve => {
+    const overlay = document.getElementById('timing-overlay');
+    const timingPanel = document.getElementById('timing-panel');
+    const mashPanel = document.getElementById('mash-panel');
+    const mashFill = document.getElementById('mash-fill');
+    const mashTimer = document.getElementById('mash-timer');
+    const mashProgressLabel = document.getElementById('mash-progress-label');
+
+  // Difficulty scaling by DC
+  const targetPresses = 10 + Math.floor(Math.max(0, dc - 18) / 2); // 10..14+ presses
+  // Timing: Gentle for low-DC; global minimum start time of 4.5s
+  const timeLimit = (dc < 17)
+    ? 5000 // 5.0s for low-DC fish
+    : Math.max(4500, 3000 - Math.max(0, dc - 17) * 130);
+
+    let presses = 0;
+    let running = true;
+    const start = performance.now();
+
+    function updateUI(now) {
+      const elapsed = now - start;
+      const pct = Math.min(100, Math.round((presses / targetPresses) * 100));
+      mashFill.style.width = pct + '%';
+      mashProgressLabel.textContent = pct + '%';
+      mashTimer.textContent = 'Time: ' + ((timeLimit - elapsed) / 1000).toFixed(1) + 's';
+    }
+
+    function onKey(e) {
+      if (e.code === 'Space') {
+        e.preventDefault();
+        presses += 1;
+      }
+      if (e.code === 'Escape') {
+        e.preventDefault();
+        cleanup(false);
+      }
+      if (e.key === 'Enter' || e.code === 'Enter') {
+        // Allow Enter to confirm early if player already filled it
+        if ((presses / targetPresses) >= 1) cleanup(true);
+      }
+    }
+
+    function frame(now) {
+      if (!running) return;
+      updateUI(now);
+      if (presses >= targetPresses) {
+        cleanup(true);
+        return;
+      }
+      if (now - start >= timeLimit) {
+        cleanup(false);
+        return;
+      }
+      requestAnimationFrame(frame);
+    }
+
+    function cleanup(result) {
+      running = false;
+      document.removeEventListener('keydown', onKey);
+      overlay.style.display = 'none';
+      timingPanel.style.display = '';
+      mashPanel.style.display = 'none';
+      resolve(result);
+    }
+
+    // Start
+    mashFill.style.width = '0%';
+    mashProgressLabel.textContent = '0%';
+    timingPanel.style.display = 'none';
+    mashPanel.style.display = 'block';
+    overlay.style.display = 'flex';
+    document.addEventListener('keydown', onKey);
+    requestAnimationFrame(frame);
+  });
+}
+
 function initializeFishingMinigame() {
    // Replaced Firebase with localStorage for simplified integration
    let userId = 'local-user-' + Math.random().toString(36).substring(2, 9); // Generate a random local ID
@@ -534,25 +979,27 @@ function initializeFishingMinigame() {
    let currentTab = 'fishing';
    const fishingTabButton = document.getElementById('fishing-tab-button');
    const catalogueTabButton = document.getElementById('catalogue-tab-button');
-   const fishingContent = document.getElementById('fishing-content');
-   const catalogueContent = document.getElementById('catalogue-content');
+  const fishingContent = document.getElementById('fishing-content');
+  const catalogueOverlay = document.getElementById('catalogue-overlay');
+  const catalogueCloseBtn = document.getElementById('catalogue-close');
    const rodSelect = document.getElementById('rod-select');
    const lureSelect = document.getElementById('lure-select');
    const regionSelect = document.getElementById('region-select');
    const playerBonusInput = document.getElementById('player-bonus');
    const castButton = document.getElementById('cast-button');
    const fishingLog = document.getElementById('fishing-log');
+  const sessionStatsValueEl = document.getElementById('session-stats-value');
    const caughtFishDisplay = document.getElementById('caught-fish-display');
    const fishNameElement = document.getElementById('fish-name');
    const fishValueElement = document.getElementById('fish-value');
    const fishImageElement = document.getElementById('fish-image');
    const fishPropertiesElement = document.getElementById('fish-properties');
-   const catalogueList = document.getElementById('catalogue-list');
+  const catalogueList = document.getElementById('catalogue-list');
    const playerBonusTooltip = document.getElementById('player-bonus-tooltip');
    const playerBonusLabel = document.getElementById('player-bonus-label');
 
    // --- Fish Data ---
-   // Define fishing regions and their fish
+     // Define fishing regions and their fish                                      
    const fishingRegions = [
     	 {
         	 name: "Lake & River",
@@ -614,82 +1061,67 @@ function initializeFishingMinigame() {
             	 { name: "Darkforme River Tyrant", dc: 25, value: 750, properties: "An ancient crocodilian terror dominating entire river stretches. **Creatures over 50 HP may yield treasure—contact the DM or Assistant Game Masters.**", image: "assets/images/fish/rivertyrant.png" },
             	 { name: "Darkforme Abyssal Leviathan", dc: 26, value: 1500, properties: "The deepwater nightmare that consumes everything in its path. **Creatures over 50 HP may yield treasure—contact the DM or Assistant Game Masters.**", image: "assets/images/fish/abyssalleviathan.png" },
             	 { name: "Lakeopus Rex", dc: 25, value: 80, properties: "The king of all Lakopuses. Catching and releasing the Lakeopus Rex allows for the King of the Lake VR boss battle to be unlocked.", image: "assets/images/fish/lakeopus_rex.png" },
-            	 { name: "Prismatic Carp", dc: 18, value: 40, properties: "A shimmering fish with scales that cycle through all colors. Grants resistance to a random damage type for 1 hour when consumed.", image: "assets/images/fish/fish_placeholder.png" },
-            	 { name: "Thunder Catfish", dc: 19, value: 45, properties: "Generates small electrical charges. Consuming it grants the ability to cast Shocking Grasp once within the next 8 hours.", image: "assets/images/fish/fish_placeholder.png" },
-            	 { name: "Ancient Sturgeon", dc: 20, value: 50, properties: "Said to have lived for centuries. Consuming its flesh grants 10 temporary hit points and advantage on Wisdom checks for 1 hour.", image: "assets/images/fish/unisturgeon.png" },
-            	 { name: "Guardian Pike", dc: 21, value: 55, properties: "A massive predator with armored scales. Grants +2 to AC for 1 hour when properly prepared.", image: "assets/images/fish/jaguargar.png" },            	 
-               { name: "Deepwater Crustacean", dc: 17, value: 35, properties: "A rare species that dwells in the deepest parts of lakes. When prepared, grants water breathing for 30 minutes.", image: "assets/images/fish/swordclaw_crab.png" },
-            	 { name: "Arcane Bass", dc: 16, value: 30, properties: "Shows faint magical runes on its scales. When consumed, grants the ability to detect magic for 10 minutes.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Silver Perch", dc: 11, value: 7, properties: "Its reflective scales shimmer in the light. When prepared during a short rest, provides 5HP and +1 to Charisma (Performance) checks for 1 hour.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Golden Minnow", dc: 12, value: 8, properties: "A small but valuable fish. When consumed, grants the ability to hold your breath for twice as long for 1 hour.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Spotted River Bass", dc: 13, value: 9, properties: "A common game fish. When prepared during a short rest, provides 6HP and advantage on Athletics checks for swimming for 1 hour.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Mossy Catfish", dc: 14, value: 10, properties: "Covered in a harmless moss that has mild healing properties. When consumed, provides 5HP and advantage on saving throws against disease for 2 hours.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "River Pike", dc: 11, value: 8, properties: "A predatory freshwater fish. When prepared properly, grants +1 to Wisdom (Survival) checks for 2 hours.", image: "assets/images/fish/fish_placeholder.png" },               
-               { name: "Whiskered Sturgeon", dc: 13, value: 10, properties: "Its sensitive barbels detect minute vibrations. When consumed, grants advantage on Wisdom (Perception) checks that rely on hearing for 1 hour.", image: "assets/images/fish/fish_placeholder.png" },
-               
-               // Additional DC 10-13 fish
-               { name: "Copper Minnow", dc: 10, value: 5, properties: "Has a distinctive metallic sheen. When consumed, grants resistance to lightning damage for 10 minutes.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Whispering Reed Fish", dc: 10, value: 6, properties: "Makes soft whistling sounds when out of water. When prepared, grants 3HP and +1 to Stealth checks for 1 hour.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Dappled Sunfish", dc: 10, value: 7, properties: "Covered in colorful spots that change with the light. When consumed, grants advantage on saving throws against being blinded for 2 hours.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Pebble Sucker", dc: 11, value: 6, properties: "Collects small stones in its mouth. When prepared properly, provides 4HP and +1 to Athletics checks for 1 hour.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "River Pincer", dc: 11, value: 8, properties: "Has specialized fins that can grip objects. When consumed, grants advantage on checks to avoid being disarmed for 2 hours.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Meadow Brook Trout", dc: 11, value: 7, properties: "Smells faintly of wildflowers. When prepared during a short rest, provides 5HP and advantage on Nature checks for 1 hour.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Echo Minnow", dc: 12, value: 7, properties: "Makes distinctive clicking sounds to navigate murky waters. When consumed, grants +2 to Perception checks in darkness for 1 hour.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Lazuli Swimmer", dc: 12, value: 8, properties: "Has brilliant blue scales. When prepared properly, provides 5HP and +1 to Charisma checks for 1 hour.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Featherscale", dc: 12, value: 7, properties: "Extremely light with wispy fins. When consumed, grants reduced falling damage (half damage) for 1 hour.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Mud Dreamer", dc: 13, value: 8, properties: "Found half-buried in riverbed mud. When prepared during a short rest, provides 6HP and advantage on saving throws against exhaustion for 2 hours.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Whitewater Bass", dc: 13, value: 9, properties: "Strong fish with powerful muscles. When consumed, grants +1 to Strength checks and jumping distance for 2 hours.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Spotted Gar", dc: 13, value: 8, properties: "Has armored scales and a long snout. When prepared properly, provides 5HP and +1 AC against piercing damage for 1 hour.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "River Goby", dc: 14, value: 9, properties: "A small fish that can camouflage itself. When consumed, grants advantage on Stealth checks in natural environments for 1 hour.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Silverfin Darter", dc: 14, value: 10, properties: "Its silver fins shimmer in the light. When prepared during a short rest, provides 6HP and +1 to Dexterity saves against traps for 2 hours.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Golden Shiner", dc: 15, value: 11, properties: "A small, golden fish. When consumed, grants a +1 bonus to Charisma checks for 1 hour.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Bluegill Sunfish", dc: 15, value: 12, properties: "A common freshwater fish. When prepared properly, provides 7HP and +1 to Wisdom saves against illusions for 2 hours.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Redfin Pickerel", dc: 16, value: 13, properties: "A predatory fish with sharp teeth. When consumed, grants advantage on attack rolls against aquatic creatures for 1 hour.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Mottled Catfish", dc: 16, value: 14, properties: "Its mottled skin provides excellent camouflage. When prepared during a short rest, provides 8HP and +1 to Stealth checks in water for 2 hours.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Stream Darter", dc: 10, value: 6, properties: "A small, quick fish. When consumed, grants +1 to Dexterity checks for 1 hour.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Muddy Sucker", dc: 10, value: 5, properties: "Not the prettiest fish, but provides 4HP when cooked properly.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Creek Chub", dc: 11, value: 6, properties: "A hardy little fish. When prepared, grants 3HP and +1 to Constitution saves against cold for 2 hours.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Pond Sunfish", dc: 11, value: 7, properties: "Its warm colors inspire confidence. When consumed, grants advantage on the next saving throw made within 1 hour.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Willow Minnow", dc: 12, value: 6, properties: "Small but nutritious. When prepared during a short rest, provides 3HP and +1 to Wisdom checks for 1 hour.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Beaver Tail Fish", dc: 12, value: 8, properties: "Named for its unusual tail shape. When consumed, grants swimming speed equal to half your walking speed for 30 minutes.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Lake Bluegill", dc: 13, value: 7, properties: "A popular angling fish. When prepared properly, provides 4HP and +1 to Animal Handling checks for 2 hours.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Yellow Perch", dc: 13, value: 8, properties: "Its yellow stripes are distinctive. When consumed, grants the ability to see clearly underwater for 30 minutes.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Whiskered Sturgeon", dc: 13, value: 10, properties: "Its sensitive barbels detect minute vibrations. When consumed, grants advantage on Wisdom (Perception) checks that rely on hearing for 1 hour.", image: "assets/images/fish/fish_placeholder.png" },
-               
-               // Additional DC 14-16 fish
-               { name: "Northern Pike", dc: 14, value: 12, properties: "A voracious predator. When prepared during a short rest, provides 6HP and +1 to attack rolls for 1 hour.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Freshwater Drum", dc: 14, value: 10, properties: "Makes drumming sounds when caught. When consumed, grants advantage on Intimidation checks for 1 hour.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Channel Catfish", dc: 15, value: 11, properties: "A bottom feeder with keen senses. When prepared, grants darkvision for 1 hour if you don't already have it.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Largemouth Bass", dc: 15, value: 13, properties: "A prized game fish. When consumed, grants +2 to Strength checks and saving throws for 1 hour.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Muskellunge", dc: 16, value: 15, properties: "The fish of a thousand casts. When prepared properly, grants 8HP and advantage on Constitution saves for 2 hours.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Lake Sturgeon", dc: 16, value: 18, properties: "An ancient fish species. When consumed, grants 5 temporary hit points and resistance to one damage type of your choice for 1 hour.", image: "assets/images/fish/fish_placeholder.png" },
-               
-               // Additional DC 17+ fish
-               { name: "River Snapper", dc: 17, value: 15, properties: "A snapping turtle-like fish. When consumed, grants resistance to bludgeoning damage for 1 hour.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Giant River Shrimp", dc: 18, value: 20, properties: "A large shrimp that can be eaten raw or cooked. Provides a +2 bonus to Dexterity saving throws for 1 hour when consumed.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Crystal Trout", dc: 19, value: 25, properties: "Its scales refract light like a prism. When prepared properly, provides 10HP and advantage on Intelligence checks for 2 hours.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Ethereal Catfish", dc: 20, value: 30, properties: "A ghostly fish that can phase through solid objects. When consumed, grants the ability to move through solid objects as if they were difficult terrain for 10 minutes.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Spectral Pike", dc: 21, value: 35, properties: "A spectral fish that can become invisible at will. When consumed, grants the ability to turn invisible for 1 minute.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Void Eel", dc: 22, value: 40, properties: "A dark eel that seems to absorb light. When consumed, grants resistance to necrotic damage for 1 hour.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Celestial Salmon", dc: 23, value: 50, properties: "A shimmering fish that glows faintly. When prepared properly, provides 12HP and advantage on saving throws against being charmed for 2 hours.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Astral Sturgeon", dc: 24, value: 60, properties: "A massive fish with star-like patterns on its scales. When consumed, grants the ability to cast Astral Projection once within the next 8 hours.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Giant River Eel", dc: 17, value: 20, properties: "A massive eel that can constrict its prey. When consumed, grants a +2 bonus to Dexterity saving throws for 1 hour.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Silver Salmon", dc: 18, value: 25, properties: "A shimmering fish that grants a +1 bonus to Dexterity checks for 1 hour when consumed.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Golden Catfish", dc: 19, value: 30, properties: "Its golden scales are said to bring good luck. When consumed, grants advantage on the next attack roll made within 1 hour.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Ethereal Pike", dc: 20, value: 35, properties: "A ghostly fish that can phase through solid objects. When consumed, grants the ability to move through solid objects as if they were difficult terrain for 10 minutes.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Spectral Sturgeon", dc: 21, value: 40, properties: "A rare fish that glows faintly in the dark. When consumed, grants darkvision for 1 hour if you don't already have it.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Titanic Catfish", dc: 22, value: 50, properties: "A colossal catfish that can swallow whole boats. When consumed, grants the ability to breathe underwater for 1 hour.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Legendary Paddlefish", dc: 17, value: 25, properties: "A rare filter feeder with a distinctive snout. When prepared by an expert chef, grants +2 to all ability checks for 1 hour.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Frostfin Trout", dc: 18, value: 30, properties: "A trout that thrives in icy waters. When consumed, grants resistance to cold damage for 1 hour.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Emberfish", dc: 19, value: 35, properties: "A fiery fish that glows with internal heat. When consumed, grants resistance to fire damage for 1 hour.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Stormscale Eel", dc: 20, value: 40, properties: "An eel that crackles with electrical energy. When consumed, grants the ability to cast Thunderwave once within the next 8 hours.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Voidfin Shark", dc: 21, value: 45, properties: "A shark that seems to exist partially in another dimension. When consumed, grants the ability to cast Misty Step once within the next 8 hours.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Celestial Ray", dc: 22, value: 50, properties: "A ray that glows with celestial light. When prepared properly, provides 15HP and advantage on saving throws against being blinded for 2 hours.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Astral Leviathan", dc: 23, value: 60, properties: "A massive leviathan that swims through the astral plane. When consumed, grants the ability to cast Astral Projection once within the next 8 hours.", image: "assets/images/fish/fish_placeholder.png" },               
-               { name: "Crystal Trout", dc: 18, value: 30, properties: "Its translucent flesh seems to glow with inner light. When consumed, grants the ability to cast Light at will for 8 hours.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Moonbeam Gar", dc: 19, value: 35, properties: "Only surfaces during certain lunar phases. When prepared under moonlight, grants resistance to necrotic damage for 24 hours.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Elder Lake Turtle", dc: 20, value: 40, properties: "Said to be over 200 years old. When its meat is consumed, grants +1 to Wisdom and advantage on Wisdom saves for 24 hours.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Depths Walker", dc: 21, value: 45, properties: "A fish that seems to walk along the lake bottom. When consumed, grants water walking for 1 hour.", image: "assets/images/fish/fish_placeholder.png" }
+                 { name: "Prismatic Carp", dc: 18, value: 40, properties: "A shimmering fish with scales that cycle through all colors. Grants resistance to a random damage type for 1 hour when consumed.", image: "assets/images/fish/prismatic_carp.png" },
+                 { name: "Thunder Catfish", dc: 19, value: 45, properties: "Generates small electrical charges. Consuming it grants the ability to cast Shocking Grasp once within the next 8 hours.", image: "assets/images/fish/thunder_catfish.png" },
+                 { name: "Arcane Bass", dc: 16, value: 30, properties: "Shows faint magical runes on its scales. When consumed, grants the ability to detect magic for 10 minutes.", image: "assets/images/fish/arcane_bass.png" },
+                 { name: "Silver Perch", dc: 11, value: 7, properties: "Its reflective scales shimmer in the light. When prepared during a short rest, provides 5HP and +1 to Charisma (Performance) checks for 1 hour.", image: "assets/images/fish/silver_perch.png" },
+                 { name: "Golden Minnow", dc: 12, value: 8, properties: "A small but valuable fish. When consumed, grants the ability to hold your breath for twice as long for 1 hour.", image: "assets/images/fish/golden_minnow.png" },
+                 { name: "Spotted River Bass", dc: 13, value: 9, properties: "A common game fish. When prepared during a short rest, provides 6HP and advantage on Athletics checks for swimming for 1 hour.", image: "assets/images/fish/spotted_river_bass.png" },
+                 { name: "Mossy Catfish", dc: 14, value: 10, properties: "Covered in a harmless moss that has mild healing properties. When consumed, provides 5HP and advantage on saving throws against disease for 2 hours.", image: "assets/images/fish/mossy_catfish.png" },
+                 { name: "River Pike", dc: 11, value: 8, properties: "A predatory freshwater fish. When prepared properly, grants +1 to Wisdom (Survival) checks for 2 hours.", image: "assets/images/fish/river_pike.png" },
+                 { name: "Whiskered Sturgeon", dc: 13, value: 10, properties: "Its sensitive barbels detect minute vibrations. When consumed, grants advantage on Wisdom (Perception) checks that rely on hearing for 1 hour.", image: "assets/images/fish/whiskered_sturgeon.png" },
+                 // Additional DC 10-13 fish
+                 { name: "Copper Minnow", dc: 10, value: 5, properties: "Has a distinctive metallic sheen. When consumed, grants resistance to lightning damage for 10 minutes.", image: "assets/images/fish/copper_minnow.png" },
+                 { name: "Dappled Sunfish", dc: 10, value: 7, properties: "Covered in colorful spots that change with the light. When consumed, grants advantage on saving throws against being blinded for 2 hours.", image: "assets/images/fish/dappled_sunfish.png" },
+                 { name: "Pebble Sucker", dc: 11, value: 6, properties: "Collects small stones in its mouth. When prepared properly, provides 4HP and +1 to Athletics checks for 1 hour.", image: "assets/images/fish/pebble_sucker.png" },
+                 { name: "River Pincer", dc: 11, value: 8, properties: "Has specialized fins that can grip objects. When consumed, grants advantage on checks to avoid being disarmed for 2 hours.", image: "assets/images/fish/river_pincer.png" },
+                 { name: "Meadow Brook Trout", dc: 11, value: 7, properties: "Smells faintly of wildflowers. When prepared during a short rest, provides 5HP and advantage on Nature checks for 1 hour.", image: "assets/images/fish/meadow_brook_trout.png" },
+                 { name: "Echo Minnow", dc: 12, value: 7, properties: "Makes distinctive clicking sounds to navigate murky waters. When consumed, grants +2 to Perception checks in darkness for 1 hour.", image: "assets/images/fish/echo_minnow.png" },
+                 { name: "Lazuli Swimmer", dc: 12, value: 8, properties: "Has brilliant blue scales. When prepared properly, provides 5HP and +1 to Charisma checks for 1 hour.", image: "assets/images/fish/lazuli_swimmer.png" },
+                 { name: "Featherscale", dc: 12, value: 7, properties: "Extremely light with wispy fins. When consumed, grants reduced falling damage (half damage) for 1 hour.", image: "assets/images/fish/featherscale.png" },
+                 { name: "Mud Dreamer", dc: 13, value: 8, properties: "Found half-buried in riverbed mud. When prepared during a short rest, provides 6HP and advantage on saving throws against exhaustion for 2 hours.", image: "assets/images/fish/mud_dreamer.png" },
+                 { name: "Whitewater Bass", dc: 13, value: 9, properties: "Strong fish with powerful muscles. When consumed, grants +1 to Strength checks and jumping distance for 2 hours.", image: "assets/images/fish/whitewater_bass.png" },
+                 { name: "Spotted Gar", dc: 13, value: 8, properties: "Has armored scales and a long snout. When prepared properly, provides 5HP and +1 AC against piercing damage for 1 hour.", image: "assets/images/fish/spotted_gar.png" },
+                 { name: "River Goby", dc: 14, value: 9, properties: "A small fish that can camouflage itself. When consumed, grants advantage on Stealth checks in natural environments for 1 hour.", image: "assets/images/fish/river_goby.png" },
+                 { name: "Silverfin Darter", dc: 14, value: 10, properties: "Its silver fins shimmer in the light. When prepared during a short rest, provides 6HP and +1 to Dexterity saves against traps for 2 hours.", image: "assets/images/fish/silverfin_darter.png" },
+                 { name: "Golden Shiner", dc: 15, value: 11, properties: "A small, golden fish. When consumed, grants a +1 bonus to Charisma checks for 1 hour.", image: "assets/images/fish/golden_shiner.png" },
+                 { name: "Bluegill Sunfish", dc: 15, value: 12, properties: "A common freshwater fish. When prepared properly, provides 7HP and +1 to Wisdom saves against illusions for 2 hours.", image: "assets/images/fish/bluegill_sunfish.png" },
+                 { name: "Redfin Pickerel", dc: 16, value: 13, properties: "A predatory fish with sharp teeth. When consumed, grants advantage on attack rolls against aquatic creatures for 1 hour.", image: "assets/images/fish/redfin_pickerel.png" },
+                 { name: "Mottled Catfish", dc: 16, value: 14, properties: "Its mottled skin provides excellent camouflage. When prepared during a short rest, provides 8HP and +1 to Stealth checks in water for 2 hours.", image: "assets/images/fish/mottled_catfish.png" },
+                 { name: "Stream Darter", dc: 10, value: 6, properties: "A small, quick fish. When consumed, grants +1 to Dexterity checks for 1 hour.", image: "assets/images/fish/stream_darter.png" },
+                 { name: "Muddy Sucker", dc: 10, value: 5, properties: "Not the prettiest fish, but provides 4HP when cooked properly.", image: "assets/images/fish/muddy_sucker.png" },
+                 { name: "Creek Chub", dc: 11, value: 6, properties: "A hardy little fish. When prepared, grants 3HP and +1 to Constitution saves against cold for 2 hours.", image: "assets/images/fish/creek_chub.png" },
+                 { name: "Willow Minnow", dc: 12, value: 6, properties: "Small but nutritious. When prepared during a short rest, provides 3HP and +1 to Wisdom checks for 1 hour.", image: "assets/images/fish/willow_minnow.png" },
+                 { name: "Lake Bluegill", dc: 13, value: 7, properties: "A popular angling fish. When prepared properly, provides 4HP and +1 to Animal Handling checks for 2 hours.", image: "assets/images/fish/lake_bluegill.png" },
+                 { name: "Yellow Perch", dc: 13, value: 8, properties: "Its yellow stripes are distinctive. When consumed, grants the ability to see clearly underwater for 30 minutes.", image: "assets/images/fish/yellow_perch.png" },
+                 { name: "Northern Pike", dc: 14, value: 12, properties: "A voracious predator. When prepared during a short rest, provides 6HP and +1 to attack rolls for 1 hour.", image: "assets/images/fish/northern_pike.png" },
+                 { name: "Channel Catfish", dc: 15, value: 11, properties: "A bottom feeder with keen senses. When prepared, grants darkvision for 1 hour if you don't already have it.", image: "assets/images/fish/channel_catfish.png" },
+                 { name: "Muskellunge", dc: 16, value: 15, properties: "The fish of a thousand casts. When prepared properly, grants 8HP and advantage on Constitution saves for 2 hours.", image: "assets/images/fish/muskellunge.png" },
+                 { name: "Lake Sturgeon", dc: 16, value: 18, properties: "An ancient fish species. When consumed, grants 5 temporary hit points and resistance to one damage type of your choice for 1 hour.", image: "assets/images/fish/lake_sturgeon.png" },
+                 { name: "River Snapper", dc: 17, value: 15, properties: "A snapping turtle-like fish. When consumed, grants resistance to bludgeoning damage for 1 hour.", image: "assets/images/fish/river_snapper.png" },
+                 { name: "Giant River Shrimp", dc: 18, value: 20, properties: "A large shrimp that can be eaten raw or cooked. Provides a +2 bonus to Dexterity saving throws for 1 hour when consumed.", image: "assets/images/fish/giant_river_shrimp.png" },
+                 { name: "Crystal Trout", dc: 19, value: 25, properties: "Its scales refract light like a prism. When prepared properly, provides 10HP and advantage on Intelligence checks for 2 hours.", image: "assets/images/fish/crystal_trout.png" },
+                 { name: "Ethereal Catfish", dc: 20, value: 30, properties: "A ghostly fish that can phase through solid objects. When consumed, grants the ability to move through solid objects as if they were difficult terrain for 10 minutes.", image: "assets/images/fish/ethereal_catfish.png" },
+                 { name: "Spectral Pike", dc: 21, value: 35, properties: "A spectral fish that can become invisible at will. When consumed, grants the ability to turn invisible for 1 minute.", image: "assets/images/fish/spectral_pike.png" },
+                 { name: "Void Eel", dc: 22, value: 40, properties: "A dark eel that seems to absorb light. When consumed, grants resistance to necrotic damage for 1 hour.", image: "assets/images/fish/void_eel.png" },
+                 { name: "Celestial Salmon", dc: 23, value: 50, properties: "A shimmering fish that glows faintly. When prepared properly, provides 12HP and advantage on saving throws against being charmed for 2 hours.", image: "assets/images/fish/celestial_salmon.png" },
+                 { name: "Astral Sturgeon", dc: 24, value: 60, properties: "A massive fish with star-like patterns on its scales. When consumed, grants the ability to cast Astral Projection once within the next 8 hours.", image: "assets/images/fish/astral_sturgeon.png" },
+                 { name: "Giant River Eel", dc: 17, value: 20, properties: "A massive eel that can constrict its prey. When consumed, grants a +2 bonus to Dexterity saving throws for 1 hour.", image: "assets/images/fish/giant_river_eel.png" },
+                 { name: "Silver Salmon", dc: 18, value: 25, properties: "A shimmering fish that grants a +1 bonus to Dexterity checks for 1 hour when consumed.", image: "assets/images/fish/silver_salmon.png" },
+                 { name: "Golden Catfish", dc: 19, value: 30, properties: "Its golden scales are said to bring good luck. When consumed, grants advantage on the next attack roll made within 1 hour.", image: "assets/images/fish/golden_catfish.png" },
+                 { name: "Ethereal Pike", dc: 20, value: 35, properties: "A ghostly fish that can phase through solid objects. When consumed, grants the ability to move through solid objects as if they were difficult terrain for 10 minutes.", image: "assets/images/fish/ethereal_pike.png" },
+                 { name: "Spectral Sturgeon", dc: 21, value: 40, properties: "A rare fish that glows faintly in the dark. When consumed, grants darkvision for 1 hour if you don't already have it.", image: "assets/images/fish/spectral_sturgeon.png" },
+                 { name: "Titanic Catfish", dc: 22, value: 50, properties: "A colossal catfish that can swallow whole boats. When consumed, grants the ability to breathe underwater for 1 hour.", image: "assets/images/fish/titanic_catfish.png" },
+                 { name: "Frostfin Trout", dc: 18, value: 30, properties: "A trout that thrives in icy waters. When consumed, grants resistance to cold damage for 1 hour.", image: "assets/images/fish/frostfin_trout.png" },
+                 { name: "Emberfish", dc: 19, value: 35, properties: "A fiery fish that glows with internal heat. When consumed, grants resistance to fire damage for 1 hour.", image: "assets/images/fish/emberfish.png" },
+                 { name: "Stormscale Eel", dc: 20, value: 40, properties: "An eel that crackles with electrical energy. When consumed, grants the ability to cast Thunderwave once within the next 8 hours.", image: "assets/images/fish/stormscale_eel.png" },
+                 { name: "Voidfin Shark", dc: 21, value: 45, properties: "A shark that seems to exist partially in another dimension. When consumed, grants the ability to cast Misty Step once within the next 8 hours.", image: "assets/images/fish/voidfin_shark.png" },
+                 { name: "Celestial Ray", dc: 22, value: 50, properties: "A ray that glows with celestial light. When prepared properly, provides 15HP and advantage on saving throws against being blinded for 2 hours.", image: "assets/images/fish/celestial_ray.png" },
+                 { name: "Astral Leviathan", dc: 23, value: 60, properties: "A massive leviathan that swims through the astral plane. When consumed, grants the ability to cast Astral Projection once within the next 8 hours.", image: "assets/images/fish/astral_leviathan.png" },
+                 { name: "Crystal Trout", dc: 18, value: 30, properties: "Its translucent flesh seems to glow with inner light. When consumed, grants the ability to cast Light at will for 8 hours.", image: "assets/images/fish/crystal_trout.png" },
+                 { name: "Moonbeam Gar", dc: 19, value: 35, properties: "Only surfaces during certain lunar phases. When prepared under moonlight, grants resistance to necrotic damage for 24 hours.", image: "assets/images/fish/moonbeam_gar.png" },
+                 { name: "Elder Lake Turtle", dc: 20, value: 40, properties: "Said to be over 200 years old. When its meat is consumed, grants +1 to Wisdom and advantage on Wisdom saves for 24 hours.", image: "assets/images/fish/elder_lake_turtle.png" },
+                 { name: "Depths Walker", dc: 21, value: 45, properties: "A fish that seems to walk along the lake bottom. When consumed, grants water walking for 1 hour.", image: "assets/images/fish/depths_walker.png" }
         	 ]
     	 },
     	 {
@@ -828,20 +1260,33 @@ function initializeFishingMinigame() {
    // --- Rods and Lures Data ---
    const rods = [
     	 { name: "Standard Rod", bonus: 0 },
-    	 { name: "+1 Rod", bonus: 1 }
+		 { name: "+1 Rod", bonus: 1 },
+        { name: "Creekwaddle Rod", bonus: 1 },
+  { name: "Journeyman Rod", bonus: 1 },
+  { name: "Master's Rod", bonus: 2 }
     	 // Add more rods here
    ];
 
    const lures = [
     	 { name: "Standard Lure", bonus: 0 },
     	 { name: "+1 Lure", bonus: 1 },
-         { name: "Magi-Jig Lure", bonus: 1 }
+  { name: "Magi-Jig Lure", bonus: 1 }
     	 // Add more lures here
    ];
 
    // Initialize catalogue from localStorage
    let caughtFishCatalogue = [];
    loadCatalogue(); // Ensure this is called to populate the catalogue on load
+
+   // Session tracker (resets on page refresh)
+   let sessionTotalValue = 0;
+   let sessionCatchCount = 0;
+   function updateSessionStats() {
+     if (sessionStatsValueEl) {
+       sessionStatsValueEl.textContent = `${sessionTotalValue} gp (${sessionCatchCount} fish)`;
+     }
+   }
+   updateSessionStats();
 
    // --- Functions ---
    // Populate all the dropdowns
@@ -951,11 +1396,16 @@ function getWeightedFishList(fishSource) {
     return weightedList;
 }
 
-// Modify this function to add a rare catch check
+// Select fish with extreme rarity gating
 function selectRandomFish() {
     if (!regionSelect || !lureSelect) return null;
     const selectedRegionIndex = parseInt(regionSelect.value);
-    const isMagiJigSelected = lureSelect.options[lureSelect.selectedIndex].text.includes("Magi-Jig");
+  const selectedLureText = lureSelect.options[lureSelect.selectedIndex].text;
+  const isMagiJigSelected = selectedLureText.includes("Magi-Jig");
+  const selectedRodText = rodSelect.options[rodSelect.selectedIndex].text;
+  const isCreekwaddleRod = selectedRodText.includes("Creekwaddle");
+  const isJourneymanRod = selectedRodText.includes("Journeyman");
+  const isMastersRod = selectedRodText.includes("Master");
     
     let fishSourceData;
     
@@ -967,42 +1417,44 @@ function selectRandomFish() {
         } else {
             fishSourceData = fishingRegions[selectedRegionIndex].fish;
         }
-    } else {
-        fishSourceData = fishingRegions[selectedRegionIndex].fish;
+  } else {
+    fishSourceData = fishingRegions[selectedRegionIndex].fish;
+  }
+
+  // Rod-based DC filtering
+  if (isCreekwaddleRod || isJourneymanRod || isMastersRod) {
+    const basePool = [...fishSourceData];
+    // Creekwaddle Rod includes Magi-Jig fish that meet the threshold when in Lake & River
+    if (isCreekwaddleRod && selectedRegionIndex === 0) {
+      // Add Magi-Jig fish at or below DC 14 into consideration
+      const eligibleMagi = magiJigLakeFish.filter(f => f.dc <= 14);
+      basePool.push(...eligibleMagi);
     }
-      // Ultra-rare items check (approximately 0.5% chance)
-    const ultraRareItems = [
-        "Deactivated Warforged", 
-        "Magic Boot", 
-        "Functional Good-Rod", 
-        "Broken Good-Rod", 
-        "Barnacled Chest", 
-        "Subterranean Treasure Chest",
-        "Darkforme Titan-Snapper",
-        "Darkforme River Tyrant",
-        "Darkforme Abyssal Leviathan",
-        "Lakeopus Rex",
-        "Saltwater Treasure Chest"
-    ];
-    
-    // First check if player gets a chance at ultra rare (0.5% base chance)
-    // Higher player bonus slightly increases chance for rare finds
-    const playerBonus = parseInt(playerBonusInput.value) || 0;
-    const rareChance = 0.005 + (playerBonus * 0.0005); // Slight boost with higher bonus
-    
-    if (Math.random() < rareChance) {
-        // Player gets a rare item opportunity!
-        // Find all ultra-rare items in the current region
-        const availableRares = fishSourceData.filter(fish => ultraRareItems.includes(fish.name));
-        
-        if (availableRares.length > 0) {
-            // Return a random rare item from available ones
-            return availableRares[Math.floor(Math.random() * availableRares.length)];
-        }
+    // Apply the DC threshold filter
+    if (isCreekwaddleRod) {
+      fishSourceData = basePool.filter(f => f.dc <= 14);
+    } else if (isJourneymanRod) {
+      fishSourceData = basePool.filter(f => f.dc >= 14);
+    } else if (isMastersRod) {
+      fishSourceData = basePool.filter(f => f.dc >= 16);
     }
-    
-    // Normal weighted selection for common fish
-    const weightedList = getWeightedFishList(fishSourceData);
+    // Safety: if somehow empty, fall back to original pool respecting intent
+    if (fishSourceData.length === 0) {
+      // If no eligible fish, keep original selection rules to avoid dead-ends
+      fishSourceData = [...basePool];
+    }
+  }
+
+  // Apply extreme rarity gate: DC20+ and named legendaries ~ 1 in 250,000 overall chance
+  const playerBonus = parseInt(playerBonusInput.value) || 0;
+  const extremes = fishSourceData.filter(isExtremeRare);
+  const commons = fishSourceData.filter(f => !isExtremeRare(f));
+  const baseGate = 1 / 250000; // ~4e-6
+  const gateChance = baseGate * (1 + Math.min(Math.max(playerBonus, 0), 20) * 0.01); // small skill boost, capped at +20%
+  const useExtremes = extremes.length > 0 && Math.random() < gateChance;
+
+  const source = useExtremes ? extremes : (commons.length ? commons : fishSourceData);
+  const weightedList = getWeightedFishList(source);
     if (weightedList.length === 0) return fishSourceData[Math.floor(Math.random() * fishSourceData.length)];
     const randomIndex = Math.floor(Math.random() * weightedList.length);
     return weightedList[randomIndex];
@@ -1014,7 +1466,7 @@ function selectRandomFish() {
    }
 
    // Cast line and attempt to catch fish
-   async function castLine() {
+  async function castLine() {
     	 if (!dbInitialized || !userId) {
         	 fishingLog.innerHTML = `<p class="text-red-500">Cannot fish: User not authenticated or database not ready. Please wait or refresh.</p>`;
         	 return;
@@ -1040,29 +1492,55 @@ function selectRandomFish() {
 
     	 fishingLog.innerHTML += `<p class="text-blue-600 font-semibold">You cast your line hoping to catch a ${targetFish.name} (DC: ${targetFish.dc})...</p>`; // text-blue-600 will use themed color
 
-    	 let successfulRolls = 0;
-    	 let attempts = 0;
+    let successfulRolls = 0;
+    let attempts = 0;
 
     	 for (let i = 1; i <= 3; i++) {
         	 attempts++;
-        	 const roll = rollD20();
-        	 let totalBonus = selectedRodBonus + playerBonus;
-        	 let attemptLog = `Attempt ${i}: Rolled a ${roll}. `;
+           // Timing mini-game before each attempt
+           const isMagiJigSelected = lureSelect.options[lureSelect.selectedIndex].text.includes("Magi-Jig");
+           let baseBonus = selectedRodBonus + playerBonus;
+           if (i === 1) baseBonus += selectedLureBonus;
+           const timingBonus = await playTimingMinigame(targetFish.dc, baseBonus, isMagiJigSelected);
+
+           // For high-DC fish, require line-tension mash QTE before rolling
+           if (targetFish.dc >= 17) {
+             const kept = await playMashMinigame(targetFish.dc);
+             if (!kept) {
+               let failLog = `Attempt ${i}: The line went slack! <span class="text-red-500 font-bold">Failed to keep tension.</span>`;
+               fishingLog.innerHTML += `<p>${failLog}</p>`;
+               // Count as failed attempt and continue
+               if (attempts - successfulRolls >= 2 && attempts >=2) {
+                 fishingLog.innerHTML += `<p class="text-red-600 font-bold mt-2">The fish got away...</p>`;
+                 break;
+               }
+               continue;
+             } else {
+               fishingLog.innerHTML += `<p class="text-green-500">Attempt ${i}: Line tension maintained.</p>`;
+             }
+           }
+
+           const roll = rollD20();
+           let totalBonus = selectedRodBonus + playerBonus;
+           let attemptLog = `Attempt ${i}: Rolled a ${roll}. `;
 
         	 if (i === 1) {
             	 totalBonus += selectedLureBonus;
             	 attemptLog += `(Lure bonus: +${selectedLureBonus}) `;
         	 }
-        	 attemptLog += `(Rod bonus: +${selectedRodBonus}, Player bonus: +${playerBonus}) `;
+       attemptLog += `(Rod bonus: +${selectedRodBonus}, Player bonus: +${playerBonus}) `;
+       if (timingBonus > 0) {
+         attemptLog += `(Timing bonus: +${timingBonus}) `;
+       }
 
-        	 const finalRoll = roll + totalBonus;
+       const finalRoll = roll + totalBonus + timingBonus;
         	 attemptLog += `Total: ${finalRoll} vs DC ${targetFish.dc}. `;
 
-        	 if (i === 1 && roll === 20) {
-            	 attemptLog += `<span class="text-yellow-500 font-bold">Natural 20 on the first roll!</span> Fish caught!`; // text-yellow-500 themed
-            	 fishingLog.innerHTML += `<p>${attemptLog}</p>`;
-            	 successfulRolls = 2;
-            	 break;
+             if (i === 1 && roll === 20) {
+             	 attemptLog += `<span class="text-yellow-500 font-bold">Natural 20 on the first roll!</span> Hook secured!`; // text-yellow-500 themed
+             	 fishingLog.innerHTML += `<p>${attemptLog}</p>`;
+             	 successfulRolls = 2;
+             	 break;
         	 }
 
         	 if (finalRoll >= targetFish.dc) {
@@ -1075,7 +1553,7 @@ function selectRandomFish() {
         	 }
 
         	 if (successfulRolls >= 2) {
-            	 fishingLog.innerHTML += `<p class="text-green-600 font-bold mt-2">Congratulations! You caught the ${targetFish.name}!</p>`; // text-green-600 themed
+            	 fishingLog.innerHTML += `<p class="text-green-600 font-bold mt-2">Hooked! Time to reel in the ${targetFish.name}...</p>`; // text-green-600 themed
             	 break;
         	 }
         	 if (attempts - successfulRolls >= 2 && attempts >=2) {
@@ -1084,7 +1562,15 @@ function selectRandomFish() {
         	 }
     	 }
 
-    	 if (successfulRolls >= 2) {
+     	 if (successfulRolls >= 2) {
+        	 // End-of-catch tension minigame for all fish (easier for low DC by design)
+        	 fishingLog.innerHTML += `<p class="text-yellow-500 font-semibold mt-2">Reel it in!</p>`;
+        	 const reeledIn = await playMashMinigame(targetFish.dc);
+        	 if (!reeledIn) {
+        	 	 fishingLog.innerHTML += `<p class="text-red-600 font-bold mt-1">The hook slipped at the last moment! The ${targetFish.name} got away...</p>`;
+        	 	 return;
+        	 }
+        	 fishingLog.innerHTML += `<p class=\"text-green-600 font-bold mt-1\">Landed the ${targetFish.name}!</p>`;
         	 const selectedRegionIndex = parseInt(regionSelect.value);
         	 const regionName = fishingRegions[selectedRegionIndex].name;
 
@@ -1115,6 +1601,10 @@ function selectRandomFish() {
         	 };
         	 caughtFishDisplay.classList.remove('hidden');
         	 await addToCatalogue(targetFish);
+        	 // Update session value tracker
+        	 sessionCatchCount += 1;
+        	 sessionTotalValue += Number(targetFish.value) || 0;
+        	 updateSessionStats();
     	 } else if (attempts < 3 && successfulRolls < 2 && (attempts - successfulRolls < 2 || attempts <2) ) {
         	 fishingLog.innerHTML += `<p class="text-red-600 font-bold mt-2">The fish got away...</p>`;
     	 }
@@ -1220,29 +1710,40 @@ function selectRandomFish() {
    }
 
    // Switch between fishing and catalogue tabs
-   function switchTab(tabName) {
-        if (!fishingContent || !catalogueContent || !fishingTabButton || !catalogueTabButton) {
+  function switchTab(tabName) {
+      if (!fishingContent || !fishingTabButton || !catalogueTabButton) {
             console.error("Tab switching elements not found!");
             return;
         }
     	 currentTab = tabName;
-    	 if (tabName === 'fishing') {
-        	 fishingContent.classList.remove('hidden');
-        	 catalogueContent.classList.add('hidden');
-        	 fishingTabButton.classList.add('active');
-        	 fishingTabButton.classList.remove('bg-gray-200', 'text-gray-700'); // Old theme classes
-        	 catalogueTabButton.classList.remove('active');
-        	 catalogueTabButton.classList.add('bg-gray-200', 'text-gray-700'); // Fallback, CSS will handle with :not(.active)
-    	 } else if (tabName === 'catalogue') {
-        	 fishingContent.classList.add('hidden');
-        	 catalogueContent.classList.remove('hidden');
-        	 catalogueTabButton.classList.add('active');
-        	 catalogueTabButton.classList.remove('bg-gray-200', 'text-gray-700');
-        	 fishingTabButton.classList.remove('active');
-        	 fishingTabButton.classList.add('bg-gray-200', 'text-gray-700');
-        	 renderCatalogue();
-    	 }
+		 if (tabName === 'fishing') {
+      	 fishingContent.classList.remove('hidden');
+      	 fishingTabButton.classList.add('active');
+      	 fishingTabButton.classList.remove('bg-gray-200', 'text-gray-700');
+      	 catalogueTabButton.classList.remove('active');
+		 } else if (tabName === 'catalogue') {
+      	 // Open overlay instead of switching content
+      	 showCatalogueOverlay();
+		 }
    }
+
+  function showCatalogueOverlay() {
+    if (!catalogueOverlay) return;
+    renderCatalogue();
+    catalogueOverlay.style.display = 'flex';
+    catalogueTabButton.classList.add('active');
+    // Close on ESC or outside click
+    function onKey(e){ if(e.code==='Escape'){ hideCatalogueOverlay(); } }
+    function onClick(e){ if(e.target===catalogueOverlay){ hideCatalogueOverlay(); } }
+    document.addEventListener('keydown', onKey, { once: true });
+    catalogueOverlay.addEventListener('click', onClick, { once: true });
+  }
+
+  function hideCatalogueOverlay() {
+    if (!catalogueOverlay) return;
+    catalogueOverlay.style.display = 'none';
+    catalogueTabButton.classList.remove('active');
+  }
 
    // --- Event Listeners ---
      if (regionSelect) {
@@ -1258,8 +1759,9 @@ function selectRandomFish() {
 
     if (castButton) castButton.addEventListener('click', castLine);
 
-    if (fishingTabButton) fishingTabButton.addEventListener('click', () => switchTab('fishing'));
-    if (catalogueTabButton) catalogueTabButton.addEventListener('click', () => switchTab('catalogue'));
+  if (fishingTabButton) fishingTabButton.addEventListener('click', () => switchTab('fishing'));
+  if (catalogueTabButton) catalogueTabButton.addEventListener('click', () => showCatalogueOverlay());
+  if (catalogueCloseBtn) catalogueCloseBtn.addEventListener('click', hideCatalogueOverlay);
 
     if (playerBonusLabel && playerBonusTooltip) {
         playerBonusLabel.addEventListener('mouseenter', () => playerBonusTooltip.classList.remove('hidden'));

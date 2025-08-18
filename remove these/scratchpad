@@ -1,0 +1,337 @@
+A new app.
+
+DIAPER CLICKER a clicking-based semi-idle game where players try to put the entire world in diapers!
+
+~In the center top half of the screen and centered is the (lovely diaper.png) image which will be what our users click to diaper butts.
+~visual fields where the elements you purchase will be neatly arranged below central clicker.
+~in the bottom left corner, a window showing a simplistic depiction of the earth as a faded but colored blue and green sphere that begins to fill with opacity as you diaper the world.
+~Uses a layout and color scheme like that found in the rest of the simple handbook apps, notably in the simple handbook HTML.
+~Each row of purchaseable units which adds a set amount of butts-diapered-per-second to the clicker passively.
+~Each unit can be upgraded 10 times, and has an 11th synergy upgrade with another unit (needs to be purchased by both)
+
+
+~Soft-Goal: Reach 9 billion "butts diapered," (not necessarily through clicking alone). A timer should tell you how long (paused at browser close) it took to reach the target.
+
+~Secondary Goal: Reach 92 Trillion butts diapered (local universal population an arbitrary number, game continues perpetually- and this gives me a longer-term goal to add more content towards as we move forward.)
+
+Methods:
+
+~Clicking
+~Buying upgrades
+~Buying "clicks"
+~Buying nannybots, diaper factories, diaper media networks,  Pampolice Agencies, diapropaganda ministries, then Diapocratic states, and finally churches of Diaperism- the holy faith of diaper (building diaper churchs, lol)
+~Units/buildings should upgrade trees
+~use our lore and imagery as needed, we have so much and the image names make it obvious what would be appropriate.
+~early game should focus on clicking
+~users should be able to "farm clicks" by purchasing diaper media networks and can be represented by potty-checker imagery as its source imagery.
+~nannybots bring butts for diapering, and can use the monster folder imagery for them
+~diaper factories need a placeholder image which can just be the factoy emoji but sized appropriately.
+~diapropaganda ministries needs a placeholder, can just be a government office emoji
+~pampolice agency needs to use an emoji placeholder
+~diapropaganda ministries can just use an eye placeholder emoji
+~and churches of diaperism can also use a church emoji placeholder for now.
+
+What else is needed:
+~Acheivements based off butts diapered such as getting the population of the vatican, then uk, then america, then of asia, etc.
+~Acheivements based off butts diapered without clicking (passively through buildings or different events.)
+~Acheivements based off number of buildings
+~Flavor text that appears in a news-channel-style ticker and updates the player on the state of the world as they diaper it. Makes comments based on lore and the amount of people who now wear diapers 24/7 and how that impacts the planet and culture.
+~Incremental non-unit upgrades that appear above the earth window in their own list and appear as milestone markers are reached.
+    -plasticizer for "improved plastic backing" could be one example.
+    -darkessence from the src folder used to represent "black diaper dye: doesn't affect absorbency, but dang these look cool!"
+    -other upgrades based on the items in our items.html
+    -diaper-brand upgrades (another flat percentage butts diapered per second upgrade) pulled from the pamperlogue
+    -darkling workers (a high level upgrade that needs a placeholder for now to trigger a flag that begins counting the time since the upgrade was acheived. Should become available once the player has pased the 4 billion butts diapered milestone)
+    -one upgrade should be Subliminal Diaper Anime cuz funny.
+
+
+
+
+
+================================================
+
+~Make the achievements section an actual tab of its own, move world coverage under the diaper clicker, put milestone upgrades above units and buildings in the same column.
+~track player stats on same page as acheivements
+~add manual save file system and put it on the same page as the acheivements and stats
+~add delete save/start run over feature
+~add feature for user to name their "Diaper Empire", make default Amazing Padbutt, so "Amazing Padbutt's Diaper Empire" and make a HIDDEN acheivement "I'm so original," for naming your diaper empire "Lulu." And the flavor text should be "Yes, I swiped the joke acheivement, but I don't punish you for it, have 100 cookies." and the HIDDEN acheivement should gift the player 100 cookies if unlocked. Add another HIDDEN acheivement for naming your diaper empire TheOwlcan or The Owlcan or theowlcan or owlcan (etc, simple variations) and have the achievement be called "We're All Owlcan..." and the acheivement flavor text should read: "...And you have been owl-ssimilated!"
+~make the +X from clicks a variety of different shades of pink heart with the +X in it.
+~Units are not purchaseable immediately when you first have the right amount of currency, requiring a refresh.
+
+
+
+~units and buildings need actual upgrade TIERS, they should NOT be limited to 10 of each unit
+~unit/building upgrades can be things like Ghost Hands for click power and Improved Nannybots, and should unlock at unit production milestones or units owned milestones.
+~put per click and per second totals in the world coverage box, make the butts diapered box larger and centered above the diaper clicker
+
+
+
+======================================================
+
+
+
+
+
+
+
+
+
+"C:\Users\Lulu\Desktop\InteractiveHandbook\src\assets\images\expeditionandgames\diaperclicker\prettyprincessdiaper.webp"
+"C:\Users\Lulu\Desktop\InteractiveHandbook\src\assets\images\expeditionandgames\diaperclicker\puppamps.webp"
+"C:\Users\Lulu\Desktop\InteractiveHandbook\src\assets\images\expeditionandgames\diaperclicker\whitediaper.webp"
+"C:\Users\Lulu\Desktop\InteractiveHandbook\src\assets\images\expeditionandgames\diaperclicker\blackdiaper.webp"
+"C:\Users\Lulu\Desktop\InteractiveHandbook\src\assets\images\expeditionandgames\diaperclicker\holydiaper.webp"
+
+
+
+
+
+
+
+
+
+
+
+
+
+======================================================
+
+Okay:
+~I want to add the ability to sell units and buildings.
+~I want to add another unit. This will be Diaper Universities, "Expanding the horizons of diaper life and science," It will come after churches of diaperism. Just use the Diaper school logo for now.
+~After diaper university is built, a timer is set. Once two billion butts are diapered, an upgrade tree for Advanced Diaperology should unlock in milestone upgrades. It should be a decent increase to click power and a 10% bonus to idle per second.
+~After Advanced Diaperology is purchased, a suite of advanced upgrades should unlock progressively (these should all be TOGGLE abilities, and switchable between on and off- with a 2 minute cooldown on each- and reflect the other units and buildings as sort of quasi power-ups. They should be directly impacted by how many of each unit/building the player has of that type)
+-Ghostly Pacts: Clicking gains 300% power but idle gain drops by 50% when user is clicking.
+-Nannybot Autonomy: Nannybot DPS randomly fluctuates between 75% and 150% output, with a greater chance of a lower output if the user has not recently bought a nannybot.
+-Volatile Markets: Users can buy (or sell) diaper factories for the chance to trigger a Market Surge, which doubles idle per second gain for 1 minute. However, there is also a lower chance of triggering a Market Dip, which lowers idle per second gain for 1 minute by 20%.
+-Hyperbliminal Diaper Messaging: "It's time to just drop the act and show some pamp," as flavor text, this toggle upgrade boosts idle gain, but imposes a 20 minute penalty (that only resets once its over, meaning they CAN just freely click until then) of -30% idle production if they buy any units other than diaper media networks and diapropaganda ministries.
+-Global Indoctrination Changing Stations: this would stop the user from clicking at all, triple idle production, and lower the cost of upgrades by 5% while active. Instead of a 2 minute cooldown, it would have a 10 minute global cooldown, requiring the player to wait 10 minutes to change toggle instead of just the normal 2.
+-Militarized & Obvious Diapolice: Pampolice Agencies get a 200% boost +1% for every 10 pampolice agencies earned, but this upgrade costs 10% of current Butts Diapered to activate. Furthermore, every time you buy a pampolice agency, there is a 90% chance of public backlash, causing a 80% drop in idle gain for 5 minutes. (this last part, with the backlash debuff should only be communicated to the player after it happens via ticker-injected messages with red Breaking News text.)
+-Crinkle Tax: for every 10 diapocratic states the user owners, they get a 1% chance of getting 20x gold heart clicks, which obviously give 20 times click production for that click. This bonus caps at 25%. However, there is also a progessive 1% chance (to a max of 20%) of triggering Pampublic Referendum when buying a diapocratic state- which drops click power by 50% for 10 minutes and prevents golden clicks during that time.
+-Pampul Canon: For every Church of Diaperism owned, there is a 1% increase to DPS of all other units while this is active, however clicking power lowers by .1% for every building owned (this should be directly communicated to the player)
+-Diaper Universities already have Advanced Diaperology as their advanced upgrade for now- but once all of them are unlocked, the Diaper University Toggle: Blind Me With Science! unlocks. Its purpose is.... it toggles between the current appearance of the app and a light-brown background version- essentially its just a light mode. It's a joke- but it should still work. Its cost should be 1 diaper butt.
+
+
+
+
+            // Regular monsters
+    {
+        name: "Dark Dimension Nannybot Bratnapper",
+        hp: 38,
+        attack: 16,
+        defense: 15,
+        cr: 1,
+        weaknesses: [],
+        image: "https://ik.imagekit.io/owlcan/Monsters/nannybot.jpg",
+        attacks: [
+            { name: "Bratnap Claws", damage: 7 }
+        ]
+    },
+    {
+        name: "Darkling-Bellowbelly",
+        hp: 26,
+        attack: 17,
+        defense: 13,
+        cr: 1,
+        weaknesses: ["radiant"],
+        image: "https://ik.imagekit.io/owlcan/Monsters/Darkforme%20Bellowbelly.png",
+        attacks: [
+            { name: "Claw", damage: 9 },
+            { name: "Bite", damage: 8 }
+        ]
+    },
+    {
+        name: "Darkling-Brackling",
+        hp: 22,
+        attack: 14,
+        defense: 12,
+        cr: 1,
+        weaknesses: ["radiant"],
+        image: "https://ik.imagekit.io/owlcan/Monsters/Brackling.png",
+        attacks: [
+            { name: "Tendril Lash", damage: 10 },
+            { name: "Bite", damage: 7 }
+        ]
+    },
+    {
+        name: "Darkling-Slurper",
+        hp: 4,
+        attack: 16,
+        defense: 10,
+        cr: 0.5,
+        weaknesses: ["radiant"],
+        image: "https://ik.imagekit.io/owlcan/Monsters/Darkling%20Slurper.png",
+        attacks: [
+            { name: "Slurp", damage: 6 },
+            { name: "Shuddering Pound", damage: 7 }
+        ]
+    },
+    {
+        name: "Darkform Enforcer",
+        hp: 102,
+        attack: 22,
+        defense: 16,
+        cr: 5,
+        weaknesses: ["radiant"],
+        image: "https://ik.imagekit.io/owlcan/Monsters/Darkforme%20Enforcer.png",
+        attacks: [
+            { name: "Tendril Barrage", damage: 10 },
+            { name: "Pound", damage: 18 },
+            { name: "Blistering Beam", damage: 15 }
+        ]
+    },
+    {
+        name: "Darkforme-Cavesweller",
+        hp: 136,
+        attack: 20,
+        defense: 15,
+        cr: 3,
+        weaknesses: ["radiant"],
+        image: "https://ik.imagekit.io/owlcan/Monsters/Darkforme%20Cavesweller.png",
+        attacks: [
+            { name: "Claw", damage: 13 },
+            { name: "Bite", damage: 17 },
+            { name: "Tendril Lash", damage: 15 }
+        ]
+    },
+    {
+        name: "Darkforme-Shade-Sneak",
+        hp: 13,
+        attack: 15,
+        defense: 13,
+        cr: 0.5,
+        weaknesses: ["radiant"],
+        image: "https://ik.imagekit.io/owlcan/Monsters/Darkforme%20Shadow-Lurker.png",
+        attacks: [
+            { name: "Claw", damage: 7 },
+            { name: "Bite", damage: 5 }
+        ]
+    },
+    {
+        name: "Darkling-Ossokin",
+        hp: 1,
+        attack: 14,
+        defense: 11,
+        cr: 0.125,
+        weaknesses: [],
+        image: "https://i.postimg.cc/wTwwZ38v/darkling-ossokin.png",
+        attacks: [
+            { name: "Shin Smack", damage: 1 }
+        ]
+    },
+    {
+        name: "Darkling-Hungerer",
+        hp: 10,
+        attack: 14,
+        defense: 12,
+        cr: 0.5,
+        weaknesses: [],
+        image: "https://i.postimg.cc/rFVhfxH3/darkling-hungerer.png",
+        attacks: [
+            { name: "Gnawing Swipe", damage: 3 }
+        ]
+    },
+    {
+        name: "Darkforme-Sleek-Lurker Pack Alpha",
+        hp: 32,
+        attack: 17,
+        defense: 14,
+        cr: 1,
+        weaknesses: ["radiant"],
+        image: "https://ik.imagekit.io/owlcan/Monsters/Darkforme%20Shadow-Lurker%20Pack%20Alpha.png",
+        attacks: [
+            { name: "Claw", damage: 8 },
+            { name: "Bite", damage: 7 }
+        ]
+    },
+    {
+        name: "Dark Dimension Project Auditor",
+        hp: 70,
+        attack: 16,
+        defense: 17,
+        cr: 5,
+        weaknesses: [],
+        image: "https://ik.imagekit.io/owlcan/projectauditor.png",
+        attacks: [
+            { name: "Enchanted Saber", damage: 15 },
+            { name: "Arcane Detonation", damage: 16 }
+        ]
+    },
+    {
+        name: "Dark Dimension Matronbot",
+        hp: 75,
+        attack: 18,
+        defense: 16,
+        cr: 5,
+        weaknesses: [],
+        image: "https://ik.imagekit.io/owlcan/Monsters/matronbot_bria.png",
+        attacks: [
+            { name: "Diaper Grappler", damage: 11 },
+            { name: "Punishment Rod", damage: 13 }
+        ]
+    },
+    {
+        name: "Darkling-Nightshade Elemental",
+        hp: 26,
+        attack: 16,
+        defense: 14,
+        cr: 2,
+        weaknesses: [],
+        image: "https://i.postimg.cc/x17tj7dV/darkling-nightshade-elemental.png",
+        attacks: [
+            { name: "Shadow Blast", damage: 9 }
+        ]
+    },
+        {
+        name: "Darkling-Shark",
+        hp: 16,
+        attack: 14,
+        defense: 13,
+        cr: 1,
+        weaknesses: [],
+        image: "https://i.postimg.cc/qRcLLvxp/darkling-shark.png",
+        attacks: [
+            { name: "Bite", damage: 6 }
+        ]
+    },
+    {
+        name: "Darkling-Ossokin-Proselyte",
+        hp: 13,
+        attack: 14,
+        defense: 12,
+        cr: 1,
+        weaknesses: [],
+        image: "https://i.postimg.cc/kgDTm9qy/darkling-ossokin-proselyte.png",
+        attacks: [
+            { name: "Bone Tap", damage: 3 }
+        ]
+    },
+    {
+        name: "Darkforme-Hungore",
+        hp: 32,
+        attack: 16,
+        defense: 14,
+        cr: 2,
+        weaknesses: ["radiant"],
+        image: "https://i.postimg.cc/RZ3LYRLs/darkforme-hungore.png",
+        attacks: [
+            { name: "Ventral Maw", damage: 7 }
+        ]
+    },
+    {
+        name: "The Darkformless",
+        hp: 39,
+        attack: 16,
+        defense: 15,
+        cr: 4,
+        weaknesses: ["radiant"],
+        image: "https://i.postimg.cc/v8zhxDmz/the-darkformless.png",
+        attacks: [
+            { name: "Shadow Bolt", damage: 9 },
+            { name: "Umbral Blast", damage: 4 }
+        ]
+    },        
+            // Bosses (stronger than previous, not stronger than Slimepress)
+            
+            
+            // Slimepress (buffed for late-game)

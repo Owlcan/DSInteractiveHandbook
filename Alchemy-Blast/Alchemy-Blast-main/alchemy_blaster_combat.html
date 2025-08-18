@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alchemy Blaster - Combat</title>
+    <link rel="stylesheet" href="assets/css/ui-styles.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #111;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+        
+        #gameContainer {
+            position: relative;
+            width: 800px;
+            height: 960px;
+        }
+        
+        #gameCanvas {
+            border: 2px solid #444;
+            box-shadow: 0 0 20px rgba(0, 100, 255, 0.3);
+            display: block;
+            background-color: #000;
+            width: 100%;
+            height: 100%;
+        }
+        
+        #loading {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+        
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #333;
+            border-top: 5px solid #55f;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        #gameInfo {
+            color: #aaa;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        
+        .control-group {
+            text-align: left;
+        }
+        
+        .key {
+            background-color: #333;
+            color: #fff;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin: 0 2px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <!-- Updated canvas dimensions to match CSS container size -->
+        <canvas id="gameCanvas" width="800" height="960"></canvas>
+        
+        <div id="loading">
+            <div class="loader"></div>
+            <p>Loading Alchemy Blaster...</p>
+        </div>
+        
+        <div id="gameInfo">
+            <div class="controls">
+                <div class="control-group">
+                    <p><span class="key">A</span> / <span class="key">←</span> : Move Left</p>
+                    <p><span class="key">D</span> / <span class="key">→</span> : Move Right</p>
+                </div>
+                <div class="control-group">
+                    <p><span class="key">Space</span> / <span class="key">Z</span> : Fire</p>
+                    <p><span class="key">Shift</span> / <span class="key">X</span> : Special Fire</p>
+                    <p><span class="key">P</span> / <span class="key">Esc</span> : Pause</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load only the necessary systems -->
+    <script src="assets/js/expedition/audio_manager.js"></script>
+    <script src="assets/js/expedition/ParticleSystem.js"></script>
+    <script src="assets/js/expedition/ProjectileManager.js"></script>
+    <script src="assets/js/expedition/EnemySystem.js"></script>
+
+    <!-- Load character-specific logic -->
+    <script src="assets/js/expedition/controllers/Player_Logic.js"></script>
+    <script src="assets/js/expedition/controllers/Player_Aliza_Logic.js"></script>
+
+    <!-- Load game scripts in order -->
+    <script src="assets/js/expedition/alchemyblaster.js"></script>
+    <script src="assets/js/expedition/game_renderer.js"></script>
+    <script src="assets/js/expedition/monster_logic.js"></script>
+    <script src="assets/js/expedition/game_controller.js"></script>
+    <script src="assets/js/expedition/game_module.js"></script>
+
+    <script>
+        // Hide loading screen once all assets are loaded
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                const loadingScreen = document.getElementById('loading');
+                loadingScreen.style.opacity = '0';
+                loadingScreen.style.transition = 'opacity 0.5s';
+                
+                setTimeout(function() {
+                    loadingScreen.style.display = 'none';
+                }, 500);
+            }, 1000); // Show loading screen for at least 1 second
+        });
+    </script>
+</body>
+</html>

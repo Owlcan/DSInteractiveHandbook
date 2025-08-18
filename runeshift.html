@@ -1,0 +1,1275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shifting Rune Maze</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=EB+Garamond:wght@400;500;600&display=swap');
+        
+        body {
+            font-family: 'EB Garamond', serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #000000 100%);
+            color: #d4af37;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        /* Subtle mystical particles */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(1px 1px at 30px 50px, rgba(212, 175, 55, 0.3), transparent),
+                radial-gradient(1px 1px at 80px 30px, rgba(255, 215, 0, 0.2), transparent),
+                radial-gradient(1px 1px at 150px 90px, rgba(184, 134, 11, 0.4), transparent);
+            background-repeat: repeat;
+            background-size: 200px 150px;
+            animation: shimmer 15s infinite linear;
+            opacity: 0.6;
+            z-index: -1;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(-100px, -75px) rotate(360deg); }
+        }
+        
+        .game-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            z-index: 1;
+            /* Scale the entire game UI ~20% larger */
+            transform: scale(1.2);
+            transform-origin: top center;
+        }
+        
+        .game-container {
+            background: linear-gradient(145deg, #1a1a1a 0%, #0f0f0f 50%, #000000 100%);
+            border: 14px solid #d4af37; /* Even thicker gold border */
+            border-radius: 0.5rem;
+            box-shadow: 
+                0 0 38px rgba(212, 175, 55, 0.7),
+                inset 0 5px 0 rgba(255, 215, 0, 0.35),
+                0 18px 36px rgba(0, 0, 0, 0.9);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            max-width: 90%;
+            width: 650px;
+            position: relative;
+        }
+        
+        .game-container::before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            background: linear-gradient(45deg, #d4af37, #ffd700, #b8860b, #d4af37);
+            border-radius: 0.5rem;
+            z-index: -1;
+            animation: goldGlimmer 4s ease-in-out infinite;
+        }
+        
+        @keyframes goldGlimmer {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 0.9; }
+        }
+        
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            font-size: 2.5rem;
+            background: linear-gradient(45deg, #d4af37, #ffd700, #b8860b);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: titleShimmer 3s ease-in-out infinite alternate;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.6);
+            margin: 0;
+            letter-spacing: 2px;
+        }
+        
+        @keyframes titleShimmer {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+        
+        canvas {
+            background: linear-gradient(135deg, #000000 0%, #0a0a0a 100%);
+            border: 10px solid #d4af37; /* Even thicker gold border */
+            border-radius: 0.5rem;
+            display: block;
+            touch-action: none;
+            box-shadow: 
+                0 0 32px rgba(212, 175, 55, 0.8),
+                inset 0 0 20px rgba(0, 0, 0, 0.9);
+            position: relative;
+        }
+        
+        canvas::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #d4af37, #ffd700);
+            border-radius: 0.5rem;
+            z-index: -1;
+            animation: canvasGold 6s linear infinite;
+        }
+        
+        @keyframes canvasGold {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .info-panel {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+            width: 100%;
+            padding: 0;
+            font-size: 1.05rem;
+            font-weight: 600;
+            font-family: 'Cinzel', serif;
+            align-items: stretch;
+        }
+
+    .info-panel > span {
+            background: linear-gradient(145deg, #131313, #0b0b0b);
+            padding: 0.6rem 1rem;
+            border-radius: 0.5rem;
+            border: 2px solid rgba(212, 175, 55, 0.85);
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.6), inset 0 2px 0 rgba(255, 215, 0, 0.12);
+            color: #d4af37;
+            text-shadow: 0 0 4px rgba(212, 175, 55, 0.45);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 44px;
+            white-space: nowrap;
+            letter-spacing: 0.4px;
+        }
+        
+        .message-box {
+            background: linear-gradient(145deg, #1a1a1a 0%, #0f0f0f 100%);
+            border: 2px solid rgba(212, 175, 55, 0.8);
+            border-radius: 0.5rem;
+            padding: 1rem 1.5rem;
+            text-align: center;
+            font-weight: 500;
+            font-family: 'EB Garamond', serif;
+            color: #d4af37;
+            height: 4rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 650px;
+            max-width: 90%;
+            margin-top: 1.5rem;
+            box-shadow: 
+                0 0 10px rgba(212, 175, 55, 0.3),
+                inset 0 1px 0 rgba(255, 215, 0, 0.1);
+            text-shadow: 0 0 5px rgba(212, 175, 55, 0.6);
+            animation: messageGlimmer 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes messageGlimmer {
+            0% { box-shadow: 0 0 10px rgba(212, 175, 55, 0.3), inset 0 1px 0 rgba(255, 215, 0, 0.1); }
+            100% { box-shadow: 0 0 15px rgba(212, 175, 55, 0.5), inset 0 1px 0 rgba(255, 215, 0, 0.2); }
+        }
+        
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+            width: 180px;
+        }
+        
+        .control-button {
+            background: linear-gradient(145deg, #1a1a1a 0%, #0f0f0f 100%);
+            color: #d4af37;
+            padding: 1rem;
+            border-radius: 0.3rem;
+            font-size: 1.4rem;
+            font-weight: bold;
+            font-family: 'Cinzel', serif;
+            cursor: pointer;
+            -webkit-user-select: none;
+            user-select: none;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(212, 175, 55, 0.6);
+            box-shadow: 
+                0 4px 8px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 215, 0, 0.1);
+            text-shadow: 0 0 5px rgba(212, 175, 55, 0.6);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .control-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .control-button:hover::before {
+            left: 100%;
+        }
+        
+        .control-button:active {
+            background: linear-gradient(145deg, #0f0f0f 0%, #1a1a1a 100%);
+            transform: translateY(2px);
+            box-shadow: 
+                0 2px 4px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 215, 0, 0.1);
+        }
+        
+        .control-button.up, .control-button.down {
+            grid-column: 2;
+        }
+        
+        .control-button.left {
+            grid-column: 1;
+            grid-row: 2;
+        }
+        
+        .control-button.right {
+            grid-column: 3;
+            grid-row: 2;
+        }
+        
+        .control-button.center {
+            grid-column: 2;
+            grid-row: 3;
+            background: linear-gradient(145deg, #2a2a1a 0%, #1a1a0f 100%);
+            color: #ffd700;
+            border-color: rgba(255, 215, 0, 0.6);
+            text-shadow: 0 0 8px rgba(255, 215, 0, 0.8);
+        }
+        
+        .control-button.center:active {
+            background: linear-gradient(145deg, #1a1a0f 0%, #2a2a1a 100%);
+        }
+        
+        .control-button.action {
+            background: linear-gradient(145deg, #2a1a1a 0%, #1a0f0f 100%);
+            color: #cd853f;
+            border-color: rgba(205, 133, 63, 0.6);
+            text-shadow: 0 0 8px rgba(205, 133, 63, 0.8);
+        }
+        
+        .control-button.action:active {
+            background: linear-gradient(145deg, #1a0f0f 0%, #2a1a1a 100%);
+        }
+        
+        /* Responsive design improvements */
+        @media (max-width: 768px) {
+            .game-container {
+                width: 95%;
+                padding: 1.5rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .info-panel {
+                grid-template-columns: 1fr;
+            }
+
+            .controls {
+                width: 160px;
+            }
+            
+            .control-button {
+                padding: 0.8rem;
+                font-size: 1.2rem;
+            }
+        }
+
+        /* Treasure list grouping with tally badge */
+        #treasure-list { width: 100%; }
+        .treasure-item {
+            position: relative;
+            width: 56px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .treasure-item img {
+            width: 48px;
+            height: 48px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 4px rgba(212,175,55,0.7));
+        }
+        .treasure-count {
+            position: absolute;
+            right: -6px;
+            bottom: -6px;
+            background: #111;
+            border: 2px solid #d4af37;
+            color: #ffd700;
+            font-family: 'Cinzel', serif;
+            font-size: 0.8rem;
+            border-radius: 999px;
+            padding: 0 6px;
+            line-height: 1.1rem;
+            min-width: 1.2rem;
+            text-align: center;
+            box-shadow: 0 0 6px rgba(212,175,55,0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="game-wrapper" style="flex-direction: row; align-items: flex-start; gap: 2rem;">
+        <!-- Treasure Collection Box UI -->
+        <div id="treasure-box" style="min-width: 110px; max-width: 140px; background: linear-gradient(135deg, #1a1a1a 0%, #232323 100%); border: 4px solid #d4af37; border-radius: 0.5rem; box-shadow: 0 0 18px rgba(212,175,55,0.3); padding: 1rem 0.5rem; margin-right: 0.5rem; display: flex; flex-direction: column; align-items: center;">
+            <h2 style="font-family: 'Cinzel', serif; font-size: 1.1rem; color: #ffd700; margin-bottom: 0.5rem; text-align: center;">Treasures</h2>
+            <div id="treasure-list" style="display: flex; flex-direction: column; gap: 0.3rem; align-items: center;"></div>
+            <div id="shatter-count" style="margin-top: 0.7rem; font-size: 1rem; color: #d4af37; text-align: center;">Wall-Shatter Uses: <span id="shatter-uses">1</span>/5</div>
+        </div>
+        <div class="game-container">
+            <h1 class="text-3xl font-extrabold text-white">Shifting Rune Maze</h1>
+            <div class="info-panel">
+                <span>Level: <span id="level-display">1</span></span>
+                <span>Score: <span id="score-display">0</span></span>
+                <span>Rune Shatter: <span id="wall-break-display">Available</span></span>
+            </div>
+            <canvas id="mazeCanvas"></canvas>
+
+            <!-- Touch Controls for Mobile -->
+            <div class="controls md:hidden">
+                <button class="control-button up" id="up-btn">▲</button>
+                <button class="control-button left" id="left-btn">◀</button>
+                <button class="control-button center" id="reset-btn">R</button>
+                <button class="control-button right" id="right-btn">▶</button>
+                <button class="control-button down" id="down-btn">▼</button>
+                <button class="control-button action" id="shatter-btn">S</button> <!-- New button for Shatter -->
+            </div>
+        </div>
+        <div id="message-box" class="message-box"></div>
+    </div>
+
+    <script>
+        // Get canvas and context
+        const canvas = document.getElementById('mazeCanvas');
+        const ctx = canvas.getContext('2d');
+
+    // Offscreen static layer to reduce per-frame work
+    const staticCanvas = document.createElement('canvas');
+    const staticCtx = staticCanvas.getContext('2d');
+    let staticDirty = true; // When true, rebuild static layer (walls/paths)
+
+        // Game state variables
+        let cellSize = 30; // Size of each cell in the maze
+        let mazeWidth = 15; // Number of cells wide
+        let mazeHeight = 15; // Number of cells high
+        let player = { x: 0, y: 0 };
+        let exit = { x: 0, y: 0 };
+        let maze = [];
+        let level = 1;
+        let score = 0;
+        let gameStarted = false;
+        let shiftingInterval;
+        let messageTimeout;
+        let difficultyIncreaseLevels = [2, 4, 6, 8, 10]; // Levels at which difficulty increases
+        const WIN_LEVEL = 5; // Level to win the game
+
+    // Rune Shatter ability variables
+    // Uses pool: start at 1; +1 per 3 treasures (max 5). Toggleable active mode.
+    let wallBreakUses = 1;
+    let wallBreakMaxUses = 1; // Maximum available this run; current uses reset to this each level
+    let wallBreakModeActive = false;
+
+        // Maze generation parameters
+        const WALL = 1;
+        const PATH = 0;
+
+        // Colors for drawing
+        const WALL_COLOR = '#d4af37'; /* Gold for walls */
+        const PATH_COLOR = '#000000'; /* Deep Black for maze background (floors) */
+        const PLAYER_COLOR = '#ffd700'; /* Bright Gold for player */
+        const EXIT_COLOR = '#b8860b'; /* Dark Gold for exit */
+        const RUNE_COLOR = '#daa520'; /* Goldenrod for glowing runes */
+        const SHIFT_WALL_COLOR = '#1a1a1a'; /* Dark gray for shifting walls */
+
+        // ----- Treasure and Key Assets -----
+        const SRM_ASSET = './src/assets/images/expeditionandgames/shiftingrunemaze/';
+        const TREASURE_TYPES = [
+            { id: 'bronzepile', name: 'Bronze coins', img: 'bronzepile.webp', value: 25 },
+            { id: 'silverpile', name: 'Silver coins', img: 'silverpile.webp', value: 50 },
+            { id: 'goldpile', name: 'Gold coins', img: 'goldpile.webp', value: 100 },
+            { id: 'treasurechest', name: 'Treasure chest', img: 'treasurechest.webp', value: 150 },
+            { id: 'bronzecrown', name: 'Bronze crown', img: 'bronzecrown.webp', value: 180 },
+            { id: 'silvercrown', name: 'Silver crown', img: 'silvercrown.webp', value: 220 },
+            { id: 'goldcrown', name: 'Gold crown', img: 'goldcrown.webp', value: 300 },
+            { id: 'treasuregrimoire', name: 'Treasure grimoire', img: 'treasuregrimoire.webp', value: 350 },
+            { id: 'treasurepamp', name: 'Treasure pamp', img: 'treasurepamp.webp', value: 400 },
+            { id: 'rattlescepter', name: 'Rattle scepter', img: 'rattlescepter.webp', value: 500 }
+        ];
+        const KEY_ASSETS = {
+            generic: 'key.webp',
+            red: 'redkey.webp',
+            blue: 'bluekey.webp',
+            lock: 'lock.webp',
+            colorlock: 'colorlock.webp'
+        };
+        const treasureImages = {};
+        TREASURE_TYPES.forEach(t => { const img = new Image(); img.src = SRM_ASSET + t.img; treasureImages[t.id] = img; });
+        const keyImages = {};
+        Object.entries(KEY_ASSETS).forEach(([k, v]) => { const img = new Image(); img.src = SRM_ASSET + v; keyImages[k] = img; });
+
+        // Treasures/Keys state
+        let treasures = []; // {x,y,type,value}
+        let totalTreasuresCollected = 0;
+    // Only first-time (unique) treasure types count towards powerup thresholds
+    let collectedTreasureTypes = new Set();
+        let keys = []; // {x,y,color}
+        let keysRequired = 0;
+        let keysCollected = new Set();
+        let exitLocked = false;
+
+        // Enemy sprites (black silhouettes); draw with purple glow for visibility
+        const ENEMY_SPRITE_PATHS = [
+            './src/assets/images/expeditionandgames/towerD/darklingmob17.png',
+            './src/assets/images/expeditionandgames/towerD/darklingmob15.png',
+            './src/assets/images/expeditionandgames/towerD/darklingmob12.png',
+            './src/assets/images/expeditionandgames/towerD/darklingmob13.png'
+        ];
+        const enemySprites = ENEMY_SPRITE_PATHS.map(path => { const img = new Image(); img.src = path; return img; });
+
+        // Enemy system state
+        let enemies = [];
+        let enemyMoveInterval = null;
+
+        // Set canvas dimensions
+        function setCanvasSize() {
+            canvas.width = mazeWidth * cellSize;
+            canvas.height = mazeHeight * cellSize;
+            staticCanvas.width = canvas.width;
+            staticCanvas.height = canvas.height;
+            staticDirty = true;
+        }
+
+        // Display messages to the user
+        function showMessage(msg, duration = 2000) {
+            const msgBox = document.getElementById('message-box');
+            msgBox.textContent = msg;
+            // The box is now always visible, just clear text
+            clearTimeout(messageTimeout);
+            messageTimeout = setTimeout(() => {
+                msgBox.textContent = ""; // Clear text after duration
+            }, duration);
+        }
+
+        // Update the Rune Shatter display
+        function updateWallBreakDisplay() {
+            const display = document.getElementById('wall-break-display');
+            const usesSpan = document.getElementById('shatter-uses');
+            if (usesSpan) usesSpan.textContent = Math.min(5, wallBreakUses);
+            if (wallBreakModeActive) {
+                display.textContent = `ACTIVE (${wallBreakUses} left)`;
+                display.style.color = '#FF00FF';
+            } else {
+                display.textContent = `${Math.min(5, wallBreakUses)} uses`;
+                display.style.color = wallBreakUses > 0 ? '#DAA520' : '#FF4444';
+            }
+        }
+
+        // Generate a maze using Recursive Backtracking algorithm
+        function generateMaze(width, height) {
+            // Initialize grid with all walls
+            const grid = Array(height).fill(0).map(() => Array(width).fill(WALL));
+
+            function carvePath(cx, cy) {
+                const directions = shuffle([[0, 1], [0, -1], [1, 0], [-1, 0]]); // Right, Left, Down, Up
+
+                for (const [dx, dy] of directions) {
+                    const nx = cx + dx * 2; // Move two steps to create path
+                    const ny = cy + dy * 2;
+
+                    if (nx >= 0 && nx < width && ny >= 0 && ny < height && grid[ny][nx] === WALL) {
+                        grid[cy + dy][cx + dx] = PATH; // Carve path between current and next cell
+                        grid[ny][nx] = PATH; // Mark next cell as path
+                        carvePath(nx, ny); // Recurse
+                    }
+                }
+            }
+
+            // Start carving from a random cell
+            const startX = Math.floor(Math.random() * width);
+            const startY = Math.floor(Math.random() * height);
+            grid[startY][startX] = PATH;
+            carvePath(startX, startY);
+
+            // Ensure start and end points are paths
+            player = { x: 0, y: 0 };
+            exit = { x: width - 1, y: height - 1 };
+            grid[player.y][player.x] = PATH;
+            grid[exit.y][exit.x] = PATH;
+
+            // Ensure immediate paths from start and to exit
+            // Ensure paths from player start (0,0)
+            if (mazeHeight > 0 && mazeWidth > 1) grid[0][1] = PATH; // Path to the right
+            if (mazeWidth > 0 && mazeHeight > 1) grid[1][0] = PATH; // Path downwards
+
+            // Ensure paths to exit (width-1, height-1)
+            if (mazeHeight > 0 && mazeWidth > 1) grid[mazeHeight - 1][mazeWidth - 2] = PATH; // Path from left to exit
+            if (mazeWidth > 0 && mazeHeight > 1) grid[mazeHeight - 2][mazeWidth - 1] = PATH; // Path from top to exit
+
+
+            // Add some random paths to make it less perfect and allow for shifting later
+            for (let i = 0; i < width * height * 0.05; i++) { // Add 5% extra paths
+                const rx = Math.floor(Math.random() * width);
+                const ry = Math.floor(Math.random() * height);
+                if (grid[ry][rx] === WALL) {
+                    grid[ry][rx] = PATH;
+                }
+            }
+
+            return grid;
+        }
+
+        // Shuffle array helper
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // Rebuild static layer (walls and paths only)
+        function rebuildStaticLayer() {
+            staticCtx.clearRect(0, 0, staticCanvas.width, staticCanvas.height);
+            for (let y = 0; y < mazeHeight; y++) {
+                for (let x = 0; x < mazeWidth; x++) {
+                    if (maze[y][x] === WALL) {
+                        const gradient = staticCtx.createLinearGradient(x * cellSize, y * cellSize, (x + 1) * cellSize, (y + 1) * cellSize);
+                        gradient.addColorStop(0, WALL_COLOR);
+                        gradient.addColorStop(0.3, '#ffd700');
+                        gradient.addColorStop(0.7, '#b8860b');
+                        gradient.addColorStop(1, WALL_COLOR);
+                        staticCtx.fillStyle = gradient;
+                        staticCtx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
+                        // Subtle golden glow (applied once, cached)
+                        staticCtx.shadowColor = WALL_COLOR;
+                        staticCtx.shadowBlur = 2;
+                        staticCtx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
+                        staticCtx.shadowBlur = 0;
+                    } else {
+                        staticCtx.fillStyle = PATH_COLOR;
+                        staticCtx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
+                    }
+                }
+            }
+            staticDirty = false;
+        }
+
+        // Draw dynamic frame (runes shimmer, enemies, player, exit)
+        function drawMaze() {
+            if (staticDirty) rebuildStaticLayer();
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(staticCanvas, 0, 0);
+
+            // Runes shimmer (very lightweight)
+            const t = Date.now() * 0.003;
+            ctx.shadowBlur = 0;
+            for (let y = 0; y < mazeHeight; y++) {
+                for (let x = 0; x < mazeWidth; x++) {
+                    if (maze[y][x] === PATH) {
+                        const shimmer = 0.25 + 0.25 * Math.sin(t + (x + y) * 0.3);
+                        ctx.fillStyle = RUNE_COLOR;
+                        ctx.globalAlpha = shimmer;
+                        ctx.beginPath();
+                        ctx.arc(x * cellSize + cellSize / 2, y * cellSize + cellSize / 2, Math.max(1, cellSize / 16), 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                }
+            }
+            ctx.globalAlpha = 1;
+
+            // Draw treasures and keys
+            drawTreasures();
+            drawKeys();
+
+            // Draw enemies with dark purple glow for visibility
+            drawEnemies();
+
+            // Draw player as bold female symbol (♀) with gold glow and black stroke, fully opaque
+            const time = Date.now() * 0.002;
+            const playerGlow = 0.7 + 0.3 * Math.sin(time * 2);
+            const px = player.x * cellSize + cellSize / 2;
+            const py = player.y * cellSize + cellSize / 2;
+            ctx.save();
+            ctx.font = `bold ${Math.floor(cellSize * 0.85)}px Cinzel, Arial, sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.shadowColor = PLAYER_COLOR;
+            ctx.shadowBlur = 18 * playerGlow;
+            ctx.globalAlpha = 1;
+            ctx.fillStyle = PLAYER_COLOR;
+            ctx.strokeStyle = '#ffd700'; // Bright gold stroke
+            ctx.lineWidth = Math.max(3, cellSize * 0.09);
+            ctx.fillText('♀', px, py);
+            ctx.strokeText('♀', px, py);
+            ctx.shadowBlur = 0;
+            ctx.restore();
+
+            // Draw exit with mystical golden aura
+            const exitShimmer = 0.5 + 0.5 * Math.sin(time * 3);
+            ctx.fillStyle = EXIT_COLOR;
+            ctx.shadowColor = EXIT_COLOR;
+            ctx.shadowBlur = 15 * exitShimmer;
+            ctx.globalAlpha = exitShimmer;
+            ctx.fillRect(exit.x * cellSize, exit.y * cellSize, cellSize, cellSize);
+            
+            // Add exit mystical pattern
+            ctx.globalAlpha = 1;
+            ctx.fillStyle = '#ffd700';
+            ctx.fillRect(exit.x * cellSize + cellSize / 4, exit.y * cellSize + cellSize / 4, cellSize / 2, cellSize / 2);
+            ctx.shadowBlur = 0;
+            ctx.globalAlpha = 1;
+
+            // Lock overlay
+            if (exitLocked) {
+                const img = keysRequired > 1 ? keyImages.colorlock : keyImages.lock;
+                if (img && img.complete) {
+                    const pad = Math.floor(cellSize * 0.15);
+                    const dw = cellSize - pad * 2;
+                    const dh = cellSize - pad * 2;
+                    ctx.drawImage(img, exit.x * cellSize + pad, exit.y * cellSize + pad, dw, dh);
+                }
+            }
+        }
+
+        function drawTreasures() {
+            for (const t of treasures) {
+                const img = treasureImages[t.type];
+                if (!img || !img.complete) continue;
+                const pad = Math.floor(cellSize * 0.12);
+                const dw = cellSize - pad * 2;
+                const dh = cellSize - pad * 2;
+                ctx.drawImage(img, t.x * cellSize + pad, t.y * cellSize + pad, dw, dh);
+            }
+        }
+
+        function drawKeys() {
+            for (const k of keys) {
+                const img = keyImages[k.color === 'generic' ? 'generic' : k.color];
+                if (!img || !img.complete) continue;
+                const pad = Math.floor(cellSize * 0.12);
+                const dw = cellSize - pad * 2;
+                const dh = cellSize - pad * 2;
+                ctx.drawImage(img, k.x * cellSize + pad, k.y * cellSize + pad, dw, dh);
+            }
+        }
+
+        // ---------- Enemy logic ----------
+        function getEnemyCountForLevel(lvl) {
+            if (lvl < 3) return 0;
+            if (lvl < 5) return 1;
+            if (lvl < 8) return 2;
+            if (lvl < 11) return 3;
+            if (lvl < 15) return 4;
+            return 6;
+        }
+
+        function spawnEnemies() {
+            enemies = [];
+            const count = getEnemyCountForLevel(level);
+            for (let i = 0; i < count; i++) {
+                const pos = randomPathCellFarFromPlayer();
+                enemies.push({
+                    x: pos.x,
+                    y: pos.y,
+                    sprite: enemySprites[Math.floor(Math.random() * enemySprites.length)],
+                    hasShatter: true,
+                    state: 'wander', // 'wander' or 'hunt'
+                    steps: randInt(3, 6)
+                });
+            }
+        }
+
+        function startEnemyAI() {
+            if (enemyMoveInterval) clearInterval(enemyMoveInterval);
+            const base = 700; // ms
+            const speed = Math.max(250, base - level * 15);
+            enemyMoveInterval = setInterval(moveEnemies, speed);
+        }
+
+        function moveEnemies() {
+            if (!gameStarted) return;
+            for (const e of enemies) {
+                // Switch state if needed
+                e.steps -= 1;
+                if (e.steps <= 0) {
+                    if (e.state === 'wander') { e.state = 'hunt'; e.steps = randInt(1, 2); }
+                    else { e.state = 'wander'; e.steps = randInt(4, 7); } // slightly longer wander
+                }
+
+                const { nx, ny } = nextEnemyStep(e);
+                if (nx === e.x && ny === e.y) continue; // no move
+                // Prevent stacking on another enemy
+                if (enemies.some(o => o !== e && o.x === nx && o.y === ny)) continue;
+                e.x = nx; e.y = ny;
+
+                // Check player collision -> game over
+                if (e.x === player.x && e.y === player.y) {
+                    onGameOver('A darkling caught you! Game over.');
+                    return;
+                }
+            }
+            // Redraw after movement
+            drawMaze();
+        }
+
+        function nextEnemyStep(e) {
+            // Candidates are Von Neumann neighbors
+            const dirs = [ [1,0], [-1,0], [0,1], [0,-1] ];
+            let ordered = dirs;
+            if (e.state === 'hunt') {
+                const dx = player.x - e.x;
+                const dy = player.y - e.y;
+                ordered = dirs
+                  .map(([ix,iy]) => ({ ix, iy, score: Math.abs((e.x+ix)-player.x) + Math.abs((e.y+iy)-player.y) }))
+                  .sort((a,b) => a.score - b.score)
+                  .map(o => [o.ix, o.iy]);
+            } else {
+                // Randomize order in wander
+                ordered = shuffle([...dirs]);
+            }
+
+            for (const [dx, dy] of ordered) {
+                const tx = e.x + dx, ty = e.y + dy;
+                if (!inBounds(tx, ty)) continue;
+                if (maze[ty][tx] === PATH) {
+                    return { nx: tx, ny: ty };
+                } else if (maze[ty][tx] === WALL && e.hasShatter) {
+                    // Use shatter once per level to break a wall and move in
+                    maze[ty][tx] = PATH;
+                    staticDirty = true;
+                    e.hasShatter = false;
+                    return { nx: tx, ny: ty };
+                }
+            }
+            return { nx: e.x, ny: e.y };
+        }
+
+        function drawEnemies() {
+            for (const e of enemies) {
+                const cx = e.x * cellSize + cellSize / 2;
+                const cy = e.y * cellSize + cellSize / 2;
+                const r = Math.max(6, cellSize * 0.35);
+                // Purple glow underlay
+                ctx.save();
+                ctx.shadowColor = 'rgba(120, 0, 200, 0.9)';
+                ctx.shadowBlur = 14;
+                ctx.globalAlpha = 0.9;
+                ctx.fillStyle = 'rgba(50, 0, 80, 0.6)';
+                ctx.beginPath();
+                ctx.arc(cx, cy, r, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+
+                // Draw sprite scaled to cell
+                const pad = Math.floor(cellSize * 0.1);
+                const dw = cellSize - pad * 2;
+                const dh = cellSize - pad * 2;
+                const dx = e.x * cellSize + pad;
+                const dy = e.y * cellSize + pad;
+                if (e.sprite && e.sprite.complete) {
+                    ctx.drawImage(e.sprite, dx, dy, dw, dh);
+                } else {
+                    // Fallback: black square
+                    ctx.fillStyle = '#000';
+                    ctx.fillRect(dx, dy, dw, dh);
+                }
+            }
+        }
+
+    function randomPathCellFarFromPlayer() {
+            // Try to find a PATH cell not near player or exit
+            const minDist = 5; // Manhattan distance
+            for (let attempts = 0; attempts < 500; attempts++) {
+                const x = Math.floor(Math.random() * mazeWidth);
+                const y = Math.floor(Math.random() * mazeHeight);
+                if (maze[y][x] !== PATH) continue;
+                const dP = Math.abs(x - player.x) + Math.abs(y - player.y);
+                const dE = Math.abs(x - exit.x) + Math.abs(y - exit.y);
+        if (treasures.some(t => t.x === x && t.y === y)) continue;
+        if (keys.some(k => k.x === x && k.y === y)) continue;
+        if (dP >= minDist && dE >= 3) return { x, y };
+            }
+            // Fallback: first PATH found
+            for (let y = 0; y < mazeHeight; y++)
+                for (let x = 0; x < mazeWidth; x++)
+            if (maze[y][x] === PATH && !treasures.some(t => t.x === x && t.y === y) && !keys.some(k => k.x === x && k.y === y)) return { x, y };
+            return { x: 0, y: 0 };
+        }
+
+        function inBounds(x, y) { return x >= 0 && x < mazeWidth && y >= 0 && y < mazeHeight; }
+        function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+
+        function onGameOver(msg) {
+            showMessage(msg, 2500);
+            gameStarted = false;
+            // Stop enemy AI and shifting briefly, then reset
+            if (enemyMoveInterval) { clearInterval(enemyMoveInterval); enemyMoveInterval = null; }
+            setTimeout(() => { resetGame(); }, 2000);
+        }
+
+        // Handle player movement
+        function movePlayer(dx, dy) {
+            const newX = player.x + dx;
+            const newY = player.y + dy;
+
+            // Check boundaries
+            if (newX >= 0 && newX < mazeWidth && newY >= 0 && newY < mazeHeight) {
+                if (wallBreakModeActive) {
+                    // If in wall break mode, attempt to break the wall
+                    if (maze[newY][newX] === WALL) {
+                        maze[newY][newX] = PATH; // Break the wall
+                        staticDirty = true;
+                        wallBreakUses = Math.max(0, wallBreakUses - 1);
+                        wallBreakModeActive = false;
+                        showMessage("Rune wall shattered!");
+                        updateWallBreakDisplay();
+                        drawMaze();
+                        return; // Wall broken, do not move player
+                    } else {
+                        showMessage("Cannot shatter a path or out of bounds. Rune Shatter cancelled.", 2000);
+                        wallBreakModeActive = false;
+                        updateWallBreakDisplay();
+                        return; // Wall break attempt failed, do not move player
+                    }
+                }
+
+                // Normal movement logic
+                if (maze[newY][newX] === PATH) {
+                    player.x = newX;
+                    player.y = newY;
+                    // Collectibles
+                    collectTreasureAt(newX, newY);
+                    collectKeyAt(newX, newY);
+                    drawMaze(); // Redraw after movement
+
+                    // Check for win condition
+                    if (player.x === exit.x && player.y === exit.y) {
+                        if (exitLocked) {
+                            const remaining = keysRequired - keysCollected.size;
+                            if (remaining > 0) {
+                                showMessage(`The exit is locked! Find ${remaining} key${remaining>1?'s':''}.`);
+                            }
+                        } else {
+                            levelUp();
+                        }
+                    }
+                } else {
+                    showMessage("Blocked by a rune wall!");
+                }
+            }
+        }
+
+        function collectTreasureAt(x, y) {
+            const idx = treasures.findIndex(t => t.x === x && t.y === y);
+            if (idx === -1) return;
+            const t = treasures[idx];
+            treasures.splice(idx, 1);
+            score += t.value;
+            document.getElementById('score-display').textContent = score;
+            totalTreasuresCollected += 1;
+            addTreasureToUI(t.type);
+            // Only count the first time a treasure TYPE is collected toward powerups
+            if (!collectedTreasureTypes.has(t.type)) {
+                collectedTreasureTypes.add(t.type);
+                const uniqueCount = collectedTreasureTypes.size;
+                if (uniqueCount % 3 === 0 && wallBreakMaxUses < 5) {
+                    wallBreakMaxUses += 1; // increase maximum allowed per level
+                    // grant +1 immediately this level too, up to new max
+                    wallBreakUses = Math.min(wallBreakMaxUses, wallBreakUses + 1);
+                    showMessage('Bonus wall-shatter gained!');
+                    updateWallBreakDisplay();
+                }
+            }
+        }
+
+        function collectKeyAt(x, y) {
+            const idx = keys.findIndex(k => k.x === x && k.y === y);
+            if (idx === -1) return;
+            const k = keys[idx];
+            keys.splice(idx, 1);
+            keysCollected.add(k.color);
+            const remaining = keysRequired - keysCollected.size;
+            if (remaining <= 0) {
+                exitLocked = false;
+                showMessage('You unlocked the exit!');
+            } else {
+                showMessage(`Key acquired. ${remaining} more to go.`);
+            }
+        }
+
+        function addTreasureToUI(type) {
+            const container = document.getElementById('treasure-list');
+            if (!container) return;
+            const img = treasureImages[type];
+            if (!img) return;
+            // Try to find existing entry by data-type
+            let entry = container.querySelector(`[data-type="${type}"]`);
+            if (!entry) {
+                entry = document.createElement('div');
+                entry.className = 'treasure-item';
+                entry.setAttribute('data-type', type);
+                const icon = document.createElement('img');
+                icon.src = img.src;
+                icon.alt = type;
+                const badge = document.createElement('span');
+                badge.className = 'treasure-count';
+                badge.textContent = '1';
+                entry.appendChild(icon);
+                entry.appendChild(badge);
+                container.appendChild(entry);
+            } else {
+                const badge = entry.querySelector('.treasure-count');
+                const n = parseInt(badge.textContent || '0', 10) + 1;
+                badge.textContent = String(n);
+            }
+            updateWallBreakDisplay();
+        }
+
+        // Level up logic
+        function levelUp() {
+            score += level * 100; // Increase score based on level
+            document.getElementById('score-display').textContent = score;
+
+            if (level === WIN_LEVEL) {
+                showMessage(`You reached Level ${WIN_LEVEL}! You win! Keep playing for a high score!`, 5000);
+            } else {
+                showMessage(`Level ${level} complete! Moving to Level ${level + 1}!`, 3000);
+            }
+
+            level++;
+            document.getElementById('level-display').textContent = level;
+
+            // Keep shatter uses persistent; only exit active mode
+            wallBreakModeActive = false;
+            updateWallBreakDisplay();
+
+
+            // Increase maze size and shifting frequency based on difficultyIncreaseLevels
+            if (difficultyIncreaseLevels.includes(level)) {
+                mazeWidth += 2;
+                mazeHeight += 2;
+                cellSize = Math.max(20, cellSize - 2); // Make cells smaller for larger mazes
+                clearInterval(shiftingInterval); // Clear old interval
+                const shiftFrequency = Math.max(1500, 4000 - (level * 200)); // Faster shifting
+                shiftingInterval = setInterval(shiftMaze, shiftFrequency);
+                showMessage(`Difficulty increased! Maze size: ${mazeWidth}x${mazeHeight}, Shifting every ${shiftFrequency / 1000}s`, 3000);
+            }
+
+            // Generate new maze and reset player position
+            initGame();
+            // Ensure UI reflects fresh (inactive) shatter state after level loads
+            wallBreakModeActive = false;
+            // Reset available uses to maximum for the new level
+            wallBreakUses = Math.min(5, wallBreakMaxUses);
+            updateWallBreakDisplay();
+        }
+
+        // Maze shifting logic
+        function shiftMaze() {
+            // Only shift if game has started
+            if (!gameStarted) return;
+
+            const shiftAmount = Math.floor(Math.random() * 3) + 1; // Shift 1 to 3 cells
+            let shiftedCount = 0;
+
+            // Attempt to shift a few random walls/paths
+            for (let i = 0; i < shiftAmount; i++) {
+                // Only modify inner field (deadzone on outer rim)
+                const rx = 1 + Math.floor(Math.random() * Math.max(1, mazeWidth - 2));
+                const ry = 1 + Math.floor(Math.random() * Math.max(1, mazeHeight - 2));
+
+                // Avoid shifting player or exit cells
+                if ((rx === player.x && ry === player.y) || (rx === exit.x && ry === exit.y)) {
+                    continue;
+                }
+
+                if (maze[ry][rx] === WALL) {
+                    maze[ry][rx] = PATH; // Always safe to turn wall to path
+                    shiftedCount++;
+                } else { // Current cell is a PATH, consider turning it into a WALL
+                    if (Math.random() < 0.3) { // Only attempt to turn path into wall 30% of the time
+                        // Avoid covering treasures/keys
+                        if (treasures.some(t => t.x === rx && t.y === ry) || keys.some(k => k.x === rx && k.y === ry)) {
+                            continue;
+                        }
+                        // Temporarily change to WALL to test
+                        maze[ry][rx] = WALL;
+
+                        // Check if player is now trapped (no adjacent paths)
+                        let playerTrapped = true;
+                        const neighbors = [[0, 1], [0, -1], [1, 0], [-1, 0]]; // Down, Up, Right, Left
+                        for (const [dx, dy] of neighbors) {
+                            const nx = player.x + dx;
+                            const ny = player.y + dy;
+                            // Check if neighbor is within bounds and is a PATH
+                            if (nx >= 0 && nx < mazeWidth && ny >= 0 && ny < mazeHeight && maze[ny][nx] === PATH) {
+                                playerTrapped = false;
+                                break;
+                            }
+                        }
+
+                        if (playerTrapped) {
+                            // If player would be trapped, revert the change
+                            maze[ry][rx] = PATH;
+            } else {
+                            // If player is not trapped, keep the change
+                            shiftedCount++;
+                        }
+                    }
+                }
+            }
+
+            if (shiftedCount > 0) {
+                showMessage(`Maze shifted! (${shiftedCount} runes changed)`, 1500);
+        staticDirty = true; // base tiles changed
+                drawMaze();
+            }
+        }
+
+        // Initialize or reset the game
+        function initGame() {
+            setCanvasSize();
+            maze = generateMaze(mazeWidth, mazeHeight);
+            player = { x: 0, y: 0 }; // Always start at top-left
+            exit = { x: mazeWidth - 1, y: mazeHeight - 1 }; // Always exit at bottom-right
+            // Setup treasures and keys per level
+            treasures = [];
+            totalTreasuresCollected = totalTreasuresCollected; // persist count across levels
+            spawnTreasuresForLevel();
+            setupKeysForLevel();
+            staticDirty = true;
+            drawMaze();
+            gameStarted = true;
+            // Ensure shatter mode is off at the start of a level
+            wallBreakModeActive = false;
+            // Reset the available uses for the level to the current maximum
+            wallBreakUses = Math.min(5, wallBreakMaxUses);
+            // Ensure shifting interval is set up only once and updated
+            if (!shiftingInterval) {
+                const initialShiftFrequency = 4000; // Initial shift every 4 seconds
+                shiftingInterval = setInterval(shiftMaze, initialShiftFrequency);
+            }
+            updateWallBreakDisplay(); // Update display on init
+            document.getElementById('message-box').textContent = ""; // Clear message box on init
+            // Spawn enemies and start their AI (after level 5)
+            spawnEnemies();
+            startEnemyAI();
+            
+            // Start animation loop for visual effects
+            if (!window.animationRunning) {
+                window.animationRunning = true;
+                animate();
+            }
+        }
+
+        function setupKeysForLevel() {
+            keys = [];
+            keysCollected = new Set();
+            if (level > 11) {
+                keysRequired = 2;
+                exitLocked = true;
+                keys.push(placeKey('red'));
+                keys.push(placeKey('blue'));
+                showMessage('The exit is locked by two seals. Find the red and blue keys!');
+            } else if (level > 7) {
+                keysRequired = 1;
+                exitLocked = true;
+                keys.push(placeKey('generic'));
+                showMessage('The exit is locked. Find the key!');
+            } else {
+                keysRequired = 0;
+                exitLocked = false;
+            }
+        }
+
+        function placeKey(color) {
+            for (let attempts = 0; attempts < 500; attempts++) {
+                const x = Math.floor(Math.random() * mazeWidth);
+                const y = Math.floor(Math.random() * mazeHeight);
+                if (maze[y][x] !== PATH) continue;
+                if ((x === player.x && y === player.y) || (x === exit.x && y === exit.y)) continue;
+                if (treasures.some(t => t.x === x && t.y === y)) continue;
+                if (keys.some(k => k.x === x && k.y === y)) continue;
+                return { x, y, color };
+            }
+            return { x: 1, y: 1, color };
+        }
+
+        function spawnTreasuresForLevel() {
+            const unlocked = Math.min(TREASURE_TYPES.length, Math.max(1, level));
+            const typesPool = TREASURE_TYPES.slice(0, unlocked);
+            // Amount scales a little higher with map size and level for more loot per level
+            const base = Math.floor((mazeWidth * mazeHeight) / 110) + 3;
+            const scaled = base + Math.floor(level / 3);
+            const count = Math.max(3, Math.min(12, scaled));
+            for (let i = 0; i < count; i++) {
+                const type = typesPool[Math.floor(Math.random() * typesPool.length)];
+                const pos = randomTreasureCell();
+                treasures.push({ x: pos.x, y: pos.y, type: type.id, value: type.value });
+            }
+        }
+
+        function randomTreasureCell() {
+            for (let attempts = 0; attempts < 500; attempts++) {
+                const x = Math.floor(Math.random() * mazeWidth);
+                const y = Math.floor(Math.random() * mazeHeight);
+                if (maze[y][x] !== PATH) continue;
+                if ((x === player.x && y === player.y) || (x === exit.x && y === exit.y)) continue;
+                if (enemies.some(e => e.x === x && e.y === y)) continue;
+                if (treasures.some(t => t.x === x && t.y === y)) continue;
+                if (keys.some(k => k.x === x && k.y === y)) continue;
+                return { x, y };
+            }
+            return { x: 1, y: 1 };
+        }
+        
+        // Animation loop for continuous visual effects
+        // Throttled animation loop (~30 FPS)
+        let lastFrameTime = 0;
+        const targetDelta = 1000 / 30;
+        function animate(ts) {
+            if (gameStarted) {
+                if (!lastFrameTime || ts - lastFrameTime >= targetDelta) {
+                    drawMaze();
+                    lastFrameTime = ts;
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+
+        // Event Listeners for Keyboard (Desktop)
+        document.addEventListener('keydown', (e) => {
+            if (!gameStarted) return;
+            switch (e.key) {
+                case 'ArrowUp':
+                    movePlayer(0, -1);
+                    break;
+                case 'ArrowDown':
+                    movePlayer(0, 1);
+                    break;
+                case 'ArrowLeft':
+                    movePlayer(-1, 0);
+                    break;
+                case 'ArrowRight':
+                    movePlayer(1, 0);
+                    break;
+                case ' ': // Spacebar for Rune Shatter
+                    e.preventDefault(); // Prevent scrolling
+                    if (wallBreakUses > 0) {
+                        wallBreakModeActive = !wallBreakModeActive; // Toggle mode
+                        if (wallBreakModeActive) {
+                            showMessage("Rune Shatter ACTIVE! Press an arrow key to break a wall.");
+                        } else {
+                            showMessage("Rune Shatter cancelled.");
+                        }
+                    } else {
+                        showMessage("No wall-shatter uses left.");
+                    }
+                    updateWallBreakDisplay();
+                    break;
+                case 'r': // Reset game with 'r' key
+                    resetGame();
+                    break;
+            }
+        });
+
+        // Event Listeners for Touch Controls (Mobile)
+        document.getElementById('up-btn').addEventListener('click', () => movePlayer(0, -1));
+        document.getElementById('down-btn').addEventListener('click', () => movePlayer(0, 1));
+        document.getElementById('left-btn').addEventListener('click', () => movePlayer(-1, 0));
+        document.getElementById('right-btn').addEventListener('click', () => movePlayer(1, 0));
+        document.getElementById('reset-btn').addEventListener('click', resetGame);
+        document.getElementById('shatter-btn').addEventListener('click', () => { // New button for Rune Shatter
+            if (wallBreakUses > 0) {
+                wallBreakModeActive = !wallBreakModeActive; // Toggle mode
+                if (wallBreakModeActive) {
+                    showMessage("Rune Shatter ACTIVE! Press an arrow key to break a wall.");
+                } else {
+                    showMessage("Rune Shatter cancelled.");
+                }
+            } else {
+                showMessage("No wall-shatter uses left.");
+            }
+            updateWallBreakDisplay();
+        });
+
+
+        // Reset game function
+        function resetGame() {
+            clearInterval(shiftingInterval);
+            shiftingInterval = null; // Reset interval ID
+            if (enemyMoveInterval) { clearInterval(enemyMoveInterval); enemyMoveInterval = null; }
+            enemies = [];
+            level = 1;
+            score = 0;
+            mazeWidth = 15;
+            mazeHeight = 15;
+            cellSize = 30;
+            document.getElementById('level-display').textContent = level;
+            document.getElementById('score-display').textContent = score;
+            gameStarted = false;
+            wallBreakUses = 1; // Reset initial uses
+            wallBreakMaxUses = 1; // Reset maximum uses
+            wallBreakModeActive = false;
+            treasures = [];
+            totalTreasuresCollected = 0;
+            collectedTreasureTypes = new Set();
+            keys = [];
+            keysCollected = new Set();
+            keysRequired = 0;
+            exitLocked = false;
+            const tl = document.getElementById('treasure-list');
+            if (tl) tl.innerHTML = '';
+            updateWallBreakDisplay();
+            showMessage("Game Reset! Press an arrow key to start.", 3000);
+            initGame(); // Re-initialize the game
+        }
+
+        // Initial game setup on window load
+        window.onload = function () {
+            initGame();
+            showMessage("Navigate the maze with arrow keys. Reach the magenta square! (Space/S for Rune Shatter, R to reset)", 5000);
+        };
+    </script>
+</body>
+</html>

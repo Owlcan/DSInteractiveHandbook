@@ -1,0 +1,1312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D&D Combat Assistant</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .message { margin-bottom:10px; padding:10px; border-radius:5px; max-width:80%; word-wrap: break-word; }
+        .user-message { background-color:#4a3520; color:#e6c786; margin-left:auto; }
+        .dm-message { background-color:#3d2815; color:#e6c786; border:1px solid #8b5a2b; }
+        .error-message { background-color:#a13d3d; color:#e6c786; border:1px solid #e6c786; }
+        .file-preview { max-width:200px; max-height:150px; margin:5px 0; border:1px solid #8b5a2b; border-radius: 4px; }
+        .grid-cell { border:1px solid #8b5a2b; position:absolute; display:flex; align-items:center; justify-content:center; font-size:10px; color:#a56c2f; background-color: rgba(45, 27, 15, 0.3); }
+        .token { position:absolute; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold; z-index:2; cursor:grab; box-shadow:0 2px 5px rgba(0,0,0,0.3); transition: all 0.2s ease-in-out; }
+        .player-token { background-color:#4CAF50; color:white; }
+        .enemy-token { background-color:#f44336; color:white; }
+        .wall-tile { background-color:#3d2815; position:absolute; z-index:1; }
+        .obstruction-tile { background-color:#614126; position:absolute; z-index:1; cursor:pointer; }
+        .door-tile { background-color: #855a2f; position: absolute; z-index: 1; border: 2px solid #54381d; box-sizing: border-box; display: flex; align-items: center; justify-content: center; color: white; font-size: 10px; cursor:pointer; }
+        .door-open { background-color: #a5835a; border-color: #6d4a27; }
+        .door-locked { background-color: #6d4a27; border-color: #c0a07b; }
+        .door-trapped { border: 2px dashed #f44336; }
+        .clutter-tile {
+            background-color: rgba(140, 107, 74, 0.2);
+            background-image: url("data:image/svg+xml,%3Csvg width='12' height='12' viewBox='0 0 12 12' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='3' cy='3' r='1.5' fill='%23614126' fill-opacity='0.7'/%3E%3Ccircle cx='8' cy='9' r='1' fill='%23614126' fill-opacity='0.7'/%3E%3Ccircle cx='9' cy='2' r='1' fill='%23614126' fill-opacity='0.7'/%3E%3C/svg%3E");
+            position:absolute;
+            z-index:1;
+            cursor:pointer;
+        }
+        .debris-tile {
+            background-color: rgba(163, 133, 99, 0.2);
+            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%233d2815' fill-opacity='0.3'%3E%3Cpath d='M0 38.59l2.83-2.83 1.41 1.41L1.41 40H0v-1.41zM10 40l2.83-2.83 1.41 1.41L11.41 40H10zM17.17 40l2.83-2.83 1.41 1.41L18.59 40h-1.42zM20 40l2.83-2.83 1.41 1.41L21.41 40H20zM30 40l2.83-2.83 1.41 1.41L31.41 40H30zM40 40l-2.83-2.83-1.41 1.41L38.59 40H40zM40 30l-2.83 2.83-1.41-1.41L38.59 30H40zM40 20l-2.83 2.83-1.41-1.41L38.59 20H40zM40 10l-2.83 2.83-1.41-1.41L38.59 10H40z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            position:absolute;
+            z-index:1;
+            cursor:pointer;
+        }
+        .shallow-water-tile { background-color: rgba(24, 122, 218, 0.4); position:absolute; z-index:1; cursor:pointer; }
+        .deep-water-tile { background-color: #1849da; background-image: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%233a6cb5' fill-opacity='0.4'%3E%3Cpath d='M0 0h40v40H0z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); position:absolute; z-index:1; cursor:pointer; }
+        .poison-tile { background-color: rgba(106, 218, 24, 0.4); background-image: url("data:image/svg+xml,%3Csvg width='6' height='6' viewBox='0 0 6 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23199a2c' fill-opacity='0.4' fill-rule='evenodd'%3E%3Cpath d='M5 0h1L0 6V5zM6 5v1H5z'/%3E%3C/g%3E%3C/svg%3E"); position:absolute; z-index:1; cursor:pointer; }
+        .lava-tile { background: linear-gradient(45deg, #ff4e00, #ff8c00, #ff4e00); animation: lava-flow 5s ease infinite; position:absolute; z-index:1; cursor:pointer; }
+        @keyframes lava-flow { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+        .bottomless-pit-tile { background: radial-gradient(ellipse at center, #222 0%, #000 75%); position:absolute; z-index:1; cursor:pointer; }
+        .file-thumbnail { width:60px; height:60px; border:1px solid #8b5a2b; display:flex; align-items:center; justify-content:center; position:relative; background-color:#4a3520; border-radius: 4px; }
+        .file-thumbnail .remove { position:absolute; top:-8px; right:-8px; background:red; color:white; border-radius:50%; width:16px; height:16px; font-size:12px; display:flex; align-items:center; justify-content:center; cursor:pointer; }
+        .remove-token-mode .token { cursor:not-allowed; }
+        .remove-token-mode .grid-cell { cursor:default; }
+        .placement-mode .grid-cell, .select-mode .grid-cell { cursor:cell; }
+        .move-background-mode #gridCtn { cursor: grab; }
+        .tab-btn { transition:background-color 0.3s ease; }
+        .tab-btn:hover { background-color:#4a3520; }
+        .active-tab { border-bottom:2px solid #e6c786; background-color:#4a3520; }
+        button:hover { filter: brightness(1.2); }
+        button:disabled { filter: brightness(0.6); cursor: not-allowed; }
+        .modal-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 1000; }
+        .modal-content { background-color: #3d2815; color: #e6c786; padding: 20px; border-radius: 8px; border: 1px solid #8b5a2b; text-align: center; max-width: 500px; width: 90%;}
+        .modal-content input, .modal-content textarea, .modal-content select { background-color: #4a3520; color: #e6c786; border: 1px solid #8b5a2b; padding: 8px; border-radius: 4px; margin-bottom: 10px; width: 100%; }
+        .modal-content button { background-color:#8b5a2b; color:#e6c786; border:none; padding: 8px 15px; cursor:pointer; border-radius: 4px; margin: 0 5px; }
+        .monster-stat-block { max-height: 70vh; overflow-y: auto; text-align: left; padding-right: 10px; }
+        .monster-stat-block h2 { font-size: 1.5rem; border-bottom: 2px solid #8b5a2b; margin-bottom: 10px; padding-bottom: 5px; }
+        .monster-stat-block p { margin-bottom: 5px; }
+        .monster-stat-block strong { color: #e6c786; }
+        .monster-stat-block .actions { border-top: 1px solid #8b5a2b; margin-top: 10px; padding-top: 10px; }
+    </style>
+</head>
+<body class="bg-[#2d1b0f] text-[#e6c786]">
+
+<div id="dmApp" class="flex h-screen text-left">
+  <!-- Left panel for chat -->
+  <div id="chatPanel" class="flex-1 flex flex-col border-r border-[#8b5a2b]">
+    <!-- Tab navigation -->
+    <div id="tabNav" class="flex bg-[#3d2815] border-b border-[#8b5a2b]">
+      <div id="chatTabBtn" class="tab-btn active-tab p-2.5 cursor-pointer flex-1 text-center">Chat</div>
+      <div id="notesTabBtn" class="tab-btn p-2.5 cursor-pointer flex-1 text-center">Notes & Settings</div>
+    </div>
+    
+    <!-- Chat tab content -->
+    <div id="chatTabContent" class="flex-1 flex flex-col min-h-0">
+      <div id="messagesCtn" class="flex-1 overflow-y-auto p-2.5 bg-[#2d1b0f]">
+        <!-- Messages will be added here -->
+      </div>
+      <div id="chatControls" class="p-1.5 bg-[#3d2815] flex justify-end">
+        <button id="saveChatBtn" class="bg-[#8b5a2b] text-[#e6c786] border-none py-1 px-2.5 cursor-pointer ml-1.5 rounded">Save Chat Log</button>
+      </div>
+      <div id="inputArea" class="p-2.5 bg-[#3d2815] flex flex-wrap gap-2.5">
+        <div id="uploadedFilesList" class="w-full flex flex-wrap gap-1.5"></div>
+        <textarea id="userInputEl" placeholder="Type your message..." class="flex-1 min-h-[60px] p-2 resize-none bg-[#4a3520] text-[#e6c786] border border-[#8b5a2b] rounded"></textarea>
+        <div class="flex flex-col gap-1.5">
+          <button id="uploadBtn" class="w-full p-2 bg-[#8b5a2b] text-[#e6c786] border-none cursor-pointer rounded">Upload</button>
+          <input type="file" id="fileInputEl" multiple accept=".txt,.pdf,.jpg,.jpeg,.png" hidden>
+          <button id="sendBtn" class="w-full p-2 bg-[#8b5a2b] text-[#e6c786] border-none cursor-pointer rounded">Send</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Notes & Settings tab content -->
+    <div id="notesTabContent" class="flex-1 hidden flex-col p-4 bg-[#2d1b0f] gap-4 overflow-y-auto">
+      <div>
+        <h3 class="text-lg font-bold mb-2">Gemini API Key</h3>
+        <p class="text-sm text-[#bda169] mb-2">Get your free API key from <a href="https://aistudio.google.com/app/apikey" target="_blank" class="underline">Google AI Studio</a>. The key is saved in your browser's local storage.</p>
+        <div class="flex gap-2">
+            <input type="password" id="apiKeyEl" placeholder="Paste your Gemini API Key here" class="flex-1 p-2 bg-[#4a3520] text-[#e6c786] border border-[#8b5a2b] rounded">
+            <button id="saveApiKeyBtn" class="p-2 bg-[#8b5a2b] text-[#e6c786] border-none cursor-pointer rounded">Save Key</button>
+        </div>
+      </div>
+       <div>
+        <h3 class="text-lg font-bold mb-2">Bestiary</h3>
+        <p class="text-sm text-[#bda169] mb-2">Load a JSON file containing monster data to make it available to the AI.</p>
+        <button id="loadBestiaryBtn" class="w-full p-2 bg-[#8b5a2b] text-[#e6c786] border-none cursor-pointer rounded">Load Bestiary (JSON)</button>
+        <input type="file" id="bestiaryInputEl" accept=".json" hidden>
+      </div>
+      <div>
+        <h3 class="text-lg font-bold mb-2">Campaign Notes</h3>
+        <button id="loadNotesBtn" class="w-full p-2 bg-[#8b5a2b] text-[#e6c786] border-none cursor-pointer rounded mb-2">Load Notes from File</button>
+        <input type="file" id="notesInputEl" accept=".txt" hidden>
+        <textarea id="playerNotesEl" placeholder="Add campaign notes, character details, or any other information you want the DM to remember..." class="w-full h-64 p-2 resize-none bg-[#4a3520] text-[#e6c786] border border-[#8b5a2b] rounded"></textarea>
+        <div class="mt-2 flex justify-end">
+            <button id="saveNotesBtn" class="bg-[#8b5a2b] text-[#e6c786] border-none py-2 px-5 cursor-pointer rounded">Save Notes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Right panel for combat grid -->
+  <div id="combatPanel" class="flex-1 flex flex-col">
+    <div id="gridHeader" class="p-2.5 bg-[#3d2815] text-[#e6c786] flex justify-between items-center flex-wrap gap-2">
+      <span>D&D Combat Grid</span>
+      <div class="flex flex-wrap gap-1.5">
+        <button id="uploadBackgroundBtn" class="bg-[#8b5a2b] text-[#e6c786] border-none py-1 px-2.5 cursor-pointer rounded">Upload BG</button>
+        <input type="file" id="backgroundInputEl" accept="image/*" hidden>
+        <button id="moveBackgroundBtn" class="bg-[#8b5a2b] text-[#e6c786] border-none py-1 px-2.5 cursor-pointer rounded">Move BG</button>
+        <button id="generateEncounterBtn" class="bg-[#4a6b4c] text-[#e6c786] border-none py-1 px-2.5 cursor-pointer rounded">Generate Encounter</button>
+        <button id="saveGridBtn" class="bg-[#8b5a2b] text-[#e6c786] border-none py-1 px-2.5 cursor-pointer rounded">Save</button>
+        <button id="loadGridBtn" class="bg-[#8b5a2b] text-[#e6c786] border-none py-1 px-2.5 cursor-pointer rounded">Load</button>
+        <button id="clearGridBtn" class="bg-[#8b5a2b] text-[#e6c786] border-none py-1 px-2.5 cursor-pointer rounded">Clear</button>
+        <button id="selectToolBtn" class="bg-[#8b5a2b] text-[#e6c786] border-none py-1 px-2.5 cursor-pointer rounded">Select</button>
+        <button id="addPlayerBtn" class="bg-[#8b5a2b] text-[#e6c786] border-none py-1 px-2.5 cursor-pointer rounded">Player</button>
+        <button id="addEnemyBtn" class="bg-[#8b5a2b] text-[#e6c786] border-none py-1 px-2.5 cursor-pointer rounded">Enemy</button>
+        <button id="addDoorBtn" class="bg-[#8b5a2b] text-[#e6c786] border-none py-1 px-2.5 cursor-pointer rounded">Door</button>
+        <button id="addWallBtn" class="bg-[#8b5a2b] text-[#e6c786] border-none py-1 px-2.5 cursor-pointer rounded">Wall</button>
+        <button id="addObstructionBtn" class="bg-[#8b5a2b] text-[#e6c786] border-none py-1 px-2.5 cursor-pointer rounded">Obstruction</button>
+        <button id="addClutterBtn" class="bg-[#8b5a2b] text-[#e6c786] border-none py-1 px-2.5 cursor-pointer rounded">Clutter</button>
+        <button id="addDebrisBtn" class="bg-[#8b5a2b] text-[#e6c786] border-none py-1 px-2.5 cursor-pointer rounded">Debris</button>
+        <button id="addShallowWaterBtn" class="bg-[#8b5a2b] text-[#e6c786] border-none py-1 px-2.5 cursor-pointer rounded">Shallow Water</button>
+        <button id="addDeepWaterBtn" class="bg-[#8b5a2b] text-[#e6c786] border-none py-1 px-2.5 cursor-pointer rounded">Deep Water</button>
+        <button id="addPoisonBtn" class="bg-[#8b5a2b] text-[#e6c786] border-none py-1 px-2.5 cursor-pointer rounded">Poison</button>
+        <button id="addLavaBtn" class="bg-[#8b5a2b] text-[#e6c786] border-none py-1 px-2.5 cursor-pointer rounded">Lava</button>
+        <button id="addPitBtn" class="bg-[#8b5a2b] text-[#e6c786] border-none py-1 px-2.5 cursor-pointer rounded">Pit</button>
+        <button id="removeTokenBtn" class="bg-[#8b5a2b] text-[#e6c786] border-none py-1 px-2.5 cursor-pointer rounded">Remove</button>
+      </div>
+    </div>
+    <div id="gridCtn" class="flex-1 bg-[#2d1b0f] relative overflow-auto"></div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // --- STATE MANAGEMENT ---
+  let chatHistory = [];
+  let uploadedFiles = [];
+  let bestiaryData = [];
+  let currentGrid = { 
+    width: 20, height: 20, cellSize: 40, 
+    tokens: [], walls: [], doors: [], obstructions: [], clutter: [], debris: [], 
+    shallowWater: [], deepWater: [], poison: [], lava: [], bottomlessPits: [],
+    background: { src: null, x: 0, y: 0, scale: 1, locked: true }
+  };
+  let draggedToken = null;
+  let currentMode = 'none'; // 'none', 'removeToken', 'placeWall', 'placeObstruction', etc.
+  let lineDrawStart = null;
+  let playerNotes = "";
+  let apiKey = "";
+  let isDraggingBackground = false;
+  let backgroundDragStart = { x: 0, y: 0 };
+
+  // --- DOM ELEMENTS ---
+  const getEl = (id) => document.getElementById(id);
+  const chatTabBtn = getEl('chatTabBtn');
+  const notesTabBtn = getEl('notesTabBtn');
+  const chatTabContent = getEl('chatTabContent');
+  const notesTabContent = getEl('notesTabContent');
+  const messagesCtn = getEl('messagesCtn');
+  const saveChatBtn = getEl('saveChatBtn');
+  const uploadedFilesList = getEl('uploadedFilesList');
+  const userInputEl = getEl('userInputEl');
+  const uploadBtn = getEl('uploadBtn');
+  const fileInputEl = getEl('fileInputEl');
+  const bestiaryInputEl = getEl('bestiaryInputEl');
+  const loadBestiaryBtn = getEl('loadBestiaryBtn');
+  const sendBtn = getEl('sendBtn');
+  const apiKeyEl = getEl('apiKeyEl');
+  const saveApiKeyBtn = getEl('saveApiKeyBtn');
+  const playerNotesEl = getEl('playerNotesEl');
+  const saveNotesBtn = getEl('saveNotesBtn');
+  const loadNotesBtn = getEl('loadNotesBtn');
+  const notesInputEl = getEl('notesInputEl');
+  const gridCtn = getEl('gridCtn');
+  const generateEncounterBtn = getEl('generateEncounterBtn');
+  const saveGridBtn = getEl('saveGridBtn');
+  const loadGridBtn = getEl('loadGridBtn');
+  const clearGridBtn = getEl('clearGridBtn');
+  const selectToolBtn = getEl('selectToolBtn');
+  const uploadBackgroundBtn = getEl('uploadBackgroundBtn');
+  const backgroundInputEl = getEl('backgroundInputEl');
+  const moveBackgroundBtn = getEl('moveBackgroundBtn');
+  const addPlayerBtn = getEl('addPlayerBtn');
+  const addEnemyBtn = getEl('addEnemyBtn');
+  const addDoorBtn = getEl('addDoorBtn');
+  const addWallBtn = getEl('addWallBtn');
+  const addObstructionBtn = getEl('addObstructionBtn');
+  const addClutterBtn = getEl('addClutterBtn');
+  const addDebrisBtn = getEl('addDebrisBtn');
+  const addShallowWaterBtn = getEl('addShallowWaterBtn');
+  const addDeepWaterBtn = getEl('addDeepWaterBtn');
+  const addPoisonBtn = getEl('addPoisonBtn');
+  const addLavaBtn = getEl('addLavaBtn');
+  const addPitBtn = getEl('addPitBtn');
+  const removeTokenBtn = getEl('removeTokenBtn');
+  
+  // --- INITIALIZATION ---
+  function init() {
+    setupEventListeners();
+    createGrid();
+    loadApiKey();
+    loadPlayerNotes();
+    addMessage("Welcome! To get started, go to the 'Notes & Settings' tab and enter your Gemini API key. You can get a free key from Google AI Studio.", "dm");
+  }
+
+  // --- EVENT LISTENERS ---
+  function setupEventListeners() {
+    uploadBtn.addEventListener('click', () => fileInputEl.click());
+    fileInputEl.addEventListener('change', handleFileUpload);
+    loadBestiaryBtn.addEventListener('click', () => bestiaryInputEl.click());
+    bestiaryInputEl.addEventListener('change', handleBestiaryUpload);
+    loadNotesBtn.addEventListener('click', () => notesInputEl.click());
+    notesInputEl.addEventListener('change', handleNotesUpload);
+    sendBtn.addEventListener('click', handleSendMessage);
+    userInputEl.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        handleSendMessage();
+      }
+    });
+    chatTabBtn.addEventListener('click', () => switchTab('chat'));
+    notesTabBtn.addEventListener('click', () => switchTab('notes'));
+    saveApiKeyBtn.addEventListener('click', saveApiKey);
+    saveNotesBtn.addEventListener('click', savePlayerNotes);
+    saveChatBtn.addEventListener('click', saveChatLog);
+    saveGridBtn.addEventListener('click', saveGridToFile);
+    loadGridBtn.addEventListener('click', loadGridFromFile);
+    generateEncounterBtn.addEventListener('click', handleGenerateEncounter);
+    uploadBackgroundBtn.addEventListener('click', () => backgroundInputEl.click());
+    backgroundInputEl.addEventListener('change', handleBackgroundUpload);
+    moveBackgroundBtn.addEventListener('click', () => {
+        currentGrid.background.locked = !currentGrid.background.locked;
+        setMode(currentGrid.background.locked ? 'select' : 'moveBackground');
+    });
+
+    clearGridBtn.onclick = () => {
+      Object.keys(currentGrid).forEach(key => {
+        if (Array.isArray(currentGrid[key])) {
+          currentGrid[key] = [];
+        }
+      });
+      currentGrid.background = { src: null, x: 0, y: 0, scale: 1, locked: true };
+      createGrid();
+      setMode('none');
+    };
+    selectToolBtn.onclick = () => setMode('select');
+    addPlayerBtn.onclick = () => { setMode('none'); promptForNewToken('player'); };
+    addEnemyBtn.onclick = () => {
+        setMode('none');
+        if (bestiaryData.length > 0) {
+            showBestiaryMenu();
+        } else {
+            promptForNewToken('enemy');
+        }
+    };
+    addDoorBtn.onclick = () => setMode('placeDoor');
+    addWallBtn.onclick = () => setMode('placeWall');
+    addObstructionBtn.onclick = () => setMode('placeObstruction');
+    addClutterBtn.onclick = () => setMode('placeClutter');
+    addDebrisBtn.onclick = () => setMode('placeDebris');
+    addShallowWaterBtn.onclick = () => setMode('placeShallowWater');
+    addDeepWaterBtn.onclick = () => setMode('placeDeepWater');
+    addPoisonBtn.onclick = () => setMode('placePoison');
+    addLavaBtn.onclick = () => setMode('placeLava');
+    addPitBtn.onclick = () => setMode('placeBottomlessPit');
+    removeTokenBtn.onclick = () => setMode('removeToken');
+
+    // Background Drag Listeners
+    gridCtn.addEventListener('mousedown', (e) => {
+        if (currentMode === 'moveBackground') {
+            isDraggingBackground = true;
+            backgroundDragStart.x = e.clientX - currentGrid.background.x;
+            backgroundDragStart.y = e.clientY - currentGrid.background.y;
+            gridCtn.style.cursor = 'grabbing';
+        }
+    });
+
+    window.addEventListener('mousemove', (e) => {
+        if (isDraggingBackground) {
+            currentGrid.background.x = e.clientX - backgroundDragStart.x;
+            currentGrid.background.y = e.clientY - backgroundDragStart.y;
+            redrawGrid();
+        }
+    });
+
+    window.addEventListener('mouseup', () => {
+        isDraggingBackground = false;
+        gridCtn.style.cursor = 'grab';
+    });
+  }
+
+  // --- UI & TABS ---
+  function switchTab(tabName) {
+    chatTabContent.style.display = tabName === 'chat' ? 'flex' : 'none';
+    notesTabContent.style.display = tabName === 'notes' ? 'flex' : 'none';
+    chatTabBtn.classList.toggle('active-tab', tabName === 'chat');
+    notesTabBtn.classList.toggle('active-tab', tabName === 'notes');
+  }
+
+  function showToast(message, isError = false) {
+      const toast = document.createElement('div');
+      toast.textContent = message;
+      toast.className = `fixed bottom-5 right-5 text-white py-2 px-4 rounded-lg shadow-lg z-[1000] ${isError ? 'bg-red-500' : 'bg-green-500'}`;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
+  }
+
+  function showModal(config) {
+    const { title, bodyHTML = '', onConfirm } = config;
+    const backdrop = document.createElement('div');
+    backdrop.className = 'modal-backdrop';
+    
+    const content = document.createElement('div');
+    content.className = 'modal-content';
+    
+    content.innerHTML = `
+        <p class="text-lg mb-4">${title}</p>
+        <div class="modal-body">${bodyHTML}</div>
+        <div>
+            <button class="modal-confirm">OK</button>
+            <button class="modal-cancel">Cancel</button>
+        </div>
+    `;
+    
+    backdrop.appendChild(content);
+    document.body.appendChild(backdrop);
+
+    const confirmBtn = content.querySelector('.modal-confirm');
+    const cancelBtn = content.querySelector('.modal-cancel');
+
+    const closeModal = () => backdrop.remove();
+
+    confirmBtn.addEventListener('click', () => {
+        const inputs = content.querySelectorAll('.modal-input');
+        let value;
+        if (inputs.length > 1) {
+            value = Array.from(inputs).map(i => i.value);
+        } else if (inputs.length === 1) {
+            value = inputs[0].value;
+        }
+
+        if (onConfirm) {
+            onConfirm(value);
+        }
+        closeModal();
+    });
+    cancelBtn.addEventListener('click', closeModal);
+  }
+
+
+  // --- LOCAL STORAGE & SAVING ---
+  function saveApiKey() {
+      apiKey = apiKeyEl.value.trim();
+      if (apiKey) {
+          localStorage.setItem('dmApp_apiKey', apiKey);
+          showToast('API Key saved!');
+      } else {
+          showToast('Please enter an API Key.', true);
+      }
+  }
+
+  function loadApiKey() {
+      const savedKey = localStorage.getItem('dmApp_apiKey');
+      if (savedKey) {
+          apiKey = savedKey;
+          apiKeyEl.value = apiKey;
+      }
+  }
+
+  function savePlayerNotes() {
+    playerNotes = playerNotesEl.value;
+    localStorage.setItem('dmApp_playerNotes', playerNotes);
+    showToast('Notes saved!');
+  }
+
+  function loadPlayerNotes() {
+    const savedNotes = localStorage.getItem('dmApp_playerNotes');
+    if (savedNotes) {
+      playerNotes = savedNotes;
+      playerNotesEl.value = playerNotes;
+    }
+  }
+
+  function saveChatLog() {
+    let chatText = chatHistory.map(msg => `${msg.role === 'user' ? 'Player' : 'DM'}: ${msg.content}`).join('\n\n');
+    const blob = new Blob([chatText], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `dnd_chat_${new Date().toISOString().slice(0, 10)}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+    a.remove();
+  }
+
+  function saveGridToFile() {
+    const gridData = JSON.stringify(currentGrid, null, 2);
+    const blob = new Blob([gridData], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'dnd-grid.json';
+    a.click();
+    URL.revokeObjectURL(url);
+    a.remove();
+    showToast('Grid saved to file!');
+  }
+
+  function loadGridFromFile() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = e => {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+        reader.onload = readerEvent => {
+            try {
+                const newGrid = JSON.parse(readerEvent.target.result);
+                // Basic validation
+                if (newGrid.width && newGrid.height && newGrid.tokens) {
+                    currentGrid = newGrid;
+                    createGrid();
+                    showToast('Grid loaded successfully!');
+                } else {
+                    showToast('Invalid grid file format.', true);
+                }
+            } catch (err) {
+                showToast('Error reading grid file.', true);
+                console.error(err);
+            }
+        }
+        reader.readAsText(file, 'UTF-8');
+    }
+    input.click();
+  }
+
+  // --- FILE HANDLING ---
+  function handleNotesUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        playerNotesEl.value += `\n\n--- Uploaded Log: ${file.name} ---\n` + e.target.result;
+        savePlayerNotes();
+    };
+    reader.readAsText(file);
+    notesInputEl.value = '';
+  }
+
+  function handleBestiaryUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        try {
+            const json = JSON.parse(e.target.result);
+            if (json.creatures && Array.isArray(json.creatures)) {
+                bestiaryData = json.creatures;
+                showToast(`Bestiary loaded with ${bestiaryData.length} creatures!`);
+            } else {
+                showToast('Invalid JSON format: "creatures" array not found.', true);
+            }
+        } catch (error) {
+            showToast(`Error parsing JSON: ${error.message}`, true);
+            console.error("Error parsing bestiary JSON:", error);
+        }
+    };
+    reader.readAsText(file);
+    bestiaryInputEl.value = ''; // Reset for next upload
+  }
+
+  function handleBackgroundUpload(event) {
+    const file = event.target.files[0];
+    if (file && file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            currentGrid.background.src = e.target.result;
+            redrawGrid();
+        };
+        reader.readAsDataURL(file);
+    } else {
+        showToast('Please select a valid image file.', true);
+    }
+    backgroundInputEl.value = '';
+  }
+
+  function handleFileUpload() {
+    for (const file of fileInputEl.files) {
+      const fileData = {
+        id: `file-${Date.now()}-${Math.random()}`,
+        name: file.name,
+        type: file.type,
+        content: null,
+        preview: null,
+        base64: null
+      };
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        fileData.base64 = e.target.result.split(',')[1]; // Get base64 part
+
+        if (file.type.startsWith('image/')) {
+            fileData.content = `Image: ${file.name}`;
+            fileData.preview = e.target.result;
+        } else if (file.type === 'application/pdf' || file.type === 'text/plain') {
+            try {
+                const textContent = atob(fileData.base64);
+                fileData.content = textContent;
+                fileData.preview = textContent.substring(0, 100) + (textContent.length > 100 ? '...' : '');
+            } catch(err) {
+                console.error("Error decoding file content:", err);
+                fileData.content = "Could not read file content.";
+                fileData.preview = "Could not read file content.";
+            }
+        } else {
+            return; // Skip unsupported files
+        }
+        uploadedFiles.push(fileData);
+        addFileThumb(fileData);
+      };
+      reader.readAsDataURL(file);
+    }
+    fileInputEl.value = '';
+  }
+
+  function addFileThumb(fileData) {
+    const thumbEl = document.createElement('div');
+    thumbEl.className = 'file-thumbnail';
+    thumbEl.dataset.id = fileData.id;
+
+    if (fileData.type.startsWith('image/')) {
+      thumbEl.innerHTML = `<img src="${fileData.preview}" class="w-full h-full object-cover rounded">`;
+    } else {
+      thumbEl.innerHTML = `<span class="text-xs">${fileData.type.includes('pdf') ? 'PDF' : 'TXT'}</span>`;
+      thumbEl.style.backgroundColor = '#614126';
+    }
+    
+    const removeBtn = document.createElement('span');
+    removeBtn.className = 'remove';
+    removeBtn.innerHTML = '&times;';
+    removeBtn.onclick = (e) => {
+      e.stopPropagation();
+      uploadedFiles = uploadedFiles.filter(f => f.id !== fileData.id);
+      thumbEl.remove();
+    };
+    
+    thumbEl.appendChild(removeBtn);
+    uploadedFilesList.appendChild(thumbEl);
+  }
+
+  // --- CORE LOGIC ---
+  function getBestiaryAsText() {
+    if (bestiaryData.length === 0) {
+        return "No bestiary loaded.";
+    }
+    let text = "";
+    bestiaryData.forEach(creature => {
+        const name = creature.name || 'Unknown';
+        const hp = creature.stats?.hitPointsStr || 'N/A';
+        const ac = creature.stats?.armorClass || 'N/A';
+        const speed = creature.stats?.speed || 'N/A';
+        text += `- ${name}: HP ${hp}, AC ${ac}, Speed ${speed}\n`;
+    });
+    return text;
+  }
+  
+  function handleSendMessage() {
+    const message = userInputEl.value.trim();
+    if (!message && uploadedFiles.length === 0) return;
+
+    let userMessageParts = [];
+    if (message) {
+        userMessageParts.push({ text: message });
+    }
+    
+    if (uploadedFiles.length > 0) {
+      const fileMsg = document.createElement('div');
+      fileMsg.className = 'message user-message';
+      let fileHTML = '<div>Uploaded files:</div>';
+      
+      for (let file of uploadedFiles) {
+        if (file.type.startsWith('image/')) {
+          fileHTML += `<div><strong>${file.name}</strong><br><img src="${file.preview}" class="file-preview"></div>`;
+          userMessageParts.push({ inlineData: { mimeType: file.type, data: file.base64 } });
+        } else {
+          fileHTML += `<div><strong>${file.name}</strong><br><pre class="max-h-[150px] overflow-auto bg-[#4a3520] p-1 border border-[#8b5a2b] text-[#e6c786] rounded">${file.preview}</pre></div>`;
+        }
+      }
+      fileMsg.innerHTML = fileHTML;
+      messagesCtn.appendChild(fileMsg);
+    }
+
+    if (message) {
+        addMessage(message, "user");
+    }
+
+    const textFiles = uploadedFiles.filter(f => f.type === 'text/plain' || f.type === 'application/pdf');
+    if (textFiles.length > 0) {
+        let fileContentText = "\n\n--- Uploaded File Content ---\n";
+        textFiles.forEach(file => {
+            fileContentText += `File: ${file.name}\nContent: ${file.content}\n\n`;
+        });
+        fileContentText += "--- End of File Content ---";
+        userMessageParts.unshift({ text: fileContentText });
+    }
+    
+    userInputEl.value = '';
+    uploadedFilesList.innerHTML = '';
+    
+    const systemInstruction = `You are a D&D Dungeon Master assistant. Your persona is creative, knowledgeable, and fair. You help run combat, describe scenes vividly, and interpret rules. 
+IMPORTANT: When referring to grid locations, use the alphanumeric coordinates (e.g., A1, B3).
+MOVEMENT RULES: When moving characters, respect standard D&D 5e movement rules where 1 square = 5 feet. For example, a creature with 30 feet of movement can move 6 squares. You must enforce this.
+
+--- Player's Campaign Notes ---
+${playerNotes.trim() || "No notes provided."}
+--- End of Notes ---
+
+--- Loaded Bestiary ---
+${getBestiaryAsText()}
+--- End of Bestiary ---
+
+--- Current Combat Grid State ---
+${getGridStateAsText()}
+--- End of Grid State ---
+
+Based on all the above context (notes, bestiary, grid state), the user's chat history, and the user's following message (which may include text and images), provide a helpful and engaging response. If the player's message implies an action, describe the outcome. If it's a question, answer it. If it's a statement, react to it in character.`;
+
+    sendRequestToGemini(systemInstruction, userMessageParts);
+  }
+
+  function handleGenerateEncounter() {
+    showModal({
+        title: "Generate Encounter",
+        bodyHTML: `<textarea class="modal-input h-32" placeholder='Describe the encounter. E.g., "A goblin ambush in a cluttered forest clearing" or "Two skeletons in a small, 15x15 foot crypt with a single stone sarcophagus."'></textarea>`,
+        onConfirm: (description) => {
+            const systemInstruction = `You are a D&D Dungeon Master assistant. Based on the user's request, you will generate a combat encounter.
+First, provide a vivid, descriptive paragraph setting the scene for the player.
+Second, provide a series of commands to set up the grid. You MUST use the following commands exactly as specified. A coordinate MUST be an alphanumeric pair like A1, B3, J15.
+
+COMMANDS:
+- create room from [coord] to [coord] (Example: create room from A1 to E5)
+- create hallway from [coord] to [coord] (Example: create hallway from E5 to E10)
+- place enemy "Name" at [coord] (Example: place enemy "Goblin" at C3)
+- place door at [coord] {state: "open|closed|locked|stuck|trapped"} (Example: place door at E1 {state: "locked"})
+- place wall at [coord] (Example: place wall at B2)
+- place obstruction at [coord] (Example: place obstruction at G7)
+- place clutter at [coord] (Example: place clutter at H9)
+- place debris at [coord] (Example: place debris at D4)
+- place shallow water at [coord]
+- place deep water at [coord]
+- place poison at [coord]
+- place lava at [coord]
+- place bottomless pit at [coord]
+
+RULES:
+1. The grid is ${currentGrid.width}x${currentGrid.height}. All coordinates must be within these bounds.
+2. Do not place multiple tokens in the same grid cell.
+3. If the user mentions a creature from the bestiary, use its name exactly as it appears there.
+4. After all commands, you MUST include the following sentence exactly: "The stage is set. Place your player tokens on the grid and tell me what you do."
+
+--- Loaded Bestiary ---
+${getBestiaryAsText()}
+--- End of Bestiary ---
+
+--- User's Encounter Request ---
+${description}
+--- End of Request ---`;
+            
+            addMessage(`Generating encounter: ${description}`, 'user');
+            sendRequestToGemini(systemInstruction, []);
+        }
+    });
+  }
+
+  async function sendRequestToGemini(systemText, userParts) {
+    if (!apiKey) {
+        addMessage("Please add your Gemini API key in the 'Notes & Settings' tab before sending a message.", "error");
+        return;
+    }
+
+    const systemInstruction = { role: "user", parts: [{ text: systemText }] };
+    
+    if (userParts && userParts.length > 0) {
+        chatHistory.push({ role: "user", parts: userParts });
+    }
+
+    sendBtn.disabled = true;
+    sendBtn.textContent = "Thinking...";
+    let loadingIndicator = addMessage("Generating response...", "dm");
+    
+    try {
+      const validChatHistory = chatHistory.filter(turn => turn.parts && turn.parts.length > 0);
+
+      const apiPayload = {
+          contents: [systemInstruction, ...validChatHistory],
+      };
+
+      const responseText = await callGeminiApi(apiKey, apiPayload);
+
+      messagesCtn.removeChild(loadingIndicator);
+      addMessage(responseText, "dm");
+      
+      if (responseText) {
+        chatHistory.push({ role: "model", parts: [{ text: responseText }] });
+      }
+      
+      processGridCommands(responseText);
+
+    } catch (error) {
+      console.error("Error generating response:", error);
+      messagesCtn.removeChild(loadingIndicator);
+      addMessage(`Error: ${error.message}. Please check your API key and network connection.`, "error");
+    } finally {
+      sendBtn.disabled = false;
+      sendBtn.textContent = "Send";
+      uploadedFiles = [];
+    }
+  }
+
+  async function callGeminiApi(key, payload) {
+    const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${key}`;
+    
+    const response = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+        const errorBody = await response.json();
+        throw new Error(errorBody.error?.message || `API request failed with status ${response.status}`);
+    }
+
+    const data = await response.json();
+    
+    if (!data.candidates || !data.candidates[0].content || !data.candidates[0].content.parts) {
+        throw new Error("Invalid response structure from Gemini API.");
+    }
+
+    return data.candidates[0].content.parts[0].text;
+  }
+
+  function addMessage(text, type) {
+    const messageElement = document.createElement('div');
+    messageElement.className = `message ${type}-message`;
+    text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>');
+    messageElement.innerHTML = text.replace(/\n/g, '<br>');
+    messagesCtn.appendChild(messageElement);
+    messagesCtn.scrollTop = messagesCtn.scrollHeight;
+    return messageElement;
+  }
+
+  // --- GRID LOGIC ---
+  function createGrid() {
+    gridCtn.innerHTML = '';
+    const gridDiv = document.createElement('div');
+    gridDiv.style.position = 'relative';
+    gridDiv.style.width = `${currentGrid.width * currentGrid.cellSize}px`;
+    gridDiv.style.height = `${currentGrid.height * currentGrid.cellSize}px`;
+    gridDiv.style.margin = 'auto';
+    gridDiv.style.marginTop = '20px';
+    gridDiv.style.backgroundColor = '#4a3520';
+    gridDiv.style.backgroundSize = 'cover';
+    gridDiv.style.backgroundPosition = `${currentGrid.background.x}px ${currentGrid.background.y}px`;
+    if(currentGrid.background.src) {
+        gridDiv.style.backgroundImage = `url(${currentGrid.background.src})`;
+    }
+    
+    for (let y = 0; y < currentGrid.height; y++) {
+      for (let x = 0; x < currentGrid.width; x++) {
+        const cell = document.createElement('div');
+        cell.className = 'grid-cell';
+        cell.style.width = `${currentGrid.cellSize}px`;
+        cell.style.height = `${currentGrid.cellSize}px`;
+        cell.style.left = `${x * currentGrid.cellSize}px`;
+        cell.style.top = `${y * currentGrid.cellSize}px`;
+        cell.dataset.coord = `${String.fromCharCode(65 + x)}${y + 1}`;
+        cell.dataset.x = x;
+        cell.dataset.y = y;
+        cell.textContent = cell.dataset.coord;
+        
+        cell.addEventListener('dragover', e => e.preventDefault());
+        cell.addEventListener('drop', handleTokenDrop);
+        cell.addEventListener('click', () => handleCellClick(x, y));
+        
+        gridDiv.appendChild(cell);
+      }
+    }
+    gridCtn.appendChild(gridDiv);
+    redrawGrid();
+  }
+
+  function redrawGrid() {
+    const gridDiv = gridCtn.querySelector('div');
+    if(currentGrid.background.src) {
+        gridDiv.style.backgroundImage = `url(${currentGrid.background.src})`;
+        gridDiv.style.backgroundPosition = `${currentGrid.background.x}px ${currentGrid.background.y}px`;
+    } else {
+        gridDiv.style.backgroundImage = 'none';
+    }
+
+    gridCtn.querySelectorAll('.token, .wall-tile, .door-tile, .obstruction-tile, .clutter-tile, .debris-tile, .shallow-water-tile, .deep-water-tile, .poison-tile, .lava-tile, .bottomless-pit-tile').forEach(el => el.remove());
+    
+    const featureTypes = ['walls', 'doors', 'obstructions', 'clutter', 'debris', 'shallowWater', 'deepWater', 'poison', 'lava', 'bottomlessPits'];
+    featureTypes.forEach(type => {
+        if(currentGrid[type]) currentGrid[type].forEach(addFeatureToGrid);
+    });
+    
+    currentGrid.tokens.forEach(addTokenToGrid);
+  }
+
+  function handleCellClick(x, y) {
+      if (currentMode === 'select') {
+          const door = currentGrid.doors.find(d => d.x === x && d.y === y);
+          if (door) {
+              showModal({
+                  title: `Edit Door at ${String.fromCharCode(65 + x)}${y + 1}`,
+                  bodyHTML: `<select class="modal-input">${['closed', 'open', 'locked', 'stuck', 'trapped'].map(s => `<option value="${s}" ${s === door.state ? 'selected' : ''}>${s.charAt(0).toUpperCase() + s.slice(1)}</option>`).join('')}</select>`,
+                  onConfirm: (newState) => {
+                      door.state = newState;
+                      redrawGrid();
+                  }
+              });
+              return;
+          }
+
+          const terrainTypes = ['obstructions', 'clutter', 'debris', 'shallowWater', 'deepWater', 'poison', 'lava', 'bottomlessPits'];
+          const terrain = terrainTypes.map(type => currentGrid[type]?.find(f => f.x === x && f.y === y)).find(f => f);
+          if (terrain) {
+              showModal({
+                  title: `Edit ${terrain.type}`,
+                  bodyHTML: `<input type="text" class="modal-input" value="${terrain.name}">`,
+                  onConfirm: (newName) => {
+                      terrain.name = newName;
+                      redrawGrid();
+                  }
+              });
+              return;
+          }
+      }
+
+      if (currentMode === 'placeWall') {
+          if (!lineDrawStart) {
+              lineDrawStart = { x, y };
+              getEl('gridCtn').querySelector(`[data-coord="${String.fromCharCode(65 + x)}${y + 1}"]`).style.backgroundColor = 'rgba(255,255,0,0.5)';
+          } else {
+              drawLine(lineDrawStart.x, lineDrawStart.y, x, y, 'wall');
+              lineDrawStart = null;
+              redrawGrid();
+          }
+          return;
+      }
+      
+      lineDrawStart = null; // Reset line drawing if switching modes
+
+      switch (currentMode) {
+          case 'placeDoor': promptForNewDoor(x, y); break;
+          case 'placeObstruction': addFeature({ type: 'obstruction', x, y, name: 'Obstruction' }); break;
+          case 'placeClutter': addFeature({ type: 'clutter', x, y, name: 'Clutter' }); break;
+          case 'placeDebris': addFeature({ type: 'debris', x, y, name: 'Debris' }); break;
+          case 'placeShallowWater': addFeature({ type: 'shallowWater', x, y, name: 'Shallow Water' }); break;
+          case 'placeDeepWater': addFeature({ type: 'deepWater', x, y, name: 'Deep Water' }); break;
+          case 'placePoison': addFeature({ type: 'poison', x, y, name: 'Poison' }); break;
+          case 'placeLava': addFeature({ type: 'lava', x, y, name: 'Lava' }); break;
+          case 'placeBottomlessPit': addFeature({ type: 'bottomlessPit', x, y, name: 'Bottomless Pit' }); break;
+      }
+  }
+
+  function drawLine(x0, y0, x1, y1, type) {
+    let dx = Math.abs(x1 - x0);
+    let dy = -Math.abs(y1 - y0);
+    let sx = x0 < x1 ? 1 : -1;
+    let sy = y0 < y1 ? 1 : -1;
+    let err = dx + dy;
+    while (true) {
+        addFeature({ type, x: x0, y: y0 });
+        if (x0 === x1 && y0 === y1) break;
+        let e2 = 2 * err;
+        if (e2 >= dy) {
+            err += dy;
+            x0 += sx;
+        }
+        if (e2 <= dx) {
+            err += dx;
+            y0 += sy;
+        }
+    }
+}
+
+
+  function setMode(newMode) {
+    currentMode = (currentMode === newMode) ? 'none' : newMode;
+    lineDrawStart = null; // Reset line drawing on mode change
+    redrawGrid(); // Redraw to clear any highlights
+    updateModeUI();
+  }
+
+  function updateModeUI() {
+      const buttons = {
+          removeToken: removeTokenBtn,
+          placeWall: addWallBtn,
+          placeDoor: addDoorBtn,
+          placeObstruction: addObstructionBtn,
+          placeClutter: addClutterBtn,
+          placeDebris: addDebrisBtn,
+          placeShallowWater: addShallowWaterBtn,
+          placeDeepWater: addDeepWaterBtn,
+          placePoison: addPoisonBtn,
+          placeLava: addLavaBtn,
+          placeBottomlessPit: addPitBtn,
+          select: selectToolBtn,
+          moveBackground: moveBackgroundBtn,
+      };
+      Object.values(buttons).forEach(btn => {
+          btn.style.backgroundColor = '';
+          btn.style.color = '';
+      });
+      getEl('generateEncounterBtn').style.backgroundColor = '#4a6b4c';
+      gridCtn.className = 'flex-1 bg-[#2d1b0f] relative overflow-auto';
+
+      if (buttons[currentMode]) {
+          buttons[currentMode].style.backgroundColor = '#f44336';
+          buttons[currentMode].style.color = 'white';
+          gridCtn.classList.add(`${currentMode}-mode`);
+      }
+  }
+  
+  function promptForNewDoor(x, y) {
+    showModal({
+        title: "Set Door State",
+        bodyHTML: `<select class="modal-input">${['closed', 'open', 'locked', 'stuck', 'trapped'].map(s => `<option value="${s}">${s.charAt(0).toUpperCase() + s.slice(1)}</option>`).join('')}</select>`,
+        onConfirm: (state) => {
+            addFeature({ type: 'door', x, y, state });
+        }
+    });
+  }
+
+  function showBestiaryMenu() {
+    showModal({
+        title: "Select a Monster",
+        bodyHTML: `<select class="modal-input">${bestiaryData.map((opt, index) => `<option value="${index}">${opt.name}</option>`).join('')}</select>`,
+        onConfirm: (selectedIndex) => {
+            const creature = bestiaryData[parseInt(selectedIndex)];
+            if (creature) {
+                addNewToken({
+                    name: creature.name,
+                    type: 'enemy',
+                    size: creature.stats?.size || 'Medium'
+                });
+            }
+        }
+    });
+  }
+
+  function promptForNewToken(type) {
+      showModal({
+        title: `Enter ${type} name:`,
+        bodyHTML: `<input type="text" class="modal-input" value="${type === 'player' ? 'Player' : 'Goblin'}" autofocus>`,
+        onConfirm: (name) => {
+            addNewToken({
+                name: name,
+                type: type,
+                size: 'Medium'
+            });
+        }
+      });
+  }
+
+  function addNewToken(tokenData) {
+    const token = {
+        id: `token-${Date.now()}-${Math.random()}`,
+        name: tokenData.name,
+        type: tokenData.type,
+        size: tokenData.size,
+        x: tokenData.x ?? Math.floor(currentGrid.width / 2),
+        y: tokenData.y ?? Math.floor(currentGrid.height / 2)
+    };
+    currentGrid.tokens.push(token);
+    addTokenToGrid(token);
+  }
+
+  function getTokenSizeMultiplier(size) {
+    switch (size?.toLowerCase()) {
+        case 'large': return 2;
+        case 'huge': return 3;
+        case 'gargantuan': return 4;
+        default: return 1; // Tiny, Small, Medium
+    }
+  }
+
+  function showMonsterDetailsModal(monster) {
+    let abilitiesHTML = monster.stats.additionalAbilities.map(a => `<p><strong>${a.name}:</strong> ${a.description}</p>`).join('');
+    let actionsHTML = monster.stats.actions.map(a => `<p><strong>${a.name}:</strong> ${a.description}</p>`).join('');
+    let legendaryActionsHTML = monster.stats.legendaryActions.map(a => `<p><strong>${a.name}:</strong> ${a.description}</p>`).join('');
+
+    const bodyHTML = `
+        <div class="monster-stat-block">
+            <p><strong>Size:</strong> ${monster.stats.size} | <strong>AC:</strong> ${monster.stats.armorClass} | <strong>HP:</strong> ${monster.stats.hitPointsStr}</p>
+            <p><strong>Speed:</strong> ${monster.stats.speed}</p>
+            <div class="actions">
+                <h3>Abilities</h3>
+                ${abilitiesHTML || '<p>None</p>'}
+            </div>
+            <div class="actions">
+                <h3>Actions</h3>
+                ${actionsHTML || '<p>None</p>'}
+            </div>
+            ${legendaryActionsHTML ? `<div class="actions"><h3>Legendary Actions</h3>${legendaryActionsHTML}</div>` : ''}
+        </div>
+    `;
+    showModal({ title: monster.name, bodyHTML });
+  }
+
+  function addTokenToGrid(token) {
+    const tokenElement = document.createElement('div');
+    tokenElement.id = token.id;
+    tokenElement.className = `token ${token.type}-token`;
+    tokenElement.textContent = token.name.charAt(0).toUpperCase();
+    tokenElement.title = token.name;
+    
+    const sizeMultiplier = getTokenSizeMultiplier(token.size);
+    const cellSize = currentGrid.cellSize;
+    const tokenSize = Math.floor(cellSize * sizeMultiplier) - (sizeMultiplier > 1 ? 4 : (cellSize * 0.2));
+
+    tokenElement.style.width = `${tokenSize}px`;
+    tokenElement.style.height = `${tokenSize}px`;
+    tokenElement.style.left = `${token.x * cellSize + (cellSize * sizeMultiplier - tokenSize) / 2}px`;
+    tokenElement.style.top = `${token.y * cellSize + (cellSize * sizeMultiplier - tokenSize) / 2}px`;
+    if (sizeMultiplier > 1) {
+        tokenElement.style.borderRadius = '10px'; // Make larger tokens more square
+    }
+    
+    tokenElement.draggable = true;
+    tokenElement.addEventListener('dragstart', e => {
+      if (currentMode === 'removeToken') { e.preventDefault(); return; }
+      draggedToken = token.id;
+      e.dataTransfer.setData('text/plain', token.id);
+    });
+    
+    tokenElement.addEventListener('dblclick', () => {
+      if (currentMode === 'removeToken') return;
+      if (token.type === 'enemy') {
+          const monster = bestiaryData.find(m => m.name === token.name);
+          if (monster) {
+              showMonsterDetailsModal(monster);
+          } else {
+              showToast(`No details found for "${token.name}" in the bestiary.`, true);
+          }
+      } else {
+          showModal({
+            title: "Edit token name:",
+            bodyHTML: `<input type="text" class="modal-input" value="${token.name}">`,
+            onConfirm: (newName) => {
+                token.name = newName;
+                redrawGrid();
+            }
+          });
+      }
+    });
+    
+    tokenElement.addEventListener('click', () => {
+      if (currentMode === 'removeToken') removeToken(token.id);
+    });
+    
+    gridCtn.querySelector('div').appendChild(tokenElement);
+  }
+
+  function removeToken(id) {
+    const tokenIndex = currentGrid.tokens.findIndex(t => t.id === id);
+    if (tokenIndex === -1) return;
+    const token = currentGrid.tokens[tokenIndex];
+    const coord = `${String.fromCharCode(65 + token.x)}${token.y + 1}`;
+    currentGrid.tokens.splice(tokenIndex, 1);
+    getEl(id)?.remove();
+    addMessage(`${token.name} removed from ${coord}.`, "dm");
+  }
+
+  function handleTokenDrop(e) {
+    e.preventDefault();
+    const id = e.dataTransfer.getData('text/plain');
+    const token = currentGrid.tokens.find(t => t.id === id);
+    if (!token) return;
+    
+    const cell = e.target.closest('.grid-cell');
+    if (!cell) return;
+
+    const x = parseInt(cell.dataset.x);
+    const y = parseInt(cell.dataset.y);
+    const coord = cell.dataset.coord;
+    
+    const sizeMultiplier = getTokenSizeMultiplier(token.size);
+    for (let ix = 0; ix < sizeMultiplier; ix++) {
+        for (let iy = 0; iy < sizeMultiplier; iy++) {
+            const checkX = x + ix;
+            const checkY = y + iy;
+            if (currentGrid.walls.some(w => w.x === checkX && w.y === checkY) || currentGrid.obstructions.some(o => o.x === checkX && o.y === checkY)) {
+                addMessage(`${token.name} can't move to ${coord}, its path is blocked.`, "dm");
+                return;
+            }
+        }
+    }
+    
+    token.x = x;
+    token.y = y;
+    redrawGrid();
+
+    let moveMessage = `${token.name} moved to ${coord}.`;
+    if (currentGrid.clutter.some(c => c.x === x && c.y === y)) moveMessage += " They push through the clutter.";
+    if (currentGrid.debris.some(d => d.x === x && d.y === y)) moveMessage += " They step carefully over debris.";
+    addMessage(moveMessage, "dm");
+  }
+
+  function addFeature(feature) {
+      const collectionName = feature.type + 's';
+      if (!currentGrid[collectionName]) currentGrid[collectionName] = [];
+      
+      const existingIndex = currentGrid[collectionName].findIndex(f => f.x === feature.x && f.y === feature.y);
+      
+      if (existingIndex > -1) {
+          const existingFeature = currentGrid[collectionName][existingIndex];
+          currentGrid[collectionName].splice(existingIndex, 1);
+          getEl(existingFeature.id)?.remove();
+          addMessage(`${feature.type.charAt(0).toUpperCase() + feature.type.slice(1)} removed from ${String.fromCharCode(65 + feature.x)}${feature.y + 1}.`, "dm");
+      } else {
+          feature.id = `${feature.type}-${Date.now()}-${Math.random()}`;
+          currentGrid[collectionName].push(feature);
+          addFeatureToGrid(feature);
+          addMessage(`${feature.type.charAt(0).toUpperCase() + feature.type.slice(1)} placed at ${String.fromCharCode(65 + feature.x)}${feature.y + 1}.`, "dm");
+      }
+  }
+
+  function addFeatureToGrid(feature) {
+      const el = document.createElement('div');
+      el.id = feature.id;
+      el.className = `${feature.type}-tile`;
+      el.title = feature.name || feature.type;
+      if(feature.type === 'door') {
+        el.classList.add(`door-${feature.state}`);
+        el.textContent = feature.state.charAt(0).toUpperCase();
+        el.title = `Door (${feature.state})`;
+      } else if (feature.type === 'bottomlessPit') {
+        el.className = 'bottomless-pit-tile';
+      }
+      el.style.width = `${currentGrid.cellSize}px`;
+      el.style.height = `${currentGrid.cellSize}px`;
+      el.style.left = `${feature.x * currentGrid.cellSize}px`;
+      el.style.top = `${feature.y * currentGrid.cellSize}px`;
+      el.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (currentMode === `place${feature.type.charAt(0).toUpperCase() + feature.type.slice(1)}`) {
+              addFeature(feature);
+          }
+      });
+      gridCtn.querySelector('div').appendChild(el);
+  }
+
+  function getGridStateAsText() {
+    let text = "";
+    const describe = (name, collection) => {
+        if (collection && collection.length > 0) {
+            text += `${name} on the grid:\n`;
+            collection.forEach(item => {
+                const coord = `${String.fromCharCode(65 + item.x)}${item.y + 1}`;
+                if (item.type === 'door') {
+                    text += `- ${item.type} is at ${coord} (state: ${item.state})\n`;
+                } else {
+                    text += `- ${item.name ? `${item.type} "${item.name}"` : name.slice(0, -1)} is at ${coord}\n`;
+                }
+            });
+        }
+    };
+    describe("Tokens", currentGrid.tokens);
+    describe("Walls", currentGrid.walls);
+    describe("Doors", currentGrid.doors);
+    describe("Obstructions", currentGrid.obstructions);
+    describe("Clutter", currentGrid.clutter);
+    describe("Debris", currentGrid.debris);
+    describe("Shallow Water", currentGrid.shallowWater);
+    describe("Deep Water", currentGrid.deepWater);
+    describe("Poison", currentGrid.poison);
+    describe("Lava", currentGrid.lava);
+    describe("Bottomless Pits", currentGrid.bottomlessPits);
+    if (text === "") text = "The grid is currently empty.\n";
+    return text;
+  }
+
+  // --- COMMAND PROCESSING ---
+  function processGridCommands(text) {
+    const placePlayerRegex = /place\s+(?:the\s+)?player\s+["']?([^"']+)["']?\s+at\s+([A-Z])(\d+)/gi;
+    const placeEnemyRegex = /place\s+(?:the\s+)?(?:enemy|monster|creature)\s+["']?([^"']+)["']?\s+at\s+([A-Z])(\d+)/gi;
+    const placeDoorRegex = /place\s+door\s+at\s+([A-Z])(\d+)(?:\s*{state:\s*["']?([^"']+)["']?})?/gi;
+    const placeFeatureRegex = /(?:place|put|add)\s+(?:a\s+)?(wall|obstruction|clutter|debris|shallow water|deep water|poison|lava|bottomless pit)\s+(?:at|on)\s+([A-Z])(\d+)/gi;
+    const createRoomRegex = /create\s+room\s+from\s+([A-Z])(\d+)\s+to\s+([A-Z])(\d+)/gi;
+    const createHallwayRegex = /create\s+hallway\s+from\s+([A-Z])(\d+)\s+to\s+([A-Z])(\d+)/gi;
+
+    let match;
+
+    while ((match = createRoomRegex.exec(text)) !== null) {
+        const x1 = match[1].charCodeAt(0) - 65;
+        const y1 = parseInt(match[2]) - 1;
+        const x2 = match[3].charCodeAt(0) - 65;
+        const y2 = parseInt(match[4]) - 1;
+        for (let x = x1; x <= x2; x++) {
+            for (let y = y1; y <= y2; y++) {
+                if (x === x1 || x === x2 || y === y1 || y === y2) {
+                    if (!currentGrid.walls.some(f => f.x === x && f.y === y)) {
+                        addFeature({ type: 'wall', x, y });
+                    }
+                }
+            }
+        }
+    }
+    
+    while ((match = createHallwayRegex.exec(text)) !== null) {
+        let x1 = match[1].charCodeAt(0) - 65;
+        let y1 = parseInt(match[2]) - 1;
+        let x2 = match[3].charCodeAt(0) - 65;
+        let y2 = parseInt(match[4]) - 1;
+
+        const isHorizontal = y1 === y2;
+        if (isHorizontal) {
+            for (let x = Math.min(x1, x2); x <= Math.max(x1, x2); x++) {
+                if (!currentGrid.walls.some(f => f.x === x && f.y === y1 - 1)) addFeature({ type: 'wall', x, y: y1 - 1 });
+                if (!currentGrid.walls.some(f => f.x === x && f.y === y1 + 1)) addFeature({ type: 'wall', x, y: y1 + 1 });
+            }
+        } else { // Vertical
+            for (let y = Math.min(y1, y2); y <= Math.max(y1, y2); y++) {
+                if (!currentGrid.walls.some(f => f.x === x1 - 1 && f.y === y)) addFeature({ type: 'wall', x: x1 - 1, y });
+                if (!currentGrid.walls.some(f => f.x === x1 + 1 && f.y === y)) addFeature({ type: 'wall', x: x1 + 1, y });
+            }
+        }
+    }
+
+    while ((match = placePlayerRegex.exec(text)) !== null) {
+        const name = match[1].trim();
+        const x = match[2].charCodeAt(0) - 65;
+        const y = parseInt(match[3]) - 1;
+        addNewToken({ name, type: 'player', size: 'Medium', x, y });
+    }
+
+    while ((match = placeEnemyRegex.exec(text)) !== null) {
+        const name = match[1].trim();
+        const x = match[2].charCodeAt(0) - 65;
+        const y = parseInt(match[3]) - 1;
+        const bestiaryEntry = bestiaryData.find(c => c.name.toLowerCase() === name.toLowerCase());
+        addNewToken({ 
+            name: name, 
+            type: 'enemy', 
+            size: bestiaryEntry?.stats?.size || 'Medium',
+            x, 
+            y
+        });
+    }
+    
+    while ((match = placeDoorRegex.exec(text)) !== null) {
+        const x = match[1].charCodeAt(0) - 65;
+        const y = parseInt(match[2]) - 1;
+        const state = match[3] || 'closed';
+        if (!currentGrid.doors.some(f => f.x === x && f.y === y)) {
+            addFeature({ type: 'door', x, y, state });
+        }
+    }
+
+    while ((match = placeFeatureRegex.exec(text)) !== null) {
+        const typeName = match[1].toLowerCase().replace(' ', '');
+        const type = typeName.endsWith('s') ? typeName : typeName + 's';
+        const x = match[2].charCodeAt(0) - 65;
+        const y = parseInt(match[3]) - 1;
+        
+        if (!currentGrid[type]?.some(f => f.x === x && f.y === y)) {
+            addFeature({ type: typeName, x, y, name: match[1].charAt(0).toUpperCase() + match[1].slice(1) });
+        }
+    }
+
+    redrawGrid();
+  }
+
+  // --- START THE APP ---
+  init();
+});
+</script>
+
+</body>
+</html>

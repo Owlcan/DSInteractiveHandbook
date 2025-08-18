@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gravity Runner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #80ABD8; /* User requested color */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow: hidden; /* Hide scrollbars */
+        }
+
+        #game-container {
+            background-color: #80ABD8; /* User requested color */
+            border: 4px solid #80ABD8; /* Slate-700 */
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            width: 95vw; /* Increased responsive width */
+            max-width: 1400px; /* Increased max width for desktop */
+            height: 75vh; /* Full height, do not crop container */
+            max-height: 800px; /* Full max height, do not crop container */
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end; /* Align ground to bottom */
+        }
+
+        canvas {
+            display: block;
+            background-color: transparent; /* Canvas background is transparent to show game-container background */
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            clip-path: inset(0px 0px 30px 0px); /* Crop 30px from the bottom only */
+        }
+
+        #ground {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 120px; /* Increased ground height to show proper unsquished ground layer */
+            background: transparent; /* No background color - image will be drawn on canvas */
+            z-index: 1; /* Ensure ground is above other elements if any */
+        }
+
+        #score-display {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #1a202c; /* Gray-900 */
+            z-index: 10;
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 8px 12px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        #message-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 24px 32px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            z-index: 100;
+            display: none; /* Hidden by default */
+            border: 2px solid #334155;
+        }
+
+        #message-box h2 {
+            font-size: 2rem;
+            color: #1a202c;
+            margin-bottom: 16px;
+        }
+
+        #message-box p {
+            font-size: 1.1rem;
+            color: #4a5568;
+            margin-bottom: 24px;
+        }
+
+        #message-box button {
+            background-color: #4a5568; /* Gray-700 */
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        #message-box button:hover {
+            background-color: #2d3748; /* Gray-800 */
+            transform: translateY(-2px);
+        }
+
+        #controls {
+            position: absolute;
+            bottom: -100px; /* Move off screen */
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 16px;
+            z-index: 10;
+        }
+
+        .control-button {
+            background-color: #4a5568; /* Gray-700 */
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .control-button:hover {
+            background-color: #2d3748; /* Gray-800 */
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <div id="canvas-crop-wrapper" style="height: 100%; overflow: hidden; position: relative; margin-bottom: -30px;">
+            <canvas id="gameCanvas"></canvas>
+        </div>
+        <div id="ground"></div>
+        <div id="score-display">Score: 0</div>
+        <div id="message-box">
+            <h2 id="message-title">Game Over!</h2>
+            <p id="message-text">Your score: <span id="final-score">0</span></p>
+            <button id="restart-button">Restart</button>
+        </div>
+        <div id="controls">
+            <button id="jump-button" class="control-button">Jump</button>
+        </div>
+    </div>
+
+    <script>
+        // Game state variables
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const groundElement = document.getElementById('ground');
+        const scoreDisplay = document.getElementById('score-display');
+        const messageBox = document.getElementById('message-box');
+        const messageTitle = document.getElementById('message-title');
+        const messageText = document.getElementById('message-text');
+        const finalScoreSpan = document.getElementById('final-score');
+        const restartButton = document.getElementById('restart-button');
+        const jumpButton = document.getElementById('jump-button');
+
+        let gameRunning = false;
+        let score = 0;
+        let gameStartTime = 0;
+        let animationFrameId;
+
+        // Player variables
+        const player = {
+            x: 90,
+            y: 0, // Player y position relative to the ground
+            width: 115, // 15% larger (100 * 1.15)
+            height: 143.75, // 15% larger (125 * 1.15)
+            hitboxOffsetX: 40, // No front offset needed
+            hitboxWidth: 60, // 60px width (excludes back 40px cape area)
+            velocityY: 0,
+            gravity: 0.48, // Reduced gravity by 20% for 20% more airtime (0.6 * 0.8 = 0.48)
+            jumpStrength: -19.5, // Increased jump strength by 15% (16 * 1.15)
+            secondJumpStrength: -14.0, // 50% of jumpStrength for double jump
+            isJumping: false,
+            isGrounded: true,
+            hasDoubleJump: true, // Player can double jump
+            spriteFrames: [],
+            currentFrame: 0,
+            frameRate: 100, // milliseconds per frame
+            lastFrameTime: 0,
+            baseY: 0 // This will be set dynamically based on canvas height and ground height
+        };
+
+        // Obstacle variables
+        const obstacles = [];
+        const obstacleTypes = [
+            { type: 'pit', width: 450, height: 180, isPit: true, hitboxScale: 0.8 }, // Pit with random variants - 10% smaller (500*0.9=450, 200*0.9=180)
+            { type: 'rock', width: 91, height: 91, hitboxScale: 1.0 }, // 65 * 1.4 = 91
+            { type: 'bush', width: 142.8, height: 142.8, hitboxScale: 1.0 }, // 102 * 1.4 = 142.8
+            { type: 'bunny', width: 0, height: 0, hitboxScale: 1.0 }, // Use actual image dimensions
+            { type: 'bird', width: 65, height: 45, airObstacle: true, hitboxScale: 1.0 } // No scaling
+        ];
+        
+        // Pit variants for random selection - reduced sizes
+        const pitVariants = [
+            { image: 'pit1', width: 583, height: 233 },      // Large pit - 10% smaller again (648*0.9=583, 259*0.9=233)
+            { image: 'smallpit1', width: 585, height: 234 }, // Small pit now matches the size of the other pits
+            { image: 'pit2', width: 585, height: 234 }       // Medium pit - 10% smaller (650*0.9=585, 260*0.9=234)
+        ];
+        let obstacleSpawnInterval = 2000; // milliseconds - decreased frequency by 33% (1500 * 1.33)
+        let lastObstacleSpawnTime = 0;
+        let gameSpeed = 4.3923; // 10% faster (3.993 * 1.1)
+
+    // Gravity inversion logic removed
+
+        // Background pit overlay variables - DISABLED
+        const backgroundPits = [];
+        let lastBackgroundPitSpawnTime = 0;
+        const backgroundPitSpawnInterval = 999999; // Disabled - set to huge number
+        const backgroundPitSpeed = 1; // Slower than obstacles for background effect
+
+        // Image loading
+        const spriteImageUrls = [
+            "src/assets/images/expeditionandgames/der1.png",
+            "src/assets/images/expeditionandgames/der2.png",
+            "src/assets/images/expeditionandgames/der3.png",
+            "src/assets/images/expeditionandgames/der4.png",
+            "src/assets/images/expeditionandgames/der5.png"
+        ];
+
+        // Background and environment images
+        const backgroundImages = {
+            bg1: null,
+            bg2: null,
+            bg3: null,
+            bg4: null,
+            pit1: null,
+            smallpit1: null,
+            pit2: null
+        };
+
+        // Ground layer as separate foreground element - REMOVED
+        let groundLayerImage = null;
+
+        // Obstacle images
+        const obstacleImages = {
+            bush: [],
+            rock: [],
+            bunny: [],
+            bird: []
+        };
+
+        let imagesLoaded = 0;
+        let totalImages = spriteImageUrls.length + 7; // 5 sprites + 7 background/pit images (bg1-4, pit1, smallpit1, pit2)
+
+        // Background parallax positions
+        const backgroundLayers = [
+            { currentImageIndex: 0, lastChangeTime: 0, fadeProgress: 0, isFading: false, nextImageIndex: 1 },
+            { currentImageIndex: 1, lastChangeTime: 0, fadeProgress: 0, isFading: false, nextImageIndex: 2 },
+            { currentImageIndex: 2, lastChangeTime: 0, fadeProgress: 0, isFading: false, nextImageIndex: 3 },
+            { currentImageIndex: 3, lastChangeTime: 0, fadeProgress: 0, isFading: false, nextImageIndex: 0 }
+        ];
+
+    const backgroundChangeInterval = 30000; // 30 seconds between background changes
+    const fadeDuration = 500; // 0.5 seconds fade duration (fast)
+
+        // Prevent hold-space from triggering repeated jumps
+        let jumpKeyHeld = false;
+        function handleKeyDown(event) {
+            if ((event.code === 'Space' || event.code === 'ArrowUp') && !jumpKeyHeld) {
+                if (!gameRunning && messageBox.style.display === 'block') {
+                    // If game is over and message box is visible, restart
+                    resetGame();
+                } else {
+                    jump();
+                }
+                jumpKeyHeld = true;
+            }
+        }
+        function handleKeyUp(event) {
+            if (event.code === 'Space' || event.code === 'ArrowUp') {
+                jumpKeyHeld = false;
+            }
+        }
+
+        function loadImages() {
+            // Load player sprites
+            spriteImageUrls.forEach((url, index) => {
+                const img = new Image();
+                img.src = url;
+                img.onload = () => {
+                    player.spriteFrames[index] = img;
+                    imagesLoaded++;
+                    checkAllImagesLoaded();
+                };
+                img.onerror = () => {
+                    console.error("Failed to load image:", url);
+                    player.spriteFrames[index] = null;
+                    imagesLoaded++;
+                    checkAllImagesLoaded();
+                };
+            });
+
+            // Load background images
+            const bgImages = [
+                { key: 'bg1', url: 'src/assets/images/expeditionandgames/backgroundandforeground/BG1.png' },
+                { key: 'bg2', url: 'src/assets/images/expeditionandgames/backgroundandforeground/BG2.png' },
+                { key: 'bg3', url: 'src/assets/images/expeditionandgames/backgroundandforeground/BG3.png' },
+                { key: 'bg4', url: 'src/assets/images/expeditionandgames/backgroundandforeground/BG4.png' },
+                { key: 'pit1', url: 'src/assets/images/expeditionandgames/obstructionsobstacles/pit1.png' },
+                { key: 'smallpit1', url: 'src/assets/images/expeditionandgames/obstructionsobstacles/smallpit1.png' },
+                { key: 'pit2', url: 'src/assets/images/expeditionandgames/obstructionsobstacles/pit2.png' }
+            ];
+
+            bgImages.forEach(({ key, url }) => {
+                const img = new Image();
+                img.src = url;
+                img.onload = () => {
+                    backgroundImages[key] = img;
+                    imagesLoaded++;
+                    checkAllImagesLoaded();
+                };
+                img.onerror = () => {
+                    console.error("Failed to load background image:", url);
+                    backgroundImages[key] = null;
+                    imagesLoaded++;
+                    checkAllImagesLoaded();
+                };
+            });
+
+            // Ground layer loading removed - no longer needed
+
+            // Load obstacle images
+            const obstacleImageUrls = [
+                'src/assets/images/expeditionandgames/obstructionsobstacles/bush (1).png',
+                'src/assets/images/expeditionandgames/obstructionsobstacles/bush (2).png',
+                'src/assets/images/expeditionandgames/obstructionsobstacles/bush (3).png',
+                'src/assets/images/expeditionandgames/obstructionsobstacles/bush (4).png',
+                'src/assets/images/expeditionandgames/obstructionsobstacles/rock (1).png',
+                'src/assets/images/expeditionandgames/obstructionsobstacles/rock (2).png',
+                'src/assets/images/expeditionandgames/obstructionsobstacles/rock (3).png',
+                'src/assets/images/expeditionandgames/obstructionsobstacles/rock (4).png',
+                'src/assets/images/expeditionandgames/obstructionsobstacles/bigbunny (1).png',
+                'src/assets/images/expeditionandgames/obstructionsobstacles/bigbunny (2).png',
+                'src/assets/images/expeditionandgames/obstructionsobstacles/bigbunny (3).png',
+                'src/assets/images/expeditionandgames/obstructionsobstacles/bigbunny (4).png',
+                'src/assets/images/expeditionandgames/obstructionsobstacles/bigbunny (5).png',
+                'src/assets/images/expeditionandgames/obstructionsobstacles/bigbunny (6).png',
+                'src/assets/images/expeditionandgames/obstructionsobstacles/bigbunny (7).png',
+                'src/assets/images/expeditionandgames/obstructionsobstacles/bigbunny (8).png',
+                'src/assets/images/expeditionandgames/obstructionsobstacles/1 - birb.png',
+                'src/assets/images/expeditionandgames/obstructionsobstacles/2 - birb.png'
+            ];
+
+            totalImages += obstacleImageUrls.length;
+
+            obstacleImageUrls.forEach((url, index) => {
+                const img = new Image();
+                img.src = url;
+                img.onload = () => {
+                    if (url.includes('bush')) {
+                        obstacleImages.bush.push(img);
+                    } else if (url.includes('rock')) {
+                        obstacleImages.rock.push(img);
+                    } else if (url.includes('bunny')) {
+                        obstacleImages.bunny.push(img);
+                    } else if (url.includes('birb')) {
+                        obstacleImages.bird.push(img);
+                    }
+                    imagesLoaded++;
+                    checkAllImagesLoaded();
+                };
+                img.onerror = () => {
+                    console.error("Failed to load obstacle image:", url);
+                    imagesLoaded++;
+                    checkAllImagesLoaded();
+                };
+            });
+        }
+
+        function checkAllImagesLoaded() {
+            if (imagesLoaded === totalImages) {
+                initGame();
+            }
+        }
+
+        // --- Game Initialization and Reset ---
+        function initGame() {
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+                document.addEventListener('keydown', handleKeyDown);
+                document.addEventListener('keyup', handleKeyUp);
+            jumpButton.addEventListener('click', handleJumpClick);
+            restartButton.addEventListener('click', resetGame);
+
+        // Set initial player base Y based on ground height - player runs ON the ground (moved up 90px)
+        player.baseY = canvas.height - groundElement.offsetHeight - player.height - 90;
+        player.y = player.baseY;            // Start the game loop
+            startGame();
+        }
+
+        function startGame() {
+            if (gameRunning) return; // Prevent multiple game loops
+            gameRunning = true;
+            score = 0;
+            gameStartTime = performance.now();
+            scoreDisplay.textContent = `Score: ${score}`;
+            messageBox.style.display = 'none';
+            obstacles.length = 0; // Clear existing obstacles
+            backgroundPits.length = 0; // Clear existing background pits
+            player.y = player.baseY;
+            player.velocityY = 0;
+            player.isJumping = false;
+            player.isGrounded = true;
+            player.hasDoubleJump = true; // Reset double jump for new game
+            player.currentFrame = 0;
+            player.lastFrameTime = 0; // Make sure this is a number, not NaN
+            document.body.classList.remove('inverted');
+
+            // Reset background layers for new game
+            backgroundLayers.forEach((layer, index) => {
+                layer.currentImageIndex = index;
+                layer.nextImageIndex = (index + 1) % 4;
+                layer.lastChangeTime = performance.now();
+                layer.isFading = false;
+                layer.fadeProgress = 0;
+            });
+
+            lastObstacleSpawnTime = performance.now();
+            lastGravityInversionTime = performance.now();
+            lastBackgroundPitSpawnTime = performance.now();
+
+            gameLoop();
+        }
+
+        function resetGame() {
+            cancelAnimationFrame(animationFrameId);
+            gameRunning = false;
+            isGravityInverting = false;
+            gravityInversionProgress = 0;
+            document.body.classList.remove('inverted');
+            startGame();
+        }
+
+        function endGame() {
+            gameRunning = false;
+            isGravityInverting = false;
+            gravityInversionProgress = 0;
+            document.body.classList.remove('inverted');
+            cancelAnimationFrame(animationFrameId);
+            finalScoreSpan.textContent = score;
+            messageBox.style.display = 'block';
+        }
+
+        // --- Canvas Resizing ---
+        function resizeCanvas() {
+            const container = document.getElementById('game-container');
+            canvas.width = container.clientWidth;
+            canvas.height = container.clientHeight;
+            player.baseY = canvas.height - groundElement.offsetHeight - player.height - 90;
+            if (player.isGrounded) {
+                player.y = player.baseY;
+            }
+        }
+
+        // --- Input Handlers ---
+        function handleKeyDown(event) {
+            if ((event.code === 'Space' || event.code === 'ArrowUp') && !jumpKeyHeld) {
+                if (!gameRunning && messageBox.style.display === 'block') {
+                    // If game is over and message box is visible, restart
+                    resetGame();
+                } else {
+                    jump();
+                }
+                jumpKeyHeld = true;
+            }
+        }
+        function handleKeyUp(event) {
+            if (event.code === 'Space' || event.code === 'ArrowUp') {
+                jumpKeyHeld = false;
+            }
+        }
+
+        function handleJumpClick() {
+            jump();
+        }
+
+        function jump() {
+            if (!gameRunning) return;
+
+            if (player.isGrounded) {
+                // First jump from ground
+                player.velocityY = player.jumpStrength;
+                player.isGrounded = false;
+                player.isJumping = true;
+                // Do NOT reset hasDoubleJump here; it is reset on landing only
+            } else if (player.hasDoubleJump) {
+                // Double jump - available anytime in air if not used yet
+                player.velocityY = player.secondJumpStrength;
+                player.hasDoubleJump = false; // Consume double jump
+            }
+        }
+
+        // --- Game Logic ---
+        function update(deltaTime) {
+            if (!gameRunning) return;
+
+            // Update background changes (fade between images)
+            const currentTime = performance.now();
+            backgroundLayers.forEach(layer => {
+                if (!layer.isFading && currentTime - layer.lastChangeTime > backgroundChangeInterval) {
+                    // Start fade transition
+                    layer.isFading = true;
+                    layer.fadeProgress = 0;
+                    layer.lastChangeTime = currentTime;
+                }
+                
+                if (layer.isFading) {
+                    // Update fade progress
+                    layer.fadeProgress = Math.min(1, (currentTime - layer.lastChangeTime) / fadeDuration);
+                    
+                    if (layer.fadeProgress >= 1) {
+                        // Fade complete, switch to next image
+                        layer.currentImageIndex = layer.nextImageIndex;
+                        layer.nextImageIndex = (layer.nextImageIndex + 1) % 4; // Cycle through bg1-bg4
+                        layer.isFading = false;
+                        layer.fadeProgress = 0;
+                        layer.lastChangeTime = currentTime;
+                    }
+                }
+            });
+
+            // Update player vertical position
+            player.velocityY += player.gravity;
+            player.y += player.velocityY;
+
+            // Check for ground collision - player runs ON the ground layer (moved up 90px)
+            const groundLevel = canvas.height - groundElement.offsetHeight - player.height - 90;
+            if (player.y >= groundLevel) {
+                if (!player.isGrounded) {
+                    // Only reset double jump when actually landing
+                    player.hasDoubleJump = true;
+                }
+                player.y = groundLevel;
+                player.velocityY = 0;
+                player.isGrounded = true;
+                player.isJumping = false;
+            } else {
+                player.isGrounded = false;
+            }
+
+            // Animate player sprite
+            if (isNaN(player.lastFrameTime)) {
+                player.lastFrameTime = 0;
+            }
+            player.lastFrameTime += deltaTime;
+            if (player.lastFrameTime > player.frameRate) {
+                player.currentFrame = (player.currentFrame + 1) % player.spriteFrames.length;
+                player.lastFrameTime = 0;
+            }
+
+            // Spawn obstacles
+            if (performance.now() - lastObstacleSpawnTime > obstacleSpawnInterval) {
+                spawnObstacle();
+                lastObstacleSpawnTime = performance.now();
+                // Gradually decrease spawn interval
+                obstacleSpawnInterval = Math.max(800, obstacleSpawnInterval - 10);
+            }
+
+            // Increase speed by 2% every 100 score
+            if (!update.lastSpeedScore || score - update.lastSpeedScore >= 100) {
+                if (typeof update.lastSpeedScore === 'undefined') update.lastSpeedScore = 0;
+                if (score - update.lastSpeedScore >= 100) {
+                    gameSpeed = Math.min(8, gameSpeed * 1.02);
+                    update.lastSpeedScore += 100;
+                }
+            }
+
+            // Spawn background pits - DISABLED
+            // if (performance.now() - lastBackgroundPitSpawnTime > backgroundPitSpawnInterval) {
+            //     spawnBackgroundPit();
+            //     lastBackgroundPitSpawnTime = performance.now();
+            // }
+
+            // Update obstacles position
+            obstacles.forEach(obstacle => {
+                obstacle.x -= gameSpeed;
+            });
+
+            // Update background pits position - DISABLED
+            // backgroundPits.forEach(pit => {
+            //     pit.x -= backgroundPitSpeed;
+            // });
+
+            // Remove off-screen obstacles
+            // Filter out obstacles that are completely off-screen to the left
+            for (let i = obstacles.length - 1; i >= 0; i--) {
+                if (obstacles[i].x + obstacles[i].width < 0) {
+                    obstacles.splice(i, 1);
+                }
+            }
+
+            // Remove off-screen background pits - DISABLED
+            // for (let i = backgroundPits.length - 1; i >= 0; i--) {
+            //     if (backgroundPits[i].x + backgroundPits[i].width < 0) {
+            //         backgroundPits.splice(i, 1);
+            //     }
+            // }
+
+
+            // Check for collisions
+            checkCollisions();
+
+            // Gravity inversion logic removed
+
+            // Update score based on time elapsed
+            const scoreUpdateTime = performance.now();
+            const timeElapsed = (scoreUpdateTime - gameStartTime) / 1000; // Convert to seconds
+            score = Math.floor(timeElapsed * 10); // Convert to points (1 second = 10 points)
+            scoreDisplay.textContent = `Score: ${score}`;
+        }
+
+        // Debug mode flag for 'Oops All Pits'
+        // let oopsAllPitsMode = false;
+
+        function spawnObstacle() {
+            // If debug mode is on, only spawn pits
+            // let typeIndex;
+            // if (oopsAllPitsMode) {
+            //     // Only pick pit type
+            //     typeIndex = 0; // pit is always first in obstacleTypes
+            // } else {
+            //     typeIndex = Math.floor(Math.random() * obstacleTypes.length);
+            // }
+            let typeIndex = Math.floor(Math.random() * obstacleTypes.length);
+            const type = obstacleTypes[typeIndex];
+            let obstacleX = canvas.width;
+            let obstacleY;
+            let obstacleImage = null;
+            let obstacleWidth = type.width;
+            let obstacleHeight = type.height;
+            let pitImage = null;
+
+            // Handle pit variants
+            if (type.isPit) {
+                const pitVariant = pitVariants[Math.floor(Math.random() * pitVariants.length)];
+                obstacleWidth = pitVariant.width;
+                obstacleHeight = pitVariant.height;
+                pitImage = pitVariant.image;
+                // For smallpit1, set its Y so its bottom edge is flush with the ground
+                if (pitImage === 'smallpit1') {
+                    obstacleY = canvas.height - groundElement.offsetHeight - obstacleHeight;
+                } else if (pitImage === 'pit2') {
+                    // Move pit2 up by 35px (total -35px)
+                    obstacleY = (canvas.height - groundElement.offsetHeight - 120) - 30 + 10 - 5;
+                } else if (pitImage === 'pit1') {
+                    // Move pit1 down by 20px so its bottom edge is 20px off the game board
+                    obstacleY = (canvas.height - groundElement.offsetHeight - 120) - 15 + 10 - 25 + 10;
+                } else {
+                    obstacleY = (canvas.height - groundElement.offsetHeight - 120) - 15;
+                }
+            }
+
+            // Check if spawning near existing pits (69px buffer zone) and other ground-based enemies (138px buffer)
+            if (!type.isPit) {
+                const tooCloseToExistingPitOrGround = obstacles.some(existingObstacle => {
+                    // Pits: 69px buffer for non-pit obstacles (60 * 1.15)
+                    if (existingObstacle.isPit) {
+                        const leftBuffer = existingObstacle.x - 69;
+                        const rightBuffer = existingObstacle.x + existingObstacle.width + 69;
+                        return obstacleX < rightBuffer && obstacleX + obstacleWidth > leftBuffer;
+                    }
+                    // Ground-based enemies: 138px buffer (120 * 1.15)
+                    if (["bush","rock","bunny"].includes(existingObstacle.type) && ["bush","rock","bunny"].includes(type.type)) {
+                        const leftBuffer = existingObstacle.x - 138;
+                        const rightBuffer = existingObstacle.x + existingObstacle.width + 138;
+                        return obstacleX < rightBuffer && obstacleX + obstacleWidth > leftBuffer;
+                    }
+                    return false;
+                });
+                // If too close to a pit or another ground enemy, skip spawning this obstacle
+                if (tooCloseToExistingPitOrGround) {
+                    return;
+                }
+            }
+
+            // Ensure pits are always at least 288px apart from each other (250 * 1.15)
+            if (type.isPit) {
+                const tooCloseToOtherPit = obstacles.some(existingObstacle => {
+                    if (existingObstacle.isPit) {
+                        const leftBuffer = existingObstacle.x - 288;
+                        const rightBuffer = existingObstacle.x + existingObstacle.width + 288;
+                        return obstacleX < rightBuffer && obstacleX + obstacleWidth > leftBuffer;
+                    }
+                    return false;
+                });
+                if (tooCloseToOtherPit) {
+                    return;
+                }
+            }
+
+            // Calculate hitbox dimensions (no scaling - use full size)
+            const hitboxWidth = obstacleWidth * type.hitboxScale;
+            const hitboxHeight = obstacleHeight * type.hitboxScale;
+            const hitboxOffsetX = (obstacleWidth - hitboxWidth) / 2;
+            const hitboxOffsetY = (obstacleHeight - hitboxHeight) / 2;
+
+            // Select random image for the obstacle type
+            if (type.type === 'bush' && obstacleImages.bush.length > 0) {
+                obstacleImage = obstacleImages.bush[Math.floor(Math.random() * obstacleImages.bush.length)];
+            } else if (type.type === 'rock' && obstacleImages.rock.length > 0) {
+                obstacleImage = obstacleImages.rock[Math.floor(Math.random() * obstacleImages.rock.length)];
+            } else if (type.type === 'bunny' && obstacleImages.bunny.length > 0) {
+                obstacleImage = obstacleImages.bunny[Math.floor(Math.random() * obstacleImages.bunny.length)];
+                // Scale bunny to reasonable size while maintaining aspect ratio
+                if (obstacleImage) {
+                    const targetHeight = 102; // Target height for bunnies - 15% smaller (120 * 0.85 = 102)
+                    const aspectRatio = obstacleImage.naturalWidth / obstacleImage.naturalHeight;
+                    obstacleHeight = targetHeight;
+                    obstacleWidth = targetHeight * aspectRatio;
+                }
+            } else if (type.type === 'bird' && obstacleImages.bird.length > 0) {
+                obstacleImage = obstacleImages.bird[Math.floor(Math.random() * obstacleImages.bird.length)];
+                // Make birds 15% larger
+                obstacleWidth = type.width * 1.15;
+                obstacleHeight = type.height * 1.15;
+            }
+
+            if (type.airObstacle) {
+                const minAirY = groundElement.offsetHeight + 90 + 60 + 10; // Minimum Y above ground, 10px higher
+                const maxAirY = canvas.height - groundElement.offsetHeight - obstacleHeight - 90 - 60 + 10; // Maximum Y below inverted ground, 10px higher
+                obstacleY = Math.random() * (maxAirY - minAirY) + minAirY;
+            } else if (type.isPit) {
+                if (pitImage === 'pit2') {
+                    // Move pit2 up by 35px (total -35px)
+                    obstacleY = (canvas.height - groundElement.offsetHeight - 120) - 30 + 10 - 5;
+                } else if (pitImage === 'pit1') {
+                    // Move pit1 down by 20px so its bottom edge is 20px off the game board
+                    obstacleY = (canvas.height - groundElement.offsetHeight - 120) - 15 + 10 - 25 + 10;
+                } else {
+                    obstacleY = (canvas.height - groundElement.offsetHeight - 120) - 15;
+                }
+            } else {
+                obstacleY = canvas.height - groundElement.offsetHeight - obstacleHeight - 90;
+            }
+
+            obstacles.push({
+                x: obstacleX,
+                y: obstacleY,
+                width: obstacleWidth,
+                height: obstacleHeight,
+                hitboxWidth: hitboxWidth,
+                hitboxHeight: hitboxHeight,
+                hitboxOffsetX: hitboxOffsetX,
+                hitboxOffsetY: hitboxOffsetY,
+                type: type.type,
+                airObstacle: type.airObstacle,
+                isPit: type.isPit,
+                pitImage: pitImage, // Store which pit image to use
+                image: obstacleImage
+            });
+        }
+
+        function spawnBackgroundPit() {
+            // Spawn background pits at random intervals for visual effect
+            // Use ground element dimensions since pit and ground layer fit together
+            const pitWidth = Math.random() * 300 + 200; // Random width between 200-500px (MUCH bigger)
+            const pitHeight = groundElement.offsetHeight; // Same height as ground element
+            const pitY = canvas.height - pitHeight; // At ground level
+            
+            backgroundPits.push({
+                x: canvas.width,
+                y: pitY,
+                width: pitWidth,
+                height: pitHeight
+            });
+        }
+
+        function checkCollisions() {
+            obstacles.forEach(obstacle => {
+                if (obstacle.isPit) {
+                    let graceZoneWidth = obstacle.width * 0.25;
+                    let effectivePitX = obstacle.x + graceZoneWidth;
+                    let effectivePitWidth = obstacle.width - (graceZoneWidth * 2);
+                    // Shrink smallpit1 hitbox by 5% (centered)
+                    if (obstacle.pitImage === 'smallpit1') {
+                        effectivePitX += (effectivePitWidth * 0.025);
+                        effectivePitWidth *= 0.95;
+                    }
+                    // Shrink pit1 hitbox by another 5% (total 10% smaller, centered)
+                    if (obstacle.pitImage === 'pit1') {
+                        effectivePitX += (effectivePitWidth * 0.025);
+                        effectivePitWidth *= 0.95;
+                        effectivePitX += (effectivePitWidth * 0.025);
+                        effectivePitWidth *= 0.95;
+                    }
+                    // Move pit2 hitbox another 10px to the left (total 20px left)
+                    if (obstacle.pitImage === 'pit2') {
+                        effectivePitX -= 10;
+                        effectivePitX -= 10;
+                    }
+                    // Move smallpit1 hitbox another 5px to the left (total 10px left)
+                    if (obstacle.pitImage === 'smallpit1') {
+                        effectivePitX -= 5;
+                        effectivePitX -= 5;
+                    }
+                    const hitboxYOffset = 30;
+                    const playerLeft = player.x + player.hitboxOffsetX;
+                    const playerRight = player.x + player.hitboxOffsetX + player.hitboxWidth;
+                    const playerTop = player.y;
+                    const playerBottom = player.y + player.height;
+                    if (
+                        playerRight > effectivePitX &&
+                        playerLeft < effectivePitX + effectivePitWidth &&
+                        playerBottom > obstacle.y + hitboxYOffset &&
+                        playerTop < obstacle.y + obstacle.height + hitboxYOffset
+                    ) {
+                        endGame();
+                    }
+                } else if (obstacle.type === 'bunny') {
+                    // Bunnies get 5% grace zones on both sides
+                    const graceZoneWidth = obstacle.width * 0.05; // 5% grace zone on each side
+                    const effectiveBunnyX = obstacle.x + graceZoneWidth;
+                    const effectiveBunnyWidth = obstacle.width - (graceZoneWidth * 2); // Remove 5% from both sides
+                    
+                    const playerLeft = player.x + player.hitboxOffsetX;
+                    const playerRight = player.x + player.hitboxOffsetX + player.hitboxWidth;
+                    const playerTop = player.y;
+                    const playerBottom = player.y + player.height;
+                    
+                    // Check if player is overlapping with effective bunny area (excluding grace zones)
+                    if (playerRight > effectiveBunnyX &&
+                        playerLeft < effectiveBunnyX + effectiveBunnyWidth &&
+                        playerBottom > obstacle.y &&
+                        playerTop < obstacle.y + obstacle.height) {
+                        // Collision detected!
+                        endGame();
+                    }
+                } else {
+                    // Normal collision detection for other obstacles using full hitbox (no scaling)
+                    const playerLeft = player.x + player.hitboxOffsetX;
+                    const playerRight = player.x + player.hitboxOffsetX + player.hitboxWidth;
+                    const playerTop = player.y;
+                    const playerBottom = player.y + player.height;
+
+                    // Obstacle hitbox (full size, no scaling)
+                    const obstacleLeft = obstacle.x + obstacle.hitboxOffsetX;
+                    const obstacleRight = obstacle.x + obstacle.hitboxOffsetX + obstacle.hitboxWidth;
+                    const obstacleTop = obstacle.y + obstacle.hitboxOffsetY;
+                    const obstacleBottom = obstacle.y + obstacle.hitboxOffsetY + obstacle.hitboxHeight;
+
+                    // Collision detection (AABB)
+                    if (playerRight > obstacleLeft &&
+                        playerLeft < obstacleRight &&
+                        playerBottom > obstacleTop &&
+                        playerTop < obstacleBottom) {
+                        // Collision detected!
+                        endGame();
+                    }
+                }
+            });
+        }
+
+    // Gravity inversion function removed
+
+        // Add Oops All Pits button to UI
+        /*
+        const oopsAllPitsButton = document.createElement('button');
+        oopsAllPitsButton.textContent = 'Oops All Pits';
+        oopsAllPitsButton.className = 'control-button';
+        oopsAllPitsButton.style.position = 'absolute';
+        oopsAllPitsButton.style.top = '16px';
+        oopsAllPitsButton.style.right = '16px';
+        oopsAllPitsButton.style.zIndex = '20';
+        oopsAllPitsButton.onclick = function() {
+            oopsAllPitsMode = !oopsAllPitsMode;
+            oopsAllPitsButton.style.backgroundColor = oopsAllPitsMode ? '#f97316' : '#4a5568';
+            oopsAllPitsButton.textContent = oopsAllPitsMode ? 'Pits Only (ON)' : 'Oops All Pits';
+        };
+        document.getElementById('game-container').appendChild(oopsAllPitsButton);
+        */
+
+        // --- Drawing Functions ---
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas
+
+            // Draw background layers with fade transitions
+            const bgImages = [backgroundImages.bg1, backgroundImages.bg2, backgroundImages.bg3, backgroundImages.bg4];
+            backgroundLayers.forEach((layer, index) => {
+                const currentBgImg = bgImages[layer.currentImageIndex];
+                const nextBgImg = bgImages[layer.nextImageIndex];
+                
+                if (layer.isFading && currentBgImg && nextBgImg) {
+                    // Draw current image with fading alpha
+                    ctx.globalAlpha = 1 - layer.fadeProgress;
+                    ctx.drawImage(currentBgImg, 0, 0, canvas.width, canvas.height);
+                    
+                    // Draw next image with increasing alpha
+                    ctx.globalAlpha = layer.fadeProgress;
+                    ctx.drawImage(nextBgImg, 0, 0, canvas.width, canvas.height);
+                    
+                    // Reset alpha
+                    ctx.globalAlpha = 1.0;
+                } else if (currentBgImg) {
+                    // Draw current image normally
+                    ctx.drawImage(currentBgImg, 0, 0, canvas.width, canvas.height);
+                }
+            });
+
+            // Background pit drawing DISABLED
+            // backgroundPits.forEach(pit => {
+            //     if (backgroundImages.pit) {
+            //         ctx.globalAlpha = 0.7; // Make background pits semi-transparent
+            //         // Draw from bottom up to ground layer for proper fit
+            //         const pitY = canvas.height - groundElement.offsetHeight;
+            //         const pitHeight = groundElement.offsetHeight;
+            //         ctx.drawImage(backgroundImages.pit, pit.x, pitY, pit.width, pitHeight);
+            //         ctx.globalAlpha = 1.0; // Reset alpha
+            //     }
+            // });
+
+            // Draw all non-pit obstacles first
+            obstacles.forEach(obstacle => {
+                if (!obstacle.isPit) {
+                    if (obstacle.image) {
+                        ctx.drawImage(obstacle.image, obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+                    } else {
+                        ctx.fillStyle = '#666666';
+                        ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+                        ctx.fillStyle = 'white';
+                        ctx.font = '10px Arial';
+                        ctx.textAlign = 'center';
+                        ctx.fillText(obstacle.type, obstacle.x + obstacle.width / 2, obstacle.y + obstacle.height / 2 + 4);
+                    }
+                }
+            });
+
+            // Draw player ON the ground layer (always above pits)
+            ctx.save();
+            const playerCenterX = player.x + player.width / 2;
+            const playerCenterY = player.y + player.height / 2;
+            ctx.translate(playerCenterX, playerCenterY);
+            ctx.rotate(player.rotationAngle);
+            ctx.translate(-playerCenterX, -playerCenterY);
+            if (player.spriteFrames[player.currentFrame]) {
+                ctx.drawImage(
+                    player.spriteFrames[player.currentFrame],
+                    player.x,
+                    player.y,
+                    player.width,
+                    player.height
+                );
+            } else {
+                ctx.fillStyle = '#f97316';
+                ctx.fillRect(player.x, player.y, player.width, player.height);
+                ctx.fillStyle = 'white';
+                ctx.font = '12px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('Player', player.x + player.width / 2, player.y + player.height / 2 + 4);
+            }
+            ctx.restore();
+
+            // Draw all pits after player so pits never overlap player
+            obstacles.forEach(obstacle => {
+                if (obstacle.isPit) {
+                    const pitImage = backgroundImages[obstacle.pitImage];
+                    if (pitImage) {
+                        ctx.drawImage(pitImage, obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+                    } else {
+                        ctx.fillStyle = '#8B4513';
+                        ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+                        ctx.fillStyle = 'white';
+                        ctx.font = '10px Arial';
+                        ctx.textAlign = 'center';
+                        ctx.fillText('PIT', obstacle.x + obstacle.width / 2, obstacle.y + obstacle.height / 2 + 4);
+                    }
+                    // const graceZoneWidth = obstacle.width * 0.25;
+                    // let effectivePitX = obstacle.x + graceZoneWidth;
+                    // let effectivePitWidth = obstacle.width - (graceZoneWidth * 2);
+                    // // Shrink smallpit1 hitbox by 5% (centered)
+                    // if (obstacle.pitImage === 'smallpit1') {
+                    //     effectivePitX += (effectivePitWidth * 0.025);
+                    //     effectivePitWidth *= 0.95;
+                    // }
+                    // const hitboxYOffset = 30;
+                    // ctx.save();
+                    // ctx.strokeStyle = 'red';
+                    // ctx.lineWidth = 4;
+                    // ctx.setLineDash([10, 6]);
+                    // ctx.strokeRect(effectivePitX, obstacle.y + hitboxYOffset, effectivePitWidth, obstacle.height);
+                    // ctx.setLineDash([]);
+                    // ctx.font = 'bold 16px Arial';
+                    // ctx.fillStyle = 'red';
+                    // ctx.textAlign = 'center';
+                    // ctx.fillText(
+                    //     obstacle.pitImage ? obstacle.pitImage : 'pit',
+                    //     effectivePitX + effectivePitWidth / 2,
+                    //     obstacle.y + hitboxYOffset - 10 // 10px above the hitbox
+                    // );
+                    // ctx.restore();
+                }
+            });
+
+            // Ground layer drawing removed - no longer needed
+
+            // Pit overlays removed - pits are now drawn in main obstacle loop above
+        }
+
+        // --- Game Loop ---
+        let lastTime = 0;
+        function gameLoop(currentTime) {
+            // Ensure currentTime is defined for the first call
+            if (lastTime === 0) lastTime = currentTime;
+
+            const deltaTime = currentTime - lastTime;
+            lastTime = currentTime;
+
+            update(deltaTime);
+            draw();
+
+            if (gameRunning) { // Only request next frame if game is still running
+                animationFrameId = requestAnimationFrame(gameLoop);
+            }
+        }
+
+        // Start loading images when the window loads
+        window.onload = loadImages;
+    </script>
+</body>
+</html>
