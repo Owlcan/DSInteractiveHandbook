@@ -2245,23 +2245,26 @@
         
         // Helper function to identify weaker enemies from a wave
         function getWeakerEnemies(waveEnemies) {
+        // Safety guard for unexpected inputs
+        if (!waveEnemies || typeof waveEnemies !== 'object') return [];
+
             // Categorize enemies by strength - expanded for early game portals
             const veryWeakTypes = ['skitterer', 'shambler', 'fastShambler']; // Super early enemies
             const weakerTypes = ['armoredSkitterer', 'alphaSkitterer', 'flier', 'swarmVesper', 'greaterVesper'];
             const mediumTypes = ['brute', 'shadowmancer', 'corruptor', 'sapper', 'ghost', 'lurker', 'spitter'];
             const strongerTypes = ['charger', 'hulkingShambler', 'titan', 'titan2', 'titan3', 'summoner', 'frostbringer'];
+        const weakerEnemies = [];
             // At high levels, allow all non-boss, non-digger enemies to exit portals
             if (wave > 60) {
                 for (const [enemyType, count] of Object.entries(waveEnemies)) {
-                    if (!ENEMY_DATA[enemyType].boss && ENEMY_DATA[enemyType].special !== 'drill') {
+            const data = ENEMY_DATA[enemyType];
+            if (data && !data.boss && data.special !== 'drill') {
                         for (let i = 0; i < Math.ceil(count * 0.3); i++) {
                             weakerEnemies.push(enemyType);
                         }
                     }
                 }
             }
-            
-            const weakerEnemies = [];
             
             for (const [enemyType, count] of Object.entries(waveEnemies)) {
                 let cloneCount = 0;
@@ -4003,6 +4006,7 @@
             const code = cheatCode.toUpperCase().trim();
             
             switch(code) {
+                case 'IWANTPOWER': // Alias for convenience; allows repeated triggering
                 case 'WANTPOWER':
                         essence += 40000;
                         logMessage("CHEAT: Added 40,000 essence!");
@@ -4053,8 +4057,8 @@
                     break;
                     
                 case 'THEFUTUREISNOW':
-                    wave = 39; // Will advance to 40 on next wave
-                    logMessage("CHEAT: Advanced to wave 40!");
+                    wave = 58; // Will advance to 59 on next wave
+                    logMessage("CHEAT: Advanced to wave 59!");
                     updateUI();
                     break;
                     
@@ -4064,7 +4068,7 @@
                     break;
                     
                 default:
-                    logMessage("Unknown cheat code. Try: WANTPOWER, WANTITNOW, NO!BETTER, THEFUTUREISNOW, IHAVESEENTHETOPOFTHEMOUNTAIN");
+                    logMessage("Unknown cheat code. Try: WANTPOWER, IWANTPOWER, WANTITNOW, NO!BETTER, THEFUTUREISNOW, IHAVESEENTHETOPOFTHEMOUNTAIN");
                     break;
             }
         }
@@ -4319,7 +4323,13 @@
             
             // Check for portal spawning (waves 5+)
             if (shouldSpawnPortal(wave)) {
-                const weakerEnemies = getWeakerEnemies(waveData.enemies);
+                let weakerEnemies = [];
+                try {
+                    weakerEnemies = getWeakerEnemies(waveData.enemies);
+                } catch (err) {
+                    console.error('Portal spawn selection failed:', err);
+                    weakerEnemies = [];
+                }
                 if (weakerEnemies.length > 0) {
                     // MUCH more aggressive portal spawning throughout the game
                     let portalCount = 1;
@@ -4463,6 +4473,12 @@
                     const hpMultiplier = 1 + (cycleNumber - 1) * 0.5; // 50% more HP per cycle after 40
                     newEnemy.hp = Math.floor(newEnemy.hp * hpMultiplier);
                     newEnemy.maxHp = newEnemy.hp;
+
+                    // Golden Queen tuning: reduce HP by ~45% for waves 60+
+                    if (wave >= 60 && newEnemy.isGoldenQueen) {
+                        newEnemy.hp = Math.floor(newEnemy.hp * 0.55);
+                        newEnemy.maxHp = newEnemy.hp;
+                    }
                 }
                 
                 enemies.push(newEnemy);
@@ -4605,6 +4621,173 @@
                 updateUI();
                 updateAvailableTowers();
             }
+        }
+
+        // --- Save/Load System ---
+        const SAVE_KEY = 'old-war-defense-save-v1';
+
+        function serializeTowers() {
+            return towers.map(t => ({
+                x: t.x,
+                y: t.y,
+                type: t.type,
+                level: t.level,
+                capstone: t.capstone,
+                champion: !!t.champion,
+                // type-specific flags (persist if present)
+                bossDebuff: t.bossDebuff || false,
+                bossStun: t.bossStun || false,
+                chiBlast: t.chiBlast || false,
+                aoeBurst: t.aoeBurst || false,
+                spawnAnimals: t.spawnAnimals || false
+            }));
+        }
+
+        function reconstructTowerFromSave(s) {
+            let newTower = null;
+            switch (s.type) {
+                case 'archer': newTower = new ArcherTower(s.x, s.y, s.type); break;
+                case 'knight': newTower = new KnightTower(s.x, s.y, s.type); break;
+                case 'mage': newTower = new MageTower(s.x, s.y, s.type); break;
+                case 'monk': newTower = new MonkTower(s.x, s.y, s.type); break;
+                case 'centaur': newTower = new CentaurTower(s.x, s.y, s.type); break;
+                case 'beastrider': newTower = new BeastriderTower(s.x, s.y, s.type); break;
+                case 'animal': newTower = new ArcherTower(s.x, s.y, s.type); break; // Animal fighters use archer base
+                case 'cleric': newTower = new Tower(s.x, s.y, s.type); break; // Cleric uses base
+                default: return null;
+            }
+            if (!newTower) return null;
+            // Restore progression
+            newTower.level = Math.max(0, s.level || 0);
+            newTower.capstone = (s.capstone === 0 || s.capstone === 1) ? s.capstone : (s.capstone === null ? null : null);
+            newTower.champion = !!s.champion;
+            // Restore type-specific flags if applicable
+            if ('bossDebuff' in s) newTower.bossDebuff = !!s.bossDebuff;
+            if ('bossStun' in s) newTower.bossStun = !!s.bossStun;
+            if ('chiBlast' in s) newTower.chiBlast = !!s.chiBlast;
+            if ('aoeBurst' in s) newTower.aoeBurst = !!s.aoeBurst;
+            if ('spawnAnimals' in s) newTower.spawnAnimals = !!s.spawnAnimals;
+            // Recalculate stats based on restored state
+            if (typeof newTower.updateStats === 'function') newTower.updateStats();
+            return newTower;
+        }
+
+        function getSaveData() {
+            return {
+                version: 1,
+                wave,
+                essence,
+                lives,
+                hardMode,
+                chaosMode,
+                endlessMode,
+                waveQueue,
+                towers: serializeTowers()
+            };
+        }
+
+        function saveGame(manual = false) {
+            try {
+                const data = getSaveData();
+                localStorage.setItem(SAVE_KEY, JSON.stringify(data));
+                if (manual) {
+                    setWaveDetails('Game saved.');
+                }
+                updateSaveButtons();
+            } catch (e) {
+                console.error('Save failed', e);
+                if (manual) setWaveDetails('Save failed.');
+            }
+        }
+
+        function syncModeButtons() {
+            // Reflect mode booleans on their respective buttons without toggling
+            if (endlessModeButton) {
+                endlessModeButton.textContent = endlessMode ? 'Disable Endless Mode' : 'Enable Endless Mode';
+                endlessModeButton.classList.toggle('endless-active', !!endlessMode);
+            }
+            if (hardModeButton) {
+                hardModeButton.textContent = hardMode ? 'Normal Mode' : 'Hard Mode';
+                hardModeButton.classList.toggle('active', !!hardMode);
+            }
+            if (chaosModeButton) {
+                chaosModeButton.textContent = chaosMode ? 'Normal Mode' : 'Chaos Mode';
+                chaosModeButton.classList.toggle('active', !!chaosMode);
+            }
+        }
+
+        function loadGame() {
+            try {
+                const raw = localStorage.getItem(SAVE_KEY);
+                if (!raw) {
+                    setWaveDetails('No saved game found.');
+                    return;
+                }
+                const data = JSON.parse(raw);
+
+                // Restore core state
+                wave = Math.max(0, data.wave || 0);
+                essence = Math.max(0, data.essence || 0);
+                lives = Math.max(0, data.lives || 0);
+                hardMode = !!data.hardMode;
+                chaosMode = !!data.chaosMode;
+                endlessMode = !!data.endlessMode;
+                waveQueue = Math.max(0, data.waveQueue || 0);
+
+                // Adjust path for hard mode, rebuild placement tiles
+                path = hardMode ? hardPath : normalPath;
+                setupPlacementTiles();
+
+                // Clear dynamic entities
+                enemies = [];
+                projectiles = [];
+                particles = [];
+                portals = [];
+                waveInProgress = false;
+                currentWaveSpawning = false;
+                selectedTower = null;
+                selectedPlacedTower = null;
+
+                // Rebuild towers and mark tiles occupied
+                towers = [];
+                if (Array.isArray(data.towers)) {
+                    for (const s of data.towers) {
+                        const t = reconstructTowerFromSave(s);
+                        if (t) {
+                            towers.push(t);
+                            const tile = placementTiles.find(pt => pt.x === t.x && pt.y === t.y);
+                            if (tile) tile.occupied = true;
+                        }
+                    }
+                }
+
+                // Update derived availability and UI
+                updateAvailableTowers();
+                syncModeButtons();
+                updateUI();
+                setWaveDetails('Game loaded.');
+            } catch (e) {
+                console.error('Load failed', e);
+                setWaveDetails('Load failed.');
+            }
+        }
+
+        function clearSavedGame() {
+            try {
+                localStorage.removeItem(SAVE_KEY);
+                updateSaveButtons();
+                setWaveDetails('Saved game cleared.');
+            } catch (e) {
+                console.error('Clear save failed', e);
+                setWaveDetails('Clear save failed.');
+            }
+        }
+
+        let saveButton, loadButton, clearSaveButton;
+        function updateSaveButtons() {
+            const hasSave = !!localStorage.getItem(SAVE_KEY);
+            if (loadButton) loadButton.disabled = !hasSave;
+            if (clearSaveButton) clearSaveButton.disabled = !hasSave;
         }
         
         function logMessage(message, className = '') {
@@ -4850,6 +5033,8 @@
                 const waveBonus = 25 + wave * 5;
                 essence += waveBonus;
                 logMessage(`Wave ${wave} cleared! +${waveBonus} Essence.`);
+                // Auto-save on wave completion
+                saveGame(false);
                 
                 // Reset endless mode timer when wave completes
                 if (endlessMode) {
@@ -4970,6 +5155,38 @@
                 gameLoop();
             }
         });
+
+        // Create Save/Load/Clear buttons next to the Hard/Chaos mode buttons (top controls)
+        try {
+            const modeContainer = document.getElementById('hard-mode-button')?.parentElement;
+            if (modeContainer) {
+                saveButton = document.createElement('button');
+                saveButton.id = 'save-button';
+                saveButton.className = 'mode-button';
+                saveButton.textContent = 'Save Game';
+                saveButton.addEventListener('click', () => saveGame(true));
+
+                loadButton = document.createElement('button');
+                loadButton.id = 'load-button';
+                loadButton.className = 'mode-button';
+                loadButton.textContent = 'Load Game';
+                loadButton.addEventListener('click', () => loadGame());
+
+                clearSaveButton = document.createElement('button');
+                clearSaveButton.id = 'clear-save-button';
+                clearSaveButton.className = 'mode-button';
+                clearSaveButton.textContent = 'Clear Save';
+                clearSaveButton.addEventListener('click', () => clearSavedGame());
+
+                modeContainer.appendChild(saveButton);
+                modeContainer.appendChild(loadButton);
+                modeContainer.appendChild(clearSaveButton);
+
+                updateSaveButtons();
+            }
+        } catch (e) {
+            console.error('Failed to create save/load buttons', e);
+        }
 
         initialDraw();
 
