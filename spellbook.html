@@ -133,6 +133,31 @@ button:hover {
   color: var(--ink2);
 }
 
+.card.condensed {
+  padding: 8px 15px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.card.condensed:hover {
+  background-color: var(--gold-dark);
+  color: var(--parchment-dark);
+}
+
+.card.condensed h3 {
+  margin: 0;
+  padding: 0;
+  border: none;
+  font-size: 1.2rem;
+  display: inline;
+}
+
+.card.condensed .spell-meta {
+  font-style: italic;
+  opacity: 0.8;
+  margin-left: 10px;
+}
+
 @media (max-width: 600px) {
   .filter-container {
     flex-direction: column;
@@ -177,6 +202,7 @@ button:hover {
       </div>
       <button id="apply-filters">Apply Filters</button>
       <button id="reset-filters">Reset</button>
+      <button id="toggle-view">Condensed View</button>
     </div>
     <div class="card-grid" id="spellbook-container">
       <!-- Spell cards will be generated here -->
@@ -2188,9 +2214,218 @@ button:hover {
     	},
     	"duration": "Concentration, up to 1 minute",
     	"ritual": false,
-    	"description": "You evoke an overwhelming aura of repulsion and olfactory disgust. Choose one creature within range; the target must make a Wisdom saving throw. On a failure, it is incapacitated with revulsion for the duration, and all attack rolls against it are made at disadvantage as foes recoil in utter disgust. The affected creature may repeat the saving throw at the end of each of its turns, ending the effect on a success.\n\n*“A stench so foul, it stops foes in their tracks—literally!”*"
+		"description": "You evoke an overwhelming aura of repulsion and olfactory disgust. Choose one creature within range; the target must make a Wisdom saving throw. On a failure, it is incapacitated with revulsion for the duration, and all attack rolls against it are made at disadvantage as foes recoil in utter disgust. The affected creature may repeat the saving throw at the end of each of its turns, ending the effect on a success.\n\n*“A stench so foul, it stops foes in their tracks—literally!”*"
+	},
+,
+	{
+		"name": "Forced Second Childhood",
+		"level": 4,
+		"school": "Enchantment",
+		"classes": "Wizard, Bard, Warlock",
+		"casttime": "1 action",
+		"range": "60 feet",
+		"components": {
+			"verbal": true,
+			"somatic": true,
+			"material": "A miniature diaper bag that has a mini diaper, bottle, and onesie charms inside it (worth at least 200 gp)"
+		},
+		"duration": "Concentration, up to 1 minute",
+		"ritual": false,
+		"description": "You target a creature you can see within range, attempting to overwhelm its mind and body with a magical, forced regression into infancy. The target must make a Wisdom saving throw. On a failed save, the creature is magically regressed for the duration. An unwilling creature can repeat the Wisdom saving throw at the end of each of its turns, ending the effect on a success. A creature that is immune to being charmed is immune to this spell. While regressed, the target is subject to the following effects: Mental Regression: The target's Intelligence, Wisdom, and Charisma scores become 6. It cannot cast spells, activate magic items, or understand language. It can still recognize friends and foes. Physical Regression: The target's Strength score becomes 10, unless it was already lower. It drops anything it is holding. Its size becomes Small if it was Medium or larger. Childlike State: At the start of each of its turns, it must roll a d6 to determine its behavior: 1–2 Tantrum (one clumsy unarmed strike against the nearest creature); 3–4 Confused Wandering (move in a random direction, no action); 5–6 Distracted (fascinated by a nearby object or creature and uses its action to gurgle at or grab it). Magical Diapering: Upon failing the initial save, a thick, padded diaper magically appears on the target. Any Continence Checks the creature is forced to make during the spell's duration automatically fail.",
+		"concentration": true
+	},
+	{
+		"name": "Mass Uncontrollable Fantasy",
+		"level": 5,
+		"school": "Illusion",
+		"classes": "Bard, Wizard, Cleric",
+		"casttime": "1 action",
+		"range": "30 feet",
+		"components": {
+			"verbal": true,
+			"somatic": true,
+			"material": "True"
+		},
+		"duration": "Concentration, up to 4 hours",
+		"ritual": false,
+		"description": "You conjure a euphoric playtime fantasy that envelops up to 5 creatures you can see within range. Each target must succeed on a Wisdom saving throw or be unable to take attack actions, cast spells, or use class features for the duration. The spell overrides rage and similar states. The effect ends instantly for a target if it takes intentional malicious damage.",
+		"concentration": true
+	},
+	{
+		"name": "Crinkly Invitation",
+		"level": 1,
+		"school": "Enchantment",
+		"classes": "Bard, Wizard, Sorcerer",
+		"casttime": "1 action",
+		"range": "60 feet",
+		"components": {
+			"verbal": true,
+			"somatic": true,
+			"material": "True"
+		},
+		"duration": "1 round",
+		"ritual": false,
+		"description": "You create a subtle, magically enticing crinkling sound that only one creature of your choice within range can hear. The target must succeed on a Wisdom saving throw or be captivated by the sound. On a failed save, the creature is compelled to use all of its available movement on its next turn to move closer to you by the safest route available. The creature does nothing on its turn except move.",
+		"concentration": false
+	},
+	{
+		"name": "Padding Perfection",
+		"level": 2,
+		"school": "Transmutation",
+		"classes": "Wizard, Artificer, Cleric, Bard",
+		"casttime": "1 action",
+		"range": "Touch",
+		"components": {
+			"verbal": true,
+			"somatic": true,
+			"material": "True"
+		},
+		"duration": "1 hour",
+		"ritual": false,
+		"description": "You touch a diaper worn by a willing creature. For the duration, the diaper magically adjusts to a perfect, comfortable fit. It becomes pleasantly warm, emits a soft, clean scent (like baby powder or lavender), and feels incredibly soft. The wearer gains a +1 bonus to AC and has advantage on saving throws against being frightened. If the diaper was fresh or unused, it gains +3 Magical Booster Use Charges.",
+		"concentration": false
+	},
+	{
+		"name": "Clutching Shadows",
+		"level": 1,
+		"school": "Illusion",
+		"classes": "Wizard, Warlock, Bard",
+		"casttime": "1 action",
+		"range": "60 feet",
+		"components": {
+			"verbal": true,
+			"somatic": true,
+			"material": "False"
+		},
+		"duration": "Concentration, up to 1 minute",
+		"ritual": false,
+		"description": "You cause the shadows around a creature to writhe and grasp. Choose one creature you can see within range. The target must succeed on a Strength saving throw or be restrained by the shadows for the duration. At the start of each of its turns, the target can repeat the saving throw, ending the effect on a success. While restrained, the creature perceives the shadows as monstrous, grasping claws and is considered frightened of you.",
+		"concentration": true
+	},
+	{
+		"name": "Monster in the Closet",
+		"level": 3,
+		"school": "Conjuration",
+		"classes": "Wizard, Warlock",
+		"casttime": "1 action",
+		"range": "60 feet",
+		"components": {
+			"verbal": true,
+			"somatic": true,
+			"material": "True"
+		},
+		"duration": "Concentration, up to 1 minute",
+		"ritual": false,
+		"description": "You summon a childhood terror from a dark space. Choose a dark or heavily obscured area within range that is at least 5 feet by 5 feet (such as a dark closet or the space under a bed). A Shadow Mastiff emerges from the space and acts on your initiative. It is hostile to all creatures other than you and will attack the nearest non‑allied creature. The monster disappears when it drops to 0 hit points or when the spell ends.",
+		"concentration": true
+	},
+	{
+		"name": "Isolating Nightmare",
+		"level": 5,
+		"school": "Illusion",
+		"classes": "Bard, Wizard, Warlock",
+		"casttime": "1 action",
+		"range": "60 feet",
+		"components": {
+			"verbal": true,
+			"somatic": true,
+			"material": "False"
+		},
+		"duration": "Concentration, up to 1 minute",
+		"ritual": false,
+		"description": "You tap into a creature's deepest fears, trapping it in a waking nightmare. Choose one creature you can see within range. The target must make a Wisdom saving throw. On a failed save, the creature is incapacitated and becomes blind and deaf to its actual surroundings, as it is trapped in a terrifying illusion of your design. At the end of each of the target's turns, it takes 4d10 psychic damage and can then repeat the Wisdom saving throw, ending the spell on a success.",
+		"concentration": true
+	},
+	{
+		"name": "Pattern Weaving",
+		"level": 1,
+		"school": "Transmutation",
+		"classes": "Wizard, Bard, Artificer",
+		"casttime": "1 action",
+		"range": "Touch",
+		"components": {
+			"verbal": true,
+			"somatic": true,
+			"material": ""
+		},
+		"duration": "1 hour",
+		"ritual": false,
+		"description": "You touch a diaper and magically alter its appearance. You can create any non-magical pattern or print on its surface. Additionally, you can choose to imbue it with a minor magical property related to the print (e.g., a ducky print makes faint quacking noises, a star print glows with dim light).",
+		"concentration": false
+	},
+	{
+		"name": "Reinforce Padding",
+		"level": 2,
+		"school": "Abjuration",
+		"classes": "Cleric, Paladin, Artificer, Bard",
+		"casttime": "1 action",
+		"range": "Touch",
+		"components": {
+			"verbal": true,
+			"somatic": true,
+			"material": ""
+		},
+		"duration": "1 hour",
+		"ritual": false,
+		"description": "You touch a diaper worn by a creature. The diaper becomes magically reinforced. The wearer gains temporary hit points equal to 2d8 + your spellcasting ability modifier. While these temporary hit points last, the creature has a +1 bonus to AC.",
+		"concentration": false,
+		"higherlevels": "When you cast this spell using a spell slot of 3rd level or higher, the temporary hit points increase by 1d8 for each slot level above 2nd."
+	},
+	{
+		"name": "Animated Print",
+		"level": 3,
+		"school": "Conjuration",
+		"classes": "Wizard, Artificer, Bard, Druid",
+		"casttime": "1 action",
+		"range": "Touch",
+		"components": {
+			"verbal": true,
+			"somatic": true,
+			"material": "a small spool of golden thread"
+		},
+		"duration": "1 hour",
+		"ritual": false,
+		"description": "You touch a diaper with a printed pattern of a beast of CR 1/4 or lower. The print animates and peels off the diaper, becoming a spectral, loyal creature that obeys your commands. It has the statistics of the depicted beast but is a construct, and it lasts for the duration or until it is reduced to 0 hit points.",
+		"concentration": false,
+		"higherlevels": "When you cast this spell using a spell slot of 4th level or higher, you can animate a print depicting a beast with a challenge rating of up to 1/2 (slot 4th), 1 (slot 5th), or 2 (slot 6th)."
+	},
+	{
+		"name": "Imprint",
+		"level": 4,
+		"school": "Transmutation",
+		"classes": "Wizard, Warlock, Bard",
+		"casttime": "1 action",
+		"range": "60 feet",
+		"components": {
+			"verbal": true,
+			"somatic": true,
+			"material": "a small, blank piece of fabric"
+		},
+		"duration": "Concentration, up to 1 minute",
+		"ritual": false,
+		"description": "You attempt to trap a foe as a harmless decoration on your own diaper. Choose one creature you can see within range. The target must succeed on a Charisma saving throw or be magically transformed into a two-dimensional image and imprinted onto the front- or butt- of the diaper you are currently wearing.\n\nWhile imprinted, the target is incapacitated and has total cover. The effect ends if your concentration is broken, if you or the target move more than 120 feet apart, or if you dismiss it (no action required).\n\nWhenever your diaper expends a use charge (due to a failed Continence Check or other effect), the imprinted creature takes 1d10 psychic damage at the end of that turn, as the magical filth seeps into their patterned form. If you purposefully fail a Continence Check while a creature is imprinted, this damage is doubled to 2d10.\n\nCreatures reduced to zero hit points in this fashion are permanently affixed to the diaper and cannot be resurrected except with the use of True Resurrection, Wish, or Miracle.",
+		"concentration": true
+	},
+	{
+		"name": "Masterwork Diaper",
+		"level": 5,
+		"school": "Conjuration",
+		"classes": "Wizard, Cleric, Artificer, Bard",
+		"casttime": "1 action",
+		"range": "Touch",
+		"components": {
+			"verbal": true,
+			"somatic": true,
+			"material": "a diamond-dust infused needle worth at least 250 gp"
+		},
+		"duration": "8 hours",
+		"ritual": false,
+		"description": "You conjure a single, masterpiece diaper of exquisite design and powerful magic onto a willing creature you touch. Choose one of the following effects:\n\n• The Aegis of Comfort: The diaper has 20 use charges and grants the wearer a +3 bonus to AC.\n• The Tapestry of Holding: The diaper functions as a bag of holding, but can only hold items related to childcare (toys, bottles, changing supplies, etc.).\n• The Gilded Cage: The diaper is a locking diaper that requires a DC 25 Strength (Athletics) check or a 7th-level or higher dispel magic to remove. It grants the wearer resistance to one damage type of your choice.",
+		"concentration": false
 	}
 ];
+
+  let isCondensedView = false;
 
   // Function to load and display spells
   function loadSpells() {
@@ -2203,92 +2438,210 @@ button:hover {
     const levelFilter = document.getElementById('level-filter');
     const schoolFilter = document.getElementById('school-filter');
     
-    const levelValue = levelFilter ? levelFilter.value : 'all';
-    const schoolValue = schoolFilter ? schoolFilter.value : 'all';
+		const levelValue = levelFilter ? levelFilter.value : 'all';
+		const schoolValue = schoolFilter ? schoolFilter.value : 'all';
+
+		// Helpers for normalization
+		const normalizeSchool = (s) => {
+			if (!s) return '';
+			const m = String(s).toLowerCase().trim();
+			const map = {
+				v: 'evocation', evocation: 'evocation',
+				c: 'conjuration', conjuration: 'conjuration',
+				a: 'abjuration', abjuration: 'abjuration',
+				i: 'illusion', illusion: 'illusion',
+				n: 'necromancy', necromancy: 'necromancy',
+				d: 'divination', divination: 'divination',
+				t: 'transmutation', transmutation: 'transmutation',
+				// pass-through for custom schools like 'luminancy' or 'divine'
+				luminancy: 'luminancy', divine: 'divine'
+			};
+			return map[m] || m;
+		};
+		const displaySchool = (s) => {
+			const norm = normalizeSchool(s);
+			if (!norm) return 'Unknown School';
+			return norm.charAt(0).toUpperCase() + norm.slice(1);
+		};
     
     // Create a filtered array of spells
     let filteredSpells = [...spellsData];
     
     // Apply level filter
-    if (levelValue !== 'all') {
-      if (levelValue === '0') {
-        filteredSpells = filteredSpells.filter(spell => spell.level === 0);
-      } else if (levelValue === '4+') {
-        filteredSpells = filteredSpells.filter(spell => spell.level >= 4);
-      } else {
-        filteredSpells = filteredSpells.filter(spell => spell.level === parseInt(levelValue));
-      }
-    }
+		if (levelValue !== 'all') {
+			if (levelValue === '0') {
+				filteredSpells = filteredSpells.filter(spell => Number(spell.level) === 0);
+			} else if (levelValue === '4+') {
+				filteredSpells = filteredSpells.filter(spell => Number(spell.level) >= 4);
+			} else {
+				const lvl = parseInt(levelValue, 10);
+				filteredSpells = filteredSpells.filter(spell => Number(spell.level) === lvl);
+			}
+		}
     
     // Apply school filter
-    if (schoolValue !== 'all') {
-      filteredSpells = filteredSpells.filter(spell =>
-        spell.school && spell.school.toLowerCase() === schoolValue.toLowerCase()
-      );
-    }
+		if (schoolValue !== 'all') {
+			const target = normalizeSchool(schoolValue);
+			filteredSpells = filteredSpells.filter(spell => normalizeSchool(spell.school) === target);
+		}
     
     // Display spells
-    filteredSpells.forEach(spell => {
-      const card = document.createElement('div');
-      card.className = 'card';
+		if (filteredSpells.length === 0) {
+			const emptyMsg = document.createElement('div');
+			emptyMsg.className = 'card';
+			emptyMsg.innerHTML = '<p>No spells match your filters.</p>';
+			spellsContainer.appendChild(emptyMsg);
+			return;
+		}
+
+		filteredSpells.forEach((spell, index) => {
+			const card = document.createElement('div');
+			card.className = isCondensedView ? 'card condensed' : 'card';
+			card.dataset.spellIndex = index;
+
+			if (isCondensedView) {
+				// Condensed view - just name, level, and school
+				card.innerHTML = `
+					<h3>${spell.name}</h3>
+					<span class="spell-meta">${getOrdinal(Number(spell.level))}-level ${displaySchool(spell.school)}</span>
+				`;
+        
+				// Add click handler to expand
+				card.addEventListener('click', () => expandSpell(card, spell));
+			} else {
+				// Full view - all details
+				// Create components string
+				let componentsText = [];
+				if (spell.components) {
+					if (spell.components.verbal) componentsText.push('V');
+					if (spell.components.somatic) componentsText.push('S');
+					if (spell.components.material && typeof spell.components.material === 'string' && spell.components.material !== 'False') {
+						componentsText.push(`M (${spell.components.material})`);
+					}
+				}
+        
+				// Create the HTML content for the spell card
+				const castTime = spell.casttime || '—';
+				const range = spell.range || 'Self';
+				const duration = spell.duration || '—';
+				const desc = (spell.description || '').replace(/\n/g, '<br>');
+        
+				card.innerHTML = `
+					<h3>${spell.name}</h3>
+					<p><em>${getOrdinal(Number(spell.level))}-level ${displaySchool(spell.school)}</em></p>
+					<p><strong>Casting Time:</strong> ${castTime}</p>
+					<p><strong>Range:</strong> ${range}</p>
+					<p><strong>Components:</strong> ${componentsText.join(', ') || 'None'}</p>
+					<p><strong>Duration:</strong> ${duration}</p>
+					${spell.ritual ? '<p><strong>Ritual</strong></p>' : ''}
+					<p>${desc}</p>
+					${spell.higherlevels ? `<p><strong>At Higher Levels:</strong> ${spell.higherlevels}</p>` : ''}
+				`;
+			}
       
-      // Create components string
-      let componentsText = [];
-      if (spell.components) {
-        if (spell.components.verbal) componentsText.push("V");
-        if (spell.components.somatic) componentsText.push("S");
-        if (spell.components.material && typeof spell.components.material === 'string' && spell.components.material !== "False") {
-          componentsText.push(`M (${spell.components.material})`);
-        }
-      }
-      
-      // Create the HTML content for the spell card
-      card.innerHTML = `
-        <h3>${spell.name}</h3>
-        <p><em>${getOrdinal(spell.level)}-level ${spell.school}</em></p>
-        <p><strong>Casting Time:</strong> ${spell.casttime}</p>
-        <p><strong>Range:</strong> ${spell.range || "Self"}</p>
-        <p><strong>Components:</strong> ${componentsText.join(", ") || "None"}</p>
-        <p><strong>Duration:</strong> ${spell.duration}</p>
-        ${spell.ritual ? "<p><strong>Ritual</strong></p>" : ""}
-        <p>${spell.description.replace(/\n/g, '<br>')}</p>
-        ${spell.higherlevels ? `<p><strong>At Higher Levels:</strong> ${spell.higherlevels}</p>` : ""}
-      `;
-      
-      spellsContainer.appendChild(card);
-    });
+			spellsContainer.appendChild(card);
+		});
   }
   
+  // Function to expand a condensed spell card
+  function expandSpell(card, spell) {
+    // Create components string
+    let componentsText = [];
+		if (spell.components) {
+			if (spell.components.verbal) componentsText.push('V');
+			if (spell.components.somatic) componentsText.push('S');
+			if (spell.components.material && typeof spell.components.material === 'string' && spell.components.material !== 'False') {
+				componentsText.push(`M (${spell.components.material})`);
+			}
+		}
+    
+    // Switch to full view for this card
+    card.className = 'card';
+		const desc = (spell.description || '').replace(/\n/g, '<br>');
+		const castTime = spell.casttime || '—';
+		const range = spell.range || 'Self';
+		const duration = spell.duration || '—';
+		const schoolText = (function(){
+			const s = spell.school;
+			const norm = s ? String(s).toLowerCase() : '';
+			return norm ? norm.charAt(0).toUpperCase() + norm.slice(1) : 'Unknown School';
+		})();
+		card.innerHTML = `
+			<h3>${spell.name}</h3>
+			<p><em>${getOrdinal(Number(spell.level))}-level ${schoolText}</em></p>
+			<p><strong>Casting Time:</strong> ${castTime}</p>
+			<p><strong>Range:</strong> ${range}</p>
+			<p><strong>Components:</strong> ${componentsText.join(', ') || 'None'}</p>
+			<p><strong>Duration:</strong> ${duration}</p>
+			${spell.ritual ? '<p><strong>Ritual</strong></p>' : ''}
+			<p>${desc}</p>
+			${spell.higherlevels ? `<p><strong>At Higher Levels:</strong> ${spell.higherlevels}</p>` : ''}
+			<button class="collapse-btn" style="margin-top: 10px; font-size: 0.9em;">Collapse</button>
+		`;
+    
+    // Add collapse functionality
+    const collapseBtn = card.querySelector('.collapse-btn');
+    collapseBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      card.className = 'card condensed';
+      card.innerHTML = `
+        <h3>${spell.name}</h3>
+	<span class="spell-meta">${getOrdinal(Number(spell.level))}-level ${schoolText}</span>
+      `;
+      card.addEventListener('click', () => expandSpell(card, spell));
+    });
+  }
+
   // Helper function to convert number to ordinal text
   function getOrdinal(level) {
-    if (level === 0) return "Cantrip";
-    
-    const suffixes = ["th", "st", "nd", "rd"];
-    const v = level % 100;
-    return level + (suffixes[(v - 20) % 10] || suffixes[v] || suffixes[0]);
+	const n = Number(level);
+	if (!isFinite(n)) return String(level);
+	if (n === 0) return 'Cantrip';
+	const suffixes = ['th', 'st', 'nd', 'rd'];
+	const v = n % 100;
+	return n + (suffixes[(v - 20) % 10] || suffixes[v] || suffixes[0]);
   }
   
   // Setup function that safely initializes everything
   function initializeSpellbook() {
+		// Guard against multiple initializations (DOMContentLoaded + load events)
+		if (window.__spellbookInitialized) {
+			return;
+		}
+		window.__spellbookInitialized = true;
+
     const applyFiltersButton = document.getElementById('apply-filters');
     const resetFiltersButton = document.getElementById('reset-filters');
+    const toggleViewButton = document.getElementById('toggle-view');
+    const levelFilterEl = document.getElementById('level-filter');
+    const schoolFilterEl = document.getElementById('school-filter');
     
-    // Add event listeners only if elements exist
-    if (applyFiltersButton) {
-      applyFiltersButton.addEventListener('click', loadSpells);
-    }
+		// Add event listeners only if elements exist
+		if (applyFiltersButton) {
+			applyFiltersButton.addEventListener('click', loadSpells);
+		}
+		if (levelFilterEl) levelFilterEl.addEventListener('change', loadSpells);
+		if (schoolFilterEl) schoolFilterEl.addEventListener('change', loadSpells);
     
-    if (resetFiltersButton) {
-      resetFiltersButton.addEventListener('click', function() {
-        const levelFilter = document.getElementById('level-filter');
-        const schoolFilter = document.getElementById('school-filter');
-        
-        if (levelFilter) levelFilter.value = 'all';
-        if (schoolFilter) schoolFilter.value = 'all';
-        
-        loadSpells();
-      });
-    }
+		if (resetFiltersButton) {
+			resetFiltersButton.addEventListener('click', function() {
+				const levelFilter = document.getElementById('level-filter');
+				const schoolFilter = document.getElementById('school-filter');
+				if (levelFilter) levelFilter.value = 'all';
+				if (schoolFilter) schoolFilter.value = 'all';
+				loadSpells();
+			});
+		}
+    
+		if (toggleViewButton) {
+			// Ensure initial label reflects current state
+			toggleViewButton.textContent = isCondensedView ? 'Full View' : 'Condensed View';
+			toggleViewButton.addEventListener('click', function() {
+				isCondensedView = !isCondensedView;
+				toggleViewButton.textContent = isCondensedView ? 'Full View' : 'Condensed View';
+				loadSpells();
+			});
+		}
     
     // Initial load of spells
     loadSpells();

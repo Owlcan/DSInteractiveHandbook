@@ -1726,6 +1726,11 @@
 
     <div id="school-events-section" class="content-section">
       <h2>School Events Generator</h2>
+      <div id="school-events-menu" class="inline-block" style="margin: 10px 0; display: flex; gap: 8px; flex-wrap: wrap;">
+        <button type="button" class="nav-button" data-variant="school" title="Original School Events">School Events</button>
+        <button type="button" class="nav-button" data-variant="forest" title="Forest Events Generator">Forest Events</button>
+        <button type="button" class="nav-button" data-variant="cellarways" title="Cellarways Corridor & Room Generator">Cellarways</button>
+      </div>
       <div id="school-events-iframe-container" class="iframe-container">
         </div>
     </div>
@@ -1763,7 +1768,7 @@
         { containerId: 'achievement-tracker-iframe-container', iframeId: 'achievement-tracker-iframe', type: 'dynamic' },
         { containerId: 'races-iframe-container', iframeId: 'races-iframe', type: 'dynamic' },
         { containerId: 'backgrounds-iframe-container', iframeId: 'backgrounds-iframe', type: 'dynamic' },
-  { containerId: 'origin-feats-iframe-container', iframeId: 'origin-feats-iframe', type: 'dynamic' },
+        { containerId: 'origin-feats-iframe-container', iframeId: 'origin-feats-iframe', type: 'dynamic' },
         // Statically placed iframes (src will be blanked, loading div handled by its own onload or reset)
         { iframeId: 'legacy-weapon-iframe', type: 'static' },
         { iframeId: 'regalia-creator-iframe', type: 'static' },
@@ -1805,6 +1810,32 @@
                              <iframe id="${iframeId}" src="${src}" title="${title}" style="width: 100%; height: 100%; border: none; display: block; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.2);" onload="if(this.previousElementSibling && this.previousElementSibling.classList.contains('iframe-loading')) { this.previousElementSibling.style.display='none'; }"></iframe>`;
     }
 
+    // --- School Events menu loader (top-level scope) ---
+    let schoolEventsLastVariant = 'school';
+    function loadSchoolEventsVariant(variant) {
+        const srcMap = {
+          school: { src: '../School Events Generator.html', title: 'School Events Generator' },
+          forest: { src: '../Forest Events Generator.html', title: 'Forest Events Generator' },
+          cellarways: { src: '../CellarwaysGenerator.html', title: 'Cellarways Generator' },
+        };
+        const selected = srcMap[variant] || srcMap.school;
+        // Update button pressed state if menu exists
+        const menu = document.getElementById('school-events-menu');
+        if (menu) {
+          const buttons = menu.querySelectorAll('[data-variant]');
+          buttons.forEach(btn => {
+            const isActive = btn.getAttribute('data-variant') === variant;
+            btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+            // Optional subtle active hint
+            btn.style.outline = isActive ? '2px solid var(--gold)' : '';
+          });
+        }
+        createOrRefreshIframe('school-events-iframe-container', 'school-events-iframe', selected.src, selected.title);
+        schoolEventsLastVariant = variant;
+    }
+    // Ensure global access from any listener context
+    window.loadSchoolEventsVariant = loadSchoolEventsVariant;
+
     /**
      * Refreshes a statically placed iframe by resetting its src.
      */
@@ -1831,7 +1862,7 @@
         } else {
             console.error(`Static iframe with ID ${iframeId} not found for refresh.`);
         }
-    }
+  }
 
 
     // --- Event Listeners Setup ---
@@ -1909,8 +1940,20 @@
             createOrRefreshIframe('auto-dm-iframe-container', 'auto-dm-iframe', '../AutoDM App.html', 'Auto-DM');
         },
   'btn-school-events': () => { 
-            document.getElementById('school-events-section').classList.add('active');
-            createOrRefreshIframe('school-events-iframe-container', 'school-events-iframe', '../School Events Generator.html', 'School Events Generator');
+            const section = document.getElementById('school-events-section');
+            section.classList.add('active');
+            const menu = document.getElementById('school-events-menu');
+            if (menu && !menu.dataset.initialized) {
+              menu.addEventListener('click', (e) => {
+                const btn = e.target.closest('[data-variant]');
+                if (!btn) return;
+                const variant = btn.getAttribute('data-variant');
+                window.loadSchoolEventsVariant(variant);
+              });
+              menu.dataset.initialized = '1';
+            }
+            // Load last selected (defaults to original School Events)
+            window.loadSchoolEventsVariant(schoolEventsLastVariant);
   },
       };
 

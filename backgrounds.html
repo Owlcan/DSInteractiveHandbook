@@ -223,6 +223,7 @@
                     <div id="quicknav-content">
                         <h2>Backgrounds Quick Navigation</h2>
                         <ul style="list-style-type: '♞ '; columns: 2; -webkit-columns: 2; -moz-columns: 2;">
+                            <li><a href="javascript:void(0);" onclick="navigateToBackgroundById('budding-caregiver')">Budding Caregiver</a></li>
                             <li><a href="javascript:void(0);" onclick="navigateToBackgroundById('orphan-from-afar')">Orphan from Afar</a></li>
                             <li><a href="javascript:void(0);" onclick="navigateToBackgroundById('disciplinary-exile')">Disciplinary Exile</a></li>
                             <li><a href="javascript:void(0);" onclick="navigateToBackgroundById('brat-prince-princess')">Brat Prince/Princess</a></li>
@@ -238,7 +239,45 @@
                             <li><a href="javascript:void(0);" onclick="navigateToBackgroundById('punk-rocker')">Punk Rocker</a></li>
                             <li><a href="javascript:void(0);" onclick="navigateToBackgroundById('desert-bloom-entertainer')">Desert Bloom Entertainer</a></li>
                             <li><a href="javascript:void(0);" onclick="navigateToBackgroundById('big-lil-bully')">Big Lil Bully</a></li>
+                            <li><a href="javascript:void(0);" onclick="navigateToBackgroundById('exchange-student-crystal-archipelago')">Exchange Student (Crystal Archipelago)</a></li>
+                            <li><a href="javascript:void(0);" onclick="navigateToBackgroundById('library-whisperer')">Library Whisperer</a></li>
+                            <li><a href="javascript:void(0);" onclick="navigateToBackgroundById('mender-of-broken-wands')">Mender of Broken Wands</a></li>
+                            <li><a href="javascript:void(0);" onclick="navigateToBackgroundById('groundskeepers-ward')">Groundskeeper's Ward</a></li>
+                            <li><a href="javascript:void(0);" onclick="navigateToBackgroundById('counselors-aide')">Counselor's Aide</a></li>
+                            <li><a href="javascript:void(0);" onclick="navigateToBackgroundById('dueling-club-regular')">Dueling Club Regular</a></li>
+                            <li><a href="javascript:void(0);" onclick="navigateToBackgroundById('festival-caravan-kid')">Festival Caravan Kid</a></li>
+                            <li><a href="javascript:void(0);" onclick="navigateToBackgroundById('clocktower-timekeeper')">Clocktower Timekeeper</a></li>
+                            <li><a href="javascript:void(0);" onclick="navigateToBackgroundById('arcane-archivists-runner')">Arcane Archivist's Runner</a></li>
+                            <li><a href="javascript:void(0);" onclick="navigateToBackgroundById('kitchen-alchemist')">Kitchen Alchemist</a></li>
+                            <li><a href="javascript:void(0);" onclick="navigateToBackgroundById('weatherwatch-initiate')">Weatherwatch Initiate</a></li>
+                            <li><a href="javascript:void(0);" onclick="navigateToBackgroundById('custodian-of-oddities')">Custodian of Oddities</a></li>
                         </ul>
+                    </div>
+                `
+            },
+            {
+                type: "background",
+                name: "Budding Caregiver",
+                id: "budding-caregiver",
+                contentHTML: `
+                    <div class="clearfix">
+                        <div class="float-right-image-container">
+                             <img src="src/assets/images/backgrounds/buddingcaregiver.webp" alt="Illustration for Budding Caregiver" class="background-image">
+                             <p class="image-caption">The one who kept everyone fed, washed, and tucked in.</p>
+                        </div>
+                        <h2>Budding Caregiver</h2>
+                        <p>You’ve always been the steady pair of hands in the chaos—whether you grew up raising your younger siblings or became the de facto caretaker for the littlest in a band of street urchins. You know how to calm tears, coax smiles, and keep a household (or hideout) running on a shoestring. At the Scholia Diaspros, that instinct turns into something greater: practical kindness, protective grit, and a touch of nurturing magic.</p>
+                        <h3>Traits & Proficiencies</h3>
+                        <ul>
+                            <li><strong>Ability Score Increases:</strong> +2 to one ability score and +1 to another, OR +1 to three different ability scores.</li>
+                            <li><strong>Skill Proficiencies:</strong> Insight, Medicine.</li>
+                            <li><strong>Tool Proficiency:</strong> Cook's utensils, and one tool of your choice.</li>
+                            <li><strong>Languages:</strong> One language of your choice.</li>
+                            <li><strong>Spells & Features:</strong> You learn the cantrips <em>Spank!</em>, <em>Diapering</em>, and <em>Little Miracle</em>. Your spellcasting ability for these and for the feature below is Intelligence or Wisdom (your choice when you create your character).
+                                In addition, choose one 1st-level spell from the Diaper School spell list at character creation. You can cast that spell a number of times per long rest equal to your proficiency bonus. Whenever you gain a level (or at the DM’s discretion), you can replace this chosen spell with a different 1st-level spell from the same Diaper School list.</li>
+                        </ul>
+                        <h3>Starting Equipment</h3>
+                        <p>Cook's utensils, a well-loved apron or ladle, a small caregiver’s kit (soft blanket, reusable cloths, calming tea blend), a set of common clothes, and a pouch containing 10 gp.</p>
                     </div>
                 `
             },
@@ -602,6 +641,318 @@
                         </ul>
                         <h3>Starting Equipment</h3>
                         <p>A set of common clothes that are slightly too small for you, a gaming set (matching your proficiency), a crude wooden toy you "confiscated" but secretly cherish, and a belt pouch containing 10 gp.</p>
+                    </div>
+                `
+            },
+                            {
+                type: "background",
+                name: "Exchange Student (Crystal Archipelago)",
+                id: "exchange-student-crystal-archipelago",
+                contentHTML: `
+                    <div class="clearfix">
+                        <div class="float-right-image-container">
+                            <img src="src/assets/images/backgrounds/exchangestudent.webp" alt="Illustration for Exchange Student (Crystal Archipelago)" class="background-image">
+                            <p class="image-caption">A voyager learning strange new customs.</p>
+                        </div>
+                        <h2>Exchange Student (Crystal Archipelago)</h2>
+                        <p>You crossed seas and wards to study at the Academy. The customs here are baffling, the magic is different, and you love every second of it. Your letters of introduction open doors—slowly—but your charm does the rest.</p>
+                        <h3>Traits & Proficiencies</h3>
+                        <ul>
+                            <li><strong>Ability Score Increases:</strong> +2 to one ability score and +1 to another, OR +1 to three different ability scores.</li>
+                            <li><strong>Skill Proficiencies:</strong> Insight, Persuasion</li>
+                            <li><strong>Tool Proficiency:</strong> Navigator's tools or one musical instrument (your choice).</li>
+                            <li><strong>Languages:</strong> One language of your choice.</li>
+                            <li><strong>Origin Feat:</strong> Choose one from Inspiring Leader, Skilled, or Keen Mind. <strong>Or a Diaper School Origin Feat</strong></li>
+                            <li><strong>Feature: Cultural Liaison:</strong> You can secure polite introductions and modest hospitality from embassy staff, traveling diplomats, or student culture clubs linked to your homeland.</li>
+                        </ul>
+                        <h3>Starting Equipment</h3>
+                        <p>A travel cloak, letters of introduction, a small map/sea-chart case, navigator's tools or a musical instrument (matching your proficiency), a set of common clothes, and a pouch containing 15 gp.</p>
+                    </div>
+                `
+            },
+            {
+                type: "background",
+                name: "Library Whisperer",
+                id: "library-whisperer",
+                contentHTML: `
+                    <div class="clearfix">
+                        <div class="float-right-image-container">
+                            <img src="src/assets/images/backgrounds/librarywhisperer.webp" alt="Illustration for Library Whisperer" class="background-image">
+                            <p class="image-caption">The stacks open for those who listen.</p>
+                        </div>
+                        <h2>Library Whisperer</h2>
+                        <p>The Stacks seem to guide you. Indexes open under your fingers, marginalia points to secrets, and the night librarian nods when you pass. You don’t just find books—you find what people need.</p>
+                        <h3>Traits & Proficiencies</h3>
+                        <ul>
+                            <li><strong>Ability Score Increases:</strong> +2 to one ability score and +1 to another, OR +1 to three different ability scores.</li>
+                            <li><strong>Skill Proficiencies:</strong> Investigation, History</li>
+                            <li><strong>Tool Proficiency:</strong> Calligrapher's supplies.</li>
+                            <li><strong>Languages:</strong> One language of your choice.</li>
+                            <li><strong>Origin Feat:</strong> Choose one from Keen Mind, Observant, or Magic Initiate (Wizard). <strong>Or a Diaper School Origin Feat</strong></li>
+                            <li><strong>Feature: Stacks Access:</strong> You have advantage on checks to locate obscure references in the Academy library and know who to ask for after-hours study access.</li>
+                        </ul>
+                        <h3>Starting Equipment</h3>
+                        <p>Calligrapher's supplies, a bottle of ink and quill, a "restricted notes" token (flavor), a set of common clothes, and a pouch containing 10 gp.</p>
+                    </div>
+                `
+            },
+            {
+                type: "background",
+                name: "Mender of Broken Wands",
+                id: "mender-of-broken-wands",
+                contentHTML: `
+                    <div class="clearfix">
+                        <div class="float-right-image-container">
+                            <img src="src/assets/images/backgrounds/menderofwands.webp" alt="Illustration for Mender of Broken Wands" class="background-image">
+                            <p class="image-caption">Where others see scrap, you see fixes.</p>
+                        </div>
+                        <h2>Mender of Broken Wands</h2>
+                        <p>You fix what others snap—wand cores, cracked focuses, and fragile egos. Your hands are steady, your mind is quick, and your pockets jingle with salvaged bits that "might be useful later."</p>
+                        <h3>Traits & Proficiencies</h3>
+                        <ul>
+                            <li><strong>Ability Score Increases:</strong> +2 to one ability score and +1 to another, OR +1 to three different ability scores.</li>
+                            <li><strong>Skill Proficiencies:</strong> Arcana, Sleight of Hand</li>
+                            <li><strong>Tool Proficiency:</strong> Tinker's tools.</li>
+                            <li><strong>Languages:</strong> One language of your choice.</li>
+                            <li><strong>Origin Feat:</strong> Choose one from Artificer Initiate, Magic Initiate (Wizard), or Skill Expert. <strong>Or a Diaper School Origin Feat</strong></li>
+                            <li><strong>Feature: Quick Fix:</strong> You can jury-rig a simple arcane focus or mechanism for one scene so it functions in a pinch (DM determines limits).</li>
+                        </ul>
+                        <h3>Starting Equipment</h3>
+                        <p>Tinker's tools, a pouch of wire and scrap foci, a pair of protective goggles (flavor), a set of common clothes, and a pouch containing 10 gp.</p>
+                    </div>
+                `
+            },
+            {
+                type: "background",
+                name: "Groundskeeper's Ward",
+                id: "groundskeepers-ward",
+                contentHTML: `
+                    <div class="clearfix">
+                        <div class="float-right-image-container">
+                            <img src="src/assets/images/backgrounds/groundskeeperward.webp" alt="Illustration for Groundskeeper's Ward" class="background-image">
+                            <p class="image-caption">Shortcuts woven between hedgerows.</p>
+                        </div>
+                        <h2>Groundskeeper's Ward</h2>
+                        <p>You grew up among greenhouses and groaning statues, learning which paths are safe and which hedges bite back. The campus is a living thing—and it likes you.</p>
+                        <h3>Traits & Proficiencies</h3>
+                        <ul>
+                            <li><strong>Ability Score Increases:</strong> +2 to one ability score and +1 to another, OR +1 to three different ability scores.</li>
+                            <li><strong>Skill Proficiencies:</strong> Nature, Perception</li>
+                            <li><strong>Tool Proficiency:</strong> Herbalism kit.</li>
+                            <li><strong>Languages:</strong> One language of your choice.</li>
+                            <li><strong>Origin Feat:</strong> Choose one from Tough, Observant, or Magic Initiate (Druid). <strong>Or a Diaper School Origin Feat</strong></li>
+                            <li><strong>Feature: Hidden Paths:</strong> You know discreet campus routes and can guide a group quickly and safely between key locations, avoiding most mundane patrols.</li>
+                        </ul>
+                        <h3>Starting Equipment</h3>
+                        <p>Herbalism kit, gardener's gloves, a pruning knife (counts as a dagger), a satchel of dried herbs, a set of common clothes, and a pouch containing 10 gp.</p>
+                    </div>
+                `
+            },
+            {
+                type: "background",
+                name: "Counselor's Aide",
+                id: "counselors-aide",
+                contentHTML: `
+                    <div class="clearfix">
+                        <div class="float-right-image-container">
+                            <img src="src/assets/images/backgrounds/counselorsaide.webp" alt="Illustration for Counselor's Aide" class="background-image">
+                            <p class="image-caption">The right words at the right time.</p>
+                        </div>
+                        <h2>Counselor's Aide</h2>
+                        <p>You've seen students at their worst—and helped them find better. A steady voice and a stocked kit turn panic into progress more often than not.</p>
+                        <h3>Traits & Proficiencies</h3>
+                        <ul>
+                            <li><strong>Ability Score Increases:</strong> +2 to one ability score and +1 to another, OR +1 to three different ability scores.</li>
+                            <li><strong>Skill Proficiencies:</strong> Insight, Medicine</li>
+                            <li><strong>Tool Proficiency:</strong> Calligrapher's supplies or Herbalism kit (your choice).</li>
+                            <li><strong>Languages:</strong> One language of your choice.</li>
+                            <li><strong>Origin Feat:</strong> Choose one from Healer, Inspiring Leader, or Skilled. <strong>Or a Diaper School Origin Feat</strong></li>
+                            <li><strong>Feature: Calm Presence:</strong> Once per long rest you can help de‑escalate a tense scene; allies gain advantage on one group check to calm, negotiate, or counsel.</li>
+                        </ul>
+                        <h3>Starting Equipment</h3>
+                        <p>A healer's kit (10 uses), a counselor's badge (flavor), a bound notebook and quill, a set of common clothes, and a pouch containing 10 gp.</p>
+                    </div>
+                `
+            },
+            {
+                type: "background",
+                name: "Dueling Club Regular",
+                id: "dueling-club-regular",
+                contentHTML: `
+                    <div class="clearfix">
+                        <div class="float-right-image-container">
+                            <img src="src/assets/images/backgrounds/duelingclubregular.webp" alt="Illustration for Dueling Club Regular" class="background-image">
+                            <p class="image-caption">Precision, poise, and plenty of bruises.</p>
+                        </div>
+                        <h2>Dueling Club Regular</h2>
+                        <p>You’re not the top seed, but you’re scrappy and cool under pressure. You know the rules by heart—and how to win within them.</p>
+                        <h3>Traits & Proficiencies</h3>
+                        <ul>
+                            <li><strong>Ability Score Increases:</strong> +2 to one ability score and +1 to another, OR +1 to three different ability scores.</li>
+                            <li><strong>Skill Proficiencies:</strong> Intimidation, and either Athletics or Acrobatics (your choice)</li>
+                            <li><strong>Tool Proficiency:</strong> One type of gaming set (your choice).</li>
+                            <li><strong>Languages:</strong> One language of your choice.</li>
+                            <li><strong>Origin Feat:</strong> Choose one from Martial Initiate, Alert, or Athlete. <strong>Or a Diaper School Origin Feat</strong></li>
+                            <li><strong>Feature: On Guard:</strong> You can always find a sparring partner and a safe practice space; you have advantage to arrange formal duels and source proper equipment.</li>
+                        </ul>
+                        <h3>Starting Equipment</h3>
+                        <p>A padded practice jacket, a wooden practice weapon, chalk and wraps, a gaming set (matching your proficiency), and a pouch containing 15 gp.</p>
+                    </div>
+                `
+            },
+            {
+                type: "background",
+                name: "Festival Caravan Kid",
+                id: "festival-caravan-kid",
+                contentHTML: `
+                    <div class="clearfix">
+                        <div class="float-right-image-container">
+                            <img src="src/assets/images/backgrounds/festivalkid.webp" alt="Illustration for Festival Caravan Kid" class="background-image">
+                            <p class="image-caption">Life on the move teaches fast.</p>
+                        </div>
+                        <h2>Festival Caravan Kid</h2>
+                        <p>You grew up moving from town to town—pitching tents, telling tales, and striking deals. A grin and a good story can get you fed almost anywhere.</p>
+                        <h3>Traits & Proficiencies</h3>
+                        <ul>
+                            <li><strong>Ability Score Increases:</strong> +2 to one ability score and +1 to another, OR +1 to three different ability scores.</li>
+                            <li><strong>Skill Proficiencies:</strong> Performance, Deception</li>
+                            <li><strong>Tool Proficiency:</strong> Disguise kit or one musical instrument (your choice).</li>
+                            <li><strong>Languages:</strong> One language of your choice.</li>
+                            <li><strong>Origin Feat:</strong> Choose one from Actor, Skilled, or Mobile. <strong>Or a Diaper School Origin Feat</strong></li>
+                            <li><strong>Feature: Camp Setup:</strong> You can arrange modest lodging with traveling performers and vendors, and you know how to draw a small crowd for coin or favors.</li>
+                        </ul>
+                        <h3>Starting Equipment</h3>
+                        <p>A colorful costume, a bedroll and light tent fly, a disguise kit or instrument (matching your proficiency), a set of common clothes, and a pouch containing 15 gp.</p>
+                    </div>
+                `
+            },
+            {
+                type: "background",
+                name: "Clocktower Timekeeper",
+                id: "clocktower-timekeeper",
+                contentHTML: `
+                    <div class="clearfix">
+                        <div class="float-right-image-container">
+                            <img src="src/assets/images/backgrounds/clocktowertimekeeper.webp" alt="Illustration for Clocktower Timekeeper" class="background-image">
+                            <p class="image-caption">Every gear ticks in your head.</p>
+                        </div>
+                        <h2>Clocktower Timekeeper</h2>
+                        <p>Maintaining the ancient Academy clock taught you patience and patterns. Schedules unfold like music; you’re rarely surprised by a bell—or a guard shift.</p>
+                        <h3>Traits & Proficiencies</h3>
+                        <ul>
+                            <li><strong>Ability Score Increases:</strong> +2 to one ability score and +1 to another, OR +1 to three different ability scores.</li>
+                            <li><strong>Skill Proficiencies:</strong> Investigation, Perception</li>
+                            <li><strong>Tool Proficiency:</strong> Tinker's tools.</li>
+                            <li><strong>Languages:</strong> One language of your choice.</li>
+                            <li><strong>Origin Feat:</strong> Choose one from Alert, Observant, or Keen Mind. <strong>Or a Diaper School Origin Feat</strong></li>
+                            <li><strong>Feature: Sense of Timing:</strong> Once per long rest, gain advantage on an Initiative roll; you are also preternaturally good at estimating durations and schedules.</li>
+                        </ul>
+                        <h3>Starting Equipment</h3>
+                        <p>Tinker's tools, a pocket watch or gear-whistle, a small vial of gear oil, a set of common clothes, and a pouch containing 10 gp.</p>
+                    </div>
+                `
+            },
+            {
+                type: "background",
+                name: "Arcane Archivist's Runner",
+                id: "arcane-archivists-runner",
+                contentHTML: `
+                    <div class="clearfix">
+                        <div class="float-right-image-container">
+                            <img src="src/assets/images/backgrounds/arcanearchivistrunner.webp" alt="Illustration for Arcane Archivist's Runner" class="background-image">
+                            <p class="image-caption">Messages through wards and red tape.</p>
+                        </div>
+                        <h2>Arcane Archivist's Runner</h2>
+                        <p>You ferry sealed documents between faculty who barely speak—except through you. Knowing which door to knock on (and when) is your real magic.</p>
+                        <h3>Traits & Proficiencies</h3>
+                        <ul>
+                            <li><strong>Ability Score Increases:</strong> +2 to one ability score and +1 to another, OR +1 to three different ability scores.</li>
+                            <li><strong>Skill Proficiencies:</strong> Stealth, Persuasion</li>
+                            <li><strong>Tool Proficiency:</strong> Forgery kit or calligrapher's supplies (your choice).</li>
+                            <li><strong>Languages:</strong> One language of your choice.</li>
+                            <li><strong>Origin Feat:</strong> Choose one from Skulker, Skilled, or Magic Initiate (Wizard). <strong>Or a Diaper School Origin Feat</strong></li>
+                            <li><strong>Feature: Sealed Courier:</strong> Select faculty trust you; you can move messages through wards and bureaucracy where others can’t, and you know a few secure shortcuts.</li>
+                        </ul>
+                        <h3>Starting Equipment</h3>
+                        <p>A sealed satchel, sealing wax and a generic signet, a dark hooded cloak, a forgery kit or calligrapher's supplies (matching your proficiency), a set of common clothes, and a pouch containing 15 gp.</p>
+                    </div>
+                `
+            },
+            {
+                type: "background",
+                name: "Kitchen Alchemist",
+                id: "kitchen-alchemist",
+                contentHTML: `
+                    <div class="clearfix">
+                        <div class="float-right-image-container">
+                            <img src="src/assets/images/backgrounds/kitchenalchemist.webp" alt="Illustration for Kitchen Alchemist" class="background-image">
+                            <p class="image-caption">Precision in spices, precision in brews.</p>
+                        </div>
+                        <h2>Kitchen Alchemist</h2>
+                        <p>You learned precision by measuring spices and stabilizing sauces. Now your mixtures rarely curdle—and sometimes help more than a meal should.</p>
+                        <h3>Traits & Proficiencies</h3>
+                        <ul>
+                            <li><strong>Ability Score Increases:</strong> +2 to one ability score and +1 to another, OR +1 to three different ability scores.</li>
+                            <li><strong>Skill Proficiencies:</strong> Survival, and either Medicine or Nature (your choice)</li>
+                            <li><strong>Tool Proficiency:</strong> Cook's utensils or alchemist's supplies (your choice).</li>
+                            <li><strong>Languages:</strong> One language of your choice.</li>
+                            <li><strong>Origin Feat:</strong> Choose one from Chef, Tough, or Healer. <strong>Or a Diaper School Origin Feat</strong></li>
+                            <li><strong>Feature: Nourishing Brew:</strong> Once per day you can prepare a restorative snack or tonic that provides a small comfort or fortitude benefit (DM adjudicates minor bonus).</li>
+                        </ul>
+                        <h3>Starting Equipment</h3>
+                        <p>Cook's utensils or alchemist's supplies (matching your proficiency), a spice pouch, an apron, a mess kit, a set of common clothes, and a pouch containing 10 gp.</p>
+                    </div>
+                `
+            },
+            {
+                type: "background",
+                name: "Weatherwatch Initiate",
+                id: "weatherwatch-initiate",
+                contentHTML: `
+                    <div class="clearfix">
+                        <div class="float-right-image-container">
+                            <img src="src/assets/images/backgrounds/weatherwatcher.webp" alt="Illustration for Weatherwatch Initiate" class="background-image">
+                            <p class="image-caption">Reading skies like scripture.</p>
+                        </div>
+                        <h2>Weatherwatch Initiate</h2>
+                        <p>From rooftops and ridgelines you chart winds and read storms with uncanny accuracy. Friends ask you if it’s a coat day—you are rarely wrong.</p>
+                        <h3>Traits & Proficiencies</h3>
+                        <ul>
+                            <li><strong>Ability Score Increases:</strong> +2 to one ability score and +1 to another, OR +1 to three different ability scores.</li>
+                            <li><strong>Skill Proficiencies:</strong> Nature, Survival</li>
+                            <li><strong>Tool Proficiency:</strong> Cartographer's tools.</li>
+                            <li><strong>Languages:</strong> One language of your choice.</li>
+                            <li><strong>Origin Feat:</strong> Choose one from Observant, Mobile, or Magic Initiate (Druid). <strong>Or a Diaper School Origin Feat</strong></li>
+                            <li><strong>Feature: Read the Sky:</strong> You can accurately predict local weather and identify safe routes around storms, gaining advantage on checks to avoid weather hazards.</li>
+                        </ul>
+                        <h3>Starting Equipment</h3>
+                        <p>Cartographer's tools, a map case with local charts, a sturdy cloak, chalk and twine, a set of common clothes, and a pouch containing 10 gp.</p>
+                    </div>
+                `
+            },
+            {
+                type: "background",
+                name: "Custodian of Oddities",
+                id: "custodian-of-oddities",
+                contentHTML: `
+                    <div class="clearfix">
+                        <div class="float-right-image-container">
+                            <img src="src/assets/images/backgrounds/custodianofoddities.webp" alt="Illustration for Custodian of Oddities" class="background-image">
+                            <p class="image-caption">"Please don't touch"—except you.</p>
+                        </div>
+                        <h2>Custodian of Oddities</h2>
+                        <p>You inventory the "please don't touch" closet. You know which items sing, which sulk, and which explode if you glare at them wrong.</p>
+                        <h3>Traits & Proficiencies</h3>
+                        <ul>
+                            <li><strong>Ability Score Increases:</strong> +2 to one ability score and +1 to another, OR +1 to three different ability scores.</li>
+                            <li><strong>Skill Proficiencies:</strong> Arcana, Investigation</li>
+                            <li><strong>Tool Proficiency:</strong> Thieves' tools or tinker's tools (your choice).</li>
+                            <li><strong>Languages:</strong> One language of your choice.</li>
+                            <li><strong>Origin Feat:</strong> Choose one from Resilient (Con), Alert, or Magic Initiate (Wizard). <strong>Or a Diaper School Origin Feat</strong></li>
+                            <li><strong>Feature: Safe Handler:</strong> You know procedures for weird objects; you have advantage on checks to secure, transport, or neutralize non-obvious hazards from magical curios.</li>
+                        </ul>
+                        <h3>Starting Equipment</h3>
+                        <p>A padded specimen case, heavy canvas gloves, a length of soft cord and tags, thieves' tools or tinker's tools (matching your proficiency), a set of common clothes, and a pouch containing 10 gp.</p>
                     </div>
                 `
             }

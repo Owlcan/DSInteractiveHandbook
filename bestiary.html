@@ -2329,6 +2329,142 @@
             "flavor": {
                 "faction": "",
                 "environment": "",
+                "description": "Large ooze, chaotic evil",
+                "nameIsProper": false,
+                "imageUrl": "",
+                "descriptionHtml": {}
+            },
+            "stats": {
+                "size": "Large",
+                "race": "ooze",
+                "alignment": "chaotic evil",
+                "armorType": "Natural Armor",
+                "armorClass": 14,
+                "numHitDie": 14,
+                "speed": "30 ft., climb 30 ft.",
+                "abilityScores": {
+                    "strength": 18,
+                    "dexterity": 14,
+                    "constitution": 17,
+                    "intelligence": 6,
+                    "wisdom": 10,
+                    "charisma": 6
+                },
+                "proficiencyBonus": 3,
+                "damageVulnerabilities": [
+                    "Radiant"
+                ],
+                "damageResistances": [
+                    "Bludgeoning, Piercing, and Slashing from Nonmagical Attacks",
+                    "Acid"
+                ],
+                "damageImmunities": [],
+                "conditionImmunities": [
+                    "Blinded",
+                    "Charmed",
+                    "Deafened",
+                    "Exhaustion",
+                    "Frightened",
+                    "Prone"
+                ],
+                "senses": [
+                    "Blindsight 60 ft. (blind beyond this radius)",
+                    "Passive Perception 10"
+                ],
+                "languages": [
+                    "---"
+                ],
+                "challengeRating": 5,
+                "experiencePoints": 1800,
+                "legendaryActionsPerRound": 0,
+                "legendaryActionsDescription": "",
+                "savingThrows": [
+                    { "ability": "constitution", "proficient": true, "modifier": 6, "modifierStr": "Con +6" }
+                ],
+                "skills": [],
+                "additionalAbilities": [
+                    {
+                        "name": "Amorphous Mass",
+                        "description": "The Liquid Legion can move through a space as narrow as 1 inch without squeezing.",
+                        "descriptionHtml": {}
+                    },
+                    {
+                        "name": "Legion Swarm",
+                        "description": "Creatures that start their turn within 10 feet of the Liquid Legion must succeed on a DC 15 Strength saving throw or have their speed reduced by 10 feet until the start of their next turn and take 5 (1d10) acid damage. Creatures grappled or restrained by the Liquid Legion automatically fail this save.",
+                        "descriptionHtml": {}
+                    },
+                    {
+                        "name": "Split",
+                        "description": "When a Liquid Legion that is Medium or larger is subjected to slashing or lightning damage, it splits into two new Liquid Legions if it has at least 20 hit points. Each new Liquid Legion has hit points equal to half the original's, rounded down. New legions are one size smaller than the original.",
+                        "descriptionHtml": {}
+                    },
+                    {
+                        "name": "Corrosive Form",
+                        "description": "A creature that hits the Liquid Legion with a melee attack while within 5 feet takes 5 (1d10) acid damage.",
+                        "descriptionHtml": {}
+                    }
+                ],
+                "actions": [
+                    {
+                        "name": "Multiattack",
+                        "description": "The Liquid Legion makes two Pseudopod attacks.",
+                        "descriptionHtml": {}
+                    },
+                    {
+                        "name": "Pseudopod",
+                        "description": "<em>Melee Weapon Attack:</em> +7 to hit, reach 10 ft., one target. <em>Hit:</em> 11 (2d6 + 4) bludgeoning damage plus 9 (2d8) necrotic damage.",
+                        "descriptionHtml": {}
+                    },
+                    {
+                        "name": "Engulf",
+                        "description": "The Liquid Legion moves up to its speed. While doing so, it can enter a Huge or smaller creature's space. Whenever the Liquid Legion enters a creature's space, the creature must make a DC 15 Dexterity saving throw. On a successful save, the creature can choose to be pushed 5 feet back or to the side of the Liquid Legion. On a failed save, the Liquid Legion enters the creature's space, and the creature takes 9 (2d8) necrotic damage and is engulfed. The engulfed creature is restrained, can't breathe, and takes 14 (4d6) necrotic damage at the start of each of the Liquid Legion's turns. If the Liquid Legion moves, the engulfed creature moves with it. The Liquid Legion can have up to two Medium or smaller creatures, or one Large creature, engulfed at a time.",
+                        "descriptionHtml": {}
+                    }
+                ],
+                "reactions": [
+                    {
+                        "name": "Flow and Reform",
+                        "description": "When the Liquid Legion would be hit by a weapon attack, it imposes disadvantage on that attack if it moved at least 10 feet on its last turn. If the attack still hits, the attacker takes Corrosive Form damage.",
+                        "descriptionHtml": {}
+                    }
+                ],
+                "legendaryActions": [],
+                "hitDieSize": 10,
+                "armorTypeStr": "(Natural Armor)",
+                "abilityScoreModifiers": {
+                    "strength": 4,
+                    "dexterity": 2,
+                    "constitution": 3,
+                    "intelligence": -2,
+                    "wisdom": 0,
+                    "charisma": -2
+                },
+                "abilityScoreStrs": {
+                    "strength": "18 (+4)",
+                    "dexterity": "14 (+2)",
+                    "constitution": "17 (+3)",
+                    "intelligence": "6 (–2)",
+                    "wisdom": "10 (+0)",
+                    "charisma": "6 (–2)"
+                },
+                "extraHealthFromConstitution": 42,
+                "hitPoints": 115,
+                "hitPointsStr": "115 (14d10 + 42)",
+                "passivePerception": 10,
+                "challengeRatingStr": "5"
+            },
+            "sharing": {
+                "linkSharingEnabled": false
+            },
+            "_id": "6870794b97a02efde25f8fb5",
+            "name": "Darkling Liquid Legion",
+            "bestiaryId": "6870793497a02efde25f8fa7",
+            "__v": 0
+        },
+        {
+            "flavor": {
+                "faction": "",
+                "environment": "",
                 "description": "Medium ooze, chaotic evil",
                 "nameIsProper": false,
                 "imageUrl": "",
@@ -2355,7 +2491,7 @@
                     "Radiant"
                 ],
                 "damageResistances": [
-                    "Bludgeoning, Piercing from non-magical attacks"
+                    "Bludgeoning, Piercing from Nonmagical Attacks"
                 ],
                 "damageImmunities": [],
                 "conditionImmunities": [
@@ -2382,23 +2518,20 @@
                 "additionalAbilities": [
                     {
                         "name": "Split",
-                        "description": "When a legion that is Medium or larger is subjected to slashing or lightning damage, it splits into two new legions if it has at least 10 hit points. Each new legion has hit points equal to half the original's, rounded down. New legions are one size smaller than the original legion.",
-                        "descriptionHtml": {},
-                        "$$hashKey": "object:38020"
+                        "description": "When a Pugnacious Puddle that is Medium or larger is subjected to slashing or lightning damage, it splits into two new Pugnacious Puddles if it has at least 10 hit points. Each new Pugnacious Puddle has hit points equal to half the original's, rounded down. New puddles are one size smaller than the original.",
+                        "descriptionHtml": {}
                     }
                 ],
                 "actions": [
                     {
                         "name": "Pseudopod",
                         "description": "<em>Melee Weapon Attack:</em> +4 to hit, reach 5 ft., one target. <em>Hit:</em> 5 (1d6 + 2) bludgeoning damage plus 3 (1d6) necrotic damage.",
-                        "descriptionHtml": {},
-                        "$$hashKey": "object:38025"
+                        "descriptionHtml": {}
                     },
                     {
                         "name": "Engulf",
-                        "description": "The legion moves up to its speed. While doing so, it can enter a Large or smaller creature's space. Whenever the legion enters a creature's space, the creature must make a DC 12 Dexterity saving throw. On a successful save, the creature can choose to be pushed 5 feet back or to the side of the legion. On a failed save, the legion enters the creature's space, and the creature takes 7 (2d6) necrotic damage and is engulfed. The engulfed creature is restrained, can't breathe, and takes 7 (2d6) necrotic damage at the start of each of the legion's turns.",
-                        "descriptionHtml": {},
-                        "$$hashKey": "object:38026"
+                        "description": "The Pugnacious Puddle moves up to its speed. While doing so, it can enter a Large or smaller creature's space. Whenever the Pugnacious Puddle enters a creature's space, the creature must make a DC 12 Dexterity saving throw. On a successful save, the creature can choose to be pushed 5 feet back or to the side of the Pugnacious Puddle. On a failed save, the Pugnacious Puddle enters the creature's space, and the creature takes 7 (2d6) necrotic damage and is engulfed. The engulfed creature is restrained, can't breathe, and takes 7 (2d6) necrotic damage at the start of each of the Pugnacious Puddle's turns.",
+                        "descriptionHtml": {}
                     }
                 ],
                 "reactions": [],
@@ -2422,16 +2555,460 @@
                     "charisma": "5 (–3)"
                 },
                 "extraHealthFromConstitution": 18,
-                "hitPoints": 66,
-                "hitPointsStr": "66 (6d8 + 18)",
+                "hitPoints": 45,
+                "hitPointsStr": "45 (6d8 + 18)",
                 "passivePerception": 9,
                 "challengeRatingStr": "2"
             },
-            "sharing": {
-                "linkSharingEnabled": false
+            "sharing": { "linkSharingEnabled": false },
+            "_id": "cellarways-pugnacious-puddle",
+            "name": "Pugnacious Puddle",
+            "bestiaryId": "6870793497a02efde25f8fa7",
+            "__v": 0
+        },
+        {
+            "flavor": {
+                "faction": "Darklings",
+                "environment": "Cellarways",
+                "description": "Medium abomination, cunning evil",
+                "nameIsProper": false,
+                "imageUrl": "",
+                "descriptionHtml": {}
             },
-            "_id": "6870794b97a02efde25f8fb5",
-            "name": "Darkling Liquid Legion",
+            "stats": {
+                "size": "Medium",
+                "race": "abomination",
+                "alignment": "cunning evil",
+                "armorType": "Natural Armor",
+                "armorClass": 15,
+                "numHitDie": 8,
+                "speed": "40 ft., climb 20 ft.",
+                "abilityScores": {
+                    "strength": 18,
+                    "dexterity": 17,
+                    "constitution": 18,
+                    "intelligence": 12,
+                    "wisdom": 14,
+                    "charisma": 12
+                },
+                "proficiencyBonus": 2,
+                "damageVulnerabilities": ["Radiant"],
+                "damageResistances": [],
+                "damageImmunities": ["Bludgeoning from Nonmagical Attacks"],
+                "conditionImmunities": [],
+                "senses": [
+                    "Darkvision 120 ft.",
+                    "Passive Perception 15"
+                ],
+                "languages": ["Undercommon", "Understands Common"],
+                "challengeRating": 4,
+                "experiencePoints": 1100,
+                "legendaryActionsPerRound": 0,
+                "legendaryActionsDescription": "",
+                "savingThrows": [],
+                "skills": [
+                    {"name": "Stealth", "proficient": true, "modifier": 6, "modifierStr": "Stealth +6"},
+                    {"name": "Perception", "proficient": true, "modifier": 5, "modifierStr": "Perception +5"},
+                    {"name": "Athletics", "proficient": true, "modifier": 7, "modifierStr": "Athletics +7"}
+                ],
+                "additionalAbilities": [
+                    {"name": "Shadow Stalker", "description": "While in dim light or darkness, the Lurker Primogenitor has advantage on Dexterity (Stealth) checks.", "descriptionHtml": {}},
+                    {"name": "Pack Coordination", "description": "The Lurker Primogenitor can use a bonus action to telepathically command up to three allied Darklings it can see within 120 feet. Commanded Darklings can use their reaction to immediately move up to half their speed and make one weapon attack.", "descriptionHtml": {}}
+                ],
+                "actions": [
+                    {"name": "Multiattack", "description": "The Lurker Primogenitor makes two attacks: one with its Bite and one with its Maw Lash.", "descriptionHtml": {}},
+                    {"name": "Bite", "description": "<em>Melee Weapon Attack:</em> +7 to hit, reach 5 ft., one target. <em>Hit:</em> 11 (2d6 + 4) piercing damage.", "descriptionHtml": {}},
+                    {"name": "Maw Lash", "description": "<em>Melee Weapon Attack:</em> +7 to hit, reach 15 ft., one target. <em>Hit:</em> 9 (1d10 + 4) slashing damage, and the target must succeed on a DC 15 Strength saving throw or be grappled (escape DC 15).", "descriptionHtml": {}},
+                    {"name": "Swallow Limb", "description": "The Lurker Primogenitor attempts to swallow the limb of a creature it is grappling. The target must make a DC 15 Strength saving throw. On a failed save, the target takes 13 (2d8 + 4) piercing damage and is restrained until the grapple ends. While restrained in this way, the creature cannot use the grappled limb for attacks or to perform somatic components for spells. At the start of each of the Lurker's turns, the restrained creature takes 4 (1d8) acid damage.", "descriptionHtml": {}}
+                ],
+                "reactions": [],
+                "legendaryActions": [],
+                "hitDieSize": 8,
+                "armorTypeStr": "(Natural Armor)",
+                "abilityScoreModifiers": {
+                    "strength": 4,
+                    "dexterity": 3,
+                    "constitution": 4,
+                    "intelligence": 1,
+                    "wisdom": 2,
+                    "charisma": 1
+                },
+                "abilityScoreStrs": {
+                    "strength": "18 (+4)",
+                    "dexterity": "17 (+3)",
+                    "constitution": "18 (+4)",
+                    "intelligence": "12 (+1)",
+                    "wisdom": "14 (+2)",
+                    "charisma": "12 (+1)"
+                },
+                "extraHealthFromConstitution": 32,
+                "hitPoints": 68,
+                "hitPointsStr": "68 (8d8 + 32)",
+                "passivePerception": 15,
+                "challengeRatingStr": "4"
+            },
+            "sharing": {"linkSharingEnabled": false},
+            "_id": "cellarways-lurker-primogenitor",
+            "name": "Lurker Primogenitor",
+            "bestiaryId": "6870793497a02efde25f8fa7",
+            "__v": 0
+        },
+        {
+            "flavor": {
+                "faction": "Darkforged",
+                "environment": "Cellarways",
+                "description": "Medium construct, calculating evil",
+                "nameIsProper": false,
+                "imageUrl": "",
+                "descriptionHtml": {}
+            },
+            "stats": {
+                "size": "Medium",
+                "race": "construct",
+                "alignment": "calculating evil",
+                "armorType": "Reinforced Plating",
+                "armorClass": 17,
+                "numHitDie": 10,
+                "speed": "30 ft.",
+                "abilityScores": {
+                    "strength": 16,
+                    "dexterity": 18,
+                    "constitution": 16,
+                    "intelligence": 14,
+                    "wisdom": 13,
+                    "charisma": 10
+                },
+                "proficiencyBonus": 3,
+                "damageVulnerabilities": ["Radiant"],
+                "damageResistances": ["Bludgeoning, Piercing, and Slashing from Nonmagical Attacks"],
+                "damageImmunities": ["Necrotic"],
+                "conditionImmunities": ["Charmed", "Frightened", "Poisoned"],
+                "senses": [
+                    "Darkvision 120 ft.",
+                    "Passive Perception 14"
+                ],
+                "languages": ["Understands Common", "Understands Abyssal"],
+                "challengeRating": 5,
+                "experiencePoints": 1800,
+                "legendaryActionsPerRound": 0,
+                "legendaryActionsDescription": "",
+                "savingThrows": [
+                    {"ability": "strength", "proficient": true, "modifier": 6, "modifierStr": "Str +6"},
+                    {"ability": "dexterity", "proficient": true, "modifier": 7, "modifierStr": "Dex +7"}
+                ],
+                "skills": [
+                    {"name": "Perception", "proficient": true, "modifier": 4, "modifierStr": "Perception +4"},
+                    {"name": "Stealth", "proficient": true, "modifier": 7, "modifierStr": "Stealth +7"}
+                ],
+                "additionalAbilities": [
+                    {"name": "Constructed Resilience", "description": "The Warforged Darkwatch has advantage on saving throws against being poisoned, is immune to disease, and magic can't put it to sleep.", "descriptionHtml": {}},
+                    {"name": "Elite Tactician", "description": "As a bonus action, the Darkwatch can give a telepathic command to an allied Darkling or Darkforged creature it can see within 120 feet. That ally can use its reaction to move up to its speed without provoking opportunity attacks.", "descriptionHtml": {}},
+                    {"name": "Degenerate Regeneration", "description": "If unwounded for 1 round, the Darkwatch begins to coalesce its dark essence. At the start of its turn, it can restore 1d8 hit points provided it has not taken radiant damage since its last turn.", "descriptionHtml": {}}
+                ],
+                "actions": [
+                    {"name": "Multiattack", "description": "The Darkwatch makes two attacks with its Suppression Cannon or two attacks with its Energy Blade.", "descriptionHtml": {}},
+                    {"name": "Suppression Cannon", "description": "<em>Ranged Weapon Attack:</em> +7 to hit, range 40/80 ft., one target. <em>Hit:</em> 9 (1d10 + 4) force damage, and the target's speed is halved until the end of its next turn. A creature can only be affected by this speed reduction once per round.", "descriptionHtml": {}},
+                    {"name": "Energy Blade", "description": "<em>Melee Weapon Attack:</em> +7 to hit, reach 5 ft., one target. <em>Hit:</em> 11 (2d6 + 4) force damage.", "descriptionHtml": {}},
+                    {"name": "Stasis Grenade (Recharge 5-6)", "description": "The Darkwatch launches a grenade at a point it can see within 60 feet. Each creature within a 15-foot radius of that point must succeed on a DC 15 Constitution saving throw or be stunned until the end of the Darkwatch's next turn.", "descriptionHtml": {}}
+                ],
+                "reactions": [],
+                "legendaryActions": [],
+                "hitDieSize": 8,
+                "armorTypeStr": "(Reinforced Plating)",
+                "abilityScoreModifiers": {
+                    "strength": 3,
+                    "dexterity": 4,
+                    "constitution": 3,
+                    "intelligence": 2,
+                    "wisdom": 1,
+                    "charisma": 0
+                },
+                "abilityScoreStrs": {
+                    "strength": "16 (+3)",
+                    "dexterity": "18 (+4)",
+                    "constitution": "16 (+3)",
+                    "intelligence": "14 (+2)",
+                    "wisdom": "13 (+1)",
+                    "charisma": "10 (+0)"
+                },
+                "extraHealthFromConstitution": 30,
+                "hitPoints": 75,
+                "hitPointsStr": "75 (10d8 + 30)",
+                "passivePerception": 14,
+                "challengeRatingStr": "5"
+            },
+            "sharing": {"linkSharingEnabled": false},
+            "_id": "cellarways-warforged-darkwatch",
+            "name": "Warforged Darkwatch",
+            "bestiaryId": "6870793497a02efde25f8fa7",
+            "__v": 0
+        },
+        {
+            "flavor": {
+                "faction": "Darkformes",
+                "environment": "Plains",
+                "description": "Large abomination, unaligned",
+                "nameIsProper": false,
+                "imageUrl": "",
+                "descriptionHtml": {}
+            },
+            "stats": {
+                "size": "Large",
+                "race": "abomination",
+                "alignment": "unaligned",
+                "armorType": "Natural Armor",
+                "armorClass": 14,
+                "numHitDie": 12,
+                "hitDieSize": 10,
+                "speed": "10 ft.",
+                "abilityScores": {
+                    "strength": 16,
+                    "dexterity": 8,
+                    "constitution": 14,
+                    "intelligence": 10,
+                    "wisdom": 16,
+                    "charisma": 18
+                },
+                "proficiencyBonus": 3,
+                "damageVulnerabilities": ["Radiant"],
+                "damageResistances": [],
+                "damageImmunities": [],
+                "conditionImmunities": ["Cursed", "Frightened", "Prone"],
+                "senses": [
+                    "Darkvision 60 ft.",
+                    "Tremorsense 30 ft.",
+                    "Passive Perception 13"
+                ],
+                "languages": ["Telepathy 60 ft."],
+                "challengeRating": 5,
+                "experiencePoints": 1800,
+                "legendaryActionsPerRound": 0,
+                "legendaryActionsDescription": "",
+                "savingThrows": [],
+                "skills": [],
+                "additionalAbilities": [
+                    {"name": "Fear Aura", "description": "Any creature that starts its turn within 20 feet of the Psychic Bloom must succeed on a DC 14 Wisdom saving throw or be frightened until the start of its next turn. If a creature's saving throw is successful, the creature is immune to the Psychic Bloom's Fear Aura for the next 24 hours.", "descriptionHtml": {}}
+                ],
+                "actions": [
+                    {"name": "Psychic Pulse (Recharge 6)", "description": "The Psychic Bloom releases a wave of psychic energy. Each creature in a 30-foot cone must make a DC 14 Intelligence saving throw, taking 14 (4d6) psychic damage on a failed save, or half as much damage on a successful one.", "descriptionHtml": {}},
+                    {"name": "Tendril Slam", "description": "<em>Melee Weapon Attack:</em> +6 to hit, reach 10 ft., one target. <em>Hit:</em> 10 (2d6 + 3) bludgeoning damage.", "descriptionHtml": {}}
+                ],
+                "reactions": [],
+                "legendaryActions": [],
+                "armorTypeStr": "(Natural Armor)",
+                "abilityScoreModifiers": {
+                    "strength": 3,
+                    "dexterity": -1,
+                    "constitution": 2,
+                    "intelligence": 0,
+                    "wisdom": 3,
+                    "charisma": 4
+                },
+                "abilityScoreStrs": {
+                    "strength": "16 (+3)",
+                    "dexterity": "8 (–1)",
+                    "constitution": "14 (+2)",
+                    "intelligence": "10 (+0)",
+                    "wisdom": "16 (+3)",
+                    "charisma": "18 (+4)"
+                },
+                "extraHealthFromConstitution": 24,
+                "hitPoints": 90,
+                "hitPointsStr": "90 (12d10 + 24)",
+                "passivePerception": 13,
+                "challengeRatingStr": "5"
+            },
+            "sharing": {"linkSharingEnabled": false},
+            "_id": "integrate-psychic-bloom",
+            "name": "Psychic Bloom",
+            "bestiaryId": "6870793497a02efde25f8fa7",
+            "__v": 0
+        },
+        {
+            "flavor": {
+                "faction": "Constructs",
+                "environment": "Dimensional Anomalies",
+                "description": "Medium construct, unaligned",
+                "nameIsProper": false,
+                "imageUrl": "",
+                "descriptionHtml": {}
+            },
+            "stats": {
+                "size": "Medium",
+                "race": "construct",
+                "alignment": "unaligned",
+                "armorType": "Natural Armor",
+                "armorClass": 17,
+                "numHitDie": 10,
+                "hitDieSize": 8,
+                "speed": "30 ft.",
+                "abilityScores": {
+                    "strength": 16,
+                    "dexterity": 10,
+                    "constitution": 16,
+                    "intelligence": 14,
+                    "wisdom": 14,
+                    "charisma": 10
+                },
+                "proficiencyBonus": 2,
+                "damageVulnerabilities": [],
+                "damageResistances": ["Bludgeoning, Piercing, and Slashing from Nonmagical Attacks", "Force"],
+                "damageImmunities": [],
+                "conditionImmunities": ["Charmed", "Exhaustion", "Frightened", "Paralyzed", "Petrified", "Poisoned", "Prone", "Unconscious"],
+                "senses": [
+                    "Darkvision 120 ft.",
+                    "Truesight 30 ft.",
+                    "Passive Perception 12"
+                ],
+                "languages": ["Understands Common (doesn't speak)"],
+                "challengeRating": 4,
+                "experiencePoints": 1100,
+                "legendaryActionsPerRound": 0,
+                "legendaryActionsDescription": "",
+                "savingThrows": [],
+                "skills": [],
+                "additionalAbilities": [
+                    {"name": "Planar Stability", "description": "The Planar Warden is immune to effects that would teleport it or move it to another plane of existence against its will.", "descriptionHtml": {}},
+                    {"name": "Dimensional Seal (3/Day)", "description": "As an action, the Planar Warden can attempt to temporarily seal a minor dimensional seam or temporal flux zone within 30 feet. This requires a successful DC 14 Intelligence (Arcana) check. If successful, the anomaly is suppressed for 1d4 hours.", "descriptionHtml": {}}
+                ],
+                "actions": [
+                    {"name": "Stabilizing Strike", "description": "<em>Melee Weapon Attack:</em> +6 to hit, reach 5 ft., one target. <em>Hit:</em> 10 (2d6 + 3) force damage. If the target is a creature that originated from another plane, it must succeed on a DC 14 Charisma saving throw or be pushed 10 feet away.", "descriptionHtml": {}}
+                ],
+                "reactions": [],
+                "legendaryActions": [],
+                "armorTypeStr": "(Natural Armor)",
+                "abilityScoreModifiers": {
+                    "strength": 3,
+                    "dexterity": 0,
+                    "constitution": 3,
+                    "intelligence": 2,
+                    "wisdom": 2,
+                    "charisma": 0
+                },
+                "abilityScoreStrs": {
+                    "strength": "16 (+3)",
+                    "dexterity": "10 (+0)",
+                    "constitution": "16 (+3)",
+                    "intelligence": "14 (+2)",
+                    "wisdom": "14 (+2)",
+                    "charisma": "10 (+0)"
+                },
+                "extraHealthFromConstitution": 30,
+                "hitPoints": 75,
+                "hitPointsStr": "75 (10d8 + 30)",
+                "passivePerception": 12,
+                "challengeRatingStr": "4"
+            },
+            "sharing": {"linkSharingEnabled": false},
+            "_id": "integrate-planar-warden",
+            "name": "Planar Warden",
+            "bestiaryId": "6870793497a02efde25f8fa7",
+            "__v": 0
+        },
+        {
+            "flavor": {
+                "faction": "Aberrations",
+                "environment": "Planar and Temporal Distortions",
+                "description": "Large aberration, lawful evil",
+                "nameIsProper": false,
+                "imageUrl": "",
+                "descriptionHtml": {}
+            },
+            "stats": {
+                "size": "Large",
+                "race": "aberration",
+                "alignment": "lawful evil",
+                "armorType": "Natural Armor",
+                "armorClass": 18,
+                "numHitDie": 20,
+                "hitDieSize": 10,
+                "speed": "40 ft., fly 40 ft. (hover)",
+                "abilityScores": {
+                    "strength": 18,
+                    "dexterity": 16,
+                    "constitution": 20,
+                    "intelligence": 20,
+                    "wisdom": 18,
+                    "charisma": 22
+                },
+                "proficiencyBonus": 5,
+                "damageVulnerabilities": [],
+                "damageResistances": [
+                    "Bludgeoning, Piercing, and Slashing from Nonmagical Attacks",
+                    "Psychic",
+                    "Necrotic",
+                    "Force"
+                ],
+                "damageImmunities": [],
+                "conditionImmunities": [
+                    "Charmed",
+                    "Exhaustion",
+                    "Frightened",
+                    "Grappled",
+                    "Paralyzed",
+                    "Petrified",
+                    "Prone",
+                    "Restrained",
+                    "Unconscious"
+                ],
+                "senses": [
+                    "Truesight 120 ft.",
+                    "Passive Perception 19"
+                ],
+                "languages": [
+                    "Deep Speech",
+                    "Telepathy 120 ft."
+                ],
+                "challengeRating": 15,
+                "experiencePoints": 13000,
+                "legendaryActionsPerRound": 3,
+                "legendaryActionsDescription": "The Echo Inquisitor can take 3 legendary actions, choosing from the options below. Only one legendary action option can be used at a time and only at the end of another creature's turn. The Echo Inquisitor regains spent legendary actions at the start of its turn.",
+                "savingThrows": [
+                    {"ability": "intelligence", "proficient": true, "modifier": 10, "modifierStr": "Int +10"},
+                    {"ability": "wisdom", "proficient": true, "modifier": 9, "modifierStr": "Wis +9"},
+                    {"ability": "charisma", "proficient": true, "modifier": 11, "modifierStr": "Cha +11"}
+                ],
+                "skills": [],
+                "additionalAbilities": [
+                    {"name": "Temporal Paradox", "description": "When the Echo Inquisitor hits a creature with an attack, the target must succeed on a DC 19 Wisdom saving throw or be afflicted by a temporal paradox. On a failed save, the target takes an extra 3d6 psychic damage and its speed is halved until the end of its next turn as its movements are briefly out of sync with time.", "descriptionHtml": {}},
+                    {"name": "Planar Shift (Recharge 5-6)", "description": "As a bonus action, the Echo Inquisitor can teleport up to 60 feet. After teleporting, it can choose one creature within 10 feet of its destination. That creature must succeed on a DC 19 Charisma saving throw or be banished to a random demiplane for 1 round, returning to its original space (or the nearest unoccupied space) at the start of its next turn.", "descriptionHtml": {}}
+                ],
+                "actions": [
+                    {"name": "Multiattack", "description": "The Echo Inquisitor makes two Temporal Lash attacks.", "descriptionHtml": {}},
+                    {"name": "Temporal Lash", "description": "<em>Melee Weapon Attack:</em> +9 to hit, reach 10 ft., one target. <em>Hit:</em> 14 (2d8 + 5) force damage.", "descriptionHtml": {}}
+                ],
+                "reactions": [],
+                "legendaryActions": [
+                    {"name": "Flicker (1 Action)", "description": "The Echo Inquisitor uses Temporal Paradox.", "descriptionHtml": {}},
+                    {"name": "Echo Gaze (2 Actions)", "description": "The Echo Inquisitor targets one creature it can see within 60 feet. The target must succeed on a DC 19 Wisdom saving throw or be frightened until the end of its next turn.", "descriptionHtml": {}},
+                    {"name": "Reality Warp (3 Actions)", "description": "The Echo Inquisitor causes the ground in a 10-foot radius within 60 feet to become difficult terrain until the start of its next turn, as reality briefly twists.", "descriptionHtml": {}}
+                ],
+                "armorTypeStr": "(Natural Armor)",
+                "abilityScoreModifiers": {
+                    "strength": 4,
+                    "dexterity": 3,
+                    "constitution": 5,
+                    "intelligence": 5,
+                    "wisdom": 4,
+                    "charisma": 6
+                },
+                "abilityScoreStrs": {
+                    "strength": "18 (+4)",
+                    "dexterity": "16 (+3)",
+                    "constitution": "20 (+5)",
+                    "intelligence": "20 (+5)",
+                    "wisdom": "18 (+4)",
+                    "charisma": "22 (+6)"
+                },
+                "extraHealthFromConstitution": 70,
+                "hitPoints": 180,
+                "hitPointsStr": "180 (20d10 + 70)",
+                "passivePerception": 19,
+                "challengeRatingStr": "15"
+            },
+            "sharing": {"linkSharingEnabled": false},
+            "_id": "integrate-echo-inquisitor",
+            "name": "Echo Inquisitor",
             "bestiaryId": "6870793497a02efde25f8fa7",
             "__v": 0
         },
@@ -11157,6 +11734,1246 @@
             "name": "Darkling-Hooter",
             "bestiaryId": "6870797797a02efde25f8fd6",
             "__v": 0
+        },
+        {
+            "flavor": {
+                "faction": "Cellarways Native",
+                "environment": "Dungeon/Stone",
+                "description": "Medium aberration, neutral evil",
+                "nameIsProper": false,
+                "imageUrl": "",
+                "descriptionHtml": {}
+            },
+            "stats": {
+                "size": "Medium",
+                "race": "aberration",
+                "alignment": "neutral evil",
+                "armorType": "Natural Armor",
+                "armorClass": 17,
+                "numHitDie": 10,
+                "speed": "5 ft., burrow 5 ft.",
+                "abilityScores": {
+                    "strength": 16,
+                    "dexterity": 5,
+                    "constitution": 16,
+                    "intelligence": 6,
+                    "wisdom": 13,
+                    "charisma": 18
+                },
+                "proficiencyBonus": 3,
+                "damageVulnerabilities": ["Psychic"],
+                "damageResistances": ["Bludgeoning, piercing, and slashing from nonmagical attacks"],
+                "damageImmunities": [],
+                "conditionImmunities": ["Charmed", "Exhaustion", "Frightened", "Paralyzed", "Petrified", "Poisoned", "Prone"],
+                "senses": ["Blindsight 60 ft. (blind beyond this radius)", "passive Perception 11"],
+                "languages": ["—"],
+                "challengeRating": 5,
+                "experiencePoints": 1800,
+                "legendaryActionsPerRound": 0,
+                "legendaryActionsDescription": "",
+                "savingThrows": [],
+                "skills": [],
+                "additionalAbilities": [
+                    {"name": "False Appearance", "description": "While the grief-stone remains motionless, it is indistinguishable from a normal section of worked stone wall, floor, or ceiling.", "descriptionHtml": {}},
+                    {"name": "Emotional Predator", "description": "Any creature that starts its turn within 30 feet of the grief-stone and is frightened or has taken psychic damage must succeed on a DC 15 Charisma saving throw or have its speed halved until the start of its next turn. The grief-stone heals for half of any psychic damage it deals.", "descriptionHtml": {}}
+                ],
+                "actions": [
+                    {"name": "Multiattack", "description": "The grief-stone makes two Grasping Wall attacks.", "descriptionHtml": {}},
+                    {"name": "Grasping Wall", "description": "Melee Spell Attack: +7 to hit, reach 10 ft., one target. Hit: 11 (2d6 + 4) bludgeoning damage, and the target is grappled (escape DC 14). The grief-stone can have up to two targets grappled at a time.", "descriptionHtml": {}},
+                    {"name": "Whispers of Sorrow (Recharge 5–6)", "description": "The grief-stone emits a wave of psychic despair in a 30-foot radius. Each creature in that area must succeed on a DC 15 Wisdom saving throw or take 18 (4d8) psychic damage and be frightened for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.", "descriptionHtml": {}},
+                    {"name": "Seal the Way (1/Day)", "description": "The grief-stone chooses a doorway, archway, or other opening up to 10 feet wide within 60 feet. The opening is magically sealed with solid stone for 1 hour (dispel magic DC 15). The stone (AC 17, 30 HP) is immune to poison and psychic damage.", "descriptionHtml": {}}
+                ],
+                "reactions": [],
+                "legendaryActions": [],
+                "hitDieSize": 8,
+                "armorTypeStr": "(Natural Armor)",
+                "abilityScoreModifiers": {"strength": 3, "dexterity": -3, "constitution": 3, "intelligence": -2, "wisdom": 1, "charisma": 4},
+                "abilityScoreStrs": {"strength": "16 (+3)", "dexterity": "5 (–3)", "constitution": "16 (+3)", "intelligence": "6 (–2)", "wisdom": "13 (+1)", "charisma": "18 (+4)"},
+                "extraHealthFromConstitution": 30,
+                "hitPoints": 75,
+                "hitPointsStr": "75 (10d8 + 30)",
+                "passivePerception": 11,
+                "challengeRatingStr": "5"
+            },
+            "sharing": {"linkSharingEnabled": false},
+            "_id": "cellarways-grief-stone",
+            "name": "Grief-Stone",
+            "bestiaryId": "cellarways",
+            "__v": 0
+        },
+        {
+            "flavor": {
+                "faction": "Humanoid Darklings",
+                "environment": "Cellarways",
+                "description": "Medium monstrosity, lawful evil",
+                "nameIsProper": false,
+                "imageUrl": "",
+                "descriptionHtml": {}
+            },
+            "stats": {
+                "size": "Medium",
+                "race": "monstrosity",
+                "alignment": "lawful evil",
+                "armorType": "Natural Armor",
+                "armorClass": 15,
+                "numHitDie": 9,
+                "speed": "30 ft.",
+                "abilityScores": {"strength": 16, "dexterity": 16, "constitution": 16, "intelligence": 10, "wisdom": 14, "charisma": 13},
+                "proficiencyBonus": 2,
+                "damageVulnerabilities": ["Radiant"],
+                "damageResistances": [],
+                "damageImmunities": [],
+                "conditionImmunities": [],
+                "senses": ["Darkvision 120 ft.", "passive Perception 15"],
+                "languages": ["Common", "Infernal"],
+                "challengeRating": 3,
+                "experiencePoints": 700,
+                "legendaryActionsPerRound": 0,
+                "legendaryActionsDescription": "",
+                "savingThrows": [],
+                "skills": [
+                    {"name": "Perception", "proficient": true, "modifier": 5, "modifierStr": "Perception +5"},
+                    {"name": "Stealth", "proficient": true, "modifier": 6, "modifierStr": "Stealth +6"},
+                    {"name": "Intimidation", "proficient": true, "modifier": 4, "modifierStr": "Intimidation +4"}
+                ],
+                "additionalAbilities": [
+                    {"name": "Shadowmist Jaunt", "description": "As a bonus action, the hall monitor can teleport up to 30 feet to an unoccupied space it can see. A 5-foot-radius cloud of magical darkness fills the space it left until the start of its next turn.", "descriptionHtml": {}},
+                    {"name": "Keen Senses", "description": "The hall monitor has advantage on Wisdom (Perception) checks that rely on sight or hearing.", "descriptionHtml": {}}
+                ],
+                "actions": [
+                    {"name": "Multiattack", "description": "The hall monitor makes two attacks with its Gloom Rod.", "descriptionHtml": {}},
+                    {"name": "Gloom Rod", "description": "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 7 (1d8 + 3) bludgeoning damage plus 4 (1d8) necrotic damage.", "descriptionHtml": {}},
+                    {"name": "Hey, Stop!! (Recharge 5-6)", "description": "The hall monitor targets one creature it can see within 30 feet. The target must succeed on a DC 13 Wisdom saving throw or its speed is reduced to 0 until the end of its next turn.", "descriptionHtml": {}}
+                ],
+                "reactions": [],
+                "legendaryActions": [],
+                "hitDieSize": 8,
+                "armorTypeStr": "(Natural Armor)",
+                "abilityScoreModifiers": {"strength": 3, "dexterity": 3, "constitution": 3, "intelligence": 0, "wisdom": 2, "charisma": 1},
+                "abilityScoreStrs": {"strength": "16 (+3)", "dexterity": "16 (+3)", "constitution": "16 (+3)", "intelligence": "10 (+0)", "wisdom": "14 (+2)", "charisma": "13 (+1)"},
+                "extraHealthFromConstitution": 27,
+                "hitPoints": 67,
+                "hitPointsStr": "67 (9d8 + 27)",
+                "passivePerception": 15,
+                "challengeRatingStr": "3"
+            },
+            "sharing": {"linkSharingEnabled": false},
+            "_id": "cellarways-darkling-hall-monitor",
+            "name": "Darkling Hall Monitor",
+            "bestiaryId": "cellarways",
+            "__v": 0
+        },
+        {
+            "flavor": {"faction": "Humanoid Darklings", "environment": "Cellarways", "description": "Medium monstrosity, lawful evil", "nameIsProper": false, "imageUrl": "", "descriptionHtml": {}},
+            "stats": {
+                "size": "Medium",
+                "race": "monstrosity",
+                "alignment": "lawful evil",
+                "armorType": "Natural Armor",
+                "armorClass": 16,
+                "numHitDie": 12,
+                "speed": "30 ft.",
+                "abilityScores": {"strength": 18, "dexterity": 14, "constitution": 16, "intelligence": 11, "wisdom": 14, "charisma": 16},
+                "proficiencyBonus": 3,
+                "damageVulnerabilities": ["Radiant"],
+                "damageResistances": [],
+                "damageImmunities": [],
+                "conditionImmunities": ["Frightened"],
+                "senses": ["Darkvision 120 ft.", "passive Perception 15"],
+                "languages": ["Common", "Infernal", "Telepathy 60 ft."],
+                "challengeRating": 5,
+                "experiencePoints": 1800,
+                "legendaryActionsPerRound": 0,
+                "legendaryActionsDescription": "",
+                "savingThrows": [
+                    {"ability": "strength", "proficient": true, "modifier": 7, "modifierStr": "Str +7"},
+                    {"ability": "constitution", "proficient": true, "modifier": 6, "modifierStr": "Con +6"}
+                ],
+                "skills": [
+                    {"name": "Athletics", "proficient": true, "modifier": 7, "modifierStr": "Athletics +7"},
+                    {"name": "Intimidation", "proficient": true, "modifier": 6, "modifierStr": "Intimidation +6"},
+                    {"name": "Perception", "proficient": true, "modifier": 5, "modifierStr": "Perception +5"}
+                ],
+                "additionalAbilities": [
+                    {"name": "Aura of Order", "description": "Any creature that starts its turn within 20 feet of the Professor must succeed on a DC 14 Wisdom saving throw or be unable to use the Dash or Disengage action until the start of its next turn.", "descriptionHtml": {}},
+                    {"name": "Lesson in Pain", "description": "When a creature within 5 feet hits the Professor with a melee attack, the Professor can use its reaction to make a Rod of Correction attack against that creature.", "descriptionHtml": {}}
+                ],
+                "actions": [
+                    {"name": "Multiattack", "description": "The Professor makes two attacks with its Rod of Correction.", "descriptionHtml": {}},
+                    {"name": "Rod of Correction", "description": "Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 11 (2d6 + 4) bludgeoning damage plus 7 (2d6) psychic damage.", "descriptionHtml": {}},
+                    {"name": "Spank! (Recharge 5-6)", "description": "Melee Spell Attack: +7 to hit, reach 5 ft., one target. Hit: 18 (4d8) force damage, and the target must succeed on a DC 14 Constitution saving throw or be stunned until the end of its next turn. On a miss, the target still takes half damage and is not stunned.", "descriptionHtml": {}}
+                ],
+                "reactions": [],
+                "legendaryActions": [],
+                "hitDieSize": 8,
+                "armorTypeStr": "(Natural Armor)",
+                "abilityScoreModifiers": {"strength": 4, "dexterity": 2, "constitution": 3, "intelligence": 0, "wisdom": 2, "charisma": 3},
+                "abilityScoreStrs": {"strength": "18 (+4)", "dexterity": "14 (+2)", "constitution": "16 (+3)", "intelligence": "11 (+0)", "wisdom": "14 (+2)", "charisma": "16 (+3)"},
+                "extraHealthFromConstitution": 36,
+                "hitPoints": 90,
+                "hitPointsStr": "90 (12d8 + 36)",
+                "passivePerception": 15,
+                "challengeRatingStr": "5"
+            },
+            "sharing": {"linkSharingEnabled": false},
+            "_id": "cellarways-detention-professor-weapon",
+            "name": "Darkling Detention Professor (Weapon Specialist)",
+            "bestiaryId": "cellarways",
+            "__v": 0
+        },
+        {
+            "flavor": {"faction": "Humanoid Darklings", "environment": "Cellarways", "description": "Medium monstrosity, lawful evil", "nameIsProper": false, "imageUrl": "", "descriptionHtml": {}},
+            "stats": {
+                "size": "Medium",
+                "race": "monstrosity",
+                "alignment": "lawful evil",
+                "armorType": "Natural Armor",
+                "armorClass": 14,
+                "numHitDie": 12,
+                "speed": "30 ft.",
+                "abilityScores": {"strength": 11, "dexterity": 14, "constitution": 14, "intelligence": 18, "wisdom": 15, "charisma": 16},
+                "proficiencyBonus": 3,
+                "damageVulnerabilities": ["Radiant"],
+                "damageResistances": [],
+                "damageImmunities": [],
+                "conditionImmunities": ["Frightened"],
+                "senses": ["Darkvision 120 ft.", "passive Perception 12"],
+                "languages": ["Common", "Infernal", "Telepathy 60 ft."],
+                "challengeRating": 5,
+                "experiencePoints": 1800,
+                "legendaryActionsPerRound": 0,
+                "legendaryActionsDescription": "",
+                "savingThrows": [
+                    {"ability": "intelligence", "proficient": true, "modifier": 7, "modifierStr": "Int +7"},
+                    {"ability": "wisdom", "proficient": true, "modifier": 5, "modifierStr": "Wis +5"}
+                ],
+                "skills": [
+                    {"name": "Arcana", "proficient": true, "modifier": 7, "modifierStr": "Arcana +7"},
+                    {"name": "Deception", "proficient": true, "modifier": 6, "modifierStr": "Deception +6"},
+                    {"name": "Insight", "proficient": true, "modifier": 5, "modifierStr": "Insight +5"}
+                ],
+                "additionalAbilities": [
+                    {"name": "Spellcasting", "description": "The Professor is an 8th-level spellcaster. Spell save DC 15, +7 to hit with spell attacks. Cantrips (at will): Mage Hand, Minor Illusion, Ray of Frost; 1st (4 slots): Command, Magic Missile, Shield; 2nd (3): Hold Person, Suggestion; 3rd (3): Counterspell, Fear; 4th (2): Banishment.", "descriptionHtml": {}},
+                    {"name": "Strict Scrutiny", "description": "As a bonus action, the Professor targets one creature it can see within 60 feet. The Professor has advantage on its next spell attack roll against that creature before the end of its next turn.", "descriptionHtml": {}}
+                ],
+                "actions": [
+                    {"name": "Punishing Touch", "description": "Melee Spell Attack: +7 to hit, reach 5 ft., one target. Hit: 18 (4d8) psychic damage.", "descriptionHtml": {}},
+                    {"name": "Spank! (Spell, Cantrip)", "description": "A bolt of disciplinary energy at one creature within 60 feet. The target must succeed on a DC 15 Wisdom saving throw or take 1 force damage and be paralyzed until the end of their next turn (halved movement on a successful save). The target can repeat the saving throw at the end of each of its turns, ending the effect on a success (retaining halved movement until then).", "descriptionHtml": {}}
+                ],
+                "reactions": [],
+                "legendaryActions": [],
+                "hitDieSize": 8,
+                "armorTypeStr": "(Natural Armor)",
+                "abilityScoreModifiers": {"strength": 0, "dexterity": 2, "constitution": 2, "intelligence": 4, "wisdom": 2, "charisma": 3},
+                "abilityScoreStrs": {"strength": "11 (+0)", "dexterity": "14 (+2)", "constitution": "14 (+2)", "intelligence": "18 (+4)", "wisdom": "15 (+2)", "charisma": "16 (+3)"},
+                "extraHealthFromConstitution": 24,
+                "hitPoints": 78,
+                "hitPointsStr": "78 (12d8 + 24)",
+                "passivePerception": 12,
+                "challengeRatingStr": "5"
+            },
+            "sharing": {"linkSharingEnabled": false},
+            "_id": "cellarways-detention-professor-mage",
+            "name": "Darkling Detention Professor (Mage Specialist)",
+            "bestiaryId": "cellarways",
+            "__v": 0
+        },
+        {
+            "flavor": {"faction": "Darkformes", "environment": "Cellarways", "description": "Large monstrosity, lawful evil", "nameIsProper": false, "imageUrl": "", "descriptionHtml": {}},
+            "stats": {
+                "size": "Large",
+                "race": "monstrosity",
+                "alignment": "lawful evil",
+                "armorType": "Natural Armor",
+                "armorClass": 17,
+                "numHitDie": 15,
+                "speed": "40 ft., teleport 20 ft.",
+                "abilityScores": {"strength": 20, "dexterity": 16, "constitution": 20, "intelligence": 18, "wisdom": 16, "charisma": 18},
+                "proficiencyBonus": 4,
+                "damageVulnerabilities": ["Radiant"],
+                "damageResistances": ["Necrotic", "Bludgeoning, piercing, and slashing from nonmagical attacks"],
+                "damageImmunities": [],
+                "conditionImmunities": ["Charmed", "Frightened"],
+                "senses": ["Truesight 60 ft.", "Darkvision 120 ft.", "passive Perception 17"],
+                "languages": ["All", "Telepathy 120 ft."],
+                "challengeRating": 9,
+                "experiencePoints": 5000,
+                "legendaryActionsPerRound": 2,
+                "legendaryActionsDescription": "The Dean can take 2 legendary actions, choosing from the options listed.",
+                "savingThrows": [
+                    {"ability": "strength", "proficient": true, "modifier": 9, "modifierStr": "Str +9"},
+                    {"ability": "constitution", "proficient": true, "modifier": 9, "modifierStr": "Con +9"},
+                    {"ability": "intelligence", "proficient": true, "modifier": 8, "modifierStr": "Int +8"},
+                    {"ability": "charisma", "proficient": true, "modifier": 8, "modifierStr": "Cha +8"}
+                ],
+                "skills": [
+                    {"name": "Athletics", "proficient": true, "modifier": 9, "modifierStr": "Athletics +9"},
+                    {"name": "Intimidation", "proficient": true, "modifier": 8, "modifierStr": "Intimidation +8"},
+                    {"name": "Perception", "proficient": true, "modifier": 7, "modifierStr": "Perception +7"}
+                ],
+                "additionalAbilities": [
+                    {"name": "Legendary Resistance (2/Day)", "description": "If the Dean fails a saving throw, it can choose to succeed instead.", "descriptionHtml": {}},
+                    {"name": "Inescapable Pursuit", "description": "As a bonus action, the Dean teleports up to 20 feet to an unoccupied space it can see. Opportunity attacks made against it have disadvantage.", "descriptionHtml": {}},
+                    {"name": "Terrifying Presence", "description": "Each creature of the Dean's choice within 30 feet and aware of it must succeed on a DC 16 Wisdom saving throw or become frightened for 1 minute. A creature repeats the save at the end of each of its turns, ending the effect on a success (immune for 24 hours on a success).", "descriptionHtml": {}}
+                ],
+                "actions": [
+                    {"name": "Multiattack", "description": "The Dean makes three attacks: two with its Punitive Strike and one with its Grasping Shadow.", "descriptionHtml": {}},
+                    {"name": "Punitive Strike", "description": "Melee Weapon Attack: +9 to hit, reach 10 ft., one target. Hit: 14 (2d8 + 5) bludgeoning damage plus 9 (2d8) psychic damage.", "descriptionHtml": {}},
+                    {"name": "Grasping Shadow", "description": "Ranged Spell Attack: +8 to hit, range 60 ft., one target. Hit: The target is grappled by shadowy tendrils (escape DC 16). Until this grapple ends, the target is restrained, and the Dean can't use Grasping Shadow on another target.", "descriptionHtml": {}},
+                    {"name": "Dean's Decree (Recharge 5–6)", "description": "Each creature in a 30-foot radius must make a DC 16 Constitution saving throw. On a failed save, a creature takes 36 (8d8) psychic damage and is stunned for 1 minute. On a successful save, a creature takes half as much damage and is not stunned. A stunned creature repeats the save at the end of each of its turns, ending on a success.", "descriptionHtml": {}}
+                ],
+                "reactions": [],
+                "legendaryActions": [
+                    {"name": "Teleport", "description": "The Dean uses its Inescapable Pursuit.", "descriptionHtml": {}},
+                    {"name": "Strike", "description": "The Dean makes one Punitive Strike attack.", "descriptionHtml": {}},
+                    {"name": "Cast a Cantrip (Costs 2 Actions)", "description": "The Dean casts a cantrip (spell save DC 16).", "descriptionHtml": {}}
+                ],
+                "hitDieSize": 10,
+                "armorTypeStr": "(Natural Armor)",
+                "abilityScoreModifiers": {"strength": 5, "dexterity": 3, "constitution": 5, "intelligence": 4, "wisdom": 3, "charisma": 4},
+                "abilityScoreStrs": {"strength": "20 (+5)", "dexterity": "16 (+3)", "constitution": "20 (+5)", "intelligence": "18 (+4)", "wisdom": "16 (+3)", "charisma": "18 (+4)"},
+                "extraHealthFromConstitution": 75,
+                "hitPoints": 157,
+                "hitPointsStr": "157 (15d10 + 75)",
+                "passivePerception": 17,
+                "challengeRatingStr": "9"
+            },
+            "sharing": {"linkSharingEnabled": false},
+            "_id": "cellarways-disciplinary-dean",
+            "name": "Darkforme Disciplinary Dean",
+            "bestiaryId": "cellarways",
+            "__v": 0
+        },
+        {
+            "flavor": {"faction": "Dark Dimension", "environment": "Incursion Team", "description": "Medium humanoid, lawful evil", "nameIsProper": false, "imageUrl": "", "descriptionHtml": {}},
+            "stats": {
+                "size": "Medium",
+                "race": "humanoid",
+                "alignment": "lawful evil",
+                "armorType": "Composite Weave",
+                "armorClass": 15,
+                "numHitDie": 8,
+                "speed": "30 ft.",
+                "abilityScores": {"strength": 16, "dexterity": 14, "constitution": 14, "intelligence": 12, "wisdom": 10, "charisma": 11},
+                "proficiencyBonus": 2,
+                "damageVulnerabilities": [],
+                "damageResistances": [],
+                "damageImmunities": [],
+                "conditionImmunities": [],
+                "senses": ["Darkvision 60 ft.", "passive Perception 12"],
+                "languages": ["Common", "Infernal"],
+                "challengeRating": 2,
+                "experiencePoints": 450,
+                "legendaryActionsPerRound": 0,
+                "legendaryActionsDescription": "",
+                "savingThrows": [],
+                "skills": [
+                    {"name": "Athletics", "proficient": true, "modifier": 5, "modifierStr": "Athletics +5"},
+                    {"name": "Perception", "proficient": true, "modifier": 2, "modifierStr": "Perception +2"}
+                ],
+                "additionalAbilities": [
+                    {"name": "Breaching Tactics", "description": "The Infiltrator has advantage on an attack roll against a creature if at least one of the Infiltrator's allies is within 5 feet of the creature and the ally isn't incapacitated.", "descriptionHtml": {}}
+                ],
+                "actions": [
+                    {"name": "Multiattack", "description": "The Infiltrator makes two attacks with its Arc-Saber.", "descriptionHtml": {}},
+                    {"name": "Arc-Saber", "description": "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 7 (1d8 + 3) slashing damage plus 2 (1d4) lightning damage.", "descriptionHtml": {}},
+                    {"name": "Magitech Scattergun (Recharge 4–6)", "description": "The Infiltrator fires its weapon in a 15-foot cone. Each creature in that area must make a DC 13 Dexterity saving throw, taking 18 (4d8) piercing damage on a failed save, or half as much damage on a success.", "descriptionHtml": {}}
+                ],
+                "reactions": [],
+                "legendaryActions": [],
+                "hitDieSize": 8,
+                "armorTypeStr": "(Composite Weave)",
+                "abilityScoreModifiers": {"strength": 3, "dexterity": 2, "constitution": 2, "intelligence": 1, "wisdom": 0, "charisma": 0},
+                "abilityScoreStrs": {"strength": "16 (+3)", "dexterity": "14 (+2)", "constitution": "14 (+2)", "intelligence": "12 (+1)", "wisdom": "10 (+0)", "charisma": "11 (+0)"},
+                "extraHealthFromConstitution": 16,
+                "hitPoints": 52,
+                "hitPointsStr": "52 (8d8 + 16)",
+                "passivePerception": 12,
+                "challengeRatingStr": "2"
+            },
+            "sharing": {"linkSharingEnabled": false},
+            "_id": "cellarways-dd-infiltrator",
+            "name": "Dark Dimension Infiltrator",
+            "bestiaryId": "cellarways",
+            "__v": 0
+        },
+        {
+            "flavor": {"faction": "Dark Dimension", "environment": "Incursion Team", "description": "Medium humanoid, lawful evil (magitech researcher)", "nameIsProper": false, "imageUrl": "src/assets/images/Monsters/darkdimensionvoidscholar.webp", "descriptionHtml": {}},
+            "stats": {
+                "size": "Medium",
+                "race": "humanoid",
+                "alignment": "lawful evil",
+                "armorType": "Composite Weave",
+                "armorClass": 15,
+                "numHitDie": 8,
+                "hitDieSize": 8,
+                "speed": "30 ft.",
+                "abilityScores": {"strength": 12, "dexterity": 16, "constitution": 14, "intelligence": 14, "wisdom": 10, "charisma": 12},
+                "proficiencyBonus": 2,
+                "damageVulnerabilities": [],
+                "damageResistances": [],
+                "damageImmunities": [],
+                "conditionImmunities": [],
+                "senses": ["Darkvision 60 ft.", "passive Perception 12"],
+                "languages": ["Common", "Infernal"],
+                "challengeRating": 2,
+                "experiencePoints": 450,
+                "legendaryActionsPerRound": 0,
+                "legendaryActionsDescription": "",
+                "savingThrows": [],
+                "skills": [
+                    {"name": "Arcana", "proficient": true, "modifier": 4, "modifierStr": "Arcana +4"},
+                    {"name": "Perception", "proficient": true, "modifier": 2, "modifierStr": "Perception +2"}
+                ],
+                "additionalAbilities": [
+                    {"name": "Magitech Savant", "description": "The Void Scholar has advantage on Intelligence (Arcana) checks made to analyze, disable, or operate magitech devices.", "descriptionHtml": {}},
+                    {"name": "Phase Step (Recharge 5–6)", "description": "As a bonus action, the Void Scholar magically teleports up to 20 feet to an unoccupied space it can see.", "descriptionHtml": {}}
+                ],
+                "actions": [
+                    {"name": "Multiattack", "description": "The Void Scholar makes two attacks: any combination of Vibro-Dagger and Force Bolt.", "descriptionHtml": {}},
+                    {"name": "Vibro-Dagger", "description": "<em>Melee Weapon Attack:</em> +5 to hit, reach 5 ft., one target. <em>Hit:</em> 7 (1d4 + 3) piercing damage plus 3 (1d6) thunder damage.", "descriptionHtml": {}},
+                    {"name": "Force Bolt", "description": "<em>Ranged Spell Attack:</em> +4 to hit, range 60 ft., one target. <em>Hit:</em> 9 (2d6 + 2) force damage.", "descriptionHtml": {}},
+                    {"name": "Null Pulse (Recharge 5–6)", "description": "The Void Scholar emits destabilizing energy in a 15-foot cone. Each creature in that area must make a DC 12 Dexterity saving throw, taking 14 (4d6) force damage on a failed save, or half as much on a success.", "descriptionHtml": {}}
+                ],
+                "reactions": [],
+                "legendaryActions": [],
+                "armorTypeStr": "(Composite Weave)",
+                "abilityScoreModifiers": {"strength": 1, "dexterity": 3, "constitution": 2, "intelligence": 2, "wisdom": 0, "charisma": 1},
+                "abilityScoreStrs": {"strength": "12 (+1)", "dexterity": "16 (+3)", "constitution": "14 (+2)", "intelligence": "14 (+2)", "wisdom": "10 (+0)", "charisma": "12 (+1)"},
+                "extraHealthFromConstitution": 16,
+                "hitPoints": 52,
+                "hitPointsStr": "52 (8d8 + 16)",
+                "passivePerception": 12,
+                "challengeRatingStr": "2"
+            },
+            "sharing": {"linkSharingEnabled": false},
+            "_id": "cellarways-dd-void-scholar",
+            "name": "Dark Dimension Void Scholar",
+            "bestiaryId": "cellarways",
+            "__v": 0
+        },
+        {
+            "flavor": {"faction": "Dark Dimension", "environment": "Incursion Team", "description": "Medium humanoid, lawful evil", "nameIsProper": false, "imageUrl": "", "descriptionHtml": {}},
+            "stats": {
+                "size": "Medium",
+                "race": "humanoid",
+                "alignment": "lawful evil",
+                "armorType": "Reinforced Weave, Shield",
+                "armorClass": 17,
+                "numHitDie": 13,
+                "speed": "30 ft.",
+                "abilityScores": {"strength": 18, "dexterity": 12, "constitution": 16, "intelligence": 10, "wisdom": 12, "charisma": 14},
+                "proficiencyBonus": 3,
+                "damageVulnerabilities": [],
+                "damageResistances": [],
+                "damageImmunities": [],
+                "conditionImmunities": [],
+                "senses": ["Darkvision 60 ft.", "passive Perception 11"],
+                "languages": ["Common", "Infernal"],
+                "challengeRating": 5,
+                "experiencePoints": 1800,
+                "legendaryActionsPerRound": 0,
+                "legendaryActionsDescription": "",
+                "savingThrows": [
+                    {"ability": "strength", "proficient": true, "modifier": 7, "modifierStr": "Str +7"},
+                    {"ability": "constitution", "proficient": true, "modifier": 6, "modifierStr": "Con +6"}
+                ],
+                "skills": [
+                    {"name": "Athletics", "proficient": true, "modifier": 7, "modifierStr": "Athletics +7"},
+                    {"name": "Intimidation", "proficient": true, "modifier": 5, "modifierStr": "Intimidation +5"}
+                ],
+                "additionalAbilities": [
+                    {"name": "Aggressive", "description": "As a bonus action, the Vanguard can move up to its speed toward a hostile creature that it can see.", "descriptionHtml": {}},
+                    {"name": "Shield Guard", "description": "When a creature the Vanguard can see attacks a target other than the Vanguard within 5 feet of it, the Vanguard can use its reaction to impose disadvantage on the attack roll.", "descriptionHtml": {}}
+                ],
+                "actions": [
+                    {"name": "Multiattack", "description": "The Vanguard makes two attacks with its Kinetic Maul.", "descriptionHtml": {}},
+                    {"name": "Kinetic Maul", "description": "Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 13 (2d8 + 4) bludgeoning damage. The first time the Vanguard hits a creature on its turn, that creature must succeed on a DC 14 Constitution saving throw or be stunned until the start of the Vanguard's next turn.", "descriptionHtml": {}},
+                    {"name": "Magitech Handcannon", "description": "Ranged Weapon Attack: +4 to hit, range 30/90 ft., one target. Hit: 8 (2d6 + 1) piercing damage.", "descriptionHtml": {}}
+                ],
+                "reactions": [],
+                "legendaryActions": [],
+                "hitDieSize": 8,
+                "armorTypeStr": "(Reinforced Weave, Shield)",
+                "abilityScoreModifiers": {"strength": 4, "dexterity": 1, "constitution": 3, "intelligence": 0, "wisdom": 1, "charisma": 2},
+                "abilityScoreStrs": {"strength": "18 (+4)", "dexterity": "12 (+1)", "constitution": "16 (+3)", "intelligence": "10 (+0)", "wisdom": "12 (+1)", "charisma": "14 (+2)"},
+                "extraHealthFromConstitution": 39,
+                "hitPoints": 97,
+                "hitPointsStr": "97 (13d8 + 39)",
+                "passivePerception": 11,
+                "challengeRatingStr": "5"
+            },
+            "sharing": {"linkSharingEnabled": false},
+            "_id": "cellarways-dd-vanguard",
+            "name": "Dark Dimension Vanguard",
+            "bestiaryId": "cellarways",
+            "__v": 0
+        },
+        {
+            "flavor": {"faction": "Dark Dimension", "environment": "Incursion Team", "description": "Medium humanoid, lawful evil", "nameIsProper": false, "imageUrl": "", "descriptionHtml": {}},
+            "stats": {
+                "size": "Medium",
+                "race": "humanoid",
+                "alignment": "lawful evil",
+                "armorType": "Magitech Plate",
+                "armorClass": 18,
+                "numHitDie": 20,
+                "speed": "30 ft.",
+                "abilityScores": {"strength": 20, "dexterity": 14, "constitution": 16, "intelligence": 14, "wisdom": 14, "charisma": 18},
+                "proficiencyBonus": 3,
+                "damageVulnerabilities": [],
+                "damageResistances": [],
+                "damageImmunities": [],
+                "conditionImmunities": [],
+                "senses": ["Darkvision 60 ft.", "passive Perception 16"],
+                "languages": ["Common", "Infernal", "Abyssal"],
+                "challengeRating": 7,
+                "experiencePoints": 2900,
+                "legendaryActionsPerRound": 2,
+                "legendaryActionsDescription": "The Justicar can take 2 legendary actions per round.",
+                "savingThrows": [
+                    {"ability": "strength", "proficient": true, "modifier": 9, "modifierStr": "Str +9"},
+                    {"ability": "constitution", "proficient": true, "modifier": 7, "modifierStr": "Con +7"},
+                    {"ability": "charisma", "proficient": true, "modifier": 8, "modifierStr": "Cha +8"}
+                ],
+                "skills": [
+                    {"name": "Athletics", "proficient": true, "modifier": 9, "modifierStr": "Athletics +9"},
+                    {"name": "Insight", "proficient": true, "modifier": 6, "modifierStr": "Insight +6"},
+                    {"name": "Intimidation", "proficient": true, "modifier": 8, "modifierStr": "Intimidation +8"},
+                    {"name": "Perception", "proficient": true, "modifier": 6, "modifierStr": "Perception +6"}
+                ],
+                "additionalAbilities": [
+                    {"name": "Aura of Determination", "description": "Any ally within 10 feet of the Justicar has advantage on saving throws against being frightened or charmed.", "descriptionHtml": {}},
+                    {"name": "Indomitable (2/Day)", "description": "The Justicar can reroll a saving throw that it fails. It must use the new roll.", "descriptionHtml": {}}
+                ],
+                "actions": [
+                    {"name": "Multiattack", "description": "The Justicar makes three attacks with its Executioner's Axe.", "descriptionHtml": {}},
+                    {"name": "Executioner's Axe", "description": "Melee Weapon Attack: +9 to hit, reach 5 ft., one target. Hit: 11 (1d12 + 5) slashing damage plus 4 (1d8) force damage.", "descriptionHtml": {}},
+                    {"name": "Condemn (Recharge 5–6)", "description": "The Justicar chooses one creature it can see within 30 feet. For the next minute, all attacks made against the target by the Justicar and its allies score a critical hit on a roll of 19 or 20.", "descriptionHtml": {}}
+                ],
+                "reactions": [],
+                "legendaryActions": [
+                    {"name": "Attack", "description": "The Justicar makes one Executioner's Axe attack.", "descriptionHtml": {}},
+                    {"name": "Reposition", "description": "The Justicar moves up to half its speed without provoking opportunity attacks.", "descriptionHtml": {}},
+                    {"name": "Rallying Cry (Costs 2 Actions)", "description": "Each ally within 30 feet that can hear the Justicar gains 10 temporary hit points.", "descriptionHtml": {}}
+                ],
+                "hitDieSize": 10,
+                "armorTypeStr": "(Magitech Plate)",
+                "abilityScoreModifiers": {"strength": 5, "dexterity": 2, "constitution": 3, "intelligence": 2, "wisdom": 2, "charisma": 4},
+                "abilityScoreStrs": {"strength": "20 (+5)", "dexterity": "14 (+2)", "constitution": "16 (+3)", "intelligence": "14 (+2)", "wisdom": "14 (+2)", "charisma": "18 (+4)"},
+                "extraHealthFromConstitution": 60,
+                "hitPoints": 170,
+                "hitPointsStr": "170 (20d10 + 60)",
+                "passivePerception": 16,
+                "challengeRatingStr": "7"
+            },
+            "sharing": {"linkSharingEnabled": false},
+            "_id": "cellarways-dd-justicar",
+            "name": "Dark Dimension Justicar",
+            "bestiaryId": "cellarways",
+            "__v": 0
+        },
+        {
+            "flavor": {"faction": "Slime Darklings", "environment": "Cellarways", "description": "Tiny ooze, chaotic evil (harmless)", "nameIsProper": false, "imageUrl": "", "descriptionHtml": {}},
+            "stats": {
+                "size": "Tiny",
+                "race": "ooze",
+                "alignment": "chaotic evil",
+                "armorType": "",
+                "armorClass": 8,
+                "numHitDie": 1,
+                "speed": "10 ft.",
+                "abilityScores": {"strength": 2, "dexterity": 10, "constitution": 8, "intelligence": 3, "wisdom": 6, "charisma": 5},
+                "proficiencyBonus": 2,
+                "damageVulnerabilities": ["Radiant"],
+                "damageResistances": [],
+                "damageImmunities": ["Acid"],
+                "conditionImmunities": ["Blinded", "Charmed", "Deafened", "Exhaustion", "Frightened", "Prone"],
+                "senses": ["Blindsight 30 ft. (blind beyond this radius)", "passive Perception 8"],
+                "languages": ["—"],
+                "challengeRating": 0,
+                "experiencePoints": 10,
+                "legendaryActionsPerRound": 0,
+                "legendaryActionsDescription": "",
+                "savingThrows": [],
+                "skills": [],
+                "additionalAbilities": [
+                    {"name": "Fusion", "description": "As a bonus action, fuses with another slime-like darkling within 5 feet. The target darkling gains 2d6 hit points; the Tiny Slime Darkling is consumed.", "descriptionHtml": {}},
+                    {"name": "Harmless Presence", "description": "Tiny Slime Darklings are incapable of causing harm or dealing damage. Their sole purpose is aiding larger slimes through fusion and healing.", "descriptionHtml": {}}
+                ],
+                "actions": [],
+                "reactions": [],
+                "legendaryActions": [],
+                "hitDieSize": 4,
+                "abilityScoreModifiers": {"strength": -4, "dexterity": 0, "constitution": -1, "intelligence": -4, "wisdom": -2, "charisma": -3},
+                "abilityScoreStrs": {"strength": "2 (–4)", "dexterity": "10 (+0)", "constitution": "8 (–1)", "intelligence": "3 (–4)", "wisdom": "6 (–2)", "charisma": "5 (–3)"},
+                "extraHealthFromConstitution": -1,
+                "hitPoints": 1,
+                "hitPointsStr": "1 (1d4 – 1)",
+                "passivePerception": 8,
+                "challengeRatingStr": "0"
+            },
+            "sharing": {"linkSharingEnabled": false},
+            "_id": "cellarways-tiny-slime-darkling",
+            "name": "Tiny Slime Darkling",
+            "bestiaryId": "cellarways",
+            "__v": 0
+        },
+        {
+            "flavor": {"faction": "Slime Darklings", "environment": "Cellarways", "description": "Small ooze, chaotic evil", "nameIsProper": false, "imageUrl": "", "descriptionHtml": {}},
+            "stats": {
+                "size": "Small",
+                "race": "ooze",
+                "alignment": "chaotic evil",
+                "armorType": "",
+                "armorClass": 10,
+                "numHitDie": 4,
+                "speed": "15 ft.",
+                "abilityScores": {"strength": 8, "dexterity": 12, "constitution": 12, "intelligence": 4, "wisdom": 8, "charisma": 6},
+                "proficiencyBonus": 2,
+                "damageVulnerabilities": ["Radiant"],
+                "damageResistances": ["Bludgeoning, Piercing"],
+                "damageImmunities": ["Acid"],
+                "conditionImmunities": ["Blinded", "Charmed", "Deafened", "Exhaustion", "Frightened", "Prone"],
+                "senses": ["Blindsight 30 ft. (blind beyond this radius)", "passive Perception 9"],
+                "languages": ["—"],
+                "challengeRating": 0.5,
+                "experiencePoints": 100,
+                "legendaryActionsPerRound": 0,
+                "legendaryActionsDescription": "",
+                "savingThrows": [],
+                "skills": [],
+                "additionalAbilities": [
+                    {"name": "Consume Tiny Slime", "description": "As a bonus action, absorbs a Tiny Slime Darkling within 5 feet, healing for 2d6 hit points.", "descriptionHtml": {}},
+                    {"name": "Split", "description": "When reduced to 0 hit points, splits into two Tiny Slime Darklings instead of dying.", "descriptionHtml": {}}
+                ],
+                "actions": [
+                    {"name": "Pseudopod Strike", "description": "Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) bludgeoning damage and 2 (1d4) acid damage.", "descriptionHtml": {}}
+                ],
+                "reactions": [],
+                "legendaryActions": [],
+                "hitDieSize": 6,
+                "abilityScoreModifiers": {"strength": -1, "dexterity": 1, "constitution": 1, "intelligence": -3, "wisdom": -1, "charisma": -2},
+                "abilityScoreStrs": {"strength": "8 (–1)", "dexterity": "12 (+1)", "constitution": "12 (+1)", "intelligence": "4 (–3)", "wisdom": "8 (–1)", "charisma": "6 (–2)"},
+                "extraHealthFromConstitution": 4,
+                "hitPoints": 18,
+                "hitPointsStr": "18 (4d6 + 4)",
+                "passivePerception": 9,
+                "challengeRatingStr": "1/2"
+            },
+            "sharing": {"linkSharingEnabled": false},
+            "_id": "cellarways-small-slime-darkling",
+            "name": "Small Slime Darkling",
+            "bestiaryId": "cellarways",
+            "__v": 0
+        },
+        {
+            "flavor": {"faction": "Slime Darklings", "environment": "Cellarways", "description": "Small ooze, chaotic evil", "nameIsProper": false, "imageUrl": "", "descriptionHtml": {}},
+            "stats": {
+                "size": "Small",
+                "race": "ooze",
+                "alignment": "chaotic evil",
+                "armorType": "Natural Armor",
+                "armorClass": 12,
+                "numHitDie": 4,
+                "speed": "10 ft.",
+                "abilityScores": {"strength": 8, "dexterity": 10, "constitution": 12, "intelligence": 14, "wisdom": 12, "charisma": 6},
+                "proficiencyBonus": 2,
+                "damageVulnerabilities": ["Radiant"],
+                "damageResistances": ["Bludgeoning, Piercing"],
+                "damageImmunities": ["Acid"],
+                "conditionImmunities": ["Blinded", "Charmed", "Deafened", "Exhaustion", "Frightened", "Prone"],
+                "senses": ["Blindsight 30 ft. (blind beyond this radius)", "passive Perception 11"],
+                "languages": ["—"],
+                "challengeRating": 2,
+                "experiencePoints": 450,
+                "legendaryActionsPerRound": 0,
+                "legendaryActionsDescription": "",
+                "savingThrows": [],
+                "skills": [{"name": "Arcana", "proficient": true, "modifier": 6, "modifierStr": "Arcana +6"}],
+                "additionalAbilities": [
+                    {"name": "Central Command", "description": "As a bonus action, commands slime darklings within 30 feet. Each commanded darkling may move up to 10 feet without provoking opportunity attacks.", "descriptionHtml": {}},
+                    {"name": "Absorb Knowledge", "description": "Can absorb magical essence or arcane writings it touches. Gains advantage on Arcana checks for 1 hour after absorbing; the writing is destroyed.", "descriptionHtml": {}},
+                    {"name": "Consume Tiny Slime", "description": "As a bonus action, absorbs a Tiny Slime Darkling within 5 feet, healing for 2d6 hit points.", "descriptionHtml": {}}
+                ],
+                "actions": [
+                    {"name": "Pseudopod Lash", "description": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) bludgeoning damage and 3 (1d6) acid damage.", "descriptionHtml": {}},
+                    {"name": "Slime Wave (Recharge 5–6)", "description": "Excretes a 15-foot cube of slippery slime. Each creature in the area must succeed on a DC 12 Dexterity saving throw or fall prone. The area becomes difficult terrain until the end of the Cuboid's next turn.", "descriptionHtml": {}}
+                ],
+                "reactions": [],
+                "legendaryActions": [],
+                "hitDieSize": 8,
+                "armorTypeStr": "(Natural Armor)",
+                "abilityScoreModifiers": {"strength": -1, "dexterity": 0, "constitution": 1, "intelligence": 2, "wisdom": 1, "charisma": -2},
+                "abilityScoreStrs": {"strength": "8 (–1)", "dexterity": "10 (+0)", "constitution": "12 (+1)", "intelligence": "14 (+2)", "wisdom": "12 (+1)", "charisma": "6 (–2)"},
+                "extraHealthFromConstitution": 4,
+                "hitPoints": 22,
+                "hitPointsStr": "22 (4d8 + 4)",
+                "passivePerception": 11,
+                "challengeRatingStr": "2"
+            },
+            "sharing": {"linkSharingEnabled": false},
+            "_id": "cellarways-cuboid-slime-darkling",
+            "name": "Small Cuboid Darkling Slime",
+            "bestiaryId": "cellarways",
+            "__v": 0
+        },
+        {
+            "flavor": {"faction": "Slime Darklings", "environment": "Cellarways", "description": "Medium ooze, chaotic evil", "nameIsProper": false, "imageUrl": "", "descriptionHtml": {}},
+            "stats": {
+                "size": "Medium",
+                "race": "ooze",
+                "alignment": "chaotic evil",
+                "armorType": "Natural Armor",
+                "armorClass": 12,
+                "numHitDie": 7,
+                "speed": "15 ft.",
+                "abilityScores": {"strength": 14, "dexterity": 8, "constitution": 14, "intelligence": 6, "wisdom": 10, "charisma": 7},
+                "proficiencyBonus": 2,
+                "damageVulnerabilities": ["Radiant"],
+                "damageResistances": ["Bludgeoning", "Piercing"],
+                "damageImmunities": ["Acid"],
+                "conditionImmunities": ["Blinded", "Charmed", "Deafened", "Exhaustion", "Frightened", "Prone"],
+                "senses": ["Blindsight 30 ft. (blind beyond this radius)", "passive Perception 10"],
+                "languages": ["—"],
+                "challengeRating": 3,
+                "experiencePoints": 700,
+                "legendaryActionsPerRound": 0,
+                "legendaryActionsDescription": "",
+                "savingThrows": [],
+                "skills": [],
+                "additionalAbilities": [
+                    {"name": "Consume Tiny Slime", "description": "As a bonus action, can absorb up to 2 Tiny Slime Darklings within 10 feet, healing for 2d6 hit points per Tiny Slime absorbed.", "descriptionHtml": {}},
+                    {"name": "Wobbling Bulk", "description": "Creatures within 10 feet that can see Big Boi must succeed on a DC 12 Wisdom saving throw or suffer disadvantage on their next attack roll against Big Boi.", "descriptionHtml": {}},
+                    {"name": "Glob Gang Buff", "description": "Allied slime darklings within 30 feet gain +1 AC while Big Boi is within range.", "descriptionHtml": {}}
+                ],
+                "actions": [
+                    {"name": "Pseudopod Slam", "description": "Melee Weapon Attack: +5 to hit, reach 10 ft., one target. Hit: 12 (2d8 + 3) bludgeoning damage and 6 (1d8) acid damage.", "descriptionHtml": {}},
+                    {"name": "Jiggle Quake (Recharge 5–6)", "description": "Generates a localized tremor in a 20-foot radius. Creatures in the area must make a DC 12 Strength saving throw or fall prone. The ground becomes slippery difficult terrain until the end of Big Boi’s next turn.", "descriptionHtml": {}}
+                ],
+                "reactions": [],
+                "legendaryActions": [],
+                "hitDieSize": 8,
+                "armorTypeStr": "(Natural Armor)",
+                "abilityScoreModifiers": {"strength": 2, "dexterity": -1, "constitution": 2, "intelligence": -2, "wisdom": 0, "charisma": -2},
+                "abilityScoreStrs": {"strength": "14 (+2)", "dexterity": "8 (–1)", "constitution": "14 (+2)", "intelligence": "6 (–2)", "wisdom": "10 (+0)", "charisma": "7 (–2)"},
+                "extraHealthFromConstitution": 14,
+                "hitPoints": 45,
+                "hitPointsStr": "45 (7d8 + 14)",
+                "passivePerception": 10,
+                "challengeRatingStr": "3"
+            },
+            "sharing": {"linkSharingEnabled": false},
+            "_id": "cellarways-slime-big-boi",
+            "name": "Darkling Slime Big Boi",
+            "bestiaryId": "cellarways",
+            "__v": 0
+        },
+        {
+            "flavor": {"faction": "Slime Darklings", "environment": "Cellarways", "description": "Large ooze, unaligned", "nameIsProper": false, "imageUrl": "", "descriptionHtml": {}},
+            "stats": {
+                "size": "Large",
+                "race": "ooze",
+                "alignment": "unaligned",
+                "armorType": "Natural Armor",
+                "armorClass": 10,
+                "numHitDie": 8,
+                "speed": "20 ft.",
+                "abilityScores": {"strength": 14, "dexterity": 8, "constitution": 14, "intelligence": 3, "wisdom": 10, "charisma": 5},
+                "proficiencyBonus": 2,
+                "damageVulnerabilities": ["Radiant"],
+                "damageResistances": ["Bludgeoning, Piercing, Slashing from non-magical weapons"],
+                "damageImmunities": ["Acid", "Poison"],
+                "conditionImmunities": ["Blinded", "Charmed", "Deafened", "Exhaustion", "Frightened", "Poisoned", "Prone"],
+                "senses": ["Blindsight 60 ft. (blind beyond this radius)", "passive Perception 10"],
+                "languages": ["—"],
+                "challengeRating": 4,
+                "experiencePoints": 1100,
+                "legendaryActionsPerRound": 0,
+                "legendaryActionsDescription": "",
+                "savingThrows": [],
+                "skills": [],
+                "additionalAbilities": [
+                    {"name": "Indiscriminate Consumption", "description": "Absorbs nonmagical objects in its path. Any nonmagical, unsecured object it moves over is destroyed unless larger than the Cleaner.", "descriptionHtml": {}},
+                    {"name": "Imposing Bulk", "description": "Completely fills a 10-foot-wide hallway or similar confined space, making it nearly impossible to move around without contact.", "descriptionHtml": {}},
+                    {"name": "Deterrent Presence", "description": "Any creature that starts its turn within 10 feet must succeed on a DC 12 Wisdom saving throw or suffer disadvantage on attack rolls against the Cleaner until the start of its next turn.", "descriptionHtml": {}}
+                ],
+                "actions": [
+                    {"name": "Consume and Advance", "description": "The Cleaner moves 10 feet in a straight line. Each creature in its path must succeed on a DC 13 Dexterity saving throw or take 10 (3d6) acid damage and be pushed 5 feet to the side. This movement does not provoke opportunity attacks.", "descriptionHtml": {}},
+                    {"name": "Slime Expulsion (Recharge 5–6)", "description": "Releases a wave of corrosive slime in a 15-foot cone. Each creature in the area must make a DC 13 Constitution saving throw, taking 14 (4d6) acid damage on a failed save or half as much on a success. The area becomes difficult terrain until the end of the Cleaner’s next turn.", "descriptionHtml": {}}
+                ],
+                "reactions": [],
+                "legendaryActions": [],
+                "hitDieSize": 10,
+                "armorTypeStr": "(Natural Armor)",
+                "abilityScoreModifiers": {"strength": 2, "dexterity": -1, "constitution": 2, "intelligence": -4, "wisdom": 0, "charisma": -3},
+                "abilityScoreStrs": {"strength": "14 (+2)", "dexterity": "8 (–1)", "constitution": "14 (+2)", "intelligence": "3 (–4)", "wisdom": "10 (+0)", "charisma": "5 (–3)"},
+                "extraHealthFromConstitution": 16,
+                "hitPoints": 60,
+                "hitPointsStr": "60 (8d10 + 16)",
+                "passivePerception": 10,
+                "challengeRatingStr": "4"
+            },
+            "sharing": {"linkSharingEnabled": false},
+            "_id": "cellarways-mobile-hall-cleaner",
+            "name": "Mobile Hall Cleaner",
+            "bestiaryId": "cellarways",
+            "__v": 0
+        },
+        {
+            "flavor": {"faction": "Slime Darklings", "environment": "Court of the Slimepress", "description": "Small ooze, neutral good", "nameIsProper": false, "imageUrl": "", "descriptionHtml": {}},
+            "stats": {
+                "size": "Small",
+                "race": "ooze",
+                "alignment": "neutral good",
+                "armorType": "Natural Armor",
+                "armorClass": 12,
+                "numHitDie": 8,
+                "speed": "20 ft.",
+                "abilityScores": {"strength": 14, "dexterity": 10, "constitution": 14, "intelligence": 12, "wisdom": 14, "charisma": 18},
+                "proficiencyBonus": 3,
+                "damageVulnerabilities": ["Radiant"],
+                "damageResistances": ["Bludgeoning, Piercing, Slashing from non-magical weapons"],
+                "damageImmunities": ["Acid"],
+                "conditionImmunities": ["Blinded", "Charmed", "Exhaustion", "Frightened", "Poisoned", "Prone"],
+                "senses": ["Blindsight 60 ft. (blind beyond this radius)", "passive Perception 12"],
+                "languages": ["Undercommon"],
+                "challengeRating": 3,
+                "experiencePoints": 700,
+                "legendaryActionsPerRound": 0,
+                "legendaryActionsDescription": "",
+                "savingThrows": [],
+                "skills": [],
+                "additionalAbilities": [
+                    {"name": "Regal Aura", "description": "+1 bonus to saving throws and attack rolls for friendly creatures within 20 feet while in her presence.", "descriptionHtml": {}},
+                    {"name": "Majestic Glow (1/Short Rest)", "description": "Emits a shimmering aura in a 15-foot radius, granting allies temporary hit points equal to +4 Cha and forcing hostile creatures to make a DC 14 Charisma save or be awestruck (stunned) until the end of their next turn.", "descriptionHtml": {}},
+                    {"name": "Glob Entourage", "description": "Always accompanied by 3–6 well-dressed Small Slime Darklings who avoid combat unless the Princess is threatened.", "descriptionHtml": {}}
+                ],
+                "actions": [
+                    {"name": "Pseudopod Tap (Non-Aggressive)", "description": "Melee Weapon Attack: +4 to hit, reach 10 ft., one target. Hit: No damage, but the target must succeed on a DC 14 Dexterity saving throw or be nudged 5 feet in a direction of the Princess's choosing.", "descriptionHtml": {}},
+                    {"name": "Glittering Reassurance (Recharge 5–6)", "description": "Releases a radiant cascade in a 30-foot radius. All creatures in the area regain 10 hit points; hostile creatures must succeed on a DC 14 Wisdom save or be blinded until the end of their next turn.", "descriptionHtml": {}}
+                ],
+                "reactions": [],
+                "legendaryActions": [],
+                "hitDieSize": 10,
+                "armorTypeStr": "(Natural Armor)",
+                "abilityScoreModifiers": {"strength": 2, "dexterity": 0, "constitution": 2, "intelligence": 1, "wisdom": 2, "charisma": 4},
+                "abilityScoreStrs": {"strength": "14 (+2)", "dexterity": "10 (+0)", "constitution": "14 (+2)", "intelligence": "12 (+1)", "wisdom": "14 (+2)", "charisma": "18 (+4)"},
+                "extraHealthFromConstitution": 16,
+                "hitPoints": 60,
+                "hitPointsStr": "60 (8d10 + 16)",
+                "passivePerception": 12,
+                "challengeRatingStr": "3"
+            },
+            "sharing": {"linkSharingEnabled": false},
+            "_id": "cellarways-cube-princess",
+            "name": "Darkling Cube Princess",
+            "bestiaryId": "cellarways",
+            "__v": 0
+        },
+        {
+            "flavor": {"faction": "Slimepress Court", "environment": "Shadow Court", "description": "Medium ooze, lawful evil", "nameIsProper": false, "imageUrl": "", "descriptionHtml": {}},
+            "stats": {
+                "size": "Medium",
+                "race": "ooze",
+                "alignment": "lawful evil",
+                "armorType": "Natural Armor",
+                "armorClass": 13,
+                "numHitDie": 6,
+                "speed": "30 ft.",
+                "abilityScores": {"strength": 10, "dexterity": 12, "constitution": 14, "intelligence": 13, "wisdom": 14, "charisma": 16},
+                "proficiencyBonus": 2,
+                "damageVulnerabilities": [],
+                "damageResistances": ["Bludgeoning, Piercing, and Slashing from nonmagical attacks"],
+                "damageImmunities": [],
+                "conditionImmunities": ["Charmed", "Exhaustion", "Frightened", "Grappled", "Paralyzed", "Petrified", "Prone", "Restrained"],
+                "senses": ["Darkvision 60 ft.", "passive Perception 12"],
+                "languages": ["Common", "Undercommon"],
+                "challengeRating": 2,
+                "experiencePoints": 450,
+                "legendaryActionsPerRound": 0,
+                "legendaryActionsDescription": "",
+                "savingThrows": [],
+                "skills": [],
+                "additionalAbilities": [
+                    {"name": "Amorphous", "description": "Can move through a space as narrow as 1 inch wide without squeezing.", "descriptionHtml": {}},
+                    {"name": "Imperious Announcer", "description": "As a bonus action, projects its voice up to 120 feet. Creatures that hear it must succeed on a DC 13 Wisdom saving throw or have disadvantage on their next attack roll or saving throw against the Slimepress.", "descriptionHtml": {}},
+                    {"name": "Innate Spellcasting (Shadow)", "description": "Spell save DC 13. It can innately cast the following spells, requiring no components: At will: thaumaturgy; 3/day each: command, fog cloud; 1/day: darkness.", "descriptionHtml": {}}
+                ],
+                "actions": [
+                    {"name": "Pseudopod Tap", "description": "Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 4 (1d6 + 1) bludgeoning damage.", "descriptionHtml": {}},
+                    {"name": "Shadow Bolt", "description": "Ranged Spell Attack: +5 to hit, range 60 ft., one target. Hit: 7 (2d4 + 2) necrotic damage.", "descriptionHtml": {}}
+                ],
+                "reactions": [],
+                "legendaryActions": [],
+                "hitDieSize": 8,
+                "armorTypeStr": "(Natural Armor)",
+                "abilityScoreModifiers": {"strength": 0, "dexterity": 1, "constitution": 2, "intelligence": 1, "wisdom": 2, "charisma": 3},
+                "abilityScoreStrs": {"strength": "10 (+0)", "dexterity": "12 (+1)", "constitution": "14 (+2)", "intelligence": "13 (+1)", "wisdom": "14 (+2)", "charisma": "16 (+3)"},
+                "extraHealthFromConstitution": 24,
+                "hitPoints": 78,
+                "hitPointsStr": "78 (12d8 + 24)",
+                "passivePerception": 12,
+                "challengeRatingStr": "2"
+            },
+            "sharing": {"linkSharingEnabled": false},
+            "_id": "cellarways-shadowy-chamberlain",
+            "name": "The Shadowy Chamberlain",
+            "bestiaryId": "cellarways",
+            "__v": 0
+        },
+        {
+            "flavor": {"faction": "Slimepress Court", "environment": "Shadow Court", "description": "Small ooze, lawful evil", "nameIsProper": false, "imageUrl": "", "descriptionHtml": {}},
+            "stats": {
+                "size": "Small",
+                "race": "ooze",
+                "alignment": "lawful evil",
+                "armorType": "Scraps of armor",
+                "armorClass": 14,
+                "numHitDie": 5,
+                "speed": "20 ft.",
+                "abilityScores": {"strength": 12, "dexterity": 10, "constitution": 12, "intelligence": 6, "wisdom": 10, "charisma": 8},
+                "proficiencyBonus": 2,
+                "damageVulnerabilities": [],
+                "damageResistances": ["Bludgeoning", "Piercing"],
+                "damageImmunities": ["Acid"],
+                "conditionImmunities": ["Blinded", "Charmed", "Deafened", "Exhaustion", "Frightened", "Prone"],
+                "senses": ["Blindsight 30 ft. (blind beyond this radius)", "passive Perception 10"],
+                "languages": ["—"],
+                "challengeRating": 0.5,
+                "experiencePoints": 100,
+                "legendaryActionsPerRound": 0,
+                "legendaryActionsDescription": "",
+                "savingThrows": [],
+                "skills": [],
+                "additionalAbilities": [
+                    {"name": "Corrosive Form", "description": "A creature that touches a Viscount or hits it with a melee attack while within 5 feet takes 2 (1d4) acid damage.", "descriptionHtml": {}}
+                ],
+                "actions": [
+                    {"name": "Pseudopod Slam", "description": "Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 4 (1d6 + 1) bludgeoning damage plus 2 (1d4) acid damage.", "descriptionHtml": {}},
+                    {"name": "Acid Glob (Recharge 5–6)", "description": "Ranged Weapon Attack: +2 to hit, range 30/90 ft., one target. Hit: 6 (2d4 + 1) acid damage; on a hit, the target's nonmagical armor or weapon takes a permanent –1 penalty to AC or damage rolls (stacking) until repaired.", "descriptionHtml": {}}
+                ],
+                "reactions": [],
+                "legendaryActions": [],
+                "hitDieSize": 6,
+                "armorTypeStr": "(Scraps of armor)",
+                "abilityScoreModifiers": {"strength": 1, "dexterity": 0, "constitution": 1, "intelligence": -2, "wisdom": 0, "charisma": -1},
+                "abilityScoreStrs": {"strength": "12 (+1)", "dexterity": "10 (+0)", "constitution": "12 (+1)", "intelligence": "6 (–2)", "wisdom": "10 (+0)", "charisma": "8 (–1)"},
+                "extraHealthFromConstitution": 10,
+                "hitPoints": 44,
+                "hitPointsStr": "44 (10d6 + 10)",
+                "passivePerception": 10,
+                "challengeRatingStr": "1/2"
+            },
+            "sharing": {"linkSharingEnabled": false},
+            "_id": "cellarways-viscounts-of-viscera",
+            "name": "The Viscounts of Viscera",
+            "bestiaryId": "cellarways",
+            "__v": 0
+        },
+        {
+            "flavor": {"faction": "Slimepress Court", "environment": "Shadow Court", "description": "Tiny ooze, lawful evil", "nameIsProper": false, "imageUrl": "", "descriptionHtml": {}},
+            "stats": {
+                "size": "Tiny",
+                "race": "ooze",
+                "alignment": "lawful evil",
+                "armorType": "",
+                "armorClass": 11,
+                "numHitDie": 3,
+                "speed": "15 ft., climb 15 ft.",
+                "abilityScores": {"strength": 6, "dexterity": 12, "constitution": 12, "intelligence": 8, "wisdom": 10, "charisma": 7},
+                "proficiencyBonus": 2,
+                "damageVulnerabilities": [],
+                "damageResistances": [],
+                "damageImmunities": ["Acid"],
+                "conditionImmunities": ["Blinded", "Charmed", "Deafened", "Exhaustion", "Frightened", "Prone"],
+                "senses": ["Darkvision 60 ft.", "passive Perception 10"],
+                "languages": ["—"],
+                "challengeRating": 0.25,
+                "experiencePoints": 50,
+                "legendaryActionsPerRound": 0,
+                "legendaryActionsDescription": "",
+                "savingThrows": [],
+                "skills": [],
+                "additionalAbilities": [
+                    {"name": "Amorphous", "description": "Can move through a space as narrow as 1 inch wide without squeezing.", "descriptionHtml": {}},
+                    {"name": "Corrosive Message", "description": "As an action, touches an object, dealing 1d4 acid damage to it (destroying nonmagical, unattended objects reduced to 0 HP).", "descriptionHtml": {}},
+                    {"name": "Spell-Like Secretion", "description": "Once per short rest, exudes a noxious bile that mimics the effects of grease (DC 12). The area is also lightly obscured until the start of the Baronesses' next turn.", "descriptionHtml": {}}
+                ],
+                "actions": [
+                    {"name": "Corroding Claw", "description": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) slashing damage plus 3 (1d6) acid damage.", "descriptionHtml": {}}
+                ],
+                "reactions": [],
+                "legendaryActions": [],
+                "hitDieSize": 4,
+                "abilityScoreModifiers": {"strength": -2, "dexterity": 1, "constitution": 1, "intelligence": -1, "wisdom": 0, "charisma": -2},
+                "abilityScoreStrs": {"strength": "6 (–2)", "dexterity": "12 (+1)", "constitution": "12 (+1)", "intelligence": "8 (–1)", "wisdom": "10 (+0)", "charisma": "7 (–2)"},
+                "extraHealthFromConstitution": 6,
+                "hitPoints": 20,
+                "hitPointsStr": "20 (6d4 + 6)",
+                "passivePerception": 10,
+                "challengeRatingStr": "1/4"
+            },
+            "sharing": {"linkSharingEnabled": false},
+            "_id": "cellarways-baronesses-black-bile",
+            "name": "The Baronesses of Black Bile",
+            "bestiaryId": "cellarways",
+            "__v": 0
+        },
+        {
+            "flavor": {"faction": "Slimepress Court", "environment": "Shadow Court", "description": "Small ooze, chaotic evil", "nameIsProper": false, "imageUrl": "", "descriptionHtml": {}},
+            "stats": {
+                "size": "Small",
+                "race": "ooze",
+                "alignment": "chaotic evil",
+                "armorType": "",
+                "armorClass": 10,
+                "numHitDie": 6,
+                "speed": "25 ft.",
+                "abilityScores": {"strength": 8, "dexterity": 10, "constitution": 12, "intelligence": 10, "wisdom": 8, "charisma": 14},
+                "proficiencyBonus": 2,
+                "damageVulnerabilities": [],
+                "damageResistances": ["Bludgeoning", "Piercing"],
+                "damageImmunities": ["Acid"],
+                "conditionImmunities": ["Blinded", "Charmed", "Deafened", "Exhaustion", "Frightened", "Prone"],
+                "senses": ["Darkvision 60 ft.", "passive Perception 9"],
+                "languages": ["Undercommon"],
+                "challengeRating": 1,
+                "experiencePoints": 200,
+                "legendaryActionsPerRound": 0,
+                "legendaryActionsDescription": "",
+                "savingThrows": [],
+                "skills": [],
+                "additionalAbilities": [
+                    {"name": "Mimicry", "description": "Can mimic simple sounds and voices it has heard. DC 12 Wisdom (Insight) to discern imitation.", "descriptionHtml": {}},
+                    {"name": "Cruel Entertainment", "description": "As a bonus action, forces one creature within 30 feet to make a DC 12 Wisdom saving throw or have disadvantage on its next attack roll or ability check.", "descriptionHtml": {}},
+                    {"name": "Twin Act", "description": "The Jesters operate as a duo. When both Jesters are within 10 feet of each other, they have advantage on attack rolls and saving throws. If one Jester is reduced to 0 hit points, the other becomes enraged until the end of its next turn, gaining advantage on all attacks.", "descriptionHtml": {}},
+                    {"name": "Two-on-One", "description": "When both Jesters attack the same target on a turn, the second attack that hits deals an extra 3 (1d6) psychic damage.", "descriptionHtml": {}}
+                ],
+                "actions": [
+                    {"name": "Pseudopod Slap", "description": "Melee Weapon Attack: +2 to hit, reach 5 ft., one target. Hit: 3 (1d4 + 1) bludgeoning damage.", "descriptionHtml": {}},
+                    {"name": "Cackle of Despair (Recharge 6)", "description": "Each creature within 15 feet that can hear the Jester must succeed on a DC 12 Wisdom saving throw or take 7 (2d6) psychic damage and be frightened until the end of its next turn.", "descriptionHtml": {}},
+                    {"name": "Mirror Switch (Recharge 5–6)", "description": "If both Jesters are alive and within 60 feet, they can instantly swap positions. Each creature adjacent to either Jester when the switch happens must succeed on a DC 12 Dexterity saving throw or fall prone.", "descriptionHtml": {}},
+                    {"name": "Twin Taunt", "description": "One Jester distracts while the other strikes. One creature within 30 feet must succeed on a DC 12 Wisdom saving throw or have disadvantage on opportunity attacks until the start of the Jesters' next turn.", "descriptionHtml": {}}
+                ],
+                "reactions": [],
+                "legendaryActions": [],
+                "hitDieSize": 6,
+                "abilityScoreModifiers": {"strength": -1, "dexterity": 0, "constitution": 1, "intelligence": 0, "wisdom": -1, "charisma": 2},
+                "abilityScoreStrs": {"strength": "8 (–1)", "dexterity": "10 (+0)", "constitution": "12 (+1)", "intelligence": "10 (+0)", "wisdom": "8 (–1)", "charisma": "14 (+2)"},
+                "extraHealthFromConstitution": 6,
+                "hitPoints": 27,
+                "hitPointsStr": "27 (6d6 + 6)",
+                "passivePerception": 9,
+                "challengeRatingStr": "1"
+            },
+            "sharing": {"linkSharingEnabled": false},
+            "_id": "cellarways-royal-jesters",
+            "name": "The Royal Jesters (of Despair)",
+            "bestiaryId": "cellarways",
+            "__v": 0
+        },
+        {
+            "flavor": {"faction": "Darkforged", "environment": "Cellarways", "description": "Medium construct, lawful evil", "nameIsProper": false, "imageUrl": "", "descriptionHtml": {}},
+            "stats": {
+                "size": "Medium",
+                "race": "construct",
+                "alignment": "lawful evil",
+                "armorType": "Chain Shirt",
+                "armorClass": 14,
+                "numHitDie": 4,
+                "speed": "30 ft.",
+                "abilityScores": {"strength": 14, "dexterity": 14, "constitution": 14, "intelligence": 10, "wisdom": 10, "charisma": 8},
+                "proficiencyBonus": 2,
+                "damageVulnerabilities": ["Radiant"],
+                "damageResistances": [],
+                "damageImmunities": [],
+                "conditionImmunities": ["Cursed", "Poisoned"],
+                "senses": ["Darkvision 60 ft.", "passive Perception 10"],
+                "languages": ["Understands Common but can't speak"],
+                "challengeRating": 1,
+                "experiencePoints": 200,
+                "legendaryActionsPerRound": 0,
+                "legendaryActionsDescription": "",
+                "savingThrows": [],
+                "skills": [],
+                "additionalAbilities": [
+                    {"name": "Darkling Synergy", "description": "While within 10 feet of another Darkling or Darkforged Remnant, the Remnant gains a +1 bonus to attack and damage rolls.", "descriptionHtml": {}},
+                    {"name": "Constructed Fortitude", "description": "The Darkforged Remnant has advantage on saving throws against being charmed, frightened, paralyzed, petrified, and stunned.", "descriptionHtml": {}}
+                ],
+                "actions": [
+                    {"name": "Multiattack", "description": "The Remnant makes two Tendril Lash attacks.", "descriptionHtml": {}},
+                    {"name": "Tendril Lash", "description": "Melee Weapon Attack: +4 to hit, reach 10 ft., one target. Hit: 5 (1d6 + 2) slashing damage. If the target is a creature, it must succeed on a DC 12 Strength saving throw or be pulled 5 feet closer to the Remnant.", "descriptionHtml": {}}
+                ],
+                "reactions": [],
+                "legendaryActions": [],
+                "hitDieSize": 8,
+                "armorTypeStr": "(Chain Shirt)",
+                "abilityScoreModifiers": {"strength": 2, "dexterity": 2, "constitution": 2, "intelligence": 0, "wisdom": 0, "charisma": -1},
+                "abilityScoreStrs": {"strength": "14 (+2)", "dexterity": "14 (+2)", "constitution": "14 (+2)", "intelligence": "10 (+0)", "wisdom": "10 (+0)", "charisma": "8 (−1)"},
+                "extraHealthFromConstitution": 8,
+                "hitPoints": 26,
+                "hitPointsStr": "26 (4d8 + 8)",
+                "passivePerception": 10,
+                "challengeRatingStr": "1"
+            },
+            "sharing": {"linkSharingEnabled": false},
+            "_id": "cellarways-darkforged-remnant-lash",
+            "name": "Darkforged Remnant (Lash)",
+            "bestiaryId": "cellarways",
+            "__v": 0
+        },
+        {
+            "flavor": {"faction": "Darkforged", "environment": "Cellarways", "description": "Medium construct, lawful evil", "nameIsProper": false, "imageUrl": "", "descriptionHtml": {}},
+            "stats": {
+                "size": "Medium",
+                "race": "construct",
+                "alignment": "lawful evil",
+                "armorType": "Splint",
+                "armorClass": 15,
+                "numHitDie": 4,
+                "speed": "30 ft.",
+                "abilityScores": {"strength": 16, "dexterity": 12, "constitution": 16, "intelligence": 8, "wisdom": 10, "charisma": 8},
+                "proficiencyBonus": 2,
+                "damageVulnerabilities": ["Radiant"],
+                "damageResistances": [],
+                "damageImmunities": [],
+                "conditionImmunities": ["Cursed", "Poisoned"],
+                "senses": ["Darkvision 60 ft.", "passive Perception 10"],
+                "languages": ["Understands Common but can't speak"],
+                "challengeRating": 1,
+                "experiencePoints": 200,
+                "legendaryActionsPerRound": 0,
+                "legendaryActionsDescription": "",
+                "savingThrows": [],
+                "skills": [],
+                "additionalAbilities": [
+                    {"name": "Darkling Synergy", "description": "While within 10 feet of another Darkling or Darkforged Remnant, the Remnant gains a +1 bonus to attack and damage rolls.", "descriptionHtml": {}},
+                    {"name": "Constructed Fortitude", "description": "The Darkforged Remnant has advantage on saving throws against being charmed, frightened, paralyzed, petrified, and stunned.", "descriptionHtml": {}}
+                ],
+                "actions": [
+                    {"name": "Slam", "description": "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 7 (1d8 + 3) bludgeoning damage.", "descriptionHtml": {}},
+                    {"name": "Shoulder Barge (Recharge 5–6)", "description": "The Remnant moves up to its speed in a straight line and can move through the space of any Medium or smaller creature. The first time it enters a creature's space during this move, that creature must succeed on a DC 13 Strength saving throw or be knocked prone.", "descriptionHtml": {}}
+                ],
+                "reactions": [],
+                "legendaryActions": [],
+                "hitDieSize": 8,
+                "armorTypeStr": "(Splint)",
+                "abilityScoreModifiers": {"strength": 3, "dexterity": 1, "constitution": 3, "intelligence": -1, "wisdom": 0, "charisma": -1},
+                "abilityScoreStrs": {"strength": "16 (+3)", "dexterity": "12 (+1)", "constitution": "16 (+3)", "intelligence": "8 (−1)", "wisdom": "10 (+0)", "charisma": "8 (−1)"},
+                "extraHealthFromConstitution": 12,
+                "hitPoints": 30,
+                "hitPointsStr": "30 (4d8 + 12)",
+                "passivePerception": 10,
+                "challengeRatingStr": "1"
+            },
+            "sharing": {"linkSharingEnabled": false},
+            "_id": "cellarways-darkforged-remnant-brute",
+            "name": "Darkforged Remnant (Brute)",
+            "bestiaryId": "cellarways",
+            "__v": 0
+        },
+        {
+            "flavor": {"faction": "Darkforged", "environment": "Cellarways", "description": "Medium construct, lawful evil", "nameIsProper": false, "imageUrl": "", "descriptionHtml": {}},
+            "stats": {
+                "size": "Medium",
+                "race": "construct",
+                "alignment": "lawful evil",
+                "armorType": "Leather",
+                "armorClass": 13,
+                "numHitDie": 4,
+                "speed": "30 ft.",
+                "abilityScores": {"strength": 12, "dexterity": 15, "constitution": 12, "intelligence": 10, "wisdom": 10, "charisma": 8},
+                "proficiencyBonus": 2,
+                "damageVulnerabilities": ["Radiant"],
+                "damageResistances": [],
+                "damageImmunities": [],
+                "conditionImmunities": ["Cursed", "Poisoned"],
+                "senses": ["Darkvision 60 ft.", "passive Perception 10"],
+                "languages": ["Understands Common but can't speak"],
+                "challengeRating": 1,
+                "experiencePoints": 200,
+                "legendaryActionsPerRound": 0,
+                "legendaryActionsDescription": "",
+                "savingThrows": [],
+                "skills": [],
+                "additionalAbilities": [
+                    {"name": "Darkling Synergy", "description": "While within 10 feet of another Darkling or Darkforged Remnant, the Remnant gains a +1 bonus to attack and damage rolls.", "descriptionHtml": {}},
+                    {"name": "Constructed Fortitude", "description": "The Darkforged Remnant has advantage on saving throws against being charmed, frightened, paralyzed, petrified, and stunned.", "descriptionHtml": {}}
+                ],
+                "actions": [
+                    {"name": "Spike Shot", "description": "Ranged Weapon Attack: +4 to hit, range 80/320 ft., one target. Hit: 6 (1d8 + 2) piercing damage.", "descriptionHtml": {}},
+                    {"name": "Dysfunctional Laser (Recharge 6)", "description": "The Remnant fires a beam of unstable energy in a 30-foot line that is 5 feet wide. Each creature in that line must make a DC 11 Dexterity saving throw, taking 7 (2d6) force damage on a failed save, or half as much on a successful one. There is a 25% chance the laser malfunctions, dealing 3 (1d6) force damage to the Remnant itself.", "descriptionHtml": {}}
+                ],
+                "reactions": [],
+                "legendaryActions": [],
+                "hitDieSize": 8,
+                "armorTypeStr": "(Leather)",
+                "abilityScoreModifiers": {"strength": 1, "dexterity": 2, "constitution": 1, "intelligence": 0, "wisdom": 0, "charisma": -1},
+                "abilityScoreStrs": {"strength": "12 (+1)", "dexterity": "15 (+2)", "constitution": "12 (+1)", "intelligence": "10 (+0)", "wisdom": "10 (+0)", "charisma": "8 (−1)"},
+                "extraHealthFromConstitution": 4,
+                "hitPoints": 22,
+                "hitPointsStr": "22 (4d8 + 4)",
+                "passivePerception": 10,
+                "challengeRatingStr": "1"
+            },
+            "sharing": {"linkSharingEnabled": false},
+            "_id": "cellarways-darkforged-remnant-spike",
+            "name": "Darkforged Remnant (Spike)",
+            "bestiaryId": "cellarways",
+            "__v": 0
+        },
+        {
+            "flavor": {"faction": "Darkforged", "environment": "Cellarways", "description": "Medium construct, lawful evil", "nameIsProper": false, "imageUrl": "", "descriptionHtml": {}},
+            "stats": {
+                "size": "Medium",
+                "race": "construct",
+                "alignment": "lawful evil",
+                "armorType": "Plate",
+                "armorClass": 17,
+                "numHitDie": 4,
+                "speed": "25 ft.",
+                "abilityScores": {"strength": 15, "dexterity": 10, "constitution": 18, "intelligence": 8, "wisdom": 11, "charisma": 8},
+                "proficiencyBonus": 2,
+                "damageVulnerabilities": ["Radiant"],
+                "damageResistances": [],
+                "damageImmunities": [],
+                "conditionImmunities": ["Cursed", "Poisoned"],
+                "senses": ["Darkvision 60 ft.", "passive Perception 10"],
+                "languages": ["Understands Common but can't speak"],
+                "challengeRating": 1,
+                "experiencePoints": 200,
+                "legendaryActionsPerRound": 0,
+                "legendaryActionsDescription": "",
+                "savingThrows": [],
+                "skills": [],
+                "additionalAbilities": [
+                    {"name": "Darkling Synergy", "description": "While within 10 feet of another Darkling or Darkforged Remnant, the Remnant gains a +1 bonus to attack and damage rolls.", "descriptionHtml": {}},
+                    {"name": "Constructed Fortitude", "description": "The Darkforged Remnant has advantage on saving throws against being charmed, frightened, paralyzed, petrified, and stunned.", "descriptionHtml": {}},
+                    {"name": "Phalanx Formation", "description": "The Remnant has half cover against ranged attacks while it is within 5 feet of at least one other Darkforged Remnant (Bulwark).", "descriptionHtml": {}}
+                ],
+                "actions": [
+                    {"name": "Shield Bash", "description": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) bludgeoning damage. If the target is a creature, it must succeed on a DC 12 Strength saving throw or be pushed 5 feet away.", "descriptionHtml": {}}
+                ],
+                "reactions": [
+                    {"name": "Protect", "description": "When a creature the Remnant can see attacks a target other than itself that is within 5 feet of it, the Remnant can use its reaction to impose disadvantage on the attack roll.", "descriptionHtml": {}}
+                ],
+                "legendaryActions": [],
+                "hitDieSize": 8,
+                "armorTypeStr": "(Plate)",
+                "abilityScoreModifiers": {"strength": 2, "dexterity": 0, "constitution": 4, "intelligence": -1, "wisdom": 0, "charisma": -1},
+                "abilityScoreStrs": {"strength": "15 (+2)", "dexterity": "10 (+0)", "constitution": "18 (+4)", "intelligence": "8 (−1)", "wisdom": "11 (+0)", "charisma": "8 (−1)"},
+                "extraHealthFromConstitution": 16,
+                "hitPoints": 34,
+                "hitPointsStr": "34 (4d8 + 16)",
+                "passivePerception": 10,
+                "challengeRatingStr": "1"
+            },
+            "sharing": {"linkSharingEnabled": false},
+            "_id": "cellarways-darkforged-remnant-bulwark",
+            "name": "Darkforged Remnant (Bulwark)",
+            "bestiaryId": "cellarways",
+            "__v": 0
         }
     ]
 };
@@ -11245,20 +13062,14 @@
             imageContainer.className = 'monster-image-container';
             
             // Check correct path for image in the flavor.imageUrl property
-            if (monster.flavor && monster.flavor.imageUrl) {
-                const image = document.createElement('img');
-                image.className = 'monster-image';
-                image.src = monster.flavor.imageUrl;
-                image.alt = monster.name;
-                imageContainer.appendChild(image);
-            } else {
-                // Only use placeholder if no image is found
-                const placeholderImg = document.createElement('img');
-                placeholderImg.className = 'monster-image';
-                placeholderImg.src = 'https://via.placeholder.com/300x200?text=No+Image';
-                placeholderImg.alt = 'Monster image placeholder';
-                imageContainer.appendChild(placeholderImg);
-            }
+            const img = document.createElement('img');
+            img.className = 'monster-image';
+            img.alt = monster.name;
+            // Start with placeholder; async resolution will swap src when found
+            img.src = 'https://via.placeholder.com/300x200?text=Loading...';
+            imageContainer.appendChild(img);
+            // Resolve and set best image source (explicit URL if valid, else local by name)
+            setMonsterImage(img, monster);
             
             card.appendChild(imageContainer);
             
@@ -11478,6 +13289,330 @@
         
         // Initialize when the page loads
         window.onload = init;
+
+        // --- Image auto-resolution helpers ---
+        // Try to load local images from src/assets/images/Monsters by guessing filenames from the monster's name.
+    const IMAGE_BASE_DIR = 'src/assets/images/Monsters/';
+        const IMAGE_EXTS = ['.webp', '.png', '.jpg', '.jpeg'];
+        const imageCache = new Map(); // name -> resolved src or null
+        // Fast-path exact overrides for tricky names
+        const IMAGE_NAME_OVERRIDES = new Map([
+            ['The Royal Jesters (of Despair)', 'royaljestersofdespair.webp'],
+            ['Darkling Detention Professor (Weapon Specialist)', 'darklingdetentionprofessorweapons.webp'],
+            ['Darkling Detention Professor (Mage Specialist)', 'darklingdetentionprofessormagics.webp'],
+            ['Darkforme Disciplinary Dean', 'darkformedisciplinedean.webp'],
+            ['Dark Dimension Void Scholar', 'darkdimensionvoidscholar.webp'],
+            ['Darkling Hall Monitor', 'darklinghallmonitor.webp'],
+            ['Tiny Slime Darkling', 'tiny darkling slime.webp'],
+            ['Small Slime Darkling', 'smalldarklingslime.webp'],
+            ['The Viscounts of Viscera', 'viscountofviscera.webp'],
+            ['The Baronesses of Black Bile', 'baronessofblackbile.webp'],
+        ]);
+    const DEBUG_IMG = /[?&]debugImages=1/.test(window.location.search);
+
+        function normalizeName(name) {
+            return (name || '')
+                .toLowerCase()
+                .replace(/[“”‘’'`]/g, '')
+                .replace(/\(([^)]*)\)/g, ' $1 ') // preserve parenthetical content
+                .replace(/[^a-z0-9]+/g, ' ') // non-alnum to space
+                .trim();
+        }
+
+        function tokenVariants(tokens) {
+            // Create multiple joins of tokens with different separators and subsets
+            const joins = new Set();
+            const sepOptions = ['-', '_', '', ' '];
+            const addJoin = (arr) => {
+                if (!arr || !arr.length) return;
+                sepOptions.forEach(sep => joins.add(arr.join(sep)));
+            };
+
+            // synonyms/aliases for certain tokens
+            const mapToken = (t) => {
+                if (t === 'darkforme' || t === 'darkform' || t === 'darkformed') return 'dark';
+                if (t === 'abomination') return 'bombination'; // common typo seen in filenames
+                return t;
+            };
+            const singularizeToken = (t) => {
+                // specific irregulars first
+                if (t === 'baronesses') return 'baroness';
+                // general plural -> singular heuristics (safe-ish)
+                if (/^[a-z]{5,}sses$/.test(t)) return t.replace(/sses$/, 'ss');
+                if (/^[a-z]{5,}ches$/.test(t)) return t.replace(/ches$/, 'ch');
+                if (/^[a-z]{5,}shes$/.test(t)) return t.replace(/shes$/, 'sh');
+                if (/^[a-z]{5,}xes$/.test(t)) return t.replace(/xes$/, 'x');
+                if (/^[a-z]{5,}zes$/.test(t)) return t.replace(/zes$/, 'z');
+                if (/^[a-z]{5,}ses$/.test(t)) return t.replace(/ses$/, 's');
+                if (/^[a-z]{5,}s$/.test(t)) return t.slice(0, -1);
+                return t;
+            };
+            const morphToken = (t) => {
+                if (t === 'disciplinary') return 'discipline';
+                return t;
+            };
+            const tokensAliased = tokens.map(mapToken);
+            const tokensSing = tokens.map(singularizeToken).map(morphToken);
+            const tokensAliasedSing = tokensAliased.map(singularizeToken).map(morphToken);
+            const tokensMorphed = tokens.map(morphToken);
+
+            // full tokens
+            addJoin(tokens);
+            addJoin(tokensAliased);
+            addJoin(tokensSing);
+            addJoin(tokensAliasedSing);
+            addJoin(tokensMorphed);
+
+            // remove common leading qualifiers and generate again
+            const dropList = new Set(['the','of','dark','darkling','darkforme','darkform','dimension','variant','tiny','small','medium','large','huge','gargantuan','specialist']);
+            const tokensNoQual = tokens.filter(t => !dropList.has(t));
+            const tokensAliasedNoQual = tokensAliased.filter(t => !dropList.has(t));
+            const tokensNoQualSing = tokensNoQual.map(singularizeToken).map(morphToken);
+            const tokensAliasedNoQualSing = tokensAliasedNoQual.map(singularizeToken).map(morphToken);
+            addJoin(tokensNoQual);
+            addJoin(tokensAliasedNoQual);
+            addJoin(tokensNoQualSing);
+            addJoin(tokensAliasedNoQualSing);
+
+            // Prefix with 'dark' after removing qualifiers (e.g., dark + punishment + maid -> darkpunishmentmaid)
+            if (tokensNoQual.length) addJoin(['dark', ...tokensNoQual]);
+            if (tokensAliasedNoQual.length) addJoin(['dark', ...tokensAliasedNoQual]);
+            if (tokensNoQualSing.length) addJoin(['dark', ...tokensNoQualSing]);
+            if (tokensAliasedNoQualSing.length) addJoin(['dark', ...tokensAliasedNoQualSing]);
+
+            // Reorder helpers: move 'darkling' before 'slime' and/or to the front
+            const reorderForDarkling = (arr) => {
+                const copy = [...arr];
+                const iDarkling = copy.indexOf('darkling');
+                if (iDarkling > 0) { // move darkling to front
+                    copy.splice(iDarkling,1);
+                    copy.unshift('darkling');
+                }
+                return copy;
+            };
+            const ensureDarklingBeforeSlime = (arr) => {
+                const copy = [...arr];
+                const iD = copy.indexOf('darkling');
+                const iS = copy.indexOf('slime');
+                if (iD >= 0 && iS >= 0 && iD > iS) {
+                    // swap positions so darkling comes before slime
+                    copy.splice(iD,1);
+                    copy.splice(iS,0,'darkling');
+                }
+                return copy;
+            };
+
+            // Generate reordered joins (including originals to preserve qualifiers when useful)
+            addJoin(reorderForDarkling(tokens));
+            addJoin(ensureDarklingBeforeSlime(tokens));
+            addJoin(reorderForDarkling(tokensNoQual));
+            addJoin(ensureDarklingBeforeSlime(tokensNoQual));
+            addJoin(reorderForDarkling(tokensAliasedNoQual));
+            addJoin(ensureDarklingBeforeSlime(tokensAliasedNoQual));
+
+            // Size-aware ordering: place size first, then darkling, then optional cuboid, then slime
+            const sizeSet = new Set(['tiny','small','medium','large','huge','gargantuan']);
+            const presentSizes = tokens.filter(t => sizeSet.has(t));
+            const hasDarkling = tokens.includes('darkling');
+            const hasSlime = tokens.includes('slime');
+            const hasCuboid = tokens.includes('cuboid');
+            if (presentSizes.length && hasDarkling && hasSlime) {
+                for (const sz of presentSizes) {
+                    if (hasCuboid) addJoin([sz, 'darkling', 'cuboid', 'slime']);
+                    addJoin([sz, 'darkling', 'slime']);
+                }
+            }
+            // Cuboid combo without explicit size: darkling cuboid slime
+            if (!presentSizes.length && hasDarkling && hasSlime && hasCuboid) {
+                addJoin(['darkling','cuboid','slime']);
+            }
+
+            // tail-heavy joins (last two or last one significant tokens)
+            if (tokens.length >= 2) addJoin(tokens.slice(-2));
+            if (tokensAliased.length >= 2) addJoin(tokensAliased.slice(-2));
+            if (tokens.length >= 1) addJoin(tokens.slice(-1));
+            if (tokensAliased.length >= 1) addJoin(tokensAliased.slice(-1));
+
+            // single significant tokens length >= 5
+            tokens.filter(t => t.length >= 5).forEach(t => joins.add(t));
+            tokensAliased.filter(t => t.length >= 5).forEach(t => joins.add(t));
+
+            // compressed forms (no separators)
+            if (tokens.length) {
+                joins.add(tokens.join(''));
+                joins.add(['dark', ...tokens].join(''));
+            }
+            if (tokensAliased.length) {
+                joins.add(tokensAliased.join(''));
+                joins.add(['dark', ...tokensAliased].join(''));
+            }
+            if (tokensSing.length) {
+                joins.add(tokensSing.join(''));
+                joins.add(['dark', ...tokensSing].join(''));
+            }
+            if (tokensAliasedSing.length) {
+                joins.add(tokensAliasedSing.join(''));
+                joins.add(['dark', ...tokensAliasedSing].join(''));
+            }
+            if (tokensMorphed.length) {
+                joins.add(tokensMorphed.join(''));
+                joins.add(['dark', ...tokensMorphed].join(''));
+            }
+            if (tokensNoQual.length) {
+                joins.add(tokensNoQual.join(''));
+                joins.add(['dark', ...tokensNoQual].join(''));
+            }
+            if (tokensAliasedNoQual.length) {
+                joins.add(tokensAliasedNoQual.join(''));
+                joins.add(['dark', ...tokensAliasedNoQual].join(''));
+            }
+            if (tokensNoQualSing.length) {
+                joins.add(tokensNoQualSing.join(''));
+                joins.add(['dark', ...tokensNoQualSing].join(''));
+            }
+            if (tokensAliasedNoQualSing.length) {
+                joins.add(tokensAliasedNoQualSing.join(''));
+                joins.add(['dark', ...tokensAliasedNoQualSing].join(''));
+            }
+
+            return Array.from(joins).filter(Boolean);
+        }
+
+        function buildCandidatePaths(name) {
+            const base = normalizeName(name);
+            const tokens = base.split(/\s+/).filter(Boolean);
+            const stems = tokenVariants(tokens);
+            const paths = [];
+
+            // Expand with targeted fixes for known patterns
+            const expansions = new Set();
+            stems.forEach(s => {
+                // Ensure riverlurk compressed variant exists
+                if (/river[\-_ ]?lurk/.test(s)) expansions.add(s.replace(/river[\-_ ]?lurk/, 'riverlurk'));
+                // Punishment maid compressed + dark prefix
+                if (s.includes('punishment') && s.includes('maid')) expansions.add('darkpunishmentmaid');
+                // Insert 'slime' after darkling if missing (e.g., darkling + cube princess -> darklingslimecubeprincess)
+                if (s.includes('darkling') && !/darkling[\-_ ]?slime/.test(s)) {
+                    expansions.add(s.replace('darkling', 'darklingslime'));
+                }
+                // boi/boy alternates (e.g., big boi vs big boy)
+                if (s.includes('boi')) expansions.add(s.replace('boi','boy'));
+                if (s.includes('boy')) expansions.add(s.replace('boy','boi'));
+                // drop size adjectives that may still be present in stems to catch files that omit them
+                expansions.add(s.replace(/\b(tiny|small|medium|large|huge|gargantuan)\b/g, '').replace(/[^a-z0-9]+/g,''));
+
+                // Detention Professor variants: drop 'specialist'; pluralize weapon/mage/magic to match filenames
+                if (s.includes('specialist')) {
+                    const noSpec = s.replace(/specialist/g, '');
+                    expansions.add(noSpec);
+                    expansions.add(noSpec.replace(/[^a-z0-9]+/g,''));
+                }
+                if (/(^|[^a-z])weapon(s)?([^a-z]|$)/.test(s)) {
+                    const plural = s.replace(/weapon(?!s)/g, 'weapons');
+                    expansions.add(plural);
+                    expansions.add(plural.replace(/[^a-z0-9]+/g,''));
+                }
+                if (/(^|[^a-z])mage([^a-z]|$)/.test(s)) {
+                    const magic = s.replace(/mage/g, 'magic');
+                    const magics = magic.replace(/magic/g, 'magics');
+                    expansions.add(magic);
+                    expansions.add(magics);
+                    expansions.add(magic.replace(/[^a-z0-9]+/g,''));
+                    expansions.add(magics.replace(/[^a-z0-9]+/g,''));
+                }
+                if (/(^|[^a-z])magic([^a-z]|$)/.test(s)) {
+                    const magics2 = s.replace(/magic/g, 'magics');
+                    expansions.add(magics2);
+                    expansions.add(magics2.replace(/[^a-z0-9]+/g,''));
+                }
+
+                // Allow 'dark' prefix to match filenames that use 'darkforme'
+                if (/^dark[a-z]/.test(s)) {
+                    expansions.add(s.replace(/^dark/, 'darkforme'));
+                }
+
+                // Plural → singular special-cases for court titles
+                if (s.includes('viscounts')) expansions.add(s.replace(/viscounts/g, 'viscount'));
+                if (s.includes('baronesses')) expansions.add(s.replace(/baronesses/g, 'baroness'));
+                if (s.includes('jesters')) expansions.add(s.replace(/jesters/g, 'jester'));
+                // Morphology: disciplinary → discipline
+                if (s.includes('disciplinary')) expansions.add(s.replace(/disciplinary/g, 'discipline'));
+            });
+            const allStems = Array.from(new Set([...stems, ...expansions]));
+
+            for (const stem of allStems) {
+                for (const ext of IMAGE_EXTS) {
+                    paths.push(encodeURI(IMAGE_BASE_DIR + stem + ext));
+                }
+            }
+            return paths;
+        }
+
+    function preload(src) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.onload = () => resolve(src);
+                img.onerror = () => reject(src);
+                img.src = src;
+            });
+        }
+
+        async function resolveLocalImageByName(name) {
+            if (!name) return null;
+            if (imageCache.has(name)) return imageCache.get(name);
+
+            // 0) Check overrides first
+            const override = IMAGE_NAME_OVERRIDES.get(name);
+            if (override) {
+                const src = encodeURI(IMAGE_BASE_DIR + override);
+                try {
+                    await preload(src);
+                    if (DEBUG_IMG) console.debug('[IMG] Override hit', name, '->', src);
+                    imageCache.set(name, src);
+                    return src;
+                } catch (_) { /* fall through to heuristics */ }
+            }
+
+            const candidates = buildCandidatePaths(name);
+            if (DEBUG_IMG) {
+                console.debug('[IMG] Resolving', name, 'candidates (first 20):', candidates.slice(0,20));
+            }
+            for (const c of candidates) {
+                try {
+                    await preload(c);
+                    if (DEBUG_IMG) console.debug('[IMG] Resolved', name, '->', c);
+                    imageCache.set(name, c);
+                    return c;
+                } catch (_) { /* try next */ }
+            }
+            if (DEBUG_IMG) console.warn('[IMG] No local image resolved for', name);
+            imageCache.set(name, null);
+            return null;
+        }
+
+        async function setMonsterImage(imgEl, monster) {
+            // Prefer local by name first; then explicit imageUrl; finally placeholder
+            const placeholder = 'https://via.placeholder.com/300x200?text=No+Image';
+            imgEl.src = placeholder;
+
+            // 1) Try local match by name
+            const localSrc = await resolveLocalImageByName(monster?.name);
+            if (localSrc) {
+                imgEl.src = localSrc;
+                return;
+            }
+
+            // 2) Try explicit imageUrl if present and reachable
+            const explicit = monster?.flavor?.imageUrl;
+            if (explicit) {
+                try {
+                    const ok = await preload(explicit);
+                    imgEl.src = ok;
+                    return;
+                } catch (_) { /* fall through to placeholder */ }
+            }
+            // 3) Placeholder already set
+        }
     </script>
 </body>
 </html>

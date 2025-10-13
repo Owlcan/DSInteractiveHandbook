@@ -10,8 +10,8 @@
             font-family: 'Cormorant Garamond', serif;
             margin: 0;
             padding: 20px;
-            background-color: var(--light-gold);
-            background-image: url('https://www.transparenttextures.com/patterns/light-paper-fibers.png');
+            background-color: #d4c2a0;
+            background-image: url('https://www.transparenttextures.com/patterns/dark-wood.png');
             color: #3b322c; /* Darker text for readability */
             line-height: 1.6;
         }
@@ -19,7 +19,7 @@
         .content-container {
             max-width: 1600px;
             margin: 0 auto;
-            background-color: var(--light-gold);
+            background-color: #e8dcc0;
             background-image: url('https://www.transparenttextures.com/patterns/parchment.png');
             border-radius: 8px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
@@ -247,15 +247,49 @@
       
       <div id="regaliaSelectionCtn" style="transition: all 0.3s ease;">
         <h2 style="color: #8c693a; border-bottom: 1px solid #b08d57; padding-bottom: 10px; text-align: center;">Choose Your Regalia Base</h2>
-        <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
-          <select id="regaliaTypeSelect" style="background-color: #e0c8a0; color: #4a3b2a; padding: 12px; border: 1px solid #b08d57; border-radius: 4px; width: 100%; margin-bottom: 20px; font-family: 'Cinzel', serif; cursor: pointer;">
-            <option value="" disabled selected>Select a regalia type...</option>
-          </select>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+          <!-- Clothing/Armor Dropdown -->
+          <div style="display: flex; flex-direction: column;">
+            <h3 style="color: #8c693a; text-align: center; margin-bottom: 10px; font-size: 1.1em;">Clothing & Armor</h3>
+            <select id="clothingArmorSelect" style="background-color: #e0c8a0; color: #4a3b2a; padding: 12px; border: 1px solid #b08d57; border-radius: 4px; width: 100%; font-family: 'Cinzel', serif; cursor: pointer;">
+              <option value="" disabled selected>Select clothing or armor...</option>
+            </select>
+          </div>
+          
+          <!-- Accessories Dropdown -->
+          <div style="display: flex; flex-direction: column;">
+            <h3 style="color: #8c693a; text-align: center; margin-bottom: 10px; font-size: 1.1em;">Accessories & Jewelry</h3>
+            <select id="accessoriesSelect" style="background-color: #e0c8a0; color: #4a3b2a; padding: 12px; border: 1px solid #b08d57; border-radius: 4px; width: 100%; font-family: 'Cinzel', serif; cursor: pointer;">
+              <option value="" disabled selected>Select accessories or jewelry...</option>
+            </select>
+          </div>
+        </div>
+        
+        <!-- Warning tooltip for multiple selections -->
+        <div id="selectionWarning" style="display: none; background-color: #ffeb3b; color: #8c693a; padding: 10px; border-radius: 5px; margin: 10px 0; text-align: center; border: 1px solid #ffc107; font-weight: bold;">
+          ⚠️ Please select only one item type (either Clothing/Armor OR Accessories) to proceed.
         </div>
         
         <div id="slotSelectionCtn" style="margin-top: 20px; display: none; animation: fadeIn 0.5s ease;">
-          <h2 style="color: #8c693a; border-bottom: 1px solid #b08d57; padding-bottom: 10px; text-align: center;">Select Upgrade Slots</h2>
-          <p style="text-align: center; margin-bottom: 20px;">How many upgrade slots for your regalia?</p>
+          <h2 style="color: #8c693a; border-bottom: 1px solid #b08d57; padding-bottom: 10px; text-align: center;">Select Enhancement & Upgrade Slots</h2>
+          
+          <!-- Enhancement Selection -->
+          <div style="margin-bottom: 30px; padding: 15px; background-color: rgba(176, 141, 87, 0.2); border-radius: 5px; border: 1px solid #b08d57;">
+            <h3 style="color: #8c693a; text-align: center; margin-top: 0;">Enhancement Level (Armor/Clothing Only)</h3>
+            <p style="text-align: center; margin-bottom: 15px; font-size: 0.9em;">Choose magical enhancement level. Each level adds AC and upgrade slots.</p>
+            <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 10px;">
+              <button id="enhanceNone" class="enhanceBtn" style="background: linear-gradient(to bottom, #d4b78c, #a88665); color: #4a3b2a; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-family: 'Cinzel', serif;">None</button>
+              <button id="enhance1" class="enhanceBtn" style="background: linear-gradient(to bottom, #d4b78c, #a88665); color: #4a3b2a; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-family: 'Cinzel', serif;">+1 (1,000 GP)</button>
+              <button id="enhance2" class="enhanceBtn" style="background: linear-gradient(to bottom, #d4b78c, #a88665); color: #4a3b2a; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-family: 'Cinzel', serif;">+2 (4,000 GP)</button>
+              <button id="enhance3" class="enhanceBtn" style="background: linear-gradient(to bottom, #d4b78c, #a88665); color: #4a3b2a; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-family: 'Cinzel', serif;">+3 (16,000 GP)</button>
+              <button id="enhance4" class="enhanceBtn" style="background: linear-gradient(to bottom, #d4b78c, #a88665); color: #4a3b2a; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-family: 'Cinzel', serif;">+4 (48,000 GP)</button>
+              <button id="enhance5" class="enhanceBtn" style="background: linear-gradient(to bottom, #d4b78c, #a88665); color: #4a3b2a; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-family: 'Cinzel', serif;">+5 (125,000 GP)</button>
+            </div>
+            <div id="enhancementDisplay" style="text-align: center; margin-top: 15px; font-weight: bold; color: #8c693a;">No Enhancement Selected</div>
+          </div>
+          
+          <p style="text-align: center; margin-bottom: 20px;">How many additional upgrade slots for your regalia?</p>
           <div style="display: flex; justify-content: center; align-items: center; gap: 15px;">
             <button id="decreaseSlotBtn" style="background-color: #d4b78c; color: #4a3b2a; border: 1px solid #b08d57; border-radius: 50%; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; font-size: 20px; cursor: pointer; transition: all 0.2s;">-</button>
             <span id="slotCountDisplay" style="font-size: 2em; width: 60px; text-align: center; color: #8c693a; text-shadow: 0 0 3px #b08d57;">1</span>
@@ -279,9 +313,37 @@
             <h3 style="color: #8c693a; text-align: center; margin-top: 0;">Selected Loadout</h3>
             <ul id="selectedUpgradesList" style="list-style-type: none; padding: 0;">
               </ul>
+            <div id="costDisplayCtn" style="margin-top: 15px; padding: 10px; background-color: rgba(176, 141, 87, 0.2); border-radius: 5px; border: 1px solid #b08d57;">
+              <h4 style="color: #8c693a; margin: 0 0 10px 0; text-align: center; font-size: 1.1em;">Cost Breakdown</h4>
+              
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                <span style="color: #5c4d3e; font-size: 0.9em;">Base Regalia:</span>
+                <span id="baseCostDisplay" style="color: #8c693a; font-weight: bold;">0 GP</span>
+              </div>
+              
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                <span style="color: #5c4d3e; font-size: 0.9em;">Slot Installation:</span>
+                <span id="slotCostDisplay" style="color: #8c693a; font-weight: bold;">0 GP</span>
+              </div>
+              
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                <span style="color: #5c4d3e; font-size: 0.9em;">Enhancements:</span>
+                <span id="enhancementCostDisplay" style="color: #8c693a; font-weight: bold;">0 GP</span>
+              </div>
+              
+              <hr style="border: none; border-top: 1px solid #b08d57; margin: 10px 0;">
+              
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="color: #8c693a; font-weight: bold; font-size: 1.1em;">Total Cost:</span>
+                <span id="totalCostDisplay" style="color: #8c693a; font-weight: bold; font-size: 1.2em; text-shadow: 0 0 3px #b08d57;">0 GP</span>
+              </div>
+              
+              <div style="font-size: 0.8em; color: #5c4d3e; margin-top: 8px; font-style: italic; text-align: center;">*Includes all regalia creation costs</div>
+            </div>
           </div>
           
           <div style="margin-top: 30px; text-align: center;">
+            <button id="proceedToNextTierBtn" style="background: linear-gradient(to bottom, #d4b78c, #a88665); color: #4a3b2a; border: none; border-radius: 4px; padding: 12px 24px; font-weight: bold; cursor: pointer; font-family: 'Cinzel', serif; transition: all 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.2); display: none; margin-right: 10px;">Proceed to Next Tier</button>
             <button id="finalizeRegaliaBtn" style="background: linear-gradient(to bottom, #d4b78c, #a88665); color: #4a3b2a; border: none; border-radius: 4px; padding: 12px 24px; font-weight: bold; cursor: pointer; font-family: 'Cinzel', serif; transition: all 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.2); display: none;">Finalize Regalia Design</button>
           </div>
           
@@ -321,6 +383,14 @@
 <script>
   // Data for Regalia Types
 const regaliaTypes = [
+    // **Basic Clothing**
+    { name: "Simple Cotton Top", ac: 10, notes: "Basic everyday wear", value: 2 },
+    { name: "Silk Blouse", ac: 10, notes: "Elegant and comfortable", value: 15 },
+    { name: "Wool Sweater", ac: 10, notes: "Warm and cozy", value: 8 },
+    { name: "Linen Pants", ac: 10, notes: "Breathable and light", value: 5 },
+    { name: "Cotton Trousers", ac: 10, notes: "Sturdy everyday bottoms", value: 3 },
+    { name: "Silk Shorts", ac: 10, notes: "Luxurious and smooth", value: 12 },
+    
     // **Themed Regalia**
     { name: "Standard Issue Onesie", ac: 11, notes: "", value: 5 }, // Analogous to Padded Armor
     { name: "Padded Training Pants", ac: 11, notes: "Stealth Disadvantage", value: 5 }, // Analogous to Padded Armor
@@ -363,6 +433,24 @@ const regaliaTypes = [
     { name: "Chain Mail", ac: 16, notes: "Stealth Disadvantage, Str 13 req.", value: 75 },
     { name: "Splint Armor", ac: 17, notes: "Stealth Disadvantage, Str 15 req.", value: 200 },
     { name: "Plate Armor", ac: 18, notes: "Stealth Disadvantage, Str 15 req.", value: 1500 },
+
+    // **Mithril Armors** (+1200gp from base)
+    { name: "Mithril Chain Shirt", ac: 13, notes: "No Stealth Disadvantage", value: 1250 },
+    { name: "Mithril Scale Mail", ac: 14, notes: "No Stealth Disadvantage", value: 1250 },
+    { name: "Mithril Breastplate", ac: 14, notes: "No Stealth Disadvantage", value: 1600 },
+    { name: "Mithril Half Plate Armor", ac: 15, notes: "No Stealth Disadvantage", value: 1950 },
+    { name: "Mithril Chain Mail", ac: 16, notes: "No Stealth Disadvantage, Str 13 req.", value: 1275 },
+    { name: "Mithril Splint Armor", ac: 17, notes: "No Stealth Disadvantage, Str 15 req.", value: 1400 },
+    { name: "Mithril Plate Armor", ac: 18, notes: "No Stealth Disadvantage, Str 15 req.", value: 2700 },
+
+    // **Adamantine Armors** (+2000gp from base)
+    { name: "Adamantine Chain Shirt", ac: 13, notes: "Critical hits become normal hits", value: 2050 },
+    { name: "Adamantine Scale Mail", ac: 14, notes: "Stealth Disadvantage, Critical hits become normal hits", value: 2050 },
+    { name: "Adamantine Breastplate", ac: 14, notes: "Critical hits become normal hits", value: 2400 },
+    { name: "Adamantine Half Plate Armor", ac: 15, notes: "Stealth Disadvantage, Critical hits become normal hits", value: 2750 },
+    { name: "Adamantine Chain Mail", ac: 16, notes: "Stealth Disadvantage, Str 13 req., Critical hits become normal hits", value: 2075 },
+    { name: "Adamantine Splint Armor", ac: 17, notes: "Stealth Disadvantage, Str 15 req., Critical hits become normal hits", value: 2200 },
+    { name: "Adamantine Plate Armor", ac: 18, notes: "Stealth Disadvantage, Str 15 req., Critical hits become normal hits", value: 3500 },
 
     // **Jewelry & Accessories** (Assuming 'ac: X' for these means '+X AC Bonus')
     { name: "Frilly Arcane Witch Hat", ac: 1, notes: "A lace-adorned hat that boosts magical prowess. Wearer gains +1 bonus to spell attack rolls.", value: 2200 }, // +1 AC & spell
@@ -419,6 +507,46 @@ const regaliaTypes = [
     { name: "Dashing Musketeer Hat", ac: 10, notes: "A flamboyant hat that exudes style. The wearer gains advantage on Persuasion checks and a +1 bonus to initiative rolls, inspiring both allies and intimidating foes.", value: 1400 } // Adv on skill & initiative bonus
 ];
 
+
+// Enhancement pricing
+const enhancementPricing = {
+  "+1": { cost: 1000, slots: 1 },
+  "+2": { cost: 4000, slots: 2 },
+  "+3": { cost: 16000, slots: 3 },
+  "+4": { cost: 48000, slots: 4 },
+  "+5": { cost: 125000, slots: 5 }
+};
+
+// Global variables for enhancement
+let selectedEnhancement = "";
+let selectedRegaliaBase = null;
+
+// Define what counts as clothing/armor vs accessories
+const clothingArmorCategories = [
+  // Basic Clothing
+  "Simple Cotton Top", "Silk Blouse", "Wool Sweater", 
+  "Linen Pants", "Cotton Trousers", "Silk Shorts",
+  // Themed Regalia
+  "Standard Issue Onesie", "Padded Training Pants", "Reinforced Footie Pajamas", 
+  "Absorbency-Enhanced Jumpsuit", "Scholarly Robes with Padded Lining", 
+  "Ceremonial Gown of the Graduate", "Tactical Diaper Coveralls", 
+  "Little Knight's Armored Bloomers", "Princess's Protective Pettipants", 
+  "Starlight Dreamer Sleepsuit", "Moonlight Serenade Frilled Dress", 
+  "Cloudweave Hooded Onesie", "Battle-Knit Tutu", "Darkenveil Latex Victorian Dress", 
+  "Arcane Scholar's Layered Dress", "Armored Nun's Habit", "Restrictive Heavy Armored Nun's Habit", 
+  "Sanctified Cleric Vestments", "Oracle's Blessed Mantle", "Traditional Witch's Outfit", 
+  "Widdle Witch Waddle Dress", "Padded Armor", "Leather Armor", "Studded Leather Armor", 
+  "Hide Armor", "Chain Shirt", "Scale Mail", "Breastplate", "Half Plate Armor", 
+  "Ring Mail", "Chain Mail", "Splint Armor", "Plate Armor", "Mystic Cloak",
+  "Ceremonial Cloak of the Gilded", "Gilded Ceremonial Cloak", "Runed Battlemage Cloak",
+  "Spectacles of Insight", "Mystic Monocle", "Tech-Enhanced Visor", "Dashing Musketeer Hat",
+  // Mithril Armors
+  "Mithril Chain Shirt", "Mithril Scale Mail", "Mithril Breastplate", 
+  "Mithril Half Plate Armor", "Mithril Chain Mail", "Mithril Splint Armor", "Mithril Plate Armor",
+  // Adamantine Armors
+  "Adamantine Chain Shirt", "Adamantine Scale Mail", "Adamantine Breastplate", 
+  "Adamantine Half Plate Armor", "Adamantine Chain Mail", "Adamantine Splint Armor", "Adamantine Plate Armor"
+];
 
 const regaliaUpgrades = [
     // **Defense Upgrades**
@@ -788,13 +916,18 @@ const regaliaUpgrades = [
     selectedUpgrades: [],
     usedSlots: [], 
     regaliaName: "",
-    regaliaImageUrl: ""
+    regaliaImageUrl: "",
+    totalCost: 0, // Track total enhancement cost
+    baseCost: 0, // Track base regalia cost
+    slotCost: 0 // Track slot installation cost
   };
   
   // DOM Elements
   const progressBarEl = document.getElementById("progressBarEl");
   const stageDisplay = document.getElementById("stageDisplay");
-  const regaliaTypeSelect = document.getElementById("regaliaTypeSelect");
+  const clothingArmorSelect = document.getElementById("clothingArmorSelect");
+  const accessoriesSelect = document.getElementById("accessoriesSelect");
+  const selectionWarning = document.getElementById("selectionWarning");
   const slotSelectionCtn = document.getElementById("slotSelectionCtn");
   const decreaseSlotBtn = document.getElementById("decreaseSlotBtn");
   const increaseSlotBtn = document.getElementById("increaseSlotBtn");
@@ -817,14 +950,29 @@ const regaliaUpgrades = [
 
   // Initialize
   document.addEventListener("DOMContentLoaded", () => {
-    populateRegaliaDropdown();
+    populateRegaliaDropdowns();
     updateProgress();
     
-    regaliaTypeSelect.addEventListener("change", onRegaliaSelected);
+    clothingArmorSelect.addEventListener("change", onRegaliaSelected);
+    accessoriesSelect.addEventListener("change", onRegaliaSelected);
     decreaseSlotBtn.addEventListener("click", decreaseSlots);
     increaseSlotBtn.addEventListener("click", increaseSlots);
     confirmSlotsBtn.addEventListener("click", confirmSlots);
     finalizeRegaliaBtn.addEventListener("click", showRegaliaSummary);
+    
+    // Add "Proceed to Next Tier" button listener
+    const proceedBtn = document.getElementById("proceedToNextTierBtn");
+    if (proceedBtn) {
+      proceedBtn.addEventListener("click", showRegaliaSummary);
+    }
+    
+    // Enhancement listeners
+    document.getElementById("enhanceNone").addEventListener("click", () => selectEnhancement(""));
+    document.getElementById("enhance1").addEventListener("click", () => selectEnhancement("+1"));
+    document.getElementById("enhance2").addEventListener("click", () => selectEnhancement("+2"));
+    document.getElementById("enhance3").addEventListener("click", () => selectEnhancement("+3"));
+    document.getElementById("enhance4").addEventListener("click", () => selectEnhancement("+4"));
+    document.getElementById("enhance5").addEventListener("click", () => selectEnhancement("+5"));
     
     if (regaliaImageInput) {
       regaliaImageInput.addEventListener("input", updateImagePreview);
@@ -845,29 +993,74 @@ const regaliaUpgrades = [
     stageDisplay.textContent = stageNames[state.currentStage -1];
   }
 
-  function populateRegaliaDropdown() {
-    regaliaTypeSelect.innerHTML = '<option value="" disabled selected>Select a regalia type...</option>';
+  function populateRegaliaDropdowns() {
+    clothingArmorSelect.innerHTML = '<option value="" disabled selected>Select clothing or armor...</option>';
+    accessoriesSelect.innerHTML = '<option value="" disabled selected>Select accessories or jewelry...</option>';
+    
     regaliaTypes.forEach(regalia => {
       const option = document.createElement('option');
-      option.value = regalia.name; // Store name as value for easy lookup
-      let displayText = `${regalia.name} (AC ${regalia.ac}) (Value: ${regalia.value})`;
-      if (regalia.notes) {
+      option.value = regalia.name;
+      let displayText = `${regalia.name} (AC ${regalia.ac}) - ${regalia.value.toLocaleString()} GP`;
+      if (regalia.notes && regalia.notes.length < 50) {
         displayText += ` - ${regalia.notes}`;
       }
       option.textContent = displayText;
-      regaliaTypeSelect.appendChild(option);
+      
+      if (clothingArmorCategories.includes(regalia.name)) {
+        clothingArmorSelect.appendChild(option);
+      } else {
+        // Everything else goes to accessories
+        accessoriesSelect.appendChild(option.cloneNode(true));
+      }
     });
   }
 
-  function onRegaliaSelected() {
-    const selectedName = regaliaTypeSelect.value;
-    state.selectedRegaliaBase = regaliaTypes.find(r => r.name === selectedName); // Store the whole object
+  function onRegaliaSelected(event) {
+    const clothingSelection = clothingArmorSelect.value;
+    const accessorySelection = accessoriesSelect.value;
     
+    // Check if both are selected
+    if (clothingSelection && accessorySelection) {
+      selectionWarning.style.display = "block";
+      slotSelectionCtn.style.display = "none";
+      // Clear the selection that was just made
+      if (event && event.target === clothingArmorSelect) {
+        accessoriesSelect.value = "";
+      } else {
+        clothingArmorSelect.value = "";
+      }
+      return;
+    }
+    
+    // Hide warning if shown
+    selectionWarning.style.display = "none";
+    
+    // Get the selected item
+    const selectedName = clothingSelection || accessorySelection;
+    if (!selectedName) {
+      slotSelectionCtn.style.display = "none";
+      return;
+    }
+    
+    state.selectedRegaliaBase = regaliaTypes.find(r => r.name === selectedName);
+    selectedRegaliaBase = state.selectedRegaliaBase;
+    
+    // Show/hide enhancement options based on whether it's armor/clothing
+    const armorClothingCheck = clothingArmorCategories.includes(selectedName);
+    const enhancementDiv = document.querySelector('#slotSelectionCtn > div');
+    if (enhancementDiv) {
+      enhancementDiv.style.display = armorClothingCheck ? 'block' : 'none';
+    }
+    
+    // Show slot selection container
     slotSelectionCtn.style.display = "block";
     state.currentStage = 2;
-    updateProgress();
-    updateSlotDisplay(); 
-    updateSelectedUpgradesList(); 
+    
+    // Update UI elements safely
+    if (typeof updateProgress === 'function') updateProgress();
+    if (typeof updateSlotDisplay === 'function') updateSlotDisplay();
+    if (typeof updateSelectedUpgradesList === 'function') updateSelectedUpgradesList();
+    if (typeof updateCostDisplay === 'function') updateCostDisplay();
   }
 
   function decreaseSlots() {
@@ -890,7 +1083,7 @@ const regaliaUpgrades = [
   }
 
   function confirmSlots() {
-    state.remainingSlots = state.totalSlots;
+    state.remainingSlots = state.totalSlots + (selectedEnhancement ? enhancementPricing[selectedEnhancement].slots : 0);
     remainingSlotsDisplay.textContent = state.remainingSlots;
     slotSelectionCtn.style.display = "none";
     upgradeSelectionCtn.style.display = "block";
@@ -898,6 +1091,35 @@ const regaliaUpgrades = [
     updateProgress();
     renderSlotIndicators();
     renderUpgradeOptions();
+    updateCostDisplay(); // Initialize cost display
+  }
+
+  // Enhancement handling functions
+  function selectEnhancement(level) {
+    selectedEnhancement = level;
+    
+    // Update button styles
+    document.querySelectorAll('.enhanceBtn').forEach(btn => {
+      btn.style.background = 'linear-gradient(to bottom, #d4b78c, #a88665)';
+      btn.style.color = '#4a3b2a';
+    });
+    
+    const selectedBtn = document.getElementById(`enhance${level === '' ? 'None' : level.replace('+', '')}`);
+    if (selectedBtn) {
+      selectedBtn.style.background = 'linear-gradient(to bottom, #b08d57, #826440)';
+      selectedBtn.style.color = '#f0e6d6';
+    }
+    
+    // Update display
+    const display = document.getElementById('enhancementDisplay');
+    if (level) {
+      const pricing = enhancementPricing[level];
+      display.textContent = `${level} Enhancement Selected (+${level.replace('+', '')} AC, +${pricing.slots} slots, ${pricing.cost.toLocaleString()} GP)`;
+    } else {
+      display.textContent = 'No Enhancement Selected';
+    }
+    
+    updateSlotDisplay();
   }
 
  function renderSlotIndicators() {
@@ -974,9 +1196,37 @@ const regaliaUpgrades = [
       });
     });
     
-    const showFinalizeAndCustomization = state.remainingSlots === 0;
-    finalizeRegaliaBtn.style.display = showFinalizeAndCustomization ? "inline-block" : "none";
-    regaliaCustomizationCtn.style.display = showFinalizeAndCustomization ? "block" : "none";
+    // Show finalization options when any upgrades are selected (not requiring all slots to be filled)
+    const hasUpgrades = state.selectedUpgrades.length > 0;
+    const allSlotsFilled = state.remainingSlots === 0;
+    
+    // Show "Proceed to Next Tier" button only when all slots are filled
+    const proceedBtn = document.getElementById("proceedToNextTierBtn");
+    if (proceedBtn) {
+      proceedBtn.style.display = allSlotsFilled ? "inline-block" : "none";
+    }
+    
+    // Show "Complete Regalia" button when upgrades are selected but not all slots are filled
+    let completeBtn = document.getElementById("completeRegaliaBtn");
+    if (!completeBtn && hasUpgrades && !allSlotsFilled) {
+      completeBtn = document.createElement("button");
+      completeBtn.id = "completeRegaliaBtn";
+      completeBtn.textContent = "Complete Regalia";
+      completeBtn.style.cssText = "background: linear-gradient(to bottom, #d4b78c, #a88665); color: #4a3b2a; border: none; border-radius: 4px; padding: 12px 24px; font-weight: bold; cursor: pointer; font-family: 'Cinzel', serif; transition: all 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.2); margin-right: 10px;";
+      completeBtn.addEventListener("click", showRegaliaSummary);
+      
+      // Insert the button before the finalize button
+      const finalizeBtn = document.getElementById("finalizeRegaliaBtn");
+      finalizeBtn.parentNode.insertBefore(completeBtn, finalizeBtn);
+    } else if (completeBtn) {
+      completeBtn.style.display = (hasUpgrades && !allSlotsFilled) ? "inline-block" : "none";
+    }
+    
+    // Show finalize button only when all slots are filled
+    finalizeRegaliaBtn.style.display = allSlotsFilled ? "inline-block" : "none";
+    
+    // Show personalization section when any upgrades are selected
+    regaliaCustomizationCtn.style.display = hasUpgrades ? "block" : "none";
   }
 
   function selectUpgrade(upgrade) {
@@ -1002,6 +1252,7 @@ const regaliaUpgrades = [
       updateSelectedUpgradesList();
       renderSlotIndicators();
       renderUpgradeOptions();
+      updateCostDisplay(); // Update cost display
     }
   }
 
@@ -1014,6 +1265,7 @@ const regaliaUpgrades = [
     updateSelectedUpgradesList();
     renderSlotIndicators();
     renderUpgradeOptions();
+    updateCostDisplay(); // Update cost display
   }
   
   function updateSelectedUpgradesList() {
@@ -1074,6 +1326,117 @@ const regaliaUpgrades = [
   function updateRegaliaName() {
     state.regaliaName = regaliaNameInput.value.trim();
   }
+
+  // Calculate total enhancement cost based on slot pricing (similar to weapon creator)
+  function calculateEnhancementCost() {
+    const slotCosts = {
+      1: 1500,
+      2: 1500, // 3000 total - 1500 from slot 1
+      3: 2250, // 5250 total - 3000 from slots 1-2
+      4: 2250, // 7500 total - 5250 from slots 1-3
+      5: 2250, // 9750 total - 7500 from slots 1-4
+      6: 3000, // 12750 total - 9750 from slots 1-5
+      7: 3000, // 15750 total - 12750 from slots 1-6
+      8: 3750, // 19500 total - 15750 from slots 1-7
+      9: 3750, // 23250 total - 19500 from slots 1-8
+      10: 4500 // 27750 total - 23250 from slots 1-9
+    };
+    
+    let totalCost = 0;
+    const usedSlotCount = state.totalSlots - state.remainingSlots;
+    
+    for (let i = 1; i <= usedSlotCount; i++) {
+      totalCost += slotCosts[i] || 4500; // Default to highest cost for slots beyond 10
+    }
+    
+    return totalCost;
+  }
+
+  // Calculate slot installation cost based on pricing table
+  function calculateSlotCost() {
+    const slotInstallationCosts = {
+      1: 1500,
+      2: 3000,
+      3: 5250,
+      4: 7500,
+      5: 9750,
+      6: 12750,
+      7: 15750,
+      8: 19500,
+      9: 23250,
+      10: 27750
+    };
+    
+    return slotInstallationCosts[state.totalSlots] || (27750 + (state.totalSlots - 10) * 4500);
+  }
+
+  // Get base regalia cost
+  function getBaseCost() {
+    if (!state.selectedRegaliaBase) return 0;
+    return state.selectedRegaliaBase.value || 0;
+  }
+
+  // Calculate total cost (base + slots + enhancements)
+  function calculateTotalCost() {
+    const baseCost = getBaseCost();
+    const slotCost = calculateSlotCost();
+    const enhancementCost = calculateEnhancementCost();
+    
+    state.baseCost = baseCost;
+    state.slotCost = slotCost;
+    state.totalCost = enhancementCost;
+    
+    return baseCost + slotCost + enhancementCost;
+  }
+
+  // Update cost display
+  function updateCostDisplay() {
+    if (!state.selectedRegaliaBase) return;
+    
+    const baseCost = state.selectedRegaliaBase.value;
+    const enhancementCost = selectedEnhancement ? enhancementPricing[selectedEnhancement].cost : 0;
+    const upgradesCost = state.selectedUpgrades.reduce((sum, upgrade) => sum + (upgrade.cost * 500), 0);
+    const creationCost = 150;
+    
+    const totalCost = baseCost + enhancementCost + upgradesCost + creationCost;
+    
+    const costDisplayEl = document.getElementById('totalCostDisplay');
+    if (costDisplayEl) {
+      costDisplayEl.textContent = `${totalCost.toLocaleString()} GP`;
+    }
+    
+    // Update detailed cost breakdown in the cost display container
+    const costDisplay = document.getElementById('costDisplayCtn');
+    if (costDisplay) {
+      let enhancementText = selectedEnhancement ? 
+        `<div style=\"display: flex; justify-content: space-between; margin-bottom: 5px;\">
+          <span>Enhancement (${selectedEnhancement}):</span>
+          <span>${enhancementCost.toLocaleString()} GP</span>
+        </div>` : '';
+      
+      costDisplay.innerHTML = `
+        <div style=\"display: flex; justify-content: space-between; margin-bottom: 5px;\">
+          <span>Base Regalia:</span>
+          <span>${baseCost.toLocaleString()} GP</span>
+        </div>
+        ${enhancementText}
+        <div style=\"display: flex; justify-content: space-between; margin-bottom: 5px;\">
+          <span>Upgrades (${state.selectedUpgrades.length}):</span>
+          <span>${upgradesCost.toLocaleString()} GP</span>
+        </div>
+        <div style=\"display: flex; justify-content: space-between; margin-bottom: 5px;\">
+          <span>Creation Cost:</span>
+          <span>${creationCost.toLocaleString()} GP</span>
+        </div>
+        <hr style=\"border-color: #b08d57; margin: 10px 0;\">
+        <div style=\"display: flex; justify-content: space-between; font-weight: bold; font-size: 1.2em; color: #8c693a;\">
+          <span>Total Cost:</span>
+          <span>${totalCost.toLocaleString()} GP</span>
+        </div>
+        <div style=\"font-size: 0.8em; color: #5c4d3e; margin-top: 8px; font-style: italic; text-align: center;\">*Includes all regalia creation costs</div>
+      `;
+    }
+  }
   
   function showRegaliaSummary() {
     state.regaliaName = regaliaNameInput.value.trim() || (state.selectedRegaliaBase ? state.selectedRegaliaBase.name : "My Custom Regalia");
@@ -1084,8 +1447,15 @@ const regaliaUpgrades = [
     state.currentStage = 4;
     updateProgress();
 
-    const regaliaDisplayName = state.regaliaName;
+    const regaliaDisplayName = selectedEnhancement ? `${selectedEnhancement} ${state.regaliaName}` : state.regaliaName;
     let finalAC = state.selectedRegaliaBase ? state.selectedRegaliaBase.ac : 10; // Start with base AC
+    
+    // Add enhancement bonus to AC
+    if (selectedEnhancement) {
+      const enhancementBonus = parseInt(selectedEnhancement.replace('+', ''));
+      finalAC += enhancementBonus;
+    }
+    
     let finalNotes = state.selectedRegaliaBase ? state.selectedRegaliaBase.notes : "";
 
     // Check for AC modifying upgrades
@@ -1098,6 +1468,13 @@ const regaliaUpgrades = [
         if (finalNotes === "") finalNotes = "Penalties Removed";
         else finalNotes += " (Some Penalties Removed)";
     }
+    
+    // Calculate total cost
+    const baseCost = state.selectedRegaliaBase.value;
+    const enhancementCost = selectedEnhancement ? enhancementPricing[selectedEnhancement].cost : 0;
+    const upgradesCost = state.selectedUpgrades.reduce((sum, upgrade) => sum + (upgrade.cost * 500), 0);
+    const creationCost = 150;
+    const totalCost = baseCost + enhancementCost + upgradesCost + creationCost;
     
     let summaryHTML = `
       <div style="border: 2px solid #b08d57; border-radius: 5px; padding: 20px; background-color: #e0c8a0;">
@@ -1116,10 +1493,12 @@ const regaliaUpgrades = [
         <div style="display: flex; justify-content: space-between; flex-wrap: wrap; margin-bottom: 10px; color: #5c4d3e;">
           <p><strong>Base Type:</strong> ${state.selectedRegaliaBase ? state.selectedRegaliaBase.name : 'N/A'}</p>
           <p><strong>Final AC:</strong> ${finalAC}</p>
+          <p><strong>Total Value:</strong> ${totalCost.toLocaleString()} GP</p>
         </div>
+        ${selectedEnhancement ? `<div style="margin-bottom: 10px; color: #5c4d3e;"><p><strong>Enhancement:</strong> ${selectedEnhancement} (+${selectedEnhancement.replace('+', '')} AC, ${enhancementPricing[selectedEnhancement].cost.toLocaleString()} GP)</p></div>` : ''}
         <div style="margin-bottom: 20px; color: #5c4d3e;">
             <p><strong>Notes:</strong> ${finalNotes || "None"}</p>
-            <p><strong>Total Slots Used:</strong> ${state.totalSlots - state.remainingSlots} / ${state.totalSlots}</p>
+            <p><strong>Total Slots Used:</strong> ${state.totalSlots - state.remainingSlots} / ${state.totalSlots + (selectedEnhancement ? enhancementPricing[selectedEnhancement].slots : 0)}</p>
         </div>
         <h4 style="color: #8c693a; border-bottom: 1px solid #b08d57; padding-bottom: 5px;">Chosen Upgrades</h4>
         <ul style="list-style-type: none; padding: 0;">
@@ -1145,6 +1524,39 @@ const regaliaUpgrades = [
     
     summaryHTML += `
         </ul>
+        
+        <div style="margin-top: 20px; padding: 15px; background-color: rgba(176, 141, 87, 0.2); border-radius: 5px; border: 1px solid #b08d57;">
+          <h4 style="color: #8c693a; margin-top: 0; margin-bottom: 15px; text-align: center;">Complete Cost Breakdown</h4>
+          
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span style="color: #5c4d3e; font-size: 1.0em;">Base Regalia Cost:</span>
+            <span style="color: #8c693a; font-weight: bold;">${state.baseCost.toLocaleString()} GP</span>
+          </div>
+          
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span style="color: #5c4d3e; font-size: 1.0em;">Slot Installation Cost:</span>
+            <span style="color: #8c693a; font-weight: bold;">${state.slotCost.toLocaleString()} GP</span>
+          </div>
+          
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span style="color: #5c4d3e; font-size: 1.0em;">Enhancement Cost:</span>
+            <span style="color: #8c693a; font-weight: bold;">${state.totalCost.toLocaleString()} GP</span>
+          </div>
+          
+          <hr style="border: none; border-top: 2px solid #b08d57; margin: 12px 0;">
+          
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span style="color: #5c4d3e; font-size: 1.1em;">Total Slots:</span>
+            <span style="color: #8c693a; font-weight: bold;">${state.totalSlots}</span>
+          </div>
+          
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px;">
+            <span style="color: #5c4d3e; font-size: 1.2em; font-weight: bold;">Grand Total Cost:</span>
+            <span style="color: #8c693a; font-weight: bold; font-size: 1.4em; text-shadow: 0 0 5px #b08d57;">${calculateTotalCost().toLocaleString()} GP</span>
+          </div>
+          
+          <div style="font-size: 0.85em; color: #5c4d3e; margin-top: 10px; font-style: italic; text-align: center;">*Complete regalia creation cost including base regalia, slot installation, and enhancements</div>
+        </div>
       </div>
       <div style="margin-top: 30px; text-align: center;">
         <button onclick="location.reload()" style="background: linear-gradient(to bottom, #d4b78c, #a88665); color: #4a3b2a; border: none; border-radius: 4px; padding: 12px 24px; font-weight: bold; cursor: pointer; font-family: 'Cinzel', serif; transition: all 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">Create Another Regalia</button>

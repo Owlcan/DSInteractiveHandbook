@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cellarways Corridor & Room Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1a202c;
+            background-image: radial-gradient(circle at top right, rgba(12, 74, 110, 0.5), transparent 40%),
+                              radial-gradient(circle at bottom left, rgba(100, 116, 139, 0.3), transparent 50%);
+            background-attachment: fixed;
+        }
+        h1, .section-title {
+            font-family: 'Cinzel Decorative', cursive;
+        }
+        #generator-frame {
+            background-color: rgba(17, 24, 39, 0.8);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border: 4px solid #4a5568;
+            border-image: linear-gradient(to bottom right, #a0aec0, #4a5568) 1;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(0, 0, 0, 0.4);
+        }
+        #output {
+            min-height: 300px;
+        }
+        .btn-generate {
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        .btn-generate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4);
+        }
+        .btn-generate:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        .section-title {
+             color: #a0aec0;
+             border-bottom: 1px solid #4a5568;
+        }
+    </style>
+</head>
+<body class="text-gray-300 min-h-screen flex flex-col items-center justify-center p-4">
+
+    <div id="app-container" class="w-full max-w-4xl">
+        <header class="text-center mb-6">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-100 tracking-wider">Cellarways Generator</h1>
+            <p class="mt-2 text-gray-400">Generate the impossible corridors and forgotten underpassages of the Scholia Diaspros.</p>
+        </header>
+
+        <main id="generator-frame" class="rounded-lg p-6 md:p-8">
+            <div id="output" class="text-lg leading-relaxed text-gray-300">
+                <p class="text-gray-400 italic">The passage ahead splits. Do you explore a winding corridor or venture into a sealed room? Click a button to proceed.</p>
+            </div>
+        </main>
+
+        <footer class="text-center mt-8 flex flex-col sm:flex-row justify-center gap-4">
+            <button id="generate-corridor-btn" class="btn-generate bg-slate-700 hover:bg-slate-600 text-white font-bold py-3 px-8 rounded-lg text-xl">
+                Generate Corridor
+            </button>
+            <button id="generate-room-btn" class="btn-generate bg-indigo-800 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg text-xl">
+                Generate Room
+            </button>
+            <button id="show-index-btn" class="btn-generate bg-teal-800 hover:bg-teal-700 text-white font-bold py-3 px-8 rounded-lg text-xl">
+                Encounter Index
+            </button>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURES AND HELPER FUNCTIONS ---
+
+        const weightedRandom = (items) => {
+            if (!Array.isArray(items)) {
+                console.error("weightedRandom expects an array of weighted objects.", items);
+                return null;
+            }
+            const totalWeight = items.reduce((sum, item) => sum + item.weight, 0);
+            let random = Math.random() * totalWeight;
+            for (const item of items) {
+                if (random < item.weight) return item.value;
+                random -= item.weight;
+            }
+            return items.length > 0 ? items[items.length - 1].value : null; // Fallback
+        };
+
+        const getRandomElement = (arr) => {
+            if (!Array.isArray(arr) || arr.length === 0) {
+                 console.error("getRandomElement expects a non-empty array.", arr);
+                return "";
+            }
+            return arr[Math.floor(Math.random() * arr.length)];
+        };
+
+        const roll = (chance) => Math.random() < chance;
+
+        // --- DESCRIPTIVE DATA ---
+        const styles = [
+            { value: "Blue & Silver", weight: 6 },
+            { value: "Dusty Stone", weight: 2 },
+            { value: "Carved Stone", weight: 2 },
+        ];
+        const roomTypes = [
+            { value: "Abandoned Academy Space", weight: 4 },
+            { value: "Magical & Arcane Facility", weight: 4 },
+            { value: "Foundational & Ancient Structure", weight: 1.5 },
+            { value: "Navigational Feature", weight: 0.5 },
+            { value: "Window Gallery Room", weight: 0.1 }, // very rare room type
+        ];
+        const corridorTypes = [
+            { value: "Abandoned Academy Corridor", weight: 5 },
+            { value: "Magical & Arcane Hallway", weight: 5 },
+            { value: "Foundational & Ancient Antechamber", weight: 2 },
+            { value: "Navigational Crossroads/Rotunda", weight: 1 },
+            { value: "Window Gallery Corridor", weight: 0.25 }, // rare corridor type
+        ];
+        const roomSizes = [{ value: 'Small', weight: 6 }, { value: 'Medium', weight: 3 }, { value: 'Large', weight: 1 }];
+        const roomShapes = [{ value: 'Rectangular', weight: 6 }, { value: 'Square', weight: 3 }, { value: 'Circular', weight: 1 }];
+        const conditions = [{ value: 'Worn', weight: 6 }, { value: 'Pristine', weight: 2 }, { value: 'Ruined', weight: 2 }];
+        const lightings = [{ value: 'Dim', weight: 6 }, { value: 'Dark', weight: 3 }, { value: 'Well-lit', weight: 1 }];
+        const atmospheres = [{ value: 'Unsettling', weight: 6 }, { value: 'Calm', weight: 2 }, { value: 'Oppressive', weight: 2 }];
+        const temperatures = [{ value: 'Ambient', weight: 7 }, { value: 'Cool', weight: 2 }, { value: 'Warm', weight: 1 }];
+        const smells = [{ value: 'Musty', weight: 6 }, { value: 'Earthy', weight: 2 }, { value: 'Neutral', weight: 2 }];
+        const sounds = [{ value: 'Ambient Noise', weight: 6 }, { value: 'Silent', weight: 3 }, { value: 'Echoing', weight: 1 }];
+
+        const roomData = {
+            "Abandoned Academy Space": {
+                names: ["Flooded Storage", "The Forgotten Nursery", "Cluttered Storage Classroom", "The War-Torn Ward", "The Unwritten Classroom"],
+                descriptions: [
+                    "This area is a sorrowful remnant of the Academy's past, forgotten and left to decay.",
+                    "Signs of a bygone era of student life are everywhere, now covered in dust and neglect.",
+                    "It's clear this room was abandoned in a hurry, its original purpose lost to time and chaos."
+                ]
+            },
+            "Magical & Arcane Facility": {
+                names: ["The Headmaster's Vault", "The Alchemical Workshop", "The Planar Orrery", "The Golem Foundry", "The Scrying Chamber"],
+                descriptions: [
+                    "Powerful magic still flows through this chamber's foundations, humming with latent energy.",
+                    "This was once a place of great learning and arcane creation, now left dormant.",
+                    "The intricate designs and powerful artifacts suggest this room was of great importance."
+                ]
+            },
+            "Foundational & Ancient Structure": {
+                names: ["The Foundation Crypt", "The Cistern of Whispers", "The Root Cellar"],
+                descriptions: [
+                    "Carved from the very bedrock of the demiplane, this place feels ancient and primal.",
+                    "The air is heavy with age, and the walls seem to hold the plane's oldest secrets.",
+                    "This structure feels tied to the fundamental forces of the Academy itself."
+                ]
+            },
+            "Navigational Feature": {
+                names: ["The Cellarways Crossroads", "A Shifting Rotunda", "An Unstable Junction"],
+                descriptions: [
+                    "This area serves as a confusing and dangerous junction of several shifting passages.",
+                    "Multiple paths converge here, each one humming with unstable dimensional energy.",
+                    "Navigating this space is a challenge, as the paths seem to reconfigure themselves when unobserved."
+                ]
+            },
+            "Window Gallery Room": {
+                names: ["Window Gallery", "Hall of Reflections", "Archive of Panes", "Corridor of Glass"],
+                descriptions: [
+                    "This chamber’s walls are set with thick panes of grimy glass, each one a stubborn eye peering into somewhere else.",
+                    "A hush hangs over rows of inset windows, their frames cold to the touch; the air tastes faintly of dust and ozone.",
+                    "Here the Cellarways thins: glass-lidded openings shimmer with distant light, promising glimpses—never passage."
+                ]
+            }
+        };
+
+        const features = [
+            "Shifting Floor Tiles: The tiles on the floor subtly shift in color and pattern when unobserved for more than a few seconds.",
+            "Ephemeral Wall Sections: A section of the wall shimmers and becomes transparent, offering a brief, distorted glimpse into an impossible space before solidifying again.",
+            "Door to Nowhere: A heavy wooden door, when opened, reveals only a solid brick wall that feels unnaturally cold to the touch.",
+            "Anachronistic Merger: A pristine, modern-looking desk is half-submerged in a pool of ancient, moss-covered stone, its drawers blending seamlessly into the rough-hewn rock.",
+            "Whispering Echoes: A faint, disembodied whisper can be heard, seemingly coming from the very air, repeating fragmented phrases from forgotten conversations.",
+            "Gravity Fluctuation: The pull of gravity in the center of the area feels subtly weaker, causing movement to feel strangely buoyant.",
+            "Illusory Passage: A seemingly open archway leads to a solid wall when approached, the illusion only breaking within arm's reach.",
+            "Time Dilation Pocket: A small, shimmering pocket of air exists in a corner where time moves slower; dust motes drift with agonizing slowness within it.",
+            "Weeping Carvings: The faded carvings on the walls appear to weep a faint, shimmering liquid that evaporates before it hits the floor.",
+            "Breathing Roots: If roots are present, they seem to subtly expand and contract, as if the very walls are breathing.",
+            "Self-Correcting Blackboard: A clean slate blackboard occasionally displays bizarre, alien equations that erase themselves before they can be fully deciphered.",
+            "Humming Pedestal: An empty pedestal in the center emits a low, resonant hum, and faint images of what might have once rested upon it flicker in the air above."
+        ];
+        
+        // --- GENERIC CORRIDOR PACKS (simple groups of similar monsters) ---
+        // Dice helpers for simple strings like "1d4+2"
+        const rollDiceSpec = (spec) => {
+            const m = /^(\d+)d(\d+)([+\-]\d+)?$/i.exec(spec.trim());
+            if (!m) return 1;
+            const n = parseInt(m[1], 10);
+            const d = parseInt(m[2], 10);
+            const k = m[3] ? parseInt(m[3], 10) : 0;
+            let total = 0;
+            for (let i = 0; i < n; i++) total += 1 + Math.floor(Math.random() * d);
+            return Math.max(1, total + k);
+        };
+        const averageDiceCount = (spec) => {
+            const m = /^(\d+)d(\d+)([+\-]\d+)?$/i.exec(spec.trim());
+            if (!m) return 1;
+            const n = parseInt(m[1], 10);
+            const d = parseInt(m[2], 10);
+            const k = m[3] ? parseInt(m[3], 10) : 0;
+            return Math.max(1, n * (d + 1) / 2 + k);
+        };
+        const pluralize = (word) => {
+            const lower = word.toLowerCase();
+            if (/(s|x|z|ch|sh)$/.test(lower)) return word + 'es';
+            return word + 's';
+        };
+        const roundCR = (cr) => Math.round(cr * 4) / 4; // quarter-steps
+
+        // Packs use weights compatible with weightedRandom
+        const genericCorridorPacks = [
+            { weight: 3, value: { label: "Darkling Slime Cluster", memberName: "Darkling Slime", memberCR: 0.125, countDice: "1d4+2", tactics: "They clog the hall and try to split the party at a choke point." } },
+            { weight: 2, value: { label: "Lurker Skitter Pack", memberName: "Darkling Lurker", memberCR: 0.5, countDice: "1d4", tactics: "They drop from above in staggered pairs, then disengage to reset." } },
+            { weight: 1.5, value: { label: "Slurper Patrol", memberName: "Darkling Slurper", memberCR: 1, countDice: "1d3", tactics: "Tongues lash from opposite walls to restrain a forefront target." } },
+            { weight: 1.75, value: { label: "Paralurker Flock", memberName: "Darkling Paralurker", memberCR: 1, countDice: "1d4+1", tactics: "They harry from the ceiling, seeking isolated stragglers." } },
+            { weight: 1.25, value: { label: "Weirdling Swarm", memberName: "Weirdling", memberCR: 0.25, countDice: "2d4", tactics: "They careen unpredictably, creating difficult movement and noise." } },
+        ];
+
+        const generateGenericCorridorEncounter = () => {
+            const pack = weightedRandom(genericCorridorPacks);
+            const count = rollDiceSpec(pack.countDice);
+            const plural = count === 1 ? pack.memberName : pluralize(pack.memberName);
+            const approxCR = roundCR(count * (pack.memberCR || 0));
+            return {
+                name: `${pack.label}`,
+                cr: approxCR,
+                description: `You encounter ${count} ${plural} spread along the corridor, presenting an obstacle to progress. ${pack.tactics} (Pack size: ${pack.countDice}; approx CR ${approxCR})`
+            };
+        };
+        
+        // --- ENCOUNTER DATA ---
+        const corridorEncounters = [
+            // Slimes & minor darklings
+            { value: { cr: 0.125, name: "Tiny Darkling Slimes", description: "A scatter of tiny darkling slimes ooze along the baseboards, leaving a faintly iridescent trail. They recoil from bright light and quick motion." }, weight: 4 },
+            { value: { cr: 0.25, name: "Small Darkling Slimes", description: "A cluster of small darkling slimes rolls in a loose pack, attracted to the hum of nearby magitech. They hesitate if outnumbered." }, weight: 3 },
+            { value: { cr: 0.5, name: "Wandering Slimes", description: "A small glob of 2-3 Darkling Slimes (Mopes) wobble aimlessly down the corridor. They seem more lost than aggressive and will likely flee if confronted with bright light or violence." }, weight: 4 },
+            { value: { cr: 0.5, name: "Darkling Cuboid Slime", description: "A cuboid slime lurches in right angles as if obeying a broken grid. Its geometry makes it awkward to predict but easy to outpace in straightaways." }, weight: 2 },
+            // Lurkers, slurpers, paralurkers, weirdlings
+            { value: { cr: 0.5, name: "Lurker Ambush", description: "A pair of Darkling-Lurkers cling to the ceiling, nearly invisible in the dim light. They wait for a target to pass beneath before dropping down." }, weight: 3 },
+            { value: { cr: 1, name: "Slurper Pair", description: "Two Darkling-Slurpers move along the walls, their long tongues occasionally darting out to taste the air. They are looking for sources of magic to consume." }, weight: 2 },
+            { value: { cr: 1, name: "Paralurker Pack", description: "A pack of 1d4+1 Darkling-Paralurkers skitters along the ceiling, their talons making soft clicking sounds. They are hunting for small prey and will attack if they sense weakness, but a show of force may scare them off." }, weight: 2 },
+            { value: { cr: 1, name: "Weirdlings Harrying Slimes", description: "Two Weirdling-Paralurkers chase a rolling puddle of tiny darkling slimes, causing chaos and slick footing. Intervening might win you odd gratitude—or a new problem." }, weight: 1.5 },
+            { value: { cr: 2, name: "Caller’s Rally", description: "A Darkling Caller keens down the corridor, drawing nearby lurkers and slurpers into a loose skirmish line. The echoing call betrays more bodies around the bend." }, weight: 1.5 },
+            { value: { cr: 2, name: "Yowler on the Prowl", description: "A Darkling Yowler stalks the passage. Its screech risks attracting reinforcements unless silenced quickly." }, weight: 1 },
+            // Academy hazards & patrols
+            { value: { cr: 3, name: "Patrolling Hall Monitor", description: "A lone Darkling Hall Monitor patrols the corridor with unnerving silence. It is actively looking for 'truants' and will attempt to detain the first person it sees." }, weight: 1.5 },
+            { value: { cr: 4, name: "Mobile Hall Cleaner", description: "A hulking, mindless ooze-engine shuffles forward, filling the entire hall. It indiscriminately consumes loose objects and will push through anyone in its path, leaving slick terrain behind." }, weight: 0.75 },
+            // Dark Dimension cadres
+            { value: { cr: 2, name: "Infiltrator Scout Team", description: "Two Dark Dimension Infiltrators sweep the corridor with breach gear. They prefer coordinated strikes and will fall back if they sense a superior force." }, weight: 2 },
+            { value: { cr: 2, name: "Void Scholar & Escort", description: "A Dark Dimension Void Scholar studies a flickering rune pane while two lurkers keep watch. If pressed, the scholar blinks away and counterattacks with force-bolts." }, weight: 1.25 },
+            { value: { cr: 5, name: "Warforged Darkwatch Patrol", description: "A Warforged Darkwatch unit sweeps methodically, scanning for anomalies. It signals quietly for reinforcements if not neutralized swiftly." }, weight: 0.5 },
+            { value: { cr: 3, name: "Darkforged Survey Detail", description: "A pair of Darkforged constructs methodically probe masonry and cable runs—an eminently unfriendly inspection team." }, weight: 0.75 },
+            // Oozes and bosses-in-miniature
+            { value: { cr: 2, name: "Pugnacious Puddle", description: "A jittery ooze quivers as if spoiling for a fight. It lashes at smaller slimes, then at the nearest ankles that dare approach." }, weight: 1.25 },
+            { value: { cr: 5, name: "Liquid Legion Hunt (Open)", description: "The corridor thrums with the approach of a Liquid Legion mass. With a solid Perception check, you can spot its advance in time to reposition before the wave hits." }, weight: 0.6 },
+            { value: { cr: 5, name: "Liquid Legion Ambush", description: "A sudden hush precedes a black surge spilling from wall vents. On a failed Perception check, the party is surprised as the Legion surges to engulf." }, weight: 0.3 },
+            // Lairs-in-the-hall
+            { value: { cr: 3, name: "Grief-Stone’s Shadow", description: "The corridor subtly narrows; sigils pulse faintly. A hidden Grief-Stone nearby feeds on unease—walls seem to shift to corral you unless you move decisively." }, weight: 0.75 },
+
+            // — More corridor variety —
+            // Darkling tactics and variants
+            { value: { cr: 2, name: "Ceiling Creepers Ambuscade", description: "Three to five Darkling Lurkers press flat against the rafters, drifting with the breeze like stains. Dust falls just before they drop." }, weight: 2 },
+            { value: { cr: 2, name: "Slurper Tongue Gauntlet", description: "Slurpers have anchored themselves into alcoves, lashing tongues down a narrow run. Severing tongues or forcing them to withdraw clears the lane." }, weight: 1.75 },
+            { value: { cr: 3, name: "Caller Relay", description: "Two Callers trade keening signals up and down the passage, coordinating unseen skirmishers. Silence one quickly or expect adds from both directions." }, weight: 1 },
+            { value: { cr: 1, name: "Weirdling Stampede", description: "A herd of jittery Weirdlings ricochets off lockers and molding, chasing a light that isn’t there. They bowl into anything in their path, then scatter." }, weight: 1 },
+            { value: { cr: 2, name: "Paralurker Net", description: "Paralurkers have threaded the overhead with sticky filaments. Movement below risks a sudden drop, entangle, and raking talons from above." }, weight: 1.25 },
+
+            // Environmental hazards and anomalies
+            { value: { cr: 2, name: "Arc-Sparker Conduit", description: "A cracked conduit spits blue arcs floor-to-ceiling. Timing the jumps avoids damage; nearby slimes have learned the pattern and lurk just beyond." }, weight: 1 },
+            { value: { cr: 1, name: "Gravity Flip Segment", description: "A short span inverts your step. Loose objects drift to the ceiling, and ceiling lurkers grin. Clever use of rope or mage hand helps." }, weight: 0.8 },
+            { value: { cr: 2, name: "Time-Lag Pocket", description: "A ripple of slow-time lingers here. Projectiles crawl while footsteps echo out of order; predators wait just outside the bubble." }, weight: 0.8 },
+
+            // Dark Dimension corridor ops
+            { value: { cr: 3, name: "Infiltrator Snare", description: "Tripwire sigils prime a shaped-force snare. Infiltrators strike from blind corners to isolate the rearmost target, then fade back." }, weight: 1.5 },
+            { value: { cr: 5, name: "Vanguard Shield Push", description: "A Vanguard advances methodically behind a humming bulwark, trying to compress you into a choke point for capture." }, weight: 0.9 },
+            { value: { cr: 7, name: "Justicar Passing Judgment", description: "Bootfalls like a metronome precede a Justicar who marks one of you as the offender. It attempts to separate and sentence that target." }, weight: 0.3 },
+            { value: { cr: 3, name: "Void Scholar Field Test", description: "A Void Scholar releases a test anomaly that distorts space in a 20 ft stretch. It observes, notes reactions, and attacks only if challenged." }, weight: 1 },
+
+            // Warforged/Darkforged presence
+            { value: { cr: 4, name: "Darkwatch Scanpoint", description: "Warforged Darkwatch establishes a scan beam across the hall. Crossing it without the right phase signature pings a remote alarm." }, weight: 0.6 },
+            { value: { cr: 4, name: "Darkforged Remnant Patrol", description: "Two Darkforged Remnants clatter past, their optics sweeping for stress-fractures and trespassers. They escalate quickly if hailed." }, weight: 0.8 },
+            { value: { cr: 3, name: "Darkforged Survey Trap", description: "A tripod device hums; floor runes glow. It’s a nonlethal stasis trap meant to hold subjects for collection—unless tampered with." }, weight: 0.9 },
+            { value: { cr: 2, name: "Warforged Sensor Drone", description: "A floating sensor orb maps the passage in tight grids. It blares if swatted and summons something heavier within a minute." }, weight: 0.9 },
+
+            // Ooze work details
+            { value: { cr: 0.5, name: "Stale Slurry Spill", description: "A low tide of inert ooze makes footing treacherous. Disturbances call in opportunistic slimes from vents and drains." }, weight: 1 },
+            { value: { cr: 3, name: "Custodial Cube", description: "A translucent cube polishes the hall with alarming enthusiasm. It engulfs unattended gear before moving on to unattended limbs." }, weight: 0.7 },
+            { value: { cr: 3, name: "Puddle Pack", description: "Two Pugnacious Puddles jostle for dominance, splashing hotly at the slightest provocation. Fight one and the other joins gleefully." }, weight: 0.6 },
+            { value: { cr: 2, name: "Cleaner Foam Discharge", description: "A Mobile Cleaner vents caustic foam from a maintenance hatch. The foam crawls uphill and eats grime—and curious fingers." }, weight: 0.5 },
+
+            // Rare or notable passersby
+            { value: { cr: 6, name: "Echo Inquisitor’s Afterimage", description: "A temporal smear paces the corridor ahead. Engage and the Inquisitor notices—expect a short, brutal chase through flickering time." }, weight: 0.2 },
+            { value: { cr: 4, name: "Hall Monitor Dragnet", description: "Two Monitors string a checkpoint with chalk glyphs and confiscation poles. ‘Papers,’ they demand, meaning ‘permissions you do not have.’" }, weight: 0.7 },
+            { value: { cr: 5, name: "Detention Professor on Rounds", description: "A Detention Professor strolls with a switch and a smile. It assigns ‘classwork’ involving restraints and restorative suffering." }, weight: 0.4 },
+            { value: { cr: 4, name: "Primogenitor’s Scent", description: "The air goes thin—lurkers tense. You’re moving through the hunting lane of a Lurker Primogenitor. It may test you with a feint." }, weight: 0.3 },
+
+            // Liquid Legion signs
+            { value: { cr: 3, name: "Liquid Legion Dripfeed", description: "Condensation beads go ink-black and begin marching. Early Legion massing—interrupt the flow or it will become a wave." }, weight: 0.7 },
+            { value: { cr: 1, name: "Legion Residue Hazard", description: "Patchy, reactive residue clings to the floor. It tries to flow toward warmth and sound, making stealth much harder." }, weight: 0.9 },
+
+            // Windows and oddities
+            { value: { cr: 2, name: "Window Gauntlet", description: "A run of stubborn panes emit psychic crosswind. Weirdlings press their faces to the glass, laughing at shapes only they see." }, weight: 0.9 },
+            { value: { cr: 0, name: "Slime Cube Princess Crossing (Non-Combat)", description: "The Slime Cube Princess oozes across the hall, crown askew. She pauses if greeted politely, then continues her promenade." }, weight: 0.2 },
+            { value: { cr: 4, name: "Grief-Stone Pressure Fluctuation", description: "Air grows heavy and choices feel worse. A nearby Grief-Stone flexes its will; decisive, confident movement breaks the grip." }, weight: 0.5 },
+        ];
+
+        const roomEncounters = [
+            // Dark Dimension cadres (common room threats)
+            { value: { cr: 4, name: "Infiltrator Team", description: "A pair of Dark Dimension Infiltrators examine a strange glyph on the wall. They are hostile and will attack on sight, using breaching tactics to overwhelm a target." }, weight: 4 },
+            { value: { cr: 2, name: "Void Scholar at Work", description: "A Dark Dimension Void Scholar calibrates a humming rune lattice. Disrupting the lattice may grant advantage—but risks a volatile backlash." }, weight: 2.5 },
+            { value: { cr: 5, name: "Vanguard's Post", description: "A lone Dark Dimension Vanguard stands guard in this room, protecting a seemingly insignificant doorway. It will use aggressive tactics to neutralize any who approach." }, weight: 2 },
+            { value: { cr: 7, name: "Justicar's Judgment", description: "A Dark Dimension Justicar inspects the room with an air of authority, searching for a high-value target. It deems the party an unacceptable variable and moves to eliminate them." }, weight: 1 },
+            { value: { cr: 9, name: "The Dean's Office", description: "A Darkforme Disciplinary Dean studies a scrying pool. The Dean’s punishments are immediate and severe—comply or be corrected." }, weight: 0.5 },
+
+            // Darkling faculty and classroom horrors
+            { value: { cr: 5, name: "Detention Professor’s Lesson", description: "A Darkling Detention Professor (Weapon or Magic Specialist, 50/50) addresses an empty class. The party is ‘late’—and the lesson is pain." }, weight: 3 },
+            { value: { cr: 3, name: "Hall Monitor Tribunal", description: "Two Hall Monitors and a Caller organize a makeshift tribunal. The verdict is predetermined unless the party presents a spectacular defense—or a faster offense." }, weight: 1.5 },
+
+            // Lurker/slurper dens and primogenitor packs
+            { value: { cr: 4, name: "Primogenitor Lurker Pack", description: "A Lurker Primogenitor rules a low ceiling den ringed by lurkers and slurpers. Paralurkers perch above, waiting for the fall-in signal." }, weight: 2 },
+            { value: { cr: 2, name: "Paralurker Nursery", description: "A soot-stained ceiling hides a small brood of paralurkers. They scatter if scorched, but reform quickly under a Caller’s cry." }, weight: 1.5 },
+
+            // Oozes and anomalies
+            { value: { cr: 5, name: "Grief-Stone Ambush", description: "A Grief-Stone masquerades as a load-bearing column. As doors ‘misremember’ how to open, despair feeds the sigils. Swift disruption is key." }, weight: 3 },
+            { value: { cr: 5, name: "Liquid Legion (Open Hunt)", description: "The room is a basin for a gathering ooze. Ripples telegraph a coming surge; good Perception lets you secure high ground before it crests." }, weight: 1.25 },
+            { value: { cr: 5, name: "Liquid Legion (Ambush)", description: "Floor vents exhale and black volume pours in. On a failed Perception check, the party is surprised as the Legion divides to flank." }, weight: 0.75 },
+            { value: { cr: 2, name: "Pugnacious Puddle", description: "The Puddle thumps like a heart and picks the smallest challenger in the room. It’s emboldened by spilled reagents." }, weight: 1.5 },
+
+            // Courts of the Slimepress
+            { value: { cr: 10, name: "Audience with the Shadow Slimepress (BOSS)", description: "The Shadow Slimepress reclines upon an obsidian cradle, attended by the Viscount of Viscera, the Royal Jesters of Despair, and the Baroness of Black Bile. The coterie is always present." }, weight: 0.2 },
+            { value: { cr: 3, name: "Viscount of Viscera’s Inspection", description: "The Viscount of Viscera conducts a gooey ‘audit’ with two attendants. Etiquette is a weapon here—and so are blades." }, weight: 0.75 },
+            { value: { cr: 3, name: "Baroness of Black Bile’s Soirée", description: "A bile-black reception with cruel amusements. Guests include a Yowler and a Slurper acting as ‘servers’." }, weight: 0.75 },
+            { value: { cr: 4, name: "Royal Jesters of Despair", description: "Cackling jests sour courage. Failing a Wisdom save turns resolve to rubber. The show ends only when the stage is cleared." }, weight: 0.75 },
+
+            // Rare elementals and void shapes
+            { value: { cr: 6, name: "Nightshade Elemental (RARE)", description: "An altar room worships a Nightshade Elemental. Lurkers and slurpers genuflect; the air tastes of ozone and regret." }, weight: 0.5 },
+            { value: { cr: 8, name: "The Darkformless (RARE)", description: "A void-sheathed mass tries to be everything at once. A motley band of darklings attends, bewitched by its presence." }, weight: 0.3 },
+
+            // Very rare bosses with special guidance
+            { value: { cr: 6, name: "Nightsipper (Mid-Boss)", description: "A Nightsipper coalesces from cold breath and candle smoke. This encounter is rare; the chamber suits its hunting style." }, weight: 0.35 },
+            { value: { cr: 9, name: "Nightdrinker Mote (BOSS)", description: "A core of condensed night stares back. VERY rare. 50% of the time an explicit option to flee should be presented by the DM." }, weight: 0.2 },
+            { value: { cr: 0, name: "Slime Cube Princess (Non-Combat)", description: "A Darkling Slime Cube Princess emerges shyly from a mosaic drain. Neutral and curious, she offers no threat unless attacked." }, weight: 0.25 },
+
+            // Darkforged posts
+            { value: { cr: 5, name: "Warforged Darkwatch Outpost", description: "An observation dais hums as a Warforged Darkwatch oversees a map of active anomalies. Tripwires and stasis-grenades abound." }, weight: 0.5 },
+            { value: { cr: 4, name: "Darkforged Assembly", description: "Two different Darkforged variants calibrate a pulse-emitter. Disabling it early prevents reinforcements being routed here." }, weight: 0.75 },
+        ];
+
+        // --- WINDOW GENERATOR DATA (full lore from GlimpseGenerator) ---
+        const visionCategories = {
+            echoes: {
+                title: "Echoes of What Was",
+                intros: [
+                    "A hazy vision of the past shimmers into view, a silent, sorrowful echo of a time long since passed.",
+                    "The glass shows a fragmented, looping scene from the plane's history, a moment frozen in time.",
+                    "You witness a critical moment from the Academy's turbulent history, playing out in perfect silence.",
+                    "The window weeps a memory, showing you a scene of triumph or tragedy from ages past.",
+                ],
+                scenes: [
+                    "the untamed Lissome Plains before the Old War. The air hums with a gentle, creative magic as the Bee sub-race of Crinkly-Crawlies tend to vast, impossible gardens. The very space seems to breathe, gently stretching and contracting in a rhythm of peace that feels achingly fragile.",
+                    "the great chamber of the Well of Souls, moments before its destruction. The animus within glows with a pure, stable light, a stark contrast to the corrupted font it would become. A profound sense of order and potential emanates from the glass, a vision of the plane's untainted heart.",
+                    "a desperate last stand during the Old War. The ground of a forgotten quadrangle is a churned mess, littered with the broken forms of Darkforged and students from both sides. A young Avilrayn stands radiant amidst the chaos, her light a defiant beacon against a tide of shadows. The scene is a silent, looping tableau of sacrifice.",
+                    "a young Defender Yara in a hidden corner of the nascent Cellarways. She is happily building a small, hidden fort from discarded furniture and magical wards, a look of pure, uncorrupted joy on her face. A powerful sense of youthful innocence, soon to be twisted into something monstrous, hangs over the otherwise peaceful vision.",
+                    "Headmaster Horace Hootz standing alone on an unformed, gray plain. With gestures both grand and subtle, he is shaping the very ground, raising the first spires of the Academy from nothingness. The raw, creative power on display is both awe-inspiring and terrifying to behold.",
+                    "the final, desperate confrontation with The First Nightmare. The scene is a swirling vortex of shadow and psychic pain, with the indistinct forms of the first Diapered Defenders throwing themselves into the chaos. You can almost feel the psychic screams, a memory of a battle that scarred reality itself.",
+                    "a younger, pre-curse Umbirgitte sharing a quiet moment with her Pupperling friend, Pliya. They sit beneath a tree, sharing a snack, completely unaware of the war that will soon consume their world and turn one of them into a goddess of fear. The innocence of the moment is heartbreaking.",
+                    "the Wasp sub-race of Crinkly-Crawlies serving as elite aerial shock troops for Tabitha Caelestis. They swarm across the Lissome Plains, their buzzing wings a sound of terror as they harry the Scholian armies with merciless precision. It is a vision of nature turned into a weapon of war.",
+                    "the 'momento of anti-genesis' in perfect clarity. A battered Tabitha Caelestis reaches the Well of Souls, only to be confronted by the undead Ylva, the rogues Qleer and Pahmin, and the paladin Avilrayn. The clash of desperation and righteousness is a silent, explosive tableau that decided the fate of the war.",
+                    "a Diaparachnid Silkswaddler deep within the earth, meticulously weaving a Silken Diaper with its many arms. The threads glow with innate magic as it works, a vision of the quiet, patient craftsmanship that underpins the entire culture of the Academy.",
+                ]
+            },
+            mightHaveBeen: {
+                title: "Visions of What-Might-Have-Been",
+                intros: [
+                    "You see a glimpse of an alternate, unrealized present, a world of different choices.",
+                    "The window reveals a reality that could have been, but never was, a future that died before it was born.",
+                    "An alternate timeline unfolds beyond the glass, reflecting a path not taken.",
+                    "The glass shows a world born from a single different decision, a haunting 'what if'.",
+                ],
+                scenes: [
+                    "a timeline where the goddess Umbra is still just Umbirgitte, a shy but happy student graduating alongside her friends. She stands on a sunny lawn, laughing with a Pupperling and a Kittenfolk, the curse of her incontinence a minor footnote rather than the seed of a dark god. The scene is achingly normal and beautiful in its simplicity.",
+                    "a triumphant Academy where the Old War was won swiftly and without loss. The spires pierce a golden sky, and its students live in a perfect, yet unnerving, harmony. The residents are placid and still, their lack of struggle having led to a beautiful, stagnant death.",
+                    "a reality where the Diapered Defenders failed. The plane is a twisted, nightmarish reflection of the First Nightmare's will, with the Academy's spires warped into screaming faces of shadow. The very air seems to weep, a world drowned in a sorrow it can never escape.",
+                    "a timeline where Tabitha Caelestis was victorious. She succeeded in transferring her soul to the warforged titan in the Well of Souls. Now, an immense, goddess-like empress of chrome and shadow sits on a throne overlooking her perfect, sterile, and joyless Academy, where individuality has been erased.",
+                    "a world where the Crinkly-Crawlies of the Lissome Plains never sided with the Academy. The plains are a wild, untamed jungle of buzzing hives and aggressive Wasp patrols, hostile to the isolated, fortress-like Academy. The air buzzes with untamed magic, a constant threat to the school's rigid structure.",
+                    "an Academy where magic itself failed after the Well of Souls detonated. It is now a crumbling, mundane ruin patrolled by feral scavengers. They pick through libraries of rotted books and alchemy labs filled with inert dust, oblivious to the grandeur that was lost.",
+                    "a reality where Yara's protective instincts were never corrupted. The Crèche is not a fortress but a genuine, sun-dappled nursery deep within the Cellarways, magically lit and protected. She is seen as a beloved den mother, caring for the youngest students, a beacon of light in the darkness.",
+                    "a timeline where the final confrontation with Tabitha in the Well of Souls chamber went differently. The vision shows the undead Ylva and the paladin Avilrayn falling, and the Dark Empress ascending, a glimpse of a victory that was terrifyingly close to happening.",
+                    "a world where Headmaster Hootz chose a different location. The Academy rises not on a stable demiplane, but from the back of a colossal, slumbering cosmic turtle. Its spires are made of living coral and the classrooms are perpetually damp, a far more organic and precarious existence.",
+                    "a vision of the Shadow Slimepress achieving her ultimate ambition. She has consumed the Nightdrinker and now rules the Cellarways from a throne of quivering, solidified shadow. The entire sub-level is a single, unified consciousness under her command, a silent, slimy empire.",
+                ]
+            },
+            blackSpires: {
+                title: "Visions of Black Spires",
+                intros: [
+                    "The glass reveals a permutation where the Academy's core identity is twisted into a martial power.",
+                    "You glimpse a regimented, army-like version of the school, built for war and conquest.",
+                    "This is an Academy that has forsaken knowledge for power, with terrifying results.",
+                    "A timeline of grim survival or brutal supremacy plays out before you.",
+                ],
+                scenes: [
+                    "a conquering Academy, its alabaster towers replaced with jagged spires of obsidian. It is draped in the banners of defeated planes, and students in black armor march in perfect, unnerving synchronicity. The air crackles with disciplined, aggressive magic, the scent of ozone thick in the air.",
+                    "a surviving Academy, its campus a fortified bastion against a dying, caustic universe. The walls are scarred and battered but unbroken, and students look out from arrow-slits with the hard, weary eyes of veterans. They are not studying for exams, but for the next hopeless siege.",
+                    "an Academy that has taken to the stars. The entire campus is a vast, magical starship, its spires converted into arcane engines. It drifts through a silent cosmos, bringing its harsh brand of 'enlightenment' to other worlds, leaving a trail of conquered planets in its wake.",
+                    "a single, massive fortress-school preparing for a final battle against a tide of formless, cosmic horrors that press in from all sides. Arcane cannons fire endlessly into a churning void, a vision of an Academy that sacrificed its soul for survival, and is now about to lose both.",
+                    "a timeline where the Headmaster is not a scholar, but a General. Horace Hootz is seen directing a massive war-map, moving legions of Darkforged and student-mages like chess pieces. It is a vision of the Academy's potential for absolute tyranny fully realized.",
+                    "an Academy where the Diapered Defenders' methods have been institutionalized. Students are subjected to rigorous, fear-based training regimens, their unconventional tactics and reliance on protective padding turned into a harsh state doctrine. It is a school that has weaponized its own trauma.",
+                ]
+            },
+            alien: {
+                title: "Alien Vistas",
+                intros: [
+                    "The portal opens onto a place utterly alien to this demiplane, a world of impossible physics and bizarre life.",
+                    "Your mind struggles to comprehend the non-Euclidean landscape that unfolds before you.",
+                    "The view is a stark reminder of the infinite strangeness of the multiverse.",
+                    "The laws of reality seem to fray at the edges of this impossible vision.",
+                ],
+                scenes: [
+                    "a cityscape built on the back of a colossal, slumbering beast whose slow, deep breaths cause the towers to sway rhythmically. The creature's hide is a landscape of mountains and valleys, and its dreams seem to manifest as strange, shimmering lights in the city's sky.",
+                    "a forest of crystalline trees humming under a violet sun. Their song is not auditory but psychic, and it feels both beautiful and deeply invasive, as if it is trying to rewrite your thoughts into a new, alien language.",
+                    "the churning, metallic innards of a vast, unknowable machine. Gears the size of mountains grind eternally, their purpose a mystery, but you feel a sense of immense, ancient intelligence behind their ceaseless function.",
+                    "a reality where concepts like 'up' and 'down' are meaningless. Buildings and rivers grow at impossible angles from a central, unseen point. Looking at the non-Euclidean architecture for too long induces a sense of vertigo and ontological dread.",
+                ]
+            },
+            melancholy: {
+                title: "Melancholic Landscapes",
+                intros: [
+                    "A wave of deep, unexplainable sadness washes over you as you look through the glass.",
+                    "The vision beyond is beautiful, but it aches with a profound loneliness.",
+                    "You feel as if you are witnessing the last breath of a place that once mattered.",
+                    "Silence pools in the corners of the scene, heavy as water.",
+                ],
+                scenes: [
+                    "a vast, silent desert of black sand under a sky filled with unfamiliar, weeping constellations. The ruins of a once-great city poke through the dunes, half-swallowed by time, radiating an overwhelming sense of loss.",
+                    "an endless, placid ocean where the ruins of impossible structures rise from the depths. A single, mournful bell tolls from a submerged tower, its sound muffled by the water, marking the passage of an age long dead.",
+                    "a single, perfect rose, encased in ice, floating in the center of a silent, starless void. It is a vision of isolated beauty, of a life preserved but forever unable to grow or change.",
+                    "the Great Hall of the Academy, but utterly empty and silent. Dust motes dance in a single beam of moonlight. The tables are set for a feast that will never happen, for guests who will never arrive. The silence is heavier than any sound.",
+                ]
+            }
+        };
+
+        const finalLine = "The vision is captivating, but the glass remains cold and impassable, offering a glimpse but never an escape.";
+
+        const generateWindow = () => {
+            const categoryKey = getRandomElement(Object.keys(visionCategories));
+            const category = visionCategories[categoryKey];
+            const intro = category.intros ? getRandomElement(category.intros) : "";
+            const scene = getRandomElement(category.scenes);
+            return `<div class="mt-4 p-4 border-l-4 border-blue-400 bg-gray-800/50 rounded-r-lg">
+                        <h4 class="font-bold text-blue-300">Glimpse Through a Window</h4>
+                        <p class="italic text-gray-400">${intro} You see ${scene}</p>
+                        <p class="mt-2 text-gray-500 italic">${finalLine}</p>
+                    </div>`;
+        };
+
+        // Collapsible window component wrapper
+        const createWindowComponent = () => {
+            const inner = generateWindow();
+            return `
+                <div class="window-container mt-3">
+                    <button type="button" class="window-toggle inline-flex items-center gap-2 bg-blue-200 text-blue-900 hover:bg-blue-300 border border-blue-300 font-semibold px-3 py-1.5 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
+                        Peer through the Window
+                    </button>
+                    <div class="window-content hidden">${inner}</div>
+                </div>
+            `;
+        };
+        
+        // --- LOOT GENERATOR ---
+        const generateLoot = () => {
+            const roll = Math.random() * 1000000;
+            if (roll < 1) { // 1 in 1,000,000
+                return {
+                    title: "Epic Loot!",
+                    description: "A grand, magically sealed chest sits in the center of the room. It is trapped with a powerful curse (Curse of Incontinence or Curse of Toddlerhood, DM's choice) but contains treasures worth over 5000 GP.",
+                    encounterCR: 5
+                };
+            }
+            if (roll < 100) { // 99 in 1,000,000 -> ~1 in 10,000
+                 return {
+                    title: "Moderate Loot",
+                    description: "A sturdy, locked chest is hidden in a corner. It contains coins, gems, and perhaps a minor magical item, totaling between 1000-2000 GP in value.",
+                    encounterCR: 5
+                };
+            }
+            if (roll < 1000) { // 900 in 1,000,000 -> ~1 in 1,111
+                return {
+                    title: "Minor Loot",
+                    description: "A forgotten leather pouch tucked away contains coins and a small gem worth up to 500 GP.",
+                    encounterCR: 0
+                };
+            }
+             if (roll < 10000) { // 9000 in 1,000,000 -> ~1 in 111
+                return {
+                    title: "Trinket Loot",
+                    description: "A small, unlocked box holds a collection of trinkets and loose coins, worth under 100 GP.",
+                    encounterCR: 0
+                };
+            }
+            return null;
+        };
+
+
+        // --- MAIN GENERATION LOGIC ---
+        
+        const generateCorridor = () => {
+            let html = '';
+            const style = weightedRandom(styles);
+            const type = weightedRandom(corridorTypes);
+
+            html += `<h2 class="text-2xl font-bold mb-4">${type.replace("Corridor", "Corridor").replace("Hallway", "Hallway").replace("Antechamber", "Antechamber").replace("Rotunda","Rotunda")}</h2>`;
+            html += `<p class="mb-4"><strong class="section-title pr-2">Style & Condition:</strong> A ${weightedRandom(conditions).toLowerCase()} passage of ${style.toLowerCase()}.</p>`;
+
+            let description = `This long passage winds through the underbelly of the Academy. The air is ${weightedRandom(atmospheres).toLowerCase()}, with a ${weightedRandom(smells).toLowerCase()} scent and the ${weightedRandom(sounds).toLowerCase()} of the Cellarways.`;
+            html += `<p><strong class="section-title pr-2">Description:</strong> ${description}</p>`;
+
+            // Features & Windows
+            let featuresHTML = '';
+            if (roll(0.25)) { // 25% chance of a unique feature
+                featuresHTML += `<p>${getRandomElement(features)}</p>`;
+            }
+
+            // Windows: gallery corridors vs rare extras
+            const isWindowGalleryCorridor = type === 'Window Gallery Corridor';
+            let windowCount = 0;
+            if (isWindowGalleryCorridor) {
+                windowCount = Math.floor(Math.random() * 3) + 2; // 2-4
+            } else {
+                if (roll(0.33)) windowCount = 1; // base chance
+                if (windowCount > 0 && Math.random() < 0.03) windowCount++; // very rare extra
+                if (windowCount > 0 && Math.random() < 0.01) windowCount++; // extremely rare extra
+            }
+            for (let i = 0; i < windowCount; i++) {
+                featuresHTML += createWindowComponent();
+            }
+            if (featuresHTML) {
+                html += `<div class="mt-4"><h3 class="section-title text-xl mb-2 pb-1">Features</h3>${featuresHTML}</div>`;
+            }
+
+            // Encounter
+            if (roll(0.10)) { // 10% chance of encounter
+                // 60% specific, 40% generic pack
+                if (Math.random() < 0.6) {
+                    const encounter = weightedRandom(corridorEncounters);
+                    html += `<div class="mt-4"><h3 class="section-title text-xl mb-2 pb-1">Encounter</h3><p><strong>${encounter.name} (CR ${encounter.cr}):</strong> ${encounter.description}</p></div>`;
+                } else {
+                    const gen = generateGenericCorridorEncounter();
+                    html += `<div class="mt-4"><h3 class="section-title text-xl mb-2 pb-1">Encounter</h3><p><strong>${gen.name} (CR ${gen.cr}):</strong> ${gen.description}</p></div>`;
+                }
+            }
+
+            // Loot
+            if (roll(0.001)) {
+                html += `<div class="mt-4"><h3 class="section-title text-xl mb-2 pb-1">Loot</h3><p>Tucked into a loose stone, you find a small pouch containing a handful of coins worth about ${Math.floor(Math.random() * 40) + 10} GP.</p></div>`;
+            }
+
+            output.innerHTML = html;
+        };
+
+        const generateRoom = () => {
+            let html = '';
+            const type = weightedRandom(roomTypes);
+            const style = weightedRandom(styles);
+            const roomDetails = roomData[type];
+            
+            const name = getRandomElement(roomDetails.names);
+            const size = weightedRandom(roomSizes);
+            const shape = weightedRandom(roomShapes);
+            const condition = weightedRandom(conditions);
+            const lighting = weightedRandom(lightings);
+            const atmosphere = weightedRandom(atmospheres);
+            const temperature = weightedRandom(temperatures);
+            const smell = weightedRandom(smells);
+            const sound = weightedRandom(sounds);
+
+
+            html += `<h2 class="text-2xl font-bold mb-4">${name}</h2>`;
+            html += `<p class="mb-4"><strong class="section-title pr-2">Layout & Condition:</strong> A ${size.toLowerCase()} ${shape.toLowerCase()} room, constructed in the ${style.toLowerCase()} style. It appears ${condition.toLowerCase()}.</p>`;
+            html += `<p class="mb-4"><strong class="section-title pr-2">Atmosphere:</strong> The lighting is ${lighting.toLowerCase()}, the air is ${temperature.toLowerCase()} and ${atmosphere.toLowerCase()}, with a ${smell.toLowerCase()} scent and the ${sound.toLowerCase()} of the deep places.</p>`;
+            
+            let description = getRandomElement(roomDetails.descriptions);
+            html += `<p><strong class="section-title pr-2">Description:</strong> ${description}</p>`;
+
+            // Features & Windows
+            let featuresHTML = '';
+            if (roll(0.25)) {
+                featuresHTML += `<p>${getRandomElement(features)}</p>`;
+            }
+            const isWindowGalleryRoom = type === 'Window Gallery Room';
+            let roomWindowCount = 0;
+            if (isWindowGalleryRoom) {
+                roomWindowCount = Math.floor(Math.random() * 3) + 4; // 4-6
+            } else {
+                if (roll(0.20)) roomWindowCount = 1; // base low chance
+                if (roomWindowCount > 0 && Math.random() < 0.06) roomWindowCount++; // slightly higher rare extra
+                if (roomWindowCount > 0 && Math.random() < 0.02) roomWindowCount++; // still low chance
+            }
+            for (let i = 0; i < roomWindowCount; i++) {
+                featuresHTML += createWindowComponent();
+            }
+            if (featuresHTML) {
+                html += `<div class="mt-4"><h3 class="section-title text-xl mb-2 pb-1">Features</h3>${featuresHTML}</div>`;
+            }
+
+            // Loot & Encounters
+            const loot = generateLoot();
+            let encounter = null;
+
+            if (isWindowGalleryRoom ? roll(0.5) : roll(0.33)) {
+                encounter = weightedRandom(roomEncounters);
+            }
+
+            if (loot && loot.encounterCR && (!encounter || encounter.cr < loot.encounterCR)) {
+                 // Force a stronger encounter if required by loot
+                 const requiredEncounters = roomEncounters.filter(e => e.value.cr >= loot.encounterCR);
+                 if(requiredEncounters.length > 0) {
+                    encounter = weightedRandom(requiredEncounters);
+                 }
+            }
+
+            if (encounter) {
+                 const perceptionDC = Math.ceil(encounter.cr) + 10;
+                 html += `<div class="mt-4"><h3 class="section-title text-xl mb-2 pb-1">Encounter</h3><p><strong>${encounter.name} (CR ${encounter.cr}):</strong> ${encounter.description} A DC ${perceptionDC} Perception check might be needed to notice them in the ${lighting.toLowerCase()} lighting.</p></div>`;
+            }
+
+            // Slightly higher loot odds in Window Gallery Room (bonus simple cache if none rolled)
+            if (!loot && isWindowGalleryRoom && Math.random() < 0.2) {
+                html += `<div class="mt-4"><h3 class="section-title text-xl mb-2 pb-1">Loot</h3><p>Tucked behind a cracked frame, you find a small pouch containing a handful of coins worth about ${Math.floor(Math.random() * 40) + 10} GP.</p></div>`;
+            } else if (loot) {
+                html += `<div class="mt-4"><h3 class="section-title text-xl mb-2 pb-1">${loot.title}</h3><p>${loot.description}</p></div>`;
+            }
+
+            output.innerHTML = html;
+        };
+
+        // --- ENCOUNTER INDEX (browse all encounters without rolling) ---
+        const normalizeEncounterArray = (arr, typeLabel) => {
+            if (!Array.isArray(arr)) return [];
+            return arr.map((e) => ({
+                type: typeLabel,
+                name: e.value?.name ?? "Unknown",
+                cr: e.value?.cr ?? 0,
+                description: e.value?.description ?? "",
+                weight: typeof e.weight === 'number' ? e.weight : 1,
+            }));
+        };
+
+        const renderEncounterList = (items, containerId) => {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            if (!items || items.length === 0) {
+                container.innerHTML = `<p class="text-gray-500 italic">No encounters match your filter.</p>`;
+                return;
+            }
+            const rows = items.map((it) => {
+                return `
+                <li class="p-3 rounded-md bg-gray-800/60 border border-gray-700 hover:bg-gray-800 transition">
+                    <div class="flex items-center justify-between">
+                        <div class="font-semibold text-gray-100">${it.name}</div>
+                        <div class="text-sm text-gray-400">CR ${it.cr}${it.weight ? ` • weight ${it.weight}` : ''}</div>
+                    </div>
+                    <p class="text-sm text-gray-400 mt-1">${it.description}</p>
+                </li>`;
+            }).join('');
+            container.innerHTML = `<ul class="space-y-2">${rows}</ul>`;
+        };
+
+        const sortEncounters = (items) => {
+            return [...items].sort((a, b) => {
+                if (a.cr !== b.cr) return a.cr - b.cr; // by CR asc
+                return a.name.localeCompare(b.name);
+            });
+        };
+
+        let encounterIndexData = null;
+        const renderEncounterIndex = () => {
+            // Build normalized data once
+            encounterIndexData = {
+                corridor: normalizeEncounterArray(corridorEncounters, 'Corridor'),
+                room: normalizeEncounterArray(roomEncounters, 'Room'),
+            };
+
+            // Prepare generic packs (use expected count for approx CR)
+            const genericCorridor = genericCorridorPacks.map((e) => {
+                const v = e.value;
+                const avgCount = Math.max(1, Math.round(averageDiceCount(v.countDice)));
+                const approxCR = roundCR((v.memberCR || 0) * avgCount);
+                return {
+                    type: 'Corridor (Generic Pack)',
+                    name: `${v.label}`,
+                    cr: approxCR,
+                    description: `Pack size: ${v.countDice} ${pluralize(v.memberName)} • Member CR ${v.memberCR}. ${v.tactics}`,
+                    weight: typeof e.weight === 'number' ? e.weight : 1,
+                };
+            });
+
+            const totalCorridor = encounterIndexData.corridor.length;
+            const totalRoom = encounterIndexData.room.length;
+            const totalGeneric = genericCorridor.length;
+
+            const html = `
+                <div>
+                    <h2 class="text-2xl font-bold mb-2">Encounter Index</h2>
+                    <p class="text-gray-400 mb-4">Browse all possible encounters without rolling. Use the filter to quickly find a name or keyword.</p>
+
+                    <div class="mb-6">
+                        <input id="encounter-search" type="text" placeholder="Filter by name or text…" 
+                            class="w-full bg-gray-800 text-gray-100 placeholder-gray-500 border border-gray-700 focus:border-teal-400 focus:ring-2 focus:ring-teal-400/40 rounded-md px-4 py-2 outline-none" />
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <section class="col-span-1">
+                            <div class="flex items-baseline justify-between mb-2">
+                                <h3 class="section-title text-xl pb-1">Corridor Encounters</h3>
+                                <span id="corridor-count" class="text-sm text-gray-400">${totalCorridor}</span>
+                            </div>
+                            <div id="corridor-list"></div>
+
+                            <div class="flex items-baseline justify-between mb-2 mt-6">
+                                <h3 class="section-title text-xl pb-1">Generic Corridor Packs</h3>
+                                <span id="generic-corridor-count" class="text-sm text-gray-400">${totalGeneric}</span>
+                            </div>
+                            <div id="generic-corridor-list"></div>
+                        </section>
+
+                        <section class="col-span-1">
+                            <div class="flex items-baseline justify-between mb-2">
+                                <h3 class="section-title text-xl pb-1">Room Encounters</h3>
+                                <span id="room-count" class="text-sm text-gray-400">${totalRoom}</span>
+                            </div>
+                            <div id="room-list"></div>
+                        </section>
+                    </div>
+                </div>
+            `;
+
+            output.innerHTML = html;
+
+            // Initial render, sorted by CR then name
+            renderEncounterList(sortEncounters(encounterIndexData.corridor), 'corridor-list');
+            renderEncounterList(sortEncounters(encounterIndexData.room), 'room-list');
+            renderEncounterList(sortEncounters(genericCorridor), 'generic-corridor-list');
+
+            const input = document.getElementById('encounter-search');
+            input?.addEventListener('input', () => {
+                const q = input.value.trim().toLowerCase();
+                const filterFn = (it) => !q || it.name.toLowerCase().includes(q) || it.description.toLowerCase().includes(q);
+                const filteredCorridor = sortEncounters(encounterIndexData.corridor.filter(filterFn));
+                const filteredRoom = sortEncounters(encounterIndexData.room.filter(filterFn));
+                const filteredGeneric = sortEncounters(genericCorridor.filter(filterFn));
+                document.getElementById('corridor-count').textContent = `${filteredCorridor.length}/${totalCorridor}`;
+                document.getElementById('room-count').textContent = `${filteredRoom.length}/${totalRoom}`;
+                document.getElementById('generic-corridor-count').textContent = `${filteredGeneric.length}/${totalGeneric}`;
+                renderEncounterList(filteredCorridor, 'corridor-list');
+                renderEncounterList(filteredRoom, 'room-list');
+                renderEncounterList(filteredGeneric, 'generic-corridor-list');
+            });
+        };
+
+        // --- EVENT LISTENERS ---
+        document.getElementById('generate-corridor-btn').addEventListener('click', generateCorridor);
+        document.getElementById('generate-room-btn').addEventListener('click', generateRoom);
+    document.getElementById('show-index-btn').addEventListener('click', renderEncounterIndex);
+
+        // Collapsible window toggle (event delegation)
+        document.addEventListener('click', (e) => {
+            const btn = e.target.closest('.window-toggle');
+            if (!btn) return;
+            const content = btn.nextElementSibling;
+            if (!content) return;
+            content.classList.toggle('hidden');
+        });
+    </script>
+</body>
+</html>
+
+
