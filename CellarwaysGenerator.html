@@ -105,6 +105,12 @@
             { value: "Blue & Silver", weight: 6 },
             { value: "Dusty Stone", weight: 2 },
             { value: "Carved Stone", weight: 2 },
+            { value: "Gilded Marble", weight: 1 },
+            { value: "Worn Brick", weight: 2 },
+            { value: "Hammered Brass", weight: 1 },
+            { value: "Oaken Panels", weight: 2 },
+            { value: "Black Basalt", weight: 1 },
+            { value: "Glass & Lead", weight: 0.5 },
         ];
         const roomTypes = [
             { value: "Abandoned Academy Space", weight: 4 },
@@ -112,6 +118,18 @@
             { value: "Foundational & Ancient Structure", weight: 1.5 },
             { value: "Navigational Feature", weight: 0.5 },
             { value: "Window Gallery Room", weight: 0.1 }, // very rare room type
+            // New varieties
+            { value: "Lecture & Study Space", weight: 2.5 },
+            { value: "Library & Archive Wing", weight: 2 },
+            { value: "Arcane Training Chamber", weight: 2 },
+            { value: "Botanical & Greenhouse Space", weight: 1 },
+            { value: "Sanctum & Meditation", weight: 0.8 },
+            { value: "Dining & Domestic Facility", weight: 1.5 },
+            { value: "Security & Detention Facility", weight: 0.8 },
+            { value: "Observatory & Astral Lab", weight: 0.6 },
+            { value: "Magitech Infrastructure", weight: 1.2 },
+            { value: "Club & Society Rooms", weight: 1.3 },
+            { value: "Museum & Trophy Gallery", weight: 0.9 },
         ];
         const corridorTypes = [
             { value: "Abandoned Academy Corridor", weight: 5 },
@@ -119,6 +137,22 @@
             { value: "Foundational & Ancient Antechamber", weight: 2 },
             { value: "Navigational Crossroads/Rotunda", weight: 1 },
             { value: "Window Gallery Corridor", weight: 0.25 }, // rare corridor type
+            // New corridor flavors
+            { value: "Faculty Corridor", weight: 2 },
+            { value: "Dormitory Hall", weight: 2 },
+            { value: "Service Passage", weight: 1.5 },
+            { value: "Archive Stacks Corridor", weight: 1 },
+            { value: "Greenhouse Arcade", weight: 0.8 },
+            { value: "Ritual Approach", weight: 0.6 },
+            { value: "Trophy Hallway", weight: 0.7 },
+            { value: "Observatory Causeway", weight: 0.5 },
+            { value: "Steam Tunnel", weight: 0.9 },
+            { value: "Magitech Conduit Run", weight: 1.2 },
+            // Waterways (cisterns and sewers; in-use and abandoned variants)
+            { value: "Cistern Walk (In-Use)", weight: 0.8 },
+            { value: "Cistern Walk (Abandoned)", weight: 0.7 },
+            { value: "Sewer Channel (In-Use)", weight: 0.8 },
+            { value: "Sewer Channel (Abandoned)", weight: 0.7 },
         ];
         const roomSizes = [{ value: 'Small', weight: 6 }, { value: 'Medium', weight: 3 }, { value: 'Large', weight: 1 }];
         const roomShapes = [{ value: 'Rectangular', weight: 6 }, { value: 'Square', weight: 3 }, { value: 'Circular', weight: 1 }];
@@ -169,6 +203,157 @@
                     "A hush hangs over rows of inset windows, their frames cold to the touch; the air tastes faintly of dust and ozone.",
                     "Here the Cellarways thins: glass-lidded openings shimmer with distant light, promising glimpses—never passage."
                 ]
+            },
+            // New room categories
+            "Lecture & Study Space": {
+                names: [
+                    "Tiered Lecture Hall",
+                    "Seminar Room",
+                    "Debate Chamber",
+                    "Instruction Theater",
+                    "Tutorial Nook"
+                ],
+                descriptions: [
+                    "Benches and desks rise in tiers around a speaking dais; chalk sigils haunt the blackboard like ghosts of old lessons.",
+                    "A semicircle of worn desks faces a floating slate; faint murmurs of past debates linger in the hushed air.",
+                    "The room is arranged for discourse, with sound-baffling runes and a lectern inscribed with wards against heckling.",
+                ]
+            },
+            "Library & Archive Wing": {
+                names: [
+                    "Stacks Annex",
+                    "Rare Books Vault",
+                    "Scriptorium",
+                    "Copyist’s Alcove",
+                    "Cataloguing Desk"
+                ],
+                descriptions: [
+                    "Tall stacks stretch into dimness; brass ladders roll on rails, and the smell of vellum and ink hangs heavy.",
+                    "This vault’s climate charms prickle the skin. Cases of chained tomes lie quiet under glyph-etched glass.",
+                    "Scraping quills and patient whisper-wards promise order; half-finished illuminations glow faintly on the desks."
+                ]
+            },
+            "Arcane Training Chamber": {
+                names: [
+                    "Duelling Hall",
+                    "Spell Range",
+                    "Shield Testing Room",
+                    "Kinetic Practice Court",
+                    "Conjuration Sandbox"
+                ],
+                descriptions: [
+                    "Scored stone and scorch-marks crisscross the floor; target manikins re-knit themselves between blasts.",
+                    "Pivoting wards and runic pylons form shifting cover for practice bouts; the air smells faintly of ozone.",
+                    "An array of containment circles awaits student experiments—each with a reset rune within arm’s reach."
+                ]
+            },
+            "Botanical & Greenhouse Space": {
+                names: [
+                    "Herbarium",
+                    "Alchemical Greenhouse",
+                    "Moss Grot",
+                    "Seed Archive",
+                    "Vivarium"
+                ],
+                descriptions: [
+                    "Moist warmth fogs the panes; labeled beds of luminous herbs reach toward alchemical lamps.",
+                    "Glass channels drip nutrient tinctures into neat rows; an irrigation glyph ticks like a clock.",
+                    "A humid pocket jungle hides rare cuttings under bell jars, each with warnings in spidery script."
+                ]
+            },
+            "Sanctum & Meditation": {
+                names: [
+                    "Quiet Sanctum",
+                    "Meditation Cell",
+                    "Chapel of Thought",
+                    "Reflection Niche"
+                ],
+                descriptions: [
+                    "A gentle hush saturates the room; low cushions and a slow-burning incense braid soothe the mind.",
+                    "Softly glowing script spirals along the walls, guiding breathing and centering exercises for the weary.",
+                    "A shallow font murmurs beside a low altar—petitions can be written on dissolving vellum slips."
+                ]
+            },
+            "Dining & Domestic Facility": {
+                names: [
+                    "Refectory",
+                    "Student Kitchen",
+                    "Pantry Tunnel",
+                    "Servitor Scullery",
+                    "Dish Racks"
+                ],
+                descriptions: [
+                    "Long tables and bench seating line the space; a warming charm keeps platters steaming.",
+                    "Copper pots and enchanted knives hang in orderly rows; the hearth whispers of last night’s stew.",
+                    "Crates and jars are stacked to the ceiling, tagged with neat sigils for freshness and portioning."
+                ]
+            },
+            "Security & Detention Facility": {
+                names: [
+                    "Hall Monitor Station",
+                    "Detention Room",
+                    "Confiscation Cage",
+                    "Warden’s Desk"
+                ],
+                descriptions: [
+                    "A tidy desk bristles with citation scrolls and stamped seals; a silent bell awaits misuse.",
+                    "Sturdy chairs face a lectern draped in rules; a corner cabinet rattles with reclaimed contraband.",
+                    "Runed shelving holds tagged items under suppressor veils; access requires two keys and a firm voice."
+                ]
+            },
+            "Observatory & Astral Lab": {
+                names: [
+                    "Star Chamber",
+                    "Planisphere Room",
+                    "Astrolabe Platform",
+                    "Celestial Vault"
+                ],
+                descriptions: [
+                    "A rotating dome projects drifting constellations; brass instruments click in steady cadence.",
+                    "Charts of the firmament clutter a central table; crystal lenses focus starlight into docile threads.",
+                    "A narrow catwalk circles an orrery whose planets hum in time with distant, patient music."
+                ]
+            },
+            "Magitech Infrastructure": {
+                names: [
+                    "Conduit Gallery",
+                    "Engine Substation",
+                    "Warding Node",
+                    "Maintenance Bay",
+                    "Valve Room"
+                ],
+                descriptions: [
+                    "Thick mana conduits course along the walls, pulsing gently; inspection runes blink in sequence.",
+                    "A humming core sits behind a safety cage; levers are labeled in stern, utilitarian script.",
+                    "Girders and glyph plates meet in lattices that smell of oil, brass, and warm enchantment."
+                ]
+            },
+            "Club & Society Rooms": {
+                names: [
+                    "Drama Club Stage",
+                    "Dueling Society Lounge",
+                    "Inventors’ Bench",
+                    "Chess & Go Parlor",
+                    "Artists’ Studio"
+                ],
+                descriptions: [
+                    "Costumes and props spill from armoires; a tiny stage waits for lines and laughter.",
+                    "Leather chairs surround a low table strewn with bout records and polite rivalries.",
+                    "Half-built mechanisms litter a bench; the scent of solder and inspiration fills the air."
+                ]
+            },
+            "Museum & Trophy Gallery": {
+                names: [
+                    "Relics Hall",
+                    "Trophy Case Row",
+                    "Curios Cabinet",
+                    "Founders’ Gallery"
+                ],
+                descriptions: [
+                    "Glass cases display medals, pennants, and oddities; placards recount improbable triumphs.",
+                    "Polished cases reflect proud faces from ages past; a caretaker’s feather duster lies at parade rest.",
+                    "A hush of reverence clings to the room—some artifacts watch back, patient and amused."
+                ]
             }
         };
 
@@ -184,7 +369,18 @@
             "Weeping Carvings: The faded carvings on the walls appear to weep a faint, shimmering liquid that evaporates before it hits the floor.",
             "Breathing Roots: If roots are present, they seem to subtly expand and contract, as if the very walls are breathing.",
             "Self-Correcting Blackboard: A clean slate blackboard occasionally displays bizarre, alien equations that erase themselves before they can be fully deciphered.",
-            "Humming Pedestal: An empty pedestal in the center emits a low, resonant hum, and faint images of what might have once rested upon it flicker in the air above."
+            "Humming Pedestal: An empty pedestal in the center emits a low, resonant hum, and faint images of what might have once rested upon it flicker in the air above.",
+            // New flavorful features
+            "Echoing Footfalls: Your footsteps return out of time, as if someone slightly ahead is walking your path.",
+            "Lantern Moths: Tiny luminous moths cluster near breath and warm metal, dimming when spoken to.",
+            "Runic Draft: A breeze carries ink-scents and rearranges loose papers into legible, pleading messages.",
+            "Chalk That Writes Back: Notes appear beside your notes, correcting grammar and offering sarcastic asides.",
+            "Shelf That Reshelves: Any item left unattended hops politely back to its 'proper' home when unobserved.",
+            "Tuning Fork Masonry: Touching two stones together produces perfect fifths and calming resonance.",
+            "Dripping Upslope: Water trickles uphill along grooves, forming a hovering bead that refuses to fall.",
+            "Sympathetic Door: A nearby door aches when you touch the wall, hinges creaking in sympathetic pain.",
+            "Quiescent Wardlines: Faint ward circuits glow when lies are told, then fade with a disappointed sigh.",
+            "Ambient Choir: Far-off, wordless voices hum a study hymn that resolves only when you stop to listen."
         ];
         
         // --- GENERIC CORRIDOR PACKS (simple groups of similar monsters) ---
@@ -231,107 +427,142 @@
             return {
                 name: `${pack.label}`,
                 cr: approxCR,
-                description: `You encounter ${count} ${plural} spread along the corridor, presenting an obstacle to progress. ${pack.tactics} (Pack size: ${pack.countDice}; approx CR ${approxCR})`
+                description: `You encounter ${count} ${plural} spread along the corridor, presenting an obstacle to progress. ${pack.tactics} (Pack size: ${pack.countDice}; approx CR ${approxCR})` +
+                    `<br><br><b>Mechanics:</b> On approach, each creature may make a DC 13 Wisdom (Perception) check to avoid surprise. Moving through the pack’s zone requires a DC 13 Dexterity (Acrobatics) check or the creature takes 1d4 damage from glancing hits and its speed is halved until the start of its next turn. Using bright light or loud noise imposes disadvantage on the pack’s next round (DM discretion).`
             };
         };
         
         // --- ENCOUNTER DATA ---
         const corridorEncounters = [
             // Slimes & minor darklings
-            { value: { cr: 0.125, name: "Tiny Darkling Slimes", description: "A scatter of tiny darkling slimes ooze along the baseboards, leaving a faintly iridescent trail. They recoil from bright light and quick motion." }, weight: 4 },
-            { value: { cr: 0.25, name: "Small Darkling Slimes", description: "A cluster of small darkling slimes rolls in a loose pack, attracted to the hum of nearby magitech. They hesitate if outnumbered." }, weight: 3 },
-            { value: { cr: 0.5, name: "Wandering Slimes", description: "A small glob of 2-3 Darkling Slimes (Mopes) wobble aimlessly down the corridor. They seem more lost than aggressive and will likely flee if confronted with bright light or violence." }, weight: 4 },
-            { value: { cr: 0.5, name: "Darkling Cuboid Slime", description: "A cuboid slime lurches in right angles as if obeying a broken grid. Its geometry makes it awkward to predict but easy to outpace in straightaways." }, weight: 2 },
+            { value: { cr: 0.125, name: "Tiny Darkling Slimes", description: "A scatter of tiny darkling slimes ooze along the baseboards, leaving a faintly iridescent trail. They recoil from bright light and quick motion.<br><br><b>Mechanics:</b> DC 12 Wisdom (Perception) to avoid stepping in slick patches; crossing quickly requires DC 12 Dexterity (Acrobatics) or fall prone." }, weight: 4 },
+            { value: { cr: 0.25, name: "Small Darkling Slimes", description: "A cluster of small darkling slimes rolls in a loose pack, attracted to the hum of nearby magitech. They hesitate if outnumbered.<br><br><b>Mechanics:</b> Moving through the area is difficult terrain; DC 12 Dexterity (Acrobatics) to avoid 1d4 acid damage from contact. A strong light source disperses them for 1 round." }, weight: 3 },
+            { value: { cr: 0.5, name: "Wandering Slimes", description: "A small glob of 2-3 Darkling Slimes (Mopes) wobble aimlessly down the corridor. They seem more lost than aggressive and will likely flee if confronted with bright light or violence.<br><br><b>Options:</b> DC 12 Intelligence (Nature) to anticipate their motion and pass safely; flashing bright light forces them to retreat 10 ft." }, weight: 4 },
+            { value: { cr: 0.5, name: "Darkling Cuboid Slime", description: "A cuboid slime lurches in right angles as if obeying a broken grid. Its geometry makes it awkward to predict but easy to outpace in straightaways.<br><br><b>Mechanics:</b> DC 12 Intelligence (Investigation) to read the pattern; success grants advantage on checks to slip past it this scene." }, weight: 2 },
             // Lurkers, slurpers, paralurkers, weirdlings
-            { value: { cr: 0.5, name: "Lurker Ambush", description: "A pair of Darkling-Lurkers cling to the ceiling, nearly invisible in the dim light. They wait for a target to pass beneath before dropping down." }, weight: 3 },
-            { value: { cr: 1, name: "Slurper Pair", description: "Two Darkling-Slurpers move along the walls, their long tongues occasionally darting out to taste the air. They are looking for sources of magic to consume." }, weight: 2 },
-            { value: { cr: 1, name: "Paralurker Pack", description: "A pack of 1d4+1 Darkling-Paralurkers skitters along the ceiling, their talons making soft clicking sounds. They are hunting for small prey and will attack if they sense weakness, but a show of force may scare them off." }, weight: 2 },
-            { value: { cr: 1, name: "Weirdlings Harrying Slimes", description: "Two Weirdling-Paralurkers chase a rolling puddle of tiny darkling slimes, causing chaos and slick footing. Intervening might win you odd gratitude—or a new problem." }, weight: 1.5 },
-            { value: { cr: 2, name: "Caller’s Rally", description: "A Darkling Caller keens down the corridor, drawing nearby lurkers and slurpers into a loose skirmish line. The echoing call betrays more bodies around the bend." }, weight: 1.5 },
-            { value: { cr: 2, name: "Yowler on the Prowl", description: "A Darkling Yowler stalks the passage. Its screech risks attracting reinforcements unless silenced quickly." }, weight: 1 },
+            { value: { cr: 0.5, name: "Lurker Ambush", description: "A pair of Darkling-Lurkers cling to the ceiling, nearly invisible in the dim light. They wait for a target to pass beneath before dropping down.<br><br><b>Mechanics:</b> DC 14 Wisdom (Perception) to spot them; failure means the first drop attack has advantage. A creature directly below must succeed on a DC 13 Dexterity save or take 1d4 bludgeoning from impact." }, weight: 3 },
+            { value: { cr: 1, name: "Slurper Pair", description: "Two Darkling-Slurpers move along the walls, their long tongues occasionally darting out to taste the air. They are looking for sources of magic to consume.<br><br><b>Tongue Grab:</b> On a hit, target makes DC 13 Strength save or is restrained by the tongue (AC 12, 3 HP to sever)." }, weight: 2 },
+            { value: { cr: 1, name: "Paralurker Pack", description: "A pack of 1d4+1 Darkling-Paralurkers skitters along the ceiling, their talons making soft clicking sounds. They hunt for small prey and drop in pairs.<br><br><b>Filaments:</b> Creatures hit may be entangled; escape DC 13 Strength (Athletics). Ready actions can swat them mid-drop (AC 13)." }, weight: 2 },
+            { value: { cr: 1, name: "Weirdlings Harrying Slimes", description: "Two Weirdling-Paralurkers chase a rolling puddle of tiny darkling slimes, causing chaos and slick footing.<br><br><b>Hazard:</b> Area counts as difficult terrain; DC 12 Dexterity (Acrobatics) to avoid falling. Loud clanging (improvised action) scatters the Weirdlings for 1 round." }, weight: 1.5 },
+            { value: { cr: 2, name: "Caller’s Rally", description: "A Darkling Caller keens down the corridor, drawing nearby lurkers and slurpers into a loose skirmish line.<br><br><b>Escalation:</b> If the Caller is not silenced within 2 rounds, 1d2 additional minor darklings arrive from behind." }, weight: 1.5 },
+            { value: { cr: 2, name: "Yowler on the Prowl", description: "A Darkling Yowler stalks the passage. Its screech risks attracting reinforcements unless silenced quickly.<br><br><b>Yowl:</b> Creatures within 30 ft make a DC 13 Constitution save or are frightened until the end of their next turn; each failed save increases the chance of reinforcements." }, weight: 1 },
             // Academy hazards & patrols
-            { value: { cr: 3, name: "Patrolling Hall Monitor", description: "A lone Darkling Hall Monitor patrols the corridor with unnerving silence. It is actively looking for 'truants' and will attempt to detain the first person it sees." }, weight: 1.5 },
-            { value: { cr: 4, name: "Mobile Hall Cleaner", description: "A hulking, mindless ooze-engine shuffles forward, filling the entire hall. It indiscriminately consumes loose objects and will push through anyone in its path, leaving slick terrain behind." }, weight: 0.75 },
+            { value: { cr: 3, name: "Patrolling Hall Monitor", description: "A lone Hall Monitor hunts for truants.<br><br><b>Stop & Papers:</b> DC 14 Charisma (Deception) to pass inspection. Failure: the citation rod restrains (escape DC 13 Strength, action)." }, weight: 1.5 },
+            { value: { cr: 4, name: "Mobile Hall Cleaner", description: "A hulking, mindless ooze-engine fills the hall.<br><br><b>Foam Discharge:</b> Crossing the foam requires DC 13 Dexterity (Acrobatics); on failure, take 1d4 acid damage and fall prone." }, weight: 0.75 },
             // Dark Dimension cadres
-            { value: { cr: 2, name: "Infiltrator Scout Team", description: "Two Dark Dimension Infiltrators sweep the corridor with breach gear. They prefer coordinated strikes and will fall back if they sense a superior force." }, weight: 2 },
-            { value: { cr: 2, name: "Void Scholar & Escort", description: "A Dark Dimension Void Scholar studies a flickering rune pane while two lurkers keep watch. If pressed, the scholar blinks away and counterattacks with force-bolts." }, weight: 1.25 },
+            { value: { cr: 2, name: "Infiltrator Scout Team", description: "Two Infiltrators sweep the corridor with breach gear.<br><br><b>Snare:</b> DC 14 Wisdom (Perception) to spot trip-sigils; on failure, triggering one restrains the rearmost creature (DC 14 Dexterity save to avoid)." }, weight: 2 },
+            { value: { cr: 2, name: "Void Scholar & Escort", description: "A Void Scholar studies a flickering rune pane while two lurkers keep watch.<br><br><b>Option:</b> DC 15 Intelligence (Arcana) to disrupt the pane, granting advantage against the escorts for 1 round; on a failure by 5+, backlash deals 1d4 lightning damage." }, weight: 1.25 },
             { value: { cr: 5, name: "Warforged Darkwatch Patrol", description: "A Warforged Darkwatch unit sweeps methodically, scanning for anomalies. It signals quietly for reinforcements if not neutralized swiftly." }, weight: 0.5 },
             { value: { cr: 3, name: "Darkforged Survey Detail", description: "A pair of Darkforged constructs methodically probe masonry and cable runs—an eminently unfriendly inspection team." }, weight: 0.75 },
             // Oozes and bosses-in-miniature
-            { value: { cr: 2, name: "Pugnacious Puddle", description: "A jittery ooze quivers as if spoiling for a fight. It lashes at smaller slimes, then at the nearest ankles that dare approach." }, weight: 1.25 },
-            { value: { cr: 5, name: "Liquid Legion Hunt (Open)", description: "The corridor thrums with the approach of a Liquid Legion mass. With a solid Perception check, you can spot its advance in time to reposition before the wave hits." }, weight: 0.6 },
-            { value: { cr: 5, name: "Liquid Legion Ambush", description: "A sudden hush precedes a black surge spilling from wall vents. On a failed Perception check, the party is surprised as the Legion surges to engulf." }, weight: 0.3 },
+            { value: { cr: 2, name: "Pugnacious Puddle", description: "A jittery ooze quivers, spoiling for a fight.<br><br><b>Temper:</b> Cold damage calms it (disadvantage next round); fire enrages it (advantage next attack)." }, weight: 1.25 },
+            { value: { cr: 5, name: "Liquid Legion Hunt (Open)", description: "The corridor thrums with the approach of a Liquid Legion mass.<br><br><b>Wave:</b> At the start of the round, creatures in the lane make DC 14 Strength saves or are knocked prone and take 1d4 acid damage." }, weight: 0.6 },
+            { value: { cr: 5, name: "Liquid Legion Ambush", description: "A sudden hush precedes a black surge spilling from wall vents. On a failed Perception check, the party is surprised as the Legion surges to engulf.<br><br><b>Engulf:</b> DC 14 Dexterity save or become restrained until the end of your next turn." }, weight: 0.3 },
             // Lairs-in-the-hall
-            { value: { cr: 3, name: "Grief-Stone’s Shadow", description: "The corridor subtly narrows; sigils pulse faintly. A hidden Grief-Stone nearby feeds on unease—walls seem to shift to corral you unless you move decisively." }, weight: 0.75 },
+            { value: { cr: 3, name: "Grief-Stone’s Shadow", description: "The corridor subtly narrows; sigils pulse faintly. A hidden Grief-Stone feeds on unease.<br><br><b>Aura:</b> DC 14 Wisdom save or suffer disadvantage on your first action each round while within 20 ft. DC 15 Intelligence (Arcana) or Wisdom (Religion) check suppresses the aura for 1 minute." }, weight: 0.95 },
 
             // — More corridor variety —
             // Darkling tactics and variants
-            { value: { cr: 2, name: "Ceiling Creepers Ambuscade", description: "Three to five Darkling Lurkers press flat against the rafters, drifting with the breeze like stains. Dust falls just before they drop." }, weight: 2 },
-            { value: { cr: 2, name: "Slurper Tongue Gauntlet", description: "Slurpers have anchored themselves into alcoves, lashing tongues down a narrow run. Severing tongues or forcing them to withdraw clears the lane." }, weight: 1.75 },
-            { value: { cr: 3, name: "Caller Relay", description: "Two Callers trade keening signals up and down the passage, coordinating unseen skirmishers. Silence one quickly or expect adds from both directions." }, weight: 1 },
+            { value: { cr: 2, name: "Ceiling Creepers Ambuscade", description: "Three to five Darkling Lurkers press flat against the rafters. Dust falls just before they drop.<br><br><b>Mechanics:</b> DC 14 Perception to notice; readied ranged attacks can hit mid-drop (AC 13)." }, weight: 2 },
+            { value: { cr: 2, name: "Slurper Tongue Gauntlet", description: "Slurpers anchor in alcoves, lashing tongues down a narrow run.<br><br><b>Mechanics:</b> On a hit, DC 13 Strength save or be pulled 5 ft and restrained. Tongues: AC 12, 3 HP to sever." }, weight: 1.75 },
+            { value: { cr: 3, name: "Caller Relay", description: "Two Callers trade keening signals, coordinating unseen skirmishers.<br><br><b>Escalation:</b> If both Callers remain active by end of round 2, 1d4 minor darklings arrive from each direction." }, weight: 1 },
             { value: { cr: 1, name: "Weirdling Stampede", description: "A herd of jittery Weirdlings ricochets off lockers and molding, chasing a light that isn’t there. They bowl into anything in their path, then scatter." }, weight: 1 },
-            { value: { cr: 2, name: "Paralurker Net", description: "Paralurkers have threaded the overhead with sticky filaments. Movement below risks a sudden drop, entangle, and raking talons from above." }, weight: 1.25 },
+            { value: { cr: 2, name: "Paralurker Net", description: "Paralurkers have threaded the overhead with sticky filaments.<br><br><b>Net:</b> DC 13 Strength (Athletics) to break free; cutting a strand (AC 12, 5 HP) clears a 5 ft square." }, weight: 1.25 },
 
             // Environmental hazards and anomalies
-            { value: { cr: 2, name: "Arc-Sparker Conduit", description: "A cracked conduit spits blue arcs floor-to-ceiling. Timing the jumps avoids damage; nearby slimes have learned the pattern and lurk just beyond." }, weight: 1 },
-            { value: { cr: 1, name: "Gravity Flip Segment", description: "A short span inverts your step. Loose objects drift to the ceiling, and ceiling lurkers grin. Clever use of rope or mage hand helps." }, weight: 0.8 },
-            { value: { cr: 2, name: "Time-Lag Pocket", description: "A ripple of slow-time lingers here. Projectiles crawl while footsteps echo out of order; predators wait just outside the bubble." }, weight: 0.8 },
+            { value: { cr: 2, name: "Arc-Sparker Conduit", description: "A cracked conduit spits blue arcs floor-to-ceiling.<br><br><b>Arcs:</b> Crossing space during an arc requires DC 13 Dexterity save or take 1d4 lightning damage. DC 14 Intelligence (Arcana) to temporarily ground it (action)." }, weight: 1 },
+            { value: { cr: 1, name: "Gravity Flip Segment", description: "A short span inverts your step; loose objects drift to the ceiling.<br><br><b>Mechanics:</b> DC 13 Dexterity (Acrobatics) to cross without falling 10 ft onto the ‘ceiling’; secured rope negates the check." }, weight: 0.8 },
+            { value: { cr: 2, name: "Time-Lag Pocket", description: "A ripple of slow-time lingers here; projectiles crawl.<br><br><b>Mechanics:</b> Ranged attacks against targets inside have disadvantage. When leaving the pocket, DC 13 Constitution save or suffer -10 ft speed until end of next turn." }, weight: 0.8 },
 
             // Dark Dimension corridor ops
-            { value: { cr: 3, name: "Infiltrator Snare", description: "Tripwire sigils prime a shaped-force snare. Infiltrators strike from blind corners to isolate the rearmost target, then fade back." }, weight: 1.5 },
-            { value: { cr: 5, name: "Vanguard Shield Push", description: "A Vanguard advances methodically behind a humming bulwark, trying to compress you into a choke point for capture." }, weight: 0.9 },
+            { value: { cr: 3, name: "Infiltrator Snare", description: "Tripwire sigils prime a shaped-force snare.<br><br><b>Mechanics:</b> DC 14 Intelligence (Investigation) to locate; triggering forces DC 14 Dexterity save or restrained by force filaments for 1 minute (escape DC 14 Strength or end of turn check)." }, weight: 1.5 },
+            { value: { cr: 5, name: "Vanguard Shield Push", description: "A Vanguard advances behind a humming bulwark, trying to compress you into a choke point.<br><br><b>Push:</b> When the wall advances, each adjacent creature makes a DC 15 Strength save or is pushed 10 ft and knocked prone." }, weight: 0.9 },
             { value: { cr: 7, name: "Justicar Passing Judgment", description: "Bootfalls like a metronome precede a Justicar who marks one of you as the offender. It attempts to separate and sentence that target." }, weight: 0.3 },
             { value: { cr: 3, name: "Void Scholar Field Test", description: "A Void Scholar releases a test anomaly that distorts space in a 20 ft stretch. It observes, notes reactions, and attacks only if challenged." }, weight: 1 },
 
             // Warforged/Darkforged presence
-            { value: { cr: 4, name: "Darkwatch Scanpoint", description: "Warforged Darkwatch establishes a scan beam across the hall. Crossing it without the right phase signature pings a remote alarm." }, weight: 0.6 },
-            { value: { cr: 4, name: "Darkforged Remnant Patrol", description: "Two Darkforged Remnants clatter past, their optics sweeping for stress-fractures and trespassers. They escalate quickly if hailed." }, weight: 0.8 },
-            { value: { cr: 3, name: "Darkforged Survey Trap", description: "A tripod device hums; floor runes glow. It’s a nonlethal stasis trap meant to hold subjects for collection—unless tampered with." }, weight: 0.9 },
-            { value: { cr: 2, name: "Warforged Sensor Drone", description: "A floating sensor orb maps the passage in tight grids. It blares if swatted and summons something heavier within a minute." }, weight: 0.9 },
+            { value: { cr: 4, name: "Darkwatch Scanpoint", description: "Warforged Darkwatch establishes a scan beam across the hall.<br><br><b>Bypass:</b> DC 15 Dexterity (Stealth) to time and crawl under; failure triggers a remote alarm after 1 round unless the node is disabled (AC 13, 10 HP)." }, weight: 0.6 },
+            { value: { cr: 4, name: "Darkforged Remnant Patrol", description: "Two Darkforged Remnants clatter past, scanning for trespassers.<br><br><b>Beacon:</b> Each carries a ping-beacon (AC 12, 5 HP). If a beacon survives 2 rounds of combat, reinforcements may arrive within minutes (DM discretion)." }, weight: 0.8 },
+            { value: { cr: 3, name: "Darkforged Survey Trap", description: "A tripod device hums; floor runes glow—a nonlethal stasis trap.<br><br><b>Disable:</b> DC 15 Dexterity (Thieves’ Tools) to disarm; failure restrains the creature for 1 minute or until DC 14 Strength check to break free." }, weight: 0.9 },
+            { value: { cr: 2, name: "Warforged Sensor Drone", description: "A floating sensor orb maps the passage in tight grids.<br><br><b>Mechanics:</b> AC 13, HP 8. If not destroyed within 2 rounds, it marks your position and summons heavier forces (DM discretion)." }, weight: 0.9 },
 
             // Ooze work details
-            { value: { cr: 0.5, name: "Stale Slurry Spill", description: "A low tide of inert ooze makes footing treacherous. Disturbances call in opportunistic slimes from vents and drains." }, weight: 1 },
-            { value: { cr: 3, name: "Custodial Cube", description: "A translucent cube polishes the hall with alarming enthusiasm. It engulfs unattended gear before moving on to unattended limbs." }, weight: 0.7 },
-            { value: { cr: 3, name: "Puddle Pack", description: "Two Pugnacious Puddles jostle for dominance, splashing hotly at the slightest provocation. Fight one and the other joins gleefully." }, weight: 0.6 },
-            { value: { cr: 2, name: "Cleaner Foam Discharge", description: "A Mobile Cleaner vents caustic foam from a maintenance hatch. The foam crawls uphill and eats grime—and curious fingers." }, weight: 0.5 },
+            { value: { cr: 0.5, name: "Stale Slurry Spill", description: "A low tide of inert ooze makes footing treacherous.<br><br><b>Terrain:</b> DC 12 Dexterity (Acrobatics) to cross; loud movement may draw opportunistic slimes in 1d4 rounds." }, weight: 1 },
+            { value: { cr: 3, name: "Custodial Cube", description: "A translucent cube polishes the hall with alarming enthusiasm.<br><br><b>Engulf:</b> DC 13 Dexterity save to avoid being engulfed on contact; engulfed creatures are restrained and take 1d4 acid damage per round until they escape (DC 13 Strength)." }, weight: 0.7 },
+            { value: { cr: 3, name: "Puddle Pack", description: "Two Pugnacious Puddles jostle for dominance, splashing hotly at the slightest provocation.<br><br><b>Pack Instinct:</b> When one takes damage, the other gains advantage on its next attack." }, weight: 0.6 },
+            { value: { cr: 2, name: "Cleaner Foam Discharge", description: "A Mobile Cleaner vents caustic foam from a maintenance hatch.<br><br><b>Foam:</b> Area becomes difficult terrain; creatures starting their turn in foam take 1d4 acid damage (DC 13 Dexterity save halves)." }, weight: 0.5 },
 
             // Rare or notable passersby
             { value: { cr: 6, name: "Echo Inquisitor’s Afterimage", description: "A temporal smear paces the corridor ahead. Engage and the Inquisitor notices—expect a short, brutal chase through flickering time." }, weight: 0.2 },
             { value: { cr: 4, name: "Hall Monitor Dragnet", description: "Two Monitors string a checkpoint with chalk glyphs and confiscation poles. ‘Papers,’ they demand, meaning ‘permissions you do not have.’" }, weight: 0.7 },
             { value: { cr: 5, name: "Detention Professor on Rounds", description: "A Detention Professor strolls with a switch and a smile. It assigns ‘classwork’ involving restraints and restorative suffering." }, weight: 0.4 },
+            { value: { cr: 7, name: "Detention Professors (Melee & Magic) — Duo", description: "Two Detention Professors—one with restraint implements, one in arcane robes—coordinate a corridor ‘lesson’.<br><br><b>Mechanics:</b> The melee Professor attempts to bind (on a hit, DC 14 Strength (Athletics) to escape); the magic Professor imposes disadvantage on spell attacks within 10 ft while chanting. <b>Escape Option:</b> Group challenge: 2 successes before 1 failure using DC 14 Dexterity (Stealth) to break sightlines or DC 14 Intelligence (Investigation) to route through side cover; success: you slip past without pursuit, failure: they press the lesson (begin combat, duo gains advantage on the first round). <b>Defuse Option:</b> Present a credible corrective plan: DC 15 Charisma (Persuasion/Deception) AND DC 14 Intelligence (Arcana) to satisfy the arcane rubric; success: they stamp a ‘Gold Star’ (gain advantage on one future check here) and move on; failure: stern warning (no combat unless provoked)." }, weight: 0.25 },
             { value: { cr: 4, name: "Primogenitor’s Scent", description: "The air goes thin—lurkers tense. You’re moving through the hunting lane of a Lurker Primogenitor. It may test you with a feint." }, weight: 0.3 },
 
             // Liquid Legion signs
-            { value: { cr: 3, name: "Liquid Legion Dripfeed", description: "Condensation beads go ink-black and begin marching. Early Legion massing—interrupt the flow or it will become a wave." }, weight: 0.7 },
-            { value: { cr: 1, name: "Legion Residue Hazard", description: "Patchy, reactive residue clings to the floor. It tries to flow toward warmth and sound, making stealth much harder." }, weight: 0.9 },
+            { value: { cr: 3, name: "Liquid Legion Dripfeed", description: "Condensation beads go ink-black and begin marching—early Legion massing.<br><br><b>Escalation:</b> If not disrupted within 3 rounds (fire/cold/purity magic), this escalates into a Liquid Legion encounter." }, weight: 0.7 },
+            { value: { cr: 1, name: "Legion Residue Hazard", description: "Patchy, reactive residue clings to the floor, flowing toward warmth and sound.<br><br><b>Mechanics:</b> Stealth checks have disadvantage unless you mask heat/noise (DC 13 Wisdom (Survival) to prepare)." }, weight: 0.9 },
 
             // Windows and oddities
-            { value: { cr: 2, name: "Window Gauntlet", description: "A run of stubborn panes emit psychic crosswind. Weirdlings press their faces to the glass, laughing at shapes only they see." }, weight: 0.9 },
+            { value: { cr: 2, name: "Window Gauntlet", description: "A run of stubborn panes emit psychic crosswind; Weirdlings press their faces to the glass.<br><br><b>Mechanics:</b> DC 13 Wisdom save or suffer disadvantage on Perception checks for 10 minutes from disorienting whispers." }, weight: 0.9 },
             { value: { cr: 0, name: "Slime Cube Princess Crossing (Non-Combat)", description: "The Slime Cube Princess oozes across the hall, crown askew. She pauses if greeted politely, then continues her promenade." }, weight: 0.2 },
-            { value: { cr: 4, name: "Grief-Stone Pressure Fluctuation", description: "Air grows heavy and choices feel worse. A nearby Grief-Stone flexes its will; decisive, confident movement breaks the grip." }, weight: 0.5 },
+            { value: { cr: 4, name: "Grief-Stone Pressure Fluctuation", description: "Air grows heavy and choices feel worse; a nearby Grief-Stone flexes its will.<br><br><b>Mechanics:</b> DC 14 Wisdom save to act normally; failure imposes disadvantage on your first roll this scene. A successful DC 15 Arcana/Religion check suppresses the effect for 10 minutes." }, weight: 0.7 },
+
+            // New corridor additions
+            { value: { cr: 2, name: "Steam Vent Burst", description: "A magitech steam line hisses, then vents scalding vapor down the hall.<br><br><b>Mechanics:</b> Creatures in a 20 ft line make DC 13 Dexterity saves or take 1d4 fire damage and are blinded until the end of their next turn; success halves and negates blind. Disabling the valve (DC 14 Tools) stops future bursts." }, weight: 1 },
+            { value: { cr: 3, name: "Detention Net Drop", description: "A ceiling rack snaps, dropping a runic detention net.<br><br><b>Mechanics:</b> DC 14 Dexterity save or restrained; a creature can cut free (AC 12, 10 HP) or make DC 14 Strength (Athletics) to escape as an action." }, weight: 1 },
+            { value: { cr: 4, name: "Detention Professor (Melee) Corridor Drill", description: "The melee Detention Professor calls for ‘form and focus’—a brisk corridor drill with restraint practice.<br><br><b>Mechanics:</b> A creature can comply: best-of-3 DC 14 checks (Strength (Athletics) or Dexterity (Acrobatics)). On success, earn a minor ‘Gold Star’ boon (+1 to a single Strength/Dexterity check later here); on failure, you’re briefly bound (escape DC 13 Strength) and take 1 nonlethal bludgeoning. <b>Defuse:</b> DC 14 Charisma (Persuasion) to present a self-directed exercise plan; success averts the drill without combat." }, weight: 0.9 },
+            { value: { cr: 4, name: "Detention Professor (Magic) Calibration Walk", description: "The magic Detention Professor paces a humming rune-stick, insisting on ‘responsible casting’ in the hall.<br><br><b>Mechanics:</b> Spell attacks made within 10 ft are at disadvantage while the calibration hums. <b>Assist/Defuse:</b> DC 14 Intelligence (Arcana) to help re-tune it, ending the hum for 10 minutes and granting +1 on the next Arcana/Tools check here; failure by 5+ pops for 1d4 lightning to the assister." }, weight: 0.85 },
+            { value: { cr: 2, name: "Mirror Pane Doppel", description: "A warped pane casts a living reflection that mimics the front-most creature with half potency.<br><br><b>Mechanics:</b> DC 14 Wisdom save to resist the doppel. On failure, the Reflection acts on initiative 10 with basic attacks at disadvantage; breaking the pane (AC 12, 8 HP) ends it." }, weight: 0.8 },
+            { value: { cr: 1, name: "Shifting Stair", description: "Steps stretch and compact unpredictably.<br><br><b>Mechanics:</b> Climbing requires DC 12 Dexterity (Acrobatics); failure slides the creature 10 ft back and prone. A secured rope grants advantage." }, weight: 1 },
+            { value: { cr: 3, name: "Confiscation Checkpoint", description: "A Hall Monitor and an Auditor establish a portable gate.<br><br><b>Checks:</b> DC 14 Charisma (Deception) to pass; DC 15 Dexterity (Sleight of Hand) to conceal contraband. Failure: lose 1d3 items tagged as ‘confiscated’ or provoke a brief scuffle." }, weight: 1.2 },
+            { value: { cr: 2, name: "Mana Leak", description: "A conduit leak thins magic briefly.<br><br><b>Mechanics:</b> For 1 minute, spell attacks have disadvantage within 20 ft; DC 14 Intelligence (Arcana) can patch the leak for 10 minutes, restoring normal values." }, weight: 0.9 },
+            { value: { cr: 2, name: "Ghostiby Book Runner", description: "A Darkling-Ghostiby dashes past, juggling tomes it ‘borrowed’.<br><br><b>Options:</b> DC 13 Dexterity (Sleight of Hand) to snatch a book (random minor scroll); DC 12 Charisma (Performance) to amuse it and get a harmless giggle-curse boon (+1 to next save)." }, weight: 0.7 },
+            { value: { cr: 4, name: "Darkforged Maintenance Crew", description: "Two Darkforged Remnants weld a plate while a third watches.<br><br><b>Mechanics:</b> Approaching within 10 ft triggers a warning pulse (DC 13 Wisdom save or frightened until end of next turn). Disabling the welding node (AC 13, 12 HP) draws their attention." }, weight: 0.8 },
+            { value: { cr: 3, name: "Arcane Draft", description: "A corridor cross-breeze shuffles papers into legible, pleading messages.<br><br><b>Mechanics:</b> Reading grants a clue; DC 13 Wisdom (Insight) to glean useful route info (advantage on next Navigation-type decision)." }, weight: 0.9 },
+            { value: { cr: 2, name: "Weirdling Lantern Moths", description: "Luminous moths cluster and follow warmth.<br><br><b>Mechanics:</b> DC 12 Wisdom (Animal Handling) to guide them away; success grants dim-light advantage on next Perception in this corridor; failure draws a curious Lurker in 1d4 rounds." }, weight: 0.9 },
+
+            // Light, non-combat corridor set pieces (minor fun / hazards)
+            { value: { cr: 0.5, name: "Runaway Study Cart (Non-Combat)", description: "A squeaky study cart barrels down the corridor piled high with textbooks.<br><br><b>Mechanics:</b> DC 12 Dexterity save or be jostled for 1 bludgeoning and pushed 5 ft; success steps aside. DC 12 Dexterity (Sleight of Hand) to snag a drifting pamphlet (flavor clue or minor +1 on next Investigation)." }, weight: 1.2 },
+            { value: { cr: 0, name: "Mischief Bell String (Non-Combat)", description: "A hair-thin string of tiny bells crosses at ankle height.<br><br><b>Mechanics:</b> DC 13 Wisdom (Perception) to notice; DC 13 Dexterity (Thieves' Tools) to unhook silently. On trigger, jingling imposes disadvantage on Stealth checks here for 10 minutes and may draw a patrolling Auditor at DM discretion." }, weight: 1.1 },
+            { value: { cr: 0.5, name: "Hopscotch Glyphs", description: "Chalk glyphs paint a hopscotch path that pulses faintly.<br><br><b>Mechanics:</b> A creature can attempt the pattern (DC 13 Dexterity (Acrobatics)): success grants +1 on next Dexterity-based check; failure produces a harmless spark-pop (1 lightning, no ongoing effect)." }, weight: 1 },
+            { value: { cr: 0.25, name: "Ooze Hammock", description: "A sagging, benign ooze forms a hammock between lockers. It wobbles invitingly.<br><br><b>Mechanics:</b> Resting in it requires DC 12 Constitution save; on failure, sticky residue halves speed for 1 minute; on success, gain a minor comfort boon (+1 on next saving throw)." }, weight: 0.8 },
+            { value: { cr: 0, name: "Vending Rune Kiosk (Non-Combat)", description: "A humming kiosk offers ‘Student Refreshments’. The runes accept coins, buttons, or compliments.<br><br><b>Mechanics:</b> Spend a trivial token to receive a random trinket (DM’s table) or a one-use +1 to a single check within the next hour (flavor). Tampering (DC 14 Tools) risks a zap (1d4 lightning)." }, weight: 0.9 },
+
+            // Another round of minor corridor moments
+            { value: { cr: 0, name: "Paper Wing Swarm (Non-Combat)", description: "Folded paper birds spiral on a dust devil of stale air.<br><br><b>Mechanics:</b> DC 12 Dexterity (Acrobatics) to move through without distraction; success grants +1 on your next Initiative in this corridor; failure imposes disadvantage on your next Perception here (rustling)." }, weight: 0.9 },
+            { value: { cr: 0.25, name: "Wayfinding Echo Markers", description: "Subtle pressure plates echo your steps with a half-second delay.<br><br><b>Mechanics:</b> DC 13 Wisdom (Perception) to notice and step lightly; until disabled (DC 13 Tools), Stealth checks in this stretch are at disadvantage due to the echo." }, weight: 0.8 },
+            { value: { cr: 0, name: "Custodian’s ‘Wet Floor’ Illusion", description: "A persistent glamor paints a glossy ‘wet’ sheen on stone.<br><br><b>Mechanics:</b> DC 12 Intelligence (Investigation) to see it’s harmless; hurrying creatures must make DC 12 Dexterity saves or hesitate (lose 5 ft of movement) from caution." }, weight: 0.8 },
+            { value: { cr: 0, name: "Whisper Lockers (Non-Combat)", description: "Lockers murmur gossip; offering a harmless secret hushes them.<br><br><b>Mechanics:</b> Share a small truth to gain +1 on your next Insight here; refusing imposes disadvantage on your next Persuasion in this corridor (they tattle)." }, weight: 0.7 },
+            { value: { cr: 0.5, name: "Sliding Wall Panel", description: "A wall panel shunts slowly across the hall.<br><br><b>Mechanics:</b> DC 13 Strength (Athletics) to wedge or DC 13 Tools to jam its track; failure squeezes a creature for 1 bludgeoning and halves speed for 1 minute (stiff)." }, weight: 0.7 },
+            { value: { cr: 0, name: "Vending Rune Kiosk — Diaper Discounter (Non-Combat)", description: "A blinking kiosk labeled Personal Care rattles to life. Its price tables are obviously decades out of date. It lists a Magidiaper +3 for only 100 gp, with 1d3 in stock.<br><br><b>Mechanics:</b> A creature may purchase a Magidiaper +3 for 100 gp each (roll 1d3 for available stock). DC 13 Intelligence (Investigation) notices the outdated pricing. Attempting to access admin settings (DC 14 Tools or Intelligence (Arcana)) on success restores hard access to the vendor server—discounted items are removed and the kiosk refreshes with 3 standard health potions available at the normal selling price (DM’s prevailing rate). On failure, it shocks the user for 1d4 lightning and locks the kiosk for 10 minutes." }, weight: 0.7 },
+
+            // Grief-Stone themed corridor additions
+            { value: { cr: 3, name: "Hounding Grief-Stone Tile", description: "A living grief-stone tile clicks loose and begins shadowing your steps, skittering underfoot with malign intent.<br><br><b>Mechanics:</b> At the start of each round, creatures within 10 ft make a DC 14 Wisdom save or suffer disadvantage on their first roll that round. The tile moves up to 10 ft toward the last moving creature’s space. Prying it up (AC 13, 10 HP) or warding it (DC 15 Religion/Arcana, action) suppresses it for 1 minute." }, weight: 1.0 },
+            { value: { cr: 2, name: "Paralurkers Under the Stone", description: "A small pack of paralurkers has already triggered a grief-stone and is panicking, dropping erratically from the ceiling.<br><br><b>Mechanics:</b> Paralurkers have disadvantage on their first attack each. Creatures in the aura make DC 13 Wisdom saves or have disadvantage on their first roll this round. Loud claps or sudden light can bait them across the tile again, forcing them to scatter for 1 round." }, weight: 0.95 },
         ];
 
         const roomEncounters = [
             // Dark Dimension cadres (common room threats)
-            { value: { cr: 4, name: "Infiltrator Team", description: "A pair of Dark Dimension Infiltrators examine a strange glyph on the wall. They are hostile and will attack on sight, using breaching tactics to overwhelm a target." }, weight: 4 },
-            { value: { cr: 2, name: "Void Scholar at Work", description: "A Dark Dimension Void Scholar calibrates a humming rune lattice. Disrupting the lattice may grant advantage—but risks a volatile backlash." }, weight: 2.5 },
-            { value: { cr: 5, name: "Vanguard's Post", description: "A lone Dark Dimension Vanguard stands guard in this room, protecting a seemingly insignificant doorway. It will use aggressive tactics to neutralize any who approach." }, weight: 2 },
-            { value: { cr: 7, name: "Justicar's Judgment", description: "A Dark Dimension Justicar inspects the room with an air of authority, searching for a high-value target. It deems the party an unacceptable variable and moves to eliminate them." }, weight: 1 },
-            { value: { cr: 9, name: "The Dean's Office", description: "A Darkforme Disciplinary Dean studies a scrying pool. The Dean’s punishments are immediate and severe—comply or be corrected." }, weight: 0.5 },
+            { value: { cr: 4, name: "Infiltrator Team", description: "A pair of Infiltrators examine a glyph, ready to breach.<br><br><button onclick='this.style.display=\"none\"; this.nextElementSibling.style.display=\"block\"'>Show Mechanics</button><div style='display:none'><b>Snare Grid:</b> DC 14 Intelligence (Investigation) to map trip-sigils; triggering forces a DC 14 Dexterity save or restrained by force-filaments (escape DC 14 Strength).<br><b>Tactic:</b> They focus the rearmost target; breaking line of sight cancels their opening gambit.</div>" }, weight: 4 },
+            { value: { cr: 2, name: "Void Scholar at Work", description: "A Void Scholar calibrates a humming rune lattice.<br><br><b>Option:</b> DC 15 Intelligence (Arcana) to disrupt and grant advantage vs nearby foes for 1 round; on failure by 5+, backlash deals 1d4 lightning to the disruptor." }, weight: 2.5 },
+            { value: { cr: 5, name: "Vanguard's Post", description: "A Vanguard guards a ‘nothing’ doorway with a bulwark.<br><br><b>Shield Push:</b> When it advances, each adjacent creature must succeed on a DC 15 Strength save or be pushed 10 ft and knocked prone. Disabling the anchor rune (AC 12, 10 HP) reduces its push by half." }, weight: 2 },
+            { value: { cr: 7, name: "Justicar's Judgment", description: "A Justicar inspects the room and marks an offender.<br><br><b>Mark:</b> One creature must make a DC 15 Wisdom save or is <i>Judged</i>—the Justicar has advantage vs that target until the mark is broken (total cover or 2 consecutive successful saves at end of turn)." }, weight: 1 },
+            { value: { cr: 9, name: "The Dean's Office", description: "A Disciplinary Dean studies a scrying pool.<br><br><b>Edict:</b> DC 16 Charisma (Persuasion) to receive a ‘reduced sentence’; failure triggers restraints (escape DC 15 Strength) and psychic reprimand (1d6 psychic). Compliance averts combat but imposes a minor penalty (DM discretion)." }, weight: 0.5 },
 
             // Darkling faculty and classroom horrors
-            { value: { cr: 5, name: "Detention Professor’s Lesson", description: "A Darkling Detention Professor (Weapon or Magic Specialist, 50/50) addresses an empty class. The party is ‘late’—and the lesson is pain." }, weight: 3 },
-            { value: { cr: 3, name: "Hall Monitor Tribunal", description: "Two Hall Monitors and a Caller organize a makeshift tribunal. The verdict is predetermined unless the party presents a spectacular defense—or a faster offense." }, weight: 1.5 },
+            { value: { cr: 5, name: "Detention Professor’s Lesson", description: "A Detention Professor addresses an empty class. The party is ‘late’.<br><br><b>Exercise:</b> Best-of-3 DC 14 checks (choose each round: Strength (Athletics), Dexterity (Acrobatics), or Intelligence (Arcana) if magic). Win: earn a <i>Gold Star</i> (inspiration or advantage once). Lose: take 1d6 nonlethal and a detention slip." }, weight: 3 },
+            { value: { cr: 3, name: "Hall Monitor Tribunal", description: "Two Hall Monitors and a Caller stage a tribunal.<br><br><b>Defense:</b> Group skill challenge: 3 successes before 2 failures (DC 14 Persuasion/Deception/Insight). Success: ‘time served’; Failure: citations and attempted detention (restraints, escape DC 13 Strength)." }, weight: 1.5 },
 
             // Lurker/slurper dens and primogenitor packs
-            { value: { cr: 4, name: "Primogenitor Lurker Pack", description: "A Lurker Primogenitor rules a low ceiling den ringed by lurkers and slurpers. Paralurkers perch above, waiting for the fall-in signal." }, weight: 2 },
-            { value: { cr: 2, name: "Paralurker Nursery", description: "A soot-stained ceiling hides a small brood of paralurkers. They scatter if scorched, but reform quickly under a Caller’s cry." }, weight: 1.5 },
+            { value: { cr: 4, name: "Primogenitor Lurker Pack", description: "A Lurker Primogenitor rules a low ceiling den with escorts.<br><br><b>Ceiling Squeeze:</b> Creatures taller than 5 ft make DC 13 Dexterity (Acrobatics) to avoid disadvantage from cramped space. Dislodging two anchor strands (AC 12, 5 HP each) opens the ceiling." }, weight: 2 },
+            { value: { cr: 2, name: "Paralurker Nursery", description: "A soot-stained ceiling hides a brood of paralurkers.<br><br><b>Skittish:</b> Fire or thunder forces them to scatter for 1 round; a Caller can reform them at the end of the next round unless silenced (DC 14)." }, weight: 1.5 },
 
             // Oozes and anomalies
-            { value: { cr: 5, name: "Grief-Stone Ambush", description: "A Grief-Stone masquerades as a load-bearing column. As doors ‘misremember’ how to open, despair feeds the sigils. Swift disruption is key." }, weight: 3 },
-            { value: { cr: 5, name: "Liquid Legion (Open Hunt)", description: "The room is a basin for a gathering ooze. Ripples telegraph a coming surge; good Perception lets you secure high ground before it crests." }, weight: 1.25 },
-            { value: { cr: 5, name: "Liquid Legion (Ambush)", description: "Floor vents exhale and black volume pours in. On a failed Perception check, the party is surprised as the Legion divides to flank." }, weight: 0.75 },
-            { value: { cr: 2, name: "Pugnacious Puddle", description: "The Puddle thumps like a heart and picks the smallest challenger in the room. It’s emboldened by spilled reagents." }, weight: 1.5 },
+            { value: { cr: 5, name: "Grief-Stone Ambush", description: "A Grief-Stone masquerades as a column.<br><br><b>Aura:</b> DC 14 Wisdom save at start of each turn or suffer disadvantage on your next action. DC 15 Intelligence (Arcana) or Wisdom (Religion) suppresses the aura for 1 minute; damaging the Stone ends the effect." }, weight: 3 },
+            { value: { cr: 5, name: "Liquid Legion (Open Hunt)", description: "The room is a basin for a gathering ooze.<br><br><b>Wave:</b> At the start of the round, creatures in low ground make DC 14 Strength saves or are knocked prone and take 1d4 acid damage; high ground grants advantage on the save." }, weight: 1.25 },
+            { value: { cr: 5, name: "Liquid Legion (Ambush)", description: "Floor vents exhale and black volume pours in.<br><br><b>Engulf:</b> DC 14 Dexterity save or become restrained until the end of your next turn. A creature can pull an ally free with a DC 14 Strength (Athletics) check." }, weight: 0.75 },
+            { value: { cr: 2, name: "Pugnacious Puddle", description: "The Puddle thumps like a heart and picks the smallest challenger.<br><br><b>Temper:</b> Cold calms (disadvantage next round); fire enrages (advantage next attack). Mopping with neutralizing agents (DC 13 Intelligence (Nature)) halves its HP." }, weight: 1.5 },
 
             // Courts of the Slimepress
             { value: { cr: 10, name: "Audience with the Shadow Slimepress (BOSS)", description: "The Shadow Slimepress reclines upon an obsidian cradle, attended by the Viscount of Viscera, the Royal Jesters of Despair, and the Baroness of Black Bile. The coterie is always present." }, weight: 0.2 },
@@ -351,7 +582,149 @@
             // Darkforged posts
             { value: { cr: 5, name: "Warforged Darkwatch Outpost", description: "An observation dais hums as a Warforged Darkwatch oversees a map of active anomalies. Tripwires and stasis-grenades abound." }, weight: 0.5 },
             { value: { cr: 4, name: "Darkforged Assembly", description: "Two different Darkforged variants calibrate a pulse-emitter. Disabling it early prevents reinforcements being routed here." }, weight: 0.75 },
+
+            // New general room encounters
+            { value: { cr: 2, name: "Scrying Array Misfire", description: "A wall of scrying lenses sparks chaotically.<br><br><b>Mechanics:</b> DC 14 Intelligence (Arcana) to stabilize; failure releases a psychic pop—creatures within 10 ft make DC 13 Wisdom saves or suffer disadvantage on their next check." }, weight: 1.5 },
+            { value: { cr: 3, name: "Mobile Cleaner Overflow", description: "A Mobile Cleaner left a foamy lake under tables.<br><br><b>Foam:</b> Difficult terrain; starting turn in foam deals 1d4 acid (DC 13 Dex halves). Clearing a drain (DC 14 Tools) removes foam over 1 minute." }, weight: 1.2 },
+            { value: { cr: 3, name: "Darkforged Workshop Live", description: "A maintenance jig twitches to life while a Remnant supervises.<br><br><b>Mechanics:</b> Disable the jig (AC 12, 12 HP) or DC 15 Tools; failure shocks the operator for 1d4 lightning and restrains until freed (DC 13 Strength)." }, weight: 1.2 },
+            { value: { cr: 2, name: "Window Resonance", description: "A pane in the room hums with a psychic crosswind.<br><br><b>Mechanics:</b> DC 13 Wisdom save or Perception checks are at disadvantage for 10 minutes; bracing the frame (DC 12 Tools) quiets it." }, weight: 1 },
+            { value: { cr: 2, name: "Ghostiby Shelver", description: "A Darkling-Ghostiby tries to shelve the party like books, giggling.<br><br><b>Mechanics:</b> DC 13 Charisma (Performance) to entertain it into helping; success yields advantage on a future Investigation here; failure leaves your gear ‘re-shelved’." }, weight: 0.9 },
+            { value: { cr: 4, name: "Stasis Capsule Reboot", description: "A stasis pod chimes and begins rebooting. A Warforged sensor drone warms nearby.<br><br><b>Mechanics:</b> DC 14 Intelligence (Investigation) to halt the sequence; failure releases the drone (use Sensor Drone behavior)." }, weight: 0.8 },
+            { value: { cr: 3, name: "Confiscation Sweep", description: "An Auditor and Hall Monitor inventory the room.<br><br><b>Checks:</b> DC 14 Charisma (Deception) to legitimize items; failure results in 1d3 items tagged as ‘impounded’ unless you accept a citation (minor condition, DM discretion)." }, weight: 1.2 },
+            { value: { cr: 2, name: "Runic Chalkback", description: "Notes appear correcting your notes and scolding penmanship.<br><br><b>Mechanics:</b> Accept the ‘correction’ and gain +1 on your next Arcana/History; defy it and it smudges new writing for 10 minutes." }, weight: 1 },
+
+            // Light, non-combat general room vignettes
+            { value: { cr: 0, name: "Bottle Elemental Cooler (Non-Combat)", description: "A cooler rattles—tiny water and air elementals in bottles clink for attention.<br><br><b>Mechanics:</b> DC 12 Wisdom (Animal Handling) or Intelligence (Arcana) to soothe; success yields a ‘refreshing swig’ granting +1 on next Constitution save; failure pops a cap and sprays (1 cold, targets in 5 ft)." }, weight: 0.9 },
+            { value: { cr: 0.5, name: "Tea Time Trolley", description: "A polite trolley rolls in, offering tea and biscuits.<br><br><b>Mechanics:</b> Accepting grants a calm boon (+1 on next Wisdom check); rushing it causes a wobble—DC 12 Dexterity save or spill (prone?). Polite thanks grants advantage on next reaction to social pressure here (DM’s call)." }, weight: 1 },
+            { value: { cr: 0.5, name: "Constellation Projector Puzzle", description: "A ceiling projector shows misaligned constellations.<br><br><b>Mechanics:</b> DC 14 Intelligence (Investigation) or (Arcana) to rotate lenses into place; success reveals a navigation hint (advantage on next navigation-related choice) or a hidden compartment; failure triggers a brief dazzle (disadvantage on next attack)." }, weight: 1 },
+            { value: { cr: 0, name: "Vending Rune Kiosk (Non-Combat)", description: "A magitech snack kiosk hums expectantly.<br><br><b>Mechanics:</b> Feed a coin/button/compliment to receive a random trinket or one-use +1 on a check. Forcing the panel (DC 14 Tools) risks a zap (1d4 lightning) and a loud beep (Stealth disadvantage for 10 minutes)." }, weight: 0.8 },
+            { value: { cr: 0, name: "Drama Club Script Read (Non-Combat)", description: "A stack of marked scripts urges: ‘Cold read! Now!’<br><br><b>Mechanics:</b> DC 12 Charisma (Performance) to impress the invisible director, granting advantage on your next Persuasion/Deception here; failure draws a paper-critique that imposes -1 on your next Charisma check (flavor)." }, weight: 0.8 },
+
+            // Another round of light general room set pieces
+            { value: { cr: 0.5, name: "Sand Table Runes (Non-Combat)", description: "A sand table holds scrambled runic tiles.<br><br><b>Mechanics:</b> DC 14 Intelligence (Investigation) to reorder; success grants advantage on your next Arcana/History here; failure seals the tiles under glass until you leave (no harm)." }, weight: 0.9 },
+            { value: { cr: 0, name: "Maintenance Mascot Drone (Non-Combat)", description: "A tiny mascot drone chirps for parts.<br><br><b>Mechanics:</b> Offer a spare screw/washer to receive a minor favor (+1 on next Tools or Investigation check); taking it apart triggers a sad beep imposing disadvantage on your next Persuasion here." }, weight: 0.8 },
+            { value: { cr: 0, name: "Lost Property Bin (Non-Combat)", description: "A ‘Lost Property’ bin invites rummaging.<br><br><b>Mechanics:</b> DC 12 Investigation finds a harmless trinket (flavor) or one-use +1 on a check; roll 1 on a d6: your hand catches a glue-pad—DC 12 Strength check to free or lose 5 ft of movement for 1 minute." }, weight: 0.9 },
+            { value: { cr: 0, name: "Chore Assignment Board (Non-Combat)", description: "A board lists chores with sigil stamps.<br><br><b>Mechanics:</b> Agree to a small task (flavor) to gain advantage on your next social check vs Academy staff here; refusing has no effect, but a stamp glares disapprovingly." }, weight: 0.7 },
+            { value: { cr: 0.5, name: "Portable Planetarium Demo", description: "A portable projector shows misaligned stars.<br><br><b>Mechanics:</b> DC 13 Intelligence (Arcana) to align, granting a navigation hint (advantage on next navigation choice in this floor); failure dazzles briefly (disadvantage on next ranged attack)." }, weight: 0.8 },
+            { value: { cr: 0, name: "Vending Rune Kiosk — Diaper Discounter (Non-Combat)", description: "A Personal Care kiosk chirps a welcome. Its inventory includes Magidiaper +3 at an absurdly outdated price of 100 gp each, with 1d3 in stock.<br><br><b>Mechanics:</b> Purchase Magidiaper +3 for 100 gp each (roll 1d3 for stock). DC 13 Intelligence (Investigation) to notice the inflation oversight. Accessing admin mode (DC 14 Tools or Intelligence (Arcana)) on success restores hard access to the vendor server—discounted items are removed and the kiosk refreshes with 3 standard health potions at the normal selling price (DM’s prevailing rate). On failure, it deals 1d4 lightning and locks the kiosk for 10 minutes." }, weight: 0.6 },
+
+            // Grief-Stone themed room additions
+            { value: { cr: 3, name: "Grief-Stone Pursuit Pattern", description: "Three grief-stone tiles pulse in a chasing pattern, hounding whoever moves first.<br><br><b>Mechanics:</b> Skill challenge (best of 3): DC 14 Intelligence (Investigation) to map pulses, DC 14 Dexterity (Acrobatics) to time movement, or DC 15 Religion/Arcana to ward one tile per success. On 2+ successes, the pattern breaks for 1 minute; otherwise, creatures within 10 ft make DC 14 Wisdom saves each round or suffer disadvantage on their first roll." }, weight: 0.9 },
+            { value: { cr: 0, name: "Confessional Grief-Stone (Non-Combat)", description: "A grief-stone hums like a held breath, craving contrition.<br><br><b>Mechanics:</b> A creature who speaks a sincere regret or sorrow can attempt DC 14 Wisdom (Insight) or Charisma (Performance): success calms the tile for 10 minutes and grants +1 on the next saving throw; failure leaves the aura active (DC 13 Wisdom save at start of turn or disadvantage on first roll)." }, weight: 0.7 },
         ];
+
+        // --- ROOM-SPECIFIC ENCOUNTER TABLES ---
+        // Tailored tables keyed by room category value in roomTypes
+        const roomSpecificEncounters = {
+            // Learning spaces: Dark Dimension student enforcement presences (use canonical Bestiary names)
+            "Lecture & Study Space": [
+                { weight: 3, value: { cr: 3, name: "Hall Monitor Review Session", description: "Two Hall Monitors quiz ‘late arrivals’ with trick questions and citation rods.<br><br><button onclick='this.style.display=\"none\"; this.nextElementSibling.style.display=\"block\"'>Show Mechanics</button><div style='display:none'><b>Checks:</b> DC 14 Charisma (Deception) to feign authorization, or DC 15 Charisma (Persuasion) to talk them down; DC 13 Dexterity (Stealth) to slip out a side door.<br><b>Failure:</b> You’re ‘detained’—movement is reduced by half for 1 minute or until you spend an action to break free (DC 13 Strength).<br><b>Reward:</b> Success earns a <i>Hall Pass</i> (advantage on the next social check vs Monitors).</div>" } },
+                { weight: 2.5, value: { cr: 2, name: "Auditor Patrol", description: "Three Auditors collect ‘overdue compliance forms’ and try to isolate targets.<br><br><b>Checks:</b> DC 14 Dexterity (Stealth) to avoid them entirely, or DC 15 Charisma (Persuasion) to convince them you’ve already filed. Failure triggers a brief scuffle (nonlethal) before they withdraw." } },
+                { weight: 1.5, value: { cr: 4, name: "Guest Lecture (Void Scholar)", description: "A Void Scholar lectures amid humming pylons that arc with static.<br><br><b>Hazard:</b> At the end of each round, creatures within 5 ft of a pylon must make DC 13 Dexterity saves or take 1d4 lightning damage (half on success).<br><b>Options:</b> DC 15 Intelligence (Arcana) to depower a pylon (action). Disabling 2 pylons ends the ‘lesson’." } },
+                { weight: 1.25, value: { cr: 6, name: "Auditarch Pop Quiz", description: "An Auditarch conducts a ‘pop quiz’ with two Auditor assistants.<br><br><b>Trial:</b> Each party member makes DC 15 (choose: Charisma (Persuasion), Intelligence (Investigation), or Wisdom (Insight)). On 2+ total successes, you’re ‘acquitted’; on failure, combat ensues or punitive measures are applied (restraints, citation marks)." } },
+            ],
+            "Library & Archive Wing": [
+                { weight: 3, value: { cr: 2, name: "Quiet Audit", description: "Two Auditors enforce silence among the stacks.<br><br><b>Checks:</b> DC 14 Dexterity (Stealth) to move silently; DC 15 Dexterity (Sleight of Hand) to lift a tome without notice; DC 13 Wisdom (Perception) to spot hush-glyphs before stepping on them.<br><b>Failure:</b> A harsh SHH! imposes disadvantage on your next check as shame burns." } },
+                { weight: 2, value: { cr: 3, name: "Scribes’ Sweep", description: "A Void Scholar and an Auditor cross-reference contraband tomes.<br><br><b>Options:</b> DC 15 Intelligence (Arcana) to identify the tracking glyph; DC 14 Charisma (Deception) to claim permission; DC 15 Strength (Athletics) to break off with your book. Success may yield a random scroll (DM’s choice)." } },
+                { weight: 1.25, value: { cr: 5, name: "Auditarch Catalog Review", description: "An Auditarch audits chained books for ‘irregular thought’.<br><br><b>Locks:</b> DC 16 Dexterity (Thieves’ Tools) to bypass catalog latches; DC 15 Charisma (Persuasion) to obtain ‘reading privileges’. On success, gain a significant lore clue relevant to your quest." } },
+                { weight: 1, value: { cr: 0, name: "Runaway Book Cart (Non-Combat)", description: "A creaky cart rolls itself between stacks, sorting madly.<br><br><b>Mechanics:</b> DC 12 Dexterity (Acrobatics) to avoid a bump; DC 12 Intelligence (Investigation) to catch a clue tucked under a volume, granting +1 on your next Investigation here." } },
+                { weight: 1, value: { cr: 0, name: "Index Spirit (Non-Combat)", description: "A helpful index spirit offers to sort thoughts for a whisper.<br><br><b>Mechanics:</b> Share a simple query to gain +1 on your next Arcana/History here; asking for forbidden topics imposes disadvantage on your next Persuasion vs staff (it tattles)." } },
+            ],
+            "Sanctum & Meditation": [
+                { weight: 2.5, value: { cr: 3, name: "Mindfulness Check", description: "Hall Monitors lead breathing exercises with binding ribbons at the ready.<br><br><b>Checks:</b> DC 14 Wisdom (Insight) to follow the script; DC 15 Charisma (Performance) to ‘demonstrate calm’ and pass. Failure: you’re ribbon-bound (restrained) until you escape (DC 13 Strength, action)." } },
+                { weight: 1.25, value: { cr: 6, name: "Auditarch Contemplation", description: "An Auditarch declares turmoil a punishable disorder.<br><br><b>Aura:</b> DC 15 Wisdom save upon approach or suffer frightened for 1 minute (repeat save each round).<br><b>Appeal:</b> DC 16 Charisma (Persuasion) to earn a formal ‘pardon’." } },
+                { weight: 1.25, value: { cr: 2, name: "Gentle Inquisitors", description: "Two soft-spoken Auditors offer ‘corrections through calm’.<br><br><b>Options:</b> DC 14 Charisma (Persuasion) to decline politely; DC 13 Dexterity (Sleight of Hand) to lift a shackling glyph; Failure: your speed is halved for 1 minute (soothing weighted wrap)." } },
+                { weight: 1, value: { cr: 0, name: "Zen Sand Tray (Non-Combat)", description: "A meditation tray invites raking patterns.<br><br><b>Mechanics:</b> DC 12 Wisdom (Insight) to calm your mind, granting +1 on your next Wisdom save; failure over-focuses—disadvantage on your next Perception here only." } },
+                { weight: 1, value: { cr: 0, name: "Incense Offering (Non-Combat)", description: "A faint incense brazier requests an offering.<br><br><b>Mechanics:</b> Light incense (or spend a minute in quiet) to gain +1 on your next Wisdom or Charisma save here; rushing past imposes no penalty but the room feels disappointed (flavor)." } },
+            ],
+            "Arcane Training Chamber": [
+                { weight: 2.5, value: { cr: 3, name: "Dueling Hall Monitors", description: "Two Hall Monitors ‘invite’ a nonlethal spar.<br><br><b>Spar:</b> Best-of-3 opposed checks vs DC 14 (your choice each round: Strength (Athletics) or Dexterity (Acrobatics)). Win 2 rounds: they award a <i>Practice Token</i> (advantage on your next Initiative). Lose: take 1d6 nonlethal damage and a stern lecture." } },
+                { weight: 1.75, value: { cr: 4, name: "Field Test (Void Scholar)", description: "Live-fire rune drills amidst crackling pylons.<br><br><b>Hazard:</b> At the end of each round, DC 13 Dexterity save or 1d4 lightning damage near active pylons.<br><b>Disable:</b> DC 15 Intelligence (Arcana) to depower a pylon (action). Disabling 2 ends the drill." } },
+                { weight: 1, value: { cr: 5, name: "Vanguard Drill Team", description: "A Vanguard runs a capture exercise with two Auditors in formation.<br><br><b>Push Line:</b> When the line advances, DC 15 Strength save or be shoved 10 ft toward a corner. DC 15 Intelligence (Investigation) reveals a weak point; exploiting it breaks the formation." } },
+                { weight: 1, value: { cr: 0, name: "Rations Dispenser (Non-Combat)", description: "A hopper dispenses ‘nutritive pellets’.<br><br><b>Mechanics:</b> Insert a token or compliment to receive a pellet granting +1 on your next Constitution check; jamming the chute (DC 13 Tools) causes a loud buzz (Stealth disadvantage 10 minutes)." } },
+            ],
+            // Dining and Greenhouse: slimes and darklings search for food and prey
+            "Dining & Domestic Facility": [
+                { weight: 3, value: { cr: 1, name: "Scavenger Slime Spill", description: "Hungry slimes circle dropped scraps, making the floor slick.<br><br><b>Terrain:</b> Moving more than half speed requires DC 12 Dexterity (Acrobatics) or fall prone.<br><b>Trick:</b> A round of cold or fire control (DM’s discretion) shrinks the spill and clears a path. Success salvages 1d4 usable rations." } },
+                { weight: 2.25, value: { cr: 2, name: "Slurper Tongue Raid", description: "Slurpers lash from under benches and serving slots.<br><br><b>Spot:</b> DC 14 Wisdom (Perception) to notice tongues before they strike.<br><b>Counter:</b> A readied attack can sever a tongue (AC 12, 3 HP). DC 13 Dexterity (Sleight of Hand) to tie a bench to block their reach." } },
+                { weight: 1.25, value: { cr: 1, name: "Weirdling Food Fight", description: "Weirdlings ping about chasing the smell of stew.<br><br><b>Diffusion:</b> DC 12 Charisma (Performance) to redirect their attention; or bang pots to scatter them (creatures within 10 ft make DC 12 Con saves vs ringing ears)." } },
+                { weight: 1, value: { cr: 3, name: "Kitchen Inspection (Auditors)", description: "Two Auditors ‘grade’ sanitation with confiscation poles.<br><br><b>Checks:</b> DC 14 Charisma (Persuasion) with a plausible cleanliness claim; provide fresh supplies to gain advantage. Failure costs 1d4 rations in ‘fines’ or escalates to a brief scuffle." } },
+                { weight: 1, value: { cr: 0, name: "Tea Time Trolley (Non-Combat)", description: "A courteous trolley serves steaming tea and biscuits.<br><br><b>Mechanics:</b> Accepting tea grants +1 on next Wisdom check here; rushing it causes a wobble—DC 12 Dexterity save or spill and slip (prone)." } },
+                { weight: 1, value: { cr: 0, name: "Viewing Bench Plaque (Non-Combat)", description: "A brass plaque under a viewing bench offers a cryptic couplet.<br><br><b>Mechanics:</b> DC 12 Intelligence (History) to interpret a clue about the Academy’s past (flavor +1 on next History here); failure reveals a cheeky marginal note that teases (no harm)." } },
+            ],
+            "Botanical & Greenhouse Space": [
+                { weight: 3, value: { cr: 1.5, name: "Slime Bloom in Beds", description: "Warm planters host a budding slime bloom.<br><br><b>Hazard:</b> Entering a planter requires DC 12 Constitution save or take 1d4 acid damage from reactive gel.<br><b>Counter:</b> DC 14 Intelligence (Nature) identifies chilling or cutting irrigation lines to weaken the colony." } },
+                { weight: 2.25, value: { cr: 2, name: "Slurpers in the Irrigation", description: "Slurpers feed from tubes and strike when the lattice shakes.<br><br><b>High Ground:</b> DC 14 Strength (Athletics) to climb to safer catwalks; DC 13 Dexterity (Acrobatics) to move along beams. Cutting feed lines (DC 12 Dexterity (Tools)) reduces their reach for 1 minute." } },
+                { weight: 1.75, value: { cr: 2, name: "Paralurkers in the Canopy", description: "Paralurkers prowl trellis wires and drop in tandem.<br><br><b>Spot:</b> DC 15 Wisdom (Perception) to see them before they spring.<br><b>Snare:</b> Sticky filaments restrain on a hit; escape DC 13 Strength (Athletics). Clearing canopy strands forces them to relocate." } },
+                { weight: 1, value: { cr: 3, name: "Foraging Student Patrol", description: "Two Hall Monitors and an Auditor demand ‘botany requisitions’.<br><br><b>Paperwork:</b> DC 15 Charisma (Deception) to present forged orders; offering a rare cutting grants advantage. Failure: lose 1d4 herb bundles to ‘confiscation’ or face a brief skirmish." } },
+                { weight: 0.75, value: { cr: 5, name: "Auditarch Field Lab", description: "An Auditarch samples rare cuttings behind a suppressor veil.<br><br><b>Stealth:</b> DC 16 Dexterity (Stealth) to avoid notice; DC 15 Intelligence (Arcana) to spoof the veil long enough to grab a <i>Star-Orchid Cutting</i> (valuable component). Failure is treated as theft." } },
+                { weight: 1, value: { cr: 0, name: "Comet Dust Sample (Non-Combat)", description: "A labeled vial of ‘comet dust’ begs examination.<br><br><b>Mechanics:</b> DC 13 Intelligence (Arcana/Nature) to glean a harmless insight (flavor +1 on next Arcana here); opening the vial releases glitter that imposes disadvantage on Stealth for 10 minutes (sparkle trail)." } },
+            ],
+
+            // New room-specific tables for remaining room types
+            "Abandoned Academy Space": [
+                { weight: 2.5, value: { cr: 1, name: "Echoing Locker Rattle", description: "Old lockers rattle as if remembering names.<br><br><b>Mechanics:</b> DC 12 Wisdom (Insight) to glean a clue (+1 on a relevant future check). Disturbing the lockers releases a Weirdling that startles (no damage) but imposes disadvantage on the next Perception here." } },
+                { weight: 2, value: { cr: 2, name: "Dustbound Lurkers", description: "Two Lurkers coated in dust cling to rafters.<br><br><b>Spot:</b> DC 14 Perception or their first drop gains advantage. Clearing dust clouds (gust/cantrip) cancels their concealment." } },
+                { weight: 1.25, value: { cr: 3, name: "Grief-Stone Marker", description: "A small grief-stone obelisk feeds on neglect.<br><br><b>Aura:</b> DC 14 Wisdom save or your first action each round is at disadvantage; DC 15 Arcana/Religion suppresses for 10 minutes." } },
+                { weight: 1, value: { cr: 2, name: "Custodial Cube Remnant", description: "A half-starved cube polishes a single tile obsessively.<br><br><b>Mechanics:</b> Approach within 5 ft: DC 13 Dex save or restrained (engulf) until freed (DC 13 Strength)." } },
+                { weight: 1, value: { cr: 0, name: "Calibration Chime (Non-Combat)", description: "A wall chime requests a calibration tap sequence.<br><br><b>Mechanics:</b> DC 12 Intelligence (Investigation) to follow the pattern; success grants +1 on your next Tools or Arcana check here; failure triggers an off-key buzz imposing -1 on your next check (flavor)." } },
+                { weight: 1, value: { cr: 1, name: "Grief-Stone Marker with Footprints", description: "A chalk circle warns ‘DO NOT STEP’ over a grief-stone, but fresh footprints cross it.<br><br><b>Mechanics:</b> DC 12 Survival reveals a recent small group panicked through. Entering the 10 ft field: DC 12 Wisdom save or disadvantage on first roll this round. Following the scuffs grants advantage on the next tracking check on this floor." } },
+            ],
+            "Magical & Arcane Facility": [
+                { weight: 2.25, value: { cr: 3, name: "Runic Spill", description: "A chalk circle bleeds power.<br><br><b>Mechanics:</b> Crossing it requires DC 14 Dex save or 1d4 force damage and pushed 5 ft; DC 15 Arcana to ‘cap’ the spill (action)." } },
+                { weight: 1.75, value: { cr: 4, name: "Void Scholar Calibration", description: "A Void Scholar re-tunes pylons.<br><br><b>Hazard:</b> End of round arcs deal 1d4 lightning (DC 13 Dex halves). Disable 2 pylons (DC 15 Arcana) to end test." } },
+                { weight: 1.25, value: { cr: 5, name: "Darkforged Test Bench", description: "A Darkforged Remnant stress-tests a device.<br><br><b>Mechanics:</b> Overload valve (DC 14 Tools) or strike the capacitor (AC 12, 10 HP) to depower; failure shocks for 1d4 lightning and restrains until freed (DC 13 Strength)." } },
+                { weight: 1, value: { cr: 0, name: "Club Dues Jar (Non-Combat)", description: "A jar marked ‘dues’ rattles expectantly.<br><br><b>Mechanics:</b> Donate a token coin or trinket to gain +1 on your next Persuasion with students here; trying to pocket a coin imposes disadvantage on your next Deception here (someone saw)." } },
+            ],
+            "Foundational & Ancient Structure": [
+                { weight: 2, value: { cr: 2, name: "Time-Dim Pocket", description: "A slow-time seam drapes the chamber.<br><br><b>Mechanics:</b> Ranged attacks into/out of pocket have disadvantage; exiting requires DC 13 Con save or -10 ft speed until end of next turn." } },
+                { weight: 1.5, value: { cr: 3, name: "Whispering Root Veins", description: "Living roots murmur.<br><br><b>Mechanics:</b> DC 13 Nature to interpret whispers for a navigation hint; failure unnerves a creature (disadvantage on next Wisdom save)." } },
+                { weight: 1, value: { cr: 4, name: "Ancient Grief-Stone", description: "A larger grief-stone column pulses.<br><br><b>Aura:</b> DC 14 Wisdom save each round or disadvantage on the round’s first roll; destroying or warding (DC 15 Religion) ends it." } },
+            ],
+            "Navigational Feature": [
+                { weight: 2.25, value: { cr: 2, name: "Rotunda Re-Path", description: "Paths reconfigure when unobserved.<br><br><b>Mechanics:</b> Group DC 13 Intelligence (Investigation) to map; success grants advantage on the next navigation choice; failure loops you once (time loss only)." } },
+                { weight: 1.5, value: { cr: 3, name: "Caller’s Crossroads", description: "A Caller uses the acoustics to summon help.<br><br><b>Escalation:</b> Not silenced by round 2? 1d2 minor darklings join from a new path." } },
+                { weight: 1, value: { cr: 3, name: "Legion Slope", description: "Floor grades channel ooze.<br><br><b>Mechanics:</b> At round start, DC 14 Strength save or slide 10 ft into pooling acid (1d4, DC 13 Dex halves). Sand/grit bags negate the slide." } },
+                { weight: 1, value: { cr: 2, name: "Wayfinder’s Grief-Stone", description: "A compass-rose tile is a grief-stone that punishes indecision.<br><br><b>Mechanics:</b> If the party spends more than one round deciding which way to go, creatures within 10 ft make a DC 13 Wisdom save or have disadvantage on their next check. Mapping the pulse (DC 14 Investigation) grants advantage on the next route choice." } },
+            ],
+            "Window Gallery Room": [
+                { weight: 2, value: { cr: 2, name: "Pane Choir", description: "Windows hum in discord.<br><br><b>Mechanics:</b> DC 13 Wisdom save or Perception checks are at disadvantage for 10 minutes. Wedge frames (DC 12 Tools) to calm the resonance." } },
+                { weight: 1.5, value: { cr: 1, name: "Weirdling Nose Prints", description: "Weirdlings fog the glass with noses and giggles.<br><br><b>Options:</b> Entertain them (DC 12 Performance) to gain a harmless charm (+1 on next save), or shoo them away (no effect)." } },
+                { weight: 1, value: { cr: 3, name: "Audit Through Glass", description: "An Auditor peers from the other side of a pane and writes a citation that manifests on your side.<br><br><b>Mechanics:</b> DC 14 Charisma (Deception) to argue jurisdiction; failure inflicts a minor penalty (DM discretion) until the next rest." } },
+                { weight: 1, value: { cr: 0, name: "Frosted Finger Drawing (Non-Combat)", description: "Condensation invites doodles that briefly come alive.<br><br><b>Mechanics:</b> DC 12 Charisma (Performance) to ‘draw’ a hint (advantage on next Perception here); failure creates a distracting squiggle (disadvantage on next Investigation here)." } },
+            ],
+            "Security & Detention Facility": [
+                { weight: 2.5, value: { cr: 3, name: "Hall Monitor Station Check", description: "A Station runs active checks.<br><br><b>Checks:</b> DC 14 Deception/Persuasion to pass; failure: restrained with ribbon-binds (escape DC 13 Strength) unless you accept a citation." } },
+                { weight: 1.75, value: { cr: 4, name: "Confiscation Cage Audit", description: "A locked cage hums with suppressors.<br><br><b>Mechanics:</b> DC 15 Thieves’ Tools to open; failure blares a bell and imposes disadvantage on stealth here for 10 minutes." } },
+                { weight: 0.75, value: { cr: 7, name: "Justicar Walk-Through", description: "A Justicar passes by.<br><br><b>Mark:</b> DC 15 Wisdom save or be <i>Judged</i> until you break line of sight or make two consecutive successful end-of-turn saves." } },
+                { weight: 1, value: { cr: 2, name: "Suppression Grief-Stone in Intake", description: "The intake floor hides a grief-stone keyed to quell outbursts.<br><br><b>Mechanics:</b> Creatures within 10 ft make a DC 13 Wisdom save or have disadvantage on their first attack/save this round. DC 14 Intelligence (Arcana) to switch it to standby for 10 minutes; failure rattles a shock-baton rack (noise may draw a patrol in 1d4 minutes)." } },
+                { weight: 0.85, value: { cr: 3, name: "Already Triggered by Inmates", description: "Two inmates-turned-wisps pace; they’ve set off the grief-stone repeatedly and are jittery and hostile.<br><br><b>Mechanics:</b> While the tile hums, all creatures in 10 ft make a DC 14 Wisdom save at start of turn or suffer disadvantage on their first roll. The wisps start with disadvantage on their first attack each round; clever timing can bait them back across the tile (DC 13 Deception/Performance) to impose the effect again." } },
+            ],
+            "Observatory & Astral Lab": [
+                { weight: 2, value: { cr: 2, name: "Lens Flare Track", description: "Crystal lenses sweep the room with star-light.<br><br><b>Mechanics:</b> Crossing a beam triggers DC 13 Con save or dazzled (disadvantage on next attack); covering lenses (DC 12 Tools) disables a beam." } },
+                { weight: 1.5, value: { cr: 3, name: "Void Scholar Charting", description: "A Scholar charts ephemerides.<br><br><b>Option:</b> DC 15 Arcana to assist and gain a navigational boon (advantage on next planar/astral check); failure irritates them (disadvantage on next Persuasion)." } },
+                { weight: 1, value: { cr: 3, name: "Sensor Orrery", description: "An orrery projects a scanning mesh.<br><br><b>Mechanics:</b> DC 14 Stealth to move unnoticed; failure pings a sensor drone in 1d4 minutes unless the mesh is shut down (AC 13, 10 HP)." } },
+                { weight: 1, value: { cr: 0.5, name: "Star Map Riddle (Non-Combat)", description: "Pinned star charts hide a riddle about a missing constellation.<br><br><b>Mechanics:</b> DC 14 Intelligence (Investigation) to solve and gain advantage on the next navigation check; failure shuffles the pins, imposing -1 on the next Intelligence check here (flavor)." } },
+            ],
+            "Magitech Infrastructure": [
+                { weight: 2.25, value: { cr: 2, name: "Conduit Arc Crawl", description: "An exposed conduit spits arcs along the wall.<br><br><b>Arcs:</b> Crossing requires DC 13 Dex save or 1d4 lightning; DC 14 Arcana grounds it for 10 minutes." } },
+                { weight: 1.5, value: { cr: 3, name: "Valve Overpressure", description: "A pressure redline ticks upward.<br><br><b>Mechanics:</b> DC 14 Tools to vent; failure bursts a gasket (10 ft cone, DC 13 Dex or 1d4 fire and knocked prone)." } },
+                { weight: 1, value: { cr: 4, name: "Darkforged Node Test", description: "Two Remnants test a ward node.<br><br><b>Mechanics:</b> Disable node (AC 13, 12 HP) or DC 15 Tools; while active, creatures within 10 ft have disadvantage on spell attack rolls." } },
+                { weight: 1, value: { cr: 0, name: "Loose Panel Gremlins (Non-Combat)", description: "Tiny benign gremlins peek from a loose panel, trading washers and screws for shiny buttons.<br><br><b>Mechanics:</b> Offer a trinket to receive a minor widget granting +1 on your next Tools check; trying to grab one imposes disadvantage on Stealth here for 10 minutes as they ring alarm-pips." } },
+                { weight: 1, value: { cr: 3, name: "Feedback Lattice Over a Grief-Stone", description: "A magitech lattice amplifies a grief-stone’s pulse into a gentle hum.<br><br><b>Mechanics:</b> While active, creatures entering or starting their turn within 10 ft make a DC 14 Wisdom save or their first spell or device use this round is at disadvantage. DC 15 Tools (Tinker) or Arcana to ground the lattice for 10 minutes; failure overloads for 1d4 lightning to the toucher." } },
+            ],
+            "Club & Society Rooms": [
+                { weight: 2, value: { cr: 2, name: "Dueling Society Warmup", description: "Students left a live ward circle calibrated for ‘nonlethal’.<br><br><b>Mechanics:</b> Entering triggers DC 14 Dex save or 1d4 force and restrained by light-bands (escape DC 13)." } },
+                { weight: 1.5, value: { cr: 2, name: "Inventors’ Bench Pop", description: "A prototype goes pop and fizz.<br><br><b>Mechanics:</b> DC 13 Arcana/Tools to stabilize; failure creates a 10 ft smoke cloud (heavily obscured) for 1 minute." } },
+                { weight: 1, value: { cr: 1, name: "Chess & Go Gambit", description: "A game remains mid-gambit with faintly moving pieces.<br><br><b>Option:</b> DC 13 Intelligence (History) to make the correct move, granting +1 to your next Intelligence-based check here." } },
+                { weight: 1, value: { cr: 0, name: "Poster Committee Plea (Non-Combat)", description: "A pleading notice board begs for better posters.<br><br><b>Mechanics:</b> DC 12 Charisma (Performance) or (Persuasion) to craft a catchy slogan, granting advantage on your next Deception/Persuasion in a student-run room; failure inspires a rival’s snark (flavor)." } },
+            ],
+            "Museum & Trophy Gallery": [
+                { weight: 2, value: { cr: 2, name: "Animated Trophy Case", description: "A case rattles and a mascot animates.<br><br><b>Mechanics:</b> DC 13 Wisdom (Perception) to notice the hinge-glyph; breaking the glyph (AC 12, 5 HP) ends animation." } },
+                { weight: 1.5, value: { cr: 3, name: "Cursed Pennant", description: "A pennant flutters without wind, whispering.<br><br><b>Mechanics:</b> DC 14 Wisdom save or suffer disadvantage on Courage-related checks for 10 minutes; a DC 14 Religion check can lay the pennant to rest." } },
+                { weight: 1, value: { cr: 3, name: "Curator’s Audit", description: "An Auditor-Curator requests paperwork for viewing.<br><br><b>Checks:</b> DC 14 Deception/Persuasion to obtain a visitor token; failure imposes a minor viewing ban (flavor penalty) until one enters a new room." } },
+            ],
+        };
 
         // --- WINDOW GENERATOR DATA (full lore from GlimpseGenerator) ---
         const visionCategories = {
@@ -473,6 +846,27 @@
             `;
         };
         
+        // Special greenhouse glazing glimpse (appearance beyond greenhouse glass)
+        const greenhouseGlazingScenes = [
+            "a sunlit campus lawn in perfect spring, with students laughing in slow motion—no sound carries through",
+            "a midnight jungle dripping with bioluminescence, where moths the size of books nosh on glowing petals",
+            "a soft rain over endless terraced fields; droplets strike the glass and climb upward instead of falling",
+            "the Academy’s spires reflected in an inverted sky, where clouds flow like ivy along invisible trellises",
+            "an underwater conservatory teeming with fronded kelp and curious, lantern-eyed fish",
+            "a star-flecked void garden: vines root in constellations while planetoids blossom with crystalline flowers",
+            "a quiet orchard in autumn wind; leaves blow across the glass but never quite reach it",
+            "a distant, violet desert sprouting glass-cacti that ring faintly when you tap the pane"
+        ];
+        const generateGreenhouseGlazingView = () => {
+            const scene = getRandomElement(greenhouseGlazingScenes);
+            return `
+                <div class="mt-3 p-3 border-l-4 border-green-400 bg-green-900/30 rounded-r-md">
+                    <h4 class="font-bold text-green-300">Greenhouse Glazing</h4>
+                    <p class="italic text-green-100">Through the greenhouse glass, it appears to be ${scene}. The illusion is convincing, but the panes remain stubbornly impassable.</p>
+                </div>
+            `;
+        };
+        
         // --- LOOT GENERATOR ---
         const generateLoot = () => {
             const roll = Math.random() * 1000000;
@@ -509,11 +903,16 @@
 
 
         // --- MAIN GENERATION LOGIC ---
+    // Track last generated corridor to enable cross-button rules (e.g., Ritual Approach → Sanctum)
+    let lastCorridorType = null;
         
         const generateCorridor = () => {
             let html = '';
             const style = weightedRandom(styles);
             const type = weightedRandom(corridorTypes);
+
+            // Remember last corridor type for cross-generator rules
+            lastCorridorType = type;
 
             html += `<h2 class="text-2xl font-bold mb-4">${type.replace("Corridor", "Corridor").replace("Hallway", "Hallway").replace("Antechamber", "Antechamber").replace("Rotunda","Rotunda")}</h2>`;
             html += `<p class="mb-4"><strong class="section-title pr-2">Style & Condition:</strong> A ${weightedRandom(conditions).toLowerCase()} passage of ${style.toLowerCase()}.</p>`;
@@ -566,7 +965,13 @@
 
         const generateRoom = () => {
             let html = '';
-            const type = weightedRandom(roomTypes);
+            // Rule: If the last corridor was a Ritual Approach and user clicks Room, force a Sanctum & Meditation
+            let type = null;
+            if (lastCorridorType === 'Ritual Approach') {
+                type = 'Sanctum & Meditation';
+            } else {
+                type = weightedRandom(roomTypes);
+            }
             const style = weightedRandom(styles);
             const roomDetails = roomData[type];
             
@@ -593,6 +998,11 @@
             if (roll(0.25)) {
                 featuresHTML += `<p>${getRandomElement(features)}</p>`;
             }
+            // Always show a greenhouse glazing glimpse in Botanical & Greenhouse rooms
+            const isGreenhouse = type === 'Botanical & Greenhouse Space';
+            if (isGreenhouse) {
+                featuresHTML += generateGreenhouseGlazingView();
+            }
             const isWindowGalleryRoom = type === 'Window Gallery Room';
             let roomWindowCount = 0;
             if (isWindowGalleryRoom) {
@@ -614,16 +1024,26 @@
             let encounter = null;
 
             if (isWindowGalleryRoom ? roll(0.5) : roll(0.33)) {
-                encounter = weightedRandom(roomEncounters);
+                const specific = roomSpecificEncounters[type];
+                if (specific && specific.length) {
+                    encounter = weightedRandom(specific);
+                } else {
+                    encounter = weightedRandom(roomEncounters);
+                }
             }
 
-            if (loot && loot.encounterCR && (!encounter || encounter.cr < loot.encounterCR)) {
-                 // Force a stronger encounter if required by loot
-                 const requiredEncounters = roomEncounters.filter(e => e.value.cr >= loot.encounterCR);
-                 if(requiredEncounters.length > 0) {
-                    encounter = weightedRandom(requiredEncounters);
-                 }
-            }
+                if (loot && loot.encounterCR && (!encounter || encounter.cr < loot.encounterCR)) {
+                      // Force a stronger encounter if required by loot; prefer room-specific pool
+                      const specific = roomSpecificEncounters[type];
+                      let pool = (specific && specific.length) ? specific : roomEncounters;
+                      let requiredEncounters = pool.filter(e => (e.value?.cr ?? 0) >= loot.encounterCR);
+                      if (requiredEncounters.length === 0) {
+                          requiredEncounters = roomEncounters.filter(e => (e.value?.cr ?? 0) >= loot.encounterCR);
+                      }
+                      if (requiredEncounters.length > 0) {
+                          encounter = weightedRandom(requiredEncounters);
+                      }
+                }
 
             if (encounter) {
                  const perceptionDC = Math.ceil(encounter.cr) + 10;
@@ -638,6 +1058,10 @@
             }
 
             output.innerHTML = html;
+            // Reset one-shot forcing after use
+            if (lastCorridorType === 'Ritual Approach') {
+                lastCorridorType = null;
+            }
         };
 
         // --- ENCOUNTER INDEX (browse all encounters without rolling) ---
@@ -652,7 +1076,7 @@
             }));
         };
 
-        const renderEncounterList = (items, containerId) => {
+    const renderEncounterList = (items, containerId) => {
             const container = document.getElementById(containerId);
             if (!container) return;
             if (!items || items.length === 0) {
@@ -664,7 +1088,7 @@
                 <li class="p-3 rounded-md bg-gray-800/60 border border-gray-700 hover:bg-gray-800 transition">
                     <div class="flex items-center justify-between">
                         <div class="font-semibold text-gray-100">${it.name}</div>
-                        <div class="text-sm text-gray-400">CR ${it.cr}${it.weight ? ` • weight ${it.weight}` : ''}</div>
+            <div class="text-sm text-gray-400">CR ${it.cr}</div>
                     </div>
                     <p class="text-sm text-gray-400 mt-1">${it.description}</p>
                 </li>`;

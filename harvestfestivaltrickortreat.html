@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harvest Festival Trick or Treat</title>
+    <!-- 1. Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 1b. Load Spooky Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=MedievalSharp&display=swap" rel="stylesheet">
+    <!-- 2. Configure Tailwind & Fonts -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['MedievalSharp', 'serif'], // Swapped to spooky font
+                        creepster: ['Creepster', 'cursive'],
+                    },
+                    colors: {
+                        'brand-orange': '#f97316',
+                        'brand-purple': '#8b5cf6',
+                    }
+                },
+            },
+        };
+    </script>
+    <!-- 3. Custom Styles -->
+    <style>
+        /* New Halloween Color Palette */
+        :root {
+            --halloween-orange: #f97316; /* brand-orange */
+            --halloween-orange-light: #fdba74; /* orange-300 */
+            --halloween-orange-dark: #ea580c; /* orange-600 */
+            --halloween-purple: #2d2a45; /* Dark Purple */
+            --halloween-purple-dark: #1c1a2e; /* Darker Purple */
+            --halloween-text: #f3e8ff; /* Pale Lavender */
+            --halloween-green: #34d399; /* Slime Green */
+            --halloween-gold: #ffd700; /* Gold for magical highlight */
+            --halloween-shadow: rgba(0, 0, 0, 0.7);
+        }
+
+        body {
+            font-family: 'MedievalSharp', serif; /* Use spooky font by default */
+            background-color: var(--halloween-purple-dark);
+            background-image: url('https://www.transparenttextures.com/patterns/spooky.png');
+            background-size: auto;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--halloween-text);
+        }
+
+        /* Spooky main title */
+        .font-creepster {
+            font-family: 'Creepster', cursive;
+            text-shadow: 2px 2px 4px var(--halloween-shadow);
+            letter-spacing: 2px;
+        }
+
+        /* Fun glowing effect for the button (now orange) */
+        @keyframes pulse-glow {
+            0%, 100% {
+                box-shadow: 0 0 15px rgba(249, 115, 22, 0.5), 0 0 5px rgba(249, 115, 22, 0.3);
+            }
+            50% {
+                box-shadow: 0 0 30px rgba(249, 115, 22, 0.8), 0 0 10px rgba(249, 115, 22, 0.5);
+            }
+        }
+
+        #treatButton {
+            animation: pulse-glow 3s infinite ease-in-out;
+            font-family: 'MedievalSharp', cursive; /* Ensure button font */
+        }
+
+        /* Custom scrollbar for the log */
+        #logContainer::-webkit-scrollbar {
+            width: 8px;
+        }
+        #logContainer::-webkit-scrollbar-track {
+            background: var(--halloween-purple-dark);
+        }
+        #logContainer::-webkit-scrollbar-thumb {
+            background: var(--halloween-orange-dark);
+            border-radius: 4px;
+        }
+        #logContainer::-webkit-scrollbar-thumb:hover {
+            background: var(--halloween-orange);
+        }
+
+        /* Golden text glow for magical treats */
+        .golden-glow {
+            text-shadow: 0 0 6px rgba(255, 215, 0, 0.6), 0 0 12px rgba(255, 215, 0, 0.35);
+        }
+
+    </style>
+</head>
+
+<body class="min-h-screen flex items-center justify-center p-4">
+
+    <!-- Main App Container -->
+    <div class="w-full max-w-2xl bg-[var(--halloween-purple)] bg-opacity-90 backdrop-blur-md rounded-lg shadow-2xl p-6 md:p-8 border-2 border-[var(--halloween-orange-dark)]"
+         style="background-image: url('https://www.transparenttextures.com/patterns/subtle-cobwebs.png');">
+
+        <!-- View 1: Name Entry (Visible by default) -->
+        <div id="nameEntryView">
+            <h1 class="text-5xl font-bold text-center text-[var(--halloween-orange)] mb-4 font-creepster">Harvest Festival</h1>
+            <h2 class="text-3xl font-semibold text-center mb-6">Trick or Treat!</h2>
+            <p class="text-center text-[var(--halloween-text)]/80 mb-6">Please enter your character's name to begin.</p>
+            
+            <div class="flex flex-col gap-4">
+                <input type="text" id="usernameInput" placeholder="Character Name"
+                    class="w-full px-4 py-3 bg-[var(--halloween-purple-dark)] text-[var(--halloween-text)] border border-[var(--halloween-orange-dark)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--halloween-orange)] font-sans">
+                <button id="enterButton"
+                    class="w-full bg-[var(--halloween-orange)] hover:bg-[var(--halloween-orange-dark)] text-black font-bold py-3 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 text-lg">
+                    Go Trick or Treating
+                </button>
+                <p id="nameError" class="text-red-400 text-center text-sm hidden">Please enter a name!</p>
+            </div>
+            
+        </div>
+
+        <!-- View 2: Main App (Hidden by default) -->
+        <div id="mainAppView" class="hidden">
+            <!-- Header -->
+            <div class="flex flex-col sm:flex-row justify-between sm:items-center mb-6 gap-2 sm:gap-0">
+                <h1 class="text-4xl font-bold text-[var(--halloween-orange)] font-creepster">Harvest Festival</h1>
+                <div class="userInfo">
+                    <span class="text-[var(--halloween-text)]/90 text-lg">Welcome, <strong id="usernameDisplay" class="font-medium text-[var(--halloween-text)]"></strong>!</span>
+                </div>
+            </div>
+
+            <!-- App Tabs -->
+            <div class="flex gap-2 mb-4">
+                <button id="tabTreat" class="px-3 py-2 rounded-md bg-[var(--halloween-orange)] text-black font-semibold border border-[var(--halloween-orange-dark)]">Trick or Treat</button>
+                <button id="tabCatalogue" class="px-3 py-2 rounded-md bg-[var(--halloween-purple-dark)] text-[var(--halloween-text)] border border-[var(--halloween-orange-dark)] hover:bg-[var(--halloween-purple)]">Candy Catalogue</button>
+            </div>
+
+            <!-- Trick or Treat Section -->
+            <div id="treatSection">
+                <!-- Trick or Treat Button & Result -->
+                <div class="bg-[var(--halloween-purple-dark)] bg-opacity-75 rounded-lg p-6 mb-6">
+                    <button id="treatButton"
+                        class="w-full bg-[var(--halloween-orange)] hover:bg-[var(--halloween-orange-dark)] text-black font-bold py-4 px-6 rounded-lg text-2xl transition duration-300 ease-in-out transform hover:scale-105 shadow-lg">
+                        Knock for a Treat!
+                    </button>
+                    <div id="resultBox" class="mt-6 text-center text-lg p-4 bg-[var(--halloween-purple-dark)] rounded-lg min-h-[4rem] flex items-center justify-center border border-[var(--halloween-orange-dark)]">
+                        <span class="text-[var(--halloween-text)]/60">...waiting for you to knock...</span>
+                    </div>
+                </div>
+
+                <!-- Public Log -->
+                <div>
+                    <h3 class="text-2xl font-semibold mb-4 text-[var(--halloween-text)]">Session Log</h3>
+                    <div id="logContainer"
+                        class="h-64 overflow-y-auto bg-[var(--halloween-purple-dark)] bg-opacity-75 rounded-lg p-4 border border-[var(--halloween-orange-dark)] space-y-3 text-sm">
+                        <!-- Log entries will be populated here by JavaScript -->
+                        <p class="text-[var(--halloween-text)]/50 text-center italic">Your results will appear here...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Candy Catalogue Section -->
+            <div id="catalogueSection" class="hidden">
+                <div class="bg-[var(--halloween-purple-dark)] bg-opacity-75 rounded-lg p-4 mb-4 border border-[var(--halloween-orange-dark)]">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <button id="catTabMundane" class="px-3 py-1 rounded bg-[var(--halloween-orange)] text-black border border-[var(--halloween-orange-dark)]">Mundane <span id="countMundane" class="ml-1 text-xs align-top">0/0</span></button>
+                        <button id="catTabMagical" class="px-3 py-1 rounded bg-[var(--halloween-purple)] text-[var(--halloween-text)] border border-[var(--halloween-orange-dark)]">Magical <span id="countMagical" class="ml-1 text-xs align-top">0/0</span></button>
+                        <button id="catTabFull" class="px-3 py-1 rounded bg-[var(--halloween-purple)] text-[var(--halloween-text)] border border-[var(--halloween-orange-dark)]">Full Bars <span id="countFull" class="ml-1 text-xs align-top">0/0</span></button>
+                        <label class="ml-auto flex items-center gap-2 text-sm text-[var(--halloween-text)]/80"><input id="catalogueCollectedOnly" type="checkbox" class="accent-[var(--halloween-orange)]"> Collected only</label>
+                        <button id="resetCollectionBtn" class="px-3 py-1 rounded bg-[#7f1d1d] text-white border border-red-700 hover:bg-red-800">Reset This Character</button>
+                    </div>
+                </div>
+                <div id="catalogueGrid" class="grid grid-cols-2 md:grid-cols-3 gap-3"></div>
+            </div>
+
+            <!-- TRICK OR TREAT BUTTON & RESULT (DUPLICATE REMOVED) -->
+            <!-- The old, un-themed gray/purple button and log have been deleted -->
+
+        </div>
+
+    </div>
+
+    <!-- Modal: View Treat / Diaper Image -->
+    <div id="assetModal" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50 hidden">
+        <div class="bg-[var(--halloween-purple)] border-2 border-[var(--halloween-orange-dark)] rounded-lg p-4 w-[90%] max-w-4xl max-h-[90vh] overflow-auto shadow-2xl">
+            <div class="flex justify-between items-center mb-2">
+                <h3 id="assetModalTitle" class="text-xl font-bold text-[var(--halloween-orange)]"></h3>
+                <button class="text-[var(--halloween-text)] hover:text-[var(--halloween-orange)]" onclick="closeAssetModal()" aria-label="Close">✕</button>
+            </div>
+            <img id="assetModalImage" class="w-full h-auto object-contain rounded-md border border-[var(--halloween-orange-dark)]/40 mb-3" alt="">
+            <p id="assetModalDesc" class="text-[var(--halloween-text)]/90 text-sm"></p>
+            <div class="mt-4 text-right">
+                <button class="bg-[var(--halloween-orange)] hover:bg-[var(--halloween-orange-dark)] text-black font-semibold py-1 px-3 rounded" onclick="closeAssetModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. App Logic (No Firebase!) -->
+    <script type="module">
+        // --- LORE & REWARD DATA ---
+
+        const mundaneCandies = [
+            { name: "Scholia Crest Coin (Milk Chocolate)", desc: "A simple, foil-wrapped chocolate coin molded with the Scholia Diapros academy crest." },
+            { name: "Scholia Crest Coin (Dark Chocolate)", desc: "A foil-wrapped chocolate coin. This one is dark and slightly bitter, like a Naughty Nannybot." },
+            { name: "Scholia Crest Coin (White Chocolate)", desc: "A sweet, creamy white chocolate coin. A favorite of Purekin." },
+            { name: "Scholia Crest Coin (Glimmering Mint)", desc: "A dark chocolate coin with a cool, Glimmering Forest mint filling." },
+            { name: "Pupperling Paws (Orange)", desc: "Fruit-flavored gummies shaped like little Pupperling paw prints." },
+            { name: "Pupperling Paws (Grape)", desc: "Dark purple, Umbral-colored paw print gummies." },
+            { name: "Pupperling Paws (Cherry)", desc: "Bright red, sweet, and loyal. A classic gummy." },
+            { name: "Pupperling Paws (Megafaunal Fruit)", desc: "An extra-large gummy paw with a mix of all fruit flavors." },
+            { name: "Kittenfolk 'Kat's Tongue'", desc: "A delicate, oblong cookie, lightly dusted with 'fur-like' shredded coconut." },
+            { name: "Arachnii Spinnerette Strings (Blackberry)", desc: "Long, chewy strings of fruit-flavored licorice, perfect for braiding." },
+            { name: "Arachnii Spinnerette Strings (Silk-Strawberry)", desc: "Sweet strawberry-flavored taffy strings." },
+            { name: "'Naptime' Nougat", desc: "A soft, chewy nougat bar with a calming, mild honey-and-chamomile flavor." },
+            { name: "Glimmering Forest Mushroom Pop", desc: "A hard candy lollipop shaped like a glowing mushroom, with a swirly, ethereal pattern." },
+            { name: "Pacification Pop (Blue Raspberry)", desc: "A fun, pacifier-shaped hard candy sucker. Tastes like 'blue'!" },
+            { name: "Pacification Pop (Sour Apple)", desc: "A puckeringly sour, bright green pacifier-shaped lollipop." },
+            { name: "Barkgum Chew", desc: "A surprisingly pleasant-tasting chewing gum made from refined Barkgum, with a mild, earthy-mint flavor." },
+            { name: "Chap'Hell's Cinder Toffee", desc: "A 'burnt' sugar hard candy with a spicy cinnamon kick. It's intentionally a little *too* hot." },
+            { name: "Darkaconda 'Scale' Chips", desc: "Thin, dark chocolate disks with a crunchy, cooling mint-sugar filling." },
+            { name: "Bellowbelly Cubling Sours", desc: "Extremely sour gummies shaped like tiny, grumpy Bellowbelly Cublings." },
+            { name: "Ossokin 'Bone' Stick", desc: "A white, chalky-looking candy stick with a sweet, powdery flavor." },
+            { name: "Spinebearer 'Quill'", desc: "A sharp, pointed rock candy stick, perfect for crunching." },
+            { name: "Cavesweller's Geode", desc: "A 'broken' piece of candy with a hard sugar-crystal center." },
+            { name: "Hungore's Heartbeat", desc: "A heart-shaped, blood-orange-flavored gummy with a liquid-cherry center." },
+            { name: "'Good Haul' Gumball", desc: "A classic, jaw-straining gumball with a vague 'fruit' flavor that lasts for exactly thirty seconds." },
+            { name: "'Time-Out' Taffy (Banana)", desc: "A notoriously sticky and long-lasting piece of saltwater taffy." },
+            { name: "'Time-Out' Taffy (Mystery)", desc: "A grey-swirled taffy that tastes... confusing. Is that mint? Or sausage?" },
+            { name: "Dust Bunny Ball", desc: "A fluffy, light-as-air ball of spun cotton candy that melts in your mouth." },
+            { name: "Naughty Nannybot Bolt", desc: "A rod of black licorice with silver sugar 'threads' wrapped around it." },
+            { name: "Umbra's Veil", desc: "A thin, dark-fruit-leather sheet (like a fruit roll-up) with a deep blackberry and currant flavor." },
+            { name: "Mangled Husk Meringue", desc: "A chaotic-looking, cracked meringue cookie with a bright red raspberry swirl. It looks messy but tastes divine." },
+            { name: "BunbunSkipz 'Carrot' Crumbles", desc: "A small, bite-sized piece of carrot cake with cream cheese frosting." },
+            { name: "SecuriCare Swirl", desc: "A hard, disk-shaped candy with a simple green-and-white mint swirl. Reliable and classic." },
+            { name: "TactiTush 'Tough' Toffee", desc: "A brick-hard square of toffee. Extremely difficult to chew, but lasts for an hour." },
+            { name: "'Everyday' Floral Fonderie", desc: "A soft, cream-filled candy with a delicate, edible flower pressed into its surface." },
+            { name: "'StealthWear' Wafer", desc: "A very thin, almost-black dark chocolate and mint wafer." },
+            { name: "'UltraDry' Marshmallow", desc: "An absurdly large, fluffy, and 'puffy' vanilla marshmallow." },
+            { name: "Padded Playground Pebbles", desc: "Simple candy-coated chocolate pieces in a variety of bright, primary colors." },
+            { name: "Plushie-Pal Gummy", desc: "Assorted fruit gummies shaped like common plush animals: bears, rabbits, penguins, and dragons." },
+            { name: "Pumpkin Patch 'Mud'", desc: "A small cup of chocolate pudding with a crushed-cookie 'dirt' topping and a tiny candy pumpkin." },
+            { name: "'Juice Box' Jelly", desc: "A rectangular, juice-filled gummy designed to be bitten into, releasing a burst of flavor." }
+        ];
+
+        const magicalCandies = [
+            { name: "Aliza's Electricky Paw Pop", desc: "A yellow, lemon-flavored lollipop that crackles with static. (Cast *Shocking Grasp* at will for 8 hours.) If consumed within 2 rounds of receiving it, you must make a Potty Check." },
+            { name: "Radiant Lance Lances", desc: "A glowing, pure white stick of sugar crystal. It's warm to the touch. (Cast *Light* at will for 8 hours.) If consumed within 2 rounds of receiving it, you must make a Potty Check." },
+            { name: "Cantrip Chew", desc: "A bright blue piece of bubblegum. (Cast *Prestidigitation* at will for 8 hours.) If consumed within 2 rounds of receiving it, you must make a Potty Check." },
+            { name: "Evocation Ember", desc: "A glowing-red, super-spicy cinnamon hard candy. (Gain Resistance to Cold damage for 8 hours.) If consumed within 2 rounds of receiving it, you must make a Potty Check." },
+            { name: "Abjuration Jawbreaker", desc: "A large, layered jawbreaker that seems to shimmer with a protective force. (Gain a +1 bonus to AC for 8 hours.) If consumed within 2 rounds of receiving it, you must make a Potty Check." },
+            { name: "Shade-Sneak Taffy", desc: "A dark purple taffy that seems to absorb light. (Cast *Invisibility* (self only) once.) If consumed within 2 rounds of receiving it, you must make a Potty Check." },
+            { name: "'BunbunSkipz' Hop-Drop", desc: "A springy, carrot-flavored gummy. (Your jump distance is tripled for 8 hours.) If consumed within 2 rounds of receiving it, you must make a Potty Check." },
+            { name: "Purekin 'Purifier' Mint", desc: "A white, clinical-tasting mint wafer. (Adv. on saves vs. disease/poison for 8 hours.) If consumed within 2 rounds of receiving it, you must make a Potty Check." },
+            { name: "Umbral Tribe 'Focus' Chew", desc: "A strange, herbaceous taffy that tastes like catnip and mint. (Cast *Guidance* at will for 8 hours.) If consumed within 2 rounds of receiving it, you must make a Potty Check." },
+            { name: "Illusionist's Icing", desc: "A small tube of frosting that constantly shifts color. (Cast *Minor Illusion* at will for 8 hours.) If consumed within 2 rounds of receiving it, you must make a Potty Check." },
+            { name: "Conjurer's 'Diaper' Cookie", desc: "A sugar cookie with a diaper pin etched in the frosting. (Cast the *Diapering* cantrip at will for 8 hours.) If consumed within 2 rounds of receiving it, you must make a Potty Check." },
+            { name: "Sleeper's Sucker", desc: "A lavender and honey-flavored lollipop. (Cast *Sleep* (1st-level) once.) If consumed within 2 rounds of receiving it, you must make a Potty Check." },
+            { name: "Magical 'Tough' Toffee", desc: "This brick-hard toffee is magically enchanted. (Cast *Blade Ward* as a bonus action for 8 hours.) If consumed within 2 rounds of receiving it, you must make a Potty Check." },
+            { name: "'Fear' Fizzie", desc: "A sour, fizzy candy associated with Umbra's 'protection.' (Cast *Cause Fear* (1st-level) once.) If consumed within 2 rounds of receiving it, you must make a Potty Check." }
+        ];
+
+        const fullSizedBars = [
+            { name: "Full-Sized Azure Harvest Bar", desc: "A legendary confection of white chocolate and 'blue moon' cream. (Heal 2d6 HP! Gain a random magical candy buff.)" },
+            { name: "'UltraDry Max' Power Bar", desc: "A massive bar of chocolate, nougat, and crunchy 'absorbent' rice crisps. (Heal 2d6 HP! Gain *Mage Armor* (AC 13) for 8 hours.)" },
+            { name: "The 'Pamprison' Brick", desc: "An incredibly dense block of dark chocolate fudge. (Heal 2d6 HP! Gain +1 AC for 8 hours.)" },
+            { name: "Nursery Nightweaver's 'Dream' Bar", desc: "An elegant bar of dark chocolate with a lavender-creme filling. (Heal 2d6 HP! Cast *Invisibility* (self only) once.)" },
+            { name: "'Step Into My Magical Realm' Swirl", desc: "A comically oversized, rainbow-swirled lollipop. (Heal 2d6 HP! Your jump distance is tripled for 8 hours.)" }
+        ];
+
+        // UPDATED: Mundane Diapers (with full descriptions)
+        const mundaneDiapers = [
+            { name: "SecuriCare Level 4s", desc: "A single diaper. A simple medical-style pattern with soft green lines. Reliable. (Grants Adv. on saves vs. disease while worn.)" },
+            { name: "BunbunSkipz", desc: "A single diaper. Pink and white with cute cartoon rabbits. (Increases wearer's speed by 5 ft.)" },
+            { name: "EverydayComfort Pull-Ons (Floral)", desc: "A single pull-on. A gentle cream color with a subtle print of small pastel flowers. Comfortable and reliable!" },
+            { name: "TactiTush Elite", desc: "A single diaper. A rugged, military-inspired design in camouflaged olive and beige. (Grants Adv. on Stealth in rocky/urban terrain.)" },
+            { name: "StealthWear Panty-Cut Pull-Up", desc: "A single pull-up. Sleek, modern matte black. (Grants Adv. on Stealth to avoid being seen.)" },
+            { name: "Padded Playground (Dino Print)", desc: "A single diaper. A vibrant print of cartoon dinosaurs and palm trees. (Wearer has advantage on Charisma (Intimidation) checks.)" }
+        ];
+
+        // NEW: Magical Diapers (REVISED: Pamprison REMOVED, UltraDry ADDED)
+        const magicalDiapers = [
+            { name: "Harvest-Night Pull-Up", desc: "A spooky pull-up with a bats-and-pumpkins print. (You can cast the *Minor Illusion* cantrip at will for 8 hours.)" },
+            { name: "UltraDry Max Absorbency", desc: "A single diaper. Plain, clinical white with a very thick, high-capacity design. (Wearer's hit point maximum is increased by 5.)" },
+            { name: "Umbra-Weave Night Pant", desc: "A pull-on that seems to be woven from shadows. (You can use your action to cast *Invisibility* on yourself once.)" },
+            { name: "Purekin 'Holy' Diaper", desc: "A white, rune-scribed diaper. (Grants Immunity to Non-Legendary/Boss-Based Necrotic damage for 8 hours.)" }
+        ];
+
+        // NEW: Full Wild Magic Tantrum Table (as an array)
+        const tricks = [
+            "1–2: Roll on this table at the start of each of your turns for the next minute, ignoring this result on subsequent rolls.",
+            "3–4: For the next minute, you can see any Invisible creature if you have line of sight to it, and you can see everyone's diaper status.",
+            "5–6: A NANNYBOT chosen & controlled by the DM appears in an unoccupied space within 5 feet of you, it disappears 1 min later.",
+            "7–8: You cast Diaper Doom as a 3rd-level spell centered on yourself if you pass a disadvantage potty check.",
+            "9–10: You cast magic messle on your diaper, 3 diaper usage charges expended.",
+            "11–12: Roll a d10. Your continence bonus—if any—changes by a number equal to the roll for one day.",
+            "13–14: You cast Baby-Brain (Confusion) centered on yourself. All who fail this version of confusion must roll a continence check.",
+            "15–16: For 1 minute, you regain 5HP at the start of each of your turns and your diaper regains one use charge.",
+            "17–18: You become a living plushie version of yourself that remains plush until you fluff your diaper, reverting to a FULL diaper.",
+            "19–20: You cast Grease centered on your diaper. You can butt slide up to 30ft with a 5ft running start and leave an oil slick.",
+            "21–22: Your diaper harmlessly doubles in size and hums lightly for 1 minute. All creatures within 10 feet have disadvantage on Concentration checks due to the distraction.",
+            "23–24: Your outfit shifts pastel and your skin glows a vibrant nursery hue (pink, blue, or lavender). A Remove Curse spell can end this effect.",
+            "25–26: A cutesified outfit based on your class appears on you for 1 minute. You gain advantage on Charisma (Performance) checks while wearing it.",
+            "27–28: For the next minute, all your Spells with a Casting Time of 1 action have a Casting Time of 1 Bonus Action, but whenever you cast you must roll a potty check.",
+            "29–30: You Teleport up to 60 feet to an unoccupied space of your choice that you can see, and roll a potty check.",
+            "31–32: You're transported to the Nursery until the end of your next turn, afterward you return to the space you previously occupied or the nearest unoccupied space.",
+            "33–34: You glow like a nightlight in a 30-foot radius for the next minute. Any creature that ends its turn within 5 feet of you must succeed on a CON save or be Blinded until the end of its next turn.",
+            "35–36: Your age regresses by a percentage equal to 10(1d10) for one hour.",
+            "37–38: You fall flat on your face like a baby. Witnesses must pass your spell save (WIS) or laugh uncontrollably until next turn.",
+            "39–40: You become incontinent, roll a potty check at disadvantage. If already incontinent, your diaper doubles in thickness and uses.",
+            "41–42: Balled-up diapers rain down in a 10ft radius you choose. Creatures inside take 3d4+3 magical bludgeoning dmg.",
+            "43–44: An angel appears to put you in a magical holy diaper. If good or neutral diaper gives +1AC, if not, -1AC.",
+            "45–46: A devil appears to put you in an unholy diaper. If good or chaotic you are now incontinent, if neutral or otherwise +1 AC.",
+            "47–48: All creatures in a 20ft radius (including you) must make a Wis saving throw. On a failure, they curl up on the nearest soft surface... and nap for 1 min or until disturbed.",
+            "49–50: Creatures in a 30-foot radius crave sweets, needing to eat candy before being able to take reactions.",
+            "51–52: A spectral diaper appears on you. You get +1 AC but the diaper does not come off until it is comically full.",
+            "53–54: You fail all potty checks for 1d4 days, rolling a 1d2 to decide if you wet or mess.",
+            "55–56: Your underpants change into a clean diaper rolled from the Diaper Chart.",
+            "57–58: For the next minute, any person you touch will be diapered or boostered if already diapered.",
+            "59–60: You regain your lowest-level expended spell slot and a spectral magic hand pats you on the booty.",
+            "61–62: For the next minute, you must BABY TALK when you speak.",
+            "63–64: You cast Stank Cloud centered on yourself. As Fog Cloud except DC12 CON/15ft sq or be sickened.",
+            "65–66: Up to 3 creatures you choose within 30ft of you take 4d10 lightning damage and must roll a potty check.",
+            "67–68: You are Frightened by the nearest creature until the end of your next turn, you wet your diaper.",
+            "69–70: Each creature within 30 feet of you becomes Incontinent for the next 1d4 days.",
+            "71–72: You gain Resistance to all damage for the next minute and your diaper doubles in thickness.",
+            "73–74: A random creature within 60 feet of you becomes Incontinent and Poisoned for 1d4 hours.",
+            "75–76: Maximize the damage of the next damaging spell you cast within the next minute.",
+            "77–78: You cast Polymorph on yourself. If you fail the saving throw, you turn into a baby version of yourself for the spell’s Duration.",
+            "79–80: Illusory butterflies and flower petals flutter in the air within 10 feet of you for the next minute.",
+            "81–82: You can take one additional action immediately, but you must make a potty check at disadvantage.",
+            "83–84: Each creature within 30 feet of you takes 1d10 necrotic damage. DC10 CON Check or have immediate accident and be rendered incontinent for 1d4 weeks.",
+            "85–86: You cast Mirror Image, but the mirror image is a brat.",
+            "87–88: All worn/carried panties in a 1 mile radius become diapers that cannot be removed until used.",
+            "89–90: An AU twin of yourself, under your control, appears to aid you for 2d4 turns, in only a cute onesie & diaper.",
+            "91–92: You feel your pants/pampers grow damp/full—you have had an accident, no saves.",
+            "93–94: You cast Spank as an 11th level caster on every hostile target in the vicinity.",
+            "95–96: You are teleported to The Babrooms for 1d2 turns.",
+            "97–98: The next spell you attempt to cast becomes an animated, crayon-drawn version of itself. It functions at half power.",
+            "99–100: All creatures within 60 feet (including you) are momentarily transformed into toddlers or infants for 1 minute."
+        ];
+
+
+        // --- UTILITY FUNCTIONS ---
+
+        // Simple random item picker
+        function randItem(arr) {
+            return arr[Math.floor(Math.random() * arr.length)];
+        }
+
+        // Simple d100 roller
+        function rollD100() {
+            return Math.floor(Math.random() * 100) + 1;
+        }
+
+        // --- CORE REWARD LOGIC ---
+        // Completely rewritten for new rates and object-based rewards
+        function getTrickOrTreat() {
+            const roll = rollD100();
+
+            // 1-68 (68%): Mundane Candy
+            if (roll <= 68) {
+                return {
+                    reward: randItem(mundaneCandies),
+                    type: "Mundane Candy",
+                    style: "text-[var(--halloween-text)]"
+                };
+            }
+            
+            // 69-73 (5%): Good Haul
+            if (roll <= 73) {
+                const count = Math.floor(Math.random() * 2) + 2; // 2-3 pieces
+                return {
+                    reward: `A Good Haul! You get ${count} pieces of mundane candy!`, // This is a string
+                    type: "Good Haul!",
+                    style: "text-[var(--halloween-green)] font-semibold"
+                };
+            }
+
+            // 74-83 (10%): Magical Candy
+            if (roll <= 83) {
+                return {
+                    reward: randItem(magicalCandies),
+                    type: "Magical Candy!",
+                    style: "text-[#82f0e2] font-semibold golden-glow" /* Ghostly Cyan + Golden Glow */
+                };
+            }
+
+            // 84-87 (4%): Full-Sized Bar (treated as full-sized magical candy)
+            if (roll <= 87) {
+                return {
+                    reward: randItem(fullSizedBars),
+                    type: "Full-Sized Bar!",
+                    style: "text-[var(--halloween-gold)] font-bold golden-glow"
+                };
+            }
+
+            // 88-92 (5%): Aged Regalia
+            if (roll <= 92) {
+                return {
+                    reward: { name: "Aged Regalia Scrap", desc: "A tattered piece of ancient, powerful cloth. Someone at the Academy will want this..." },
+                    type: "Aged Regalia!",
+                    style: "text-[var(--halloween-orange-light)] font-bold"
+                };
+            }
+
+            // 93-97 (5%): Mundane Diaper
+            if (roll <= 97) {
+                return {
+                    reward: randItem(mundaneDiapers),
+                    type: "Diaper?",
+                    style: "text-[var(--halloween-green)]"
+                };
+            }
+            
+            // 98-99 (2%): Magical Diaper (NEW)
+            if (roll <= 99) {
+                return {
+                    reward: randItem(magicalDiapers),
+                    type: "Magical Diaper!",
+                    style: "text-[#d678ff] font-bold" /* Magic Purple */
+                };
+            }
+
+            // 100 (1%): Trick!
+            return {
+                reward: `TRICK! ${randItem(tricks)}`, // This is a string
+                type: "Trick!",
+                style: "text-[#ff5555] font-bold" /* Red Alert */
+            };
+        }
+
+        // --- ELEMENT REFERENCES ---
+        let username = "";
+        const nameEntryView = document.getElementById("nameEntryView");
+        const mainAppView = document.getElementById("mainAppView");
+        const usernameInput = document.getElementById("usernameInput");
+        const enterButton = document.getElementById("enterButton");
+        const nameError = document.getElementById("nameError");
+        const usernameDisplay = document.getElementById("usernameDisplay");
+        // App tabs
+        const tabTreat = document.getElementById('tabTreat');
+        const tabCatalogue = document.getElementById('tabCatalogue');
+        const treatSection = document.getElementById('treatSection');
+        const catalogueSection = document.getElementById('catalogueSection');
+        // Catalogue controls
+        const catTabMundane = document.getElementById('catTabMundane');
+        const catTabMagical = document.getElementById('catTabMagical');
+        const catTabFull = document.getElementById('catTabFull');
+        const countMundane = document.getElementById('countMundane');
+        const countMagical = document.getElementById('countMagical');
+        const countFull = document.getElementById('countFull');
+        const catalogueCollectedOnly = document.getElementById('catalogueCollectedOnly');
+        const resetCollectionBtn = document.getElementById('resetCollectionBtn');
+        const catalogueGrid = document.getElementById('catalogueGrid');
+        // Get the *correct* button (the first one)
+        const treatButton = document.querySelectorAll("#treatButton")[0];
+        // Get the *correct* result box (the first one)
+        const resultBox = document.querySelectorAll("#resultBox")[0];
+        // Get the *correct* log container (the first one)
+        const logContainer = document.querySelectorAll("#logContainer")[0];
+
+        // Clear the placeholder log message
+        logContainer.innerHTML = "";
+
+        // (Note) Magical candy consumption timing is descriptive only; no additional UI/logic required.
+
+        // --- COLLECTION TRACKING (per-character) ---
+        const STORAGE_PREFIX = 'hf_candy_collection_v1_';
+        let currentCollection = null; // { mundane: {key:true}, magical:{}, full:{} }
+        let currentCatalogueCategory = 'mundane';
+
+        function getCollectionKey(name) {
+            return STORAGE_PREFIX + normalizeKey(name || '');
+        }
+        function emptyCollection() {
+            return { mundane: {}, magical: {}, full: {} };
+        }
+        function loadCollection(name) {
+            const raw = localStorage.getItem(getCollectionKey(name));
+            try {
+                const parsed = raw ? JSON.parse(raw) : null;
+                return parsed && typeof parsed === 'object' ? parsed : emptyCollection();
+            } catch { return emptyCollection(); }
+        }
+        function saveCollection(name, coll) {
+            localStorage.setItem(getCollectionKey(name), JSON.stringify(coll || emptyCollection()));
+        }
+        function categoryFromType(type) {
+            if (type === 'Mundane Candy') return 'mundane';
+            if (type === 'Magical Candy!') return 'magical';
+            if (type === 'Full-Sized Bar!') return 'full';
+            return null;
+        }
+        function markCollected(name, type, itemName) {
+            const cat = categoryFromType(type);
+            if (!cat) return;
+            const k = normalizeKey(itemName || '');
+            if (!k) return;
+            currentCollection[cat][k] = true;
+            saveCollection(name, currentCollection);
+        }
+
+        function getTotals() {
+            return {
+                mundane: mundaneCandies.length,
+                magical: magicalCandies.length,
+                full: fullSizedBars.length
+            };
+        }
+        function getCollectedCounts() {
+            return {
+                mundane: Object.keys(currentCollection.mundane).length,
+                magical: Object.keys(currentCollection.magical).length,
+                full: Object.keys(currentCollection.full).length
+            };
+        }
+        function updateCatalogueProgress() {
+            const totals = getTotals();
+            const counts = getCollectedCounts();
+            countMundane.textContent = `${counts.mundane}/${totals.mundane}`;
+            countMagical.textContent = `${counts.magical}/${totals.magical}`;
+            countFull.textContent = `${counts.full}/${totals.full}`;
+        }
+        function listForCategory(cat) {
+            if (cat === 'mundane') return mundaneCandies;
+            if (cat === 'magical') return magicalCandies;
+            if (cat === 'full') return fullSizedBars;
+            return [];
+        }
+        function renderCatalogue(cat) {
+            currentCatalogueCategory = cat;
+            updateCatalogueProgress();
+            const showCollectedOnly = catalogueCollectedOnly.checked;
+            const items = listForCategory(cat);
+            const gridHtml = items.map(it => {
+                const name = it.name;
+                const k = normalizeKey(name);
+                const collected = !!currentCollection[cat][k];
+                if (showCollectedOnly && !collected) return '';
+                const imgSrc = findBestCandyImage(name);
+                return `
+                    <div class="rounded-md border ${collected ? 'border-[var(--halloween-green)]' : 'border-[var(--halloween-orange-dark)]/60'} bg-[var(--halloween-purple-dark)]/70 p-2"> 
+                        ${imgSrc ? `<img src="${imgSrc}" alt="${name}" class="w-full h-auto object-contain rounded mb-2">` : ''}
+                        <div class="flex items-start justify-between gap-2">
+                            <div>
+                                <div class="text-sm font-semibold text-[var(--halloween-text)]">${name}</div>
+                                ${it.desc ? `<div class="text-xs text-[var(--halloween-text)]/80">${it.desc}</div>` : ''}
+                            </div>
+                            <div class="text-right text-sm ${collected ? 'text-[var(--halloween-green)]' : 'text-[var(--halloween-text)]/40'}">${collected ? '✓' : '—'}</div>
+                        </div>
+                    </div>`;
+            }).join('');
+            catalogueGrid.innerHTML = gridHtml || `<div class="text-center text-[var(--halloween-text)]/60 col-span-2 md:col-span-3">No items to show.</div>`;
+            // Update tab button styles
+            catTabMundane.className = `px-3 py-1 rounded ${cat==='mundane' ? 'bg-[var(--halloween-orange)] text-black' : 'bg-[var(--halloween-purple)] text-[var(--halloween-text)]'} border border-[var(--halloween-orange-dark)]`;
+            catTabMagical.className = `px-3 py-1 rounded ${cat==='magical' ? 'bg-[var(--halloween-orange)] text-black' : 'bg-[var(--halloween-purple)] text-[var(--halloween-text)]'} border border-[var(--halloween-orange-dark)]`;
+            catTabFull.className = `px-3 py-1 rounded ${cat==='full' ? 'bg-[var(--halloween-orange)] text-black' : 'bg-[var(--halloween-purple)] text-[var(--halloween-text)]'} border border-[var(--halloween-orange-dark)]`;
+        }
+
+        // --- IMAGE SOURCES & MATCHING ---
+        // Local candy images (pre-listed files in src/assets/images/candies)
+        const CANDY_IMAGE_BASE = 'src/assets/images/candies/';
+        const candyImageIndex = {
+            abjurationjawbreaker: CANDY_IMAGE_BASE + 'abjurationjawbreaker.webp',
+            alizaselectrickypaw: CANDY_IMAGE_BASE + 'alizaselectrickypaw.webp',
+            arachniispinnerettestringsbothflavors: CANDY_IMAGE_BASE + 'arachniispinnerettestringsbothflavors.webp',
+            barkgumchew: CANDY_IMAGE_BASE + 'barkgumchew.webp',
+            bellowbellysours: CANDY_IMAGE_BASE + 'bellowbellysours.webp',
+            bunbunskipshopdrop: CANDY_IMAGE_BASE + 'bunbunskipshopdrop.webp',
+            cantripchew: CANDY_IMAGE_BASE + 'cantripchew.webp',
+            carrotcrumbles: CANDY_IMAGE_BASE + 'carrotcrumbles.webp',
+            caveswellersgeode: CANDY_IMAGE_BASE + 'caveswellergeode.webp',
+            chocodarkacondascales: CANDY_IMAGE_BASE + 'chocodarkacondascales.webp',
+            cindertoffee: CANDY_IMAGE_BASE + 'cindertoffee.webp',
+            diapercookie: CANDY_IMAGE_BASE + 'diapercookie.webp',
+            dustbunnyball: CANDY_IMAGE_BASE + 'dustbunnyball.webp',
+            everydayfloralfonderie: CANDY_IMAGE_BASE + 'everydayfloralfonderie.webp',
+            evocationember: CANDY_IMAGE_BASE + 'evocationember.webp',
+            fearfizzle: CANDY_IMAGE_BASE + 'fearfizzle.webp',
+            glimmeringforestmushroompop: CANDY_IMAGE_BASE + 'glimmeringforestmushroompop.webp',
+            goodhaulgumball: CANDY_IMAGE_BASE + 'goodhaulgumball.webp',
+            hungoresheartbeat: CANDY_IMAGE_BASE + 'hungoreheartbeat.webp',
+            illusionisticing: CANDY_IMAGE_BASE + 'illusionisticing.webp',
+            juiceboxjelly: CANDY_IMAGE_BASE + 'juiceboxjelly.webp',
+            kittenfolkkatstongue: CANDY_IMAGE_BASE + 'kittenfolkkatstongue.webp',
+            magicalrealmpop: CANDY_IMAGE_BASE + 'magicalrealmpop.webp',
+            magicaltoughtoffee: CANDY_IMAGE_BASE + 'magicaltoughtoffee.webp',
+            mangledhuskmeringue: CANDY_IMAGE_BASE + 'mangledhuskmeringue.webp',
+            naptimenougat: CANDY_IMAGE_BASE + 'naptimenougat.webp',
+            naughtynannybotbolt: CANDY_IMAGE_BASE + 'naughtynannybotbolt.webp',
+            nightweaverdreambar: CANDY_IMAGE_BASE + 'nightweaverdreambar.webp',
+            ossokinbone: CANDY_IMAGE_BASE + 'ossokinbone.webp',
+            pacificationpops: CANDY_IMAGE_BASE + 'pacificationpops.webp',
+            pamprisonbrick: CANDY_IMAGE_BASE + 'pamprisonbrick.webp',
+            pumpkinpatchmud: CANDY_IMAGE_BASE + 'pumpkinpatchmud.webp',
+            pupperlingpawsallflavors: CANDY_IMAGE_BASE + 'pupperlingpawsallflavors.webp',
+            purifiermint: CANDY_IMAGE_BASE + 'purifiermint.webp',
+            radiantlances: CANDY_IMAGE_BASE + 'radiantlances.webp',
+            schoolcrestcoindark: CANDY_IMAGE_BASE + 'schoolcrestcoin (dark).webp',
+            schoolcrestcoinglimmeringmint: CANDY_IMAGE_BASE + 'schoolcrestcoin (glimmeringmint).webp',
+            schoolcrestcoinmilk: CANDY_IMAGE_BASE + 'schoolcrestcoin (milk).webp',
+            schoolcrestcoinwhite: CANDY_IMAGE_BASE + 'schoolcrestcoin (white).webp',
+            securicareswirl: CANDY_IMAGE_BASE + 'securicareswirl.webp',
+            shadesneaktaffy: CANDY_IMAGE_BASE + 'shadesneaktaffy.webp',
+            sleepersucker: CANDY_IMAGE_BASE + 'sleepersucker.webp',
+            spinebearerquill: CANDY_IMAGE_BASE + 'spinerbearerquill.webp',
+            stealthwafer: CANDY_IMAGE_BASE + 'stealthwafer.webp',
+            stealthwearwafer: CANDY_IMAGE_BASE + 'stealthwafer.webp',
+            tactitushtoughtoffee: CANDY_IMAGE_BASE + 'tactitushtoughtoffee.webp',
+            plushiepalgummy: CANDY_IMAGE_BASE + 'plushiepalgummies.webp',
+            paddedplaygroundpebbles: CANDY_IMAGE_BASE + 'playgroundpebbles.webp',
+            timeouttaffy: CANDY_IMAGE_BASE + 'timeouttaffy.webp',
+            ultradrymarshmallow: CANDY_IMAGE_BASE + 'ultradrymarshmallow.webp',
+            ultradrypowerbar: CANDY_IMAGE_BASE + 'ultradrypowerbar.webp',
+            umbraltribefocuschew: CANDY_IMAGE_BASE + 'umbraltribefocuschew.webp',
+            umbraveil: CANDY_IMAGE_BASE + 'umbraveil.webp'
+        };
+
+        // Magical diaper images (local)
+        const ITEM_IMAGE_BASE = 'src/assets/images/items/';
+        const magicalDiaperImageIndex = {
+            harvestnightpullup: ITEM_IMAGE_BASE + 'harvestnightpullup.webp',
+            ultradrymaxabsorbency: ITEM_IMAGE_BASE + 'ultradrymaxabsorb.webp',
+            umbraweavenightpant: ITEM_IMAGE_BASE + 'umbraweavenightpant.webp',
+            purekinholydiaper: ITEM_IMAGE_BASE + 'purekinholydiaper.webp'
+        };
+
+        // Special items (non-candy, non-diaper)
+        const specialItemImageIndex = {
+            agedregaliascrap: ITEM_IMAGE_BASE + 'agedregaliascrap.webp'
+        };
+
+        // Mundane diaper images via catalog (remote, acceptable substitutes)
+        const mundaneDiaperImageIndex = {
+            securicarelevel4s: 'https://ik.imagekit.io/owlcan/diaperlistapp/securicarel4s.jpg',
+            bunbunskipz: 'https://ik.imagekit.io/owlcan/diaperlistapp/bunbunskips.jpg',
+            everydaycomfortpullonsfloral: 'https://ik.imagekit.io/owlcan/diaperlistapp/comfortguardianplus.jpg',
+            tactitushelite: 'https://ik.imagekit.io/owlcan/diaperlistapp/tactitushelite.jpg',
+            stealthwearpantycutpullup: 'https://ik.imagekit.io/owlcan/diaperlistapp/stealthopscovertblack.jpg',
+            paddedplaygrounddinoprint: 'https://ik.imagekit.io/owlcan/diaperlistapp/kuddlepuffsdinoroar.jpg'
+        };
+
+        function normalizeKey(str) {
+            return (str || '')
+                .toLowerCase()
+                .replace(/\*|’|‘|“|”|—|–/g, '')
+                .replace(/[^a-z0-9]+/g, '');
+        }
+
+        function findBestCandyImage(name) {
+            const key = normalizeKey(name);
+            // Heuristics for known families/variants
+            if (key.startsWith('arachniispinnerettestrings')) {
+                return candyImageIndex['arachniispinnerettestringsbothflavors'];
+            }
+            if (key.startsWith('pupperlingpaws')) {
+                return candyImageIndex['pupperlingpawsallflavors'];
+            }
+            if (key.includes('stealth') && key.includes('wafer')) {
+                return candyImageIndex['stealthwafer'];
+            }
+            if (key.includes('ultradry') && (key.includes('powerbar') || key.includes('power'))) {
+                return candyImageIndex['ultradrypowerbar'];
+            }
+            if (key.includes('magicalrealm')) {
+                return candyImageIndex['magicalrealmpop'];
+            }
+            if (key.includes('bunbunskip') && key.includes('hopdrop')) {
+                return candyImageIndex['bunbunskipshopdrop'];
+            }
+            if (key.includes('fearfizz')) {
+                return candyImageIndex['fearfizzle'];
+            }
+            if (key.includes('toughtoffee')) {
+                if (key.includes('magical')) return candyImageIndex['magicaltoughtoffee'];
+                if (key.includes('tactitush')) return candyImageIndex['tactitushtoughtoffee'];
+                return candyImageIndex['tactitushtoughtoffee'];
+            }
+            // Reported mismatches and robust, punctuation-agnostic fallbacks
+            if (key.includes('pacificationpop')) {
+                return candyImageIndex['pacificationpops'];
+            }
+            if (key.includes('bellowbelly') && (key.includes('sour') || key.includes('sours'))) {
+                return candyImageIndex['bellowbellysours'];
+            }
+            if (key.includes('darkaconda') && (key.includes('scale') || key.includes('chip') || key.includes('chips'))) {
+                return candyImageIndex['chocodarkacondascales'];
+            }
+            if (key.includes('spinebearer') && key.includes('quill')) {
+                return candyImageIndex['spinebearerquill'];
+            }
+            if (key.includes('hungore') && key.includes('heartbeat')) {
+                return candyImageIndex['hungoresheartbeat'];
+            }
+            if (key.includes('cavesweller') && key.includes('geode')) {
+                return candyImageIndex['caveswellersgeode'];
+            }
+            if (key.includes('umbras') && key.includes('veil')) {
+                return candyImageIndex['umbraveil'];
+            }
+            if (key.includes('plushie') && key.includes('pal') && (key.includes('gummy') || key.includes('gummies'))) {
+                return candyImageIndex['plushiepalgummy'];
+            }
+            if (key.includes('playground') && key.includes('pebbles')) {
+                return candyImageIndex['paddedplaygroundpebbles'];
+            }
+            if (key.includes('scholia') && key.includes('crestcoin')) {
+                if (key.includes('dark')) return candyImageIndex['schoolcrestcoindark'];
+                if (key.includes('white')) return candyImageIndex['schoolcrestcoinwhite'];
+                if (key.includes('glimmering') || key.includes('mint')) return candyImageIndex['schoolcrestcoinglimmeringmint'];
+                return candyImageIndex['schoolcrestcoinmilk'];
+            }
+            // Direct key match
+            if (candyImageIndex[key]) return candyImageIndex[key];
+            // Loose contains matching
+            let best = null;
+            let bestScore = -1;
+            Object.keys(candyImageIndex).forEach(k => {
+                const aInB = key.includes(k);
+                const bInA = k.includes(key);
+                if (aInB || bInA) {
+                    const score = Math.min(key.length, k.length); // favor closer length
+                    if (score > bestScore) { bestScore = score; best = candyImageIndex[k]; }
+                }
+            });
+            return best;
+        }
+
+        function getImageForResult(result) {
+            if (!result || !result.type || typeof result.reward !== 'object') return null;
+            const name = result.reward.name || '';
+            const type = result.type;
+            if (type === 'Mundane Candy' || type === 'Magical Candy!' || type === 'Full-Sized Bar!') {
+                return findBestCandyImage(name);
+            }
+            if (type === 'Diaper?') {
+                // Mundane diapers
+                return mundaneDiaperImageIndex[normalizeKey(name)] || null;
+            }
+            if (type === 'Magical Diaper!') {
+                return magicalDiaperImageIndex[normalizeKey(name)] || null;
+            }
+            if (type === 'Aged Regalia!') {
+                return specialItemImageIndex[normalizeKey(name)] || null;
+            }
+            return null;
+        }
+
+        // Simple modal asset store for log items
+        let logIdCounter = 1;
+        const logAssets = {}; // id -> { name, desc, img, type }
+
+
+        // --- EVENT LISTENERS ---
+
+        // 1. Enter the App
+        enterButton.addEventListener("click", () => {
+            const inputName = usernameInput.value.trim();
+            if (inputName) {
+                username = inputName;
+                usernameDisplay.textContent = username;
+                
+                // Hide name entry and show the main app
+                nameEntryView.classList.add("hidden");
+                mainAppView.classList.remove("hidden");
+
+                // Init collection for this character
+                currentCollection = loadCollection(username);
+                updateCatalogueProgress();
+                renderCatalogue('mundane');
+            } else {
+                // Show error if name is blank
+                nameError.classList.remove("hidden");
+            }
+        });
+
+        // App tab switching
+        function showTreat() {
+            treatSection.classList.remove('hidden');
+            catalogueSection.classList.add('hidden');
+            tabTreat.className = 'px-3 py-2 rounded-md bg-[var(--halloween-orange)] text-black font-semibold border border-[var(--halloween-orange-dark)]';
+            tabCatalogue.className = 'px-3 py-2 rounded-md bg-[var(--halloween-purple-dark)] text-[var(--halloween-text)] border border-[var(--halloween-orange-dark)] hover:bg-[var(--halloween-purple)]';
+        }
+        function showCatalogue() {
+            treatSection.classList.add('hidden');
+            catalogueSection.classList.remove('hidden');
+            tabCatalogue.className = 'px-3 py-2 rounded-md bg-[var(--halloween-orange)] text-black font-semibold border border-[var(--halloween-orange-dark)]';
+            tabTreat.className = 'px-3 py-2 rounded-md bg-[var(--halloween-purple-dark)] text-[var(--halloween-text)] border border-[var(--halloween-orange-dark)] hover:bg-[var(--halloween-purple)]';
+            // Ensure catalogue reflects latest progress
+            updateCatalogueProgress();
+            renderCatalogue(currentCatalogueCategory);
+        }
+        tabTreat.addEventListener('click', showTreat);
+        tabCatalogue.addEventListener('click', showCatalogue);
+
+        // Catalogue events
+        catTabMundane.addEventListener('click', () => renderCatalogue('mundane'));
+        catTabMagical.addEventListener('click', () => renderCatalogue('magical'));
+        catTabFull.addEventListener('click', () => renderCatalogue('full'));
+        catalogueCollectedOnly.addEventListener('change', () => renderCatalogue(currentCatalogueCategory));
+        resetCollectionBtn.addEventListener('click', () => {
+            if (!username) return;
+            currentCollection = emptyCollection();
+            saveCollection(username, currentCollection);
+            updateCatalogueProgress();
+            renderCatalogue(currentCatalogueCategory);
+        });
+
+        // 2. Get a Treat
+        treatButton.addEventListener("click", () => {
+            // Disable button briefly to prevent spam
+            treatButton.disabled = true;
+            treatButton.textContent = "Knocking...";
+            resultBox.innerHTML = `<span class="text-[var(--halloween-text)]/60">...the door opens...</span>`;
+
+            setTimeout(() => {
+                const result = getTrickOrTreat();
+                
+                // Display the result
+                // NEW: Check if reward is an object (item) or a string (haul/trick)
+                if (typeof result.reward === 'object') {
+                    // It's an item with a name and description (including the magical candy note)
+                    const imgSrc = getImageForResult(result);
+                    resultBox.innerHTML = `
+                        <div class="flex flex-col items-center text-center">
+                            ${imgSrc ? `<img src="${imgSrc}" alt="${result.reward.name}" class="w-full h-auto object-contain mb-2 rounded-md border border-[var(--halloween-orange-dark)]/40">` : ''}
+                            <span class="${result.style}">
+                                <strong class="block text-lg">${result.reward.name}</strong>
+                                <span class="text-sm">${result.reward.desc}</span>
+                            </span>
+                        </div>`;
+                } else {
+                    // It's a simple string (Good Haul or Trick)
+                    resultBox.innerHTML = `<span class="${result.style}">${result.reward}</span>`;
+                }
+                
+                // Log the result
+                logResult(result);
+
+                // Tracking: mark candy collection per character
+                if (username && typeof result.reward === 'object') {
+                    const cat = categoryFromType(result.type);
+                    if (cat) {
+                        markCollected(username, result.type, result.reward.name);
+                        // If catalogue open, refresh counts/grid
+                        if (!catalogueSection.classList.contains('hidden')) {
+                            updateCatalogueProgress();
+                            renderCatalogue(currentCatalogueCategory);
+                        }
+                    }
+                }
+
+                // Re-enable button
+                treatButton.disabled = false;
+                treatButton.textContent = "Knock for Another Treat!";
+            }, 1000); // 1-second delay for suspense
+        });
+
+        // 3. Log Result (No Backend!)
+        function logResult(result) {
+            // Get a simple timestamp
+            const timestamp = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            
+            // NEW: Handle reward being an object or string
+            const isObject = (typeof result.reward === 'object');
+            const rewardText = isObject ? result.reward.name : result.reward;
+
+            // If object, prepare modal linkage
+            let linkHtml = '';
+            if (isObject) {
+                const imgSrc = getImageForResult(result);
+                const id = logIdCounter++;
+                logAssets[id] = { name: result.reward.name, desc: result.reward.desc || '', img: imgSrc, type: result.type };
+                linkHtml = `<button class="underline text-[var(--halloween-orange-light)] hover:text-[var(--halloween-orange)]" onclick="openAssetModal(${id})">${result.reward.name}</button>`;
+            }
+
+            // Create the new log entry
+            const logEntry = document.createElement("p");
+            logEntry.className = "text-[var(--halloween-text)]/90 border-b border-[var(--halloween-orange-dark)]/50 pb-2";
+            
+            // Use innerHTML to render the colors/styles
+            logEntry.innerHTML = `
+                <span class="font-medium text-[var(--halloween-text)]/70">[${timestamp}]</span> 
+                <strong class="text-[var(--halloween-text)]">${username}</strong> 
+                <span class="text-[var(--halloween-orange)]">(${result.type})</span>
+                <span class="text-[var(--halloween-text)]/90"> got: </span>
+                ${isObject ? `<span class="${result.style}">${linkHtml}</span>` : `<span class="${result.style}">${rewardText}</span>`}
+            `;
+
+            // Prepend to the top of the log
+            logContainer.prepend(logEntry);
+        }
+
+        // Modal open/close exposed globally
+        window.openAssetModal = function (id) {
+            const asset = logAssets[id];
+            const modal = document.getElementById('assetModal');
+            const titleEl = document.getElementById('assetModalTitle');
+            const imgEl = document.getElementById('assetModalImage');
+            const descEl = document.getElementById('assetModalDesc');
+            if (!asset) return;
+            titleEl.textContent = asset.name;
+            if (asset.img) {
+                imgEl.src = asset.img;
+                imgEl.alt = asset.name;
+                imgEl.classList.remove('hidden');
+            } else {
+                imgEl.src = '';
+                imgEl.alt = '';
+                imgEl.classList.add('hidden');
+            }
+            descEl.textContent = asset.desc || '';
+            modal.classList.remove('hidden');
+        };
+        window.closeAssetModal = function () {
+            const modal = document.getElementById('assetModal');
+            modal.classList.add('hidden');
+        };
+
+        // Accessibility: ESC closes modal
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const modal = document.getElementById('assetModal');
+                if (!modal.classList.contains('hidden')) closeAssetModal();
+            }
+        });
+        // Click backdrop to close
+        const modalEl = document.getElementById('assetModal');
+        modalEl.addEventListener('click', (e) => {
+            if (e.target === modalEl) closeAssetModal();
+        });
+
+        // (Removed) Magical candy consumption UI and logging helpers are not required.
+
+    </script>
+</body>
+</html>
+
+
+
