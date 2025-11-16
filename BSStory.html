@@ -1,0 +1,1564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ascent to the Black Pyramid</title>
+    <!-- Loading Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Setting up the Inter font family -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --gold: #daac17;
+            --gold-light: #fae791;
+            --gold-dark: #97740a;
+            --parchment: #2C2614;
+            --parchment-dark: #1E1C12;
+            --ink: #c7a81d;
+            --ink2: #8f770d;
+            --accent: #b47018;
+            --shadow: rgba(0, 0, 0, 0.5);
+        }
+
+        /* Base styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            background-color: #2c2619;
+            background-image: url('https://www.transparenttextures.com/patterns/dark-wood.png');
+            color: var(--ink);
+            overscroll-behavior: none;
+        }
+
+        /* Main storybook container */
+        #storybook-app {
+            display: flex;
+            flex-direction: column;
+            max-width: 90rem;
+            margin: 1rem auto;
+            border-radius: 0.75rem;
+            overflow: hidden;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.35), 0 10px 10px -5px rgba(0, 0, 0, 0.25);
+            background-color: var(--parchment);
+            background-image: url('https://www.transparenttextures.com/patterns/parchment.png');
+            border: 12px solid var(--gold-dark);
+        }
+
+        /* Image container */
+        #image-container {
+            position: relative;
+            background-color: var(--parchment-dark);
+            flex-shrink: 0;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border-bottom: 2px solid var(--gold);
+        }
+
+        #story-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* Show the whole image */
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        /* Variant image controls (hidden by default) */
+        #variant-controls {
+            display: none; /* Hidden by default, shown by JS */
+            position: absolute;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.6);
+            border: 1px solid var(--gold);
+            border-radius: 9999px;
+            padding: 0.5rem 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            -webkit-backdrop-filter: blur(4px);
+            backdrop-filter: blur(4px);
+        }
+
+        /* Variant image buttons */
+        .variant-btn {
+            background: linear-gradient(to bottom, var(--gold-light), var(--gold));
+            color: var(--ink2);
+            border: 1px solid var(--gold-dark);
+            border-radius: 9999px;
+            width: 2.5rem;
+            height: 2.5rem;
+            font-weight: 700;
+            font-size: 1.25rem;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+            box-shadow: 0 2px 5px var(--shadow);
+        }
+
+        .variant-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 8px var(--shadow); }
+        
+        .variant-btn:disabled {
+            background: #4b5563;
+            color: #ddd;
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        #variant-counter {
+            color: var(--gold-light);
+            font-size: 0.875rem; /* text-sm */
+            font-weight: 500;
+            min-width: 50px;
+            text-align: center;
+            padding: 0 0.5rem;
+        }
+
+        /* Hint bubbles */
+        .hint-bubble {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 0.25rem;
+            background-color: rgba(30, 28, 18, 0.9);
+            color: var(--gold-light);
+            border: 1px solid var(--gold);
+            border-radius: 9999px;
+            padding: 0.25rem 0.75rem;
+            font-size: 0.8rem;
+            box-shadow: 0 2px 6px var(--shadow);
+            display: none;
+            white-space: nowrap;
+        }
+
+        /* Text content container */
+        #text-container {
+            padding: 2rem;
+            flex-grow: 1;
+            overflow-y: auto;
+            line-height: 1.75;
+            font-size: 1.125rem;
+            max-height: 40vh;
+            color: var(--ink);
+        }
+
+        #text-content p {
+            margin-bottom: 1.5rem;
+        }
+        /* Cover links on the title page */
+        .cover-links {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+        }
+        .cover-link {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(to bottom, var(--gold-light), var(--gold));
+            color: var(--ink2);
+            border: 1px solid var(--gold-dark);
+            border-radius: 0.5rem;
+            text-decoration: none;
+            font-weight: 700;
+            box-shadow: 0 2px 5px var(--shadow);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .cover-link:hover { transform: translateY(-1px); box-shadow: 0 4px 8px var(--shadow); }
+        .dedication {
+            text-align: center;
+            margin-top: 1rem;
+            color: var(--gold-light);
+            font-style: italic;
+        }
+        
+        #text-content h2 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--gold);
+            padding-bottom: 0.5rem;
+        }
+
+        /* Page navigation */
+        #page-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            border-top: 2px solid var(--gold);
+            background-color: var(--parchment-dark);
+            color: var(--ink);
+        }
+
+        .nav-btn {
+            background: linear-gradient(to bottom, var(--gold-light), var(--gold));
+            color: var(--ink2);
+            font-weight: 700;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--gold-dark);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-size: 1rem;
+            box-shadow: 0 2px 5px var(--shadow);
+        }
+        
+        .nav-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 8px var(--shadow); }
+
+        .nav-btn:disabled {
+            background-color: #4b5563; /* bg-gray-600 */
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        #page-counter {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--gold-light);
+        }
+
+        /* Inline nav hint under buttons */
+        #nav-hint {
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--gold-light);
+            padding: 0.4rem 0;
+            background-color: rgba(30, 28, 18, 0.85);
+            border-top: 1px solid var(--gold);
+            display: none;
+        }
+
+        /* Desktop layout */
+        @media (min-width: 1024px) {
+            #storybook-app {
+                flex-direction: row;
+                height: 93vh; /* Set a fixed height on desktop */
+                max-height: 1080px;
+                margin: 2rem auto;
+            }
+
+            #image-container {
+                width: 55%;
+                height: 100%;
+                aspect-ratio: auto; /* Unset aspect ratio */
+            }
+
+            #content-wrapper {
+                width: 45%;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+            }
+
+            #text-container {
+                flex-grow: 1;
+                max-height: none; /* Allow full height */
+                overflow-y: auto; /* Enable scrolling for long text */
+            }
+
+            #page-navigation {
+                flex-shrink: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Main Storybook App Container -->
+    <div id="storybook-app">
+        
+        <!-- Left Side: Image Viewer -->
+        <div id="image-container">
+            <img id="story-image" src="" alt="Story Scene" 
+                 onerror="this.src='https://placehold.co/1280x720/111827/d1d5db?text=Image+Not+Found';">
+            
+            <!-- Variant Image Controls (hidden by default) -->
+            <div id="variant-controls">
+                <button id="prev-image-btn" class="variant-btn" title="Previous Variant">&lt;</button>
+                <span id="variant-counter">1 of 3</span>
+                <button id="next-image-btn" class="variant-btn" title="Next Variant">&gt;</button>
+            </div>
+            <!-- Hint under X of Y -->
+            <div id="image-hint" class="hint-bubble" aria-live="polite">Tip: Some pages have multiple images — use the ◄ and ► first.</div>
+        </div>
+        
+        <!-- Right Side: Text and Navigation -->
+        <div id="content-wrapper">
+            <!-- Story Text -->
+            <div id="text-container">
+                <div id="text-content">
+                    <!-- Text will be loaded here by JavaScript -->
+                </div>
+            </div>
+            
+            <!-- Page Navigation -->
+            <div id="page-navigation">
+                <button id="prev-page-btn" class="nav-btn" title="Go to previous page">Previous Page</button>
+                <span id="page-counter">Page 1 of 45</span>
+                <button id="next-page-btn" class="nav-btn" title="Go to next page">Next Page</button>
+            </div>
+            <!-- Hint below navigation buttons -->
+            <div id="nav-hint" aria-live="polite">Tip: Some pages have multiple images — use the image ◄ and ► before Next Page.</div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- 1. DEFINE STORY DATA ---
+        // This object contains all text and image arrays for each page.
+        // The text is 100% VERBATIM from the user's provided text.
+        const storyData = [
+            { // Cover Page
+                text: `
+                    <h2>Ascent to the Black Pyramid</h2>
+                    <p>Welcome! This illustrated story often includes multiple image variants per page. Use the ◄ and ► arrows on the image to explore them before turning the page.</p>
+                    <div class="cover-links">
+                        <a href="#" class="cover-link" data-part="1" title="Jump to Part 1">Go to Part 1</a>
+                        <a href="#" class="cover-link" data-part="2" title="Jump to Part 2">Go to Part 2</a>
+                        <a href="#" class="cover-link" data-part="3" title="Jump to Part 3">Go to Part 3</a>
+                    </div>
+                    <p class="dedication">To Elva, Karoline, and Alunra- as well as to all of you- the past, present, and possible-future members of Diaper School!</p>
+                `,
+                images: [
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/blackpyramidtitlepage.webp"
+                ]
+            },
+            { // Page 1: Part 1 - Lissome Plains
+                text: `
+                    <h2>Part 1</h2>
+                    <p>The Lissome Plains didn’t so much shimmer as they breathed, a constant, silent respiration of raw magic. For Alunra, a firbolg accustomed to the solid, quiet truth of a forest that knew its own mind, the sight was a physical blow. The very air felt elastic, buzzing with an untamed energy that stretched the savannah grasses into an infinite golden sea one moment, only to snap them back the next as if nothing had happened. Ancient-looking trees, gnarled and fully formed, would pop into existence with deep-set roots, only to vanish a moment later, phantoms of a reality in flux. The only constant, the only landmark to trust against the temporal vertigo, were the jagged, snow-dusted peaks of the Dracespire Mountains, an unmoving anchor in the chaos.</p>
+                    <p>Alunra stopped, her mouth hanging open. Her mind, built on the logical progression of seasons and the slow, steady growth of the wild, couldn't process the impossible physics on display. "Woooooooow," she breathed, her voice a whisper almost swallowed by the weird hum of the plains. "What is this place?"</p>
+                    <p>Charla, her four stubby gold horns catching the sun, just grinned. The sight was familiar to her, a story lifted from textbooks and history lessons. "The Headmaster screwed with the whole demesne's spatial dimensions back in the Old War," she explained, puffing out her chest with a student's pride. "It was a defense mechanism. The Warforged legions marched on the school, right? For them, it must’ve felt like centuries. Their gleaming metal shells got covered in dirt, then moss, then just grime from seasons whipping past them in minutes. From our side? They showed up a few weeks after they started, already looking like they’d lost, their morale shattered."</p>
+                    <p>A cold knot formed in Alunra's stomach. The thought of her spectral twin, Echo, a being of pure spirit, twisted and distorted by such temporal chaos was unnerving. She squeezed Charla's hand, a worried question passing between them without a word. "Will Echo be okay?"</p>
+                    <p>Charla’s confidence was a warm blanket against the strange chill of the plains. She shrugged, a simple gesture that was absurdly comforting in the face of the impossible magic around them. "Never seen it mess with a darkling or a ghost, and Echo's kinda like that, right? All spirit and stuff? I think she’ll be fine."</p>
+                    <p>That was enough. Alunra’s worry melted into a determined smile. "I'm ready for this," she said, her eyes locked on the distant peaks. "I can't wait to get to the top with you!"</p>
+                `,
+                images: ["https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/lissomeplains.webp",
+                        "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/to-the-mountain1.webp"
+                ]
+            },
+            { // Page 2: Tah'gen Intro
+                text: `
+                    <p>Walking across the plains was a lesson in not trusting your own eyes. You had to lock onto the mountains and simply walk, ignoring the world doing its wibbly-wobbly nonsense around you. As they crested a hill, two figures popped into view, their black and gold outfits a stark contrast to the shifting landscape. Definitely not students.</p>
+                    <p>"Fellow-travelers," Charla murmured, her grip tightening on Alunra's hand. "Don't think they're guests... but I'm not getting a 'dangerous' vibe either. Stay on guard."</p>
+                    <p>As they drew closer, the figures sharpened. One was a wiry, white-haired elf who looked like he hadn't slept in a week and was running on fumes and spite. The other was a fire-red tiefling girl who seemed to vibrate with pent-up energy, her own padded state subtly apparent beneath her regalia. The elf, Nargyle, greeted them with a sigh that could curdle milk, a decanter of brandy already in hand. "Good afternoon, ladies. I'm Nargyle. That's Tahgen... she's about to say hello in a really rude way. I'd appreciate it if you said hello back just as forcefully."</p>
+                    <p>Tahgen, her eyes burning like hot coals, needed no further prompting. With a loud clang of her sword on her shield, she charged, kicking up dirt. "Hi, I'm Tahgen," she growled, her voice a low rumble promising a bad time. "Gonna be nice to meet you, I think."</p>
+                    <p>Alunra’s hand slipped from Charla’s. She didn’t flinch. With a thought, Echo shimmered into existence, a ghostly copy of Alunra’s grim determination, and rushed to meet Tahgen’s charge. The sound of steel on spectral energy rang out, a sharp, angry note against the plains' magical hum.</p>
+                `,
+                images: [
+
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/tahgentintimidations.webp"
+                ]
+            },
+            { // Page 3: Tah'gen Fight
+                text: `
+                    <p>The fight was a mess of motion, a blur of teleporting tiefling and flashing steel. Tahgen was a whirlwind, blinking around the battlefield, her sword singing through the air. But Alunra and Echo were something else entirely—a perfectly coordinated dance of destruction. Everywhere Tahgen appeared, a greatsword or a spectral shield was already there to meet her.</p>
+                    <p>Sensing that she needed to join in on this tumult, Charla found her moment. Charla moved in, eyes blazing with a feral light as she collided with the tiefling’s mid-section and wrestled Tahgen into an under-the-arm grapple. At once surprised and winded by the tackle, Tahgen kicked and struggled, the chaotic motion pulling down her shorts to reveal her "battle panties,” and offer a rather enticing target for the duo to punish that opening.</p>
+                    <p>"Spank her!" Charla roared, her own control snapping as she launched herself at the tiefling, eyes blazing with a feral light as she went for a grapple, teeth bared.</p>
+                    <p>"DO NOT DO THAT, DAMMIT, DO NOT DARE!" Tahgen shrieked, her combat high shattered by the sheer audacity of the command. But it was too late. Alunra, with a grunt of effort, flipped her greatsword and brought the flat of the massive blade down on Tahgen’s padded rear with a solid SMACK- turning the greatsword into an impromptu paddle. A split-second later, Echo’s spectral strike landed with a ghostly THUMP.</p>
+                    <p>"Holy shit! Tabitha's fucking arm! Owwwwww!" Tahgen's eyes flooded with tears, the shock and searing pain of the double-tap completely breaking her battle rage. With a final, pathetic whimper, she went limp in Charla’s surprisingly strong grip.</p>
+                `,
+                images: [
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/spankher.webp", 
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/spankhernow.webp"
+                ]
+            },
+            { // Page 4: Way Rangers
+                text: `
+                    <p>Nargyle, with the long-suffering sigh of a man who’d seen this routine a thousand times, offered them a drink. "We're Way Rangers," he explained, gesturing to Tahgen, who was still rubbing her sore backside. "Our job? Guarding the unseen paths between universes from things that aren't supposed to be there. Practically Sister Schools, our Academies," Tahgen piped up, earning a death glare from her mentor.</p>
+                    <p>Their farewells to the Way Rangers were a mix of newfound respect and playful jabs. Tahgen, despite her earlier ferocity, offered Charla a surprisingly shy grin. "Next time, hornbaby, try not to use my face as a cushion," she mumbled, though there was no real heat in her words. Nargyle simply gave a weary, knowing nod. "May the Ways be kind to you, students of Scholia Diaspros. Be safe on the peaks."</p>
+                `,
+                images: [
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/chalunratahgen.webp", 
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/chalunratahgen2.webp", 
+                ]
+            },
+            { // Page 5: Mountain Climb
+                text: `
+                    <p>With a final wave, they turned to face the mountain once more. Charla gave a little preparatory wiggle, the thick padding of her high-capacity diaper a reassuring presence beneath her adventuring gear before taking Alunra's hand. The initial ascent was a grueling test of endurance, a seemingly endless spiral of stairs hewn from the living rock. Each step was a battle against the steepening incline and the increasingly thin, sharp air that stung their lungs. The world below shrank into a breathtaking, dizzying tapestry of shifting plains and distant, hazy forests. The wind, no longer a gentle breeze, became a constant, whining companion, tearing at their clothes and trying to unbalance them.</p>
+                    <p>The relentless pace soon made its presence known in another, more intimate way. A shared, unspoken understanding passed between them as the strain of the climb forced them to rely on their protection. The initial warmth blossoming through their thick padding was a private admission of the trek's difficulty, a vulnerability that only deepened their trust. Alunra, accustomed to the solid ground of the forest floor, felt a tremor of vertigo as she glanced over the edge. Her knuckles whitened as she tightened her grip on Charla's hand. The dizzying drop was terrifying, but the solid weight of Charla’s hand and the mundane, grounding press of her own thick, damp diaper against her thighs were anchors to reality.</p>
+                    <p>Charla, sensing her friend's unease, squeezed back. She’d point out strange rock formations or soaring birds, her voice a steady anchor against the overwhelming height. They moved in a rhythm born of mutual reliance, one bracing the other against a sudden gust, a shared glance of encouragement passing between them when their legs burned and their breaths grew ragged. With every step, their bond solidified, forged not in conversation but in the shared struggle and silent promise to see this through together.</p>
+                `,
+                images: [
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/charlalunraclimb.webp", 
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/charlalunramountainpass.webp",
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/charlalunraupthemountain-1.webp",
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/charlalunraupthemountain-2.webp"
+                ]
+            },
+            { // Page 6: Cathedral Approach
+                text: `
+                    <p>At last, the punishing staircase gave way to level ground. They dragged themselves onto a wide plateau, a sudden, welcome respite carved into the mountainside. Gasping for air, they leaned against each other for a moment, the damp, heavy padding they wore a testament to the brutal effort of their ascent. A shared, weary, and slightly flushed smile touched their faces. It was here, at the halfway point, that they saw it. A blackened stone cathedral clung to the sheer rock face like a stubborn old barnacle, its gothic spires clawing at the misty sky. It seemed less built upon the mountain and more to have grown out of it, a dark and ancient wound in the stone, promising secrets and forgotten history within its silent, imposing walls.</p>
+                `,
+                images: [
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/tothecathedral1.webp", 
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/tothecathedral2.webp",
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/tothecathedral3.webp",
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/charlalunraupthemountain-3.webp"
+                ]
+            },
+            { // Page 7: Cathedral Interior (Part 1)
+                text: `
+                    <p>Pushing open the heavy, groaning doors of the cathedral felt like breaking the seal on a tomb. The air that washed over them was ancient and cold, thick with the layered scents of ozone from long-dead spells, the dry decay of dust, and a deep, metallic tang like old blood.</p>
+                    <p>"Used to be a place of worship," Charla said, her voice a hushed, reverent whisper that was instantly swallowed by the cavernous space. "For Sorceress Tabitha. I've read about it... but the books didn't mention the smell."</p>
+                    <p>Alunra nodded along with what Charla was saying. She felt places like this always had a spirit of their own, much like the forest she grew up in. This place, in a strange way, seemed to remind her of that. Her eyes fell on the blackened stone cathedral, clinging to the mountainside, and grew a bit wide. "Who... could have done that?" she whispered, impressed by the breathtaking sight. "It looks like it just grew out of the mountain... and you said you took refuge there? What's it like inside?"</p>
+                    <p>"Well, you're gonna see, look close," Charla pointed out, gesturing towards the cathedral. The stairs had vanished, leaving only the option of climbing the rock-hewn cathedral or going inside to find a thoroughfare. "You're going to find the inside a little jarring, I think. Don't look too hard at the statues; they like to change... but they're not alive." Charla started across the path towards the chapel of black rock. "This USED to be a place of worship... in veneration of Sorceress Tabitha..." She stopped at the doorless portal to the interior. It wasn't dark inside; the windows and lensing apertures in the ceiling and cut into the mountain provided ample natural light.</p>
+                    <p>At either side of the pulpits, in separated coeurs symmetrical to the empty dais, two destroyed feminine statues stood in cold reverence. A place where a third statue would sit upon a raised plinth was vacant save for a single unclothed foot—the blackened stone and a bone of rebar sticking out of the ankle were all that remained.</p>
+                `,
+                images: [
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/the+black+cathedral+interior (1).webp",
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/the+black+cathedral+interior (2).webp",
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/the+black+cathedral+interior (3).webp",
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/the+black+cathedral+interior (4).webp"
+                ]
+            },
+            { // Page 8: Cathedral Interior (Part 2 - Statues)
+                text: `
+                    <p>Alunra's gaze stayed on the cathedral and then moved to the doorless portal. The work that must have gone into this place's creation was mind-boggling to her. She shivered a bit from the sheer scale. "Don't look at them too hard?" she repeated, not quite understanding what Charla meant about the changing statues. She kept ahold of Charla's hand as she stopped beside her at the doorless portal, looking around at the statues and the foot of what would have been a third. "And it wasn't even dark inside! This place is... wow. And they worshiped the Sorceress Tabitha? Like a god?"</p>
+                    <p>"I guess you haven't had a lot of history courses yet," Charla said, sitting in a pew and looking up at the tessellations and runners across the surfaces of the cathedral interior. "She had a really large following, a group that believed in whatever she was selling—I don't particularly get it." She turned to one of the statues, which had shifted from a pose bent in repose to one that was stood up straight and looking up into the sky, just as Charla had been. Charla rolled her eyes at the statue's attempt to spook them.</p>
+                    <p>"Not a lot yet, but I'll make sure I pay extra attention," Alunra said, giving a soft smile to reassure Charla, but soon looking around again. "I don't understand following any god, quite honestly. I find it better to pay those respects to the land that provides for us." She glanced over to notice the statue that had shifted, jumping with a slight squeak. "You weren't joking about them changing. The magics here must be very strong. It clearly took a lot of effort to make this place the way it is. How long did you have to spend here?" she asked, looking to the other statue. "It's a bit... unnerving."</p>
+                `,
+                images: [
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/theblackcathedralcreepypaddedtabbystatues.webp"
+                ]
+            },
+            { // Page 9: Cathedral Interior (Part 3 - Vault Door)
+                text: `
+                    <p>"The snow moved up the mountain, and then I found the door at the back of the cathedral. It's a big vault door, but you can feel air from the cracks. I think it probably leads out to the other side of the pass and around to the top of the mountain. It wasn't locked, but I just... I was not strong enough to open it—especially not when it was frozen shut." Charla looked back at Alunra as she stood and made her way in the direction of that door. "I think, like before, that was the mountain telling me to come back when I was ready."</p>
+                    <p>"A vault door?" Alunra looked curiously at Charla as she looked towards the back. "Well, if it leads to the other side and the top of the mountain, that's where we are going. And if it's hard to open," she grinned a bit, "we'll get it open. Can't let a few doors get in our way." She then tapped her chin with a finger as she thought of something. "I wonder what we will see past that vault door... I'm enjoying this adventure."</p>
+                    <p>Massive and bronzed, the gleaming metal of the door defied the age of the surrounding stone and decay. "Here we are," Charla said. "I couldn't get the two manifolds open—I couldn't even make them budge."</p>
+                    <p>Alunra looked at the door and let out a soft hum. "That... is a big door." She let out a small breath and cracked her knuckles, heading over to see if she could get those manifolds to move. "See if I can do anything." A single person would need to be very large to open the two manifolds by themselves. It seemed like two persons, or one coordinated person with a magical clone or aide, could push open the manifolds and allow the door to be opened. Alunra blinked at how big it was. She smiled more as she summoned Echo to help her with the door! Both would grab the manifolds and put all their strength into it.</p>
+                `,
+                images: [
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/theblackcathedralvault-1.webp",
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/theblackcathedralvault-2.webp"
+                ]
+            },
+            { // Page 10: The Passage & Living Bridge
+                text: `
+                    <p>With two persons and with enough strength, Alunra and Echo would allow the manifolds and their demi-causal locks to disengage and be opened. The gears and tumblers inside began to pull back and allow the opening mechanism to engage for them. With a creak, a crank, and a groan, the door's central mechanics would turn. The artifice wheezed with ages and ejected dust with exhalations of ancient sedentary existence shattered to allow them entry beyond. There was only scarce light at first, but as the doorway opened fully, there was more pronounced and visible illumination from above them.</p>
+                    <p>There was a wooden staircase out to the side of the mountain, and it appeared this would not be the last time they would enter the heart of the earth. The path seemed to turn around the mountain, but in actuality, it turned into another cave path further up ahead. The old, but amazingly sturdy bridge made of seemingly unglued, unbraced, and unnailed wood clasped to the cliffside in verdant power. It was, alive? It was a natural wooden bridging system that connected the cracked valley created by this edge of the cliffside. Through another stone corridor, a light shaft above illuminated another short descent before once again they were faced with that grown gothic stone and iron artificing.</p>
+                    <p>Charla had to stop here—not because it was foreboding, or because she was tired... but just... because of ALL of it. Just in this tiny space... like a chronological locket of a small piece of the school's history—tucked away in such secretive and protective embrace within the bosom of the mountain.</p>
+                `,
+                images: [
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/passingtotheoldrootbridge.webp"
+                ]
+            },
+            { // Page 11: Awe & Starlight
+                text: `
+                    <p>Alunra followed the path, absorbing every detail. The caves and their winding routes were astonishing, and she felt a thrill with each turn, moving in and out of the wave systems the path created. She had never witnessed anything like it. The bridge, seemingly crafted and held in place by nature itself, was breathtaking. As they passed through the final corridor, the gothic stone and iron artistry left her speechless, her mouth agape. She rubbed her eyes, trying to confirm the reality of the sight before her.</p>
+                    <p>When it was still there, she looked around and she wondered, just how long had it been since anyone was in this place? She finally spoke up after a minute. "That door we opened... it hadn't been opened in a long time, has it? When was the last time anyone stood here where we are now? This is... unbelievable."</p>
+                    <p>"It is possible someone climbed over the cathedral since the last time those doors were sealed," Charla said wisely, but sat on a step and looked out of the crevice in the rock where they were housed and into the sky beyond—faint stars dotted the blue from the distance they had to the nearest planet. Being an orbiting island of sorts, the scholia plane did have quite constant visible stars, especially at altitude.</p>
+                    <p>"Possible... if the mountain let them." She looked over to Charla and watched as she poked her head out. She moved over to the nearest wall and placed a hand on it. She knew plants and animals could understand her. Rocks, though? Plants weren't rocks, but still she talked. Her voice was soft like normal, but a bit more quiet, talking a bit more reverently. "You let us come this far, is this something you want us to see? I have to wonder. We'll keep going; we want to reach the peak, but we'll be happy to see whatever it is you want us to see. You seem to be the guide after all." She smiled to herself.</p>
+                    <p>Returning to her feet, Charla shot out her hand and awaited Alunra taking it. She wanted, desperately, to take the next steps with her, that they might see whatever laid ahead together. At first, through that archway, they would head back into the dark, but at the bottom of a lightless pit of a staircase there was, up ahead, a glow...</p>
+                    <p>Alunra turned to Charla and she took in the sight of her holding out her hand. She just stared at her for a moment in wonder and delight. She took in the look of her face and every single bit of her. Her smile grew bright and wide. "Time to continue our adventure?" She held her hand up and took Charla's into her and gave it a little squeeze.</p>
+                `,
+                images: [
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/charlalunrastarsandawe.webp"
+
+                ]
+            },
+            { // Page 12: Frozen Grove
+                text: `
+                    <p>"Yes! Let's... let's see what's around this bend," Charla began, as they ascended those steps and rounded the corner. What they beheld made the vault, the natural bridge, and everything else about Lesser Dracespire's wild and natural sapience come together—and it explained what the worshippers had been tapping into with their choice of location.</p>
+                    <p>Alunra stopped in her tracks when this all came into sight. She hadn't been sure what to expect when they came here. Hadn't had an idea of what would be beyond the vault door. And she certainly wasn't sure what to expect when they rounded the bend to get here. She tried to say something, but she had been left momentarily speechless. She wanted to know about this place, talk with the plants she could see. She wanted to soak it all in.</p>
+                    <p>"It makes a lot of sense what they were hiding behind that vault. This must have been the Sorceress' retained grove. This must have been where she attempted to take control of the natural spaces of the realm... it looks like she had some success—at least locally...." Charla ran her hand along some of the leaves of a particularly large plant and recoiled her hand. "Ooof... watch out, the leaves are like blades on some of these trees... the path must be here for a reason...." Charla tapped one of the plants and could hear a sound like glass. "Are these plants in stasis or frozen or something?" she asked, rapping it again with her knuckle. It didn't move or break or even shimmy. It just resisted her force. She looked around and squinted a bit, as if trying to suss out some secret being withheld by the grove.</p>
+                    <p>"She must have." Alunra stayed close to Charla but didn't stay in one place for long like she had when they first came here. Her head snapped to Charla's hand when it recoiled, and she looked at it with a frown at the news that the leaves were like blades. A small nod, she returned to looking at the plants. "Frozen?" she watched Charla and thought on it for a moment. "Well... I think the path is here for a reason, but... not sure what, but... if they are actually in stasis or frozen, I won't be able to do anything, but... I could try to speak with the plants. My people are able to speak to animals and plants, though... I can't hear anything back." However, as she was saying that, she was looking around for anything that might give them a clue about this place. "If that doesn't work, we... just keep going?" she sounded unsure.</p>
+                `,
+                images: [
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/groveinstasis-2.webp"
+                ]
+            },
+            { // Page 13: Grove Awakens
+                text: `
+                    <p>"Why don't you try it? But please be careful... in fact... please don't let go of my hand...." Charla took hold of her palm again and held tight as they approached a mass of the foliage near to a tree whose boughs spread across a good portion of the sinkhole grove.</p>
+                    <p>Alunra gave a nod as she took Charla's hand and gave it a little squeeze. She closed her eyes and took a deep breath as she considered her words carefully. She slowly opened them and looked to all the plants and finally to the tree. Finally, she started to speak. "Thank you for allowing us to walk under your boughs and to all the plants allowing us to walk among this grove. I know we are but strangers in this grove, but if there is something wrong and you can give us a sign, we may be able to aid, but at the very least we wish to take passage under the boughs and among the plants in this grove. I cannot understand you like a druid, but I give my respect and bow in the majesty of this majestic grove as we give these requests." She bowed, never once letting go of Charla's hand, hoping the tree and other plants would consider the requests.</p>
+                    <p>"Ahh, a voice, a small, little voice... how long since we've spoken... thank you for awakening me, child... I had been napping for so long..." The tree's boughs began to rustle a little, and the leaves moved, a single errant leaf falling where all had been still. Then, a small gust of air blew past, as though someone had exhaled far, far away but from lungs the size of mountains. "I am the Mistress Root of the grove—at one time you might have called me Professor Root—though I suppose 'Root' wasn't my surname... how long ago would that have been? Seven? Nine? Ten cycles? I am not sure."</p>
+                    <p>The tree's lowest bough curled down to the trunk as though stroking a chin, then moved towards Charla and Alunra. It hesitantly pushed a twiggy "finger" under Alunra's cheek and moved it to and fro, looking her over. The bark was not soft, but not razor-sharp, and the leaves tickled Alunra rather than cutting her. A quick look around would show many of the plants moving again, and Charla, like a toddler, extended a hand and tried to "shake" with the tree. It wrapped its leafy "fingers" around hers, doing no harm and shaking her palm.</p>
+                    <p>"Whoa...." she murmured.</p>
+                `,
+                images: [
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/crystalcavernwonder-2.webp",
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/crystalcavernwonder-3.webp"
+                ]
+            },
+            { // Page 14: Mistress Root
+                text: `
+                    <p>A big smile came across Alunra's face. Away from school and everyone, she smiled so easily and didn't try to suppress it. She listened to the words of the tree and looked up in amazement. The tree spoke, and it filled her with joy to be able to hear it, as if hearing plants was something she had always wished she could hear. Not surprising with her love of nature. She watched as the single leaf fell and shivered as the gust of air blew past. "Mistress Root of the grove... Professor... you were a teacher. I knew we could learn from plants, but... were you one other than a tree once?" She tilted her head as she watched the tree stroke its chin, watching as Mistress Root moved and talked. She was as giddy as a young child getting candy.</p>
+                    <p>As the twiggy 'finger' lifted her chin and moved her head this way and that way, she did not resist in any fashion. Though she couldn't help but squirm a bit and giggle as the leaves tickled. As this was happening, she turned to look at Charla as she went to 'shake hands' with the tree and giggled again at the sight. "Amazing, isn't it?" her smile never ceased, but it was directed at Charla for a moment. She got to experience this with her most favorite person in all the realms.</p>
+                    <p>"I was a teacher, as far as I can recall. I attended this grove when times were young and when the mountains were not so far from the walls. There were students here, many, many of them. Many are still here, with me forever... do make sure to say hello to my children," The tree spoke and then went silent for another long while. Its branches rustled, its leaves wiggled and swayed.</p>
+                    <p>"Say hello?" Charla looked around the grove—it was now clear that Charla could hear the tree as well—but this was apparent by how the sound grew until it achieved the proper echo of a real voice within the cavern. Seeing the myriad types of plants, the way they were not arranged in any druidic fashion she could recognize, her eyes went a little wider. "Did you... take them... or save them?"</p>
+                    <p>"Ask...." the tree said almost wearily. "Such a long sleep... so much talking..." the last bit it was able to manage, it spoke to Alunra in the language of the wind and trees, "thank you for rousing me—it will be nice to wake again every so often... please send... more visitors... and... say hello... to... my... babies...."</p>
+                    <p>As the tree started to speak again, Alunra gave her attention to the tree, to take in the words and to remember them. She kept ahold of Charla's hand still, because as much as she was enjoying this, she would not let herself get separated. This all was amazing, but... it was a lot. She looked around as she looked at all the plants and gave a small nod. To think there were others here that became plants, just as she guessed the tree had done. But she did a double-take at the question from Charla. She couldn't help but now ponder that. Why? While she loved plants, she herself wouldn't want to be one. Her body may return to the earth one day, she didn't wish to become a plant of some sort. "We... should say hello to her babies. We may learn a lot in doing so," she squeezed Charla's hand and took a step closer to her. "And she would like more visitors, it would seem..."</p>
+                `,
+                images: [
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/MissRoot.webp"
+                ]
+            },
+            { // Page 15: Cheryl the Grass
+                text: `
+                    <p>"We will tell everyone about this place, we will make sure she gets all the visiting and caring students she wants!" Charla said with a happy grin, squeezing tight to Alunra's hand and wheeling about the room. "Who do you want to talk to first?" Charla failed to find any flowers that seemed amazingly interesting to her, but she was really just fascinated by all the colors and shapes.</p>
+                    <p>Alunra smiled when she felt her hand squeezed and gave a nod to Charla. "Yeah, it will be good for her, her babies, and those who visit." Happy they were doing good for all, she took a look around to try and find who to talk to first, trying to find one that might stand out and be good to talk to. She blinked a bit as she got distracted by the colors and shapes and everything in general around them. She shook her head a bit and closed her eyes before she just pointed randomly to choose who to speak with. She peeked an eye open to see where she was pointing and headed over to a random plant she pointed at, Charla in hand. "Hello?"</p>
+                    <p>A small patch of grass surrounding a boulder quavered nearby, and a mousy voice trembled out, "hello there....." in simultaneously many voices but all one.</p>
+                    <p>Alunra moved over to near the grass, kneeling down but not getting on the patch of grass, not wanting to be rude and touch without permission, or hurt the grass in any way. If these had been people, she wasn't sure how things felt now as plants. "How are you? I know it's been some time since anyone has come here. We wanted to make sure things are okay and say hello."</p>
+                    <p>"Hiya... I'm Cheryl. I was a student of the Grove... talking is hard... but I do... ummmm... wanna thank you for waking me... us... up!"</p>
+                    <p>Charla knelt with Alunra and cocked her head at the grass. "Is there something weird about this patch of turf?" Charla extended her hand and brushed her fingertips over the blades—ever the child.</p>
+                    <p>The grass issued something like a giggle at the ticklish touch, and it responded to Alunra, "thanks..... for.... saying.... hello!"</p>
+                    <p>"It's okay, you don't need to talk more than you want to. Just happy to meet you, Cheryl. And you're very welcome. I'll make sure to visit again, and we can talk more when you're okay with it." She smiled softly as she saw Charla kneel beside her. "You aren't able to hear them?" she tilted her head to the side inquisitively. "Her name is Cheryl, and she was a student here. Apparently what you just did made her giggle. I think she is ticklish."</p>
+                    <p>"Well, hello, Cheryl! It was good to meet you, too!" Charla patted the grass, and there was another, windier, giggle. Charla stood up and looked around again. She shrugged and huffed, just dazzled by all the plants. "You choose our next friend, Alunra," she delegated.</p>
+                `,
+                images: [
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/charlasittingonhappygrovegrass.webp"
+                ]
+            },
+            { // Page 16: Carnellia the Rose
+                text: `
+                    <p>Alunra gave a big nod, and she looked around to find who to look to next, seeing if there was a plant that might be trying to get their attention... somehow? A dainty, multi-colored rose-bush sat tucked against a wall, licking up a large band of sunlight but sticking far from the group.</p>
+                    <p>Alunra gave a nod and smiled as she led Charla over towards the rose bush. She took in its appearance as they approached and slowed their approach. They hadn't been awake in some time, so no need to spook them by approaching too quickly. Charla would notice the bounce in her step as she very much was very giddy about all of this. "Hello there," she said in an excited tone to make new friends.</p>
+                    <p>At first, there was silence. The rainbow roses fluttered in a gentle mountain breeze but otherwise offered no sounds. Charla crinkled back and forth, just looking at the bush. She was perplexed by the portion where she couldn't hear the plants until she could. "Is this one feeling chatty?" she asked Alunra.</p>
+                    <p>"Tell her I like her horns; they are people thorns, and I am glad I still have some...." the Roses answered shyly.</p>
+                    <p>Alunra marveled at the rainbow roses and how beautiful they were. She thought they might not speak to her. When she heard Charla speak up, she had turned to say something to her but stopped when she heard the roses finally. She smiled brightly and gave a nod. "They asked me to tell you that they like your horns. They said they are people thorns and are glad they still have some." She giggled a bit before she added, "I agree, I like your horns too." She gave a nod to the rose bushes. "It's lovely to meet you; they call me Alunra. You're very beautiful." she spoke softly and quietly, just for the Roses and Charla to hear.</p>
+                    <p>"I was a dhampir in 'life.' I am very confused as to how I could have assumed this form at all..." the plant said quickly but quietly to Alunra. It was, indeed, a chatty plant, in comparison to the others. She swayed a little. "I had antler horns and pretty fangs, and enjoyed a nightcap of blood when polite to indulge...." Her leaves all turned pink when she said this; clearly, the plant was blushing.</p>
+                    <p>Charla made a squeal of amazement, "it turned pink! Did you flatter the plant, Alunra?"</p>
+                `,
+                images: [
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/naughtyrose-1.webp"
+                ]
+            },
+            { // Page 17: Blood Offering
+                text: `
+                    <p>"She was telling me about herself before she became such lovely roses. She was a dhampir, and she had antler horns and pretty fangs, as well as enjoying a nightcap of blood when it was polite. I think... that is her blushing." She giggled as she looked over to Charla to translate. She was soon looking back to the roses, though. "I'm sure you were very beautiful before you had this form, and this form suits you, I think. Were you a student of the grove? It seems many of the students became plants. Do you enjoy it? Would you like more visitors?"</p>
+                    <p>Charla gasped. "She must be hungry! Ask her if she wants some of my blood... I don't mind. It's fine, honestly. I'm acclimated to high altitudes already; I was born in the top-level slums of a world-city; I know all about surviving on thin air!" Charla tugged on Alunra so they could get closer. "Ask her what thorns she'd want to feel biting into flesh...." Charla said with an obviously bottom-baby wiggle.</p>
+                    <p>"Oh my," Alunra looked at Charla as she said that. It made a sort of sense. She wondered if the roses would want blood as roses now. But it couldn't hurt to ask, so she gave a nod to Charla and turned to the roses. And how could she say no to such a cute bottom-baby wiggle? "My friend Charla here thinks you're pretty too. I told her about you and what you told me. She wants to know if you'd like some of her blood. She's offering it happily and is very willing. She even asked what thorns you'd want to feel biting into flesh." She couldn't help but blush violet at that, though not sure why, a hand rubbing her neck a bit.</p>
+                    <p>"I.... want.... both of your blood...." the Rose bush turned an even deeper pink and continued, "hands together.... lower thorns at the base—thick and sharp and won't hurt too much for me to taste your loving friendship....."</p>
+                    <p>Charla saw Alunra go fiery violet as she heard the words of the Rose bush. She put her face in her hands for a moment as the thought of doing that was quite a lot on her mind. She slowly peeked through her fingers at Charla, and then whispered so very softly to her. "She... wants both our blood. Lower thorns at the base. She wants to taste our loving friendship, she says..." She was clearly embarrassed and bashful, and just that was quite the action the rose bush had asked for. But... she didn't mind; it just made her heart race for some silly reason.</p>
+                    <p>Charla blushed right back and lowered her hand to the base of the thorn bush. "Can I kiss you on the cheek?" asked Charla while she watched Alunra to see if she would do the same thing. "You know... to add more friendship and love?"</p>
+                    <p>The Roses giggled in the language of wind and leaves and petals. "You two are precious...."</p>
+                    <p>After a moment, Alunra went to kneel down next to Charla, lowering her hand to the base of the thorn bush as well. Her cheeks grew even more fiery as she slowly looked to Charla. She bit her bottom lip a bit before she gave a shy nod. "I'd... like that." Charla had seen her smile a lot; smiling came easy to her around Charla, though this smile was a lot more... shy.</p>
+                    <p>Charla would close her hand around a thorn and work to lace her fingers around Alunra, even if it would hurt. She looked into her eyes and then leaned in to kiss her on the cheek. The kiss was a soft, warm, quick affair—amazingly restrained and conservative for Charla.</p>
+                    <p>Alunra too would close her hand around the thorn as her fingers laced with Charla's. Her eyes showed just how much she cared and how important Charla had become to her. The kiss may have been quick, but it was the soft and warm part that made the smallest of squees escape her lips. The thorn may have hurt, but... it was the last thing on her mind. She was beyond happy.</p>
+                `,
+                images: [
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/grovesacrifice.webp"
+                ]
+            },
+            { // Page 18: Clipping & Leaving Grove
+                text: `
+                    <p>Blood trickled down the base of the Rose bush's stem and into the earth. Its flowers turned blood red for a while as it purred in a delight like wind and a cat the size of the mountain. She responded then to Alunra in a soft and halting voice, obviously trying to stifle extreme joy. "That.... was..... so delicious.... your friendship is precious, guard it. I feel so strong again.... I feel my magic..." The bush radiated now, the green leaves becoming seafoam in color and sparkling throughout their shape. The petals and flowers changed colors again, now per-petal, not just per-flower, irradiating the small corner with a soft and blessed glow. "Take a clipping of me.... grow it in the garden of the school.... and I will make a path with my magic so that students can visit this place easily...."</p>
+                    <p>Alunra might have missed the flowers changing as she had been looking to Charla. But with a soft sigh and a deep blush, she looked back to the roses and, thankfully, didn't miss seeing all the colors change. She watched in delight, and she was glad she had done this with Charla. "I'm glad you enjoyed it, friend, we both are." It brought delight to her heart that she could help the roses grow strong and feel their magic again. She marveled at the flowers, now a kaleidoscope of colors with each petal different and the seafoam color of the leaves. "Can you guide me? I don't often take clippings, so I'm inexperienced." She went to dig out one of her smaller hand axes; a dagger would have been better, but she knew her swords were both too big and unwieldy. She at least knew the axes were sharp.</p>
+                    <p>"Just pluck a branch with a flower near to the top, about 4-5 inches. I am quite resilient; as long as you plant me within a day or so, I should be capable of sprouting from that clipping," the flower went silent for a while. "Carnellia was my name; I was—and forever will be—a Student Steward of the grove."</p>
+                    <p>Alunra very carefully followed the instructions she was given by the roses, smiling to herself as she took the clipping. "It's an honor to meet you, Carnellia. I will plant the clipping once we return to our academy, and I will make sure to visit often. I'll make sure to bring Charla along with me as well when she can come too."</p>
+                    <p>"Yes! Yes! Charla too!" Charla giggled, feeling like a toddler. She sighed so happily and freely. "I feel like an actual baby in here. It's so magical...." Charla laid on the soil and tried to avoid the grass. "Sorry for sitting on any grass under there... sorrrrrryyyyyy," she said sweetly.</p>
+                    <p>"I uhhhh.... I actually don't mind....." said a muted voice from under Charla's butt, in the words of squished blades of grass underfoot to Alunra. "I'll be fine, and it's like she's hugging me... what a way... to wake up... after... so much... time, ehehe,"</p>
+                    <p>Alunra came over and slowly sat down with Charla, just grinning wide. "I know it makes me feel... I think similar. It's so old, and it makes me realize how young I am in comparison... the magic here, flowing with nature." She went to lay down and look up from where they were, giggling a bit at what the grass had to say. "They like it, by the way; they said it's like a hug and is a wonderful way to wake up." She let out a soft sigh and closed her eyes. She thought about the journey here and this place. "I'm going to come here a lot, I think. This is... so nice." She couldn't help but giggle.</p>
+                    <p>"So wonderful, it's so nice. I am glad we made it here... but... we're so close... can you ask a tall plant with a good view if there is a way for us to get out of the grove and continue up the mountain?" Charla seemed giddy, holding back from just outright bouncing because she knew she was sitting on a plant-formed person.</p>
+                    <p>"Yeah, of course," she smiled softly to herself as she slowly got up and looked around. "Little help from new friends, and we'll be on our way to the top." She was looking around for the tallest plant she could find so she could say hi to a new friend and find a way to the top of the mountain.</p>
+                `,
+                images: [
+                "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/missrootbridge.webp"
+                ]
+            },
+            { // Page 19: Part 2 - Mistress Root Lifts
+                text: `
+                    <h2>Part 2</h2>
+                    <p>"Come....." said a familiar old and lore-wisened voice. It was the tree.</p>
+                    <p>Alunra blinked as she looked to the tree and walked over to Mistress Root after she had asked her to come over. "Mistress Roots?"</p>
+                    <p>"Come, climb my boughs, little ones...." the tree's voice swelled again, and Charla piqued. "Oh.... is Miss Root offering to help us get into the ceiling passage up there?"</p>
+                    <p>"Ah... yes... little antlered one..."</p>
+                    <p>"A-antler?" Charla grabbed at her horns, blushing. "Do you know what I am?!" Charla toddled through the reflections of light in the pool surrounding Mistress Root.</p>
+                    <p>"Hmmmm, I will ponder it... small one—" To Alunra, with another renewed voice, the tree spoke in branches swaying and wind licking leaves, "come now, Alunra, do not tarry. Your little friend Charla is very energetic, and you two have lots left to do...." There was a pause, and the longest willow branch would coil around Alunra to help carry her up into the tree so she would not be left behind. Placed up in the highest sturdy branches, they were shown the way.</p>
+                    <p>"Hold tight," said the tree very slowly, clearly tired of speech though ever more spirited in movement, as it booped both Charla and Alunra on the nose before scooping the two padbutts into her viney arms and raising them upwards to a broken gantry balcony high up in the crevices of the cavern ceiling. Near to pooling shafts of light from the sunny mountain outside, they stood on a hand-hewn natural bridge of stone, bits fallen out over age and time—reinforced with vine and the sinew of roots from trees that helped to part and support the aperture above. Straight ahead, there was a stone staircase, once again. It led, clearly, out and further up the reaches of Lesser Dracespire.</p>
+                    <p>Alunra looked up at being told to climb. To the question Charla asked her, she gave a small nod. With the renewed voice and the description of Charla, she nodded in agreement. "She is energetic and my treasured friend." She squeaked as the long willow branch coiled around her and lifted her up. She was not used to being lifted this way, but she couldn't help but smile as she was lifted up so that she didn't fall behind the very fast Charla. Once she was placed down on the branches, taking hold to steady herself. As her nose was booped, she scrunched her nose and let out a giggle before she let out another excited squee as the viney arms scooped both her and Charla. She held on tight and watched as the gantry balcony was high up. Once there, she took a moment again and gathered herself, beaming over to Charla. She looked around the shafts of light and towards the bridge. Her eyes then fell upon the stone staircase. "Well, I think we've found our next way forward with the help of Mistress Roots." She held her hand out to Charla.</p>
+                `,
+                images: [
+                     "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/missrootbridge1.webp"
+                ]
+            },
+            { // Page 20: Summit & Vistas
+                text: `
+                    <p>"Yeah! Let's do it!" Charla bounded forward and out onto the side of the mountain. She stood there on the cliffside, overlooking the scenery and breathed in the outdoors anew. She was awed again by the sights, but knew there was just a little bit of peak left behind her.They reached the summit, and the wind, sharp and cold, seemed to carry whispers of impossible vistas. Before them, the very horizon flickered and shimmered, not with heat, but with temporal instability. </p>
+                    <p> One moment, massive golden academy spires, far grander and more numerous than any they knew, stretched towards a sky filled with multiple moons. The next, the landscape shifted, revealing a sprawling magitek city, its futuristic architecture gleaming under a perpetual, artificial dawn. Then, it would melt into a myriad of fanciful, yet familiar, permutations of their own impressive school – some floating in clouds, some nestled in colossal crystalline forests, others built into the very fabric of celestial bodies. Each iteration was more breathtaking and disorienting than the last, a testament to the raw, untamed magic that permeated this entire demesne.</p>
+                    <p> "Wow... hahhaha, time and space doesn't even know what it wants... but the school... schools? Schoolae? They all look great!" Turning a little more, Charla shivered and snickered, "miss me with those two, though... they seem more like Tahgen worlds... you know?"</p>
+                    <p>Alunra was infected by the energy that Charla exuded. She looked up in complete awe at what she was able to see. The views from up here were so breathtaking, and they could see so far away. She tilted her head at the multiple schools they could see. "I don't know if I'll really wrap my head around some of that... time and space stuff." But she grinned at the mention of Tahgen's world. "Still wanna visit at some point if we can."</p>
+                `,
+                images: [
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/charlaalunravistas.webp",
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/charlaalunravistas1.webp"
+                ]
+            },
+            { // Page 21: Final Climb & Pyramid
+                text: `
+                    <p>"Hopefully, but we've got a mountain to climb; let's see what we're up against!" Charla twirled around to behold what they would have to ascend and from what elevation. "Oh look... we still have a little more stairs and another plateau! I almost feel like the mountain is babying us a little... I'm running it!" Charla launched herself up the stony steps at full speed, shrieking with happy giggles, exposing her whole wet ass—the little alligator on the seat of her diaper was quite soggy, but looked as undefeated as Charla, as her skirt flipped around and her elevation made it impossible to hide as she bounded up the stone staircase, carved from the living rock, back out onto the mountainside. The air was thin and sharp, the view a dizzying drop to the world below.</p>
+                    <p>The final push was a sheer cliff face. With Alunra's strength leading the way, they scaled the rock, their trust in each other the only thing keeping them from falling. When they finally dragged themselves over the top, the world spread out before them like a map.</p>
+                    <p>"We did it," Alunra whispered, her voice choked with emotion, her lungs burning. "We got to the top."</p>
+                    <p>As she did, the dais upon which they sat purred with a wonderful vivacious energy. It, like many aspects of the Brother Mountains, was empathic, and upon feeling their friendship and devotion, the mountain decided to give them one more gift.</p>
+                    <p>A tile path of starlight, black and white, began to checker off into the gathering clouds. The path solidified as it went, the starlight darkening into ponderous black stone, forming an island of shadow and rock in the sky. Upon it, a new structure took shape: a massive, dark pyramid.</p>
+                `,
+                images: [
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/alunraechoclimb.webp",
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/alunraechoclimb1.webp",
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/alunraechoclimb2.webp"
+                ]
+            },
+            { // Page 22: Pyramid & Pee Break
+                text: `
+                    <p>When Alunra felt the purring, she slowly opened her eyes. They grew wide as she saw the mountain's gift. Her eyes followed the starlight path to the structure now appearing before her. Her mouth hung open as she moved closer to Charla and said, barely above a whisper, "Are... you seeing this?"</p>
+                    <p>"I am seeing a really funky looking pyramid, yes... made of obsidian or black granite, floating on an island... that's... new...."</p>
+                    <p>"Yeah..." Alunra smiled. "This has turned into quite the adventure, hasn't it?" She tilted her head. "What... do we do now... Brother Mountain showed this to us, after all..." She started to fidget, biting her lower lip. This had been a long day, and it wasn't over.</p>
+                    <p>"There are a lot of things we could do, including checking out that weird tomb, buuuuuuuut," Charla turned to her precious, fuzzy-eared friend and leaned over, "Ally needs to peeeeee first," she cackled in a toddler way.</p>
+                    <p>Alunra let out a bit of a whimper and nodded. The day had caught up to her, and she fidgeted some more. Her cheeks were a fiery violet, her hands twisting her skirt. "Y-yeah... can... can I hug you please? As a little distraction?" her voice was soft and quiet. She wanted support.</p>
+                    <p>Charla didn't need to be asked twice. She cleaved onto Alunra and hugged her tight. "Of course, sweetheart! Come hug the hornbaby and take care of piddles. I'm already hecka sogged and won't ever judge someone for needing to go...." She raised her arms high and draped herself around Alunra fully.</p>
+                    <p>Alunra smiled softly and, though she blushed fiercely, hugged onto Charla and buried her face in her shoulder. She shut her eyes tight and bit her bottom lip, concentrating. A soft sigh escaped her as she let it all go, her diaper expanding and growing warm. She shivered, but her smile grew. This... was not bad. It was warm, and the diaper helped with the wet feeling, so much better than when she had wet her panties. A sort of wonder filled her eyes.</p>
+                `,
+                images: [
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/tothepyramid.webp"
+                ]
+            },
+            { // Page 23: Arrivals
+                text: `
+                    <p>It was then that Elva arrived, seeing the two people there. She tried to approach, staying hidden, as she did not yet know their intent.</p>
+                    <p>Charla looked around, noticing the little fairy trying to hide behind a rock. She knelt down a little lower and waved. "Oiii, I see you...." she said sweetly. She then looked wide and said, "Eyyy, Miss Fairy.... you uhhh... you might wanna turn around and get over here....." She pointed behind Elva and shook her finger. "Unless you like the idea of being crow food!"</p>
+                    <p>Alunra, meanwhile, was completely oblivious to the world, staring down at her lap with a shy, silly smile.</p>
+                    <p>Elva, surprised at the perceptiveness of this person, turned around and exclaimed, "Holy fucking shit!" before diving into cover as she saw what Charla had pointed out in what was only half joking seriousness</p>
+                    <p>A massive crow, wreathed in shadow, buzzed the fairy with what sounded like a cawing laugh. It opened its talons and allowed Karoline to drop out.</p>
+                    <p>The swearing and mention of crow food snapped Alunra out of it. She shook her head and looked up, hissing as she got to her feet, ready to draw her greatsword when she saw Karoline. "...is it friendly?"</p>
+                    <p>"Karoline?" asked Charla in confusion. "Did everyone just see a black monolith appear in the sky and think 'that's for me!'?" Charla giggled with sheer joy, finding this incredibly surreal.</p>
+                    <p>Karoline flopped onto her stomach before standing up and putting her arms into the air. "Heck yeah, that's an adrenaline rush!" she exclaimed, not seemingly caring about the intrusion, or the fact that her athletic shorts did nothing to hide the state of her padding.</p>
+                    <p>"Oh, hi... this is Mery. She's cool, and she brought me to this weird flying rock, so here I am." She squished her butt a bit. "Do we have time for some changes first, though? I should probably get both my butt cleaned and my actual armor on."</p>
+                `,
+                images: [
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/karoelvarrival.webp"
+                ]
+            },
+            { // Page 24: Mery & Introductions
+                text: `
+                    <p>"I would warn you all to be very, very careful in zat place," Merysidian, the great shadow raven, spoke. "Eet is not ze kinna locashun for leetle ones to be errante. I will stay here for you all, but do not expect my salvation unless eet is trooly dire." She pet Karoline on the head with a goopy, syrupy beak of shadow.</p>
+                    <p>Karoline gave a light curtsy to Mery, halfway through getting her uniform on proper. "Thanks, Mery, we'll be careful." She stepped up and kissed the inky form on the cheek. "Don't worry, your new bebe sister will be sure to come back to you... and I'll help you remember more about your real sisters however I can."</p>
+                    <p>Karoline patted herself down before handing the used pamper back to Mery. "Don't wanna waste this or pollute this fine landscape," she offered with a wink, before turning to Charla. "Well, if you guys are going in, I guess that means I'm joining you. Karoline Viollete Lucca, at your service."</p>
+                    <p>Alunra stared at the giant shadowy bird as it talked, just giving a little nod and looking to Charla as if to say, 'Is this really happening?'</p>
+                    <p>Merysidian made the used diaper disappear into the inky darkness of her body, evaporating it into her biomass in seconds. "Excellent. I would have to whip your derriere if you polluted such a sacred repos." She pat Karoline on her freshly diapered bottom with a tendril and curled around herself to await their return.</p>
+                    <p>"Hey everyone... this is Karoline... I guess?" Charla said, still looking at Mery and the fairy. "Ummm, Miss Fae? Would you politely extricate your hiney from the rocks and join us? You're not hiding very well...."</p>
+                    <p>Alunra looked to Karoline and gave a little wave. She spoke up, so the fairy could hear. "Those around call me Alunra. It's nice to meet you... I think it's better to have others here if we're going in there." She pointed to the pyramid.</p>
+                    <p>Elva flew out, heading towards the one who had insulted her stealth skills. "How fucking da— wait, where did the bird go?" Elva looked around before floating over. "And now there is another person?"</p>
+                    <p>Karoline waved back at Alunra. "I'm not the most experienced adventurer, but I have some magical capabilities, including healing... just don't expect me to take a hit very well. I got dem brittle bones." She smoozed up to Charla fearlessly. "If only there was some gallant warrior here to protect me," she overly dramatically gushed.</p>
+                    <p>"I can handle a fight, and I have Echo at my side, so if you can't take a hit, I'll be up front," Alunra said with a soft smile, shifting on her feet as Elva came back out.</p>
+                    <p>"I fly over to check out this big pyramid, and suddenly three other people are here. Fuckin' hell, I need to catch a break." Elva lit up a fairy-sized cigarette and took a draw.</p>
+                    <p>"Well, now you have a whole crew to investigate this pyramid with," Karoline beamed. "Also, don't breathe that junk on me, please. No judgment, but that stuff ain't good for my skin."</p>
+                `,
+                images: [
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/groupintrowithmery.webp"
+
+                ]
+            },
+            { // Page 25: Forming the Party
+                text: `
+                    <p>"Ooooh, naughty little fae... you're lucky this is so far off campus. I think I can see where I grew up on the planet below..." Charla crossed her arms and stuck out her tongue cutely. "If we're all heading in, then we're all going to have to be careful and on our bestest of behavior, you got me?" Charla stretched, trying to take a guiding role.</p>
+                    <p>"Yeah, yeah, I hear ya. Don't get your knickers in a twist," Elva said. She finished her cigarette, put out the butt with a spark of druidcraft, and put it in her pocket. "Soooo, this is a dungeon or somethin'?" She floated closer towards it.</p>
+                    <p>Alunra gave a nod and drew her longsword, summoning Echo into existence next to her, who also drew her sword. "I think it's a... pyramid?" she clarified, smiling at Charla. "I promise to be on my best behavior."</p>
+                    <p>"Well, I'm more than okay with Charla taking the lead," Karoline said. "I'll take on a rearguard position, but I'd appreciate one heavy body sticking next to me in case we get flanked." She pulled her rapier out. "I know better than to cause mischief in unknown territory, so I'll be good... at least till we get home." She gave her trademark catlike grin.</p>
+                    <p>"I uhhhhh, I would prefer to not be wandering at the speartip," Charla said, rubbing her shoulder anxiously. "I am hardly a sneaky or capable sort with the mark of traps."</p>
+                    <p>"Oh, I can deal with traps," Elva floated down, happy to lend her skills.</p>
+                    <p>Alunra looked to Karoline. "I'll have Echo walk behind you, so it shouldn't be too hard to keep you safe," she said with a soft smile.</p>
+                    <p>"Well, that works as far as I'm concerned. Lead the way, new friend." Karoline shrugged, retaking her position. "My hero! I'll be sure to reward you with a maiden's kiss should we succeed... I'll have to find my girlfriend for that, though," Karoline laughed at her own joke.</p>
+                    <p>Elva just rolled her eyes. "I'll go behind the person in front. Just tell me if you see traps, and I'll disable them."</p>
+                    <p>"So, Miss, did you introduce yourself?" Charla asked. "You look adorable, honestly... and don't worry about my teasing. You can smoke here, just please don't litter and don't light anything on fire without letting us know, okay? You do that and do your part to keep our butts safe, and I will literally lay down my life to keep you safe. Okay? My name's Charla!" She raised a hand to shake Elva's small hand.</p>
+                    <p>"That's more than agreeable to me. I go by Elva," she said, shaking the offered hand. "I don't know about me being adorable, but thanks."</p>
+                    <p>"I think you are... a punky, smoking little fairy with a dirty mouth? That's like super-duper cute."</p>
+                    <p>"I concur, it's a nice aesthetic," Karoline nodded. "So, we have a pyramid to raid, don't we?"</p>
+                `,
+                images: [
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/groupassembledonthebridge.webp",
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/groupassembledonthebridge1.webp",
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/groupassembledonbridge-2.webp"
+                ]
+            },
+            { // Page 26: Diaper Check & Entry
+                text: `
+                    <p>"Uhhh, weird random question," Charla asked, "but like, does anyone need fresher underpants before we go in? I got spares if we need them, but it would be better to change now...."</p>
+                    <p>"Good shout. I just got cleaned up myself, but a stinky bottom is always a little bit slower, so best to handle it now," Karoline agreed.</p>
+                    <p>Alunra looked left and right and slowly raised her hand. "Maybe?" she blushed, unsure of when to change a diaper if it wasn't messy.</p>
+                    <p>Charla waddled over and whispered into Alunra's ear, "One wetting should be safe. Are you okay, sweetie? You can wait if you want, but you can also get changed...." She rubbed Alunra's wet behind approvingly.</p>
+                    <p>"Oh, I don't need those. Thanks for the offer," Elva held up a hand.</p>
+                    <p>Alunra blushed and squirmed a bit at the touch. She shook her head and whispered back to Charla, "I'm okay... it's warm and kind of comfy..." She looked to the side, blushing fiercely as she admitted it.</p>
+                    <p>Elva cleaned a shortsword. "Sooo, we gonna get goin'?"</p>
+                    <p>"Eheheheh, that's perfectly fine, Ally... I agree..." Charla hugged her.</p>
+                    <p>Karoline chuckled. "Don't worry, girl, you're in good company. I usually stay soggy or even stinky for a while unless I'm in the middle of something."</p>
+                    <p>"We're moving, Elva... don't worry."</p>
+                    <p>Alunra gave a hug back to Charla, making it brief so she was ready to head in. "I'm good for now."</p>
+                    <p>With Alunra and Echo in the lead, the newly formed 'Team Girl Squad' stepped out onto the impossible path. The checkered starlight bridge felt surprisingly solid under their feet, a ribbon of pale light against the cosmic darkness, stretching over the dizzying sea of clouds below. They crossed the open expanse, the wind cold and thin, until they set foot on the island of black rock. The ground here was covered in a fine layer of glittering golden sand that crunched under their shoes as they approached the looming, silent entrance of the Black Pyramid. The doorway was a perfect, dark square cut into the obsidian-like stone, a stark, gold-veined maw that beckoned them into the unknown. Alunra took a deep breath, gripped her sword, and led them inside.</p>
+                `,
+                images: [
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/group-diaper-check-at-entrance-3.webp"
+                ]
+            },
+            { // Page 27: First Traps (Gas)
+                text: `
+                    <p>Across the sand-dusted black stone, gleaming like new in the spectral haze of cosmic darkness, the torchless walls gleamed with gold and obsidian, swirling with milky constellations of thin white strands. Caught fragments of twilight and stardust twinkled in the spaces between, bathing the path in soft illumination. Charla saw a brazier ahead and gently dipped her torch into the censer.</p>
+                    <p>Karoline prodded Alunra to move forward and cautiously began following, taking shallow, deliberate steps while watching for any threats they might have missed. Alunra followed Charla and Elva, keeping about ten feet back, sword ready and on alert.</p>
+                    <p>"Oh... uhhh... wow... uhhhh," Charla said, stopping and putting up her palm to keep Elva from flying ahead. "There's a bunch of trigger explosives... I see four of them. No clue what type, but they all look pretty old...."</p>
+                    <p>"Point out the first one, and I can try to disarm it," Elva said.</p>
+                    <p>"I can only see the mechanism for two of them, but I can see two of the explosives themselves," Charla explained.</p>
+                    <p>Karoline looked at Elva. "You said you were good with traps, didn't you, girl? Well, now's the time to show us what you've got." A spark of magic flowed from Karoline into Elva, warm and gentle.</p>
+                    <p>Elva floated up to the first mechanism. "I've got this."</p>
+                    <p>With a clunk, the device activated and fell to the floor. The detonation, with its force, blew out the refractive sensors and filled the room with a blending of noxious gasses, turning the entire corridor into a celestial and cosmic soup.</p>
+                    <p>"That... was very anticlimactic....." said Charla, sniffling and sneezing. "Are you lot okay back there?"</p>
+                    <p>Alunra coughed and waved a hand at the smoke.</p>
+                    <p>Karoline squished her now-smelly bottom. "C'mon, I just changed!" she complained indignantly. Echo patted her on the back gently.</p>
+                    <p>While swinging her hand in front of her face, Charla asked Elva, "Direction? North, east, or west!?"</p>
+                    <p>Elva slowly turned around. "Sorry guys, I fucked that one up."</p>
+                    <p>With a hack and another wheeze, Charla reiterated, "Can we please get out of the smoke?"</p>
+                    <p>Elva floated out. "Sorry."</p>
+                    <p>"Don't worry about it, Elva," Karoline said. "The only casualty seems to have been my underwear. And let's be honest, they were on a suicide mission to begin with."</p>
+                    <p>"North," Elva pointed.</p>
+                `,
+                images: [
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/NoxiousGasTrap-1.webp",
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/NoxiousGasTrap-2.webp"
+                ]
+            },
+            { // Page 28: Tapestry Room & Change Break
+                text: `
+                    <p>Charla fumbled for Elva's butt and tried to grab her. With Elva in her grasp, she leaped north, hoping to avoid more traps and land in the room beyond, with Elva using her wings to soften the impact.</p>
+                    <p>Karoline and Alunra waited for the gas to dissipate before following, stopping at the hallway cross-section.</p>
+                    <p>Charla picked up her torch and looked around. The walls were adorned with blackened stone tapestries. She looked upon one.</p>
+                    <p>"Y-yeah, that's Deep Speech," Elva said, reading the script. "It says 'The Mother Raises the Mountains and Enseats the Grove'."</p>
+                    <p>"Well, that's not weirdly ominous," Karoline postulated. "Wonder if they mean these mountains specifically? Any groves around here? Didn't get a good look from inside an ink bird."</p>
+                    <p>Alunra blinked. "Enseats the Grove? We were there not long ago. Who is Mother, though? Mistress Root?"</p>
+                    <p>Elva read the next one aloud: "Mother Raises Son and Mountain."</p>
+                    <p>Karoline waddled up, poring over the text. She knew the Tale of Dracespire, wherein Sylvane, sister of Tabitha, pulled two masses of rock out of the earth. "Can't say I know much about the Mother," she summarized, "but apparently old Tabby's sister was all ooga-booga and literally pulled a couple of mountains out of the ground. She might be the mother in the story, but there's no telling."</p>
+                    <p>"Yes! That's right," Charla added. She stood up and rubbed her soggy butt, feeling a sudden rush of pressure. "Oooooh, booy, I feel kinda woozy...." She wet herself and hiccuped, then snorted in laughter. "Well, that passed!"</p>
+                    <p>"Hmm, maybe Mistress Roots will know more," Alunra mused, then looked at Charla with concern. "Charla, are you okay?"</p>
+                    <p>Elva was blushing off to the side.</p>
+                    <p>"Eyy... Elva... are you okay, miss?" Charla stepped closer. "Didja feel that too?"</p>
+                    <p>Elva just nodded, staying quiet.</p>
+                    <p>"Did something happen?" Charla asked.</p>
+                    <p>"Nope, nothing."</p>
+                    <p>"Alright, well, come on over here and let me check you out," Charla said gently, easily spotting the small puddle. She stood in front of Elva. "Do you want to take a short break and make sure we're all in one piece?" she said with care, giving Elva a chance to escape shame.</p>
+                    <p>Elva nodded. "Y-yeah."</p>
+                    <p>"How long can you hold your breath?" Charla leaned in very close to ask.</p>
+                    <p>"I'm not sure," Elva whispered.</p>
+                    <p>"Then you're very lucky..." Charla leaned in and opened her bag, pulling out a small booster and a small pull-up. With her body blocking the view, she made Elva watch as she inserted the booster. "You put it in here, just like a pad, right?" she whispered delicately.</p>
+                    <p>She placed the pull-up in Elva's hands, along with a wipe that was almost towel-sized for the fairy. "Just take a deep breath, go into the bag, and get yourself cleaned up."</p>
+                    <p>As Elva sheepishly disappeared into the bag, Karoline looked at Alunra. "Well, if we're stopping again, I wouldn't mind another change myself. I don't suppose I could sequester some aid from you or your strange shadow self?"</p>
+                    <p>Alunra smiled as Echo came up behind Karoline and scooped her up to lay her down for a change. "Many thanks, shadowed friend," Karoline acted like a dramatic princess. "The double protein tacos I had for lunch shall make this task an arduous one."</p>
+                    <p>Charla also took a moment to get herself changed, holding the bag open with her feet as Elva shimmyed around inside.</p>
+                    <p>Echo, who never talked, took Karoline's supplies and started the change. Alunra stood guard. "You can call her Echo," she said, not looking at Karoline to give her privacy. "She can't speak with a voice, sadly. She has come to enjoy caring for others this way." Alunra blushed. "Oh, and smells and such don't bother her, so don't worry."</p>
+                    <p>When Elva exited the bag, she was floating slightly lower than usual. Karoline, meanwhile, was taking photos of each mural with her datapad. "Will probably be someone at the school who'll want a look at these."</p>
+                `,
+                images: [
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/elvatapestry5.webp", 
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/elvatapestry6.webp", 
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/elvatapestry8.webp",
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/elvatapestry4.webp", 
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/elvatapestry1.webp", 
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/elvatapestry2.webp",
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/elvatapestry3.webp"
+                ]
+            },
+            { // Page 29: Tapestry Treasure
+                text: `
+                    <p>Charla looked over Elva. "Mind if I adjust your outfit a bit? No reason to be uncomfy, right?" Elva nodded, and Charla adjusted her uniform and the leg guards of the pull-up secretively, like a cheeky friend in a locker room. "There we go, perfect shape. Now we don't have to worry about those stupid distraction traps." She patted Elva on the bottom. "If you want, you can rest on my shoulder. I'll keep you safe!"</p>
+                    <p>"Y-yeah, I'll sit on your shoulder," Elva said, flying up.</p>
+                    <p>"Should we double back and check the other paths or continue on this way?" Karoline asked.</p>
+                    <p>"Well, did we give this room a full over?" Charla asked, looking for another brazier. She dropped her torch and had to retrieve it, seeing nothing.</p>
+                    <p>Alunra looked over. "We should give it a good look over before we try another path."</p>
+                    <p>Karoline was too busy admiring her photography to help search. "Can someone give me a hand looking for the torch?" Charla asked.</p>
+                    <p>Elva helped her. As Charla found her torch, she swept it in a wide arc, illuminating the room and showing off the last, unmarked image on the ceiling. It hung in an odd way, as though something were weighing it down in the center.</p>
+                    <p>"Do you think we should cut it at the center?" Elva asked.</p>
+                    <p>"Why don't you just fly up and unpin it?" Charla replied, clearly not wanting the object damaged. "Or cut it at the edge?"</p>
+                    <p>"It does look like it might come down somehow," Karoline commented, taking another photo. "You can fly, maybe take a closer look... after the rest of us step away first."</p>
+                    <p>"I mean, yeah, but it's just a random tapestry," Elva grumbled.</p>
+                    <p>"The spirits that may be here may not like that," Alunra said. "Also, it seems to depict a moment in history... I think it's something those that study that thing should have a chance to see. I think it may be a history of the grove."</p>
+                    <p>"Fiiiiine," Elva sighed. She floated up, careful not to show her pull-up, and started to unpin the tapestry.</p>
+                    <p>The weight of the tapestry took Elva with it, allowing her to swing on it like a little rope. The motion bundled up the contents. "Yo, somebody catch the shit!" she yelled, letting the items go bit by bit.</p>
+                    <p>Charla floundered, but Karoline managed to catch the falling items, and Alunra came over to help support the load. They were colorless, beautiful gems. "Yeah, I bet you could sell them," Elva commented.</p>
+                    <p>Alunra nodded and smiled. "When we get back, we can deal with them."</p>
+                    <p>"Well, there's another passageway here. Shall we continue on then?" Karoline suggested. "Thus far, this hasn't been particularly perilous."</p>
+                    <p>"Yeah, let's go," Elva agreed.</p>
+                    <p>Alunra nodded. "You two are in the lead, so we'll be behind you."</p>
+                `,
+                images: [
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/tapestrytreasure-1.webp",
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/tapestrytreasure-2.webp"
+                ]
+            },
+            { // Page 30: Traps Part 2 (Lasers)
+                text: `
+                    <p>"Oh, shiiiiiiiiiiit," Charla said, pointing out a myriad of traps. "There is a spear trap ahead, and a laser grid for an unknown trap."</p>
+                    <p>"While you two deal with the traps, me and Alunra should stay back," Karoline said, pulling the firbolg back into the previous hallway.</p>
+                    <p>"Would you want me to... umm... try again?" Elva asked.</p>
+                    <p>"Go ahead," Charla said. "I will stay with you. If you fail, I will try to throw you away from the trap, okay, Elva?"</p>
+                    <p>Elva floated to the pressure plate. "That should be it?" she said after a moment.</p>
+                    <p>"I hope so..." Charla said, easily leaping over the spikes. Elva floated over with her.</p>
+                    <p>"So, do you want me to try to deal with this?" Elva asked, looking at the complex laser grid.</p>
+                    <p>"You got this one?" Charla asked.</p>
+                    <p>"I can try."</p>
+                    <p>With fairydust and precision, Elva managed the feat of deactivating the entire trap apparatus. The door that would have slammed shut instead locked open, and a door somewhere in the distance also opened.</p>
+                    <p>"Is everything good?" Alunra called out, worry in her voice.</p>
+                    <p>Elva let out a sigh and collapsed back, the pressure finally getting to her.</p>
+                    <p>"Hey Madam Alunra, can you and your friend pass me over the pit now?" Karoline asked, practically jumping into Alunra's arms.</p>
+                    <p>Alunra nodded, jumped the pit, and then Echo handed Karoline over to her on the other side. "Thank you, milady," Karoline said, giving both Alunra and Echo a kiss on the cheek. Elva floated back onto Charla's shoulder. "Let's continue."</p>
+                    <p>Alunra resummoned Echo in front of Karoline, who retook her position between the two firbolgs.</p>
+                    <p>The glimmering gold dust on the walls reflected the light of the deactivated lasers, illuminating another corridor and an unfettered doorway ahead.</p>
+                `,
+                images: [
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/elvalaser.webp",
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/elvalaser1.webp",
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/elvalaser2.webp",
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/elvalaser3.webp",
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/elvalaser4.webp"
+                ]
+            },
+            { // Page 31: Boxly's Chamber
+                text: `
+                    <p>"Fly back into the room to safety if anything happens, okay?" Charla told Elva. "I can handle myself..." She stepped forward as quietly and softly as she could.</p>
+                    <p>"Are you sure you don't want me to go with?" Elva whispered.</p>
+                    <p>"Don't worry, I got this. I'm VERY fast," Charla insisted, zipping silently over to the door at the far end, leaping lightly over debris.</p>
+                    <p>"I'm kinda entirely trained for what you're doing right now, though," Elva whispered again, but Charla was already gone.</p>
+                    <p>Karoline, seeing Charla head off, pulled out a thin copper wire and cast Message. "Just keeping a line of communication open," she whispered, booping Alunra. "I'll relay any messages."</p>
+                    <p>Alunra let out a little squeak. "Thank you," she nodded, looking down the hallway with worry.</p>
+                    <p>Elva floated back to the other two.</p>
+                    <p>At the doorway to a small chamber, Charla peeked in. The room was empty save for a stone strongbox, about a foot cubed, ribbed with golden-plated ceramic and steel. Grinding marks on the floor indicated someone had tried to move it and failed. Charla stepped into the room and lobbed her torch at a censer on the far wall. It landed perfectly, igniting ancient magical embers.</p>
+                    <p>"Should we come up to join you now?" Karoline's voice whispered in her ear.</p>
+                    <p>Forgetting the spell, Charla squeaked and wet herself mildly. "Yes," she huffed, "but please be careful on the spikes."</p>
+                    <p>Karoline relayed the message, and the group carefully made their way to the chamber. The room was dazzling and hollow, the golden flecks sparkling in the torchlight, but the black stone seemed to absorb the light.</p>
+                    <p>"You take a look at this yet, boss-lady?" Karoline asked, greed dripping from her voice.</p>
+                    <p>"I dunno," Charla shrugged. "When I saw that someone gave up on trying to move it, I figured it was beyond my ken."</p>
+                    <p>The massive strongbox was clearly locked, with a series of keyhole mechanisms.</p>
+                    <p>"I could give it a crack," Elva offered.</p>
+                    <p>"Okay, you do your thing, but give us a moment to clear out in case it spits more gas at us," Karoline said, winking as more magic flowed into Elva. "Not that I'm worried. You got this, my girl." She guided Alunra and Echo back into the hallway.</p>
+                    <p>"Elva, I will wait at the door for you," Charla said. "If I can, I'll grab and stow you in my bag to keep you safe."</p>
+                    <p>"Welp, here goes nothing."</p>
+                    <p>With Elva's skilled touch, the primary and secondary mechanisms of the lock reacted, sliding away with smooth, velveteen clicks. The lid came open of its own accord, flipping slowly into a fully opened position.</p>
+                    <p>"You good?" Karoline's voice came from the hall. "Did the box open?"</p>
+                    <p>Elva backed away a bit. "It's open, alright."</p>
+                    <p>"Box is open, let's go check it out!" Karoline announced, returning to the room. "Hope it's got treasure."</p>
+                    <p>Inside was a little clockwork fist attached to a gear and armature. Two little glassy apertures sat above it, like a comical gearwork face bearing a fist as a tongue.</p>
+                `,
+                images: [
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/entreatboxly.webp"
+                ]
+            },
+            { // Page 32: Meeting Boxly
+                text: `
+                    <p>"W-what the fuck is that?" Elva asked.</p>
+                    <p>"...Why is it so cute?" Alunra wiggled from behind Karoline, a goofy grin on her face.</p>
+                    <p>"Okay, not what I was expecting," Karoline chuckled. "Can we take it, or was it a derpy little trap?"</p>
+                    <p>"Boing!" came a voice from the box. "A-hi! I'm Boxly."</p>
+                    <p>"H-hello?!?!" Elva stammered.</p>
+                    <p>"Boxly! It even has a cute name! Hello!" Alunra was delighted.</p>
+                    <p>"Well hello, Boxly. My name's Karoline." The bard bowed politely. "We're exploring around here. You wouldn't happen to know anything that might aid us, would you? We would be more than willing to compensate you."</p>
+                    <p>"What is a compersation? Is that like a conversation? I like to talk with friends, but I'm hungry! Got any treasure?" The box hopped, the slam of heavy stone against the floor making the room shiver.</p>
+                    <p>Karoline shrugged. "Well, we do have some treasure, but we'd like to know you're going to be helpful first." She knelt down. "I'd be plenty willing to share treasures if you wanna be friends with us and help us out."</p>
+                    <p>Boxly ground across the floor and extended his punching-glove tongue, nuzzling Karoline's shin with gentle bumps.</p>
+                    <p>Alunra put her hands over her mouth to keep from squealing at the cuteness.</p>
+                    <p>"Okay, that seems pretty friendly, so I'm down," Karoline nodded. "I've got some gold on me, or some gems we found earlier but couldn't identify. Which do you want? I can only offer you my share."</p>
+                    <p>"Gold and jewels?! MY FAVORITE! Gimme gimme gimme!" Boxly opened his hand-tongue.</p>
+                    <p>"Hey, we need information!" Elva protested.</p>
+                    <p>Karoline fed Boxly 100 GP and a quarter of the unidentified gemstones, ignoring Elva. "My treasure, my call," she said with a shrug. "They said they were a friend, and I'm going to trust them on that."</p>
+                    <p>Elva's eyes went wide. "How much?!?" Stunned floating in the air.</p>
+                    <p>"Whoooooooooa, numnumnumnum," Boxly devoured the treasure. "Oh wow, delicious! Mmmmm, ooooh, mmmm, now I'm feelin' real good! Let's go! I will show you all the cool places!"</p>
+                    <p>Boxly tore ass—which for him was a hot five feet per round—towards the door.</p>
+                `,
+                images: [
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/entreatboxly2.webp"
+                ]
+            },
+            { // Page 33: Boxly Part 2
+                text: `
+                    <p>"Be sure to warn us about any traps, Boxman," Karoline called out. Elva followed, still stunned.</p>
+                    <p>"Um, things might go a little faster if I carry you, Boxly, and you could direct us." Alunra spoke up softly, giving the suggestion.</p>
+                    <p>"Traps? You mean the risky-funtime machines? Oh sure!" Boxly agreed.</p>
+                    <p>Upon hearing that he might be toted, Boxly approached Alu and tapped her a few times, exploratorily, with his punching glove. "I approve of being toted, I am a magical tote container,"</p>
+                    <p>Elva was just still stunned, floating along with the parade of silliness she had found herself made party.</p>
+                    <p>Karol took the wire one more time and attempted to cast message towards Boxly. "Hello, new friend," she asked tentatively. The spell only worked on creatures, and she was curious if their new friend qualified. She got nothing back. "Good to know."</p>
+                    <p>Alu gave a nod as she squatted down and went to pick up Boxly so that she could carry him while he gave directions, looking pleased to be carrying the construct.</p>
+                `,
+                images: [
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/totingboxley.webp"
+                ]                
+            },
+            { // Page 34: Toting Boxly
+                text: `
+                    <p>Tickled by this sight, Charla patted Alu on the butt and complimented, "You are so strong! Boxly is in good hands."</p>
+                    <p>Karol moved up to Alu and Boxly. "Hey Boxly, just so we know, is your punching glove like... dangerous... like could we use you to fight monsters in here if we needed too?"</p>
+                    <p>"Uhhhhh, I, my mistress, said I gotta be careful 'cuz I can punch someone straight back into diapers!"</p>
+                    <p>"No worries there for me, but yeah, if Alu there tells you to knock someone's lights out, okay," Karol said, moving back towards Echo. "I'll stick in the back like before, but you can stay up front with Boxbox."</p>
+                    <p>Alu let out a bit of a squeak and blushed as her butt got patted. She smiled to Charla and gave a nod. The comment of punching someone straight back into diapers made her blush a bit more, just 'cause she became a bit more aware of her crinkles.</p>
+                    <p>Elva was now just slightly floating behind the party, still a bit surprised at the whole situation.</p>
+                    <p>"So we should probably have Charla and Elva continue to lead, and Boxly can just tell us where the cool stuff is," Karol suggested. "Speaking of, what kind of cool stuff are we talking here, Boxly? Considering you think traps are fun, we might not enjoy all of them, but we do both like treasure, so that'd be a good start."</p>
+                    <p>Charla retrieved her torch from the brazier and led the group with Boxly and Alu in tow behind. "Please don't hesitate to stop me whenever, Mister Box," Charla informed.</p>
+                    <p>"Ooooookay! Didja go into the reception chamber yet? It's the hall to our left up here! I was told not to come out of my room on account of all the noise I make sliding and moving around!" he said this in a single happy monotone, no break in emotion as he related the entirety of that information.</p>
+                    <p>Karol looked at the party. "Not yet, what kind of cool stuff's in there, buddy?"</p>
+                    <p>Elva floated where she was told, just trying to wrap her head around the situation.</p>
+                    <p>"There is a... reception chamber?" Alunra looked down curiously at Boxly. "I don't think we did."</p>
+                    <p>"There's no treasure vault or weapon depositories, are there? Perhaps a library?" Karol asked Boxly.</p>
+                    <p>"Ooooooh, yeah, the treasures? There's lots of those in Mistress' Sarcophagus Chamber! Buuuut, the reception area is where you go to turn on the Pyramid! It's super dark in here, and my eyes were only designed with low-light vision in mind, not complete darkness!"</p>
+                    <p>"There... are lights we can turn on? Sarcophagus? Is this a tomb?" she raised an eyebrow.</p>
+                    <p>"Light sounds good, right?" Karol asked the party. "Would kind of ruin stealth, but it would also make it harder to be snuck up on."</p>
+                    <p>"Oh yeah, let's do that!" Elva exclaimed.</p>
+                `,
+                images: [
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/totingboxley2.webp"
+                ]
+            },
+            { // Page 35: Reception & Warforged
+                text: `
+                    <p>Charla patted Alu on the bottom encouragingly and said, "You can lead the way, since you're the one holding Boxly and all...." she softly chuckled, an uneasy sort.</p>
+                    <p>Alu let out a squeak and blushed as her bottom was patted, but she looked back to Charla with a small nod. She then started leading the party, holding Boxly in front of her to help her navigate. "I'll do my best leading the way," she would try to keep an eye out as they went along.</p>
+                    <p>Elva floated back onto Charla's shoulder.</p>
+                    <p>Karol moved a bit away from Alu to maintain some spacing. "I'll watch our 6 then, Boxly, you better protect my friend there, though, won't you?"</p>
+                    <p>"Ahhhh, here we are! The Reception! Now then, uhhh, we need some light! You should find the dais of reception and place me back on there!" Boxly said in highly rambunctious anticipation of serving his duties and functions.</p>
+                    <p>The western door led back, clearly, to the area that had been trapped, near to the entrance. There was a southward corridor, leading further into the expanse of sparkle-encrusted blackstone.</p>
+                    <p>The dais sat against the center of the eastern wall, a raised black and white marble column, perfectly shaped for Sir Boxly. Standing on either side, Alunra could plainly see two cobwebbed, dusty, and ancient warforged. Both were highly feminine in appearance, sporting long and flowing hair, one green and one purple. The silver and gold gynoids did not move as Alunra approached the aperture of the room, remaining at a dead standstill as she entered.</p>
+                    <p>"I trust Sir Boxly intrinsically, mostly because life is far more interesting with the spice of friendly helpful automaton," Karoline began from around the corner. "That said, Boxly, will those warforged attack us if they were to be turned on? Also, will turning on the lights turn them on?"</p>
+                    <p>Alunra looked around the Reception room, noting the way back towards the entrance to the west and a path south. Her head turned East, spotting the dais Boxly had mentioned. She started to walk towards it, looking at the two warforged. She glanced at Karoline, waiting for an answer before placing Boxly on the dais.</p>
+                    <p>As soon as Alunra approached the dais and made any move to place Boxly on it, the question was answered by the green-haired warforged, who drew her Sentinel Spear. "DO NOT PLACE THE FOUL BOXED ONE ONTO THE PLATFORM! GREAT DOOM WILL BEFALL US!" she snarled. At this, the pink-haired warforged also sprang to life, her golden armor creaking as she leveled an axe at her sister. "Dare not relinquish yon... uhhh... dammit... Dare not plant yon cuboid monster upon the platform, or woe betide you!"</p>
+                    <p>Alunra's insight suggested their act was either untruthful or not well-rehearsed, likely a blend of both. Perhaps Boxly knew more.</p>
+                    <p>Karoline readied herself at the end of the hallway, anticipating a fight but not jumping into one haphazardly.</p>
+                    <p>"Uh... Boxly, what are they talking about?" Alunra asked, looking curiously at the box in her hands, tilting her head. "Like... not sure they know, or at least don't think they really know what they are supposed to say to someone? Maybe they don't know what happens?"</p>
+                    <p>"Boxly, if they are bad guys, I give you permission to punch them," Karoline assured, still in her pseudo-safe position.</p>
+                    <p>"Oh, this is Maria and Nellie, they're the receptionists of the tomb complex. Their engrammatic consciousness was copied and put into the warforged so they could help to protect the tomb forever and ever and ever and ever and ever...." Boxly continued as the purple-haired robot grew increasingly agitated. "I am done with this! I am going to put down the box! Intruder, place down the box that I may put it down!" She raised her axe in a fury.</p>
+                `,
+                images: [
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/warforgedgals.webp"
+                ]
+            },
+            { // Page 36: The Boxly Debate
+                text: `
+                    <p>Karoline heard the threat leveled at her new friend bot and entered the room. "Hey now, no need for that," she assured the warforged. "How about you just tell us why you don't want him on the dais and we can talk this out."</p>
+                    <p>Elva chimed in, "Huh, sounds like an argument."</p>
+                    <p>"Also, I think that if anything... Brother Mountain invited us in here. It wasn't even revealed to Charla and I till after we had started to rest on the peak. So not sure we are intruders. But what's wrong with Boxly? He's been very nice since we met him." Alunra looked to the purple-haired warforged with a soft smile. "Perhaps you could explain and we can work things out?"</p>
+                    <p>"I want the box dead!" shouted the purple-haired robot, but the green-haired robot crossed her spear with her sister's axe. </p>
+                    <p>"Steady there, sister... you know we can't SLAY Boxly... that was The Mother's familiar and friend, he deserves to annoy-eternal... if that's how long it takes," the warforged kept her weapon steady against her sister's.</p>
+                    <p>The purple-haired sister sighed and lowered her axe. "Fine, fine, place the damned box on the pedestal, but tell him I want him to shut up for AT LEAST a decade or else I am going to stick his ass BACK in the closet. I refuse to acknowledge that cretin's existence."</p>
+                    <p>"I mean, I guess Boxly might get a little annoying after an eternity, but we find his existence very novel and entertaining," Karoline decided. "We could always take him off your hands for a bit to give you a break, but before that, I believe it's dais time."</p>
+                    <p>"I wish it were not like this... could we... could we ask you ANYTHING to not put Boxly back on the pedestal? We can't offer much, but we can try to do what we can...." implored the green-haired warforged.</p>
+                    <p>Elva floated forward. "Did I hear bargaining in here?" she asked. "Now what would you offer us?"</p>
+                    <p>"My job is to complete the Living Circuit and power the complex—I love my pedestal—it's like a power throne. I get to tear ass around space and time, except I don't move anywhere!"</p>
+                    <p>Karoline raised her eyebrow at the warforged's offer and considered asking her about the treasure Boxly mentioned, then remembered they were guards and decided against it. She leaned back and allowed the others some time, deciding not to press anymore herself at the moment.</p>
+                    <p>"The desperate, terminal type, not the type you'll find having much to exploit. Our desire is clear, we do not want the box. We'll do anything to not have the box put back on the pedestal—even if it means the complex remains dark and quasi-lost for another millennia...."</p>
+                    <p>"I vote put the box on the pedestal," Karoline mentioned.</p>
+                    <p>"Wellllllll, how about after we are done here, we take the box?" Elva suggested.</p>
+                    <p>"But... I can't leave... this place is MY battery as much as I am the circuit!"</p>
+                    <p>"I'm sure we can find you another battery," Elva replied.</p>
+                    <p>"Hmmm, have you tried to talk to him and make friends with him? The three of you could become friends so none of you are alone for as long as you stand?" Of course, Alunra, the friendly firbolg, spoke of something like the power of friendship. "Maybe we could bring some games up later for you all to play or something. Or send other visitors for chats?"</p>
+                    <p>"Ehh, I vote box on platform now," Elva said.</p>
+                    <p>"Whaddya mean? These ARE my friends!" said Boxly, looking upon the two of them with a great big wide grin of his open box.</p>
+                    <p>"Alu, box on thingy, go," Elva urged.</p>
+                    <p>"Fine... fine... but I am taking first shift in The Mother's Chamber, away from Boxly. Put the box on the dais and then... ugh... Sir Boxly... I will need your key... okay?"</p>
+                    <p>"You know the rules, Miss Maria! Platform first, then I can give you the key... and I have so much to tell you about the closet! Remember when you told me to count all the sparkles on the ceiling?"</p>
+                    <p>"N-no?" she said hesitantly.</p>
+                    <p>"You did! And I did a great job! I even counted them a few times to make sure! I also counted each brick individually! I can tell you about each and every brick later as we wait out eternity!"</p>
+                    <p>"I loathe every single bit of this with a white-hot-intensity...."</p>
+                `,
+                images: [
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/boxlydebate.webp",
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/boxlydebate1.webp"
+                ]
+            },
+            { // Page 37: Lights On & The Key
+                text: `
+                    <p>Alunra blinked at the conversation, looking between all involved. After a moment, she gave a little shrug and went to place Boxly on the dais.</p>
+                    <p>Elva floated back to Charla. "They didn't wanna make deals."</p>
+                    <p>"That is disappointing, maybe there will be a magical mummy for us to make a deal with?" asked Charla, hoping to make Elva giggle. Elva did, as she floated back onto Charla's shoulder.</p>
+                    <p>"I mean, honestly, this has been endlessly entertaining even with the distinct lack of combat," Karoline shrugged. "Who knew the social workings of eternal guardian robots could be so interesting."</p>
+                    <p>As soon as Boxly was placed on the pedestal, the pyramid's overhead lighting began to glow. Bright filaments of gold laced into the walls shimmered, and even the sparkles embedded in the brick seemed to vibrate with an emanation of glistening prominence.</p>
+                    <p>Karoline looked at Boxly with intent in her eyes. "Hey, so there was mention of a key, I know one of your other friends asked for it, but do you think maybe we could have it, Sir Boxly?" Karoline asked sweetly. "You did say you'd show us around and all that, and a key would be super helpful."</p>
+                    <p>Alunra took a step back from the Dais as the place started to light up, looking around in wonder as she was finally able to see well. She grinned at seeing such a cool sight. While she took a step back, she did stay in front of the dais.</p>
+                    <p>Boxly's punching glove extended in Marie's direction, and she removed the glove, unscrewing a large brass-looking fist from the end of the armature. She replaced it with her own fist, grumbling because it was clear that this fist she was taking was not a functional hand.</p>
+                    <p>"Oooooh, yeah, I get to use the point touchy bits again!" he said as he flexed his fingers as Maria placed the empty boxing glove into the box. "I guess that means I can escort you to the chamber of The Mother....if you came this far you may as well have an 'audience' with the matron of this place—you do have a right to at least see what we've been guarding for 1000 years."</p>
+                    <p>"That sounds good, if moderately ominous," Karol concluded, looking to the rest of the party. "That was always going to be our final destination right, the heart of this place as it were."</p>
+                    <p>"A thousand years..." Alunra's eyes went wide, and she gave a little nod. She wanted an audience with this matron, even if just out of curiosity. She then looked to Boxly with a smile. "We'll make sure to come say goodbye before we leave."</p>
+                `,
+                images: [
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/boxlypowerspyramid.webp",
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/boxlypowerspyramid1.webp"
+                ]
+            },
+            { // Page 38: Surveillance Down & Breach
+                text: `
+                    <p>"I can see everything within the pyramid now! I can keep an eye on everything, everything except....well...wow! All of my systems are locked out! I cannot access any of the surveillance network! That is strange as all getout!"</p>
+                    <p>"That... sounds troubling, I think?" she glanced back to Charla, Elva, and Charla, as she didn't really know what a surveillance network was.</p>
+                    <p>Elva shrugged.</p>
+                    <p>"I'm going to take a wild guess and say that it wasn't just disrepair that knocked surveillance out," Karol nodded. "Considering everything else here works fine, Any ideas you two?" She asked, looking toward the two warforged.</p>
+                    <p>"That is actually disconcerting. Boxly is the security system and the living circuit's processor. He should always have complete control over the pyramid's basic systems unless he's being shut out from the source...." Nellie stopped and turned to Maria. "Take them to The Mother, I will guard Boxly and the Conduit."</p>
+                    <p>"Fine, fine!" Maria stepped with a crusty, shuddering lilt as she finally regained full motion and headed in the direction of the Main Burial Chamber.</p>
+                    <p>Karol shrugged and gestured for the party to follow, retaking her place near the rear.</p>
+                    <p>Alunra followed behind Maria, looking a bit worried because of that news. Echo stayed near Karol.</p>
+                    <p>Maria led the group down the hallway in the direction of the doors to the Burial Antechamber. She stopped. The door had been sealed, the gold fused as though perfectly welded into one piece, and the stone melded together. She grimaced. "This is some powerful work....I think I could get this open, but it would like toss some servos and break some pneumatics even if I get a much-needed hand...." she held up the arm she clearly cannot use. "This hand is the key to the door to the burial chamber beyond. I need you to promise me that if helping you get this door open disables me, you will take the key and protect the burial chamber from whatever is within, all right? Do you got me?" she seemed panicked, eager to get them inside.</p>
+                    <p>Karol nodded at this. "Sure, it seemed important to Boxly, and we're friends now. We'll do what we can...but also, can we have a list of things not to take from here, 'cause I mean, there were some gemstones and we already fed Boxly some of them, and I just wanna know what you guys are trying to protect here so we can do the whole adventurer thing to everything else."</p>
+                    <p>Alunra looked to Maria and gave a nod. "I promise we'll do everything we can to protect the burial chamber. I could try to give you a hand with the door. I'm pretty strong myself." she gave Maria a determined look, hoping she could save her from taking any damage from trying to get it open.</p>
+                `,
+                images: [
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/preparingtoopen.webp"
+                ]
+            },
+            { // Page 39: Opening the Door
+                text: `
+                    <p>"Can you crack magical stone and metal asunder and then hold it open for your entire group? I assume your echo could help me with that second bit, but with the first? Only so much, correct?" Marie looked between Alunra and Echo with an expressionless face of armor, but the words were encouraging—she clearly knew that Alunra was strong but was intimating that this task would clearly separate them, and she was looking to keep the students together. She nodded and said, "I guess you won't mind helping me split this open and get you inside?" She didn't wait for an answer; she brought down Goldcleaver and split apart a crack in the door. Almost immediately it tried to seal. Black viscous stone, sparkling with celestial shimmering radiation, bled from the cracks as she yanked with tremendous force on the gap she was creating.</p>
+                    <p>The whine and cracking report of actuating servos and overloading pistons from within Marie signaled that her strength was reaching its limit, but she had managed, with some effort, to pull open the doorway enough for Echo to help pull it open the rest of the way.</p>
+                    <p>Echo nodded, as did Alunra. She didn't have the abilities before; she was just strong. But what they needed was to get the door open, and getting Echo onto the other side when a gap was made was something she could do. So once there was a gap, she resummoned Echo onto the other side of the door, and Echo started working alongside Marie to pull the door open the rest of the way, putting all her power into it.</p>
+                    <p>Karol readied herself in case she needed to dive through the opening provided, her breath getting a little bit heavier at the seemingly sudden increase in stakes.</p>
+                    <p>With the help, Marie was easily able to keep the door open for them to pass through the gap. She handed Alunra her hand, jamming the stump into the stone to a cascade of ferrorod-like sparks of metal against conductive stone. The stone oozed around, soupily trying to fill the gap, but refusing to touch living matter or even living construct in its path.</p>
+                    <p>Alunra would take the hand as she went to move into the room. Echo waved the rest into the room beyond the door that was opened.</p>
+                    <p>Karol jumped in with perhaps too much gusto considering the state things were in, but she moved in with haste anyway.</p>
+                `,
+                images: [
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/doorwaybreach.webp"
+                ]
+            },
+            { // Page 40: The Nightdrinker
+                text: `
+                    <p>After they entered, the expanse of the Grande Antechamber of Dusk and Dawn was laid out before them. At the far end, before a massive, sealed golden door, a spectral shroud of a creature thrashed and writhed. It was a roiling mass of black, vaporous tentacles and shifting shadow, a formless entity punctuated by dozens of glowing red eyes. The Nightdrinker.</p>
+                    <p>"You will let me in... YOU WILL LET ME IN..." it uttered in Deep Speech, uncaring of their presence. "I will prise these doors apart and relinquish the last animus from that husk of incarne... you know I am undeniable...."</p>
+                    <p>Alunra's eyes went wide. She resummoned Echo to her side and drew her sword. "What is that thing? Is... is it talking?"</p>
+                    <p>Karoline looked at it, angry. "I think we have our culprit, and I can already tell I hate them." She kept her distance but readied her blade. "We did make a promise, after all."</p>
+                    <p>"Yo, tentacle-motherfucker! How about you go fuck yourself!" Elva shouted in Deep Speech, throwing a dagger at it. The dagger disappeared into the mass, and one of the blazing red eyes closed.</p>
+                    <p>Charla, shakily, turned back towards the door, which had now reformed, sealing itself. "I don't think we have a choice, promise notwithstanding."</p>
+                `,
+                images: [
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/thenightdrinker.webp"
+                ]
+            },
+            { // Page 41: The Fight (Part 1)
+                text: `
+                    <p>Alunra moved first, rushing 25 feet towards the west staircase, then resummoned Echo onto the staircase, close to the Nightdrinker.</p>
+                    <p>Elva flew up and slashed at the creature with her shortswords. Two of its many eyes dimmed.</p>
+                    <p>Karoline glowed with fae beauty, enhancing her allies with magic before trying a spell. It failed. "Okay, good to know."</p>
+                    <p>With a swivel of one burning orb, the Nightdrinker focused on Charla and launched a bolt of burning shadow. It exploded across the platform, showering her with sparks. The creature then, deciding to divide and conquer, lashed out with a tendril.</p>
+                    <p>Charla grabbed hold of the tentacle and held on, her eyes wild and her mouth laced in strings of drool as her voice rose in a furious, animalistic howl. "Charla!" Alunra growled. She moved up the staircase and had Echo attack. "Echo! Let's give it everything we've got!" She attacked through Echo, unleashed Incarnation, then used her Action Surge to attack and unleash Incarnation again. In a flash, she and Echo teleported, switching places.</p>
+                    <p>Charla gripped the large tentacle, using her nunchaku to lace her grip around the monster's pseudopod. "Even if you smash that door to pieces, I'm not going to let you inside it! You're going to have to actually burn my body into dust!"</p>
+                    <p>Elva rushed in, slashing again, then dashed back.</p>
+                    <p>Karoline saw her friend get hurt and rushed to her aid. "Hey, goop-guts! How does it feel getting your ass handed to you by a bunch of pants-wetting babies?" she asked mockingly, sticking her tongue out. The Nightdrinker scoffed.</p>
+                `,
+                images: [
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/charlattacksnightdrinker.webp",
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/charlaattacksnightdrinker.webp"
+                ]
+            },
+            { // Page 42: The Fight (Part 2)
+                text: `
+                    <p>Having finally noticed its foes, the Nightdrinker realized they all posed a threat. It swiped a tentacle at Elva, the airflow whipping her uniform as it passed under her. One of its eyes flamed, aiming at Alunra. It sprang forward but failed to impact, exploding in flames at her feet. Alunra, with Echo, swung her greatsword again.</p>
+                    <p>Charla, beyond all expectation, continued to hold the Nightdrinker from physically moving. Elva rushed in again for another slash, then flew back.</p>
+                    <p>Karoline moved up to Charla and touched her shoulder, whistling a bright, happy tune. Her hair turned golden, and the song seemed to mend Charla's wounds.</p>
+                    <p>The Nightdrinker opened a cluster of its eyes, sending out a cone of blinding irradiance, hoping to wrest Charla from its appendage. Karoline was blinded, instinctively covering her eyes as her diaper drooped, burdened with an extra large wetting.</p>
+                    <p>With its last bit of light, the creature focused on Elva and launched its eye at her. It missed, exploding against a pillar, but the blast caught the fairy.</p>
+                    <p>Alunra moved over to Charla. "Slash!" she yelled, striking at the creature, then moved back.</p>
+                    <p>Stunningly, Charla retained her grip, her gumline bleeding from how hard her teeth were clenched. Elva, however, charged back in, shouting in Deep Speech, "THANKS, CUNT! MAY I HAVE ANOTHER!"</p>
+                    <p>Karoline, blinded, carefully backed away.</p>
+                `,
+                images: [
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/nightdrinkerconfrontation.webp"
+                ]
+            },
+            { // Page 43: The Fight (Conclusion)
+                text: `
+                    <p>The Nightdrinker focused a trio of its eyes on Elva, deciding to grant her a modicum of its attention. It launched another eye at her, this one striking true and exploding with fiery force. Elva went down.</p>
+                    <p>"Charla!" Alunra roared, but the Nightdrinker finally tossed Charla off its tentacle.</p>
+                    <p>Alunra repeated her battle steps, moving to Charla, growling as she struck. "I'm with you, Charla! Doing what I can!" She saw Elva go down. "Karol! Get to Elva!"</p>
+                    <p>Charla landed on her feet and tumbled over to Elva, standing over her small, fallen frame. "Toss me off, but you're not getting rid of me, and you're not taking ANY friends from me!" she growled.</p>
+                    <p>Karoline did her best to approach, jumping off the railing and doing a sick roll. She took a strike in the process, but mended her own wound with her song.</p>
+                    <p>The creature lobbed a ball of spite towards Charla, who purposefully stepped in the way, body-blocking it to protect Elva. Charla caught the eye in both hands and hurled it back. "Have your damned eyeball back!"</p>
+                    <p>The eye exploded in the center mass of the shadow, cascading sparks.</p>
+                    <p>"HEY!" Alunra growled. "I'm the one that's going to take you down, so stop going after them, you ink blot on history!" She swung her greatsword.</p>
+                    <p>Charla loosed her nunchaku in a swinging hail. "And once you're nothing but a stain, I'm going to find something to erase you!"</p>
+                    <p>Karoline, her sight returning, blindly clambered towards the wounded. "I'm on my way!"</p>
+                    <p>Then, Charla saw an opening. As Alunra and Echo forced the creature to recoil with a series of heavy blows, its central mass momentarily solidified. With a final, defiant roar, Charla scrambled up the creature's body, her hands finding purchase on its vaporous hide. She reached one of its largest, central eyes and, with all her strength, ripped it from its socket. The eye felt slick and horribly organic in her hand. Without hesitation, she hurled it back into the creature's core.</p>
+                    <p>The explosion of light and raw energy was blinding. The Nightdrinker let out one final, agonizing scream that tore at their minds, and then its form imploded, collapsing in on itself until nothing remained but a fading cloud of black vapor and the lingering smell of ozone.</p>
+                    <p>"And thank you, Charla," Alunra said, breathing hard, "for holding that thing in place for as long as you did. I think Elva and I would have had a much harder time if it wasn't for you." She gave Charla a loving smile. "We did good work as a team. Glad you all were here."</p>
+                    <p>"Team Girl Squad?" Charla asked quizzically.</p>
+                    <p>"Sure, that's fine with me," Elva's voice came from the floor.</p>
+                    <p>"You've still got the hand, right, Alunra?" Karoline asked. "Why don't you lead us to hopefully the final stop? I think we deserve a victory lap... and no, that is a terrible name, Charla... great, now Elva's said it. Guess we're stuck with that now."</p>
+                    <p>Alunra chuckled and held up the clockwork fist. She led the group to the door at the head of the chamber.</p>
+                    <p>"Onward, Team Girl Squad!" Karoline raised her hand enthusiastically, commanding Echo forward.</p>
+                `,
+                images: [
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/nightdrinkerfinale.webp",
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/nightdrinkerfinale1.webp"
+                ]
+            },
+            { // Page 44: The Golden Hall
+                text: `
+                    <p>Silence descended on the antechamber. As the last bits of the Nightdrinker faded, a soft, melodic chime echoed through the hall. The great golden door, free from the assault, swung open without a sound, revealing a long, breathtaking hall that seemed pulled from a fever dream. The floor was paved with mismatched, almost organic-looking flagstones of gold and black, their surfaces polished to a near-perfect mirror finish. From these, great columns of shimmering gold rose, their surfaces not smooth but intricately ribbed, like the bones of some colossal beast. They arched overhead, meeting in the dark, and every surface—floor, column, and ceiling—reflected the others, creating a dizzying, infinite corridor of black and gold that stretched into an impossible, multiplied horizon.</p>
+                    <p>The walls between the columns were channels of pure, light-devouring blackness, yet the golden ribs of the arches caught an unseen light, making them burn with a soft, internal fire. The entire effect gave the four students the sensation of standing at the precipice of a kaleidoscopic eternity. A soft, silvery luminescence emanated from the far end of the hall, the only true point of reference in the disorienting splendor, beckoning them forward into the profound peace. The air was cool and clean, smelling of night-blooming jasmine and carrying a palpable sense of safety that soothed their frayed nerves. It was a sanctuary, a stark and welcome contrast to the brutal chaos they had just survived. For a long moment, they could only stand and stare, catching their breath before the first, true miracle they had earned.</p>
+                `,
+                images: [
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/thegoldenhall-1.webp", 
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/thegoldenhall-2.webp"
+                ]
+            },
+            { // Page 45: Mother's Walk
+                text: `
+                    <p>"Come, my brave, weary children," Elasharna’s voice was as soft as moondown, yet it resonated with an ancient power that settled their frayed nerves. "Your part in this is done. It is time for me to rest."</p>
+                    <p>She turned and began to lead them toward a set of large, ornate golden doors at the far end of the impossible hallway, her own form shimmering and changing as she walked. The air grew thick with the scent of old paper, chalk dust, and lavender as she drew near Karoline. Her form condensed, her silvery light coalescing into the shape of a stern but loving human governess from a bygone era, her hair in a severe bun, wearing a high-collared dress. "You have been so strong, Karoline," the governess-form said, her voice crisp but undeniably warm. "You held to your duties and protected your friends. I am so very proud of the leader you have become." Karoline, who had faced down horrors without flinching, found her eyes stinging with tears, a lump forming in her throat at the simple, profound praise she had unknowingly craved.</p>
+                    <p>As they moved past Elva, the academic scent of lavender and paper was swept away by a breeze carrying the fragrance of wild honey, night-blooming jasmine, and a faint, clean scent of ozone, like the air after a storm. Elasharna’s light swirled and shrank, her form becoming delicate, winged, and ethereal. For a fleeting moment, she was a nondescript fairy matriarch, her features soft and indistinct, a composite of what a fairy's mother should look like—wise, kind, with wings that shimmered like dragonfly wings at dusk. She didn’t speak a word. Her eyes, pools of liquid moonlight, simply met Elva's. In that silent, piercing gaze, a universe of maternal pride was conveyed—a deep, unconditional approval that Elva’s own mother, in her stern and martial way, might never show. Elva’s breath hitched, and the tough, sarcastic fairy just blinked rapidly, a single, crystalline tear tracing a path down her cheek before she angrily wiped it away.</p>
+                    <p>Drawing alongside Alunra, the air sweetened again, filled with the aroma of pine needles after a rain, damp earth, and blooming moonpetal flowers. The Lunar Mother softened and grew, her form stretching into that of a serene firbolg matriarch, her skin the color of twilight and her eyes holding the calm wisdom of an ancient forest. "My sweet, gentle daughter," she murmured, her voice like the rustling of leaves. "You carry the heart of the wild within you. You gave comfort and shielded those who needed you. Your roots are deep, and you will grow to shelter many." Alunra felt a wave of peace wash over her, a deep, resonant belonging that soothed the part of her that always felt a little lost so far from the woods. She walked with her head held high, her steps suddenly lighter.</p>
+                    <p>Finally, she turned to Charla, who was leaning heavily on Alunra. The air crackled with a faint charge of ozone and the warm, clean scent of a sun-baked stone. Elasharna’s features sharpened, her skin taking on an opalescent, scaled sheen. Two magnificent, curving horns of pure moonlight swept back from her brow. She was a proud draconic mother, regal and powerful, yet her gaze upon Charla was filled with an overwhelming, fierce affection. "Little one," she said, her voice a melodic rumble. "You have faced the echoes of your own history and did not break. You stood firm. The blood of your ancestors flows strong in you, but your heart is your own. Never forget that." Charla let out a shuddering breath she didn't realize she'd been holding, the words healing a wound she hadn't known was still so raw. She simply nodded, unable to speak past the tightness in her chest, and took the final few steps toward the golden doors, feeling not like a frightened child, but like a daughter being led home.</p>
+                `,
+                images: [
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/charlamothervision.webp",
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/alunramothervision.webp",
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/elvamothervision.webp",
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/karolmothervision.webp"
+
+
+                ]
+            },
+            { // Page 46: Sarcophagus Chamber & Finale
+                text: `
+                    <p>The walls were alternating panels of polished gold and shimmering obsidian, humming with a gentle, protective magic that made the air feel warm and safe. Carved into the obsidian panels were delicate scenes, a direct counter-narrative to the cathedral's windows: two young women studying together, a shared look of sorrow as one turns away, a lonely figure building a defensive wall not of stone, but of pure magic and self-sacrifice.</p>
+                    <p>In the center of the room, on a simple stone dais, rested a sarcophagus of flawless crystal. Inside lay a woman, her body wrapped in black bandages adorned with pulsating golden seals that seemed to beat in time with a slow, steady heart. She was the Lunar Mother, the guardian of this place.</p>
+                    <p>"You are daughters of the academy, yes?" her voice echoed in their minds, a warm, gentle melody. “Not all of you are ‘of here,’ but here calls itself one of your homes, by my order and my will and my love I have felt it,”</p>
+                    <p>"Legends have twisted truth over many long years- and have brought me far from those I would have as my flock…" Elasharna’s voice said, full of a sorrow that felt ancient. "I am not the creator force of this realm, nor the architect of its natural law, nor the inspiration behind the padded embrace of our peculiar panties… and no, I was not Tabitha's mother. She was... my dearest friend. We grew up together, dreaming of bright days and powerful magics."</p>
+                    <p>Eyes squinting independently with this revelation, Karoline processed this in her internal ‘lexicon of historical hotties,’ as ‘it is valid to ship Ela’Sharna and Sorceress Tabitha, probably canon, too.’ as she dumbly smiles a serene pleasant grin. Even for a lewd little brat like Karoline, Elasharna’s motherly will was enrapturing- even if the bratty bourgeois lil lady preferred her ‘littlespaces’ filled with things that buzzed before being wrapped in plastic.</p>
+                    <p>A spectral tear traced a path down Elasharna’s divine and mummified cheek. "But her brilliance was a fire that burned too brightly. She began to see power not as a tool, but as an end. I watched, helpless, as she twisted our collective tool of creation to build her legions... the Warforged. She brought about the Old War, a conflict that scarred this world to its core. In the end, that path consumed her. I could not protect her from herself... from her own ambition. So, I chose to protect this realm. I sealed myself away in this pyramid to ensure that no one else would suffer as she had, that her legacy would be one of caution, not conquest."</p>
+                    <p>She turned her spectral gaze to Charla, her voice softening with a tenderness that felt real enough to touch. She told her that Charla wasn't her daughter by blood, but a being born of her own powerful magic, a gift of hope to a world torn apart by war. "I embodied you wholecloth," she said, her translucent hand reaching out to caress Charla's cheek. "You were a gift of happiness with which I chose to reward the multiverse for its endurance."</p>
+                    <p>The words hit Charla like a physical blow—shock, disbelief, then a wave of joy and a profound, bone-deep sense of belonging. Charla, who had always felt like an outsider, a weird mix of races that didn't fit anywhere, finally understood. This place, this school, this was her home. These were her people. Her family. "T-thank you...ummm...mommy..." Charla squeaked weakly.</p>
+                    <p>As a final, simple act of a mother's care that said more than words ever could, Elasharna refreshed their diapers with a wave of her hand. Alunra let out a sudden squeak at the feeling, shifting from one foot to the other to test the fit of the new diaper.</p>
+                    <p>"You are all very welcome...but I think we've all forgotten something, haven't we?" Elasharna intimated with a wink to the whole group. "You have earned some treasured rewards, haven't you?"</p>
+                    <p>Karoline’s eyes seemed to sparkle. She took an excited step forward but stopped, regaining her composure. “Well if the madam wishes, I certainly wouldn’t turn down her generosity,” she said, like a child trying to be polite before opening presents.</p>
+                    <p>"Hell fuckin' yeah we have!" Elva buzzed, suddenly excited.</p>
+                    <p>Charla let out a long, shuddering breath and sagged against Alunra, the fight finally draining out of her. "Well," she managed, her voice a little shaky, "that was a fucking day." She looked from the sealed golden doors to Karoline and Elva, a slow grin spreading across her face. The fresh, magically-clean diaper was a weirdly comforting final touch. It wasn't an ending. It was just another impossible Tuesday at Scholia Diaspros. </p>
+                    <p>And for the first time, Charla knew, bone-deep, that she was exactly where she was supposed to be. Alunra squeezed her hand, her own eyes still a little misty. The Black Pyramid wasn't some monument- it wasn’t a tomb- it was the wellspring of love and a piece of her history, one she'd finally gotten to claim- with the help of her friends.</p>
+                `,
+                images: [
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/meetingmommy.webp",
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/karoltreasure1.webp", // "treasured rewards"
+                    "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/11/karoltreasure2.webp" // "treasured rewards"
+                ]
+            }
+        ];
+        
+        // --- 2. STATE VARIABLES ---
+        let currentPageIndex = 0;
+        let currentImageIndex = 0;
+        let story = []; // Will be loaded from storyData
+
+        // --- 3. DOM ELEMENT REFERENCES ---
+        const textContent = document.getElementById('text-content');
+        const storyImage = document.getElementById('story-image');
+        const prevPageBtn = document.getElementById('prev-page-btn');
+        const nextPageBtn = document.getElementById('next-page-btn');
+        const pageCounter = document.getElementById('page-counter');
+        
+        const variantControls = document.getElementById('variant-controls');
+        const prevImageBtn = document.getElementById('prev-image-btn');
+        const nextImageBtn = document.getElementById('next-image-btn');
+        const variantCounter = document.getElementById('variant-counter');
+        const textContainer = document.getElementById('text-container');
+        const imageHint = document.getElementById('image-hint');
+        const navHint = document.getElementById('nav-hint');
+        let partIndexMap = { 1: 1, 2: null, 3: null }; // will compute accurately on init
+
+        // --- 3a. IMAGE PATH MAPPING (map remote filenames to local assets) ---
+        const LOCAL_IMAGE_BASE = 'src/assets/images/lore/blackpyramidstory/';
+        // Known local filenames present in the attached folder
+        const LOCAL_FILES = new Set([
+            'alunra+echo+climb.webp',
+            'alunra+echo+climb1.webp',
+            'alunra+echo+climb2.webp',
+            'alunramothervision.webp',
+            'blackpyramidtitlepage.webp',
+            'boxly+debate.webp',
+            'boxly+debate1.webp',
+            'boxly+powers+pyramid.webp',
+            'boxly+powers+pyramid1.webp',
+            'chalunratahgen.webp',
+            'chalunratahgen2.webp',
+            'charla+alunra+vistas.webp',
+            'charla+alunra+vistas1.webp',
+            'charla+sitting+on+happy+grove+grass.webp',
+            'charlaattacksnightdrinker.webp',
+            'charlalunraclimb.webp',
+            'charlalunramountainpass.webp',
+            'charlalunrastarsandawe.webp',
+            'charlalunraupthemountain (1).webp',
+            'charlalunraupthemountain (2).webp',
+            'charlalunraupthemountain (3).webp',
+            'charlamothervision.webp',
+            'charlattacksnightdrinker.webp',
+            'crystal+cavern+wonder (2).webp',
+            'crystal+cavern+wonder (3).webp',
+            'doorwaybreach.webp',
+            'elvalaser.webp',
+            'elvalaser1.webp',
+            'elvalaser2.webp',
+            'elvalaser3.webp',
+            'elvalaser4.webp',
+            'elvamothervision.webp',
+            'elvatapestry1.webp',
+            'elvatapestry2.webp',
+            'elvatapestry3.webp',
+            'elvatapestry4.webp',
+            'elvatapestry5.webp',
+            'elvatapestry6.webp',
+            'elvatapestry8.webp',
+            'entreatboxly.webp',
+            'entreatboxly2.webp',
+            'group diaper check at entrance (3).webp',
+            'group+assembled+on+the+bridge.webp',
+            'group+assembled+on+the+bridge1.webp',
+            'group+intro+with+mery.webp',
+            'groupassembledonbridge (2).webp',
+            'grove+in+stasis (2).webp',
+            'grovesacrifice.webp',
+            'karoelvarrival.webp',
+            'karolmothervision.webp',
+            'karoltreasure1.webp',
+            'karoltreasure2.webp',
+            'lissomeplains.webp',
+            'meetingmommy.webp',
+            'Miss+Root.webp',
+            'missrootbridge.webp',
+            'missrootbridge1.webp',
+            'missrootbridge2.webp',
+            'naughtyrose (1).webp',
+            'nightdrinkerconfrontation.webp',
+            'nightdrinkerfinale.webp',
+            'nightdrinkerfinale1.webp',
+            'Noxious+Gas+Trap (1).webp',
+            'Noxious+Gas+Trap (2).webp',
+            'passing+to+the+old+root+bridge.webp',
+            'preparing+to+open.webp',
+            'spankher!.webp',
+            'spankhernow!.webp',
+            'tahgentintimidations.webp',
+            'tapestry+treasure (1).webp',
+            'tapestry+treasure (2).webp',
+            'the+black+cathedral+creepy+padded+tabby+statues.webp',
+            'the+black+cathedral+interior (1).webp',
+            'the+black+cathedral+interior (2).webp',
+            'the+black+cathedral+vault (1).webp',
+            'the+black+cathedral+vault (2).webp',
+            'thegoldenhall (1).webp',
+            'thegoldenhall (2).webp',
+            'thegrove (1).webp',
+            'thegrove (2).webp',
+            'thenightdrinker.webp',
+            'to the mountain.webp',
+            'to the mountain1.webp',
+            'tothecathedral1.webp',
+            'tothecathedral2.webp',
+            'tothecathedral3.webp',
+            'tothepyramid.webp',
+            'totingboxley.webp',
+            'totingboxley2.webp',
+            'warforgedgals.webp'
+        ]);
+
+        function basenameFromUrlOrPath(s) {
+            if (!s) return '';
+            const hash = s.split('#')[0];
+            const q = hash.split('?')[0];
+            return q.substring(q.lastIndexOf('/') + 1);
+        }
+
+        function tryCandidates(candidates) {
+            for (const name of candidates) {
+                if (LOCAL_FILES.has(name)) return LOCAL_IMAGE_BASE + name;
+            }
+            return null;
+        }
+
+        function mapToLocalPath(input) {
+            // Already a local path
+            if (typeof input !== 'string') return input;
+            if (input.startsWith(LOCAL_IMAGE_BASE)) return input;
+
+            const base = basenameFromUrlOrPath(input);
+            // 1) Direct match
+            const direct = tryCandidates([base]);
+            if (direct) return direct;
+
+            const noExt = base.replace(/\.webp$/i, '');
+            const ext = '.webp';
+
+            const candidates = [];
+
+            // 2) Hyphen number -> parentheses number e.g., name-1.webp -> name (1).webp
+            const m = noExt.match(/^(.*?)-(\d+)$/);
+            if (m) {
+                candidates.push(`${m[1]} (${m[2]})${ext}`);
+            }
+
+            // 3) Specific known renames and spacing
+            candidates.push(
+                noExt.replace(/MissRoot/i, 'Miss+Root') + ext,
+            );
+
+            // replace condensed words with plus-separated known phrases
+            const replacements = [
+                ['boxlypowerspyramid', 'boxly+powers+pyramid'],
+                ['boxlydebate1', 'boxly+debate1'],
+                ['boxlydebate', 'boxly+debate'],
+                ['groupintrowithmery', 'group+intro+with+mery'],
+                ['groupassembledonthebridge1', 'group+assembled+on+the+bridge1'],
+                ['groupassembledonthebridge', 'group+assembled+on+the+bridge'],
+                ['passingtotheoldrootbridge', 'passing+to+the+old+root+bridge'],
+                ['preparingtoopen', 'preparing+to+open'],
+                ['groveinstasis (2)', 'grove+in+stasis (2)'],
+                ['charlaalunravistas1', 'charla+alunra+vistas1'],
+                ['charlaalunravistas', 'charla+alunra+vistas'],
+                ['naughtyrose-1', 'naughtyrose (1)'],
+                ['NoxiousGasTrap-1', 'Noxious+Gas+Trap (1)'],
+                ['NoxiousGasTrap-2', 'Noxious+Gas+Trap (2)'],
+                ['tapestrytreasure-1', 'tapestry+treasure (1)'],
+                ['tapestrytreasure-2', 'tapestry+treasure (2)'],
+                ['theblackcathedralvault-1', 'the+black+cathedral+vault (1)'],
+                ['theblackcathedralvault-2', 'the+black+cathedral+vault (2)'],
+                ['group-diaper-check-at-entrance-3', 'group diaper check at entrance (3)'],
+                ['tothepyramid', 'tothepyramid'], // no-op safeguard
+                ['tothecathedral1', 'tothecathedral1'],
+                ['tothecathedral2', 'tothecathedral2'],
+                ['tothecathedral3', 'tothecathedral3']
+            ];
+
+            for (const [from, to] of replacements) {
+                if (noExt.toLowerCase() === from.toLowerCase()) {
+                    candidates.push(`${to}${ext}`);
+                }
+            }
+
+            // 4) Handle special exclamation filenames
+            if (/^spankhernow$/i.test(noExt)) candidates.push('spankhernow!' + ext);
+            if (/^spankher$/i.test(noExt)) candidates.push('spankher!' + ext);
+
+            // 5) to-the-mountain -> to the mountain
+            if (/^to-the-mountain(\d*)$/i.test(noExt)) {
+                const num = noExt.match(/^(?:to-the-mountain)(\d*)$/i)[1] || '';
+                candidates.push(`to the mountain${num}${ext}`);
+            }
+
+            // 6) charlalunraupthemountain-# -> ( # ) variant
+            if (/^charlalunraupthemountain-([123])$/i.test(noExt)) {
+                const n = noExt.match(/^charlalunraupthemountain-([123])$/i)[1];
+                candidates.push(`charlalunraupthemountain (${n})${ext}`);
+            }
+
+            // 7) groupassembledonbridge-2 -> groupassembledonbridge (2)
+            if (/^groupassembledonbridge-([0-9]+)$/i.test(noExt)) {
+                const n = noExt.match(/^groupassembledonbridge-([0-9]+)$/i)[1];
+                candidates.push(`groupassembledonbridge (${n})${ext}`);
+            }
+
+            // Note: Do not substitute other scenes for missing 'the+black+cathedral+interior (3|4)'.
+            // If (3) or (4) are not present locally, we will keep the original remote URL.
+
+            const mapped = tryCandidates(candidates);
+            if (mapped) return mapped;
+
+            // As a last resort, keep original (may be remote) and warn once in console
+            console.warn('[Images] No local match for', base, 'leaving original path');
+            return input;
+        }
+
+        function transformStoryData(data) {
+            return data.map(p => ({
+                ...p,
+                images: (p.images || []).map(mapToLocalPath)
+            }));
+        }
+
+        // --- 4. CORE FUNCTIONS ---
+
+        /**
+         * Loads and displays the content for a specific page index.
+         * Resets image index to 0.
+         */
+        function renderPage() {
+            // Ensure index is within bounds
+            if (currentPageIndex < 0) currentPageIndex = 0;
+            if (currentPageIndex >= story.length) currentPageIndex = story.length - 1;
+
+            const page = story[currentPageIndex];
+            currentImageIndex = 0; // Reset image index on page turn
+            
+            // 1. Update text
+            textContent.innerHTML = page.text;
+            // Scroll text container back to top
+            textContainer.scrollTop = 0; 
+            
+            // 2. Update image
+            renderImage(); 
+            
+            // 3. Update page counter
+            pageCounter.textContent = `Page ${currentPageIndex + 1} of ${story.length}`;
+            
+            // 4. Update navigation buttons
+            prevPageBtn.disabled = (currentPageIndex === 0);
+            nextPageBtn.disabled = (currentPageIndex === story.length - 1);
+        }
+
+        /**
+         * Displays the image for the current page and current image index.
+         * Manages the visibility and state of variant controls.
+         */
+        function renderImage() {
+            const page = story[currentPageIndex];
+            const images = page.images;
+
+            // Ensure image index is within bounds
+            if (currentImageIndex < 0) currentImageIndex = 0;
+            if (currentImageIndex >= images.length) currentImageIndex = images.length - 1;
+
+            // Set the image source
+            storyImage.style.opacity = 0; // Fade out
+            setTimeout(() => {
+                // Check for valid URL
+                if (images[currentImageIndex]) {
+                    storyImage.src = images[currentImageIndex];
+                } else {
+                    // Fallback if URL is bad or missing
+                    storyImage.src = 'https://placehold.co/1280x720/111827/d1d5db?text=Image+Not+Found';
+                }
+                storyImage.style.opacity = 1; // Fade in
+            }, 300); // Match transition duration
+
+            // Manage variant controls
+            if (images.length > 1) {
+                variantControls.style.display = 'flex';
+                variantCounter.textContent = `${currentImageIndex + 1} of ${images.length}`;
+                prevImageBtn.disabled = (currentImageIndex === 0);
+                nextImageBtn.disabled = (currentImageIndex === images.length - 1);
+                // Show hints when multiple variants exist
+                if (imageHint) imageHint.style.display = 'block';
+                if (navHint) navHint.style.display = 'block';
+            } else {
+                variantControls.style.display = 'none';
+                if (imageHint) imageHint.style.display = 'none';
+                if (navHint) navHint.style.display = 'none';
+            }
+        }
+
+        // --- 5. EVENT HANDLER FUNCTIONS ---
+        
+        function goToNextPage() {
+            if (currentPageIndex < story.length - 1) {
+                currentPageIndex++;
+                renderPage();
+            }
+        }
+
+        function goToPrevPage() {
+            if (currentPageIndex > 0) {
+                currentPageIndex--;
+                renderPage();
+            }
+        }
+
+        function nextImage() {
+            const images = story[currentPageIndex].images;
+            if (currentImageIndex < images.length - 1) {
+                currentImageIndex++;
+                renderImage();
+            }
+        }
+
+        function prevImage() {
+            if (currentImageIndex > 0) {
+                currentImageIndex--;
+                renderImage();
+            }
+        }
+        
+        /**
+         * Preloads all images in the storyData array to ensure smooth transitions.
+         */
+        function preloadImages(data) {
+            let preloadedImages = [];
+            data.forEach(page => {
+                if (page.images && Array.isArray(page.images)) {
+                    page.images.forEach(imageUrl => {
+                        if (typeof imageUrl === 'string' && imageUrl) {
+                            const img = new Image();
+                            img.src = imageUrl;
+                            preloadedImages.push(img);
+                        }
+                    });
+                }
+            });
+            return preloadedImages;
+        }
+
+        /**
+         * Compute indices for Part 1, 2, 3.
+         * Part 1: first page with '<h2>Part 1'.
+         * Part 2: first page with '<h2>Part 2'.
+         * Part 3: first page after Part 2 mentioning 'Pyramid' in text or any image containing 'pyramid'.
+         */
+        function computePartIndices() {
+            const findIndexByHeading = (label) => story.findIndex(p => typeof p.text === 'string' && p.text.includes(label));
+            const p1 = findIndexByHeading('<h2>Part 1');
+            const p2 = findIndexByHeading('<h2>Part 2');
+            let p3 = -1;
+            if (p2 !== -1) {
+                for (let i = p2 + 1; i < story.length; i++) {
+                    const page = story[i];
+                    const textHasPyramid = typeof page.text === 'string' && /pyramid/i.test(page.text);
+                    const imagesHavePyramid = Array.isArray(page.images) && page.images.some(u => /pyramid/i.test(u));
+                    if (textHasPyramid || imagesHavePyramid) { p3 = i; break; }
+                }
+            }
+            // Fallbacks
+            if (p3 === -1) { p3 = (p2 !== -1 && p2 + 1 < story.length) ? p2 + 1 : (p1 !== -1 ? p1 : 0); }
+            return { 1: (p1 !== -1 ? p1 : 1), 2: (p2 !== -1 ? p2 : (p1 !== -1 ? p1 + 1 : 2)), 3: p3 };
+        }
+
+        function navigateToPage(index) {
+            if (typeof index === 'number' && index >= 0 && index < story.length) {
+                currentPageIndex = index;
+                renderPage();
+            }
+        }
+
+        // --- 6. INITIALIZATION ---
+        
+        // This function will run once the DOM is fully loaded.
+        function initializeApp() {
+            console.log("Initializing Storybook...");
+            // Load and transform story data to use local image assets
+            story = transformStoryData(storyData);
+            
+            // Add event listeners
+            nextPageBtn.addEventListener('click', goToNextPage);
+            prevPageBtn.addEventListener('click', goToPrevPage);
+            nextImageBtn.addEventListener('click', nextImage);
+            prevImageBtn.addEventListener('click', prevImage);
+
+            // Preload images (local-first after transform)
+            preloadImages(story);
+
+            // Render the first page
+            partIndexMap = computePartIndices();
+
+            // Delegate clicks for cover links
+            textContent.addEventListener('click', (e) => {
+                const link = e.target.closest('.cover-link');
+                if (link) {
+                    e.preventDefault();
+                    const part = parseInt(link.getAttribute('data-part'), 10);
+                    const idx = partIndexMap[part];
+                    if (typeof idx === 'number') navigateToPage(idx);
+                }
+            });
+
+            renderPage();
+            console.log("Storybook Initialized.");
+        }
+        
+        // Wait for the DOM to be fully loaded before running the app
+        document.addEventListener('DOMContentLoaded', initializeApp);
+
+    </script>
+</body>
+</html>

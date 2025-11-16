@@ -343,6 +343,10 @@
         ];
 
 
+        // Standard heal note for all Mundane Candy
+        const MUNDANE_HEAL_NOTE = "Heals 1d4+1 HP when consumed, or 5 HP if consumed during a short rest.";
+
+
         // --- UTILITY FUNCTIONS ---
 
         // Simple random item picker
@@ -369,11 +373,20 @@
                 };
             }
             
-            // 69-73 (5%): Good Haul
+            // 69-73 (5%): Good Haul (2-3 Mundane Candies, show each with image)
             if (roll <= 73) {
                 const count = Math.floor(Math.random() * 2) + 2; // 2-3 pieces
+                const picks = [];
+                // Ensure at least two distinct items if possible
+                while (picks.length < count) {
+                    const pick = randItem(mundaneCandies);
+                    const exists = picks.some(p => normalizeKey(p.name) === normalizeKey(pick.name));
+                    if (!exists || mundaneCandies.length < count) {
+                        picks.push(pick);
+                    }
+                }
                 return {
-                    reward: `A Good Haul! You get ${count} pieces of mundane candy!`, // This is a string
+                    reward: picks, // Array of mundane candy objects
                     type: "Good Haul!",
                     style: "text-[var(--halloween-green)] font-semibold"
                 };
@@ -540,6 +553,7 @@
                 const k = normalizeKey(name);
                 const collected = !!currentCollection[cat][k];
                 if (showCollectedOnly && !collected) return '';
+                const descText = cat === 'mundane' ? `${it.desc} ${MUNDANE_HEAL_NOTE}` : (it.desc || '');
                 const imgSrc = findBestCandyImage(name);
                 return `
                     <div class="rounded-md border ${collected ? 'border-[var(--halloween-green)]' : 'border-[var(--halloween-orange-dark)]/60'} bg-[var(--halloween-purple-dark)]/70 p-2"> 
@@ -547,7 +561,7 @@
                         <div class="flex items-start justify-between gap-2">
                             <div>
                                 <div class="text-sm font-semibold text-[var(--halloween-text)]">${name}</div>
-                                ${it.desc ? `<div class="text-xs text-[var(--halloween-text)]/80">${it.desc}</div>` : ''}
+                                ${descText ? `<div class="text-xs text-[var(--halloween-text)]/80">${descText}</div>` : ''}
                             </div>
                             <div class="text-right text-sm ${collected ? 'text-[var(--halloween-green)]' : 'text-[var(--halloween-text)]/40'}">${collected ? '✓' : '—'}</div>
                         </div>
@@ -598,6 +612,7 @@
             pumpkinpatchmud: CANDY_IMAGE_BASE + 'pumpkinpatchmud.webp',
             pupperlingpawsallflavors: CANDY_IMAGE_BASE + 'pupperlingpawsallflavors.webp',
             purifiermint: CANDY_IMAGE_BASE + 'purifiermint.webp',
+            azureharvestbar: CANDY_IMAGE_BASE + 'azureharvestbar.webp',
             radiantlances: CANDY_IMAGE_BASE + 'radiantlances.webp',
             schoolcrestcoindark: CANDY_IMAGE_BASE + 'schoolcrestcoin (dark).webp',
             schoolcrestcoinglimmeringmint: CANDY_IMAGE_BASE + 'schoolcrestcoin (glimmeringmint).webp',
@@ -646,7 +661,11 @@
         function normalizeKey(str) {
             return (str || '')
                 .toLowerCase()
+                // Remove possessive 's (ASCII and curly), e.g., "Illusionist's" -> "illusionist"
+                .replace(/(’s|'s)\b/g, '')
+                // Strip common punctuation variants we don't care about
                 .replace(/\*|’|‘|“|”|—|–/g, '')
+                // Collapse everything else to alphanumerics
                 .replace(/[^a-z0-9]+/g, '');
         }
 
@@ -668,6 +687,14 @@
             if (key.includes('magicalrealm')) {
                 return candyImageIndex['magicalrealmpop'];
             }
+            // Brand/possessive-name fixes
+            if (key.includes('aliza') && (key.includes('electrick') || key.includes('selectrick')) && key.includes('paw')) {
+                return candyImageIndex['alizaselectrickypaw'];
+            }
+            // Full-sized Azure Harvest Bar
+            if (key.includes('azure') && key.includes('harvest')) {
+                return candyImageIndex['azureharvestbar'];
+            }
             if (key.includes('bunbunskip') && key.includes('hopdrop')) {
                 return candyImageIndex['bunbunskipshopdrop'];
             }
@@ -678,6 +705,16 @@
                 if (key.includes('magical')) return candyImageIndex['magicaltoughtoffee'];
                 if (key.includes('tactitush')) return candyImageIndex['tactitushtoughtoffee'];
                 return candyImageIndex['tactitushtoughtoffee'];
+            }
+            // Fixes for apostrophe-cased names and variant phrasing
+            if (key.includes('illusionist') && key.includes('icing')) {
+                return candyImageIndex['illusionisticing'];
+            }
+            if ((key.includes('sleeper') || key.includes('sleepers')) && key.includes('sucker')) {
+                return candyImageIndex['sleepersucker'];
+            }
+            if (key.includes('radiant') && key.includes('lance')) {
+                return candyImageIndex['radiantlances'];
             }
             // Reported mismatches and robust, punctuation-agnostic fallbacks
             if (key.includes('pacificationpop')) {
@@ -703,6 +740,9 @@
             }
             if (key.includes('plushie') && key.includes('pal') && (key.includes('gummy') || key.includes('gummies'))) {
                 return candyImageIndex['plushiepalgummy'];
+            }
+            if (key.includes('kittenfolk') && key.includes('kat') && key.includes('tongue')) {
+                return candyImageIndex['kittenfolkkatstongue'];
             }
             if (key.includes('playground') && key.includes('pebbles')) {
                 return candyImageIndex['paddedplaygroundpebbles'];
@@ -820,16 +860,37 @@
                 const result = getTrickOrTreat();
                 
                 // Display the result
-                // NEW: Check if reward is an object (item) or a string (haul/trick)
-                if (typeof result.reward === 'object') {
+                // NEW: Support array (Good Haul), single object, or string
+                if (Array.isArray(result.reward)) {
+                    const items = result.reward;
+                    const gridCols = items.length === 2 ? 'grid-cols-2' : (items.length >= 3 ? 'grid-cols-3' : 'grid-cols-1');
+                    const cards = items.map(it => {
+                        const imgSrc = findBestCandyImage(it.name);
+                        const displayDesc = `${it.desc} ${MUNDANE_HEAL_NOTE}`;
+                        return `
+                            <div class="rounded-md border border-[var(--halloween-orange-dark)]/40 bg-[var(--halloween-purple-dark)]/60 p-2">
+                                ${imgSrc ? `<img src="${imgSrc}" alt="${it.name}" class="w-full h-auto object-contain mb-2 rounded-md">` : ''}
+                                <div class="text-sm font-semibold text-[var(--halloween-text)]">${it.name}</div>
+                                <div class="text-xs text-[var(--halloween-text)]/80">${displayDesc}</div>
+                            </div>`;
+                    }).join('');
+                    resultBox.innerHTML = `
+                        <div class="flex flex-col items-center text-center w-full">
+                            <div class="${result.style} mb-3"><strong>A Good Haul!</strong> You got ${items.length} pieces of mundane candy!</div>
+                            <div class="grid ${gridCols} gap-3 w-full">${cards}</div>
+                        </div>`;
+                } else if (typeof result.reward === 'object') {
                     // It's an item with a name and description (including the magical candy note)
                     const imgSrc = getImageForResult(result);
+                    const displayDesc = result.type === 'Mundane Candy'
+                        ? `${result.reward.desc} ${MUNDANE_HEAL_NOTE}`
+                        : (result.reward.desc || '');
                     resultBox.innerHTML = `
                         <div class="flex flex-col items-center text-center">
                             ${imgSrc ? `<img src="${imgSrc}" alt="${result.reward.name}" class="w-full h-auto object-contain mb-2 rounded-md border border-[var(--halloween-orange-dark)]/40">` : ''}
                             <span class="${result.style}">
                                 <strong class="block text-lg">${result.reward.name}</strong>
-                                <span class="text-sm">${result.reward.desc}</span>
+                                <span class="text-sm">${displayDesc}</span>
                             </span>
                         </div>`;
                 } else {
@@ -841,15 +902,22 @@
                 logResult(result);
 
                 // Tracking: mark candy collection per character
-                if (username && typeof result.reward === 'object') {
-                    const cat = categoryFromType(result.type);
-                    if (cat) {
-                        markCollected(username, result.type, result.reward.name);
-                        // If catalogue open, refresh counts/grid
-                        if (!catalogueSection.classList.contains('hidden')) {
-                            updateCatalogueProgress();
-                            renderCatalogue(currentCatalogueCategory);
+                if (username) {
+                    if (Array.isArray(result.reward)) {
+                        // Good Haul: multiple mundane candies
+                        result.reward.forEach(it => {
+                            markCollected(username, 'Mundane Candy', it.name);
+                        });
+                    } else if (typeof result.reward === 'object') {
+                        const cat = categoryFromType(result.type);
+                        if (cat) {
+                            markCollected(username, result.type, result.reward.name);
                         }
+                    }
+                    // If catalogue open, refresh counts/grid
+                    if (!catalogueSection.classList.contains('hidden')) {
+                        updateCatalogueProgress();
+                        renderCatalogue(currentCatalogueCategory);
                     }
                 }
 
@@ -864,16 +932,29 @@
             // Get a simple timestamp
             const timestamp = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
             
-            // NEW: Handle reward being an object or string
-            const isObject = (typeof result.reward === 'object');
-            const rewardText = isObject ? result.reward.name : result.reward;
+            // NEW: Handle reward being an array, object, or string
+            const isArray = Array.isArray(result.reward);
+            const isObject = (typeof result.reward === 'object' && !isArray);
+            const rewardText = isObject ? result.reward.name : (isArray ? '' : result.reward);
 
-            // If object, prepare modal linkage
+            // Prepare modal linkage
             let linkHtml = '';
-            if (isObject) {
+            if (isArray) {
+                const links = result.reward.map(it => {
+                    const imgSrc = findBestCandyImage(it.name);
+                    const id = logIdCounter++;
+                    const descForModal = `${it.desc} ${MUNDANE_HEAL_NOTE}`;
+                    logAssets[id] = { name: it.name, desc: descForModal, img: imgSrc, type: 'Mundane Candy' };
+                    return `<button class="underline text-[var(--halloween-orange-light)] hover:text-[var(--halloween-orange)]" onclick="openAssetModal(${id})">${it.name}</button>`;
+                });
+                linkHtml = links.join(', ');
+            } else if (isObject) {
                 const imgSrc = getImageForResult(result);
                 const id = logIdCounter++;
-                logAssets[id] = { name: result.reward.name, desc: result.reward.desc || '', img: imgSrc, type: result.type };
+                const descForModal = result.type === 'Mundane Candy'
+                    ? `${result.reward.desc} ${MUNDANE_HEAL_NOTE}`
+                    : (result.reward.desc || '');
+                logAssets[id] = { name: result.reward.name, desc: descForModal, img: imgSrc, type: result.type };
                 linkHtml = `<button class="underline text-[var(--halloween-orange-light)] hover:text-[var(--halloween-orange)]" onclick="openAssetModal(${id})">${result.reward.name}</button>`;
             }
 
@@ -887,7 +968,7 @@
                 <strong class="text-[var(--halloween-text)]">${username}</strong> 
                 <span class="text-[var(--halloween-orange)]">(${result.type})</span>
                 <span class="text-[var(--halloween-text)]/90"> got: </span>
-                ${isObject ? `<span class="${result.style}">${linkHtml}</span>` : `<span class="${result.style}">${rewardText}</span>`}
+                ${(isObject || isArray) ? `<span class="${result.style}">${linkHtml}</span>` : `<span class="${result.style}">${rewardText}</span>`}
             `;
 
             // Prepend to the top of the log

@@ -1591,6 +1591,10 @@
     </div>
  <div id="book-reader-section" class="content-section">
       <h2>Book Reader</h2>
+      <div id="book-reader-menu" class="inline-block" style="margin: 10px 0; display: flex; gap: 8px; flex-wrap: wrap;">
+        <button type="button" class="nav-button" data-variant="pdf" title="Open PDF Reader (default)">Handbook (PDF)</button>
+        <button type="button" class="nav-button" data-variant="bsstory" title="Ascent to the Black Pyramid storybook">Ascent to the Black Pyramid</button>
+      </div>
       <div id="book-reader-iframe-container" class="iframe-container">
         </div>
     </div>
@@ -1838,6 +1842,31 @@
     // Ensure global access from any listener context
     window.loadSchoolEventsVariant = loadSchoolEventsVariant;
 
+    // --- Library (Book Reader) variant loader ---
+    let bookReaderLastVariant = 'pdf';
+    function loadBookReaderVariant(variant) {
+        const srcMap = {
+          pdf: { src: 'BookReader.html', title: 'Book Reader' },
+          bsstory: { src: '../BSStory.html', title: 'Ascent to the Black Pyramid' },
+        };
+        const selected = srcMap[variant] || srcMap.pdf;
+
+        // Update button pressed state if menu exists
+        const menu = document.getElementById('book-reader-menu');
+        if (menu) {
+          const buttons = menu.querySelectorAll('[data-variant]');
+          buttons.forEach(btn => {
+            const isActive = btn.getAttribute('data-variant') === variant;
+            btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+            btn.style.outline = isActive ? '2px solid var(--gold)' : '';
+          });
+        }
+
+        createOrRefreshIframe('book-reader-iframe-container', 'book-reader-iframe', selected.src, selected.title);
+        bookReaderLastVariant = variant;
+    }
+    window.loadBookReaderVariant = loadBookReaderVariant;
+
     /**
      * Refreshes a statically placed iframe by resetting its src.
      */
@@ -1915,8 +1944,21 @@
             createOrRefreshIframe('potty-checker-iframe-container', 'potty-checker-iframe', '../pottychecker.html', 'Potty Checker');
         },
         'btn-book-reader': () => {
-            document.getElementById('book-reader-section').classList.add('active');
-            createOrRefreshIframe('book-reader-iframe-container', 'book-reader-iframe', 'BookReader.html', 'Book Reader');
+            const section = document.getElementById('book-reader-section');
+            section.classList.add('active');
+            // Initialize Library menu click handler once
+            const menu = document.getElementById('book-reader-menu');
+            if (menu && !menu.dataset.initialized) {
+              menu.addEventListener('click', (e) => {
+                const btn = e.target.closest('[data-variant]');
+                if (!btn) return;
+                const variant = btn.getAttribute('data-variant');
+                window.loadBookReaderVariant(variant);
+              });
+              menu.dataset.initialized = '1';
+            }
+            // Load last selected (defaults to PDF reader)
+            window.loadBookReaderVariant(bookReaderLastVariant);
         },
         'btn-achievement-tracker': () => {
             document.getElementById('achievement-tracker').classList.add('active');

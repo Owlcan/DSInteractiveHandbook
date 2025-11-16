@@ -1223,9 +1223,13 @@
       },
       {
         name: "Potent Elemental Core",
-        description: "Choose an element (Fire, Cold, Acid, Lightning, Poison, Thunder, Force, Radiant, or Necrotic). On every hit, the weapon deals an extra 1d10 damage of the chosen type.",
+        description: "Choose an element (Fire, Cold, Acid, Lightning, Poison, Thunder, Force, Radiant, or Necrotic). On every hit, the weapon deals an extra 1d10 damage of the chosen type. You may take this upgrade multiple times; each instance must use a different element.",
         cost: 1,
-        type: "Damage Enhancement"
+        type: "Damage Enhancement",
+        repeatable: true,
+        choiceType: "element",
+        choiceLabel: "Element",
+        choiceOptions: ["Fire","Cold","Acid","Lightning","Poison","Thunder","Force","Radiant","Necrotic"]
       },
       {
         name: "Rending Strike",
@@ -1370,6 +1374,22 @@
         description: "When an effect forces you to make a Potty Check—or as a reaction to any attack or effect that might cause an unfortunate accident—you may choose to voluntarily fail that check. If you do, you and the triggering target swap underpants. For the rest of the turn, the target suffers disadvantage on attack rolls and ability checks due to its embarrassing, disorienting wardrobe malfunction, while you gain a +2 bonus to AC until the start of your next turn.",
         cost: 1,
         type: "Special Effects / Status"
+      },
+      {
+        name: "Adaptive Form",
+        description: "Invest slots to unlock alternate physical weapon forms. Each slot spent on this upgrade grants one additional non-ranged melee weapon form (e.g., Longsword, Greataxe, Whip). As a bonus action you can shift the legacy weapon between its base form and any unlocked forms, adopting that form's base damage die and properties (excluding gold value). You can select this upgrade multiple times choosing a different form each time.",
+        cost: 1,
+        type: "Mobility & Damage Enhancement",
+        repeatable: true,
+        choiceType: "form",
+        choiceLabel: "Alternate Form"
+      },
+      {
+        name: "Omniadaptive Form",
+        description: "The weapon attunes to universal martial patterns. By spending a bonus action, you may morph it into the form of ANY non-ranged melee weapon (simple, martial, or magical) for the duration until changed again. This does not grant extra elemental or special upgrade effects beyond those already invested. (Does not emulate firearms or ranged weapons.)",
+        cost: 4,
+        type: "Mobility & Damage Enhancement",
+        repeatable: false
       }
     ]
   };
@@ -1412,6 +1432,20 @@
     baseCost: 0, // Track base weapon cost
     slotCost: 0 // Track slot installation cost
   };
+
+  // Instance id counter for repeatable upgrades
+  let nextUpgradeInstanceId = 1;
+
+  // Pre-compute form choices (non-ranged melee weapon names)
+  const formChoices = (() => {
+    const disallowedCategories = [/ranged/i, /firearm/i];
+    const names = [];
+    for (const [category, arr] of Object.entries(weaponsData)) {
+      if (disallowedCategories.some(r => r.test(category))) continue;
+      arr.forEach(w => names.push(w.name));
+    }
+    return names.sort();
+  })();
   
   // Initialize
   document.addEventListener("DOMContentLoaded", () => {
@@ -1552,7 +1586,8 @@
       upgradeCard.style.cssText = "border: 1px solid #c0a060; border-radius: 4px; padding: 15px; background-color: #2a2a2a; position: relative; height: 350px; display: flex; flex-direction: column;";
       
       const canAfford = state.remainingSlots >= upgrade.cost;
-      const isSelected = state.selectedUpgrades.some(u => u.name === upgrade.name);
+      const isSelected = !upgrade.repeatable && state.selectedUpgrades.some(u => u.baseName === upgrade.name);
+      const instancesOfUpgrade = state.selectedUpgrades.filter(u => u.baseName === upgrade.name);
       
       upgradeCard.innerHTML = `
         <h3 style="color: #ffd700; margin-top: 0;">${upgrade.name}</h3>
@@ -1563,29 +1598,57 @@
           Cost: <span style="color: ${canAfford ? '#e0d2b4' : '#ff6b6b'};">${upgrade.cost} slot${upgrade.cost > 1 ? 's' : ''}</span>
         </div>
         <p style="flex-grow: 1; overflow-y: auto; margin-bottom: 15px; font-size: 75%;">${upgrade.description}</p>
+        ${upgrade.choiceType ? `<div style='margin-bottom:8px;'>
+          <label style='font-size:70%; display:block; margin-bottom:3px;'>${upgrade.choiceLabel || 'Choose'}</label>
+          <select class='upgradeChoiceSelect' style='width:100%; background:#1f1f1f; color:#e0d2b4; border:1px solid #c0a060; padding:4px; border-radius:4px;'>
+            <option value='' disabled selected>Select...</option>
+            ${(upgrade.choiceType === 'element' ? upgrade.choiceOptions : formChoices).map(opt => `<option value='${opt}'>${opt}</option>`).join('')}
+          </select>
+        </div>` : ''}
         <button class="selectUpgradeBtn" data-upgrade-name="${upgrade.name}" style="
           background: ${isSelected ? 'linear-gradient(to bottom, #6c4a00, #4c3400)' : (canAfford ? 'linear-gradient(to bottom, #c0a060, #8a7040)' : '#555')};
           color: ${canAfford ? '#1a1a1a' : '#aaa'};
           border: none;
           border-radius: 4px;
           padding: 8px 12px;
-          cursor: ${canAfford || isSelected ? 'pointer' : 'not-allowed'};
+          cursor: ${(canAfford || isSelected) ? 'pointer' : 'not-allowed'};
           font-family: 'Cinzel', serif;
           font-weight: bold;
           width: 100%;
           transition: all 0.2s;
-        ">${isSelected ? 'Remove' : 'Select'}</button>
+        ">${isSelected ? 'Remove' : (upgrade.repeatable ? 'Add' : 'Select')}</button>
+        ${upgrade.repeatable && instancesOfUpgrade.length ? `<div style='margin-top:6px; font-size:60%; color:#c0a060;'>Taken: ${instancesOfUpgrade.map(i => i.chosenValue || i.name).join(', ')}</div>` : ''}
       `;
       
       upgradeOptionsCtn.appendChild(upgradeCard);
       
       // Add event listener
       const selectBtn = upgradeCard.querySelector(".selectUpgradeBtn");
+      const choiceSelectEl = upgradeCard.querySelector('.upgradeChoiceSelect');
       selectBtn.addEventListener("click", () => {
-        if (isSelected) {
-          removeUpgrade(upgrade);
+        if (isSelected && !upgrade.repeatable) {
+          // remove the single non-repeatable instance
+          const inst = state.selectedUpgrades.find(u => u.baseName === upgrade.name);
+          if (inst) removeUpgrade(inst);
         } else if (canAfford) {
-          selectUpgrade(upgrade);
+          let chosenValue = null;
+          if (upgrade.choiceType) {
+            chosenValue = choiceSelectEl ? choiceSelectEl.value : null;
+            if (!chosenValue) {
+              alert(`Please select a ${upgrade.choiceLabel || 'choice'} before adding.`);
+              return;
+            }
+            // For element cores prevent duplicate element
+            if (upgrade.choiceType === 'element') {
+              const already = state.selectedUpgrades.some(i => i.baseName === upgrade.name && i.chosenValue === chosenValue);
+              if (already) {
+                alert('You already selected that element. Pick a different one.');
+                return;
+              }
+            }
+          }
+          selectUpgrade(upgrade, chosenValue);
+          if (choiceSelectEl) choiceSelectEl.value = '';
         }
       });
     });
@@ -1607,56 +1670,51 @@
     weaponCustomizationCtn.style.display = showCustomization ? "block" : "none";
   }
   
-  function selectUpgrade(upgrade) {
-    if (state.remainingSlots >= upgrade.cost) {
-      state.selectedUpgrades.push(upgrade);
-      state.remainingSlots -= upgrade.cost;
-      
-      // Update usedSlots with the new upgrade
-      // Find the first available slots
-      const usedSlotCount = state.totalSlots - state.remainingSlots;
-      const availableSlotIndices = [];
-      
-      // Find all unused slot indices
-      for (let i = 0; i < state.totalSlots; i++) {
-        if (!state.usedSlots.some(slot => slot.index === i)) {
-          availableSlotIndices.push(i);
-        }
-      }
-      
-      // Assign slots for this upgrade
-      for (let i = 0; i < upgrade.cost; i++) {
-        if (availableSlotIndices.length > 0) {
-          const slotIndex = availableSlotIndices.shift();
-          state.usedSlots.push({
-            index: slotIndex,
-            type: upgrade.type,
-            name: upgrade.name
-          });
-        }
-      }
-      
-      remainingSlotsDisplay.textContent = state.remainingSlots;
-      updateSelectedUpgradesList();
-      renderSlotIndicators(); // Update the slot indicators
-      renderUpgradeOptions();
-      updateCostDisplay(); // Update cost display
+  function selectUpgrade(upgrade, chosenValue = null) {
+    if (state.remainingSlots < upgrade.cost) return;
+    // Build instance object
+    const instance = {
+      instanceId: nextUpgradeInstanceId++,
+      baseName: upgrade.name,
+      name: upgrade.name + (chosenValue ? ` (${chosenValue})` : ''),
+      cost: upgrade.cost,
+      type: upgrade.type,
+      description: upgrade.description,
+      chosenValue: chosenValue || null
+    };
+    state.selectedUpgrades.push(instance);
+    state.remainingSlots -= upgrade.cost;
+
+    // Assign slot circles
+    const availableSlotIndices = [];
+    for (let i = 0; i < state.totalSlots; i++) {
+      if (!state.usedSlots.some(slot => slot.index === i)) availableSlotIndices.push(i);
     }
-  }
-  
-  function removeUpgrade(upgrade) {
-    state.selectedUpgrades = state.selectedUpgrades.filter(u => u.name !== upgrade.name);
-    state.remainingSlots += upgrade.cost;
-    
-    // Remove slots used by this upgrade
-    state.usedSlots = state.usedSlots.filter(slot => slot.name !== upgrade.name);
-    
+    for (let i = 0; i < upgrade.cost; i++) {
+      if (!availableSlotIndices.length) break;
+      const slotIndex = availableSlotIndices.shift();
+      state.usedSlots.push({ index: slotIndex, type: upgrade.type, name: instance.name, instanceId: instance.instanceId });
+    }
     remainingSlotsDisplay.textContent = state.remainingSlots;
     updateSelectedUpgradesList();
-    renderSlotIndicators(); // Update the slot indicators
+    renderSlotIndicators();
     renderUpgradeOptions();
-    updateCostDisplay(); // Update cost display
-    updateCostDisplay(); // Update cost display
+    updateCostDisplay();
+  }
+  
+  function removeUpgrade(instance) {
+    // Find instance by instanceId
+    const idx = state.selectedUpgrades.findIndex(u => u.instanceId === instance.instanceId);
+    if (idx === -1) return;
+    const removed = state.selectedUpgrades[idx];
+    state.selectedUpgrades.splice(idx,1);
+    state.remainingSlots += removed.cost;
+    state.usedSlots = state.usedSlots.filter(slot => slot.instanceId !== removed.instanceId);
+    remainingSlotsDisplay.textContent = state.remainingSlots;
+    updateSelectedUpgradesList();
+    renderSlotIndicators();
+    renderUpgradeOptions();
+    updateCostDisplay();
   }
   
   // Helper function to find weapon details
@@ -1787,21 +1845,19 @@
       return;
     }
     
-    state.selectedUpgrades.forEach(upgrade => {
+    state.selectedUpgrades.forEach(instance => {
       const li = document.createElement("li");
       li.style.cssText = "padding: 10px; background-color: #2a2a2a; margin-bottom: 8px; border-left: 3px solid #c0a060;";
       li.innerHTML = `
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <span><strong style="color: #ffd700;">${upgrade.name}</strong> (${upgrade.cost} slot${upgrade.cost > 1 ? 's' : ''})</span>
-          <button class="removeUpgradeBtn" style="background: none; border: none; color: #c0a060; cursor: pointer; font-size: 1.2em;">×</button>
+        <div style=\"display: flex; justify-content: space-between; align-items: center;\">
+          <span><strong style=\"color: #ffd700;\">${instance.name}</strong> (${instance.cost} slot${instance.cost > 1 ? 's' : ''})</span>
+          <button class=\"removeUpgradeBtn\" style=\"background: none; border: none; color: #c0a060; cursor: pointer; font-size: 1.2em;\">×</button>
         </div>
-        <div style="font-size: 0.675em; color: #e0d2b4; margin-top: 5px;">${upgrade.description}</div>
+        <div style=\"font-size: 0.675em; color: #e0d2b4; margin-top: 5px;\">${instance.description}${instance.chosenValue ? `<br><em>Choice: ${instance.chosenValue}</em>` : ''}</div>
       `;
       selectedUpgradesList.appendChild(li);
-      
-      // Add event listener for the remove button
-      const removeBtn = li.querySelector(".removeUpgradeBtn");
-      removeBtn.addEventListener("click", () => removeUpgrade(upgrade));
+      const removeBtn = li.querySelector('.removeUpgradeBtn');
+      removeBtn.addEventListener('click', () => removeUpgrade(instance));
     });
   }
   
