@@ -1,0 +1,1722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aether-Padded Punt Simulator: Landscape Edition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Field Grid Pattern */
+        #field-grid {
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), 
+                linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar { height: 10px; width: 10px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 5px; border: 2px solid #0f172a; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+        /* Player Token Styles */
+        .player-token { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+        .player-token:hover { transform: scale(1.2); z-index: 100 !important; }
+        
+        /* High Z-Index to ensure clickability over grid */
+        .player-token.selected { 
+            border: 2px solid white; 
+            box-shadow: 0 0 15px white; 
+            z-index: 60 !important; 
+            transform: scale(1.1);
+        }
+        
+        .player-token.has-ball {
+            box-shadow: 0 0 0 2px #fbbf24, 0 0 15px #fbbf24;
+            border-color: #fbbf24;
+        }
+
+        /* Role Shape Variants (clip-path creates distinct silhouettes) */
+        .player-token.star { /* Striker */
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+        }
+        .player-token.dagger { /* Midfielder (diamond for better click area) */
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+        }
+        .player-token.shield { /* Defender */
+            clip-path: polygon(50% 0%, 80% 25%, 80% 60%, 50% 100%, 20% 60%, 20% 25%);
+        }
+        .player-token.hexagon { /* Goalie */
+            clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+        }
+        .player-token.triangle { /* Flex */
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+        }
+        /* Flex now triangle; circle retained as fallback */
+
+        /* Animations */
+        .player-token.full-diaper { animation: waddle-mess 0.5s infinite alternate; }
+        @keyframes waddle-mess {
+            0% { transform: rotate(-5deg) scale(1.1); }
+            100% { transform: rotate(5deg) scale(1.1); }
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-200 font-sans h-screen flex flex-col overflow-hidden">
+
+    <!-- ==================== SETUP SCREEN ==================== -->
+    <div id="setup-screen" class="absolute inset-0 bg-slate-900 z-50 p-6 flex flex-col items-center overflow-y-auto">
+        <h1 class="text-5xl font-black mb-2 text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-indigo-400">
+            AETHER-PADDED PUNT
+        </h1>
+        <p class="text-slate-400 mb-4 text-sm uppercase tracking-widest">Landscape Field Edition</p>
+
+        <!-- TOP: TEAM BUILDER ALWAYS VISIBLE -->
+        <div class="w-full max-w-7xl mb-4">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-3">
+                <!-- Team A (Left Side) -->
+                <div class="bg-slate-800 p-6 rounded-xl border-l-8 border-red-500 shadow-2xl">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-2xl font-bold text-red-400">HOME TEAM (LEFT)</h2>
+                              <input type="text" id="team-a-name" value="The Crinkle Crushers" placeholder="Home Team Name" title="Home Team Name" 
+                                  class="bg-slate-700 text-white px-3 py-1 rounded border border-slate-600 focus:border-red-500 outline-none w-64 text-right" aria-label="Home Team Name">
+                    </div>
+                    <div class="grid grid-cols-1 gap-3" id="roster-a-container"></div>
+                </div>
+
+                <!-- Team B (Right Side) -->
+                <div class="bg-slate-800 p-6 rounded-xl border-l-8 border-blue-500 shadow-2xl">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-2xl font-bold text-blue-400">AWAY TEAM (RIGHT)</h2>
+                              <input type="text" id="team-b-name" value="The Padded Paladins" placeholder="Away Team Name" title="Away Team Name" 
+                                  class="bg-slate-700 text-white px-3 py-1 rounded border border-slate-600 focus:border-blue-500 outline-none w-64 text-right" aria-label="Away Team Name">
+                    </div>
+                    <div class="grid grid-cols-1 gap-3" id="roster-b-container"></div>
+                </div>
+            </div>
+
+            <!-- Team file export/import controls -->
+            <div class="mb-2 flex flex-wrap items-center gap-3 text-[11px]">
+                <button onclick="exportTeamSetup('A')" class="px-4 py-2 bg-red-600 hover:bg-red-500 rounded-full font-bold text-white border border-red-300/40">Export Home (Red) Team</button>
+                <button onclick="exportTeamSetup('B')" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-full font-bold text-white border border-blue-300/40">Export Away (Blue) Team</button>
+                <label class="inline-flex items-center gap-2 px-4 py-2 bg-slate-800 rounded-full border border-slate-600 cursor-pointer hover:border-slate-400">
+                    <span class="font-bold text-slate-100">Import Team Setup</span>
+                    <input id="team-import-file" type="file" accept="application/json" class="hidden" onchange="handleTeamImportFile(this)">
+                    <span class="text-[10px] text-slate-400">Single-team .json from a previous lobby</span>
+                </label>
+                <span class="text-[10px] text-slate-500">Exports/imports one team at a time. Import lets you pick Red (Home) or Blue (Away).</span>
+            </div>
+
+            <!-- Quick pre-game workflow note for play-by-post lobbies -->
+            <div class="mb-4 text-[11px] text-slate-400 bg-slate-800/60 border border-slate-700 rounded-lg p-3">
+                <div class="font-semibold text-slate-200 mb-1">Pre-game checklist for predefined opponents</div>
+                <ol class="list-decimal list-inside space-y-0.5">
+                    <li>Each player builds their own team on their chosen side (Red home / Blue away).</li>
+                    <li>Each player <span class="text-emerald-300 font-semibold">exports</span> their team to a file.</li>
+                    <li>To face a specific opponent, <span class="text-sky-300 font-semibold">import</span> their team file into the agreed color slot (Red or Blue).</li>
+                    <li>When everyone is happy, hit <span class="text-pink-300 font-semibold">INITIALIZE MATCH</span> to start.</li>
+                </ol>
+                <p class="mt-1 text-[10px] text-slate-500">Decide out-of-game which side goes first; the sim will roll initiative when the match starts, and both copies should follow that result to avoid desync.</p>
+            </div>
+
+            <button onclick="startGame()" 
+                    class="mb-4 px-16 py-5 bg-gradient-to-r from-pink-600 to-indigo-600 rounded-full text-2xl font-black text-white hover:scale-105 hover:shadow-pink-500/25 hover:shadow-2xl transition-all border border-white/20">
+                INITIALIZE MATCH
+            </button>
+        </div>
+
+        <!-- BELOW: OVERVIEW/RULES + LOAD-SAVE LAYOUT -->
+        <div class="w-full max-w-7xl flex flex-col lg:flex-row gap-4 items-start">
+            <div class="flex-1 min-w-0">
+                <!-- Setup Tabs -->
+                <div class="mb-3 flex gap-2 text-xs font-bold uppercase tracking-wide">
+                    <button id="tab-overview" onclick="setSetupTab('overview')" class="px-3 py-2 rounded-full bg-slate-800 text-slate-200 border border-slate-600">Overview</button>
+                    <button id="tab-rules" onclick="setSetupTab('rules')" class="px-3 py-2 rounded-full bg-slate-900 text-slate-400 border border-slate-700">Rules</button>
+                </div>
+
+        <!-- OVERVIEW TAB -->
+        <div id="setup-panel-overview" class="w-full mb-4 bg-slate-800/60 p-6 rounded-xl border border-slate-700">
+            <h2 class="text-xl font-bold mb-3 text-slate-100">Races & Roles Overview</h2>
+            <p class="text-xs text-slate-400 mb-4">Quick reference for all available races and the five core roles. This is meant as a table-read cheat sheet before you lock in teams.</p>
+            <!-- Roles summary -->
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-3 mb-6 text-[11px]">
+                <div class="bg-slate-900/60 border border-slate-700 rounded-lg p-3">
+                    <div class="font-bold text-pink-300 mb-1">Striker</div>
+                    <p>Primary scorer. High DEX, best at shooting. Wants the ball near goal.</p>
+                    <p class="mt-1 text-slate-400">Range: <span class="text-slate-200">Pass 5, shots scale by distance; loves clean lanes.</span></p>
+                </div>
+                <div class="bg-slate-900/60 border border-slate-700 rounded-lg p-3">
+                    <div class="font-bold text-emerald-300 mb-1">Midfielder</div>
+                    <p>Connector players. Good at passes and support, living around midfield.</p>
+                    <p class="mt-1 text-slate-400">Range: <span class="text-slate-200">Pass 5, good tackle footprint.</span></p>
+                </div>
+                <div class="bg-slate-900/60 border border-slate-700 rounded-lg p-3">
+                    <div class="font-bold text-cyan-300 mb-1">Defender</div>
+                    <p>Thick front line. STR‑focused, taxes shots and tackles near your goal.</p>
+                    <p class="mt-1 text-slate-400">Threat: <span class="text-slate-200">Big threat radius; best at clogging lanes.</span></p>
+                </div>
+                <div class="bg-slate-900/60 border border-slate-700 rounded-lg p-3">
+                    <div class="font-bold text-indigo-300 mb-1">Goalie</div>
+                    <p>Anchors the 5‑point gate. Great at denying close shots and cleaning up.</p>
+                    <p class="mt-1 text-slate-400">Position: <span class="text-slate-200">Starts in the inner 5‑point zone.</span></p>
+                </div>
+                <div class="bg-slate-900/60 border border-slate-700 rounded-lg p-3">
+                    <div class="font-bold text-amber-300 mb-1">Flex</div>
+                    <p>Weird wizard. INT‑leaning support with small spell list instead of raw stats.</p>
+                    <p class="mt-1 text-slate-400">Toolkit: <span class="text-slate-200">Soft buffs, debuffs, and diaper tricks.</span></p>
+                </div>
+            </div>
+
+            <!-- Races cheat sheet (populated at runtime) -->
+            <div>
+                <div class="flex items-center justify-between mb-2">
+                    <h3 class="text-lg font-semibold text-slate-100">Race Cards</h3>
+                    <span class="text-[10px] text-slate-500">Stats are base modifiers on top of 10s; speed is feet per turn. Each card reserves a strip for future race art.</span>
+                </div>
+                <div id="race-overview-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-[11px]"></div>
+            </div>
+        </div>
+
+        <!-- RULES TAB -->
+        <div id="setup-panel-rules" class="hidden w-full mb-4 bg-slate-800/60 p-6 rounded-xl border border-slate-700 text-[11px] leading-snug">
+            <h2 class="text-xl font-bold mb-3 text-slate-100">Core Rules Snapshot</h2>
+            <p class="text-slate-300 mb-2">This is the quick‑reference version of Aether‑Padded Punt. Use it to remind yourself what the buttons mean.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <h3 class="font-semibold text-emerald-300 mb-1">Objective & Scoring</h3>
+                    <ul class="list-disc list-inside text-slate-300 space-y-1">
+                        <li>Score by shooting the ball into the opponent&apos;s goal zones on the far side.</li>
+                        <li>Outer band is worth <span class="font-bold">1 point</span>, middle is <span class="font-bold">3</span>, inner glowing gate is <span class="font-bold">5</span>.</li>
+                        <li>Ball starts at midfield; first initiative is decided by a d20 roll‑off.</li>
+                    </ul>
+                    <h3 class="font-semibold text-sky-300 mt-3 mb-1">Turn Flow</h3>
+                    <ul class="list-disc list-inside text-slate-300 space-y-1">
+                        <li>Only the team with initiative can act; each turn is one team doing all their moves/actions.</li>
+                        <li>Select a player to see their current move speed for this turn.</li>
+                        <li>Move by clicking tiles; each player typically gets <span class="font-bold">one action</span> (pass, shoot, tackle, punt, foul, racial, or ultimate).</li>
+                        <li>After you&apos;re done with all your toys, hit <span class="font-bold">END TURN</span> to hand initiative over.</li>
+                    </ul>
+                    <h3 class="font-semibold text-amber-300 mt-3 mb-1">Actions (Buttons)</h3>
+                    <ul class="list-disc list-inside text-slate-300 space-y-1">
+                        <li><span class="font-bold">PASS</span>: Throw the ball 5 tiles forward; nearby foes may impose threat or intercept.</li>
+                        <li><span class="font-bold">SHOOT</span>: Fire toward the goal; DC scales by distance and defender pressure.</li>
+                        <li><span class="font-bold">TACKLE</span>: Hit an adjacent foe; on success you snare or, on a 20, root them.</li>
+                        <li><span class="font-bold">PUNT</span>: Diaper‑ass punt that sends the ball far downfield if the STR check holds up.</li>
+                        <li><span class="font-bold">FOUL</span>: Risky hit that deals HP damage and hands out yellow flags.</li>
+                        <li><span class="font-bold">RACE / ULTIMATE</span>: Once‑per‑half racial powers and a three‑star ultimate.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-rose-300 mb-1">Statuses & Penalties</h3>
+                    <ul class="list-disc list-inside text-slate-300 space-y-1">
+                        <li><span class="font-bold">Rooted</span>: Can&apos;t move at all.</li>
+                        <li><span class="font-bold">Snared</span>: Speed reduced and accuracy slightly worse.</li>
+                        <li><span class="font-bold">KO</span>: Out for a few turns; drops the ball if carrying.</li>
+                        <li><span class="font-bold">Penalty Box</span>: Three yellow flags earns you a timeout.</li>
+                        <li><span class="font-bold">Diaper States</span>: Full diapers impose attack/move penalties unless mitigated.</li>
+                    </ul>
+                    <h3 class="font-semibold text-indigo-300 mt-3 mb-1">Halves & Reset</h3>
+                    <ul class="list-disc list-inside text-slate-300 space-y-1">
+                        <li>The engine auto‑advances to the second half after enough turns; some per‑half abilities refresh.</li>
+                        <li>Red stars earned by big plays charge your ultimate; three stars lights it up.</li>
+                    </ul>
+                    <h3 class="font-semibold text-teal-300 mt-3 mb-1">Copy‑Paste Play‑By‑Post</h3>
+                    <ul class="list-disc list-inside text-slate-300 space-y-1">
+                        <li><span class="font-bold">COPY</span> grabs a compact JSON snapshot of the current board.</li>
+                        <li>Your opponent pastes it into their copy via <span class="font-bold">PASTE / MERGE</span> or the setup textarea.</li>
+                        <li>If the seeds match, only positions, scores, and state update and you&apos;ll see pieces slide into place.</li>
+                        <li>Goals scored on the remote side&apos;s turn pop little fireworks by the appropriate gate.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Paste / Load Saved Game State (RIGHT SIDEBAR) -->
+        <div class="w-full lg:w-80 lg:self-stretch bg-slate-800/60 p-4 rounded-xl border border-slate-700 text-[11px]">
+            <h3 class="text-sm font-bold mb-1 text-slate-200">Load Saved Game</h3>
+            <p class="text-[10px] text-slate-400 mb-2">Paste a copied JSON snapshot to jump straight into a match or sync with a remote turn. This will either fully load or gently merge depending on the seed.</p>
+            <textarea id="paste-json" class="w-full h-32 bg-slate-900 text-slate-200 text-[10px] p-2 rounded border border-slate-600 focus:border-indigo-400 outline-none" placeholder="{\n  \"seed\": \"...\",\n  ...\n}"></textarea>
+            <div class="mt-2 flex flex-wrap gap-2">
+                <button onclick="loadFromSetupPaste()" class="px-4 py-1.5 bg-indigo-600 hover:bg-indigo-500 rounded text-[10px] font-bold text-white">LOAD SAVE</button>
+                <button onclick="clearSetupPaste()" class="px-4 py-1.5 bg-slate-700 hover:bg-slate-600 rounded text-[10px] font-bold text-slate-200">CLEAR</button>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <!-- ==================== GAME INTERFACE ==================== -->
+    <div id="game-ui" class="hidden flex h-full">
+        
+        <!-- LEFT SIDEBAR: CONTROLS -->
+        <div class="w-96 bg-slate-900 p-4 border-r border-slate-700 flex flex-col flex-shrink-0 shadow-xl z-20">
+            <div class="mb-4 p-5 bg-slate-800 rounded-2xl border border-slate-700 shadow-lg text-center relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-500 via-transparent to-blue-500"></div>
+                <div class="flex justify-between items-center">
+                    <div class="text-4xl font-black text-red-400" id="score-a">0</div>
+                    <div class="flex flex-col">
+                        <span class="text-xs uppercase text-slate-500 font-bold tracking-widest">SCORE</span>
+                        <span class="text-xl font-bold text-white">VS</span>
+                    </div>
+                    <div class="text-4xl font-black text-blue-400" id="score-b">0</div>
+                </div>
+                <div class="mt-4 flex justify-between items-center text-xs font-mono bg-slate-900/50 p-2 rounded-lg">
+                    <span id="turn-indicator" class="text-slate-300">Turn: 1</span>
+                    <span>Init: <span id="initiative-indicator" class="font-bold text-yellow-400">--</span></span>
+                </div>
+            </div>
+
+            <div id="player-card" class="flex-1 bg-slate-800 p-5 rounded-2xl border border-slate-700 overflow-y-auto mb-4 shadow-inner">
+                <div class="h-full flex flex-col items-center justify-center text-slate-500 italic">
+                    <i data-lucide="mouse-pointer-2" class="mb-2 opacity-50"></i>
+                    <span>Select a player on the field<br>to view stats & actions.</span>
+                </div>
+            </div>
+
+            <button onclick="endTurn()" class="w-full py-4 bg-amber-600 hover:bg-amber-500 rounded-xl font-black text-white shadow-lg transition-all flex items-center justify-center gap-2 border-b-4 border-amber-800 active:border-b-0 active:translate-y-1">
+                <i data-lucide="skip-forward"></i> END TURN
+            </button>
+            <div class="mt-4 grid grid-cols-2 gap-2 text-[10px]">
+                <button onclick="copyGameState()" data-tip="Copy current game state JSON to clipboard." class="bg-cyan-700 hover:bg-cyan-600 p-2 rounded font-bold text-white">COPY</button>
+                <button onclick="saveGameStateFile()" data-tip="Download current game state as a .json file." class="bg-green-700 hover:bg-green-600 p-2 rounded font-bold text-white">SAVE</button>
+                <button onclick="promptPasteMerge()" data-tip="Paste JSON snapshot to merge if same seed or fully load if different." class="bg-purple-700 hover:bg-purple-600 p-2 rounded font-bold text-white col-span-2">PASTE / MERGE</button>
+            </div>
+            <!-- Second half now auto-starts after 15 turns; manual button removed -->
+        </div>
+
+        <!-- CENTER: THE FIELD (LANDSCAPE) -->
+        <div class="flex-1 bg-emerald-950 relative overflow-auto cursor-crosshair" id="field-scroll-area">
+            <!-- Landscape Dimensions: 1200px Wide x 600px Tall -->
+            <div id="field-wrapper" class="relative mx-auto my-10 bg-emerald-800 shadow-[0_0_50px_rgba(0,0,0,0.5)] border-4 border-white/20" style="width: 1200px; height: 600px;">
+                
+                <!-- Background Grid -->
+                <div id="field-grid" class="absolute inset-0 w-full h-full z-0 pointer-events-none"></div>
+
+                <!-- Midfield Markings -->
+                <div class="absolute left-1/2 top-0 h-full w-1 bg-white/20 -translate-x-1/2 pointer-events-none"></div>
+                <div class="absolute top-1/2 left-1/2 w-32 h-32 border-4 border-white/20 rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
+
+                <!-- GOAL ZONES (Landscape Orientation) -->
+                
+                <!-- LEFT GOAL (Defended by Team A) ORIGINAL STYLE RESTORED -->
+                <!-- Zones: 1pt (outer), 3pt (middle), 5pt (inner) horizontally; vertically centered without stacking at top -->
+                <!-- Adjusted heights to reduce overlap between 1pt and 3pt gates (slight trim to 1pt) -->
+                <div class="absolute left-[120px] top-1/2 -translate-y-1/2 h-[55%] w-10 border-r-2 border-y-2 border-white/20 bg-green-400/5 flex items-center justify-center text-xs font-bold text-white/30 writing-vertical rounded-r-xl">1 PT</div>
+                <div class="absolute left-[80px] top-1/2 -translate-y-1/2 h-[30%] w-10 border-r-2 border-y-2 border-white/20 bg-yellow-400/5 flex items-center justify-center text-xs font-bold text-white/30 writing-vertical rounded-r-xl">3 PT</div>
+                <div class="absolute left-0 top-1/2 -translate-y-1/2 h-[15%] w-20 border-r-2 border-y-2 border-white/30 bg-red-500/10 flex items-center justify-center text-xs font-bold text-white/50 writing-vertical rounded-r-xl shadow-[0_0_20px_rgba(239,68,68,0.2)]">5 PT</div>
+
+
+                <!-- RIGHT GOAL (Defended by Team B) ORIGINAL STYLE RESTORED -->
+                <div class="absolute right-[120px] top-1/2 -translate-y-1/2 h-[55%] w-10 border-l-2 border-y-2 border-white/20 bg-green-400/5 flex items-center justify-center text-xs font-bold text-white/30 writing-vertical rounded-l-xl">1 PT</div>
+                <div class="absolute right-[80px] top-1/2 -translate-y-1/2 h-[30%] w-10 border-l-2 border-y-2 border-white/20 bg-yellow-400/5 flex items-center justify-center text-xs font-bold text-white/30 writing-vertical rounded-l-xl">3 PT</div>
+                <div class="absolute right-0 top-1/2 -translate-y-1/2 h-[15%] w-20 border-l-2 border-y-2 border-white/30 bg-blue-500/10 flex items-center justify-center text-xs font-bold text-white/50 writing-vertical rounded-l-xl shadow-[0_0_20px_rgba(59,130,246,0.2)]">5 PT</div>
+
+
+                <!-- Interactive Layers -->
+                <!-- Z-Index 10 for movement grid, Z-Index 50 for players -->
+                <div id="click-layer" class="absolute inset-0 z-10">
+                    <!-- Invisible grid for movement clicks -->
+                </div>
+                <div id="entities-layer" class="absolute inset-0 z-50 pointer-events-none">
+                    <!-- Players and Ball go here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT SIDEBAR: LOGS -->
+        <div class="w-80 bg-slate-900 border-l border-slate-700 flex flex-col flex-shrink-0 z-20 shadow-xl">
+            <div class="p-3 bg-slate-800 font-bold text-center text-slate-300 border-b border-slate-700 shadow-sm">
+                <i data-lucide="scroll-text" class="inline-block w-4 h-4 mr-2"></i>MATCH LOG
+            </div>
+            <div id="game-log" class="flex-1 overflow-y-auto p-3 space-y-3 text-xs font-mono"></div>
+        </div>
+    </div>
+
+    <!-- ==================== JAVASCRIPT LOGIC ==================== -->
+    <script>
+        // --- CONFIGURATION CONSTANTS ---
+        const GRID_W = 60; // Landscape width
+        const GRID_H = 30; // Landscape height
+        const TILE = 20;   // 20px per square
+
+        const RACES = {
+            Human:         { str: 0, dex: 0, con: 0, speed: 30 },
+            Kittenfolk:    { str: -1, dex: 2, con: 0, speed: 35 },
+            Pupperling:    { str: 1, dex: 0, con: 1, speed: 35 },
+            Pupperlings:   { str: 1, dex: 0, con: 1, speed: 35 },
+            Bunbunkin:     { str: 2, dex: 2, con: -1, speed: 35 },
+            Skunkiddo:     { str: 0, dex: 2, con: 1, speed: 25 },
+            Darkling:      { str: 0, dex: 0, con: 0, speed: 30 },
+            Cowbuddies:    { str: 0, dex: 0, con: 1, speed: 35 },
+            Seimei:        { str: 0, dex: 0, con: 2, speed: 30 },
+            Scampersaurian:{ str: 0, dex: 0, con: 2, speed: 30 },
+            Diaparachnid:  { str: 2, dex: 2, con: 2, speed: 35 },
+            Ghost:         { str: 0, dex: 1, con: 0, speed: 30 },
+            Morphian_Changeling: { str: 0, dex: 1, con: 1, speed: 30 },
+            Tanukijin:     { str: 0, dex: 2, con: 0, speed: 30 },
+            Possumfolk:    { str: 0, dex: 2, con: 0, speed: 30 },
+            Living_Doll:   { str: -1, dex: 1, con: 2, speed: 25 },
+            Crinkleheart:  { str: 0, dex: 0, con: 2, speed: 30 },
+            Carcharodonian:{ str: 2, dex: 0, con: 1, speed: 30 },
+            Pampire:       { str: 0, dex: 2, con: 0, speed: 30 },
+            Waddlehooves:  { str: 4, dex: 0, con: 2, speed: 60 },
+            Elf:           { str: 0, dex: 2, con: 0, speed: 30 },
+            Dwarf:         { str: 0, dex: 0, con: 2, speed: 25 },
+            Halfling:      { str: 0, dex: 2, con: 0, speed: 25 },
+            Foxfolk:       { str: 0, dex: 2, con: 0, speed: 35 },
+            Demi_Gorgon:   { str: 2, dex: 0, con: 2, speed: 30 },
+            Semi_Gorgon:   { str: 1, dex: 1, con: 1, speed: 30 },
+            Gemini_Celestian: { str: 0, dex: 2, con: 0, speed: 30 },
+            Celestian_Archist: { str: 0, dex: 0, con: 1, speed: 30 },
+        };
+
+        // Human-friendly display for selection; converts internal underscore keys back to original spacing/hyphenation.
+        function displayRaceName(key){
+            switch(key){
+                case 'Morphian_Changeling': return 'Morphian Changeling';
+                case 'Living_Doll': return 'Living Doll';
+                case 'Demi_Gorgon': return 'Demi-Gorgon';
+                case 'Semi_Gorgon': return 'Semi-Gorgon';
+                case 'Gemini_Celestian': return 'Gemini Celestian';
+                case 'Celestian_Archist': return 'Celestian Archist';
+                default: return key; // single-word races already fine
+            }
+        }
+
+        // Once-per-half racial abilities (extended descriptions for tooltips)
+        const RACE_ABILITIES = {
+            Human: { label:'Versatile Reroll', desc:'After a failed pass or shoot, immediately reroll (once per half).', use(p){ p.raceFlags.versatilePending=true; logMsg(`${p.name} will reroll next failed pass/shoot.`,'info'); } },
+            Kittenfolk: { label:'Agile Pounce', desc:'Gain +15 speed this turn.', use(p){ p.raceFlags.speedBonusTurns=1; p.raceFlags.speedBonusValue=15; logMsg(`${p.name} gains +15 speed this turn.`,'success'); } },
+            Pupperling: { label:'Loyal Snatch', desc:'Steal ball from foe within 4 tiles.', use(p){ const holderId=gameState.ball.holder; if(holderId){ const carrier=[...gameState.teams.A,...gameState.teams.B].find(x=>x.id===holderId); if(carrier&&carrier.team!==p.team){ const d=Math.max(Math.abs(p.x-carrier.x),Math.abs(p.y-carrier.y)); if(d<=4){ gameState.ball.holder=p.id; gameState.ball.x=p.x; gameState.ball.y=p.y; logMsg(`${p.name} snatches the ball!`,'warning'); updateUI(); } else logMsg('Too far to snatch.','error'); } else logMsg('No opposing carrier.','error'); } else logMsg('Ball free; move onto it.','warning'); } },
+            Pupperlings: { label:'Pack Snatch', desc:'Steal ball or grant +10 speed to adjacent ally.', use(p){ const holderId=gameState.ball.holder; if(holderId){ const carrier=[...gameState.teams.A,...gameState.teams.B].find(x=>x.id===holderId); if(carrier&&carrier.team!==p.team){ const d=Math.max(Math.abs(p.x-carrier.x),Math.abs(p.y-carrier.y)); if(d<=4){ gameState.ball.holder=p.id; gameState.ball.x=p.x; gameState.ball.y=p.y; logMsg(`${p.name} pack-snatches the ball!`,'warning'); updateUI(); } else logMsg('Too far to snatch.','error'); } } else { const ally=(p.team==='A'?gameState.teams.A:gameState.teams.B).find(a=>Math.max(Math.abs(a.x-p.x),Math.abs(a.y-p.y))<=1 && a.id!==p.id); if(ally){ ally.raceFlags.speedBonusTurns=1; ally.raceFlags.speedBonusValue=10; logMsg(`${p.name} rallies ${ally.name} (+10 speed).`,'success'); } else logMsg('No adjacent ally to rally.','error'); } } },
+            Bunbunkin: { label:'Bounding Leap', desc:'Movement uses (dx+dy) instead of max(dx,dy) this turn.', use(p){ p.raceFlags.leapActive=true; logMsg(`${p.name} leaps efficiently (cheap diagonals).`,'info'); } },
+            Skunkiddo: { label:'Stinky Distraction', desc:'Adjacent foes suffer -2 DEX (affects pass/shoot/tackle).', use(p){ const foes=(p.team==='A'?gameState.teams.B:gameState.teams.A).filter(f=>Math.max(Math.abs(f.x-p.x),Math.abs(f.y-p.y))<=1); foes.forEach(f=>{ f.raceFlags.dexPenalty=(f.raceFlags.dexPenalty||0)+2; }); logMsg(`${p.name} distracts foes (-2 DEX).`,'warning'); } },
+            Darkling: { label:'Shadow Slip', desc:'Teleport near ball (within 2 tiles random).', use(p){ p.x=clamp(gameState.ball.x + (Math.floor(Math.random()*5)-2),0,GRID_W-1); p.y=clamp(gameState.ball.y + (Math.floor(Math.random()*5)-2),0,GRID_H-1); logMsg(`${p.name} shadow-slips near the ball.`,'info'); updateUI(); } },
+            Cowbuddies: { label:'Steady Bulk', desc:'+3 STR, -10 speed until end of turn.', use(p){ p.raceFlags.bulkTurns=1; logMsg(`${p.name} bulks (+3 STR -10 speed).`,'info'); } },
+            Seimei: { label:'Mystic Focus', desc:'Ignore next continence failure (Nat1 save fail).', use(p){ p.raceFlags.focusPending=true; logMsg(`${p.name} readies mystic focus.`,'success'); } },
+            Scampersaurian: { label:'Sprint Surge', desc:'+20 speed this turn.', use(p){ p.raceFlags.speedBonusTurns=1; p.raceFlags.speedBonusValue=20; logMsg(`${p.name} surges (+20 speed).`,'success'); } },
+            Diaparachnid: { label:'Web Snare', desc:'Snare nearest foe ≤5 tiles (speed -15, -1 accuracy) 2 turns.', use(p){ const foes=(p.team==='A'?gameState.teams.B:gameState.teams.A); let n=null,d=999; foes.forEach(f=>{const dd=Math.max(Math.abs(f.x-p.x),Math.abs(f.y-p.y)); if(dd<d){d=dd;n=f;}}); if(n&&d<=5){ n.raceFlags.snareTurns=2; n.raceFlags.snarePenalty=15; logMsg(`${p.name} snares ${n.name} for 2 turns!`,'warning'); } else logMsg('No target in range.','error'); } },
+            Elf: { label:'Graceful Aim', desc:'Near-miss (≤3 below DC) on shot becomes success.', use(p){ p.raceFlags.gracefulShotPending=true; logMsg(`${p.name} steadies aim (near-miss elevates).`,'info'); } },
+            Dwarf: { label:'Stout Might', desc:'+2 STR for remainder of half.', use(p){ p.raceFlags.stoutActive=true; logMsg(`${p.name} becomes stout (+2 STR).`,'success'); } },
+            Halfling: { label:'Lucky Bounce', desc:'Failed pass keeps ball at origin.', use(p){ p.raceFlags.luckyBouncePending=true; logMsg(`${p.name} prepares lucky bounce.`,'info'); } },
+            Waddlehooves: { label:'Thunder Gallop', desc:'+30 speed +2 STR this turn.', use(p){ p.raceFlags.gallopTurns=1; logMsg(`${p.name} thunders (+30 speed +2 STR).`,'success'); } }, 
+            Ghost: { label:'Ethereal Drift', desc:'Ignore threat zones on movement this turn.', use(p){ p.raceFlags.etherealTurns=1; logMsg(`${p.name} becomes ethereal (ignores zones).`,'info'); } },
+            Morphian_Changeling: { label:'Adaptive Shift', desc:'Gain +2 DEX for 2 turns.', use(p){ p.raceFlags.adaptBonusTurns=2; p.stats.dex +=2; logMsg(`${p.name} shifts (+2 DEX 2 turns).`,'success'); } }, 
+            Tanukijin: { label:'Illusory Diversion', desc:'Nearest foe -4 speed.', use(p){ const foes=(p.team==='A'?gameState.teams.B:gameState.teams.A); let n=null,d=999; foes.forEach(f=>{const dd=Math.max(Math.abs(f.x-p.x),Math.abs(f.y-p.y)); if(dd<d){d=dd;n=f;}}); if(n){ n.raceFlags.speedBonusTurns=1; n.raceFlags.speedBonusValue=-4; logMsg(`${p.name} distracts ${n.name} (-4 speed).`,'warning'); } } }, 
+            Possumfolk: { label:'Feign Sleep', desc:'Gain +4 foul defense this turn.', use(p){ p.raceFlags.possumDefenseTurns=1; logMsg(`${p.name} plays possum (+4 defense).`,'info'); } }, 
+            Living_Doll: { label:'Thread Bind', desc:'Root adjacent foe (1 turn).', use(p){ const foes=(p.team==='A'?gameState.teams.B:gameState.teams.A).filter(f=>Math.max(Math.abs(f.x-p.x),Math.abs(f.y-p.y))<=1); if(foes.length){ foes[0].raceFlags.rootTurns=1; logMsg(`${p.name} thread-binds ${foes[0].name}!`,'warning'); } else logMsg('No adjacent foe to bind.','error'); } }, 
+            Crinkleheart: { label:'Comfort Aura', desc:'Adjacent allies +2 pass/shoot mods this turn.', use(p){ const allies=(p.team==='A'?gameState.teams.A:gameState.teams.B).filter(a=>a.id!==p.id && Math.max(Math.abs(a.x-p.x),Math.abs(a.y-p.y))<=1); allies.forEach(a=>{ a.raceFlags.comfortTurns=1; }); logMsg(`${p.name} comforts allies (+2 mods).`,'success'); } }, 
+            Carcharodonian: { label:'Feeding Frenzy', desc:'+2 STR +10 speed this turn.', use(p){ p.raceFlags.frenzyTurns=1; p.raceFlags.speedBonusTurns=1; p.raceFlags.speedBonusValue=10; logMsg(`${p.name} enters Frenzy!`,'success'); } }, 
+            Pampire: { label:'Crimson Sip', desc:'Adjacent foe loses 3 HP; you heal 3.', use(p){ const foes=(p.team==='A'?gameState.teams.B:gameState.teams.A).filter(f=>Math.max(Math.abs(f.x-p.x),Math.abs(f.y-p.y))<=1 && f.hp>0); if(foes.length){ foes[0].hp=Math.max(0,foes[0].hp-3); p.hp=Math.min(p.maxHp,p.hp+3); logMsg(`${p.name} sips from ${foes[0].name}.`,'warning'); updateUI(); } else logMsg('No adjacent foe to sip.','error'); } },
+            Foxfolk: { label:'Foxfeint', desc:'Random sidestep (≤4) & +10 speed this turn.', use(p){ p.x=clamp(p.x + (Math.floor(Math.random()*9)-4),0,GRID_W-1); p.y=clamp(p.y + (Math.floor(Math.random()*9)-4),0,GRID_H-1); p.raceFlags.speedBonusTurns=1; p.raceFlags.speedBonusValue=(p.raceFlags.speedBonusValue||0)+10; logMsg(`${p.name} foxfeints (+10 speed).`,'info'); updateUI(); } },
+            Demi_Gorgon: { label:'Monstrous Glare', desc:'Nearest foe ≤3 tiles rooted 1 turn & -2 DEX.', use(p){ const foes=(p.team==='A'?gameState.teams.B:gameState.teams.A); let target=null,d=999; foes.forEach(f=>{ const dd=Math.max(Math.abs(f.x-p.x),Math.abs(f.y-p.y)); if(dd<d){d=dd;target=f;} }); if(target && d<=3){ target.raceFlags.rootTurns=1; target.raceFlags.dexPenalty=(target.raceFlags.dexPenalty||0)+2; logMsg(`${p.name} gorgon-glares ${target.name} (root & -2 DEX).`,'warning'); } else logMsg('No foe in glare range.','error'); } },
+            Semi_Gorgon: { label:'Balanced Surge', desc:'+10 speed; adjacent ally +10 speed.', use(p){ p.raceFlags.speedBonusTurns=1; p.raceFlags.speedBonusValue=(p.raceFlags.speedBonusValue||0)+10; const ally=(p.team==='A'?gameState.teams.A:gameState.teams.B).find(a=>a.id!==p.id && Math.max(Math.abs(a.x-p.x),Math.abs(a.y-p.y))<=1); if(ally){ ally.raceFlags.speedBonusTurns=1; ally.raceFlags.speedBonusValue=(ally.raceFlags.speedBonusValue||0)+10; logMsg(`${p.name} shares surge with ${ally.name}.`,'success'); } else logMsg(`${p.name} surges (+10 speed).`,'success'); } },
+            Gemini_Celestian: { label:'Dual Coordination', desc:'Adjacent ally refresh action & +10 speed.', use(p){ const ally=(p.team==='A'?gameState.teams.A:gameState.teams.B).find(a=>a.id!==p.id && a.hasActed && Math.max(Math.abs(a.x-p.x),Math.abs(a.y-p.y))<=1); if(ally){ ally.hasActed=false; ally.raceFlags.speedBonusTurns=1; ally.raceFlags.speedBonusValue=(ally.raceFlags.speedBonusValue||0)+10; logMsg(`${p.name} coordinates with ${ally.name} (action refreshed +10 speed).`,'success'); } else logMsg('No acted adjacent ally to refresh.','warning'); } },
+            Celestian_Archist: { label:'Adaptive Flux', desc:'+1 ALL stats & ignore snare penalty this turn.', use(p){ if(!p.raceFlags.adaptFluxApplied){ ['str','dex','con','int','wis','cha'].forEach(s=>p.stats[s]+=1); p.raceFlags.adaptFluxApplied=true; } p.raceFlags.adaptFluxTurns=1; logMsg(`${p.name} enters adaptive flux (+1 all stats, snare ignored).`,'success'); } }
+        };
+
+        const POSITION_TEMPLATES = [
+            { role: 'Striker', main: 'dex', count: 1 },
+            { role: 'Midfielder', main: 'dex', count: 2 },
+            { role: 'Defender', main: 'str', count: 2 },
+            { role: 'Goalie', main: 'wis', count: 1 },
+            { role: 'Flex', main: 'int', count: 1 }
+        ];
+
+        let gameState = {
+            teams: { A: [], B: [] },
+            names: { A: '', B: '' },
+            ball: { holder: null, x: 30, y: 15 }, // Center of 60x30 grid
+            scores: { A: 0, B: 0 },
+            turnCounter: 1,
+            initiative: null,
+            selectedPlayerId: null,
+            movesLeft: 0,
+            hasActed: false,
+            logs: [],
+            half: 1,
+            seed: null
+        };
+
+        // --- INITIALIZATION ---
+
+        window.onload = function() {
+            lucide.createIcons();
+            buildRosterInputs('A');
+            buildRosterInputs('B');
+            initRaceOverview();
+            setSetupTab('overview');
+        };
+
+        function setSetupTab(which){
+            const panels = {
+                overview: document.getElementById('setup-panel-overview'),
+                rules: document.getElementById('setup-panel-rules'),
+                teams: document.getElementById('setup-panel-teams')
+            };
+            const tabs = {
+                overview: document.getElementById('tab-overview'),
+                rules: document.getElementById('tab-rules'),
+                teams: document.getElementById('tab-teams')
+            };
+            Object.keys(panels).forEach(key=>{
+                if(panels[key]){
+                    panels[key].classList.toggle('hidden', key!==which);
+                }
+            });
+            Object.keys(tabs).forEach(key=>{
+                const active = key===which;
+                if(tabs[key]){
+                    tabs[key].className = `px-3 py-2 rounded-full border ${active? 'bg-slate-800 text-slate-200 border-slate-300':'bg-slate-900 text-slate-400 border-slate-700'}`;
+                }
+            });
+        }
+
+        function initRaceOverview(){
+            const grid = document.getElementById('race-overview-grid');
+            if(!grid) return;
+            grid.innerHTML = '';
+            const raceKeys = Object.keys(RACES).sort();
+            raceKeys.forEach(key=>{
+                const base = RACES[key];
+                if(!base) return;
+                const ability = resolveRaceEntry(RACE_ABILITIES, key);
+                const ultimate = resolveRaceEntry(RACE_ULTIMATES, key);
+                const card = document.createElement('div');
+                card.className = 'bg-slate-900/70 border border-slate-700 rounded-lg p-3 flex flex-col gap-1';
+                card.innerHTML = `
+                    <div class="flex items-baseline justify-between mb-1">
+                        <div class="font-semibold text-slate-100">${displayRaceName(key)}</div>
+                        <div class="text-[10px] text-slate-500">SPD ${base.speed}</div>
+                    </div>
+                    <div class="mb-1 h-10 border border-dashed border-slate-600 rounded flex items-center justify-center text-[9px] text-slate-500">Art: ${displayRaceName(key)} portrait</div>
+                    <div class="text-[11px] flex gap-3 mb-1 font-semibold">
+                        <span class="text-red-300">STR <span class="text-slate-100">${base.str>=0?'+':''}${base.str}</span></span>
+                        <span class="text-sky-300">DEX <span class="text-slate-100">${base.dex>=0?'+':''}${base.dex}</span></span>
+                        <span class="text-emerald-300">CON <span class="text-slate-100">${base.con>=0?'+':''}${base.con}</span></span>
+                    </div>
+                    <div class="text-[10px] text-cyan-300">${ability?`Ability: <span class='text-slate-200'>${ability.label}</span>`:'No listed racial ability yet.'}</div>
+                    <div class="text-[10px] text-slate-400 mb-1">${ability?ability.desc||'' : ''}</div>
+                    <div class="text-[10px] text-rose-300">${ultimate?`Ultimate: <span class='text-slate-200'>${ultimate.label}</span>`:'No ultimate defined yet.'}</div>
+                    <div class="text-[10px] text-slate-400 mt-0.5">${ultimate?ultimate.desc||'' : ''}</div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function buildRosterInputs(teamId) {
+            const container = document.getElementById(`roster-${teamId.toLowerCase()}-container`);
+            container.innerHTML = '';
+
+            let playerIndex = 0;
+            POSITION_TEMPLATES.forEach(template => {
+                for(let i=0; i<template.count; i++) {
+                    const wrapper = document.createElement('div');
+                    wrapper.className = "flex items-center gap-2 bg-slate-700/50 p-2 rounded-lg border border-slate-600";
+                    
+                    const label = document.createElement('span');
+                    label.className = `font-bold text-xs uppercase w-24 ${teamId === 'A' ? 'text-red-300' : 'text-blue-300'}`;
+                    label.innerText = template.role;
+                    
+                    const select = document.createElement('select');
+                    select.id = `sel-${teamId}-${playerIndex}`;
+                    select.className = "flex-1 bg-slate-800 text-white text-sm p-1 rounded border border-slate-500 focus:border-white outline-none";
+                    
+                    // Populate race options (exclude Waddlehooves for Flex role for balance)
+                    Object.keys(RACES).forEach(race => {
+                        if (template.role === 'Flex' && race === 'Waddlehooves') return; // restriction
+                        const opt = document.createElement('option');
+                        opt.value = race;
+                        opt.innerText = displayRaceName(race);
+                        select.appendChild(opt);
+                    });
+                    const keys = Object.keys(RACES);
+                    select.value = keys[Math.floor(Math.random() * keys.length)];
+
+                    // Name input for custom player naming
+                    const nameInput = document.createElement('input');
+                    nameInput.type = 'text';
+                    nameInput.id = `name-${teamId}-${playerIndex}`;
+                    nameInput.placeholder = 'Name';
+                    nameInput.className = 'w-28 bg-slate-800 text-white text-xs px-2 py-1 rounded border border-slate-500 focus:border-white outline-none';
+
+                    wrapper.appendChild(label);
+                    wrapper.appendChild(select);
+                    wrapper.appendChild(nameInput);
+                    container.appendChild(wrapper);
+                    playerIndex++;
+                }
+            });
+        }
+
+        function exportTeamSetup(teamId){
+            try {
+                const payload = collectTeamSetupSnapshot(teamId || 'A');
+                const json = JSON.stringify(payload, null, 2);
+                const blob = new Blob([json], {type:'application/json'});
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                const sideLabel = payload.side === 'A' ? 'red' : 'blue';
+                a.download = `arenabol-team-${sideLabel}-${Date.now().toString(36)}.json`;
+                document.body.appendChild(a); a.click(); document.body.removeChild(a);
+                logMsg(`${sideLabel.toUpperCase()} team setup exported to file.`,'success');
+            } catch(e){
+                logMsg('Failed to export team setup: '+e.message,'error');
+            }
+        }
+
+        function handleTeamImportFile(input){
+            const file = input.files && input.files[0];
+            if(!file) return;
+            const reader = new FileReader();
+            reader.onload = (ev)=>{
+                try {
+                    const data = JSON.parse(ev.target.result);
+                    let targetSide = prompt('Load this team as RED (home) or BLUE (away)? Type R or B.','R');
+                    if(!targetSide){ input.value=''; return; }
+                    targetSide = targetSide.trim().toUpperCase().startsWith('B') ? 'B' : 'A';
+                    applyTeamSetupSnapshot(data, targetSide);
+                    logMsg(`Team setup imported into ${targetSide==='A'?'RED (home)':'BLUE (away)'} slot.`,'success');
+                } catch(e){
+                    logMsg('Failed to import team setup: '+e.message,'error');
+                } finally {
+                    input.value = '';
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function collectTeamSetupSnapshot(teamId){
+            const snapshot = {
+                version: 2,
+                side: teamId,
+                teamName: teamId==='A'
+                    ? (document.getElementById('team-a-name')?.value || '')
+                    : (document.getElementById('team-b-name')?.value || ''),
+                roster: [],
+                version: 1
+            };
+            let index = 0;
+            POSITION_TEMPLATES.forEach(template=>{
+                for(let i=0;i<template.count;i++){
+                    const sel = document.getElementById(`sel-${teamId}-${index}`);
+                    const nameInput = document.getElementById(`name-${teamId}-${index}`);
+                    if(sel){
+                        snapshot.roster.push({
+                            role: template.role,
+                            race: sel.value,
+                            name: (nameInput?.value||'')
+                        });
+                    }
+                    index++;
+                }
+            });
+            return snapshot;
+        }
+
+        function applyTeamSetupSnapshot(data, targetSide){
+            if(!data || !Array.isArray(data.roster)){
+                throw new Error('Snapshot missing roster data');
+            }
+            const side = targetSide || data.side || 'A';
+            const nameId = side==='A' ? 'team-a-name' : 'team-b-name';
+            const teamNameInput = document.getElementById(nameId);
+            if(teamNameInput){
+                teamNameInput.value = data.teamName || teamNameInput.value || '';
+            }
+            let index = 0;
+            POSITION_TEMPLATES.forEach(template=>{
+                for(let i=0;i<template.count;i++){
+                    const info = data.roster[index] || {};
+                    const sel = document.getElementById(`sel-${side}-${index}`);
+                    const nameInput = document.getElementById(`name-${side}-${index}`);
+                    if(sel && info.race){
+                        sel.value = info.race;
+                    }
+                    if(nameInput && typeof info.name === 'string'){
+                        nameInput.value = info.name;
+                    }
+                    index++;
+                }
+            });
+        }
+
+        function startGame() {
+            // Generate new random seed (time + random mix, hex-like)
+            gameState.seed = generateSeed();
+            gameState.names.A = document.getElementById('team-a-name').value || "Team A";
+            gameState.names.B = document.getElementById('team-b-name').value || "Team B";
+            gameState.teams.A = compileTeam('A');
+            gameState.teams.B = compileTeam('B');
+
+            // Validate required role counts before starting
+            if(!validateRoleFill(gameState.teams.A) || !validateRoleFill(gameState.teams.B)){
+                logMsg('Cannot start: A required role is missing on one or both teams.','error');
+                gameState.teams.A=[]; gameState.teams.B=[]; // clear partial to force rebuild
+                updateUI();
+                return;
+            }
+
+            // Position goalies centered in the inner (5pt) gate line
+            positionGoalies();
+            // Position strikers and midfielders relative to ball center
+            positionFieldRoles();
+
+            const rollA = d20();
+            const rollB = d20();
+            gameState.initiative = rollA >= rollB ? 'A' : 'B';
+
+            document.getElementById('setup-screen').classList.add('hidden');
+            document.getElementById('game-ui').classList.remove('hidden');
+
+            logMsg(`MATCH START! ${gameState.names[gameState.initiative]} wins initiative (${rollA} vs ${rollB}).`, 'bold');
+            logMsg(`Seed: ${gameState.seed}`, 'info');
+            updateUI();
+            initClickLayer();
+            initTooltips();
+        }
+
+        function validateRoleFill(teamArr){
+            const needed = POSITION_TEMPLATES.reduce((acc,p)=>{acc[p.role]=p.count; return acc;},{});
+            const counts = {};
+            teamArr.forEach(p=>{ counts[p.role]=(counts[p.role]||0)+1; });
+            for(const role in needed){ if((counts[role]||0) !== needed[role]) return false; }
+            return true;
+        }
+
+        function compileTeam(teamId) {
+            const players = [];
+            let index = 0;
+            // Landscape Start Positions: Team A on Left (x~5), Team B on Right (x~55)
+            const startX = teamId === 'A' ? 5 : 55; 
+            
+            POSITION_TEMPLATES.forEach(template => {
+                for(let i=0; i<template.count; i++) {
+                    const raceName = document.getElementById(`sel-${teamId}-${index}`).value;
+                    // Normalize in case selection uses spaced/hyphen name while internal key is underscored
+                    const raceStats = resolveRaceEntry(RACES, raceName);
+                    // Enforce Waddlehooves restriction for Flex (fallback to Human if somehow selected)
+                    let finalRace = raceName;
+                    if (template.role === 'Flex' && raceName === 'Waddlehooves') {
+                        const allowed = Object.keys(RACES).filter(r => r !== 'Waddlehooves');
+                        finalRace = allowed[Math.floor(Math.random()*allowed.length)] || 'Human';
+                    }
+                    const customName = (document.getElementById(`name-${teamId}-${index}`)?.value || '').trim();
+                    
+                    const stats = { str: 10, dex: 10, con: 12, int: 10, wis: 10, cha: 10 };
+                    const finalRaceStats = resolveRaceEntry(RACES, finalRace);
+                    stats.str += finalRaceStats.str;
+                    stats.dex += finalRaceStats.dex;
+                    stats.con += finalRaceStats.con;
+                    if(template.role === 'Striker') stats.dex += 4;
+                    if(template.role === 'Midfielder') stats.dex += 4;
+                    if(template.role === 'Defender') stats.str += 4;
+                    if(template.role === 'Goalie') stats.wis += 4;
+                    if(template.role === 'Flex') stats.int += 4;
+
+                    players.push({
+                        id: `${teamId}-${index}`,
+                        name: customName || `${finalRace} ${template.role}`,
+                        race: finalRace,
+                        role: template.role,
+                        stats: stats,
+                        speed: finalRaceStats.speed,
+                        // Spread vertically y=5 to y=25
+                        x: teamId === 'A' ? startX + Math.floor(index/3) : startX - Math.floor(index/3),
+                        y: 5 + (index * 3), 
+                        team: teamId,
+                        diaper: 'Clean',
+                        charges: 0,
+                        hasMoved: false,
+                        hasActed: false,
+                        buffReinforced: false,
+                        buffPatternWeaving: false,
+                        strikerBoost: { active:false, turns:0, usedHalf:false },
+                        raceFlags: {},
+                        yellowFlags: 0,
+                        koTurns: 0,
+                        penaltyBoxTurns: 0,
+                        redStars: 0,
+                        ultimateReady: false,
+                        maxHp: 10 + getMod(stats.con) * 4,
+                        hp: 10 + getMod(stats.con) * 4
+                    });
+                    index++;
+                }
+            });
+            return players;
+        }
+
+        // Center goalies in inner (5pt) gate (x=0 for A, x=GRID_W-1 for B, y mid-field)
+        function positionGoalies() {
+            const midY = Math.floor(GRID_H/2);
+            gameState.teams.A.forEach(p => { if (p.role === 'Goalie') { p.x = 0; p.y = midY; } });
+            gameState.teams.B.forEach(p => { if (p.role === 'Goalie') { p.x = GRID_W - 1; p.y = midY; } });
+        }
+
+        // Position Strikers and Midfielders near ball
+        function positionFieldRoles() {
+            const midY = Math.floor(GRID_H/2);
+            const ballX = gameState.ball.x; // should be center (30)
+            // Strikers: 4 squares horizontally from ball, same Y
+            const strikerA = gameState.teams.A.find(p => p.role === 'Striker');
+            if (strikerA) { strikerA.x = Math.max(0, ballX - 4); strikerA.y = midY; }
+            const strikerB = gameState.teams.B.find(p => p.role === 'Striker');
+            if (strikerB) { strikerB.x = Math.min(GRID_W - 1, ballX + 4); strikerB.y = midY; }
+            // Midfielders: 8 squares from center, with vertical spread
+            const midsA = gameState.teams.A.filter(p => p.role === 'Midfielder');
+            midsA.forEach((p,i) => { p.x = Math.max(0, ballX - 8); p.y = clamp(midY + (i === 0 ? -4 : 4), 0, GRID_H - 1); });
+            const midsB = gameState.teams.B.filter(p => p.role === 'Midfielder');
+            midsB.forEach((p,i) => { p.x = Math.min(GRID_W - 1, ballX + 8); p.y = clamp(midY + (i === 0 ? -4 : 4), 0, GRID_H - 1); });
+            // Defenders: 16 squares from center, vertical spread like midfielders
+            const defsA = gameState.teams.A.filter(p => p.role === 'Defender');
+            defsA.forEach((p,i)=>{ p.x = Math.max(0, ballX - 16); p.y = clamp(midY + (i===0?-8:8),0,GRID_H-1); });
+            const defsB = gameState.teams.B.filter(p => p.role === 'Defender');
+            defsB.forEach((p,i)=>{ p.x = Math.min(GRID_W - 1, ballX + 16); p.y = clamp(midY + (i===0?-8:8),0,GRID_H-1); });
+            // Flex: single at 16 squares behind ball slightly offset downward if space
+            const flexA = gameState.teams.A.find(p=>p.role==='Flex'); if(flexA){ flexA.x = Math.max(0, ballX - 16); flexA.y = clamp(midY + 0,0,GRID_H-1); }
+            const flexB = gameState.teams.B.find(p=>p.role==='Flex'); if(flexB){ flexB.x = Math.min(GRID_W - 1, ballX + 16); flexB.y = clamp(midY + 0,0,GRID_H-1); }
+        }
+
+        function clamp(v,min,max){ return v < min ? min : v > max ? max : v; }
+
+        // --- Tooltip System ---
+        function initTooltips(){
+            if(window.__tooltipsInit) return; window.__tooltipsInit=true;
+            const tip=document.createElement('div'); tip.id='global-tooltip'; tip.style.position='fixed'; tip.style.zIndex='1000'; tip.style.pointerEvents='none'; tip.style.padding='6px 8px'; tip.style.background='#1f2937'; tip.style.color='#fff'; tip.style.fontSize='11px'; tip.style.border='1px solid #475569'; tip.style.borderRadius='6px'; tip.style.maxWidth='240px'; tip.style.display='none'; tip.style.lineHeight='1.2'; document.body.appendChild(tip);
+            let tgt=null;
+            document.addEventListener('mouseover',e=>{ const t=e.target.closest('[data-tip]'); if(!t){ return; } tgt=t; tip.innerHTML=t.getAttribute('data-tip'); tip.style.display='block'; });
+            document.addEventListener('mousemove',e=>{ if(tip.style.display==='block'){ tip.style.left=(e.clientX+14)+'px'; tip.style.top=(e.clientY+14)+'px'; } });
+            document.addEventListener('mouseout',e=>{ if(!tgt) return; if(!e.target.closest('[data-tip]')){ tip.style.display='none'; tgt=null; } });
+        }
+
+        function startSecondHalf(){
+            gameState.half += 1;
+            [...gameState.teams.A,...gameState.teams.B].forEach(p=>{
+                p.strikerBoost.usedHalf=false;
+                p.raceFlags.usedAbility=false;
+                p.raceFlags.versatilePending=false;
+                p.raceFlags.gracefulShotPending=false;
+                p.raceFlags.luckyBouncePending=false;
+                p.raceFlags.speedBonusTurns=0; p.raceFlags.bulkTurns=0; p.raceFlags.gallopTurns=0; p.raceFlags.rootTurns=0;
+                if(p.raceFlags.ascendanceActive){ ['str','dex','con','int','wis','cha'].forEach(s=>p.stats[s]-=2); p.raceFlags.ascendanceActive=false; }
+                if(p.raceFlags.adaptFluxApplied){ ['str','dex','con','int','wis','cha'].forEach(s=>p.stats[s]-=1); p.raceFlags.adaptFluxApplied=false; }
+            });
+            logMsg(`--- HALF ${gameState.half} START ---`,'bold'); updateUI();
+        }
+
+        window.actionStrikerSurge = function(){
+            const p=getSelectedPlayer(); if(!p||p.role!=='Striker'){ logMsg('Not a striker.', 'error'); return; }
+            if(p.strikerBoost.usedHalf){ logMsg('Striker Surge already used.', 'warning'); return; }
+            if(!canAct(p)) return;
+            p.strikerBoost.active=true; p.strikerBoost.turns=3; p.strikerBoost.usedHalf=true; logMsg(`${p.name} unleashes Striker Surge! (STR x2 & +20 speed for 3 turns; becomes Messy after)`, 'success'); completeAction(p);
+        };
+
+        function resolveRaceEntry(obj, name){
+            return obj[name]
+                || obj[name.replace(/[- ]/g,'_')]
+                || obj[name.replace(/_/g,' ')]
+                || obj[name.replace(/_/g,'-')];
+        }
+
+        window.actionRaceAbility = function(){
+            const p=getSelectedPlayer(); if(!p) return;
+            if(p.raceFlags.usedAbility){ logMsg('Race ability used this half.','warning'); return; }
+            if(!canAct(p)) return;
+            const ability=resolveRaceEntry(RACE_ABILITIES, p.race); if(!ability){ logMsg('No racial ability defined.','error'); return; }
+            ability.use(p); p.raceFlags.usedAbility=true; completeAction(p);
+        };
+
+        // Ultimate abilities
+        const RACE_ULTIMATES = {
+            // Human Ultimate – thematic focus on flexible adaptation without raw overpower.
+            // Effects: One-turn speed spike, ignores Full diaper penalty (quality-of-life), and grants
+            // advantage on both the next pass and the next shoot (whichever are attempted first this turn).
+            // Unused advantage expires at end of turn to prevent carrying forward.
+            Human: { label:'Master Versatility', desc:'+15 speed; ignore Full penalty; advantage on next pass & shoot.', use(p){
+                // Speed boost this turn
+                p.raceFlags.speedBonusTurns = 1;
+                p.raceFlags.speedBonusValue = (p.raceFlags.speedBonusValue||0) + 15;
+                // Advantage flags consumed on next respective action
+                p.raceFlags.masterVersatilityPass = 1;
+                p.raceFlags.masterVersatilityShoot = 1;
+                // Ignore full diaper penalty this turn
+                p.raceFlags.ignoreFullPenaltyTurns = 1;
+                logMsg(`${p.name} activates Master Versatility! (+15 speed, advantage pass & shoot, ignores Full penalty)`, 'success');
+            } },
+            Darkling: { label:'Shadowmist Jaunt', desc:'Teleport to any square.', use(p){ p.x=Math.floor(Math.random()*GRID_W); p.y=Math.floor(Math.random()*GRID_H); logMsg(`${p.name} jaunts anywhere!`,'success'); updateUI(); } },
+            Kittenfolk: { label:'Feral Blitz', desc:'+30 speed & next tackle auto succeeds.', use(p){ p.raceFlags.speedBonusTurns=1; p.raceFlags.speedBonusValue=30; p.raceFlags.autoTackle=true; logMsg(`${p.name} enters Feral Blitz!`,'success'); } },
+            Pupperling: { label:'Pack Howl', desc:'Adjacent allies +15 speed this turn.', use(p){ const allies=(p.team==='A'?gameState.teams.A:gameState.teams.B).filter(a=>a.id!==p.id && Math.max(Math.abs(a.x-p.x),Math.abs(a.y-p.y))<=1); allies.forEach(a=>{ a.raceFlags.speedBonusTurns=1; a.raceFlags.speedBonusValue=(a.raceFlags.speedBonusValue||0)+15; }); logMsg(`${p.name} howls empowering pack!`,'success'); } },
+            Pupperlings: { label:'Pack Howl', desc:'Adjacent allies +15 speed this turn.', use(p){ const allies=(p.team==='A'?gameState.teams.A:gameState.teams.B).filter(a=>a.id!==p.id && Math.max(Math.abs(a.x-p.x),Math.abs(a.y-p.y))<=1); allies.forEach(a=>{ a.raceFlags.speedBonusTurns=1; a.raceFlags.speedBonusValue=(a.raceFlags.speedBonusValue||0)+15; }); logMsg(`${p.name} howls empowering pack!`,'success'); } },
+            Bunbunkin: { label:'Bounding Frenzy', desc:'Team uses (dx+dy) movement metric this turn.', use(p){ (p.team==='A'?gameState.teams.A:gameState.teams.B).forEach(a=>{ a.raceFlags.leapActive=true; }); logMsg(`${p.name} triggers Bounding Frenzy!`,'success'); } },
+            Skunkiddo: { label:'Toxic Cloud', desc:'Adjacent foes -4 DEX & snared 2 turns.', use(p){ const foes=(p.team==='A'?gameState.teams.B:gameState.teams.A).filter(f=>Math.max(Math.abs(f.x-p.x),Math.abs(f.y-p.y))<=1); foes.forEach(f=>{ f.raceFlags.dexPenalty=(f.raceFlags.dexPenalty||0)+4; f.raceFlags.snareTurns=2; f.raceFlags.snarePenalty=15; }); logMsg(`${p.name} releases toxic cloud!`,'warning'); } },
+            Cowbuddies: { label:'Unstoppable Bulk', desc:'+5 STR ignore root/snare 3 turns.', use(p){ p.raceFlags.bulkTurns=3; p.raceFlags.ignoreControl=3; logMsg(`${p.name} becomes Unstoppable!`,'success'); } },
+            Seimei: { label:'Mystic Overcharge', desc:'Next two pass/shoot auto succeed.', use(p){ p.raceFlags.autoPassShoot=2; logMsg(`${p.name} invokes Mystic Overcharge!`,'success'); } },
+            Scampersaurian: { label:'Primeval Roar', desc:'Foes within 5 lose 10 speed & -2 STR.', use(p){ const foes=(p.team==='A'?gameState.teams.B:gameState.teams.A).filter(f=>Math.max(Math.abs(f.x-p.x),Math.abs(f.y-p.y))<=5); foes.forEach(f=>{ f.raceFlags.speedBonusTurns=1; f.raceFlags.speedBonusValue=(f.raceFlags.speedBonusValue||0)-10; f.stats.str -=2; f.raceFlags.roarDebuff=true; }); logMsg(`${p.name} unleashes Primeval Roar!`,'warning'); } },
+            Diaparachnid: { label:'Grand Web', desc:'Snare all foes within 6 for 2 turns.', use(p){ const foes=(p.team==='A'?gameState.teams.B:gameState.teams.A).filter(f=>Math.max(Math.abs(f.x-p.x),Math.abs(f.y-p.y))<=6); foes.forEach(f=>{ f.raceFlags.snareTurns=2; f.raceFlags.snarePenalty=15; }); logMsg(`${p.name} casts Grand Web!`,'warning'); } },
+            Elf: { label:'Arrow of Light', desc:'Next shot auto inner gate (5 pts).', use(p){ p.raceFlags.autoInnerShot=true; logMsg(`${p.name} nocks Arrow of Light!`,'success'); } },
+            Dwarf: { label:'Earthshatter', desc:'Adjacent squares heavy (-10 speed).', use(p){ p.raceFlags.earthshatterTurns=2; logMsg(`${p.name} shatters earth!`,'warning'); } },
+            Halfling: { label:'Perfect Bounce', desc:'Next failed pass/shot becomes success.', use(p){ p.raceFlags.perfectBounce=true; logMsg(`${p.name} readies Perfect Bounce!`,'success'); } },
+            Waddlehooves: { label:'Stampede', desc:'+50 speed +4 STR this turn.', use(p){ p.raceFlags.speedBonusTurns=1; p.raceFlags.speedBonusValue=50; p.raceFlags.stampedeStr=4; logMsg(`${p.name} starts Stampede!`,'success'); } },
+            Ghost: { label:'Soul Drift', desc:'Teleport up to 10 ignoring zones.', use(p){ p.x=clamp(p.x + (Math.floor(Math.random()*21)-10),0,GRID_W-1); p.y=clamp(p.y + (Math.floor(Math.random()*21)-10),0,GRID_H-1); logMsg(`${p.name} drifts eerily!`,'info'); updateUI(); } },
+            Morphian_Changeling: { label:'Total Adapt', desc:'+2 ALL stats 2 turns.', use(p){ p.raceFlags.adaptAllTurns=2; ['str','dex','con','int','wis','cha'].forEach(s=>p.stats[s]+=2); logMsg(`${p.name} fully adapts!`,'success'); } },
+            Tanukijin: { label:'Grand Mirage', desc:'Foes within 4 -2 DEX -5 speed.', use(p){ const foes=(p.team==='A'?gameState.teams.B:gameState.teams.A).filter(f=>Math.max(Math.abs(f.x-p.x),Math.abs(f.y-p.y))<=4); foes.forEach(f=>{ f.raceFlags.dexPenalty=(f.raceFlags.dexPenalty||0)+2; f.raceFlags.speedBonusTurns=1; f.raceFlags.speedBonusValue=(f.raceFlags.speedBonusValue||0)-5; }); logMsg(`${p.name} unveils Grand Mirage!`,'warning'); } },
+            Possumfolk: { label:'Feign Resurrection', desc:'If KO this turn, stand and act.', use(p){ p.raceFlags.possumAutoRise=true; logMsg(`${p.name} prepares Feign Resurrection!`,'success'); } },
+            Living_Doll: { label:'Puppet Master', desc:'Move adjacent foe up to 3 tiles.', use(p){ const foes=(p.team==='A'?gameState.teams.B:gameState.teams.A).filter(f=>Math.max(Math.abs(f.x-p.x),Math.abs(f.y-p.y))<=1); if(foes.length){ const f=foes[0]; f.x=clamp(f.x + (p.team==='A'?1:-1)*3,0,GRID_W-1); logMsg(`${p.name} puppets ${f.name}!`,'warning'); updateUI(); } else logMsg('No adjacent foe to puppet.','error'); } },
+            Crinkleheart: { label:'Grand Comfort', desc:'Team +2 pass/shoot mods this turn.', use(p){ (p.team==='A'?gameState.teams.A:gameState.teams.B).forEach(a=>{ a.raceFlags.comfortTurns=1; }); logMsg(`${p.name} soothes the whole team!`,'success'); } },
+            Carcharodonian: { label:'Feeding Frenzy+', desc:'+4 STR +20 speed next foul advantage.', use(p){ p.raceFlags.frenzyTurns=1; p.raceFlags.speedBonusTurns=1; p.raceFlags.speedBonusValue=(p.raceFlags.speedBonusValue||0)+20; p.raceFlags.foulAdvantage=true; logMsg(`${p.name} enters Greater Frenzy!`,'success'); } },
+            Pampire: { label:'Crimson Feast', desc:'Heal full; adjacent foes lose 5 HP.', use(p){ const foes=(p.team==='A'?gameState.teams.B:gameState.teams.A).filter(f=>Math.max(Math.abs(f.x-p.x),Math.abs(f.y-p.y))<=1); foes.forEach(f=>{ f.hp=Math.max(0,f.hp-5); if(f.hp<=0 && f.koTurns===0){ f.koTurns=2; logMsg(`${f.name} is KO'd by Crimson Feast!`,'error'); } }); p.hp=p.maxHp; logMsg(`${p.name} performs Crimson Feast!`,'warning'); updateUI(); } },
+            Foxfolk: { label:'Moonlit Ambush', desc:'Teleport adjacent to ball; +20 speed & next tackle auto succeeds.', use(p){ p.x=clamp(gameState.ball.x + (Math.floor(Math.random()*3)-1),0,GRID_W-1); p.y=clamp(gameState.ball.y + (Math.floor(Math.random()*3)-1),0,GRID_H-1); p.raceFlags.speedBonusTurns=1; p.raceFlags.speedBonusValue=(p.raceFlags.speedBonusValue||0)+20; p.raceFlags.autoTackle=true; logMsg(`${p.name} strikes from moonlit shadow!`,'success'); updateUI(); } },
+            Demi_Gorgon: { label:'Mythic Surge', desc:'+2 ALL stats & +20 speed this turn.', use(p){ ['str','dex','con','int','wis','cha'].forEach(s=>p.stats[s]+=2); p.raceFlags.mythicSurgeTurns=1; p.raceFlags.speedBonusTurns=1; p.raceFlags.speedBonusValue=(p.raceFlags.speedBonusValue||0)+20; logMsg(`${p.name} unleashes Mythic Surge!`,'success'); } },
+            Semi_Gorgon: { label:'True Petrify', desc:'Up to 2 foes within 4 tiles rooted 2 turns.', use(p){ const foes=(p.team==='A'?gameState.teams.B:gameState.teams.A).filter(f=>Math.max(Math.abs(f.x-p.x),Math.abs(f.y-p.y))<=4); foes.slice(0,2).forEach(f=>{ f.raceFlags.rootTurns=Math.max(f.raceFlags.rootTurns||0,2); }); logMsg(`${p.name} petrifies ${Math.min(2,foes.length)} foe(s)!`,'warning'); } },
+            Gemini_Celestian: { label:'Twin Focus', desc:'Adjacent ally (acted) resets & +15 speed; you +15 speed.', use(p){ const ally=(p.team==='A'?gameState.teams.A:gameState.teams.B).find(a=>a.id!==p.id && a.hasActed && Math.max(Math.abs(a.x-p.x),Math.abs(a.y-p.y))<=1); p.raceFlags.speedBonusTurns=1; p.raceFlags.speedBonusValue=(p.raceFlags.speedBonusValue||0)+15; if(ally){ ally.hasActed=false; ally.raceFlags.speedBonusTurns=1; ally.raceFlags.speedBonusValue=(ally.raceFlags.speedBonusValue||0)+15; logMsg(`${p.name} twin-focuses with ${ally.name}!`,'success'); } else logMsg('No acted adjacent ally for Twin Focus.','warning'); } },
+            Celestian_Archist: { label:'Archist Ascendance', desc:'+2 ALL stats rest of half; next 2 pass/shoot auto succeed.', use(p){ if(!p.raceFlags.ascendanceActive){ ['str','dex','con','int','wis','cha'].forEach(s=>p.stats[s]+=2); p.raceFlags.ascendanceActive=true; } p.raceFlags.autoPassShoot = (p.raceFlags.autoPassShoot||0)+2; logMsg(`${p.name} ascends (stats +2, 2 auto pass/shoot).`,'success'); } }
+        };
+
+        window.actionUltimate = function(){
+            const p=getSelectedPlayer(); if(!p) return; if(!p.ultimateReady){ logMsg('Ultimate not ready.','warning'); return; } if(!canAct(p)) return; const ult=resolveRaceEntry(RACE_ULTIMATES, p.race); if(!ult){ logMsg('No ultimate defined for this race.','error'); return; } ult.use(p); p.redStars=0; p.ultimateReady=false; completeAction(p);
+        };
+
+        // Flex role spell definitions (inspired by spellbook)
+        const FLEX_SPELLS = {
+            reinforcePadding: {
+                name: 'Reinforce Padding',
+                desc: 'Bolster diaper integrity; reduces Full penalty this turn.',
+                use(p){ p.buffReinforced = true; logMsg(`${p.name} reinforces padding! Full penalty reduced.`, 'success'); }
+            },
+            patternWeaving: {
+                name: 'Pattern Weaving',
+                desc: 'Enchant prints; next tackle gains advantage.',
+                use(p){ p.buffPatternWeaving = true; logMsg(`${p.name} weaves an animated pattern (advantage on next tackle).`, 'info'); }
+            },
+            cleanChange: {
+                name: 'Clean Change',
+                desc: 'Instant fresh change; remove charges & penalties.',
+                use(p){ p.diaper='Clean'; p.charges=0; logMsg(`${p.name} performs a magical clean change!`, 'success'); }
+            },
+            crinklyInvitation: {
+                name: 'Crinkly Invitation',
+                desc: 'Enticing sound pulls nearest foe 3 tiles closer.',
+                use(p){
+                    // Find nearest opposing player within 6 tiles (Chebyshev distance)
+                    const foes = (p.team==='A'?gameState.teams.B:gameState.teams.A);
+                    let nearest=null, best=999;
+                    foes.forEach(f=>{ const d=Math.max(Math.abs(f.x-p.x),Math.abs(f.y-p.y)); if(d<best){best=d; nearest=f;} });
+                    if(nearest && best<=6){
+                        const pull = 3;
+                        // Move foe horizontally toward p (primary), then vertical adjust
+                        if(nearest.x > p.x) nearest.x = Math.max(p.x+1, nearest.x - pull);
+                        else if(nearest.x < p.x) nearest.x = Math.min(p.x-1, nearest.x + pull);
+                        if(Math.abs(nearest.y - p.y) > 0){
+                            if(nearest.y > p.y) nearest.y = Math.max(p.y+1, nearest.y - 1);
+                            else nearest.y = Math.min(p.y-1, nearest.y + 1);
+                        }
+                        logMsg(`${p.name}'s crinkly invitation lures ${nearest.name}!`, 'warning');
+                    } else {
+                        logMsg(`${p.name}'s invitation fizzles (no nearby foe).`, 'error');
+                    }
+                }
+            }
+        };
+
+        window.actionFlexSpell = function(key){
+            const p = getSelectedPlayer();
+            if(!p || p.role !== 'Flex'){ logMsg('Not a Flex player.', 'error'); return; }
+            if(!canAct(p)){ return; }
+            const spell = FLEX_SPELLS[key];
+            if(!spell){ logMsg('Unknown spell.', 'error'); return; }
+            spell.use(p);
+            completeAction(p);
+        };
+
+        // --- CORE MECHANICS ---
+
+        function d20() { return Math.floor(Math.random() * 20) + 1; }
+        function d6() { return Math.floor(Math.random() * 6) + 1; }
+        function getMod(score) { return Math.floor((score - 10) / 2); }
+
+        function performContinenceCheck(player) {
+            logMsg(`${player.name} rolled a Nat 1! Checking Continence...`, 'warning');
+            const save = d20() + getMod(player.stats.con);
+            if (save < 10) {
+                if (player.charges < 4) {
+                    player.charges += 2;
+                    if (player.charges >= 4) player.diaper = "Full";
+                    else if (player.charges >= 2) player.diaper = "Messy";
+                    else player.diaper = "Wet";
+                    logMsg(`FAILURE! ${player.name}'s diaper is now ${player.diaper}.`, 'error');
+                } else {
+                    player.diaper = "Full";
+                    logMsg(`CATASTROPHE! ${player.name}'s diaper overflows!`, 'error');
+                }
+            } else {
+                logMsg(`SAVED! ${player.name} maintains control.`, 'success');
+            }
+            updateUI();
+        }
+
+        // --- ACTIONS ---
+
+        window.actionPass = function() {
+            const p = getSelectedPlayer();
+            if (!canAct(p)) return;
+            if (gameState.ball.holder !== p.id) { logMsg("No ball!", 'error'); return; }
+
+            let roll = d20();
+            if(p.raceFlags.masterVersatilityPass){
+                const roll2 = d20();
+                const best = Math.max(roll, roll2);
+                logMsg(`${p.name}'s Master Versatility (Pass) advantage: ${roll} / ${roll2} => ${best}`,'info');
+                roll = best;
+                p.raceFlags.masterVersatilityPass = 0;
+            }
+            if (roll === 1) performContinenceCheck(p);
+            
+            const dexPenalty = p.raceFlags.dexPenalty||0;
+            let mod = getMod(p.stats.dex - dexPenalty - (p.raceFlags.snareTurns>0?1:0)) + 3;
+            if (p.diaper === "Full" && !(p.raceFlags.ignoreFullPenaltyTurns>0)) mod -= (p.buffReinforced ? 2 : 5);
+            let passTotal = roll + mod;
+            if(p.raceFlags.autoPassShoot>0){ p.raceFlags.autoPassShoot--; passTotal = 999; logMsg(`${p.name}'s pass auto succeeds!`,'success'); }
+            // Threat zone penalty prior to resolution (path squares)
+            const targetXPre = p.x + (p.team === 'A' ? 5 : -5);
+            const targetYPre = p.y;
+            const stepPre = p.team==='A'?1:-1; const pathSquaresPre=[]; for(let x=p.x; x!==targetXPre+stepPre; x+=stepPre){ pathSquaresPre.push({x,y:targetYPre}); }
+            const foesThreat = p.team==='A'?gameState.teams.B:gameState.teams.A;
+            let threatPenalty=0;
+            foesThreat.forEach(f=>{
+                const baseMap={Striker:2,Midfielder:2,Defender:3,Goalie:2,Flex:2};
+                let r=baseMap[f.role]||2; if(['Waddlehooves','Diaparachnid','Seimei'].includes(f.race)) r+=1;
+                const crosses = pathSquaresPre.some(sq=>Math.max(Math.abs(f.x-sq.x),Math.abs(f.y-sq.y))<=r);
+                if(crosses) threatPenalty++;
+            });
+            if(threatPenalty>0){ passTotal -= threatPenalty; logMsg(`Threat zone penalty on pass (-${threatPenalty}).`,'warning'); }
+            if (passTotal >= 12) {
+                const targetX = p.x + (p.team === 'A' ? 5 : -5);
+                const targetY = p.y;
+                const foes = p.team==='A'?gameState.teams.B:gameState.teams.A;
+                let intercepted=null;
+                foes.forEach(f=>{
+                    if(f.raceFlags.rootTurns>0) return; // rooted can't intercept
+                    const minX=Math.min(p.x,targetX), maxX=Math.max(p.x,targetX);
+                    if(f.x>=minX && f.x<=maxX && Math.abs(f.y-targetY)<=2){
+                        const iRoll = d20() + getMod(f.stats.dex - (f.raceFlags.dexPenalty||0) - (f.raceFlags.snareTurns>0?1:0));
+                        if(iRoll >= passTotal && !intercepted){ intercepted=f; }
+                    }
+                });
+                if(intercepted){
+                    gameState.ball.holder=intercepted.id; gameState.ball.x=intercepted.x; gameState.ball.y=intercepted.y; logMsg(`${intercepted.name} INTERCEPTS the pass!`,'error');
+                    awardRedStar(intercepted,'Intercept');
+                } else {
+                    logMsg(`${p.name} passes!`, 'success');
+                    gameState.ball.holder = null; gameState.ball.x = targetX; gameState.ball.y = targetY;
+                }
+            } else {
+                // Halfling Lucky Bounce
+                if(p.race==='Halfling' && p.raceFlags.luckyBouncePending){
+                    p.raceFlags.luckyBouncePending=false; gameState.ball.holder=null; gameState.ball.x=p.x; gameState.ball.y=p.y; logMsg(`${p.name}'s Lucky Bounce keeps ball nearby!`,'success');
+                } else if(p.race==='Human' && p.raceFlags.versatilePending){
+                    p.raceFlags.versatilePending=false; const reroll=d20(); if(reroll + mod >=12){ logMsg(`${p.name} succeeds on versatile reroll!`,'success'); gameState.ball.holder=null; gameState.ball.x=p.x + (p.team==='A'?5:-5); gameState.ball.y=p.y; completeAction(p); return; } else { logMsg(`${p.name}'s reroll still fails.`,'error'); }
+                    logMsg(`Pass fumbled!`, 'error');
+                } else {
+                    logMsg(`Pass fumbled!`, 'error');
+                }
+                gameState.ball.holder = null;
+                gameState.ball.x = Math.max(0, Math.min(GRID_W-1, p.x + (Math.random()*10 - 5)));
+                gameState.ball.y = Math.max(0, Math.min(GRID_H-1, p.y + (Math.random()*10 - 5)));
+            }
+            completeAction(p);
+        };
+
+        window.actionShoot = function() {
+            const p = getSelectedPlayer();
+            if (!canAct(p)) return;
+            if (gameState.ball.holder !== p.id) { logMsg("No ball!", 'error'); return; }
+
+            let roll = d20();
+            if(p.raceFlags.masterVersatilityShoot){
+                const roll2 = d20();
+                const best = Math.max(roll, roll2);
+                logMsg(`${p.name}'s Master Versatility (Shoot) advantage: ${roll} / ${roll2} => ${best}`,'info');
+                roll = best;
+                p.raceFlags.masterVersatilityShoot = 0;
+            }
+            if (roll === 1) performContinenceCheck(p);
+
+            const dexPenalty = p.raceFlags.dexPenalty||0;
+            let mod = getMod(p.stats.dex - dexPenalty - (p.raceFlags.snareTurns>0?1:0)) + 3;
+            if (p.diaper === "Full" && !(p.raceFlags.ignoreFullPenaltyTurns>0)) mod -= (p.buffReinforced ? 2 : 5);
+
+            // Distance to opposing goal line
+            const goalX = p.team === 'A' ? GRID_W : 0;
+            const dist = Math.abs(p.x - goalX);
+            
+            // DC Calculation based on gates (approximate)
+            // Outer(14) -> Middle(18) -> Inner(22)
+            let dc = 14;
+            if (dist < 10) dc = 22; // Inner
+            else if (dist < 20) dc = 18; // Middle
+            
+            let total = roll + mod;
+            if(p.raceFlags.autoInnerShot){ p.raceFlags.autoInnerShot=false; dc = 22; total = dc + 999; logMsg(`${p.name}'s Arrow of Light flies true (Inner Gate)!`,'success'); }
+            if(p.raceFlags.autoPassShoot>0){ p.raceFlags.autoPassShoot--; total = dc + 999; logMsg(`${p.name}'s shot auto succeeds!`,'success'); }
+            if(p.race==='Elf' && p.raceFlags.gracefulShotPending){
+                p.raceFlags.gracefulShotPending=false;
+                if(total < dc && dc-total <= 3){ total = dc; logMsg(`${p.name}'s graceful aim elevates the shot!`,'info'); }
+            }
+            // Defensive pressure: nearby defenders/goalie reduce total
+            const foes = p.team==='A'?gameState.teams.B:gameState.teams.A; let pressure=0;
+            foes.forEach(f=>{
+                const d=Math.max(Math.abs(f.x-p.x),Math.abs(f.y-p.y));
+                if((f.role==='Defender'||f.role==='Goalie')){
+                    if(d<=1) pressure+=4; else if(d<=3) pressure+=2;
+                }
+            });
+            if(pressure>0){ total -= pressure; logMsg(`Shot under pressure (-${pressure})!`,'warning'); }
+            // Threat zone penalty along shot path
+            const pathSquares=[]; const dir = p.team==='A'?1:-1; for(let x=p.x; x!== (p.team==='A'?GRID_W:0)+dir; x+=dir){ pathSquares.push({x,y:p.y}); }
+            let zonePenalty=0;
+            foes.forEach(f=>{
+                const baseMap={Striker:2,Midfielder:2,Defender:3,Goalie:2,Flex:2};
+                let r=baseMap[f.role]||2; if(['Waddlehooves','Diaparachnid','Seimei'].includes(f.race)) r+=1;
+                const crosses = pathSquares.some(sq=>Math.max(Math.abs(f.x-sq.x),Math.abs(f.y-sq.y))<=r);
+                if(crosses) zonePenalty++;
+            });
+            if(zonePenalty>0){ total -= zonePenalty; logMsg(`Threat zone penalty on shot path (-${zonePenalty}).`,'warning'); }
+            if (total >= dc) {
+                // Points based on gate
+                let pts = 1;
+                if(dc === 18) pts = 3;
+                if(dc === 22) pts = 5;
+
+                logMsg(`GOAL!!! ${p.name} scores ${pts} points!`, 'success');
+                gameState.scores[p.team] += pts;
+                awardRedStar(p,'Goal Scored');
+                resetBall();
+            } else {
+                logMsg(`Shot blocked!`, 'error');
+                // Award red star to closest defender/goalie
+                const foesDef = p.team==='A'?gameState.teams.B:gameState.teams.A; let blocker=null,best=999;
+                foesDef.filter(f=>['Defender','Goalie'].includes(f.role)).forEach(f=>{ const d=Math.max(Math.abs(f.x-p.x),Math.abs(f.y-p.y)); if(d<best){best=d; blocker=f;} });
+                if(blocker){ awardRedStar(blocker,'Goal Defense'); }
+                gameState.ball.holder = null;
+                gameState.ball.x = goalX === 0 ? 5 : GRID_W - 5;
+                gameState.ball.y = GRID_H / 2;
+            }
+            completeAction(p);
+        };
+
+        window.actionTackle = function() {
+            const p = getSelectedPlayer();
+            if (!canAct(p)) return;
+            const roll = d20();
+            if (roll === 1) performContinenceCheck(p);
+            
+            let baseStr = p.stats.str;
+            if(p.strikerBoost.active) baseStr *= 2;
+            if(p.raceFlags.stoutActive) baseStr += 2;
+            if(p.raceFlags.bulkTurns>0) baseStr += 3;
+            if(p.raceFlags.gallopTurns>0) baseStr += 2;
+            let total = roll + getMod(baseStr);
+            if(p.raceFlags.autoTackle){ total = 999; p.raceFlags.autoTackle=false; logMsg(`${p.name}'s tackle auto succeeds!`,'success'); }
+            if(p.buffPatternWeaving){
+                // Simulate advantage: roll second die and keep higher
+                const roll2 = d20();
+                total = Math.max(total, roll2 + getMod(baseStr));
+                logMsg(`${p.name}'s animated pattern grants advantage (${roll} / ${roll2}).`, 'info');
+                p.buffPatternWeaving = false; // consume
+            }
+            if (total > 12){
+                logMsg(`${p.name} tackles!`, 'info');
+                // Apply status effect to adjacent foe (choose one)
+                const foes=p.team==='A'?gameState.teams.B:gameState.teams.A;
+                const target=foes.find(f=>Math.max(Math.abs(f.x-p.x),Math.abs(f.y-p.y))<=1);
+                if(target){
+                    if(roll===20){ target.raceFlags.rootTurns=1; logMsg(`${target.name} is ROOTED for 1 turn!`,'error'); }
+                    else { target.raceFlags.snareTurns=Math.max(target.raceFlags.snareTurns||0,2); target.raceFlags.snarePenalty=15; logMsg(`${target.name} is SNARED (speed -15, accuracy -1) for 2 turns.`,'warning'); }
+                }
+            } else logMsg(`${p.name} misses tackle!`, 'warning');
+            completeAction(p);
+        };
+
+        window.actionPunt = function() {
+            const p = getSelectedPlayer();
+            if (!canAct(p)) return;
+            const roll = d20();
+            let mod = getMod(p.stats.str) + 3;
+            if (p.diaper === "Full") mod += 2; 
+
+            if (roll + mod >= 14) {
+                logMsg(`Diaper Butt Punt clears ball!`, 'success');
+                gameState.ball.holder = null;
+                gameState.ball.x += p.team === 'A' ? 15 : -15;
+            } else {
+                logMsg(`Punt failed.`, 'error');
+            }
+            completeAction(p);
+        };
+
+        // FOUL ACTION (Striker, Midfielder, Goalie)
+        window.actionFoul = function(){
+            const p = getSelectedPlayer();
+            if(!p){ return; }
+            if(!['Striker','Midfielder','Goalie'].includes(p.role)){ logMsg('Role cannot foul directly.','error'); return; }
+            if(!canAct(p)) return;
+            // Find adjacent target (choose lowest HP opponent adjacent)
+            const foes = p.team==='A'?gameState.teams.B:gameState.teams.A;
+            const adj = foes.filter(f=>Math.max(Math.abs(f.x-p.x),Math.abs(f.y-p.y))<=1 && f.koTurns===0 && f.penaltyBoxTurns===0);
+            if(adj.length===0){ logMsg('No adjacent target to foul.','warning'); return; }
+            // Pick foe with lowest HP
+            adj.sort((a,b)=>a.hp-b.hp); const target = adj[0];
+            const attackRoll = d20();
+            let baseStr = p.stats.str; if(p.strikerBoost.active) baseStr *= 2; if(p.raceFlags.bulkTurns>0) baseStr +=3; if(p.raceFlags.gallopTurns>0) baseStr+=2; if(p.raceFlags.stoutActive) baseStr+=2;
+            const atkTotal = attackRoll + getMod(baseStr);
+            const targetDefense = 10 + getMod(target.stats.con); // Simple defense using CON resilience
+            if(attackRoll===1){ performContinenceCheck(p); }
+            // Yellow flag always applied on foul attempt
+            p.yellowFlags += 1; logMsg(`${p.name} commits a FOUL on ${target.name} (Yellow Flag ${p.yellowFlags}/3)!`,'warning');
+            if(p.yellowFlags>=3){ p.penaltyBoxTurns=3; p.yellowFlags=0; logMsg(`${p.name} sent to PENALTY BOX for 3 turns!`,'error'); }
+            if(atkTotal >= targetDefense){
+                const dmg = Math.max(1, d6() + getMod(baseStr));
+                target.hp -= dmg;
+                logMsg(`${target.name} takes ${dmg} damage (HP ${Math.max(0,target.hp)}/${target.maxHp}).`,'error');
+                if(target.hp <= 0 && target.koTurns===0){
+                    target.hp = 0; target.koTurns = 2; // KO for 2 turns
+                    // Drop ball if holder
+                    if(gameState.ball.holder === target.id){ gameState.ball.holder=null; gameState.ball.x=target.x; gameState.ball.y=target.y; logMsg(`Ball drops at ${target.x},${target.y}!`,'info'); }
+                    logMsg(`${target.name} is KO'd for 2 turns!`,'bold');
+                    awardRedStar(p,'KO');
+                }
+            } else {
+                logMsg(`${p.name}'s foul misses (Roll ${atkTotal} vs ${targetDefense}).`,'info');
+            }
+            completeAction(p);
+        };
+
+        // --- TURN MANAGEMENT ---
+
+        window.endTurn = function() {
+            gameState.teams[gameState.initiative].forEach(p => { p.hasMoved = false; p.hasActed = false; });
+            gameState.initiative = gameState.initiative === 'A' ? 'B' : 'A';
+            gameState.turnCounter++;
+            gameState.selectedPlayerId = null;
+            // decrement temporary flags
+            [...gameState.teams.A,...gameState.teams.B].forEach(p=>{
+                if(p.strikerBoost.active){ p.strikerBoost.turns--; if(p.strikerBoost.turns<=0){ p.strikerBoost.active=false; if(p.diaper!=='Full'){ p.diaper='Messy'; p.charges=Math.max(p.charges,2); logMsg(`${p.name}'s Striker Surge ends leaving them messy!`,'warning'); } } }
+                if(p.raceFlags.speedBonusTurns>0) p.raceFlags.speedBonusTurns--;
+                if(p.raceFlags.bulkTurns>0) p.raceFlags.bulkTurns--;
+                if(p.raceFlags.gallopTurns>0) p.raceFlags.gallopTurns--;
+                if(p.raceFlags.rootTurns>0) p.raceFlags.rootTurns--;
+                if(p.raceFlags.snareTurns>0){ p.raceFlags.snareTurns--; if(p.raceFlags.snareTurns<=0){ p.raceFlags.snarePenalty=0; } }
+                if(p.raceFlags.leapActive) p.raceFlags.leapActive=false;
+                if(p.raceFlags.mythicSurgeTurns>0){ p.raceFlags.mythicSurgeTurns--; if(p.raceFlags.mythicSurgeTurns===0){ ['str','dex','con','int','wis','cha'].forEach(s=>p.stats[s]-=2); } }
+                if(p.raceFlags.adaptFluxTurns>0){ p.raceFlags.adaptFluxTurns--; if(p.raceFlags.adaptFluxTurns===0 && p.raceFlags.adaptFluxApplied){ ['str','dex','con','int','wis','cha'].forEach(s=>p.stats[s]-=1); p.raceFlags.adaptFluxApplied=false; } }
+                if(p.raceFlags.ignoreFullPenaltyTurns>0){ p.raceFlags.ignoreFullPenaltyTurns--; }
+                // Expire unused Master Versatility advantage at turn end
+                if(p.raceFlags.masterVersatilityPass){ p.raceFlags.masterVersatilityPass = 0; }
+                if(p.raceFlags.masterVersatilityShoot){ p.raceFlags.masterVersatilityShoot = 0; }
+                if(p.koTurns>0){ p.koTurns--; if(p.koTurns===0){ logMsg(`${p.name} recovers from KO.`, 'success'); awardRedStar(p,'KO Recovery'); } }
+                if(p.penaltyBoxTurns>0){ p.penaltyBoxTurns--; if(p.penaltyBoxTurns===0){ logMsg(`${p.name} leaves the penalty box.`, 'success'); } }
+            });
+            logMsg(`--- TURN ${gameState.turnCounter}: ${gameState.names[gameState.initiative]} ---`, 'bold');
+            // Auto start second half after 15 full turns (when counter reaches 16 and currently half 1)
+            if(gameState.half===1 && gameState.turnCounter===16){
+                startSecondHalf();
+            }
+            updateUI();
+        };
+
+        function completeAction(player) {
+            player.hasActed = true;
+            gameState.movesLeft = 0;
+            updateUI();
+        }
+
+        function resetBall() { gameState.ball = { holder: null, x: 30, y: 15 }; }
+
+        // --- INTERACTION ---
+
+        function getSelectedPlayer() {
+            if (!gameState.selectedPlayerId) return null;
+            return [...gameState.teams.A, ...gameState.teams.B].find(p => p.id === gameState.selectedPlayerId);
+        }
+
+        function canAct(player) {
+            if (!player) return false;
+            if (player.team !== gameState.initiative) { logMsg("Not your turn!", 'error'); return false; }
+            if (player.hasActed) { logMsg("Already acted.", 'warning'); return false; }
+            if (player.koTurns > 0) { logMsg("Player is KO'd!", 'error'); return false; }
+            if (player.penaltyBoxTurns > 0) { logMsg("Player in penalty box.", 'error'); return false; }
+            return true;
+        }
+
+        window.selectPlayer = function(id) {
+            gameState.selectedPlayerId = id;
+            const p = getSelectedPlayer();
+            if (p.team === gameState.initiative && !p.hasActed) {
+                let spd = p.speed;
+                if(p.strikerBoost.active) spd += 20;
+                if(p.raceFlags.speedBonusTurns>0) spd += p.raceFlags.speedBonusValue||0;
+                if(p.raceFlags.bulkTurns>0) spd -= 10;
+                if(p.raceFlags.gallopTurns>0) spd += 30;
+                if(p.raceFlags.snareTurns>0 && !(p.raceFlags.adaptFluxTurns>0)) spd -= (p.raceFlags.snarePenalty||15);
+                gameState.movesLeft = Math.max(0, spd);
+            } else {
+                gameState.movesLeft = 0;
+            }
+            updateUI();
+        };
+
+        // Grid Click for Movement
+        window.clickGrid = function(x, y) {
+            const p = getSelectedPlayer();
+            if (!p) return;
+            if (p.team !== gameState.initiative) return;
+            if (gameState.movesLeft <= 0) return;
+
+            const dx = Math.abs(p.x - x);
+            const dy = Math.abs(p.y - y);
+            if(p.raceFlags.rootTurns>0){ logMsg(`${p.name} is rooted and cannot move!`,'error'); return; }
+            const dist = (p.raceFlags.leapActive ? (dx+dy) : Math.max(dx,dy)) * 5;
+
+            if (dist <= gameState.movesLeft) {
+                p.x = x; p.y = y; gameState.movesLeft -= dist;
+                if (gameState.ball.holder === p.id) { gameState.ball.x = x; gameState.ball.y = y; }
+                else if (!gameState.ball.holder && x === gameState.ball.x && y === gameState.ball.y) {
+                    gameState.ball.holder = p.id; logMsg(`${p.name} grabs ball!`, 'info');
+                }
+                updateUI();
+            } else {
+                logMsg("Too far!", 'warning');
+            }
+        };
+
+        // --- RENDERING ---
+
+        function updateUI() {
+            renderScoreboard();
+            renderFieldEntities();
+            renderPlayerCard();
+        }
+
+        function logMsg(text, type='info') {
+            const el = document.getElementById('game-log');
+            const d = document.createElement('div');
+            let c = "p-2 rounded border-b border-slate-800 ";
+            if(type==='bold') c+="bg-slate-700 text-white font-bold";
+            else if(type==='error') c+="bg-red-900/30 text-red-300";
+            else if(type==='success') c+="bg-green-900/30 text-green-300";
+            else if(type==='warning') c+="bg-yellow-900/30 text-yellow-300";
+            else c+="text-slate-400";
+            d.className = c; d.innerText = text;
+            el.insertBefore(d, el.firstChild);
+        }
+
+        function renderScoreboard() {
+            document.getElementById('score-a').innerText = gameState.scores.A;
+            document.getElementById('score-b').innerText = gameState.scores.B;
+            document.getElementById('turn-indicator').innerText = `Turn: ${gameState.turnCounter}`;
+            document.getElementById('initiative-indicator').innerText = gameState.names[gameState.initiative] || '--';
+            document.getElementById('initiative-indicator').className = gameState.initiative === 'A' ? 'font-bold text-red-400' : 'font-bold text-blue-400';
+        }
+
+        function renderPlayerCard() {
+            const el = document.getElementById('player-card');
+            const p = getSelectedPlayer();
+            if (!p) {
+                el.innerHTML = `<div class="h-full flex flex-col items-center justify-center text-slate-500 italic"><i data-lucide="mouse-pointer-2" class="mb-2 opacity-50"></i><span>Select a player.</span></div>`;
+                lucide.createIcons();
+                return;
+            }
+            const active = p.team === gameState.initiative && !p.hasActed;
+            const hasBall = gameState.ball.holder === p.id;
+            // Use normalization so spaced/hyphen names map to underscore keys
+            const ability = resolveRaceEntry(RACE_ABILITIES, p.race);
+            const strikerBtn = p.role==='Striker' ? `<button data-tip="Striker Surge: STR x2 & +20 speed for 3 turns; becomes Messy when it ends." onclick=\"actionStrikerSurge()\" class=\"bg-fuchsia-700 hover:bg-fuchsia-600 p-2 rounded text-[10px] font-bold text-white disabled:opacity-20\" ${(!active||p.strikerBoost.usedHalf)?'disabled':''}>Striker Surge</button>` : '';
+            const raceBtn = ability ? `<button data-tip="${ability.desc||''}" onclick=\"actionRaceAbility()\" class=\"bg-cyan-700 hover:bg-cyan-600 p-2 rounded text-[10px] font-bold text-white disabled:opacity-20\" ${(!active||p.raceFlags.usedAbility)?'disabled':''}>${ability.label}</button>` : '';
+            const boostTag = p.strikerBoost.active?`<span data-tip='Striker Surge active: STR doubled, +20 speed.' class='text-fuchsia-400 font-bold'>SURGE(${p.strikerBoost.turns})</span>`:'';
+            const rootTag = p.raceFlags.rootTurns>0?`<span data-tip='Rooted: cannot move.' class='text-red-400 font-bold'>ROOTED:${p.raceFlags.rootTurns}</span>`:'';
+            const snareTag = p.raceFlags.snareTurns>0?`<span data-tip='Snared: speed -${p.raceFlags.snarePenalty||15}, -1 accuracy.' class='text-yellow-400 font-bold'>SNARE:${p.raceFlags.snareTurns}</span>`:'';
+            const statusLine = p.koTurns>0 ? `KO'D (${p.koTurns})` : (p.penaltyBoxTurns>0 ? `PENALTY BOX (${p.penaltyBoxTurns})` : 'Active');
+            const redStarIcons = Array.from({length:3},(_,i)=>`<span class='inline-block w-3 h-3 mr-1 ${i<p.redStars?'bg-red-500':'bg-slate-700'}'></span>`).join('');
+            const yellowFlagIcons = Array.from({length:3},(_,i)=>`<span class='inline-block w-0 h-0 border-l-[5px] border-r-[5px] border-b-[9px] ${i<p.yellowFlags?'border-b-yellow-400':'border-b-slate-700'} border-l-transparent border-r-transparent mr-1'></span>`).join('');
+            const ultimateDef = resolveRaceEntry(RACE_ULTIMATES, p.race);
+            const ultimateBtn = p.ultimateReady ? `<button data-tip="Ultimate Ready: ${ultimateDef?.desc||''}" onclick=\"actionUltimate()\" class=\"bg-red-700 hover:bg-red-600 p-2 rounded text-[10px] font-bold text-white disabled:opacity-20\" ${!active?'disabled':''}>ULTIMATE</button>` : '';
+            
+            el.innerHTML = `
+                <div class="border-b border-slate-700 pb-3 mb-3">
+                    <h3 class="text-xl font-black text-white">${p.name}</h3>
+                    <div class="text-xs text-slate-400 uppercase tracking-wider">${p.race} | ${p.role}</div>
+                    <div class="mt-1 text-[10px] uppercase tracking-wide ${statusLine.startsWith('KO')?'text-red-400':statusLine.startsWith('PENALTY')?'text-purple-400':'text-green-400'}">Status: ${statusLine}</div>
+                </div>
+                <div class="grid grid-cols-2 gap-2 text-sm mb-4">
+                    <div class="bg-slate-900/50 p-2 rounded">STR: ${p.stats.str}${p.strikerBoost.active?'x2':''}${p.raceFlags.stoutActive?'+2':''}${p.raceFlags.bulkTurns>0?'+3':''}${p.raceFlags.gallopTurns>0?'+2':''}</div>
+                    <div class="bg-slate-900/50 p-2 rounded">DEX: ${p.stats.dex - (p.raceFlags.dexPenalty||0) - (p.raceFlags.snareTurns>0?1:0)}</div>
+                    <div class="bg-slate-900/50 p-2 rounded">CON: ${p.stats.con}</div>
+                    <div class="bg-slate-900/50 p-2 rounded text-emerald-400 font-bold">MOVE: ${p.koTurns>0||p.penaltyBoxTurns>0?0:gameState.movesLeft}</div>
+                </div>
+                <div class="mb-3 flex items-center justify-between text-xs">
+                    <div class="flex-1 mr-2 bg-slate-900 rounded h-4 relative overflow-hidden border border-slate-700" data-tip="HP ${p.hp}/${p.maxHp}">
+                        <div class="absolute inset-0 bg-red-900/40"></div>
+                        <div class="h-full bg-red-500" style="width:${(p.hp/p.maxHp)*100}%"></div>
+                    </div>
+                    <div class="flex items-center" data-tip="Yellow Flags">${yellowFlagIcons}</div>
+                </div>
+                <div class="mb-2 flex items-center text-[10px]" data-tip="Red Star Gauge">${redStarIcons}<span class='ml-2 ${p.ultimateReady?'text-red-400 font-bold':'text-slate-500'}'>${p.ultimateReady?'ULT READY':'PROGRESS'}</span></div>
+                <div class="mb-2 text-[10px] space-x-2">${boostTag} ${rootTag} ${snareTag}</div>
+                <div class="mb-4 p-3 bg-slate-900 rounded-lg border border-slate-700 flex justify-between items-center">
+                    <span class="text-xs text-slate-500 uppercase">Diaper</span>
+                    <span class="${p.diaper==='Full'?'text-red-400 animate-pulse font-bold':'text-slate-300'}">${p.diaper}</span>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <button data-tip="Attempt a pass 5 tiles forward; foes along path may intercept." onclick="actionPass()" class="bg-blue-600 hover:bg-blue-500 p-2 rounded text-xs font-bold text-white disabled:opacity-20" ${!active||!hasBall?'disabled':''}>PASS</button>
+                    <button data-tip="Shoot toward goal; DC based on distance; nearby defenders impose pressure." onclick="actionShoot()" class="bg-red-600 hover:bg-red-500 p-2 rounded text-xs font-bold text-white disabled:opacity-20" ${!active||!hasBall?'disabled':''}>SHOOT</button>
+                    <button data-tip="Tackle adjacent foe; Nat20 roots, normal success snares." onclick="actionTackle()" class="bg-orange-600 hover:bg-orange-500 p-2 rounded text-xs font-bold text-white disabled:opacity-20" ${!active?'disabled':''}>TACKLE</button>
+                    <button data-tip="Punt the ball far forward (STR check)." onclick="actionPunt()" class="bg-purple-600 hover:bg-purple-500 p-2 rounded text-xs font-bold text-white disabled:opacity-20" ${!active?'disabled':''}>PUNT</button>
+                </div>
+                <div class="grid grid-cols-3 gap-2 mt-4">
+                    ${strikerBtn}
+                    ${raceBtn}
+                    <button data-tip="Foul: STR attack vs CON defense; deals 1d6+STR dmg; inflicts Yellow Flag (3 => Penalty Box)." onclick="actionFoul()" class="bg-yellow-700 hover:bg-yellow-600 p-2 rounded text-[10px] font-bold text-white disabled:opacity-20" ${(!active||!['Striker','Midfielder','Goalie'].includes(p.role))?'disabled':''}>FOUL</button>
+                </div>
+                <div class="mt-2">${ultimateBtn}</div>
+            `;
+        }
+
+        function renderFieldEntities() {
+            const layer = document.getElementById('entities-layer');
+            layer.innerHTML = '';
+            // Threat footprints (render before ball & tokens)
+            const THREAT_BASE = { Striker:2, Midfielder:2, Defender:3, Goalie:2, Flex:2 };
+            [...gameState.teams.A, ...gameState.teams.B].forEach(p=>{
+                if(p.koTurns>0 || p.penaltyBoxTurns>0) return; // no threat if out
+                let r = THREAT_BASE[p.role] || 2; if(['Waddlehooves','Diaparachnid','Seimei'].includes(p.race)) r += 1;
+                for(let dy=-r; dy<=r; dy++){
+                    for(let dx=-r; dx<=r; dx++){
+                        const tx=p.x+dx, ty=p.y+dy;
+                        if(tx<0||ty<0||tx>=GRID_W||ty>=GRID_H) continue;
+                        if(Math.max(Math.abs(dx),Math.abs(dy))<=r){
+                            const tile=document.createElement('div');
+                            const col = p.team==='A' ? 'rgba(255,0,0,0.07)' : 'rgba(0,80,255,0.07)';
+                            Object.assign(tile.style,{position:'absolute',left:(tx*TILE)+'px',top:(ty*TILE)+'px',width:TILE+'px',height:TILE+'px',background:col,zIndex:15});
+                            tile.setAttribute('data-tip', `${p.name} threat (r=${r})`);
+                            layer.appendChild(tile);
+                        }
+                    }
+                }
+            });
+            
+            // Ball
+            if (!gameState.ball.holder) {
+                const b = document.createElement('div');
+                b.className = "absolute bg-yellow-400 rounded-full shadow-[0_0_15px_#facc15] border-2 border-white z-50 animate-bounce pointer-events-auto";
+                let leftPx = gameState.ball.x * TILE + 3;
+                if(gameState.ball.x === GRID_W/2){ // center line special centering between squares
+                    leftPx = gameState.ball.x * TILE - 7; // center on midline
+                }
+                Object.assign(b.style, { width: "14px", height: "14px", left: leftPx + "px", top: (gameState.ball.y * TILE + 3) + "px" });
+                layer.appendChild(b);
+            }
+
+            // Players
+            [...gameState.teams.A, ...gameState.teams.B].forEach(p => {
+                const el = document.createElement('div');
+                const isSel = gameState.selectedPlayerId === p.id;
+                const hasBall = gameState.ball.holder === p.id;
+                const color = p.team === 'A' ? 'bg-red-500' : 'bg-blue-500';
+                
+                const roleShapeMap = { Striker:'star', Midfielder:'dagger', Defender:'shield', Flex:'circle', Goalie:'hexagon' };
+                const shapeClass = roleShapeMap[p.role] || 'circle';
+                let cls = `absolute flex items-center justify-center text-[9px] font-bold text-white cursor-pointer player-token z-50 pointer-events-auto shadow-md ${color} `;
+                if(shapeClass==='circle') cls += 'rounded-full '; else cls += shapeClass+' ';
+                if (isSel) cls += 'selected ';
+                if (p.diaper === 'Full') cls += 'full-diaper ';
+                if (hasBall) cls += 'has-ball ';
+                if (p.raceFlags.rootTurns>0) cls += 'ring-2 ring-red-400 ';
+                if (p.raceFlags.snareTurns>0) cls += 'ring-2 ring-yellow-400 ';
+                if (p.koTurns>0) cls += 'ring-2 ring-red-600 animate-pulse '; // KO ring
+                if (p.penaltyBoxTurns>0) cls += 'ring-2 ring-purple-500 opacity-40 '; // penalty visual
+
+                el.className = cls;
+                el.dataset.playerId = p.id;
+                // Larger striker star
+                if(p.role==='Striker'){
+                    Object.assign(el.style, { left: (p.x * TILE - 3) + 'px', top: (p.y * TILE - 3) + 'px', width: (TILE+6) + 'px', height: (TILE+6) + 'px', filter: (p.penaltyBoxTurns>0?'grayscale(80%) brightness(70%)':'') });
+                } else {
+                    Object.assign(el.style, { left: (p.x * TILE) + 'px', top: (p.y * TILE) + 'px', width: TILE + 'px', height: TILE + 'px', filter: (p.penaltyBoxTurns>0?'grayscale(80%) brightness(70%)':'') });
+                }
+                el.innerText = p.name.charAt(0);
+                const statusTips=[]; if(p.raceFlags.rootTurns>0) statusTips.push('Rooted'); if(p.raceFlags.snareTurns>0) statusTips.push('Snared'); if(p.strikerBoost.active) statusTips.push('Surge'); if(p.koTurns>0) statusTips.push(`KO:${p.koTurns}`); if(p.penaltyBoxTurns>0) statusTips.push(`Penalty:${p.penaltyBoxTurns}`);
+                el.setAttribute('data-tip', `${p.name} (${p.race})<br>Diaper: ${p.diaper}${statusTips.length?'<br>Status: '+statusTips.join(', '):''}`);
+                el.onclick = (e) => { e.stopPropagation(); selectPlayer(p.id); };
+                layer.appendChild(el);
+            });
+        }
+
+        // Red Star system
+        function awardRedStar(player, reason){
+            if(!player) return; player.redStars=Math.min(3,player.redStars+1); logMsg(`${player.name} gains a Red Star (${reason}) [${player.redStars}/3].`,'success');
+            if(player.redStars===3 && !player.ultimateReady){ player.ultimateReady=true; logMsg(`${player.name}'s Ultimate is READY!`,'bold'); }
+        }
+
+        function initClickLayer() {
+            const layer = document.getElementById('click-layer');
+            layer.innerHTML = '';
+            for(let y=0; y<GRID_H; y++) {
+                for(let x=0; x<GRID_W; x++) {
+                    const c = document.createElement('div');
+                    c.className = "absolute hover:bg-white/10 cursor-pointer pointer-events-auto";
+                    Object.assign(c.style, { left: (x*TILE)+'px', top: (y*TILE)+'px', width: TILE+'px', height: TILE+'px', zIndex: 10 });
+                    c.onclick = () => clickGrid(x, y);
+                    layer.appendChild(c);
+                }
+            }
+        }
+
+        // ==================== SAVE / LOAD SYSTEM ====================
+        // Serialize a shallow, portable snapshot of current game state.
+        function serializeGameState(){
+            return {
+                seed: gameState.seed,
+                names: gameState.names,
+                scores: gameState.scores,
+                turnCounter: gameState.turnCounter,
+                initiative: gameState.initiative,
+                half: gameState.half,
+                ball: gameState.ball,
+                teams: {
+                    A: gameState.teams.A.map(p=>stripPlayer(p)),
+                    B: gameState.teams.B.map(p=>stripPlayer(p))
+                }
+            };
+        }
+
+        // Remove transient / computed fields but keep enough to reconstruct.
+        function stripPlayer(p){
+            return {
+                id: p.id,
+                name: p.name,
+                race: p.race,
+                role: p.role,
+                stats: p.stats,
+                speed: p.speed,
+                x: p.x,
+                y: p.y,
+                team: p.team,
+                diaper: p.diaper,
+                charges: p.charges,
+                hasMoved: p.hasMoved,
+                hasActed: p.hasActed,
+                strikerBoost: p.strikerBoost,
+                raceFlags: p.raceFlags,
+                yellowFlags: p.yellowFlags,
+                koTurns: p.koTurns,
+                penaltyBoxTurns: p.penaltyBoxTurns,
+                redStars: p.redStars,
+                ultimateReady: p.ultimateReady,
+                maxHp: p.maxHp,
+                hp: p.hp
+            };
+        }
+
+        function copyGameState(){
+            try {
+                // Compact JSON for sharing (no pretty-print to keep it short)
+                const json = JSON.stringify(serializeGameState());
+                if(navigator.clipboard){
+                    navigator.clipboard.writeText(json).then(()=>logMsg('Game state copied to clipboard.','success'));    
+                } else {
+                    // Fallback using a temporary textarea
+                    const ta=document.createElement('textarea'); ta.value=json; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); logMsg('Game state copied (fallback).','success');
+                }
+            } catch(e){ logMsg('Copy failed: '+e.message,'error'); }
+        }
+
+        function saveGameStateFile(){
+            try {
+                // Pretty-printed JSON for human-readable save files
+                const json = JSON.stringify(serializeGameState(), null, 2);
+                const blob = new Blob([json], {type:'application/json'});
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = `arenabol-save-${gameState.seed||'nosseed'}.json`;
+                document.body.appendChild(a); a.click(); document.body.removeChild(a);
+                logMsg('Game state file downloaded.','success');
+            } catch(e){ logMsg('Save failed: '+e.message,'error'); }
+        }
+
+        function promptPasteMerge(){
+            const txt = prompt('Paste game state JSON:');
+            if(!txt) return; mergeOrLoadGame(txt);
+        }
+
+        function loadFromSetupPaste(){
+            const txt=document.getElementById('paste-json').value.trim();
+            if(!txt){ return; }
+            mergeOrLoadGame(txt, true); // from setup: full load
+        }
+        function clearSetupPaste(){ document.getElementById('paste-json').value=''; }
+
+        function mergeOrLoadGame(raw, forceFull){
+            let data=null; try{ data=JSON.parse(raw); }catch(e){ logMsg('Invalid JSON paste (could not parse game data).','error'); return; }
+            if(!data.seed||!data.teams||!data.teams.A||!data.teams.B){ logMsg('Snapshot missing required fields.','error'); return; }
+            const oldScores = { A: gameState.scores.A, B: gameState.scores.B };
+            const sameSeed = gameState.seed && data.seed===gameState.seed;
+            // If no active game yet or forced full load (from setup) and seed differs: full load
+            const inGame = !document.getElementById('game-ui').classList.contains('hidden');
+            if(!inGame || forceFull || !sameSeed){
+                applyFullLoad(data, oldScores);
+                return;
+            }
+            // Merge (minimal intrusive) for same seed
+            applyMerge(data, oldScores);
+        }
+
+        function applyFullLoad(data, oldScores){
+            // Replace entire state then open UI
+            gameState.seed = data.seed;
+            gameState.names = data.names;
+            gameState.scores = data.scores;
+            gameState.turnCounter = data.turnCounter;
+            gameState.initiative = data.initiative;
+            gameState.half = data.half||1;
+            gameState.ball = data.ball;
+            gameState.teams.A = data.teams.A.map(clonePlayerFromSnapshot);
+            gameState.teams.B = data.teams.B.map(clonePlayerFromSnapshot);
+            document.getElementById('setup-screen').classList.add('hidden');
+            document.getElementById('game-ui').classList.remove('hidden');
+            logMsg(`Loaded save (seed ${gameState.seed}).`, 'bold');
+            initClickLayer(); initTooltips(); updateUI();
+            // Detect scoring change on full load (e.g., remote turn)
+            if(oldScores){
+                handleScoreDelta(oldScores, gameState.scores);
+            }
+        }
+
+        function applyMerge(data, oldScores){
+            const movementEvents = [];
+            const oldPositions = {};
+            [...gameState.teams.A, ...gameState.teams.B].forEach(p=>{
+                oldPositions[p.id] = { x: p.x, y: p.y };
+            });
+            // Minimal update: positions, ball, scores, turn, initiative, statuses; keep existing logs
+            gameState.scores = data.scores;
+            gameState.turnCounter = data.turnCounter;
+            gameState.initiative = data.initiative;
+            gameState.half = data.half||gameState.half;
+            gameState.ball = data.ball;
+            // Update existing players by id
+            const indexById = {};
+            [...gameState.teams.A, ...gameState.teams.B].forEach(p=>indexById[p.id]=p);
+            ['A','B'].forEach(teamKey=>{
+                data.teams[teamKey].forEach(snap=>{
+                    const live=indexById[snap.id];
+                    if(live){
+                        const old = oldPositions[snap.id];
+                        if(old && (old.x !== snap.x || old.y !== snap.y)){
+                            movementEvents.push({ id: snap.id, from: old, to: { x: snap.x, y: snap.y } });
+                        }
+                        live.x = snap.x; live.y = snap.y;
+                        live.diaper = snap.diaper; live.charges = snap.charges;
+                        live.raceFlags = snap.raceFlags; live.yellowFlags = snap.yellowFlags;
+                        live.koTurns = snap.koTurns; live.penaltyBoxTurns = snap.penaltyBoxTurns;
+                        live.redStars = snap.redStars; live.ultimateReady = snap.ultimateReady;
+                        live.hp = snap.hp; live.maxHp = snap.maxHp; live.hasActed = snap.hasActed; live.hasMoved = snap.hasMoved;
+                    }
+                });
+            });
+            logMsg('Merge applied from pasted state (same seed).','info');
+            updateUI();
+            if(movementEvents.length){
+                animateMovements(movementEvents);
+            }
+            if(oldScores){
+                handleScoreDelta(oldScores, gameState.scores);
+            }
+        }
+
+        function clonePlayerFromSnapshot(s){
+            return { ...s, raceFlags: s.raceFlags||{}, strikerBoost: s.strikerBoost||{active:false,turns:0,usedHalf:false} };
+        }
+
+        function generateSeed(){
+            // Combines time + random values, then base36
+            return (Date.now().toString(36) + '-' + Math.random().toString(36).slice(2,10));
+        }
+
+        // --- VISUAL EFFECTS FOR MERGED TURNS ---
+
+        function animateMovements(events){
+            const layer = document.getElementById('entities-layer');
+            if(!layer) return;
+            events.forEach(ev=>{
+                const el = layer.querySelector(`[data-player-id="${ev.id}"]`);
+                if(!el) return;
+                const fromLeft = ev.from.x * TILE;
+                const fromTop = ev.from.y * TILE;
+                const toLeft = ev.to.x * TILE;
+                const toTop = ev.to.y * TILE;
+
+                el.style.transition = 'none';
+                el.style.left = fromLeft + 'px';
+                el.style.top = fromTop + 'px';
+                void el.offsetWidth; // force reflow
+                el.style.transition = 'left 0.5s ease-out, top 0.5s ease-out';
+                el.style.left = toLeft + 'px';
+                el.style.top = toTop + 'px';
+            });
+        }
+
+        function handleScoreDelta(oldScores, newScores){
+            if(!oldScores) return;
+            const aDelta = (newScores.A ?? 0) - (oldScores.A ?? 0);
+            const bDelta = (newScores.B ?? 0) - (oldScores.B ?? 0);
+            if(aDelta>0){ triggerGoalFireworks('A'); }
+            if(bDelta>0){ triggerGoalFireworks('B'); }
+        }
+
+        function triggerGoalFireworks(team){
+            const field = document.getElementById('field-wrapper');
+            if(!field) return;
+            const container = document.createElement('div');
+            container.style.position = 'absolute';
+            container.style.pointerEvents = 'none';
+            container.style.zIndex = 80;
+            container.style.top = '50%';
+            container.style.transform = 'translateY(-50%)';
+            // Team A scores on right goal, Team B on left
+            container.style.left = team==='A' ? '80%' : '5%';
+
+            for(let i=0;i<7;i++){
+                const spark = document.createElement('div');
+                spark.style.position = 'absolute';
+                spark.style.width = '6px';
+                spark.style.height = '6px';
+                spark.style.borderRadius = '999px';
+                spark.style.background = team==='A' ? '#60a5fa' : '#f97316';
+                spark.style.left = '0px';
+                spark.style.top = '0px';
+                spark.style.opacity = '0.9';
+                const angle = (Math.PI*2*i)/7;
+                const dist = 40 + Math.random()*20;
+                const x = Math.cos(angle)*dist;
+                const y = Math.sin(angle)*dist;
+                spark.animate([
+                    { transform: 'translate(0,0)', opacity: 0.9 },
+                    { transform: `translate(${x}px, ${y}px)`, opacity: 0 }
+                ],{
+                    duration: 700 + Math.random()*300,
+                    easing: 'ease-out',
+                    fill: 'forwards'
+                });
+                container.appendChild(spark);
+            }
+
+            field.appendChild(container);
+            setTimeout(()=>{
+                if(container.parentNode===field){ field.removeChild(container); }
+            }, 1200);
+        }
+    </script>
+</body>
+</html>

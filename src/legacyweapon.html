@@ -280,10 +280,45 @@
   <!-- Weapon Selection Section -->
   <div id="weaponSelectionCtn" style="transition: all 0.3s ease;">
     <h2 style="color: #ffd700; border-bottom: 1px solid #c0a060; padding-bottom: 10px; text-align: center;">Choose Your Weapon</h2>
-    <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
-      <select id="weaponTypeSelect" style="background-color: #2a2a2a; color: #e0d2b4; padding: 12px; border: 1px solid #c0a060; border-radius: 4px; width: 100%; margin-bottom: 20px; font-family: 'Cinzel', serif; cursor: pointer;">
+    <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; align-items: center;">
+      <select id="weaponTypeSelect" style="background-color: #2a2a2a; color: #e0d2b4; padding: 12px; border: 1px solid #c0a060; border-radius: 4px; width: 100%; max-width: 500px; margin-bottom: 20px; font-family: 'Cinzel', serif; cursor: pointer;">
         <option value="" disabled selected>Select a weapon type...</option>
       </select>
+      <button id="openWeaponCatalogueBtn" type="button" title="Browse all weapons" style="white-space: nowrap; margin-bottom: 20px;">
+        View Weapon Catalogue
+      </button>
+    </div>
+
+    <!-- Quick Weapon Catalogue Modal -->
+    <div id="weaponCatalogueModal" style="display:none; position: fixed; inset: 0; background: rgba(0,0,0,0.65); z-index: 9999; align-items: center; justify-content: center;">
+      <div style="background-color: #1b1710; border: 2px solid #c0a060; border-radius: 8px; max-width: 1000px; width: 95%; max-height: 80vh; box-shadow: 0 8px 30px rgba(0,0,0,0.7); display: flex; flex-direction: column;">
+        <div style="display:flex; align-items:center; justify-content:space-between; padding:10px 15px; border-bottom:1px solid #c0a060; background: rgba(25,20,10,0.95);">
+          <h3 style="margin:0; color:#ffd700; font-size:1.1rem;">Weapon Catalogue</h3>
+          <button id="closeWeaponCatalogueBtn" type="button" style="padding:4px 10px; font-size:0.9rem;">Close</button>
+        </div>
+        <div style="padding:8px 12px; border-bottom:1px solid #3a2c15; display:flex; flex-wrap:wrap; gap:8px; align-items:center;">
+          <input id="weaponCatalogueSearch" type="text" placeholder="Search by name, damage, type, or property..." style="flex:1; min-width:180px; padding:6px 8px; background-color:#2a2a2a; color:#e0d2b4; border:1px solid #c0a060; border-radius:4px; font-family:'Cinzel', serif; font-size:0.85rem;" />
+          <select id="weaponCatalogueCategoryFilter" style="background-color:#2a2a2a; color:#e0d2b4; padding:6px 8px; border:1px solid #c0a060; border-radius:4px; font-family:'Cinzel', serif; font-size:0.85rem;">
+            <option value="">All Categories</option>
+          </select>
+          <span style="font-size:0.8rem; color:#c0a060; white-space:nowrap;">Click a row to select that weapon.</span>
+        </div>
+        <div style="overflow:auto; padding:8px 12px; flex:1; background:rgba(12,10,6,0.95);">
+          <table id="weaponCatalogueTable" style="width:100%; border-collapse:collapse; font-size:0.8rem;">
+            <thead>
+              <tr style="background:rgba(60,45,20,0.9);">
+                <th style="text-align:left; padding:4px 6px; border-bottom:1px solid #3a2c15;">Name</th>
+                <th style="text-align:left; padding:4px 6px; border-bottom:1px solid #3a2c15;">Damage</th>
+                <th style="text-align:left; padding:4px 6px; border-bottom:1px solid #3a2c15;">Type</th>
+                <th style="text-align:left; padding:4px 6px; border-bottom:1px solid #3a2c15;">Category</th>
+                <th style="text-align:left; padding:4px 6px; border-bottom:1px solid #3a2c15;">Properties</th>
+                <th style="text-align:right; padding:4px 6px; border-bottom:1px solid #3a2c15;">Base Cost</th>
+              </tr>
+            </thead>
+            <tbody id="weaponCatalogueBody"></tbody>
+          </table>
+        </div>
+      </div>
     </div>
     
     <!-- Slot Selection -->
@@ -954,6 +989,16 @@
         "base_cost": 250
       },
       {
+        "name": "Fine Dueling Pistol",
+        "damage_dice": "1d8",
+        "damage_type": "piercing",
+        "light": true,
+        "finesse": true,
+        "special": "Ammunition (range 30/90), loading, firearm; designed for quick-draw and trick shots, counts as a finesse pistol",
+        "category": "renaissance ranged",
+        "base_cost": 350
+      },
+      {
         "name": "Musket",
         "damage_dice": "1d12",
         "damage_type": "piercing",
@@ -1024,6 +1069,16 @@
         "special": "Ammunition (range 40/120), firearm, reload (6)",
         "category": "modern ranged",
         "base_cost": 1500
+      },
+      {
+        "name": "Quickdraw Pistol",
+        "damage_dice": "1d8",
+        "damage_type": "piercing",
+        "light": true,
+        "finesse": true,
+        "special": "Ammunition (range 40/120), firearm, reload (10); compact frame and tuned grip make this a finesse pistol for rapid hip shots and trick shooting",
+        "category": "modern ranged",
+        "base_cost": 2000
       },
       {
         "name": "Shotgun",
@@ -1186,28 +1241,108 @@
         "special": "Thrown (range 20/60), returns to wielder's hand after being thrown, energy, deals additional 1d6 force damage",
         "category": "futuristic melee",
         "base_cost": 2000
+      },
+      {
+        "name": "Phasebow",
+        "damage_dice": "2d4",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": "Ammunition (range 150/600), two-handed, magic. This bow's arrows can harmlessly pass through solid objects and barriers of nearly any mundane material; if the attacker knows the target's exact position, they can target a creature on the far side of such cover. When an attack from this bow passes through an object or barrier before striking a target, it deals an additional 1d4 force damage. Some extremely robust or exotic magical materials may block this effect at the DM's discretion.",
+        "category": "magical ranged",
+        "base_cost": 9000
+      },
+      {
+        "name": "Photonic Phasebow",
+        "damage_dice": "2d4",
+        "damage_type": "radiant",
+        "light": false,
+        "finesse": false,
+        "special": "Ammunition (range 150/600), two-handed, energy. When fired without special ammunition, this bow's photonic bolts behave like a Phasebow's shots: they can pass harmlessly through solid objects to strike a target the wielder can precisely locate, and if they pass through cover before hitting a foe the attack deals an extra 1d4 force damage. When using psicrystal bolts worth 5 gp each as ammunition, the base damage increases to 2d10 radiant and the bonus force damage on a shot that passes through cover increases to 1d10.",
+        "category": "futuristic ranged",
+        "base_cost": 14000
       }
     ],
     "Futuristic Firearms": [
       {
-        "name": "Laser Pistol",
+        "name": "Radiant Pistol",
         "damage_dice": "3d6",
-        "damage_type": "fire",
+        "damage_type": "radiant",
         "light": true,
         "finesse": false,
-        "special": "Ammunition (range 40/120), energy, reload (20)",
+        "special": "(range 40/120), energy, reload (20)",
         "category": "futuristic ranged",
         "base_cost": 7500
       },
       {
-        "name": "Laser Rifle",
-        "damage_dice": "3d8",
-        "damage_type": "fire",
+        "name": "Lighter Pistol",
+        "damage_dice": "3d4",
+        "damage_type": "radiant",
+        "light": true,
+        "finesse": true,
+        "special": "(range 40/120), energy, reload (12); a sleek finesse sidearm. Its detachable barrel (included with the weapon) can be removed to hide the pistol as a holdout weapon, but while the barrel is off its range becomes 20/60 and attack rolls suffer a -1 penalty.",
+        "category": "futuristic ranged",
+        "base_cost": 7000
+      },
+      {
+        "name": "Phase-Crossbow",
+        "damage_dice": "2d10",
+        "damage_type": "piercing",
         "light": false,
         "finesse": false,
-        "special": "Ammunition (range 100/300), energy, reload (10), two-handed",
+        "special": "Ammunition (range 120/480), reload (3), two-handed, energy. This crossbow is designed to fire psicrystal bolts that cost 1 gp each. It can chamber up to three such bolts at a time. Its bolts may be loosed through solid obstacles toward a creature whose precise position the wielder knows; when a shot passes through cover in this way, it gains the usual bonus force damage granted by phase-weapon effects (such as Phasic Ammunition or a Phasebow).",
+        "category": "futuristic ranged",
+        "base_cost": 11000
+      },
+      {
+        "name": "Phase-Crossballista",
+        "damage_dice": "2d10",
+        "damage_type": "radiant",
+        "light": false,
+        "finesse": false,
+        "special": "Siege, heavy, two-handed, energy. While you are braced to fire this weapon, your speed is reduced to 15 feet. Without special ammunition it fires a single radiant bolt (range 200/800) that behaves as a phase shot, able to pass through solid cover to strike a creature whose location you know; if it passes through cover before hitting, it also deals the usual bonus force damage for a phase weapon. As an alternate fire mode, it can expend a psicrystal bolt-canister worth 10 gp as ammunition to fire an explosive canister shot. On a hit, the canister detonates even if it does not directly strike a creature, creating a blast: all enemies within 5 feet of the target point (10 feet if the attack roll was made with advantage) must make a Dexterity saving throw contested against the attack roll. On a failure they take 3d12 radiant damage; on a success they take half. If a creature of CR 4 or lower is critically hit by the canister shot, it must succeed on a DC 20 Constitution saving throw or be instantly slain by the blast; even on a success, it still suffers the critical hit damage as normal.",
+        "category": "futuristic ranged",
+        "base_cost": 18000
+      },
+      {
+        "name": "Radiant Rifle",
+        "damage_dice": "3d8",
+        "damage_type": "radiant",
+        "light": false,
+        "finesse": false,
+        "special": "(range 100/300), energy, reload (10), two-handed",
         "category": "futuristic ranged",
         "base_cost": 10000
+      },
+      {
+        "name": "Freeze Rifle",
+        "damage_dice": "3d8",
+        "damage_type": "cold",
+        "light": false,
+        "finesse": false,
+        "special": "(range 100/300), energy, reload (10), two-handed, on a hit the target must succeed on a DC 15 Constitution save or have its speed halved until the start of your next turn",
+        "category": "futuristic ranged",
+        "base_cost": 9000
+      },
+      {
+        "name": "Radiant Automatic Rifle",
+        "damage_dice": "6d4",
+        "damage_type": "radiant",
+        "light": false,
+        "finesse": false,
+        "special": "(range 80/240), energy, reload (30), two-handed, burst fire; when you take the Attack action with this weapon you can split the damage of a single attack between up to two creatures within 10 feet of each other that are both within range and line of sight",
+        "category": "futuristic ranged",
+        "base_cost": 12000
+      },
+      {
+        "name": "Gunblade",
+        "damage_dice": "2d6",
+        "damage_type": "slashing",
+        "light": false,
+        "finesse": true,
+        "special": "Hybrid melee firearm (range 30/90), ammunition, reload (6). On an attack roll of 18 or higher, the shot detonates on impact and the target takes an additional 1d10 radiant damage.",
+        "category": "futuristic melee",
+        "base_cost": 6000
       }
     ]
   };
@@ -1358,6 +1493,12 @@
         type: "Ammunition Utility"
       },
       {
+        name: "Phasic Ammunition",
+        description: "Your ranged weapon's ammunition partially slips between mundane reality and the spaces between. When you make a ranged weapon attack with this weapon, you can choose to treat the shot as phasic: it may harmlessly pass through nonmagical solid objects and barriers to strike a creature whose exact position you know on the far side. If the attack passes through at least 5 feet of solid cover before striking, it deals an additional 1d4 force damage. This upgrade only applies to ranged weapons that use ammunition and does not grant the ability to bypass exceptionally robust or exotic magical materials at the DM's discretion. Some dedicated phase weapons, such as Phasebows, may have stronger inherent effects.",
+        cost: 1,
+        type: "Ammunition Utility"
+      },
+      {
         name: "Minor Spell Storing Magazine",
         description: "Integrate minor spell-storing capabilities into your firearm's magazine. This upgrade allows you to store a low-level spell within your ammo, which is discharged upon impact for an additional magical effect when you fire your weapon.",
         cost: 1,
@@ -1464,6 +1605,49 @@
     increaseSlotBtn.addEventListener("click", increaseSlots);
     confirmSlotsBtn.addEventListener("click", confirmSlots);
     proceedToNextTierBtn.addEventListener("click", proceedToNextTier);
+
+    // Weapon catalogue modal events
+    const openCatalogueBtn = document.getElementById("openWeaponCatalogueBtn");
+    const closeCatalogueBtn = document.getElementById("closeWeaponCatalogueBtn");
+    const catalogueModal = document.getElementById("weaponCatalogueModal");
+    if (openCatalogueBtn && catalogueModal) {
+      openCatalogueBtn.addEventListener("click", () => {
+        buildWeaponCatalogue();
+        catalogueModal.style.display = "flex";
+        const searchInput = document.getElementById("weaponCatalogueSearch");
+        if (searchInput) searchInput.focus();
+      });
+    }
+    if (closeCatalogueBtn && catalogueModal) {
+      closeCatalogueBtn.addEventListener("click", () => {
+        catalogueModal.style.display = "none";
+      });
+      catalogueModal.addEventListener("click", (e) => {
+        if (e.target === catalogueModal) {
+          catalogueModal.style.display = "none";
+        }
+      });
+      // Keyboard shortcuts while the modal is open
+      document.addEventListener("keydown", (e) => {
+        if (catalogueModal.style.display !== "flex") return;
+        // ESC closes the modal
+        if (e.key === "Escape") {
+          e.preventDefault();
+          catalogueModal.style.display = "none";
+          return;
+        }
+        // Enter selects the first visible row in the filtered list
+        if (e.key === "Enter") {
+          const body = document.getElementById("weaponCatalogueBody");
+          if (!body) return;
+          const firstVisible = Array.from(body.querySelectorAll("tr")).find(r => r.style.display !== "none");
+          if (firstVisible) {
+            firstVisible.click();
+            e.preventDefault();
+          }
+        }
+      });
+    }
     
     // Add Complete Weapon button event listener
     const completeWeaponBtn = document.getElementById('completeWeaponBtn');
@@ -1492,12 +1676,123 @@
         const option = document.createElement('option');
         option.value = weapon.name;
         const price = weapon.base_cost ? `${weapon.base_cost.toLocaleString()} GP` : 'Price TBD';
-        option.textContent = `${weapon.name} (${weapon.damage_dice} ${weapon.damage_type}) - ${price}`;
+        const isMagic = /magical/i.test(weapon.category || '') || /magic|energy|radiant|force|phase/i.test(weapon.special || '');
+        const isFuturistic = /futuristic/i.test(weapon.category || '') || /energy|firearm|plasma|phase/i.test(weapon.special || '');
+        const magicStar = isMagic ? '★ ' : '';
+        const futureDagger = isFuturistic ? '† ' : '';
+        option.textContent = `${magicStar}${futureDagger}${weapon.name} (${weapon.damage_dice} ${weapon.damage_type}) - ${price}`;
         optgroup.appendChild(option);
       });
       
       weaponTypeSelect.appendChild(optgroup);
     }
+  }
+
+  // Build and wire the quick weapon catalogue modal
+  function buildWeaponCatalogue() {
+    const tbody = document.getElementById("weaponCatalogueBody");
+    const searchInput = document.getElementById("weaponCatalogueSearch");
+    const categoryFilter = document.getElementById("weaponCatalogueCategoryFilter");
+    if (!tbody || !searchInput || !categoryFilter) return;
+
+    // One-time category population
+    if (categoryFilter.options.length === 1) {
+      Object.keys(weaponsData).forEach(cat => {
+        const opt = document.createElement("option");
+        opt.value = cat;
+        opt.textContent = cat;
+        categoryFilter.appendChild(opt);
+      });
+    }
+
+    const allRows = [];
+    tbody.innerHTML = "";
+
+    for (const [category, list] of Object.entries(weaponsData)) {
+      list.forEach(w => {
+        const tr = document.createElement("tr");
+        tr.dataset.weaponName = w.name;
+        tr.dataset.category = category;
+        tr.dataset.key = `${category}::${w.name}`;
+        tr.style.cursor = "pointer";
+        tr.style.transition = "background-color 0.15s";
+
+        const specials = [];
+        if (w.light) specials.push("Light");
+        if (w.finesse) specials.push("Finesse");
+        if (w.special) specials.push(w.special);
+
+        const isMagic = /magical/i.test(w.category || '') || /magic|energy|radiant|force|phase/i.test(w.special || '');
+        const isFuturistic = /futuristic/i.test(w.category || '') || /energy|firearm|plasma|phase/i.test(w.special || '');
+        const namePrefix = `${isMagic ? '★ ' : ''}${isFuturistic ? '† ' : ''}`;
+
+        tr.innerHTML = `
+          <td style="padding:3px 6px; border-bottom:1px solid #3a2c15; color:#ffd700;">${namePrefix}${w.name}</td>
+          <td style="padding:3px 6px; border-bottom:1px solid #3a2c15;">${w.damage_dice}</td>
+          <td style="padding:3px 6px; border-bottom:1px solid #3a2c15; text-transform:capitalize;">${w.damage_type}</td>
+          <td style="padding:3px 6px; border-bottom:1px solid #3a2c15; font-size:0.75rem;">${w.category}</td>
+          <td style="padding:3px 6px; border-bottom:1px solid #3a2c15; font-size:0.7rem;">${specials.join(", ") || "—"}</td>
+          <td style="padding:3px 6px; border-bottom:1px solid #3a2c15; text-align:right;">${(w.base_cost || 0).toLocaleString()} GP</td>
+        `;
+
+        tr.addEventListener("mouseenter", () => {
+          tr.style.backgroundColor = "rgba(192,160,96,0.18)";
+        });
+        tr.addEventListener("mouseleave", () => {
+          // Only clear hover if this row isn't the selected one
+          if (!tr.classList.contains("weapon-row-selected")) {
+            tr.style.backgroundColor = "transparent";
+          }
+        });
+        tr.addEventListener("click", () => {
+          // Set the dropdown and run the normal selection flow
+          if (typeof w.name === "string") {
+            weaponTypeSelect.value = w.name;
+            onWeaponSelected();
+          }
+          // Update row highlighting to show currently selected weapon
+          const key = tr.dataset.key;
+          allRows.forEach(r => {
+            r.classList.remove("weapon-row-selected");
+            if (r.dataset.key === key) {
+              r.classList.add("weapon-row-selected");
+              r.style.backgroundColor = "rgba(255,215,0,0.16)";
+            } else if (r.style.backgroundColor) {
+              r.style.backgroundColor = "transparent";
+            }
+          });
+          const modal = document.getElementById("weaponCatalogueModal");
+          if (modal) modal.style.display = "none";
+        });
+
+        tbody.appendChild(tr);
+        allRows.push(tr);
+      });
+    }
+
+    const applyFilters = () => {
+      const q = searchInput.value.toLowerCase().trim();
+      const cat = categoryFilter.value;
+      const selectedName = state.selectedWeapon || "";
+      allRows.forEach(row => {
+        const inCat = !cat || row.dataset.category === cat;
+        const text = row.textContent.toLowerCase();
+        const matches = !q || text.includes(q);
+        row.style.display = inCat && matches ? "" : "none";
+
+        // Maintain highlight on the currently selected weapon when visible
+        if (selectedName && row.dataset.weaponName === selectedName && row.style.display !== "none") {
+          row.classList.add("weapon-row-selected");
+          row.style.backgroundColor = "rgba(255,215,0,0.16)";
+        } else if (!row.classList.contains("weapon-row-selected")) {
+          row.style.backgroundColor = "transparent";
+        }
+      });
+    };
+
+    searchInput.oninput = applyFilters;
+    categoryFilter.onchange = applyFilters;
+    applyFilters();
   }
   
   function onWeaponSelected() {

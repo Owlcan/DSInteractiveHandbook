@@ -288,58 +288,58 @@
             { name: "Purekin 'Holy' Diaper", desc: "A white, rune-scribed diaper. (Grants Immunity to Non-Legendary/Boss-Based Necrotic damage for 8 hours.)" }
         ];
 
-        // NEW: Full Wild Magic Tantrum Table (as an array)
+        // NEW: Full Wild Magic Tantrum Table (now structured objects with optional diaper hooks)
         const tricks = [
-            "1–2: Roll on this table at the start of each of your turns for the next minute, ignoring this result on subsequent rolls.",
-            "3–4: For the next minute, you can see any Invisible creature if you have line of sight to it, and you can see everyone's diaper status.",
-            "5–6: A NANNYBOT chosen & controlled by the DM appears in an unoccupied space within 5 feet of you, it disappears 1 min later.",
-            "7–8: You cast Diaper Doom as a 3rd-level spell centered on yourself if you pass a disadvantage potty check.",
-            "9–10: You cast magic messle on your diaper, 3 diaper usage charges expended.",
-            "11–12: Roll a d10. Your continence bonus—if any—changes by a number equal to the roll for one day.",
-            "13–14: You cast Baby-Brain (Confusion) centered on yourself. All who fail this version of confusion must roll a continence check.",
-            "15–16: For 1 minute, you regain 5HP at the start of each of your turns and your diaper regains one use charge.",
-            "17–18: You become a living plushie version of yourself that remains plush until you fluff your diaper, reverting to a FULL diaper.",
-            "19–20: You cast Grease centered on your diaper. You can butt slide up to 30ft with a 5ft running start and leave an oil slick.",
-            "21–22: Your diaper harmlessly doubles in size and hums lightly for 1 minute. All creatures within 10 feet have disadvantage on Concentration checks due to the distraction.",
-            "23–24: Your outfit shifts pastel and your skin glows a vibrant nursery hue (pink, blue, or lavender). A Remove Curse spell can end this effect.",
-            "25–26: A cutesified outfit based on your class appears on you for 1 minute. You gain advantage on Charisma (Performance) checks while wearing it.",
-            "27–28: For the next minute, all your Spells with a Casting Time of 1 action have a Casting Time of 1 Bonus Action, but whenever you cast you must roll a potty check.",
-            "29–30: You Teleport up to 60 feet to an unoccupied space of your choice that you can see, and roll a potty check.",
-            "31–32: You're transported to the Nursery until the end of your next turn, afterward you return to the space you previously occupied or the nearest unoccupied space.",
-            "33–34: You glow like a nightlight in a 30-foot radius for the next minute. Any creature that ends its turn within 5 feet of you must succeed on a CON save or be Blinded until the end of its next turn.",
-            "35–36: Your age regresses by a percentage equal to 10(1d10) for one hour.",
-            "37–38: You fall flat on your face like a baby. Witnesses must pass your spell save (WIS) or laugh uncontrollably until next turn.",
-            "39–40: You become incontinent, roll a potty check at disadvantage. If already incontinent, your diaper doubles in thickness and uses.",
-            "41–42: Balled-up diapers rain down in a 10ft radius you choose. Creatures inside take 3d4+3 magical bludgeoning dmg.",
-            "43–44: An angel appears to put you in a magical holy diaper. If good or neutral diaper gives +1AC, if not, -1AC.",
-            "45–46: A devil appears to put you in an unholy diaper. If good or chaotic you are now incontinent, if neutral or otherwise +1 AC.",
-            "47–48: All creatures in a 20ft radius (including you) must make a Wis saving throw. On a failure, they curl up on the nearest soft surface... and nap for 1 min or until disturbed.",
-            "49–50: Creatures in a 30-foot radius crave sweets, needing to eat candy before being able to take reactions.",
-            "51–52: A spectral diaper appears on you. You get +1 AC but the diaper does not come off until it is comically full.",
-            "53–54: You fail all potty checks for 1d4 days, rolling a 1d2 to decide if you wet or mess.",
-            "55–56: Your underpants change into a clean diaper rolled from the Diaper Chart.",
-            "57–58: For the next minute, any person you touch will be diapered or boostered if already diapered.",
-            "59–60: You regain your lowest-level expended spell slot and a spectral magic hand pats you on the booty.",
-            "61–62: For the next minute, you must BABY TALK when you speak.",
-            "63–64: You cast Stank Cloud centered on yourself. As Fog Cloud except DC12 CON/15ft sq or be sickened.",
-            "65–66: Up to 3 creatures you choose within 30ft of you take 4d10 lightning damage and must roll a potty check.",
-            "67–68: You are Frightened by the nearest creature until the end of your next turn, you wet your diaper.",
-            "69–70: Each creature within 30 feet of you becomes Incontinent for the next 1d4 days.",
-            "71–72: You gain Resistance to all damage for the next minute and your diaper doubles in thickness.",
-            "73–74: A random creature within 60 feet of you becomes Incontinent and Poisoned for 1d4 hours.",
-            "75–76: Maximize the damage of the next damaging spell you cast within the next minute.",
-            "77–78: You cast Polymorph on yourself. If you fail the saving throw, you turn into a baby version of yourself for the spell’s Duration.",
-            "79–80: Illusory butterflies and flower petals flutter in the air within 10 feet of you for the next minute.",
-            "81–82: You can take one additional action immediately, but you must make a potty check at disadvantage.",
-            "83–84: Each creature within 30 feet of you takes 1d10 necrotic damage. DC10 CON Check or have immediate accident and be rendered incontinent for 1d4 weeks.",
-            "85–86: You cast Mirror Image, but the mirror image is a brat.",
-            "87–88: All worn/carried panties in a 1 mile radius become diapers that cannot be removed until used.",
-            "89–90: An AU twin of yourself, under your control, appears to aid you for 2d4 turns, in only a cute onesie & diaper.",
-            "91–92: You feel your pants/pampers grow damp/full—you have had an accident, no saves.",
-            "93–94: You cast Spank as an 11th level caster on every hostile target in the vicinity.",
-            "95–96: You are teleported to The Babrooms for 1d2 turns.",
-            "97–98: The next spell you attempt to cast becomes an animated, crayon-drawn version of itself. It functions at half power.",
-            "99–100: All creatures within 60 feet (including you) are momentarily transformed into toddlers or infants for 1 minute."
+            { text: "1–2: Roll on this table at the start of each of your turns for the next minute, ignoring this result on subsequent rolls." },
+            { text: "3–4: For the next minute, you can see any Invisible creature if you have line of sight to it, and you can see everyone's diaper status." },
+            { text: "5–6: A NANNYBOT chosen & controlled by the DM appears in an unoccupied space within 5 feet of you, it disappears 1 min later." },
+            { text: "7–8: You cast Diaper Doom as a 3rd-level spell centered on yourself if you pass a disadvantage potty check." },
+            { text: "9–10: You cast magic messle on your diaper, 3 diaper usage charges expended." },
+            { text: "11–12: Roll a d10. Your continence bonus—if any—changes by a number equal to the roll for one day." },
+            { text: "13–14: You cast Baby-Brain (Confusion) centered on yourself. All who fail this version of confusion must roll a continence check." },
+            { text: "15–16: For 1 minute, you regain 5HP at the start of each of your turns and your diaper regains one use charge." },
+            { text: "17–18: You become a living plushie version of yourself that remains plush until you fluff your diaper, reverting to a FULL diaper." },
+            { text: "19–20: You cast Grease centered on your diaper. You can butt slide up to 30ft with a 5ft running start and leave an oil slick." },
+            { text: "21–22: Your diaper harmlessly doubles in size and hums lightly for 1 minute. All creatures within 10 feet have disadvantage on Concentration checks due to the distraction." },
+            { text: "23–24: Your outfit shifts pastel and your skin glows a vibrant nursery hue (pink, blue, or lavender). A Remove Curse spell can end this effect." },
+            { text: "25–26: A cutesified outfit based on your class appears on you for 1 minute. You gain advantage on Charisma (Performance) checks while wearing it." },
+            { text: "27–28: For the next minute, all your Spells with a Casting Time of 1 action have a Casting Time of 1 Bonus Action, but whenever you cast you must roll a potty check." },
+            { text: "29–30: You Teleport up to 60 feet to an unoccupied space of your choice that you can see, and roll a potty check." },
+            { text: "31–32: You're transported to the Nursery until the end of your next turn, afterward you return to the space you previously occupied or the nearest unoccupied space." },
+            { text: "33–34: You glow like a nightlight in a 30-foot radius for the next minute. Any creature that ends its turn within 5 feet of you must succeed on a CON save or be Blinded until the end of its next turn." },
+            { text: "35–36: Your age regresses by a percentage equal to 10(1d10) for one hour." },
+            { text: "37–38: You fall flat on your face like a baby. Witnesses must pass your spell save (WIS) or laugh uncontrollably until next turn." },
+            { text: "39–40: You become incontinent, roll a potty check at disadvantage. If already incontinent, your diaper doubles in thickness and uses." },
+            { text: "41–42: Balled-up diapers rain down in a 10ft radius you choose. Creatures inside take 3d4+3 magical bludgeoning dmg.", diaperType: "mundane" },
+            { text: "43–44: An angel appears to put you in a magical holy diaper. If good or neutral diaper gives +1AC, if not, -1AC.", diaperType: "magical" },
+            { text: "45–46: A devil appears to put you in an unholy diaper. If good or chaotic you are now incontinent, if neutral or otherwise +1 AC.", diaperType: "magical" },
+            { text: "47–48: All creatures in a 20ft radius (including you) must make a Wis saving throw. On a failure, they curl up on the nearest soft surface... and nap for 1 min or until disturbed." },
+            { text: "49–50: Creatures in a 30-foot radius crave sweets, needing to eat candy before being able to take reactions." },
+            { text: "51–52: A spectral diaper appears on you. You get +1 AC but the diaper does not come off until it is comically full.", diaperType: "magical" },
+            { text: "53–54: You fail all potty checks for 1d4 days, rolling a 1d2 to decide if you wet or mess." },
+            { text: "55–56: Your underpants change into a clean diaper rolled from the Diaper Chart.", diaperType: "any" },
+            { text: "57–58: For the next minute, any person you touch will be diapered or boostered if already diapered.", diaperType: "mundane" },
+            { text: "59–60: You regain your lowest-level expended spell slot and a spectral magic hand pats you on the booty." },
+            { text: "61–62: For the next minute, you must BABY TALK when you speak." },
+            { text: "63–64: You cast Stank Cloud centered on yourself. As Fog Cloud except DC12 CON/15ft sq or be sickened." },
+            { text: "65–66: Up to 3 creatures you choose within 30ft of you take 4d10 lightning damage and must roll a potty check." },
+            { text: "67–68: You are Frightened by the nearest creature until the end of your next turn, you wet your diaper." },
+            { text: "69–70: Each creature within 30 feet of you becomes Incontinent for the next 1d4 days." },
+            { text: "71–72: You gain Resistance to all damage for the next minute and your diaper doubles in thickness.", diaperType: "mundane" },
+            { text: "73–74: A random creature within 60 feet of you becomes Incontinent and Poisoned for 1d4 hours." },
+            { text: "75–76: Maximize the damage of the next damaging spell you cast within the next minute." },
+            { text: "77–78: You cast Polymorph on yourself. If you fail the saving throw, you turn into a baby version of yourself for the spell’s Duration." },
+            { text: "79–80: Illusory butterflies and flower petals flutter in the air within 10 feet of you for the next minute." },
+            { text: "81–82: You can take one additional action immediately, but you must make a potty check at disadvantage." },
+            { text: "83–84: Each creature within 30 feet of you takes 1d10 necrotic damage. DC10 CON Check or have immediate accident and be rendered incontinent for 1d4 weeks." },
+            { text: "85–86: You cast Mirror Image, but the mirror image is a brat." },
+            { text: "87–88: All worn/carried panties in a 1 mile radius become diapers that cannot be removed until used.", diaperType: "mundane" },
+            { text: "89–90: An AU twin of yourself, under your control, appears to aid you for 2d4 turns, in only a cute onesie & diaper.", diaperType: "mundane" },
+            { text: "91–92: You feel your pants/pampers grow damp/full—you have had an accident, no saves.", diaperType: "mundane" },
+            { text: "93–94: You cast Spank as an 11th level caster on every hostile target in the vicinity." },
+            { text: "95–96: You are teleported to The Babrooms for 1d2 turns." },
+            { text: "97–98: The next spell you attempt to cast becomes an animated, crayon-drawn version of itself. It functions at half power." },
+            { text: "99–100: All creatures within 60 feet (including you) are momentarily transformed into toddlers or infants for 1 minute." }
         ];
 
 
@@ -357,6 +357,33 @@
         // Simple d100 roller
         function rollD100() {
             return Math.floor(Math.random() * 100) + 1;
+        }
+
+        // Helper: roll on the wild magic tantrum table and optionally attach a concrete diaper item
+        function rollWildMagicTantrum() {
+            const roll = rollD100();
+            const idx = Math.min(tricks.length - 1, Math.max(0, roll - 1));
+            const entry = tricks[idx];
+            const result = { roll, text: entry.text };
+            if (entry.diaperType) {
+                let pool = null;
+                if (entry.diaperType === 'mundane') pool = mundaneDiapers;
+                else if (entry.diaperType === 'magical') pool = magicalDiapers;
+                else if (entry.diaperType === 'any') {
+                    // 50/50 mundane vs magical if available
+                    const pools = [];
+                    if (mundaneDiapers.length) pools.push(mundaneDiapers);
+                    if (magicalDiapers.length) pools.push(magicalDiapers);
+                    if (pools.length) {
+                        pool = randItem(pools);
+                    }
+                }
+                if (pool && pool.length) {
+                    result.diaper = randItem(pool);
+                    result.diaperType = entry.diaperType;
+                }
+            }
+            return result;
         }
 
         // --- CORE REWARD LOGIC ---
@@ -419,7 +446,7 @@
                 };
             }
 
-            // 93-97 (5%): Mundane Diaper
+            // 93-97 (5%): Mundane Diaper (from the normal mundaneDiapers reward table)
             if (roll <= 97) {
                 return {
                     reward: randItem(mundaneDiapers),
@@ -428,7 +455,7 @@
                 };
             }
             
-            // 98-99 (2%): Magical Diaper (NEW)
+            // 98-99 (2%): Magical Diaper (from the normal magicalDiapers reward table)
             if (roll <= 99) {
                 return {
                     reward: randItem(magicalDiapers),
@@ -437,9 +464,24 @@
                 };
             }
 
-            // 100 (1%): Trick!
+            // 100 (1%): Trick! Roll on the tantrum table and, if applicable, attach a concrete diaper item from the normal item lists.
+            const tantrum = rollWildMagicTantrum();
+            // If the tantrum produced a specific diaper item, return it as the reward object so it renders like other items
+            if (tantrum.diaper) {
+                // Attach the wild-magic line into the description so the full effect is visible
+                const enhancedDesc = `${tantrum.diaper.desc} Wild Magic (${tantrum.roll}): ${tantrum.text}`;
+                return {
+                    reward: { name: tantrum.diaper.name, desc: enhancedDesc },
+                    type: tantrum.diaperType === 'magical' ? 'Magical Diaper!' : 'Diaper?',
+                    style: tantrum.diaperType === 'magical'
+                        ? "text-[#d678ff] font-bold" /* Magic Purple */
+                        : "text-[var(--halloween-green)]"
+                };
+            }
+
+            // Otherwise, just surface the tantrum text as a pure Trick! string.
             return {
-                reward: `TRICK! ${randItem(tricks)}`, // This is a string
+                reward: `TRICK! ${tantrum.text}`,
                 type: "Trick!",
                 style: "text-[#ff5555] font-bold" /* Red Alert */
             };

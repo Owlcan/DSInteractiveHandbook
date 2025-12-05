@@ -335,3 +335,50 @@ Okay:
             
             
             // Slimepress (buffed for late-game)
+
+
+
+
+
+
+
+
+
+
+Okay, I want a full suite of variants so that we can construct the Greensea Forest sector of expeditions. Mot of the magical plains expedition events could be reused as long as they aren't plains specific, but we will need a new list for magical plains random encounters.
+
+the negative and positive variables can also be largely reused, except for the obvious odd ones like volcano or desert heat, polar cold in the forest.
+
+
+            Darkling: { label:'Shadowmist Jaunt', desc:'Teleport to any square.', use(p){ p.x=Math.floor(Math.random()*GRID_W); p.y=Math.floor(Math.random()*GRID_H); logMsg(`${p.name} jaunts anywhere!`,'success'); updateUI(); } },
+            Kittenfolk: { label:'Feral Blitz', desc:'+30 speed & next tackle auto succeeds.', use(p){ p.raceFlags.speedBonusTurns=1; p.raceFlags.speedBonusValue=30; p.raceFlags.autoTackle=true; logMsg(`${p.name} enters Feral Blitz!`,'success'); } },
+            Pupperling: { label:'Pack Howl', desc:'Adjacent allies +15 speed this turn.', use(p){ const allies=(p.team==='A'?gameState.teams.A:gameState.teams.B).filter(a=>a.id!==p.id && Math.max(Math.abs(a.x-p.x),Math.abs(a.y-p.y))<=1); allies.forEach(a=>{ a.raceFlags.speedBonusTurns=1; a.raceFlags.speedBonusValue=(a.raceFlags.speedBonusValue||0)+15; }); logMsg(`${p.name} howls empowering pack!`,'success'); } },
+            Pupperlings: { label:'Pack Howl', desc:'Adjacent allies +15 speed this turn.', use(p){ const allies=(p.team==='A'?gameState.teams.A:gameState.teams.B).filter(a=>a.id!==p.id && Math.max(Math.abs(a.x-p.x),Math.abs(a.y-p.y))<=1); allies.forEach(a=>{ a.raceFlags.speedBonusTurns=1; a.raceFlags.speedBonusValue=(a.raceFlags.speedBonusValue||0)+15; }); logMsg(`${p.name} howls empowering pack!`,'success'); } },
+            Bunbunkin: { label:'Bounding Frenzy', desc:'Team uses (dx+dy) movement metric this turn.', use(p){ (p.team==='A'?gameState.teams.A:gameState.teams.B).forEach(a=>{ a.raceFlags.leapActive=true; }); logMsg(`${p.name} triggers Bounding Frenzy!`,'success'); } },
+            Skunkiddo: { label:'Toxic Cloud', desc:'Adjacent foes -4 DEX & snared 2 turns.', use(p){ const foes=(p.team==='A'?gameState.teams.B:gameState.teams.A).filter(f=>Math.max(Math.abs(f.x-p.x),Math.abs(f.y-p.y))<=1); foes.forEach(f=>{ f.raceFlags.dexPenalty=(f.raceFlags.dexPenalty||0)+4; f.raceFlags.snareTurns=2; f.raceFlags.snarePenalty=15; }); logMsg(`${p.name} releases toxic cloud!`,'warning'); } },
+            Cowbuddy: { label:'Unstoppable Bulk', desc:'+5 STR ignore root/snare 3 turns.', use(p){ p.raceFlags.bulkTurns=3; p.raceFlags.ignoreControl=3; logMsg(`${p.name} becomes Unstoppable!`,'success'); } },
+            Cowbuddies: { label:'Unstoppable Bulk', desc:'+5 STR ignore root/snare 3 turns.', use(p){ p.raceFlags.bulkTurns=3; p.raceFlags.ignoreControl=3; logMsg(`${p.name} becomes Unstoppable!`,'success'); } },
+            Seimei: { label:'Mystic Overcharge', desc:'Next two pass/shoot auto succeed.', use(p){ p.raceFlags.autoPassShoot=2; logMsg(`${p.name} invokes Mystic Overcharge!`,'success'); } },
+            Scampersaurian: { label:'Primeval Roar', desc:'Foes within 5 lose 10 speed & -2 STR.', use(p){ const foes=(p.team==='A'?gameState.teams.B:gameState.teams.A).filter(f=>Math.max(Math.abs(f.x-p.x),Math.abs(f.y-p.y))<=5); foes.forEach(f=>{ f.raceFlags.speedBonusTurns=1; f.raceFlags.speedBonusValue=(f.raceFlags.speedBonusValue||0)-10; f.stats.str -=2; f.raceFlags.roarDebuff=true; }); logMsg(`${p.name} unleashes Primeval Roar!`,'warning'); } },
+            Diaparachnid: { label:'Grand Web', desc:'Snare all foes within 6 for 2 turns.', use(p){ const foes=(p.team==='A'?gameState.teams.B:gameState.teams.A).filter(f=>Math.max(Math.abs(f.x-p.x),Math.abs(f.y-p.y))<=6); foes.forEach(f=>{ f.raceFlags.snareTurns=2; f.raceFlags.snarePenalty=15; }); logMsg(`${p.name} casts Grand Web!`,'warning'); } },
+            Elf: { label:'Arrow of Light', desc:'Next shot auto inner gate (5 pts).', use(p){ p.raceFlags.autoInnerShot=true; logMsg(`${p.name} nocks Arrow of Light!`,'success'); } },
+            Dwarf: { label:'Earthshatter', desc:'Adjacent squares heavy (-10 speed).', use(p){ p.raceFlags.earthshatterTurns=2; logMsg(`${p.name} shatters earth!`,'warning'); } },
+            Halfling: { label:'Perfect Bounce', desc:'Next failed pass/shot becomes success.', use(p){ p.raceFlags.perfectBounce=true; logMsg(`${p.name} readies Perfect Bounce!`,'success'); } },
+            Waddlehoof: { label:'Stampede', desc:'+50 speed +4 STR this turn.', use(p){ p.raceFlags.speedBonusTurns=1; p.raceFlags.speedBonusValue=50; p.raceFlags.stampedeStr=4; logMsg(`${p.name} starts Stampede!`,'success'); } },
+            Waddlehooves: { label:'Stampede', desc:'+50 speed +4 STR this turn.', use(p){ p.raceFlags.speedBonusTurns=1; p.raceFlags.speedBonusValue=50; p.raceFlags.stampedeStr=4; logMsg(`${p.name} starts Stampede!`,'success'); } },
+           
+            Semi_Gorgon: { label:'True Petrify', desc:'Up to 2 foes within 4 tiles rooted 2 turns.', use(p){ const foes=(p.team==='A'?gameState.teams.B:gameState.teams.A).filter(f=>Math.max(Math.abs(f.x-p.x),Math.abs(f.y-p.y))<=4); foes.slice(0,2).forEach(f=>{ f.raceFlags.rootTurns=Math.max(f.raceFlags.rootTurns||0,2); }); logMsg(`${p.name} petrifies ${Math.min(2,foes.length)} foe(s)!`,'warning'); } },
+            Gemini_Celestian: { label:'Twin Focus', desc:'Adjacent ally (acted) resets & +15 speed; you +15 speed.', use(p){ const ally=(p.team==='A'?gameState.teams.A:gameState.teams.B).find(a=>a.id!==p.id && a.hasActed && Math.max(Math.abs(a.x-p.x),Math.abs(a.y-p.y))<=1); p.raceFlags.speedBonusTurns=1; p.raceFlags.speedBonusValue=(p.raceFlags.speedBonusValue||0)+15; if(ally){ ally.hasActed=false; ally.raceFlags.speedBonusTurns=1; ally.raceFlags.speedBonusValue=(ally.raceFlags.speedBonusValue||0)+15; logMsg(`${p.name} twin-focuses with ${ally.name}!`,'success'); } else logMsg('No acted adjacent ally for Twin Focus.','warning'); } },
+            Celestian_Archist: { label:'Archist Ascendance', desc:'+2 ALL stats rest of half; next 2 pass/shoot auto succeed.', use(p){ if(!p.raceFlags.ascendanceActive){ ['str','dex','con','int','wis','cha'].forEach(s=>p.stats[s]+=2); p.raceFlags.ascendanceActive=true; } p.raceFlags.autoPassShoot = (p.raceFlags.autoPassShoot||0)+2; logMsg(`${p.name} ascends (stats +2, 2 auto pass/shoot).`,'success'); } }
+        };
+
+         Ghost: { label:'Soul Drift', desc:'Teleport up to 10 ignoring zones.', use(p){ p.x=clamp(p.x + (Math.floor(Math.random()*21)-10),0,GRID_W-1); p.y=clamp(p.y + (Math.floor(Math.random()*21)-10),0,GRID_H-1); logMsg(`${p.name} drifts eerily!`,'info'); updateUI(); } },
+            Morphian_Changeling: { label:'Total Adapt', desc:'+2 ALL stats 2 turns.', use(p){ p.raceFlags.adaptAllTurns=2; ['str','dex','con','int','wis','cha'].forEach(s=>p.stats[s]+=2); logMsg(`${p.name} fully adapts!`,'success'); } },
+            Tanukijin: { label:'Grand Mirage', desc:'Foes within 4 -2 DEX -5 speed.', use(p){ const foes=(p.team==='A'?gameState.teams.B:gameState.teams.A).filter(f=>Math.max(Math.abs(f.x-p.x),Math.abs(f.y-p.y))<=4); foes.forEach(f=>{ f.raceFlags.dexPenalty=(f.raceFlags.dexPenalty||0)+2; f.raceFlags.speedBonusTurns=1; f.raceFlags.speedBonusValue=(f.raceFlags.speedBonusValue||0)-5; }); logMsg(`${p.name} unveils Grand Mirage!`,'warning'); } },
+            Possumfolk: { label:'Feign Resurrection', desc:'If KO this turn, stand and act.', use(p){ p.raceFlags.possumAutoRise=true; logMsg(`${p.name} prepares Feign Resurrection!`,'success'); } },
+            Living_Doll: { label:'Puppet Master', desc:'Move adjacent foe up to 3 tiles.', use(p){ const foes=(p.team==='A'?gameState.teams.B:gameState.teams.A).filter(f=>Math.max(Math.abs(f.x-p.x),Math.abs(f.y-p.y))<=1); if(foes.length){ const f=foes[0]; f.x=clamp(f.x + (p.team==='A'?1:-1)*3,0,GRID_W-1); logMsg(`${p.name} puppets ${f.name}!`,'warning'); updateUI(); } else logMsg('No adjacent foe to puppet.','error'); } },
+            Crinkleheart: { label:'Grand Comfort', desc:'Team +2 pass/shoot mods this turn.', use(p){ (p.team==='A'?gameState.teams.A:gameState.teams.B).forEach(a=>{ a.raceFlags.comfortTurns=1; }); logMsg(`${p.name} soothes the whole team!`,'success'); } },
+            Carcharodonian: { label:'Feeding Frenzy+', desc:'+4 STR +20 speed next foul advantage.', use(p){ p.raceFlags.frenzyTurns=1; p.raceFlags.speedBonusTurns=1; p.raceFlags.speedBonusValue=(p.raceFlags.speedBonusValue||0)+20; p.raceFlags.foulAdvantage=true; logMsg(`${p.name} enters Greater Frenzy!`,'success'); } },
+            Pampire: { label:'Crimson Feast', desc:'Heal full; adjacent foes lose 5 HP.', use(p){ const foes=(p.team==='A'?gameState.teams.B:gameState.teams.A).filter(f=>Math.max(Math.abs(f.x-p.x),Math.abs(f.y-p.y))<=1); foes.forEach(f=>{ f.hp=Math.max(0,f.hp-5); if(f.hp<=0 && f.koTurns===0){ f.koTurns=2; logMsg(`${f.name} is KO'd by Crimson Feast!`,'error'); } }); p.hp=p.maxHp; logMsg(`${p.name} performs Crimson Feast!`,'warning'); updateUI(); } },
+            Foxfolk: { label:'Moonlit Ambush', desc:'Teleport adjacent to ball; +20 speed & next tackle auto succeeds.', use(p){ p.x=clamp(gameState.ball.x + (Math.floor(Math.random()*3)-1),0,GRID_W-1); p.y=clamp(gameState.ball.y + (Math.floor(Math.random()*3)-1),0,GRID_H-1); p.raceFlags.speedBonusTurns=1; p.raceFlags.speedBonusValue=(p.raceFlags.speedBonusValue||0)+20; p.raceFlags.autoTackle=true; logMsg(`${p.name} strikes from moonlit shadow!`,'success'); updateUI(); } },
+            Demi_Gorgon: { label:'Mythic Surge', desc:'+2 ALL stats & +20 speed this turn.', use(p){ ['str','dex','con','int','wis','cha'].forEach(s=>p.stats[s]+=2); p.raceFlags.mythicSurgeTurns=1; p.raceFlags.speedBonusTurns=1; p.raceFlags.speedBonusValue=(p.raceFlags.speedBonusValue||0)+20; logMsg(`${p.name} unleashes Mythic Surge!`,'success'); } },

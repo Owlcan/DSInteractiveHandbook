@@ -226,6 +226,33 @@
             color: var(--gold-light);
         }
 
+        /* Glossary styling */
+        .glossary-term {
+            position: relative;
+            color: var(--gold-light);
+            border-bottom: 1px dotted var(--gold);
+            cursor: help;
+        }
+        #glossary-tooltip {
+            position: fixed;
+            z-index: 10000;
+            max-width: 340px;
+            background: rgba(30, 28, 18, 0.98);
+            color: var(--gold-light);
+            border: 1px solid var(--gold);
+            border-radius: 0.5rem;
+            box-shadow: 0 8px 20px var(--shadow);
+            padding: 0.5rem 0.75rem;
+            display: none;
+        }
+        #glossary-tooltip .title {
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 0.25rem;
+        }
+        #glossary-tooltip .body { font-size: 0.95rem; }
+        #glossary-tooltip .pin-hint { font-size: 0.8rem; opacity: 0.8; margin-top: 0.25rem; }
+
         /* Inline nav hint under buttons */
         #nav-hint {
             text-align: center;
@@ -310,6 +337,13 @@
             <div id="nav-hint" aria-live="polite">Tip: Some pages have multiple images — use the image ◄ and ► before Next Page.</div>
         </div>
 
+    </div>
+
+    <!-- Floating tooltip for glossary -->
+    <div id="glossary-tooltip" role="tooltip" aria-hidden="true">
+        <div class="title"></div>
+        <div class="body"></div>
+        <div class="pin-hint">Click term to pin/unpin</div>
     </div>
 
     <script>
@@ -1159,6 +1193,286 @@
         const imageHint = document.getElementById('image-hint');
         const navHint = document.getElementById('nav-hint');
         let partIndexMap = { 1: 1, 2: null, 3: null }; // will compute accurately on init
+        let glossaryEventsBound = false; // avoid duplicate bindings
+
+        // --- 3b. GLOSSARY DATA ---
+        // Keys are case-insensitive; display is preferred casing for title.
+        const glossary = {
+            'scholia diaspros': { display: 'Scholia Diaspros', body: 'The academy and demiplane where the story takes place.' },
+            'lissome plains': { display: 'Lissome Plains', body: 'A planar-scarred savannah outside the academy, rife with temporal and dimensional anomalies after the Old War.' },
+            'old war': { display: 'Old War', body: 'A devastating conflict centuries ago that culminated in the destruction of the Well of Souls.' },
+            'well of souls': { display: 'Well of Souls', body: 'A deep sanctum beneath the academy tied to soul magic; its destruction warped the demiplane.' },
+            'dracespire mountains': { display: 'Dracespire Mountains', body: 'The jagged, snow-dusted mountain range looming over the Lissome Plains.' },
+            'lesser dracespire': { display: 'Lesser Dracespire', body: 'One of the twin Brother Mountains; a living, empathic massif that “babies” travelers with paths and plateaus.' },
+            'brother mountains': { display: 'Brother Mountains', body: 'Twin empathic mountains tied to the academy’s history; they respond to intention and friendship.' },
+            'brother mountain': { display: 'Brother Mountain', body: 'A colloquial singular for the empathic pair; often described as guiding worthy climbers.' },
+            'way rangers': { display: 'Way Rangers', body: 'Seasoned wanderers and guides who traverse the Ways and wilds around the academy.' },
+            'darkling': { display: 'Darkling', body: 'Shadow-born abominations spawned or drawn by the demiplane’s psychic scars.' },
+            'warforged': { display: 'Warforged', body: 'Construct soldiers from the Old War era; some still serve as guardians or labor within the demiplane.' },
+            'black pyramid': { display: 'Black Pyramid', body: 'An ancient, gold-veined tomb-complex on an island of shadow and stone.' },
+            'cathedral': { display: 'Black Cathedral', body: 'A blackened, cliff-clinging cathedral of unknown age that the students pass through en route to the pyramid.' },
+            'mistress root': { display: 'Mistress Root', body: 'A vast, ancient tree-matriarch presiding over the Grove, able to lift and guide visitors.' },
+            'grove': { display: 'The Grove', body: 'A once-frozen garden within the mountain that stirs to life under the students’ care.' },
+            'boxly': { display: 'Boxly', body: 'A quirky clockwork construct with a helpful—if limited—demeanor.' },
+            'nightdrinker': { display: 'The Nightdrinker', body: 'A formidable, darkness-drinking foe encountered near the sealed door.' },
+            'golden hall': { display: 'The Golden Hall', body: 'A tranquil, awe-inspiring chamber of gold ribs and devouring black between the columns.' },
+            "mother's walk": { display: "Mother's Walk", body: 'A visionary path where Elasharna’s presence guides and comforts the students.' },
+            'elasharna': { display: 'Elasharna', body: 'A draconic mother-figure whose guidance helps Charla confront her history.' },
+            'umbra': { display: 'Umbra', body: 'A lingering psychic presence born from the Well’s destruction; source of fear-tinged echoes across the plains.' },
+            'headmaster': { display: 'Headmaster Horace Hootz', body: 'Founder of the demiplane; manipulated local space and time during the Old War.' },
+            'headmaster hootz': { display: 'Headmaster Horace Hootz', body: 'The academy’s founder and architect of the demiplane.' },
+            'mery': { display: 'Mery', body: 'A friend and ally to the party; tied to the academy’s leadership and history.' },
+            'merysidian': { display: 'Merysidian', body: 'A great shadow raven and Tabitha’s sister in legend; guardian presence tied to the academy.' },
+            'karoline': { display: 'Karoline', body: 'A party member with a quick wit and steady resolve.' },
+            'elva': { display: 'Elva', body: 'A floating companion whose observations often cut to the point.' },
+            'alunra': { display: 'Alunra', body: 'A firbolg student whose Echo aids her in battle; one of our protagonists.' },
+            'charla': { display: 'Charla', body: 'A horned student and co-protagonist whose heart drives the ascent.' },
+            'echo': { display: 'Echo', body: 'A spectral twin conjured by Alunra to fight and act in tandem.' },
+            'tahgen': { display: 'Tahgen', body: 'A fiery tiefling encountered on the plains, quick to test newcomers.' },
+            'nargyle': { display: 'Nargyle', body: 'A wry, weary elf who travels with Tahgen.' },
+
+            /* — People & figures (lore) — */
+            'sorceress tabitha': { display: 'Sorceress Tabitha', body: 'Brilliant mage whose ambition sparked the Old War; not the realm’s “Mother.”' },
+            'tabitha caelestis': { display: 'Tabitha Caelestis', body: 'Tabitha’s full name in historical accounts during the Old War.' },
+            'tabitha': { display: 'Tabitha', body: 'Shorthand for Sorceress Tabitha; contextually the antagonist of Old War legends.' },
+            'ylva': { display: 'Ylva', body: 'Undead vessel of the plane’s life force who led the charge against Tabitha at the Well of Souls.' },
+            'qleer': { display: 'Qleer', body: 'Dextrous rogue and one of the three living heroes who opposed Tabitha.' },
+            'pahmin': { display: 'Pahmin', body: 'Rogue fighting alongside Qleer in the Well of Souls confrontation.' },
+            'avilrayn': { display: 'Avilrayn', body: 'Radiant paladin who smote through Tabitha’s defenses at the Well.' },
+            'nurse tabby': { display: 'Nurse Tabby', body: 'Compassion split from Tabitha’s soul, later awakening in a warforged body.' },
+            'lunar mother': { display: 'Lunar Mother', body: 'An epithet of Elasharna within the pyramid’s sanctum.' },
+
+            /* — Places & features — */
+            'greensea forest': { display: 'Greensea Forest', body: 'Vast living forest whose roots were invoked against the Darkforged.' },
+            'reception chamber': { display: 'Reception Chamber', body: 'Antechamber used to power up systems and route visitors inside the pyramid.' },
+            'sarcophagus chamber': { display: 'Sarcophagus Chamber', body: 'Inner sanctum housing Elasharna’s crystal sarcophagus.' },
+
+            /* — Phenomena — */
+            'temporal flux zone': { display: 'Temporal Flux Zone', body: 'Patch where time runs oddly—slows, accelerates, or jitters unpredictably.' },
+            'temporal flux zones': { display: 'Temporal Flux Zones', body: 'Areas of unstable time on the Lissome Plains.' },
+            'dimensional seam': { display: 'Dimensional Seam', body: 'Thin crack where other planes bleed through; causes sudden planar effects.' },
+            'dimensional seams': { display: 'Dimensional Seams', body: 'Networks of planar-thin regions across the plains.' },
+            'psychic echoes': { display: 'Psychic Echoes', body: 'Residual fear and sorrow waves from the Well’s destruction.' },
+            'gravity wells': { display: 'Gravity Wells', body: 'Localized shifts in gravity—too heavy, too light, even brief buoyancy.' },
+            'darkformes': { display: 'Darkformes', body: 'Oil-like shadow constructs torn from the Well by Tabitha.' },
+            'darkforged': { display: 'Darkforged', body: 'Warforged corrupted or formed from shadow; opposed the heroes at the Well.' },
+            'crystal resonance arcanoengine': { display: 'Crystal Resonance Arcanoengine', body: 'Chronocrystal charged with Tabitha’s condensed misery; launched by the Well’s detonation.' },
+            'the castoff': { display: 'The Castoff', body: 'A malign seed born from the Arcanoengine’s fall; slumbers until disturbed by plains-magic.' },
+
+            /* — Flora — */
+            'sunpetal grass': { display: 'Sunpetal Grass', body: 'Resilient golden grass that subtly shimmers with residual light magic.' },
+            'wild bee blossoms': { display: 'Wild Bee Blossoms', body: 'Hardy wildflowers tended by Bee Crinkly-Crawlies; mundane nectar and pollen.' },
+            'whisperweeds': { display: 'Whisperweeds', body: 'Tall reeds that whisper with the wind—echoes of the Well’s damned.' },
+            'glimmerbloom': { display: 'Glimmerbloom', body: 'Rare color-shifting petals; a petal can bolster resolve against fear.' },
+            'temporal thistle': { display: 'Temporal Thistle', body: 'Metallic plant from instability zones; thorns cause déjà vu.' },
+            'echo moss': { display: 'Echo Moss', body: 'Phosphorescent moss that replays faint sounds of the past when touched.' },
+            'soul-echo orchids': { display: 'Soul-Echo Orchids', body: 'Translucent blooms that grant fleeting visions of Old War moments.' },
+            'umbral shroud-vine': { display: 'Umbral Shroud-Vine', body: 'Creeping vine thriving in concentrated negative psychic energy.' },
+
+            /* — Fauna — */
+            'crinkly-crawlies': { display: 'Crinkly-Crawlies', body: 'Industrious peoples (Ants & Bees); adapted for the demiplane’s oddities.' },
+            'crinkly crawlies': { display: 'Crinkly-Crawlies', body: 'Alternate spelling; industrious Ant and Bee folk of the plains.' },
+            'bee crinkly-crawlies': { display: 'Bee Crinkly-Crawlies', body: 'Gardeners and cultivators; revitalized portions of the Lissome Plains.' },
+            'ant crinkly-crawlies': { display: 'Ant Crinkly-Crawlies', body: 'Builders of vast subterranean networks beneath the plains.' },
+            'wasp crinkly-crawlies': { display: 'Wasp Crinkly-Crawlies', body: 'Wild clans descended from wartime wasps; territorial and predatory.' },
+            'warped jackalopes': { display: 'Warped Jackalopes', body: 'Jackalopes touched by planar bleed; shimmer and phase briefly.' },
+            'whisper hounds': { display: 'Whisper Hounds', body: 'Gaunt canines whose howls stir fleeting dread.' },
+            'darkling-paralurker': { display: 'Darkling-Paralurker', body: 'Small abomination that glides as a shadow blur; dangerous in packs.' },
+            'darkling-slitherscale': { display: 'Darkling-Slitherscale', body: 'Stealthy abomination that slips away by melding into grasses.' },
+            'temporal stalker': { display: 'Temporal Stalker', body: 'Small darkling whose passing leaves disorienting time ripples.' },
+
+            /* — Items & materials — */
+            'shimmering dust': { display: 'Shimmering Dust', body: 'Component dust for light/illusion magic; adds subtle sparkle.' },
+            'temporal grass blade': { display: 'Temporal Grass Blade', body: 'Chewed to heighten perception for a moment.' },
+            'darkling residue': { display: 'Darkling Residue', body: 'A reagent for foul odors or necrotic effects.' },
+            'wild bee pollen sac': { display: 'Wild Bee Pollen Sac', body: 'Edible sachet granting minor rejuvenation.' },
+            'warped pebble': { display: 'Warped Pebble', body: 'A focus/trinket that subtly shifts color/temperature.' },
+            'dino-scat (petrified)': { display: 'Dino-Scat (Petrified)', body: 'Powder is potent fertilizer; burned, it creates thick smoke.' },
+            'whisperweeds stalk': { display: 'Whisperweeds Stalk', body: 'Snapped stalk emits an unsettling whispering hush.' },
+            'aether-wing feather': { display: 'Aether-Wing Feather', body: 'A component for phasey shimmer or teleport-like spells.' },
+            'chronos-hare foot': { display: 'Chronos-Hare Foot', body: 'Lucky charm that peps up initiative for a moment.' },
+            'echo crystal shard': { display: 'Echo Crystal Shard', body: 'Aids in hearing past whispers; enhances illusory “psyche.”' },
+            'warped seed pod': { display: 'Warped Seed Pod', body: 'Uncertain growth—normal or curiously mutated.' },
+            'fragment of warforged carapace': { display: 'Fragment of Warforged Carapace', body: 'Faint abjuration aura; used to reinforce or ward.' },
+            'jackalope antler shard': { display: 'Jackalope Antler Shard', body: 'A nimble spur that briefly quickens the step.' },
+            'whisper hound fang': { display: 'Whisper Hound Fang', body: 'Reagent that bolsters fear magics slightly.' },
+            'glimmer-ghast essence': { display: 'Glimmer-Ghast Essence', body: 'Smear onto arms—next cut flares radiant and may blind.' },
+            'temporal thistle bloom': { display: 'Temporal Thistle Bloom', body: 'Crushed to twist reflexes briefly (yours or a foe’s).' },
+            'temporal bloom': { display: 'Temporal Bloom', body: 'Rare flower that grants one timely advantage.' },
+            'planar tear dust': { display: 'Planar Tear Dust', body: 'Thrown dust that blurs a target or warps footing.' },
+            'umbral weave fragment': { display: 'Umbral Weave Fragment', body: 'Necrotic/fear reagent; imbues a strike with shadow.' },
+            'temporal stag velvet': { display: 'Temporal Stag Velvet', body: 'Velvet that primes swift action for a longer spell of time.' },
+            'megafaunal bunny paw': { display: 'Megafaunal Bunny Paw', body: 'Hearty fare; fuels mighty leaps for a while.' },
+            'warden\'s core shard': { display: "Warden's Core Shard", body: 'Shard from a Planar Warden—stabilizes anomalies or powers banishment.' },
+            'planar warden': { display: 'Planar Warden', body: 'Ancient guardian automata of planar boundaries.' },
+            'psychic bloom spore': { display: 'Psychic Bloom Spore', body: 'Crushed spore that bursts fear into nearby minds.' },
+            'heart of the lissome plains': { display: 'Heart of the Lissome Plains', body: 'Artifact of courage and traversal woven into the plains.’ heart.' },
+            'chronos-weave silk': { display: 'Chronos-Weave Silk', body: 'Legendary thread for garments that bend time or space.' },
+            'echo inquisitor\'s eye': { display: "Echo Inquisitor's Eye", body: 'Legendary eye granting sudden foresight and troubled dreams.' }
+        };
+
+        // --- 3c. GLOSSARY HELPERS/WIRING ---
+        function escapeRegExp(str) {
+            return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        }
+
+        function applyGlossary(container) {
+            if (!container) return;
+            const terms = Object.keys(glossary || {});
+            if (!terms.length) return;
+            // Sort longest first to prefer multi-word/longer phrases
+            terms.sort((a, b) => b.length - a.length);
+
+            const boundary = '[A-Za-z0-9]';
+            const walker = document.createTreeWalker(
+                container,
+                NodeFilter.SHOW_TEXT,
+                {
+                    acceptNode: (node) => {
+                        if (!node.nodeValue || !node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+                        const parent = node.parentElement;
+                        if (!parent) return NodeFilter.FILTER_REJECT;
+                        const tag = parent.tagName;
+                        if (tag === 'SCRIPT' || tag === 'STYLE' || tag === 'CODE' || tag === 'PRE') return NodeFilter.FILTER_REJECT;
+                        if (parent.closest('a, button, textarea, input, select, .cover-links, .glossary-term')) return NodeFilter.FILTER_REJECT;
+                        return NodeFilter.FILTER_ACCEPT;
+                    }
+                }
+            );
+
+            const nodesToProcess = [];
+            while (walker.nextNode()) nodesToProcess.push(walker.currentNode);
+
+            nodesToProcess.forEach(textNode => {
+                let text = textNode.nodeValue;
+                let replaced = false;
+                for (const key of terms) {
+                    const dataKey = key.toLowerCase();
+                    const info = glossary[dataKey];
+                    if (!info) continue;
+                    const esc = escapeRegExp(key);
+                    const re = new RegExp(`(^|[^${boundary}])(${esc})(?=$|[^${boundary}])`, 'gi');
+                    text = text.replace(re, (m, p1, p2) => {
+                        replaced = true;
+                        const title = info.display || p2;
+                        // Keep preceding separator (p1) as-is
+                        return `${p1}<span class="glossary-term" data-term="${dataKey}" tabindex="0">${title}</span>`;
+                    });
+                }
+                if (replaced) {
+                    const span = document.createElement('span');
+                    span.innerHTML = text;
+                    textNode.parentNode.replaceChild(span, textNode);
+                }
+            });
+        }
+
+        function setupGlossaryInteractions() {
+            if (glossaryEventsBound) return; // only once
+            glossaryEventsBound = true;
+            const tooltip = document.getElementById('glossary-tooltip');
+            if (!tooltip) return;
+
+            let pinnedEl = null;
+
+            function setTooltipContentFor(el) {
+                const termKey = el?.getAttribute('data-term');
+                if (!termKey) return false;
+                const data = glossary[termKey.toLowerCase()];
+                if (!data) return false;
+                tooltip.querySelector('.title').textContent = data.display || termKey;
+                tooltip.querySelector('.body').textContent = data.body || '';
+                return true;
+            }
+
+            function positionTooltipFor(el) {
+                if (!el) return;
+                const rect = el.getBoundingClientRect();
+                const pad = 8;
+                const ttRect = tooltip.getBoundingClientRect();
+                let top = rect.bottom + window.scrollY + pad;
+                let left = rect.left + window.scrollX + (rect.width - ttRect.width) / 2;
+                // Keep inside viewport
+                const vw = window.innerWidth + window.scrollX;
+                const vh = window.innerHeight + window.scrollY;
+                if (left + ttRect.width > vw - pad) left = vw - ttRect.width - pad;
+                if (left < pad + window.scrollX) left = window.scrollX + pad;
+                if (top + ttRect.height > vh - pad) top = rect.top + window.scrollY - ttRect.height - pad;
+                tooltip.style.left = `${left}px`;
+                tooltip.style.top = `${top}px`;
+            }
+
+            function showTooltip(el) {
+                if (!setTooltipContentFor(el)) return;
+                tooltip.style.display = 'block';
+                positionTooltipFor(el);
+                tooltip.setAttribute('aria-hidden', 'false');
+            }
+
+            function hideTooltip() {
+                tooltip.style.display = 'none';
+                tooltip.setAttribute('aria-hidden', 'true');
+            }
+
+            // Delegated events on text content
+            document.getElementById('text-content').addEventListener('mouseover', (e) => {
+                const el = e.target.closest('.glossary-term');
+                if (!el) return;
+                if (pinnedEl && pinnedEl !== el) return; // respect pin
+                showTooltip(el);
+            });
+
+            document.getElementById('text-content').addEventListener('mouseout', (e) => {
+                const el = e.target.closest('.glossary-term');
+                if (!el) return;
+                if (pinnedEl) return; // keep shown if pinned
+                hideTooltip();
+            });
+
+            // Focus/blur for keyboard accessibility
+            document.getElementById('text-content').addEventListener('focusin', (e) => {
+                const el = e.target.closest('.glossary-term');
+                if (!el) return;
+                if (pinnedEl && pinnedEl !== el) return;
+                showTooltip(el);
+            });
+            document.getElementById('text-content').addEventListener('focusout', (e) => {
+                const el = e.target.closest('.glossary-term');
+                if (!el) return;
+                if (pinnedEl) return;
+                hideTooltip();
+            });
+
+            // Click to pin/unpin
+            document.getElementById('text-content').addEventListener('click', (e) => {
+                const el = e.target.closest('.glossary-term');
+                if (!el) return;
+                e.preventDefault();
+                if (pinnedEl === el) {
+                    // Unpin
+                    pinnedEl = null;
+                    hideTooltip();
+                } else {
+                    pinnedEl = el;
+                    showTooltip(el);
+                }
+            });
+
+            // Click outside to unpin
+            document.addEventListener('click', (e) => {
+                if (!pinnedEl) return;
+                const withinTerm = e.target.closest && e.target.closest('.glossary-term');
+                const withinTooltip = e.target.closest && e.target.closest('#glossary-tooltip');
+                if (!withinTerm && !withinTooltip) {
+                    pinnedEl = null;
+                    hideTooltip();
+                }
+            });
+
+            // Reposition on resize/scroll when pinned
+            window.addEventListener('resize', () => { if (pinnedEl && tooltip.style.display === 'block') positionTooltipFor(pinnedEl); });
+            window.addEventListener('scroll', () => { if (pinnedEl && tooltip.style.display === 'block') positionTooltipFor(pinnedEl); }, true);
+        }
 
         // --- 3a. IMAGE PATH MAPPING (map remote filenames to local assets) ---
         const LOCAL_IMAGE_BASE = 'src/assets/images/lore/blackpyramidstory/';
@@ -1385,6 +1699,8 @@
             
             // 1. Update text
             textContent.innerHTML = page.text;
+            // Apply glossary wrapping to freshly rendered text
+            applyGlossary(textContent);
             // Scroll text container back to top
             textContainer.scrollTop = 0; 
             
@@ -1554,6 +1870,8 @@
 
             renderPage();
             console.log("Storybook Initialized.");
+            // Setup glossary interactions once
+            setupGlossaryInteractions();
         }
         
         // Wait for the DOM to be fully loaded before running the app

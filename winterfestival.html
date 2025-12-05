@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wintertide Caroling: Carol of the Founding Frost</title>
+    <!-- 1. Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 1b. Load Festive Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Mountains+of+Christmas:wght@400;700&display=swap" rel="stylesheet">
+    <!-- 2. Configure Tailwind & Fonts -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Mountains of Christmas', 'cursive'],
+                        serif: ['Cinzel Decorative', 'serif'],
+                    },
+                    colors: {
+                        'winter-blue': '#dbeafe', // blue-100
+                        'winter-dark': '#1e3a8a', // blue-900
+                        'winter-ice': '#a5f3fc', // cyan-200
+                        'winter-silver': '#e2e8f0', // slate-200
+                    }
+                },
+            },
+        };
+    </script>
+    <!-- 3. Custom Styles -->
+    <style>
+        /* Wintertide Palette */
+        :root {
+            --bg-deep: #0f172a;
+            --bg-panel: rgba(30, 58, 138, 0.85); /* Deep Blue transparency */
+            --accent-gold: #fde047;
+            --accent-ice: #bae6fd;
+            --text-light: #f0f9ff;
+            --glow-color: rgba(186, 230, 253, 0.6);
+        }
+
+        body {
+            font-family: 'Mountains of Christmas', cursive;
+            background-color: var(--bg-deep);
+            background-image: url('https://www.transparenttextures.com/patterns/snow.png');
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+
+        /* Titles */
+        .font-cinzel {
+            font-family: 'Cinzel Decorative', serif;
+            text-shadow: 0 0 10px var(--glow-color);
+        }
+
+        /* Snowfall Animation */
+        @keyframes snowfall {
+            0% { background-position: 0 0; }
+            100% { background-position: 50px 100px; }
+        }
+        
+        .snow-bg {
+            animation: snowfall 10s linear infinite;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-deep);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-ice);
+            border-radius: 4px;
+        }
+
+        /* Input styling */
+        input:focus {
+            box-shadow: 0 0 15px var(--accent-ice);
+        }
+        
+        .golden-glow {
+            text-shadow: 0 0 5px var(--accent-gold);
+        }
+
+        /* FROST FRAME: Thick snowflake themed border */
+        .frost-frame {
+            box-sizing: border-box;
+            border: 25px ridge var(--accent-ice); /* Thick ridge border simulating ice */
+            border-radius: 12px;
+            background-color: #fff; /* Background behind image to fill transparency */
+            box-shadow: 
+                0 0 15px rgba(186, 230, 253, 0.8), /* Outer glow */
+                inset 0 0 10px rgba(255, 255, 255, 0.8); /* Inner frost */
+            transition: transform 0.2s ease;
+        }
+        .frost-frame:hover {
+            transform: scale(1.02);
+            border-color: #fff;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex items-center justify-center p-4 snow-bg">
+
+    <!-- Main Container -->
+    <div class="w-full max-w-2xl bg-[var(--bg-panel)] backdrop-blur-md rounded-xl shadow-2xl p-6 md:p-8 border-2 border-[var(--accent-ice)] relative overflow-hidden">
+        
+        <!-- Decorative Snowflake Corners -->
+        <div id="sf-top-left" class="absolute top-2 left-2 text-4xl text-[var(--accent-ice)] opacity-50 cursor-pointer" title="❄">❄</div>
+        <div id="sf-top-right" class="absolute top-2 right-2 text-4xl text-[var(--accent-ice)] opacity-50" title="❄">❄</div>
+        <div id="sf-bottom-left" class="absolute bottom-2 left-2 text-4xl text-[var(--accent-ice)] opacity-50 cursor-pointer" title="❄">❄</div>
+        <div id="sf-bottom-right" class="absolute bottom-2 right-2 text-4xl text-[var(--accent-ice)] opacity-50 cursor-pointer" title="❄">❄</div>
+
+        <!-- View 1: Intro -->
+        <div id="introView" class="text-center">
+            <h1 class="text-5xl font-bold text-[var(--accent-ice)] mb-2 font-cinzel">Wintertide Caroling</h1>
+            <h2 class="text-2xl text-[var(--accent-gold)] mb-6">The Carol of the Founding Frost</h2>
+            
+            <div class="bg-blue-950/50 p-4 rounded-lg border border-blue-400/30 mb-6">
+                <p class="mb-4">"Ho there, student! To earn your Wintertide sweets, you must complete the verses of the Old Academy Carol."</p>
+                <p class="text-sm italic text-blue-200">Finish the rhyme with the correct lore term. Get 4 or more right for a treat! Get it wrong... and face a Wintertide Prank!</p>
+            </div>
+
+            <div class="flex flex-col gap-4 max-w-md mx-auto">
+                <input type="text" id="usernameInput" placeholder="Enter Your Name, Caroler"
+                    class="w-full px-4 py-3 bg-blue-950 text-center text-white border border-blue-400 rounded-lg focus:outline-none placeholder-blue-300/50 text-xl">
+                <button id="startBtn"
+                    class="w-full bg-[var(--accent-ice)] hover:bg-white text-blue-900 font-bold py-3 px-4 rounded-lg transition duration-300 transform hover:scale-105 text-xl font-cinzel shadow-[0_0_15px_rgba(186,230,253,0.5)]">
+                    Begin the Song!
+                </button>
+                <p id="nameError" class="text-red-300 text-sm hidden font-sans">Please sign the guestbook first!</p>
+            </div>
+        </div>
+
+        <!-- View 2: The Quiz -->
+        <div id="quizView" class="hidden">
+            <div class="flex justify-between items-end mb-4 border-b border-blue-400/30 pb-2">
+                <span class="text-[var(--accent-ice)] font-bold text-xl" id="quizUserDisplay"></span>
+                <span class="text-[var(--accent-gold)]">Verse <span id="verseNumber">1</span> of 5</span>
+            </div>
+
+            <div class="bg-blue-950/60 p-6 rounded-lg border border-[var(--accent-ice)] mb-6 min-h-[200px] flex flex-col justify-center items-center text-center">
+                <div id="verseText" class="text-2xl leading-relaxed italic font-serif">
+                    <!-- Verse goes here -->
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-4">
+                <div id="optionsContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-2">
+                    <!-- Multiple-choice options injected here -->
+                </div>
+                <button id="submitAnswerBtn"
+                    class="w-full bg-[var(--accent-gold)] hover:bg-yellow-300 text-blue-900 font-bold py-3 px-4 rounded-lg transition duration-300 text-xl shadow-lg">
+                    Sing it Loud!
+                </button>
+            </div>
+        </div>
+
+        <!-- View 3: Results -->
+        <div id="resultView" class="hidden text-center">
+            <h1 id="resultTitle" class="text-4xl font-bold mb-4 font-cinzel"></h1>
+            
+            <div id="scoreDisplay" class="text-2xl mb-6 text-blue-200"></div>
+
+            <div id="rewardContainer" class="bg-blue-950/80 p-6 rounded-lg border-2 border-dashed mb-8 transition-all duration-500 min-h-[420px]">
+                <div id="rewardContent" class="flex flex-col items-center gap-4">
+                    <!-- Reward image/text goes here -->
+                    <div class="animate-pulse text-xl">Opening your gift...</div>
+                </div>
+            </div>
+
+            <button id="restartBtn"
+                class="bg-[var(--accent-ice)] hover:bg-white text-blue-900 font-bold py-2 px-6 rounded-lg transition duration-300">
+                Sing Another Round
+            </button>
+        </div>
+
+    </div>
+
+    <!-- Modal: Asset Viewer -->
+    <div id="assetModal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 hidden">
+        <div class="bg-blue-950 border-2 border-[var(--accent-ice)] rounded-lg p-6 w-[90%] max-w-4xl max-h-[90vh] overflow-auto shadow-[0_0_50px_rgba(186,230,253,0.3)]">
+            <div class="flex justify-between items-center mb-4">
+                <h3 id="assetModalTitle" class="text-2xl font-bold text-[var(--accent-ice)] font-cinzel"></h3>
+                <button class="text-white hover:text-[var(--accent-gold)] text-2xl" onclick="closeAssetModal()" aria-label="Close">✕</button>
+            </div>
+            <!-- Added frost-frame class to modal image -->
+            <div class="flex justify-center mb-4">
+                <img id="assetModalImage" class="w-auto h-auto max-h-[60vh] frost-frame" alt="">
+            </div>
+            <p id="assetModalDesc" class="text-blue-100 text-lg font-sans text-center"></p>
+            <div class="mt-6 text-center">
+                <button class="bg-[var(--accent-gold)] hover:bg-yellow-300 text-blue-900 font-bold py-2 px-6 rounded-lg" onclick="closeAssetModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data & Logic -->
+    <script type="module">
+        // --- DATA SETS ---
+
+        // 1. The Carol Quiz
+        // Themed 5-verse carols; one set is chosen at random at quiz start.
+        const carolSets = {
+            founding: [
+            {
+                lines: [
+                    "Old Horace Hootz, with vision bright,",
+                    "Found a scarp within the ______ light.",
+                    "He stabilized the realm with arcane grace,",
+                    "And built for us this padded place."
+                ],
+                correct: "Ways",
+                options: ["Ways", "Weave", "Wards", "Wails"],
+                hint: "The space between dimensions where Hootz traveled."
+            },
+            {
+                lines: [
+                    "The Great Weaver followed, silent and crude,",
+                    "To save her throne, she ate her ______ brood.",
+                    "No war was fought, no webs were spun,",
+                    "Before the Academy had truly begun."
+                ],
+                correct: "Arachnarcanum",
+                options: ["Arachnarcanum", "Arachnihorde", "Aracnacrown", "Arachniarchon"],
+                hint: "The Weaver's first, hungry children."
+            },
+            {
+                lines: [
+                    "On Lissome Plains where the grasses sway,",
+                    "He danced with ______ to pave the way.",
+                    "A treaty struck with hooves on ground,",
+                    "Where cooperative spirits could be found."
+                ],
+                correct: "Waddlehooves",
+                options: ["Waddlehooves", "Wobblehooves", "Waddlehorns", "Waddlemanes"],
+                hint: "The centaurine monstrosities of the plains."
+            },
+            {
+                lines: [
+                    "Through Greensea woods where spirits play,",
+                    "The Road to ______ is safe by day.",
+                    "Maintained by pacts and honey sweet,",
+                    "A thoroughfare for traveling feet."
+                ],
+                correct: "Majica",
+                options: ["Majica", "Magicka", "Majora", "Magistrate"],
+                hint: "The protected path through the forest."
+            },
+            {
+                lines: [
+                    "But ambition grew and shadows fell,",
+                    "When Tabitha built the ______ of Souls—a hell.",
+                    "To save the lost, or so she claimed,",
+                    "Until the Warforged Host was named."
+                ],
+                correct: "Well",
+                options: ["Well", "Wall", "Weir", "Wheel"],
+                hint: "The source of the Warforged souls."
+            }
+            ],
+            crone: [
+            {
+                lines: [
+                    "A guest uninvited, she came from the Ways,",
+                    "To weave in the dark through the end of days.",
+                    "She sits deep below on a ______ Throne,",
+                    "Where silence and secrets are quiet and lone."
+                ],
+                correct: "Chitin",
+                options: ["Chitin", "Crystal", "Cinder", "Cotton"],
+                hint: "The material of the Great Weaver's seat."
+            },
+            {
+                lines: [
+                    "To stop the Iron March, the mages cried,",
+                    "And summoned the ______ of Wintertide.",
+                    "A spell of stasis, a frozen breath,",
+                    "A slumbering mimicking quiet death."
+                ],
+                correct: "Longest",
+                options: ["Longest", "Last", "Lone", "Lost"],
+                hint: "The spell that froze the war: The ______ of Wintertide."
+            },
+            {
+                lines: [
+                    "Her daughters are weavers, with arms so many,",
+                    "Spinning fate for the few and the plenty.",
+                    "The ______ clans, with silk and with thread,",
+                    "Wrap up the living to comfort the dead."
+                ],
+                correct: "Diaparachnid",
+                options: ["Diaparachnid", "Diarchnid", "Diapanthid", "Diapherid"],
+                hint: "The species name of the Weaver's children."
+            },
+            {
+                lines: [
+                    "It is not out of malice she binds us tight,",
+                    "But to keep us safe through the endless night.",
+                    "For ______ is structure, and structure is peace,",
+                    "Until the chaotic movements cease."
+                ],
+                correct: "Containment",
+                options: ["Containment", "Comfort", "Control", "Constraint"],
+                hint: "One of the Weaver's Portfolios: Creation, Textiles, Community, and..."
+            },
+            {
+                lines: [
+                    "The snow is a shroud, a blank, clean slate,",
+                    "Where we pause and we dream and we hibernate.",
+                    "We long for ______ when the ice finally breaks,",
+                    "And the world from its slumber slowly awakes."
+                ],
+                correct: "Rebirth",
+                options: ["Rebirth", "Relief", "Return", "Renewal"],
+                hint: "The hope of the Wintertide season."
+            }
+            ],
+            comfort: [
+            {
+                lines: [
+                    "In the West Wing attic, toys awoke,",
+                    "A soft rebellion, not a joke.",
+                    "Now bears and dolls freely roam,",
+                    "A Living ______ finds a home."
+                ],
+                correct: "Plushie",
+                options: ["Plushie", "Plaything", "Puppet", "Poltergeist"],
+                hint: "The animated toys of the Lost & Found."
+            },
+            {
+                lines: [
+                    "When words are jumbled in your head,",
+                    "And magic words cannot be said.",
+                    "To stop the casting of a spell,",
+                    "A magic ______ works well."
+                ],
+                correct: "Pacifier",
+                options: ["Pacifier", "Pillow", "Parcel", "Pact"],
+                hint: "A common item that blocks verbal components."
+            },
+            {
+                lines: [
+                    "They drink the red to stay alive,",
+                    "But in our padded halls they thrive.",
+                    "Though scary teeth give folks a scare,",
+                    "The ______ wears soft underwear."
+                ],
+                correct: "Pampire",
+                options: ["Pampire", "Vamprite", "Pamperkin", "Pantspike"],
+                hint: "The vampire kin who rely on padding."
+            },
+            {
+                lines: [
+                    "When Tabitha's tunnels started to quake,",
+                    "A strict new rule she had to make.",
+                    "To keep us safe from falling stone,",
+                    "A ______ kept us in our zone."
+                ],
+                correct: "Curfew",
+                options: ["Curfew", "Barrier", "Bell", "Border"],
+                hint: "The rule that keeps students in at night."
+            },
+            {
+                lines: [
+                    "It gathers leaks and holds the mess,",
+                    "A vital part of student dress.",
+                    "Enchanted cloth or plastic white,",
+                    "A ______ makes the future bright."
+                ],
+                correct: "Diaper",
+                options: ["Diaper", "Draper", "Doubler", "Duster"],
+                hint: "The fundamental item of the Academy."
+            }
+            ],
+            greensea: [
+            {
+                lines: [
+                    "The leaves turn gold and drift away,",
+                    "To mark the end of autumn's day.",
+                    "The ______ forest goes to sleep,",
+                    "While secrets in the roots lie deep."
+                ],
+                correct: "Greensea",
+                options: ["Greensea", "Greenward", "Greenglade", "Greenfell"],
+                hint: "The name of the ancient forest surrounding the Academy."
+            },
+            {
+                lines: [
+                    "The bees seal up their hives with wax,",
+                    "Against the winter's cold attacks.",
+                    "They store the ______ Honey bright,",
+                    "A taste of summer's golden light."
+                ],
+                correct: "Sunpetal",
+                options: ["Sunpetal", "Sunburst", "Sunbloom", "Sunshard"],
+                hint: "The magical flower cultivated by the Crinkly-Crawlies."
+            },
+            {
+                lines: [
+                    "The path is hidden, the way is lost,",
+                    "Beneath the rime and heavy frost.",
+                    "The Road to ______ is buried deep,",
+                    "While ancient trees their vigil keep."
+                ],
+                correct: "Majica",
+                options: ["Majica", "Magicka", "Majora", "Majesty"],
+                hint: "The protected thoroughfare through the woods."
+            },
+            {
+                lines: [
+                    "But finding warmth is not a dream,",
+                    "Amidst the ice and rising steam.",
+                    "The ______ Thermosprings bubble hot,",
+                    "A cozy, safe, and soaking spot."
+                ],
+                correct: "Creekfalls",
+                options: ["Creekfalls", "Cinderfalls", "Clifffalls", "Crestfalls"],
+                hint: "The location where Ela'sharna was found, now a warm spring."
+            },
+            {
+                lines: [
+                    "The borders shrink, the woods withdraw,",
+                    "Awaiting spring and eventual thaw.",
+                    "The ______ Plains are silent now,",
+                    "Beneath the winter's heavy brow."
+                ],
+                correct: "Lissome",
+                options: ["Lissome", "Limestone", "Lissar", "Linden"],
+                hint: "The vast grasslands inhabited by the Waddlehooves."
+            }
+            ],
+            ambition: [
+            {
+                lines: [
+                    "The Headmaster walked the halls so wide,",
+                    "But doors would open to the other side.",
+                    "A dysfunction of the ______ state,",
+                    "As reality began to separate."
+                ],
+                correct: "Ontological",
+                options: ["Ontological", "Arcane", "Temporal", "Spatial"],
+                hint: "The type of dysfunction Hootz suffered: existence itself breaking down."
+            },
+            {
+                lines: [
+                    "A corridor that stretched forever more,",
+                    "Behind every single classroom door.",
+                    "The Hallway of ______ Doors appeared,",
+                    "A sign the end was drawing neared."
+                ],
+                correct: "Infinite",
+                options: ["Infinite", "Endless", "Shifting", "Vanishing"],
+                hint: "The hallway that manifests when the school's fabric frays."
+            },
+            {
+                lines: [
+                    "He did not pass to the great beyond,",
+                    "But with his school formed a permanent bond.",
+                    "The Planar ______ Event took place,",
+                    "And he vanished without leaving a trace."
+                ],
+                correct: "Integration",
+                options: ["Integration", "Inversion", "Implosion", "Interlink"],
+                hint: "The event where Hootz merged with the Academy (~877 years ago)."
+            },
+            {
+                lines: [
+                    "Then came a girl with hair of red,",
+                    "Seeking to raise the tragic dead.",
+                    "Young ______ arrived with sisters three,",
+                    "To change the course of history."
+                ],
+                correct: "Tabitha",
+                options: ["Tabitha", "Tahlia", "Triss", "Tamsin"],
+                hint: "The crimson-haired prodigy who eventually built the Well."
+            },
+            {
+                lines: [
+                    "Deep in the woods, a crystal sought,",
+                    "But a darker lesson soon was taught.",
+                    "She found the ______ Thing amidst the gloom,",
+                    "And sealed the Academy's coming doom."
+                ],
+                correct: "Dark",
+                options: ["Dark", "Deep", "Dread", "Dire"],
+                hint: "The entity Tabitha encountered while searching for the Chronal Crystal."
+            }
+            ],
+                        plains: [
+                {
+                    lines: [
+                        "The Waddlehooves graze where the soft wind blows,",
+                        "Across the vast expanse of the ______.",
+                        "It stretched so wide in the Hootz-era days,",
+                        "A haven built from fragments of the Ways."
+                    ],
+                    correct: "Lissome Plains",
+                    options: ["Lissome Plains", "Lissome Fields", "Greensea Plains", "Lissome Reach"],
+                    hint: "The expansive grasslands given to the Waddlehooves."
+                },
+                {
+                    lines: [
+                        "But winter magic settles deep and fast,",
+                        "Freezing the great Warforged host that passed.",
+                        "Trapped in time, now barely there,",
+                        "The ______ Host drifts on the air."
+                    ],
+                    correct: "Ghostly",
+                    options: ["Ghostly", "Gilded", "Grim", "Glimmering"],
+                    hint: "The current phase-shifted state of the Warforged trapped by the Iron March spell."
+                },
+                {
+                    lines: [
+                        "Our gifts are brought by the Megafaunal kin,",
+                        "Whose mighty paws pull the winter within.",
+                        "The gigantic ______ that bound their race,",
+                        "Now guide the sleigh across this place."
+                    ],
+                    correct: "Bunbunkin",
+                    options: ["Bunbunkin", "Bunbunlord", "Bunbuntide", "Bunburrow"],
+                    hint: "The large rabbit-folk native to the Academy planes."
+                },
+                {
+                    lines: [
+                        "With boundless energy and playful speed,",
+                        "The Pupperlings dance and plant a seed.",
+                        "For loyalty shown and might they wield,",
+                        "Their strongest feature is the ______ Shield."
+                    ],
+                    correct: "Sterling",
+                    options: ["Sterling", "Silver", "Stalwart", "Starfall"],
+                    hint: "A famous Rare Diaper known for deflection from non-magical metal weapons (Sterling Shield)."
+                },
+                {
+                    lines: [
+                        "They dash and dart and move with grace,",
+                        "The nimble Padded Pouncers set the pace.",
+                        "The Weaver's second clan, quick and small,",
+                        "The tiny hands retrieve the ______ call."
+                    ],
+                    correct: "Prank",
+                    options: ["Prank", "Play", "Pounce", "Prize"],
+                    hint: "The type of mischievous action Padded Pouncers often perform."
+                }
+            ]
+        };
+
+        // 2. Rewards (Treats)
+        // Sourced wholesale from Harvest Festival Trick or Treat app for consistency
+        const mundaneCandies = [
+            { name: "Scholia Crest Coin (Milk Chocolate)", desc: "A simple, foil-wrapped chocolate coin molded with the Scholia Diapros academy crest.", type: "Mundane Candy" },
+            { name: "Scholia Crest Coin (Dark Chocolate)", desc: "A foil-wrapped chocolate coin. This one is dark and slightly bitter, like a Naughty Nannybot.", type: "Mundane Candy" },
+            { name: "Scholia Crest Coin (White Chocolate)", desc: "A sweet, creamy white chocolate coin. A favorite of Purekin.", type: "Mundane Candy" },
+            { name: "Scholia Crest Coin (Glimmering Mint)", desc: "A dark chocolate coin with a cool, Glimmering Forest mint filling.", type: "Mundane Candy" },
+            { name: "Pupperling Paws (Orange)", desc: "Fruit-flavored gummies shaped like little Pupperling paw prints.", type: "Mundane Candy" },
+            { name: "Pupperling Paws (Grape)", desc: "Dark purple, Umbral-colored paw print gummies.", type: "Mundane Candy" },
+            { name: "Pupperling Paws (Cherry)", desc: "Bright red, sweet, and loyal. A classic gummy.", type: "Mundane Candy" },
+            { name: "Pupperling Paws (Megafaunal Fruit)", desc: "An extra-large gummy paw with a mix of all fruit flavors.", type: "Mundane Candy" },
+            { name: "Kittenfolk 'Kat's Tongue'", desc: "A delicate, oblong cookie, lightly dusted with 'fur-like' shredded coconut.", type: "Mundane Candy" },
+            { name: "Arachnii Spinnerette Strings (Blackberry)", desc: "Long, chewy strings of fruit-flavored licorice, perfect for braiding.", type: "Mundane Candy" },
+            { name: "Arachnii Spinnerette Strings (Silk-Strawberry)", desc: "Sweet strawberry-flavored taffy strings.", type: "Mundane Candy" },
+            { name: "'Naptime' Nougat", desc: "A soft, chewy nougat bar with a calming, mild honey-and-chamomile flavor.", type: "Mundane Candy" },
+            { name: "Glimmering Forest Mushroom Pop", desc: "A hard candy lollipop shaped like a glowing mushroom, with a swirly, ethereal pattern.", type: "Mundane Candy" },
+            { name: "Pacification Pop (Blue Raspberry)", desc: "A fun, pacifier-shaped hard candy sucker. Tastes like 'blue'!", type: "Mundane Candy" },
+            { name: "Pacification Pop (Sour Apple)", desc: "A puckeringly sour, bright green pacifier-shaped lollipop.", type: "Mundane Candy" },
+            { name: "Barkgum Chew", desc: "A surprisingly pleasant-tasting chewing gum made from refined Barkgum, with a mild, earthy-mint flavor.", type: "Mundane Candy" },
+            { name: "Chap'Hell's Cinder Toffee", desc: "A 'burnt' sugar hard candy with a spicy cinnamon kick. It's intentionally a little *too* hot.", type: "Mundane Candy" },
+            { name: "Darkaconda 'Scale' Chips", desc: "Thin, dark chocolate disks with a crunchy, cooling mint-sugar filling.", type: "Mundane Candy" },
+            { name: "Bellowbelly Cubling Sours", desc: "Extremely sour gummies shaped like tiny, grumpy Bellowbelly Cublings.", type: "Mundane Candy" },
+            { name: "Ossokin 'Bone' Stick", desc: "A white, chalky-looking candy stick with a sweet, powdery flavor.", type: "Mundane Candy" },
+            { name: "Spinebearer 'Quill'", desc: "A sharp, pointed rock candy stick, perfect for crunching.", type: "Mundane Candy" },
+            { name: "Cavesweller's Geode", desc: "A 'broken' piece of candy with a hard sugar-crystal center.", type: "Mundane Candy" },
+            { name: "Hungore's Heartbeat", desc: "A heart-shaped, blood-orange-flavored gummy with a liquid-cherry center.", type: "Mundane Candy" },
+            { name: "'Good Haul' Gumball", desc: "A classic, jaw-straining gumball with a vague 'fruit' flavor that lasts for exactly thirty seconds.", type: "Mundane Candy" },
+            { name: "'Time-Out' Taffy (Banana)", desc: "A notoriously sticky and long-lasting piece of saltwater taffy.", type: "Mundane Candy" },
+            { name: "'Time-Out' Taffy (Mystery)", desc: "A grey-swirled taffy that tastes... confusing. Is that mint? Or sausage?", type: "Mundane Candy" },
+            { name: "Dust Bunny Ball", desc: "A fluffy, light-as-air ball of spun cotton candy that melts in your mouth.", type: "Mundane Candy" },
+            { name: "Naughty Nannybot Bolt", desc: "A rod of black licorice with silver sugar 'threads' wrapped around it.", type: "Mundane Candy" },
+            { name: "Umbra's Veil", desc: "A thin, dark-fruit-leather sheet (like a fruit roll-up) with a deep blackberry and currant flavor.", type: "Mundane Candy" },
+            { name: "Mangled Husk Meringue", desc: "A chaotic-looking, cracked meringue cookie with a bright red raspberry swirl. It looks messy but tastes divine.", type: "Mundane Candy" },
+            { name: "BunbunSkipz 'Carrot' Crumbles", desc: "A small, bite-sized piece of carrot cake with cream cheese frosting.", type: "Mundane Candy" },
+            { name: "SecuriCare Swirl", desc: "A hard, disk-shaped candy with a simple green-and-white mint swirl. Reliable and classic.", type: "Mundane Candy" },
+            { name: "TactiTush 'Tough' Toffee", desc: "A brick-hard square of toffee. Extremely difficult to chew, but lasts for an hour.", type: "Mundane Candy" },
+            { name: "'Everyday' Floral Fonderie", desc: "A soft, cream-filled candy with a delicate, edible flower pressed into its surface.", type: "Mundane Candy" },
+            { name: "'StealthWear' Wafer", desc: "A very thin, almost-black dark chocolate and mint wafer.", type: "Mundane Candy" },
+            { name: "'UltraDry' Marshmallow", desc: "An absurdly large, fluffy, and 'puffy' vanilla marshmallow.", type: "Mundane Candy" },
+            { name: "Padded Playground Pebbles", desc: "Simple candy-coated chocolate pieces in a variety of bright, primary colors.", type: "Mundane Candy" },
+            { name: "Plushie-Pal Gummy", desc: "Assorted fruit gummies shaped like common plush animals: bears, rabbits, penguins, and dragons.", type: "Mundane Candy" },
+            { name: "Pumpkin Patch 'Mud'", desc: "A small cup of chocolate pudding with a crushed-cookie 'dirt' topping and a tiny candy pumpkin.", type: "Mundane Candy" },
+            { name: "'Juice Box' Jelly", desc: "A rectangular, juice-filled gummy designed to be bitten into, releasing a burst of flavor.", type: "Mundane Candy" }
+        ];
+
+        const magicalCandies = [
+            { name: "Aliza's Electricky Paw Pop", desc: "A yellow, lemon-flavored lollipop that crackles with static. (Cast *Shocking Grasp* at will for 8 hours.) If consumed within 2 rounds of receiving it, you must make a Potty Check.", type: "Magical Candy" },
+            { name: "Radiant Lance Lances", desc: "A glowing, pure white stick of sugar crystal. It's warm to the touch. (Cast *Light* at will for 8 hours.) If consumed within 2 rounds of receiving it, you must make a Potty Check.", type: "Magical Candy" },
+            { name: "Cantrip Chew", desc: "A bright blue piece of bubblegum. (Cast *Prestidigitation* at will for 8 hours.) If consumed within 2 rounds of receiving it, you must make a Potty Check.", type: "Magical Candy" },
+            { name: "Evocation Ember", desc: "A glowing-red, super-spicy cinnamon hard candy. (Gain Resistance to Cold damage for 8 hours.) If consumed within 2 rounds of receiving it, you must make a Potty Check.", type: "Magical Candy" },
+            { name: "Abjuration Jawbreaker", desc: "A large, layered jawbreaker that seems to shimmer with a protective force. (Gain a +1 bonus to AC for 8 hours.) If consumed within 2 rounds of receiving it, you must make a Potty Check.", type: "Magical Candy" },
+            { name: "Shade-Sneak Taffy", desc: "A dark purple taffy that seems to absorb light. (Cast *Invisibility* (self only) once.) If consumed within 2 rounds of receiving it, you must make a Potty Check.", type: "Magical Candy" },
+            { name: "'BunbunSkipz' Hop-Drop", desc: "A springy, carrot-flavored gummy. (Your jump distance is tripled for 8 hours.) If consumed within 2 rounds of receiving it, you must make a Potty Check.", type: "Magical Candy" },
+            { name: "Purekin 'Purifier' Mint", desc: "A white, clinical-tasting mint wafer. (Adv. on saves vs. disease/poison for 8 hours.) If consumed within 2 rounds of receiving it, you must make a Potty Check.", type: "Magical Candy" },
+            { name: "Umbral Tribe 'Focus' Chew", desc: "A strange, herbaceous taffy that tastes like catnip and mint. (Cast *Guidance* at will for 8 hours.) If consumed within 2 rounds of receiving it, you must make a Potty Check.", type: "Magical Candy" },
+            { name: "Illusionist's Icing", desc: "A small tube of frosting that constantly shifts color. (Cast *Minor Illusion* at will for 8 hours.) If consumed within 2 rounds of receiving it, you must make a Potty Check.", type: "Magical Candy" },
+            { name: "Conjurer's 'Diaper' Cookie", desc: "A sugar cookie with a diaper pin etched in the frosting. (Cast the *Diapering* cantrip at will for 8 hours.) If consumed within 2 rounds of receiving it, you must make a Potty Check.", type: "Magical Candy" },
+            { name: "Sleeper's Sucker", desc: "A lavender and honey-flavored lollipop. (Cast *Sleep* (1st-level) once.) If consumed within 2 rounds of receiving it, you must make a Potty Check.", type: "Magical Candy" },
+            { name: "Magical 'Tough' Toffee", desc: "This brick-hard toffee is magically enchanted. (Cast *Blade Ward* as a bonus action for 8 hours.) If consumed within 2 rounds of receiving it, you must make a Potty Check.", type: "Magical Candy" },
+            { name: "'Fear' Fizzie", desc: "A sour, fizzy candy associated with Umbra's 'protection.' (Cast *Cause Fear* (1st-level) once.) If consumed within 2 rounds of receiving it, you must make a Potty Check.", type: "Magical Candy" }
+        ];
+
+        const fullSizedBars = [
+            { name: "Full-Sized Azure Harvest Bar", desc: "A legendary confection of white chocolate and 'blue moon' cream. (Heal 2d6 HP! Gain a random magical candy buff.)", type: "Full-Sized Treat" },
+            { name: "'UltraDry Max' Power Bar", desc: "A massive bar of chocolate, nougat, and crunchy 'absorbent' rice crisps. (Heal 2d6 HP! Gain *Mage Armor* (AC 13) for 8 hours.)", type: "Full-Sized Treat" },
+            { name: "The 'Pamprison' Brick", desc: "An incredibly dense block of dark chocolate fudge. (Heal 2d6 HP! Gain +1 AC for 8 hours.)", type: "Full-Sized Treat" },
+            { name: "Nursery Nightweaver's 'Dream' Bar", desc: "An elegant bar of dark chocolate with a lavender-creme filling. (Heal 2d6 HP! Cast *Invisibility* (self only) once.)", type: "Full-Sized Treat" },
+            { name: "'Step Into My Magical Realm' Swirl", desc: "A comically oversized, rainbow-swirled lollipop. (Heal 2d6 HP! Your jump distance is tripled for 8 hours.)", type: "Full-Sized Treat" }
+        ];
+
+        // Unified treats list for Winterfest logic
+        const treats = [
+            ...mundaneCandies,
+            ...magicalCandies,
+            ...fullSizedBars
+        ];
+
+        // 3. Punishments (Tricks)
+        const tricks = [
+            { text: "1–2: Roll on this table at the start of each of your turns for the next minute, ignoring this result on subsequent rolls." },
+            { text: "3–4: For the next minute, you can see any Invisible creature if you have line of sight to it, and you can see everyone's diaper status." },
+            { text: "5–6: A NANNYBOT chosen & controlled by the DM appears in an unoccupied space within 5 feet of you, it disappears 1 min later." },
+            { text: "7–8: You cast Diaper Doom as a 3rd-level spell centered on yourself if you pass a disadvantage potty check." },
+            { text: "9–10: You cast magic messle on your diaper, 3 diaper usage charges expended." },
+            { text: "11–12: Roll a d10. Your continence bonus—if any—changes by a number equal to the roll for one day." },
+            { text: "13–14: You cast Baby-Brain (Confusion) centered on yourself. All who fail this version of confusion must roll a continence check." },
+            { text: "15–16: For 1 minute, you regain 5HP at the start of each of your turns and your diaper regains one use charge." },
+            { text: "17–18: You become a living plushie version of yourself that remains plush until you fluff your diaper, reverting to a FULL diaper." },
+            { text: "19–20: You cast Grease centered on your diaper. You can butt slide up to 30ft with a 5ft running start and leave an oil slick." },
+            { text: "21–22: Your diaper harmlessly doubles in size and hums lightly for 1 minute. All creatures within 10 feet have disadvantage on Concentration checks due to the distraction." },
+            { text: "23–24: Your outfit shifts pastel and your skin glows a vibrant nursery hue (pink, blue, or lavender). A Remove Curse spell can end this effect." },
+            { text: "25–26: A cutesified outfit based on your class appears on you for 1 minute. You gain advantage on Charisma (Performance) checks while wearing it." },
+            { text: "27–28: For the next minute, all your Spells with a Casting Time of 1 action have a Casting Time of 1 Bonus Action, but whenever you cast you must roll a potty check." },
+            { text: "29–30: You Teleport up to 60 feet to an unoccupied space of your choice that you can see, and roll a potty check." },
+            { text: "31–32: You're transported to the Nursery until the end of your next turn, afterward you return to the space you previously occupied or the nearest unoccupied space." },
+            { text: "33–34: You glow like a nightlight in a 30-foot radius for the next minute. Any creature that ends its turn within 5 feet of you must succeed on a CON save or be Blinded until the end of its next turn." },
+            { text: "35–36: Your age regresses by a percentage equal to 10(1d10) for one hour." },
+            { text: "37–38: You fall flat on your face like a baby. Witnesses must pass your spell save (WIS) or laugh uncontrollably until next turn." },
+            { text: "39–40: You become incontinent, roll a potty check at disadvantage. If already incontinent, your diaper doubles in thickness and uses." },
+            { text: "41–42: Balled-up diapers rain down in a 10ft radius you choose. Creatures inside take 3d4+3 magical bludgeoning dmg.", diaperType: "mundane" },
+            { text: "43–44: An angel appears to put you in a magical holy diaper. If good or neutral diaper gives +1AC, if not, -1AC.", diaperType: "magical" },
+            { text: "45–46: A devil appears to put you in an unholy diaper. If good or chaotic you are now incontinent, if neutral or otherwise +1 AC.", diaperType: "magical" },
+            { text: "47–48: All creatures in a 20ft radius (including you) must make a Wis saving throw. On a failure, they curl up on the nearest soft surface... and nap for 1 min or until disturbed." },
+            { text: "49–50: Creatures in a 30-foot radius crave sweets, needing to eat candy before being able to take reactions." },
+            { text: "51–52: A spectral diaper appears on you. You get +1 AC but the diaper does not come off until it is comically full.", diaperType: "magical" },
+            { text: "53–54: You fail all potty checks for 1d4 days, rolling a 1d2 to decide if you wet or mess." },
+            { text: "55–56: Your underpants change into a clean diaper rolled from the Diaper Chart.", diaperType: "any" },
+            { text: "57–58: For the next minute, any person you touch will be diapered or boostered if already diapered.", diaperType: "mundane" },
+            { text: "59–60: You regain your lowest-level expended spell slot and a spectral magic hand pats you on the booty." },
+            { text: "61–62: For the next minute, you must BABY TALK when you speak." },
+            { text: "63–64: You cast Stank Cloud centered on yourself. As Fog Cloud except DC12 CON/15ft sq or be sickened." },
+            { text: "65–66: Up to 3 creatures you choose within 30ft of you take 4d10 lightning damage and must roll a potty check." },
+            { text: "67–68: You are Frightened by the nearest creature until the end of your next turn, you wet your diaper." },
+            { text: "69–70: Each creature within 30 feet of you becomes Incontinent for the next 1d4 days." },
+            { text: "71–72: You gain Resistance to all damage for the next minute and your diaper doubles in thickness.", diaperType: "mundane" },
+            { text: "73–74: A random creature within 60 feet of you becomes Incontinent and Poisoned for 1d4 hours." },
+            { text: "75–76: Maximize the damage of the next damaging spell you cast within the next minute." },
+            { text: "77–78: You cast Polymorph on yourself. If you fail the saving throw, you turn into a baby version of yourself for the spell’s Duration." },
+            { text: "79–80: Illusory butterflies and flower petals flutter in the air within 10 feet of you for the next minute." },
+            { text: "81–82: You can take one additional action immediately, but you must make a potty check at disadvantage." },
+            { text: "83–84: Each creature within 30 feet of you takes 1d10 necrotic damage. DC10 CON Check or have immediate accident and be rendered incontinent for 1d4 weeks." },
+            { text: "85–86: You cast Mirror Image, but the mirror image is a brat." },
+            { text: "87–88: All worn/carried panties in a 1 mile radius become diapers that cannot be removed until used.", diaperType: "mundane" },
+            { text: "89–90: An AU twin of yourself, under your control, appears to aid you for 2d4 turns, in only a cute onesie & diaper.", diaperType: "mundane" },
+            { text: "91–92: You feel your pants/pampers grow damp/full—you have had an accident, no saves.", diaperType: "mundane" },
+            { text: "93–94: You cast Spank as an 11th level caster on every hostile target in the vicinity." },
+            { text: "95–96: You are teleported to The Babrooms for 1d2 turns." },
+            { text: "97–98: The next spell you attempt to cast becomes an animated, crayon-drawn version of itself. It functions at half power." },
+            { text: "99–100: All creatures within 60 feet (including you) are momentarily transformed into toddlers or infants for 1 minute." }
+        ];
+
+        // --- IMAGE SOURCES & MATCHING (Mimicked from Harvest app) ---
+        // Local image bases
+        const CANDY_IMAGE_BASE = 'src/assets/images/candies/';
+        const ITEM_IMAGE_BASE = 'src/assets/images/items/';
+
+        // Candy images index
+        const candyImageIndex = {
+            abjurationjawbreaker: CANDY_IMAGE_BASE + 'abjurationjawbreaker.webp',
+            alizaselectrickypaw: CANDY_IMAGE_BASE + 'alizaselectrickypaw.webp',
+            arachniispinnerettestringsbothflavors: CANDY_IMAGE_BASE + 'arachniispinnerettestringsbothflavors.webp',
+            barkgumchew: CANDY_IMAGE_BASE + 'barkgumchew.webp',
+            bellowbellysours: CANDY_IMAGE_BASE + 'bellowbellysours.webp',
+            bunbunskipshopdrop: CANDY_IMAGE_BASE + 'bunbunskipshopdrop.webp',
+            cantripchew: CANDY_IMAGE_BASE + 'cantripchew.webp',
+            carrotcrumbles: CANDY_IMAGE_BASE + 'carrotcrumbles.webp',
+            caveswellersgeode: CANDY_IMAGE_BASE + 'caveswellergeode.webp',
+            chocodarkacondascales: CANDY_IMAGE_BASE + 'chocodarkacondascales.webp',
+            cindertoffee: CANDY_IMAGE_BASE + 'cindertoffee.webp',
+            diapercookie: CANDY_IMAGE_BASE + 'diapercookie.webp',
+            dustbunnyball: CANDY_IMAGE_BASE + 'dustbunnyball.webp',
+            everydayfloralfonderie: CANDY_IMAGE_BASE + 'everydayfloralfonderie.webp',
+            evocationember: CANDY_IMAGE_BASE + 'evocationember.webp',
+            fearfizzle: CANDY_IMAGE_BASE + 'fearfizzle.webp',
+            glimmeringforestmushroompop: CANDY_IMAGE_BASE + 'glimmeringforestmushroompop.webp',
+            goodhaulgumball: CANDY_IMAGE_BASE + 'goodhaulgumball.webp',
+            hungoresheartbeat: CANDY_IMAGE_BASE + 'hungoreheartbeat.webp',
+            illusionisticing: CANDY_IMAGE_BASE + 'illusionisticing.webp',
+            juiceboxjelly: CANDY_IMAGE_BASE + 'juiceboxjelly.webp',
+            kittenfolkkatstongue: CANDY_IMAGE_BASE + 'kittenfolkkatstongue.webp',
+            magicalrealmpop: CANDY_IMAGE_BASE + 'magicalrealmpop.webp',
+            magicaltoughtoffee: CANDY_IMAGE_BASE + 'magicaltoughtoffee.webp',
+            mangledhuskmeringue: CANDY_IMAGE_BASE + 'mangledhuskmeringue.webp',
+            naptimenougat: CANDY_IMAGE_BASE + 'naptimenougat.webp',
+            naughtynannybotbolt: CANDY_IMAGE_BASE + 'naughtynannybotbolt.webp',
+            nightweaverdreambar: CANDY_IMAGE_BASE + 'nightweaverdreambar.webp',
+            ossokinbone: CANDY_IMAGE_BASE + 'ossokinbone.webp',
+            pacificationpops: CANDY_IMAGE_BASE + 'pacificationpops.webp',
+            pamprisonbrick: CANDY_IMAGE_BASE + 'pamprisonbrick.webp',
+            pumpkinpatchmud: CANDY_IMAGE_BASE + 'pumpkinpatchmud.webp',
+            pupperlingpawsallflavors: CANDY_IMAGE_BASE + 'pupperlingpawsallflavors.webp',
+            purifiermint: CANDY_IMAGE_BASE + 'purifiermint.webp',
+            azureharvestbar: CANDY_IMAGE_BASE + 'azureharvestbar.webp',
+            radiantlances: CANDY_IMAGE_BASE + 'radiantlances.webp',
+            schoolcrestcoindark: CANDY_IMAGE_BASE + 'schoolcrestcoin (dark).webp',
+            schoolcrestcoinglimmeringmint: CANDY_IMAGE_BASE + 'schoolcrestcoin (glimmeringmint).webp',
+            schoolcrestcoinmilk: CANDY_IMAGE_BASE + 'schoolcrestcoin (milk).webp',
+            schoolcrestcoinwhite: CANDY_IMAGE_BASE + 'schoolcrestcoin (white).webp',
+            securicareswirl: CANDY_IMAGE_BASE + 'securicareswirl.webp',
+            shadesneaktaffy: CANDY_IMAGE_BASE + 'shadesneaktaffy.webp',
+            sleepersucker: CANDY_IMAGE_BASE + 'sleepersucker.webp',
+            spinebearerquill: CANDY_IMAGE_BASE + 'spinerbearerquill.webp',
+            stealthwafer: CANDY_IMAGE_BASE + 'stealthwafer.webp',
+            tactitushtoughtoffee: CANDY_IMAGE_BASE + 'tactitushtoughtoffee.webp',
+            plushiepalgummy: CANDY_IMAGE_BASE + 'plushiepalgummies.webp',
+            paddedplaygroundpebbles: CANDY_IMAGE_BASE + 'playgroundpebbles.webp',
+            timeouttaffy: CANDY_IMAGE_BASE + 'timeouttaffy.webp',
+            ultradrymarshmallow: CANDY_IMAGE_BASE + 'ultradrymarshmallow.webp',
+            ultradrypowerbar: CANDY_IMAGE_BASE + 'ultradrypowerbar.webp',
+            umbraltribefocuschew: CANDY_IMAGE_BASE + 'umbraltribefocuschew.webp',
+            umbraveil: CANDY_IMAGE_BASE + 'umbraveil.webp'
+        };
+
+        // Magical diaper images (local)
+        const magicalDiaperImageIndex = {
+            harvestnightpullup: ITEM_IMAGE_BASE + 'harvestnightpullup.webp',
+            ultradrymaxabsorbency: ITEM_IMAGE_BASE + 'ultradrymaxabsorb.webp',
+            umbraweavenightpant: ITEM_IMAGE_BASE + 'umbraweavenightpant.webp',
+            purekinholydiaper: ITEM_IMAGE_BASE + 'purekinholydiaper.webp'
+        };
+
+        // Special items (non-candy, non-diaper)
+        const specialItemImageIndex = {
+            agedregaliascrap: ITEM_IMAGE_BASE + 'agedregaliascrap.webp'
+        };
+
+        // Mundane diaper images via catalog (remote substitutes)
+        const mundaneDiaperImageIndex = {
+            securicarelevel4s: 'https://ik.imagekit.io/owlcan/diaperlistapp/securicarel4s.jpg',
+            bunbunskipz: 'https://ik.imagekit.io/owlcan/diaperlistapp/bunbunskips.jpg',
+            everydaycomfortpullonsfloral: 'https://ik.imagekit.io/owlcan/diaperlistapp/comfortguardianplus.jpg',
+            tactitushelite: 'https://ik.imagekit.io/owlcan/diaperlistapp/tactitushelite.jpg',
+            stealthwearpantycutpullup: 'https://ik.imagekit.io/owlcan/diaperlistapp/stealthopscovertblack.jpg',
+            paddedplaygrounddinoprint: 'https://ik.imagekit.io/owlcan/diaperlistapp/kuddlepuffsdinoroar.jpg'
+        };
+
+        function normalizeKey(str) {
+            return (str || '')
+                .toLowerCase()
+                .replace(/(’s|'s)\b/g, '')
+                .replace(/\*|’|‘|“|”|—|–/g, '')
+                .replace(/[^a-z0-9]+/g, '');
+        }
+
+        function findBestCandyImage(name) {
+            const key = normalizeKey(name);
+            // Heuristics for families/variants
+            if (key.startsWith('arachniispinnerettestrings')) return candyImageIndex['arachniispinnerettestringsbothflavors'];
+            if (key.startsWith('pupperlingpaws')) return candyImageIndex['pupperlingpawsallflavors'];
+            if (key.includes('stealth') && key.includes('wafer')) return candyImageIndex['stealthwafer'];
+            if (key.includes('ultradry') && (key.includes('powerbar') || key.includes('power'))) return candyImageIndex['ultradrypowerbar'];
+            if (key.includes('magicalrealm')) return candyImageIndex['magicalrealmpop'];
+            if (key.includes('aliza') && (key.includes('electrick') || key.includes('selectrick')) && key.includes('paw')) return candyImageIndex['alizaselectrickypaw'];
+            if (key.includes('azure') && key.includes('harvest')) return candyImageIndex['azureharvestbar'];
+            if (key.includes('bunbunskip') && key.includes('hopdrop')) return candyImageIndex['bunbunskipshopdrop'];
+            if (key.includes('fearfizz')) return candyImageIndex['fearfizzle'];
+            if (key.includes('toughtoffee')) {
+                if (key.includes('magical')) return candyImageIndex['magicaltoughtoffee'];
+                if (key.includes('tactitush')) return candyImageIndex['tactitushtoughtoffee'];
+                return candyImageIndex['tactitushtoughtoffee'];
+            }
+            if (key.includes('illusionist') && key.includes('icing')) return candyImageIndex['illusionisticing'];
+            if ((key.includes('sleeper') || key.includes('sleepers')) && key.includes('sucker')) return candyImageIndex['sleepersucker'];
+            if (key.includes('radiant') && key.includes('lance')) return candyImageIndex['radiantlances'];
+            if (key.includes('pacificationpop')) return candyImageIndex['pacificationpops'];
+            if (key.includes('bellowbelly') && (key.includes('sour') || key.includes('sours'))) return candyImageIndex['bellowbellysours'];
+            if (key.includes('darkaconda') && (key.includes('scale') || key.includes('chip') || key.includes('chips'))) return candyImageIndex['chocodarkacondascales'];
+            if (key.includes('spinebearer') && key.includes('quill')) return candyImageIndex['spinebearerquill'];
+            if (key.includes('hungore') && key.includes('heartbeat')) return candyImageIndex['hungoresheartbeat'];
+            if (key.includes('cavesweller') && key.includes('geode')) return candyImageIndex['caveswellersgeode'];
+            if (key.includes('umbras') && key.includes('veil')) return candyImageIndex['umbraveil'];
+            if (key.includes('plushie') && key.includes('pal') && (key.includes('gummy') || key.includes('gummies'))) return candyImageIndex['plushiepalgummy'];
+            if (key.includes('kittenfolk') && key.includes('kat') && key.includes('tongue')) return candyImageIndex['kittenfolkkatstongue'];
+            if (key.includes('playground') && key.includes('pebbles')) return candyImageIndex['paddedplaygroundpebbles'];
+            if (key.includes('scholia') && key.includes('crestcoin')) {
+                if (key.includes('dark')) return candyImageIndex['schoolcrestcoindark'];
+                if (key.includes('white')) return candyImageIndex['schoolcrestcoinwhite'];
+                if (key.includes('glimmering') || key.includes('mint')) return candyImageIndex['schoolcrestcoinglimmeringmint'];
+                return candyImageIndex['schoolcrestcoinmilk'];
+            }
+            if (candyImageIndex[key]) return candyImageIndex[key];
+            // Loose contains matching
+            let best = null;
+            let bestScore = -1;
+            Object.keys(candyImageIndex).forEach(k => {
+                const aInB = key.includes(k);
+                const bInA = k.includes(key);
+                if (aInB || bInA) {
+                    const score = Math.max(k.length, key.length);
+                    if (score > bestScore) { bestScore = score; best = candyImageIndex[k]; }
+                }
+            });
+            return best;
+        }
+
+        function getImageForResult(result) {
+            if (!result || !result.type || typeof result.name !== 'string') return null;
+            const name = result.name;
+            const type = result.type;
+            if (type === 'Mundane Candy' || type === 'Magical Candy' || type === 'Full-Sized Treat') {
+                return findBestCandyImage(name) || ITEM_IMAGE_BASE + 'cocoa.png'; // guaranteed fallback
+            }
+            if (type === 'Diaper?') {
+                return mundaneDiaperImageIndex[normalizeKey(name)] || ITEM_IMAGE_BASE + 'cocoa.png';
+            }
+            if (type === 'Magical Diaper!') {
+                return magicalDiaperImageIndex[normalizeKey(name)] || ITEM_IMAGE_BASE + 'cocoa.png';
+            }
+            if (type === 'Aged Regalia!') {
+                return specialItemImageIndex[normalizeKey(name)] || ITEM_IMAGE_BASE + 'cocoa.png';
+            }
+            return ITEM_IMAGE_BASE + 'cocoa.png';
+        }
+
+        // --- APP STATE ---
+        let currentState = {
+            username: "",
+            qIndex: 0,
+            score: 0,
+            answers: [],
+            selectedOption: null,
+            activeCarolKey: null,
+            activeCarolVerses: []
+        };
+
+        // --- ELEMENTS ---
+        const views = {
+            intro: document.getElementById('introView'),
+            quiz: document.getElementById('quizView'),
+            result: document.getElementById('resultView')
+        };
+        const elements = {
+            nameInput: document.getElementById('usernameInput'),
+            startBtn: document.getElementById('startBtn'),
+            errorMsg: document.getElementById('nameError'),
+            quizUser: document.getElementById('quizUserDisplay'),
+            verseNum: document.getElementById('verseNumber'),
+            verseText: document.getElementById('verseText'),
+            optionsContainer: document.getElementById('optionsContainer'),
+            submitBtn: document.getElementById('submitAnswerBtn'),
+            resultTitle: document.getElementById('resultTitle'),
+            scoreDisplay: document.getElementById('scoreDisplay'),
+            rewardBox: document.getElementById('rewardContainer'),
+            rewardContent: document.getElementById('rewardContent'),
+            restartBtn: document.getElementById('restartBtn')
+        };
+
+        // Modal elements
+        window.openAssetModal = function(name, desc, imgSrc) {
+            const modal = document.getElementById('assetModal');
+            document.getElementById('assetModalTitle').innerText = name;
+            document.getElementById('assetModalDesc').innerText = desc;
+            const imgEl = document.getElementById('assetModalImage');
+            if (imgSrc) {
+                imgEl.src = imgSrc;
+                imgEl.classList.remove('hidden');
+            } else {
+                imgEl.classList.add('hidden');
+            }
+            modal.classList.remove('hidden');
+        };
+        window.closeAssetModal = function() {
+            document.getElementById('assetModal').classList.add('hidden');
+        };
+
+        // --- UTILS ---
+        function rand(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+        
+        function normalize(str) {
+            return str.toLowerCase().replace(/[^a-z]/g, '');
+        }
+
+        // --- LOGIC ---
+
+        function startQuiz() {
+            const name = elements.nameInput.value.trim();
+            if (!name) {
+                elements.errorMsg.classList.remove('hidden');
+                return;
+            }
+            currentState.username = name;
+            currentState.qIndex = 0;
+            currentState.score = 0;
+            currentState.answers = [];
+            currentState.selectedOption = null;
+
+            // Randomly choose which carol to use this run
+            const keys = Object.keys(carolSets);
+            const chosenKey = keys[Math.floor(Math.random() * keys.length)];
+            currentState.activeCarolKey = chosenKey;
+            currentState.activeCarolVerses = carolSets[chosenKey];
+            
+            // Switch Views
+            views.intro.classList.add('hidden');
+            views.quiz.classList.remove('hidden');
+            elements.quizUser.innerText = `Singer: ${name}`;
+            
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const currentQ = currentState.activeCarolVerses[currentState.qIndex];
+            elements.verseNum.innerText = currentState.qIndex + 1;
+
+            // Construct Verse HTML
+            let html = "";
+            currentQ.lines.forEach(line => {
+                if (line.includes("______")) {
+                    html += `<p class="mb-2 text-[var(--accent-gold)] font-bold text-3xl">${line.replace("______", "__________")}</p>`;
+                } else {
+                    html += `<p class="mb-2 text-2xl">${line}</p>`;
+                }
+            });
+            elements.verseText.innerHTML = html;
+
+            // Build multiple-choice options
+            elements.optionsContainer.innerHTML = "";
+            currentQ.options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.textContent = opt;
+                btn.className = "px-3 py-2 rounded-lg border border-blue-400 bg-blue-900/40 text-[var(--text-light)] hover:bg-blue-800 hover:border-[var(--accent-ice)] transition text-lg";
+                btn.dataset.value = opt;
+                btn.addEventListener('click', () => {
+                    // Clear previous selection styles
+                    Array.from(elements.optionsContainer.querySelectorAll('button')).forEach(b => {
+                        b.classList.remove('ring-2', 'ring-[var(--accent-gold)]', 'bg-blue-800');
+                    });
+                    btn.classList.add('ring-2', 'ring-[var(--accent-gold)]', 'bg-blue-800');
+                    currentState.selectedOption = opt;
+                });
+                elements.optionsContainer.appendChild(btn);
+            });
+
+            // Clear any selection from previous question
+            currentState.selectedOption = null;
+        }
+
+        function checkAnswer() {
+            const currentQ = currentState.activeCarolVerses[currentState.qIndex];
+            const userAns = currentState.selectedOption;
+            if (!userAns) return; // Don't submit with nothing selected
+
+            const correctAns = currentQ.correct;
+            const isCorrect = normalize(userAns) === normalize(correctAns);
+
+            if (isCorrect) currentState.score++;
+            currentState.answers.push(isCorrect);
+
+            nextQuestion();
+        }
+
+        function nextQuestion() {
+            currentState.qIndex++;
+            if (currentState.qIndex < currentState.activeCarolVerses.length) {
+                // Animation transition
+                elements.verseText.classList.add('opacity-0');
+                setTimeout(() => {
+                    loadQuestion();
+                    elements.verseText.classList.remove('opacity-0');
+                }, 300);
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            views.quiz.classList.add('hidden');
+            views.result.classList.remove('hidden');
+
+            const score = currentState.score;
+            const isNice = score >= 3; // Treat for 3, 4, or 5 correct per admin testing preference
+
+            elements.scoreDisplay.innerHTML = `You got <span class="font-bold text-white">${score}</span> out of 5 verses correct.`;
+
+            if (isNice) {
+                // TREAT
+                elements.resultTitle.innerText = "A Merry Harvest & Wintertide!";
+                elements.resultTitle.className = "text-4xl font-bold mb-4 font-cinzel text-[var(--accent-ice)]";
+                elements.rewardBox.className = "bg-blue-900/60 p-6 rounded-lg border-2 border-[var(--accent-ice)] mb-8";
+                
+                const reward = rand(treats);
+                const imgSrc = (typeof getImageForResult === 'function')
+                    ? getImageForResult({ name: reward.name, type: reward.type })
+                    : null;
+                
+                // Construct Reward HTML - Added frost-frame to result image
+                let html = `
+                    <div class="text-[var(--accent-gold)] text-xl font-bold mb-4">You earned a Treat!</div>
+                    ${imgSrc ? `<img src="${imgSrc}" class="w-[24rem] max-w-[90%] h-auto object-contain mx-auto mb-4 frost-frame cursor-pointer" onclick="openAssetModal('${reward.name.replace(/'/g, "\\'")}', '${reward.desc.replace(/'/g, "\\'")}', '${imgSrc}')">` : ''}
+                    <div class="text-2xl text-white font-cinzel mb-2">${reward.name}</div>
+                    <div class="text-blue-200 italic">${reward.desc}</div>
+                    <div class="text-sm mt-4 text-[var(--accent-ice)] border px-3 py-1 rounded border-blue-500 inline-block">${reward.type}</div>
+                `;
+                elements.rewardContent.innerHTML = html;
+
+            } else {
+                // TRICK (PRANK)
+                elements.resultTitle.innerText = "The Spirits are Playful...";
+                elements.resultTitle.className = "text-4xl font-bold mb-4 font-cinzel text-red-300";
+                elements.rewardBox.className = "bg-red-950/60 p-6 rounded-lg border-2 border-red-400 mb-8";
+
+                const trickEntry = rand(tricks);
+                
+                let html = `
+                    <div class="text-red-300 text-xl font-bold mb-2">Wintertide Prank!</div>
+                    <div class="text-lg text-white font-sans leading-relaxed p-4">${trickEntry.text}</div>
+                `;
+                
+                if (trickEntry.diaperType) {
+                    html += `<div class="mt-3 text-sm text-red-200 opacity-75 font-serif border-t border-red-800 pt-2">(Includes a ${trickEntry.diaperType} diaper effect!)</div>`;
+                }
+
+                elements.rewardContent.innerHTML = html;
+            }
+        }
+
+        function restart() {
+            elements.nameInput.value = "";
+            views.result.classList.add('hidden');
+            views.intro.classList.remove('hidden');
+        }
+
+        // --- LISTENERS ---
+        elements.startBtn.addEventListener('click', startQuiz);
+        elements.submitBtn.addEventListener('click', checkAnswer);
+        elements.restartBtn.addEventListener('click', restart);
+        
+        // Enter key support
+        elements.nameInput.addEventListener('keypress', (e) => {
+            if(e.key === 'Enter') startQuiz();
+        });
+
+        // --- ADMIN CHEATCODE ---
+        // Click sequence: Bottom-Right -> Bottom-Left -> Top-Left within 5 seconds
+        const sfBR = document.getElementById('sf-bottom-right');
+        const sfBL = document.getElementById('sf-bottom-left');
+        const sfTL = document.getElementById('sf-top-left');
+        let cheatStep = 0;
+        let cheatTimer = null;
+
+        function resetCheatTimer() {
+            if (cheatTimer) { clearTimeout(cheatTimer); }
+            cheatTimer = setTimeout(() => { cheatStep = 0; }, 5000);
+        }
+
+        function triggerCheatFinish() {
+            // Ensure we have a username and an active carol
+            if (!currentState.username) {
+                currentState.username = 'Tester';
+            }
+            if (!currentState.activeCarolVerses || currentState.activeCarolVerses.length === 0) {
+                // If quiz hasn't started, initialize with a random carol
+                const keys = Object.keys(carolSets);
+                const chosenKey = keys[Math.floor(Math.random() * keys.length)];
+                currentState.activeCarolKey = chosenKey;
+                currentState.activeCarolVerses = carolSets[chosenKey];
+            }
+            // Simulate a completed quiz with score = 3/5
+            currentState.qIndex = currentState.activeCarolVerses.length;
+            currentState.score = 3;
+            currentState.answers = [true, true, true, false, false];
+            // Switch to results view if needed
+            views.intro.classList.add('hidden');
+            views.quiz.classList.add('hidden');
+            views.result.classList.remove('hidden');
+            elements.quizUser.innerText = `Singer: ${currentState.username}`;
+            showResults();
+        }
+
+        sfBR?.addEventListener('click', () => {
+            cheatStep = (cheatStep === 0) ? 1 : 0; // must start here
+            resetCheatTimer();
+        });
+        sfBL?.addEventListener('click', () => {
+            if (cheatStep === 1) { cheatStep = 2; resetCheatTimer(); } else { cheatStep = 0; }
+        });
+        sfTL?.addEventListener('click', () => {
+            if (cheatStep === 2) { cheatStep = 0; triggerCheatFinish(); } else { cheatStep = 0; }
+        });
+
+    </script>
+</body>
+</html>

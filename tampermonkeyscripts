@@ -1,0 +1,376 @@
+// ==UserScript==
+// @name         Google Docs Sidebar → Movable Modal + Second Instance (Hardened)
+// @namespace    http://tampermonkey.net/
+// @version      1.1
+// @description  Let the Docs add-on sidebar float as a draggable modal and open a second instance inside the same window, with safer DOM handling.
+// @match        https://docs.google.com/*
+// @grant        none
+// ==/UserScript==
+
+(function () {
+  'use strict';
+
+  // Primary known selector; we also fall back to generic sidebar asides.
+  const INNER_ROOT_SELECTOR = '.appsDocsUiSidebarScrollableContainer';
+
+  let mainPanelWrapper = null;
+  let dockPlaceholder = null;
+  let secondPanelWrapper = null;
+  let initializedAside = null;
+
+  // Observe the document for an add-on sidebar
+  const observer = new MutationObserver(() => {
+    tryAttach();
+  });
+  observer.observe(document.documentElement, { childList: true, subtree: true });
+
+  // Also try once on load just in case
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    setTimeout(tryAttach, 1000);
+  } else {
+    window.addEventListener('load', () => setTimeout(tryAttach, 1000));
+  }
+
+  // Keyboard rescue: Ctrl+Alt+M toggles floating panel for the current sidebar
+  window.addEventListener('keydown', (e) => {
+    if (e.ctrlKey && e.altKey && e.key.toLowerCase() === 'm') {
+      if (initializedAside && !mainPanelWrapper) {
+        safeInitSidebarModal(initializedAside);
+      } else if (mainPanelWrapper) {
+        // Hide/show instead of full dock, just for quick toggle
+        const visible = mainPanelWrapper.style.display !== 'none';
+        mainPanelWrapper.style.display = visible ? 'none' : 'flex';
+      }
+    }
+  });
+
+  function tryAttach() {
+    try {
+      if (initializedAside) return; // already done
+
+      // Prefer the known inner root
+      let innerRoot = document.querySelector(INNER_ROOT_SELECTOR);
+
+      // Fallback: look for any <aside> that looks like a sidebar
+      let sidebarAside = null;
+      if (innerRoot) {
+        sidebarAside = innerRoot.closest('aside');
+      }
+      if (!sidebarAside) {
+        const candidates = Array.from(document.querySelectorAll('aside'));
+        sidebarAside = candidates.find((a) => {
+          const aria = (a.getAttribute('aria-label') || '').toLowerCase();
+          return aria.includes('add-on') || aria.includes('sidebar') || aria.includes('extensions');
+        }) || null;
+      }
+      if (!sidebarAside) return;
+
+      if (sidebarAside.dataset.modalSidebarInitialized) {
+        initializedAside = sidebarAside;
+        return;
+      }
+
+      // Wait until it has some layout before moving it
+      const rect = sidebarAside.getBoundingClientRect();
+      if (!rect.width || !rect.height) {
+        // Try again a bit later
+        setTimeout(tryAttach, 500);
+        return;
+      }
+
+      sidebarAside.dataset.modalSidebarInitialized = 'true';
+      initializedAside = sidebarAside;
+      safeInitSidebarModal(sidebarAside);
+    } catch (err) {
+      // Swallow errors so we don't break the page
+      console.warn('Sidebar modal init error:', err);
+    }
+  }
+
+  function safeInitSidebarModal(sidebarAside) {
+    try {
+      initSidebarModal(sidebarAside);
+    } catch (err) {
+      console.warn('initSidebarModal failed:', err);
+    }
+  }
+
+  function initSidebarModal(sidebarAside) {
+    const originalParent = sidebarAside.parentElement;
+    if (!originalParent) return;
+
+    // Avoid double-wrapping
+    if (mainPanelWrapper && mainPanelWrapper.contains(sidebarAside)) {
+      return;
+    }
+
+    injectInlineControlBar(sidebarAside);
+
+    mainPanelWrapper = createFloatingPanel(sidebarAside, {
+      title: sidebarAside.getAttribute('aria-label') || 'Sidebar',
+      initialRight: 40,
+      initialTop: 80,
+    });
+    document.body.appendChild(mainPanelWrapper);
+
+    dockPlaceholder = document.createElement('div');
+    const computedWidth = getSafeWidth(sidebarAside) || '300px';
+    dockPlaceholder.style.width = computedWidth;
+    dockPlaceholder.style.minHeight = '50px';
+    originalParent.insertBefore(dockPlaceholder, sidebarAside.nextSibling);
+
+    const dockButton = mainPanelWrapper.querySelector('[data-action="dock"]');
+    if (dockButton) {
+      dockButton.addEventListener('click', () => {
+        dockSidebar(sidebarAside, originalParent);
+      });
+    }
+
+    const newPanelButton = mainPanelWrapper.querySelector('[data-action="new-panel"]');
+    if (newPanelButton) {
+      newPanelButton.addEventListener('click', () => {
+        try {
+          if (!secondPanelWrapper) {
+            openSecondInstance(sidebarAside);
+          } else {
+            secondPanelWrapper.style.display =
+              secondPanelWrapper.style.display === 'none' ? 'block' : 'none';
+          }
+        } catch (err) {
+          console.warn('openSecondInstance failed:', err);
+        }
+      });
+    }
+  }
+
+  function getSafeWidth(el) {
+    try {
+      const cs = getComputedStyle(el);
+      if (cs && cs.width && cs.width !== 'auto' && cs.width !== '0px') {
+        return cs.width;
+      }
+    } catch {}
+    return null;
+  }
+
+  function injectInlineControlBar(sidebarAside) {
+    try {
+      if (sidebarAside.querySelector('.tm-modal-inline-bar')) return;
+
+      const bar = document.createElement('div');
+      bar.className = 'tm-modal-inline-bar';
+      bar.style.cssText = `
+        display: flex;
+        justify-content: flex-end;
+        gap: 6px;
+        padding: 4px 6px;
+        border-bottom: 1px solid rgba(0,0,0,0.1);
+        background: #f5f5f5;
+        font-size: 11px;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        color: #444;
+      `;
+
+      const hint = document.createElement('span');
+      hint.textContent = 'Sidebar tools (Ctrl+Alt+M)';
+      hint.style.cssText = 'margin-right:auto;color:#777;font-weight:500;';
+
+      bar.appendChild(hint);
+      sidebarAside.insertBefore(bar, sidebarAside.firstChild);
+    } catch (err) {
+      console.warn('injectInlineControlBar failed:', err);
+    }
+  }
+
+  function createFloatingPanel(contentNode, options) {
+    const { title, initialRight = 20, initialTop = 60 } = options || {};
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'tm-floating-sidebar';
+    wrapper.style.cssText = `
+      position: fixed;
+      top: ${initialTop}px;
+      right: ${initialRight}px;
+      width: 360px;
+      max-width: 90vw;
+      max-height: 85vh;
+      background: #ffffff;
+      color: #222;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+      border-radius: 8px;
+      border: 1px solid rgba(0,0,0,0.12);
+      display: flex;
+      flex-direction: column;
+      z-index: 9999;
+      overflow: hidden;
+    `;
+
+    const header = document.createElement('div');
+    header.className = 'tm-floating-header';
+    header.style.cssText = `
+      display: flex;
+      align-items: center;
+      padding: 4px 8px;
+      background: #f0f0f0;
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+      cursor: move;
+      user-select: none;
+      font-size: 12px;
+      font-weight: 600;
+      color: #444;
+      gap: 6px;
+    `;
+
+    const titleSpan = document.createElement('span');
+    titleSpan.textContent = title || 'Panel';
+    titleSpan.style.flex = '1';
+
+    const newBtn = document.createElement('button');
+    newBtn.textContent = '+';
+    newBtn.title = 'New panel';
+    newBtn.setAttribute('data-action', 'new-panel');
+    styleHeaderButton(newBtn);
+
+    const dockBtn = document.createElement('button');
+    dockBtn.textContent = '⤵';
+    dockBtn.title = 'Dock back to sidebar area';
+    dockBtn.setAttribute('data-action', 'dock');
+    styleHeaderButton(dockBtn);
+
+    header.appendChild(titleSpan);
+    header.appendChild(newBtn);
+    header.appendChild(dockBtn);
+    wrapper.appendChild(header);
+
+    const body = document.createElement('div');
+    body.className = 'tm-floating-body';
+    body.style.cssText = `
+      flex: 1;
+      overflow: auto;
+      background: #fff;
+    `;
+    wrapper.appendChild(body);
+
+    body.appendChild(contentNode);
+
+    makeDraggable(wrapper, header);
+
+    return wrapper;
+  }
+
+  function styleHeaderButton(btn) {
+    btn.style.cssText = `
+      border: none;
+      background: #e0e0e0;
+      color: #444;
+      border-radius: 4px;
+      padding: 2px 6px;
+      cursor: pointer;
+      font-size: 11px;
+      line-height: 1.2;
+    `;
+    btn.addEventListener('mouseenter', () => {
+      btn.style.background = '#d0d0d0';
+    });
+    btn.addEventListener('mouseleave', () => {
+      btn.style.background = '#e0e0e0';
+    });
+  }
+
+  function makeDraggable(panel, handle) {
+    let isDragging = false;
+    let startX = 0;
+    let startY = 0;
+    let startLeft = 0;
+    let startTop = 0;
+
+    handle.addEventListener('mousedown', (e) => {
+      if (e.button !== 0) return;
+      isDragging = true;
+      const rect = panel.getBoundingClientRect();
+      startX = e.clientX;
+      startY = e.clientY;
+      startLeft = rect.left;
+      startTop = rect.top;
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+      e.preventDefault();
+    });
+
+    function onMouseMove(e) {
+      if (!isDragging) return;
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+      let newLeft = startLeft + dx;
+      let newTop = startTop + dy;
+
+      const maxLeft = window.innerWidth - 80;
+      const maxTop = window.innerHeight - 60;
+      if (newLeft < 10) newLeft = 10;
+      if (newTop < 10) newTop = 10;
+      if (newLeft > maxLeft) newLeft = maxLeft;
+      if (newTop > maxTop) newTop = maxTop;
+
+      panel.style.left = `${newLeft}px`;
+      panel.style.top = `${newTop}px`;
+      panel.style.right = 'auto';
+    }
+
+    function onMouseUp() {
+      isDragging = false;
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+    }
+  }
+
+  function dockSidebar(sidebarAside, originalParent) {
+    try {
+      if (originalParent) {
+        originalParent.insertBefore(sidebarAside, dockPlaceholder || null);
+        if (dockPlaceholder && dockPlaceholder.parentElement) {
+          dockPlaceholder.parentElement.removeChild(dockPlaceholder);
+        }
+      }
+    } catch (e) {
+      console.warn('dockSidebar insert failed:', e);
+    }
+
+    if (mainPanelWrapper && mainPanelWrapper.parentElement) {
+      mainPanelWrapper.parentElement.removeChild(mainPanelWrapper);
+    }
+    if (secondPanelWrapper && secondPanelWrapper.parentElement) {
+      secondPanelWrapper.parentElement.removeChild(secondPanelWrapper);
+    }
+
+    mainPanelWrapper = null;
+    secondPanelWrapper = null;
+    dockPlaceholder = null;
+
+    // Reset basic positioning styles; Docs will usually reapply its own
+    try {
+      sidebarAside.style.position = '';
+      sidebarAside.style.top = '';
+      sidebarAside.style.left = '';
+      sidebarAside.style.right = '';
+      sidebarAside.style.bottom = '';
+    } catch {}
+  }
+
+  function openSecondInstance(sidebarAside) {
+    // Clone the aside for a second visual instance
+    const clone = sidebarAside.cloneNode(true);
+    clone.dataset.modalSidebarInitialized = 'clone';
+
+    secondPanelWrapper = createFloatingPanel(clone, {
+      title: (sidebarAside.getAttribute('aria-label') || 'Sidebar') + ' (2)',
+      initialRight: 420,
+      initialTop: 120,
+    });
+    document.body.appendChild(secondPanelWrapper);
+
+    // In the second panel, hide the new-panel button to avoid cascades
+    const newBtn = secondPanelWrapper.querySelector('[data-action="new-panel"]');
+    if (newBtn) newBtn.style.display = 'none';
+  }
+
+})();

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Field Journal — Jace Vern</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background-color: #1c1917; }
+    .paper-texture { 
+      background: linear-gradient(to right, rgba(62, 39, 35, 0.08), rgba(0,0,0,0) 10%), #e8dcc5; 
+      position: relative;
+    }
+    .paper-texture::after { /* subtle noise overlay */
+      content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .25; border-radius: inherit;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
+    }
+    .parchment-frame { border-right: 4px solid #c4b495; border-bottom: 4px solid #c4b495; }
+    .book-spine { background: #451a03; }
+    .gold-trim { background: rgba(120, 53, 15, 0.8); border-color: rgba(245, 158, 11, 0.5); }
+    .desk-ambience { background: rgba(0,0,0,.2); filter: blur(24px); }
+    .btn-nav:disabled { opacity:.5; cursor:not-allowed; }
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0,0,0,0.05); }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(62,39,35,.3); border-radius: 10px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(62,39,35,.5); }
+    /* Replace Tailwind arbitrary values with stable CSS helpers */
+    .shadow-strong { box-shadow: 0 20px 50px -12px rgba(0,0,0,.9); }
+    .min-h-620 { min-height: 620px; }
+    .w-90p { width: 90%; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    .animate-fade-in { animation: fadeIn .5s ease; }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4 font-serif overflow-hidden relative">
+  <!-- Wood grain ambience -->
+  <div class="absolute inset-0 opacity-20 pointer-events-none" style="background-image: url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"none\" fill-rule=\"evenodd\"%3E%3Cg fill=\"%233e2723\" fill-opacity=\"1\"%3E%3Cpath d=\"M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
+
+  <div class="relative w-full max-w-2xl">
+    <!-- Book spine (decor) -->
+    <div class="book-spine absolute -left-2 top-4 bottom-4 w-6 rounded-l-lg shadow-2xl z-0 border-l border-t border-b border-amber-800"></div>
+
+    <!-- Journal Page -->
+    <div class="relative paper-texture w-full min-h-620 rounded-r-lg shadow-strong flex flex-col parchments-border border-r-4 border-b-4 border-[#c4b495]">
+      <!-- Gold trims -->
+      <div class="gold-trim h-2 w-90p mx-auto mt-4 border-b"></div>
+
+      <!-- Content -->
+      <div class="flex-1 p-8 sm:p-12 relative z-10 flex flex-col text-stone-900">
+        <!-- Dynamic content root -->
+        <div id="journal-content" class="flex-1 flex flex-col"></div>
+        <!-- Page counter -->
+        <div id="page-counter" class="mt-auto pt-6 flex justify-center text-stone-400 text-xs font-mono"></div>
+      </div>
+
+      <div class="gold-trim h-2 w-90p mx-auto mb-4 border-t"></div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="absolute -bottom-16 left-0 right-0 flex justify-center gap-8 z-20">
+      <button id="btn-prev" class="btn-nav flex items-center justify-center w-12 h-12 rounded-full bg-stone-800 border-2 border-amber-700 text-amber-100 shadow-lg transition-all duration-200 hover:bg-stone-700 hover:scale-110 active:scale-95" aria-label="Previous page">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      </button>
+      <button id="btn-next" class="btn-nav flex items-center justify-center w-12 h-12 rounded-full bg-stone-800 border-2 border-amber-700 text-amber-100 shadow-lg transition-all duration-200 hover:bg-stone-700 hover:scale-110 active:scale-95" aria-label="Next page">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </button>
+    </div>
+
+    <!-- Desk ambience -->
+    <div class="absolute -right-8 top-1/4 w-24 h-24 desk-ambience rounded-full pointer-events-none"></div>
+  </div>
+
+  <script>
+    const journalEntries = [
+      { id: 'cover', type: 'cover', title: 'Field Journal', subtitle: 'Property of Jace Vern', details: ['Year 3 of the Thaw', 'Major: Arcane Archaeology', '(Self-Assigned)'], warning: 'IF FOUND: Return to Scholia Diaspros Administration. Do not read.' },
+      { id: 'entry-14', type: 'content', title: 'Entry 14', date: 'The Mud', content: `The mud out here is different. Closer to the campus, the ground is soft, almost forgiving—like it wants to cradle you. Out here, past the boundary markers where the Hall Monitors stop patrolling, the mud is hungry.
+
+I’ve read the old records—the ones the Headmistress hasn’t scrubbed yet. Before the War, before the Well cracked and the sky turned the color of a bruised plum, there was a township here. Real buildings. Stone and mortar, not just magic and intent. They say the "Sunken Tower" was the nexus of it all. Old Magitek. Not the soft, puffy enchantments we weave into our undergarments now, but hard magic. Cold magic.
+
+The rumors say it didn’t fall. They say it was pulled down when the earth liquefied during the initial blast. If the Thaw is real, and the magical frost is finally receding from the fens, the spire should be visible. I have my supplies. My pack is heavy, and I’ve double-layered my padding. If I get stuck out there, I’m not coming back for a change.` },
+      { id: 'entry-16', type: 'content', title: 'Entry 16', date: 'The Sighting', content: `I saw it. Or I think I saw it.
+
+The fog is thick today—soupy. It smells of copper and old ozone. I was navigating a ridge of solid earth near the sinkhole when the mist parted. Just for a second. A jagged black tooth jutting out of the scum water. It wasn’t stone. It looked like metal, slick and unrusted despite centuries in the muck.
+
+I tried to get closer, but the local wildlife is aggressive. Saw a Darkling—not the cute, pranking kind we deal with in the dorms. This thing was feral. Shadow-stuff leaking off it like oil. It was picking through a pile of debris that looked suspiciously like an old dormitory wall. I stayed hidden. My stealth spell held, but barely. My diaper is already soaked through, mostly from nerves. I need to find a dry patch to rest before I make the final push to the spire.
+
+Why does no one talk about what this place was? Why is it just "The Old Ruins"? The architecture I saw... it looked like a machine. A massive, buried machine.` },
+      { id: 'entry-17', type: 'content', title: 'Entry 17', date: 'Inside', content: `I am inside. Or... on top of? It’s hard to tell where the swamp ends and the Tower begins.
+
+I managed to rappel down onto a balcony that was half-submerged. The interior is surprisingly dry, sealed by some kind of pressure field that hums against my teeth. It’s freezing in here.
+
+The rumors were wrong. It wasn’t a library, and it wasn’t a command center. I found a room full of glass tubes. Most are shattered, but the ones that aren't... they have pipes running into the floor. Massive, brass pipes. The scale of this place is wrong. The doors are too tall. The chairs—if that’s what these metal frames are—are uncomfortable, rigid.
+
+There’s a console here. It’s flickering. The text is in Old Common, blocked and sharp. I can make out the words "Regulation" and "Disposal."
+
+I don't like the hum. It sounds like a heartbeat. A very slow, very deep heartbeat coming from beneath the water line. I’m going to try to copy the runes on the console and leave. This doesn't feel like a place of learning. It feels like a factory.` },
+      { id: 'entry-18', type: 'content', title: 'Entry 18', date: 'TRAPPED', content: `The door sealed.
+
+I didn't touch it. I swear. I was sketching the rune sequence for the "Disposal" valve when the pressure field fluctuated. The air pressure dropped, my ears popped, and the bulkhead behind me slammed shut.
+
+The humming has stopped. That’s worse. Silence in a place like this means something is listening.
+
+I can hear scratching in the vents. It sounds metallic. Clinking. Like claws on brass. I tried to cast Knock on the door, but the mana just... dissolved. The walls are eating the magic.
+
+I’m tired. I’m cold. I have one clean diaper left in my bag, but I’m too terrified to change. If I take my armor off, whatever is in those vents will smell the vulnerability.
+
+The scratching is getting closer. It sounds like... giggling? But distorted. Tinny.
+
+If anyone finds this, don't look for the lever. Do not pull the lever marked "Sanitization."
+
+I think the Tower isn't a building. I think it's a—` }
+    ];
+
+    let currentPage = 0;
+    const contentRoot = document.getElementById('journal-content');
+    const pageCounter = document.getElementById('page-counter');
+    const btnPrev = document.getElementById('btn-prev');
+    const btnNext = document.getElementById('btn-next');
+
+    function iconBook() {
+      return `<svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 text-amber-900 mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20"/><path d="M20 22V6a2 2 0 0 0-2-2H6.5A2.5 2.5 0 0 0 4 6.5V19.5"/><path d="M20 6H9"/></svg>`;
+    }
+    function iconSkull(size='w-4 h-4') {
+      return `<svg xmlns='http://www.w3.org/2000/svg' class='${size} inline-block mr-2 mb-1' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 20v-2'/><path d='M6 20v-2'/><path d='M18 20v-2'/><path d='M19 12a7 7 0 1 0-14 0c0 1.38.56 2.63 1.46 3.54C7.37 16.44 8 17.62 8 19h8c0-1.38.63-2.56 1.54-3.46A5 5 0 0 0 19 12Z'/><path d='M10 10h.01'/><path d='M14 10h.01'/></svg>`;
+    }
+    function iconMapPin() {
+      return `<svg xmlns='http://www.w3.org/2000/svg' class='w-3 h-3' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M20 10c0 7-8 12-8 12s-8-5-8-12a8 8 0 1 1 16 0Z'/><circle cx='12' cy='10' r='3'/></svg>`;
+    }
+
+    function render() {
+      const entry = journalEntries[currentPage];
+      btnPrev.disabled = currentPage === 0;
+      btnNext.disabled = currentPage === journalEntries.length - 1;
+      pageCounter.textContent = `Page ${currentPage + 1} of ${journalEntries.length}`;
+
+      if (entry.type === 'cover') {
+        contentRoot.innerHTML = `
+          <div class="flex flex-col items-center justify-center h-full text-center space-y-8 border-4 border-double border-stone-800 p-8 m-4 bg-[#dccba6] shadow-inner rounded-r-lg">
+            ${iconBook()}
+            <div>
+              <h1 class="text-4xl font-bold tracking-widest text-stone-900 uppercase border-b-2 border-stone-800 pb-2 mb-2">${entry.title}</h1>
+              <h2 class="text-xl text-stone-700 italic font-semibold">${entry.subtitle}</h2>
+            </div>
+            <div class="space-y-2 text-stone-800">
+              ${entry.details.map(d => `<p class="text-sm font-medium tracking-wide uppercase">${d}</p>`).join('')}
+            </div>
+            <div class="mt-12 p-4 border-2 border-red-900/30 bg-red-900/5 text-red-900 text-xs font-bold tracking-widest uppercase w-full">
+              ${iconSkull()} ${entry.warning}
+            </div>
+          </div>`;
+        return;
+      }
+
+      // Content page
+      const paragraphs = (entry.content || '').split(/\n\n/);
+      contentRoot.innerHTML = `
+        <div class="flex flex-col h-full animate-fade-in">
+          <div class="flex justify-between items-end border-b-2 border-stone-400/50 pb-2 mb-6">
+            <h2 class="text-2xl font-bold text-amber-950">${entry.title}</h2>
+            <span class="text-sm font-mono text-stone-500 uppercase tracking-tight flex items-center gap-1">${iconMapPin()} ${entry.date || ''}</span>
+          </div>
+          <div class="flex-1 overflow-y-auto pr-2 custom-scrollbar">
+            ${paragraphs.map(p => `<p class="mb-4 text-lg leading-relaxed text-stone-800 indent-4 first-letter:text-3xl first-letter:font-bold first-letter:text-amber-900 first-letter:mr-1">${p.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</p>`).join('')}
+            ${entry.id === 'entry-18' ? `
+              <div class="mt-8 border-t border-stone-400 pt-4 text-center">
+                <p class="text-red-900/70 text-sm italic font-mono tracking-widest">[ END OF RECORD ]</p>
+                <div class="flex justify-center gap-2 mt-2 opacity-50">
+                  <span class="w-2 h-2 bg-stone-800 rounded-full animate-pulse"></span>
+                  <span class="w-2 h-2 bg-stone-800 rounded-full animate-pulse" style="animation-delay: .15s;"></span>
+                  <span class="w-2 h-2 bg-stone-800 rounded-full animate-pulse" style="animation-delay: .3s;"></span>
+                </div>
+              </div>` : ''}
+          </div>
+        </div>`;
+    }
+
+    btnPrev.addEventListener('click', () => { if (currentPage > 0) { currentPage -= 1; render(); } });
+    btnNext.addEventListener('click', () => { if (currentPage < journalEntries.length - 1) { currentPage += 1; render(); } });
+
+    // Initial paint
+    render();
+  </script>
+</body>
+</html>
