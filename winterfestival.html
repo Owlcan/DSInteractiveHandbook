@@ -141,7 +141,10 @@
         <div id="quizView" class="hidden">
             <div class="flex justify-between items-end mb-4 border-b border-blue-400/30 pb-2">
                 <span class="text-[var(--accent-ice)] font-bold text-xl" id="quizUserDisplay"></span>
-                <span class="text-[var(--accent-gold)]">Verse <span id="verseNumber">1</span> of 5</span>
+                <div class="flex items-center gap-4">
+                    <span class="text-[var(--accent-gold)]">Verse <span id="verseNumber">1</span> of 5</span>
+                    <span class="text-blue-200 font-sans text-sm">Answered: <span id="answeredCount">0</span>/5</span>
+                </div>
             </div>
 
             <div class="bg-blue-950/60 p-6 rounded-lg border border-[var(--accent-ice)] mb-6 min-h-[200px] flex flex-col justify-center items-center text-center">
@@ -549,6 +552,235 @@
                     hint: "The type of mischievous action Padded Pouncers often perform."
                 }
             ]
+            ,
+            discipline: [
+                {
+                    lines: [
+                        "To classes and dungeons, you must look your best,",
+                        "A vest and a bowtie, put to the test.",
+                        "For adventures and lessons, it is the norm,",
+                        "To always be wearing your school ______."
+                    ],
+                    correct: "Uniform",
+                    options: ["Uniform", "Emblem", "Regalia", "Badge"],
+                    hint: "The required attire for all students on weekdays."
+                },
+                {
+                    lines: [
+                        "If you spill on the sofa or soil the rug,",
+                        "You won't get a sticker or even a hug.",
+                        "For making a mess, the Dean sends a warning,",
+                        "Immediate ______ until the next morning."
+                    ],
+                    correct: "Diapering",
+                    options: ["Diapering", "Detention", "De-merit", "Downtime"],
+                    hint: "The punishment for soiling school property."
+                },
+                {
+                    lines: [
+                        "No smoking or drinking in dorms, it is said,",
+                        "Or you'll wake up with a pounding head.",
+                        "These grown-up vices are strictly denied,",
+                        "They are absolutely ______ inside."
+                    ],
+                    correct: "Prohibited",
+                    options: ["Prohibited", "Discouraged", "Limited", "Conditional"],
+                    hint: "The rule regarding alcohol and smoke."
+                },
+                {
+                    lines: [
+                        "They roam the hallways with badges so bright,",
+                        "Keeping the peace by day and by night.",
+                        "If you are running or causing a fuss,",
+                        "The Hall ______ will come for us."
+                    ],
+                    correct: "Monitors",
+                    options: ["Monitors", "Marshals", "Prefects", "Watchers"],
+                    hint: "The students authorized to enforce rules."
+                },
+                {
+                    lines: [
+                        "For extra bad brats who won't learn their part,",
+                        "A special garment is state of the art.",
+                        "It clicks and it seals with a magical sound,",
+                        "A ______ Diaper means you are bound."
+                    ],
+                    correct: "Locking",
+                    options: ["Locking", "Layered", "Linked", "Latticed"],
+                    hint: "A type of punishment diaper that cannot be removed."
+                }
+            ],
+            races: [
+                {
+                    lines: [
+                        "With twitching tails and ears so high,",
+                        "They chase the lasers across the sky.",
+                        "Nimble and quick, with fur soft as silk,",
+                        "The cute ______ love a saucer of milk."
+                    ],
+                    correct: "Kittenfolk",
+                    options: ["Kittenfolk", "Catlings", "Felidans", "Meowkin"],
+                    hint: "The feline humanoids of the Academy."
+                },
+                {
+                    lines: [
+                        "Loyal and loud with a happy bark,",
+                        "Chasing the balls all through the park.",
+                        "Sturdy and strong, they never will fail,",
+                        "The ______ wags a very fast tail."
+                    ],
+                    correct: "Pupperlings",
+                    options: ["Pupperlings", "Doglings", "Houndfolk", "Pupkin"],
+                    hint: "The canine humanoids known for boundless energy."
+                },
+                {
+                    lines: [
+                        "Digging deep tunnels beneath the ground,",
+                        "Where cozy roots and carrots are found.",
+                        "With mighty feet for a thump and a hop,",
+                        "The ______ never know when to stop."
+                    ],
+                    correct: "Bunbunkin",
+                    options: ["Bunbunkin", "Bunbunfolk", "Burrowkin", "Rabbitfolk"],
+                    hint: "The rabbit-folk who are natural burrowers."
+                },
+                {
+                    lines: [
+                        "Sly little tricksters with coats of red,",
+                        "Playing a prank before going to bed.",
+                        "Clever and keen in the woods or the box,",
+                        "You can't outsmart the laughing ______."
+                    ],
+                    correct: "Foxfolk",
+                    options: ["Foxfolk", "Vulpin", "Foxkin", "Redtails"],
+                    hint: "The vulpine kin known for keen senses."
+                },
+                {
+                    lines: [
+                        "With a leaf on their head and a belly so round,",
+                        "Transforming into a teapot found.",
+                        "Drumming their tummies with a rhythmic din,",
+                        "The shapeshifting, happy ______."
+                    ],
+                    correct: "Tanukijin",
+                    options: ["Tanukijin", "Tanukkin", "Raccoonfolk", "Leaflings"],
+                    hint: "The raccoon-dog people known for transformation."
+                }
+            ],
+            cantrips: [
+                {
+                    lines: [
+                        "You point a finger and summon a wrap,",
+                        "To cover a bottom with a soft snap.",
+                        "It's fresh and it's clean, a magical covering,",
+                        "The spell of ______ is hovering."
+                    ],
+                    correct: "Diapering",
+                    options: ["Diapering", "Swaddling", "Wardening", "Binding"],
+                    hint: "A conjuration cantrip that summons a fresh diaper."
+                },
+                {
+                    lines: [
+                        "A spectral hand with a playful sting,",
+                        "Makes naughty students quietly sing.",
+                        "It slows you down with a sharp little yank,",
+                        "The simple cantrip we call ______."
+                    ],
+                    correct: "Spank",
+                    options: ["Spank", "Smack", "Swipe", "Slap"],
+                    hint: "An evocation cantrip that reduces speed."
+                },
+                {
+                    lines: [
+                        "To clean a stain or warm up a treat,",
+                        "To make a smell turn flowery sweet.",
+                        "A tiny blessing for things big and small,",
+                        "A Little ______ answers the call."
+                    ],
+                    correct: "Miracle",
+                    options: ["Miracle", "Blessing", "Grace", "Charm"],
+                    hint: "A divine cantrip for cleaning, flavoring, or warming."
+                },
+                {
+                    lines: [
+                        "A banana peel or a sudden sneeze,",
+                        "A hiccup fit or a wobbly breeze.",
+                        "You didn't mean to, you didn't intend,",
+                        "A Spontaneous ______ brings it to end."
+                    ],
+                    correct: "Accident",
+                    options: ["Accident", "Mishap", "Blunder", "Slip"],
+                    hint: "An enchantment cantrip that causes trips, sneezes, or farts."
+                },
+                {
+                    lines: [
+                        "A ghostly hand in a bowl of warm fluid,",
+                        "Pranking a fighter, a mage, or a druid.",
+                        "While they are sleeping, the magic creeps in,",
+                        "Magehand in Warm ______ creates a grin."
+                    ],
+                    correct: "Water",
+                    options: ["Water", "Bath", "Broth", "Tea"],
+                    hint: "A cursed transmutation cantrip for sleeping targets."
+                }
+            ],
+            faq: [
+                {
+                    lines: [
+                        "New students ask what guides their day,",
+                        "From dorm to class, from work to play.",
+                        "The handbook’s wisdom keeps chaos at bay,",
+                        "First rule: respect the ______ in every way."
+                    ],
+                    correct: "Rules",
+                    options: ["Rules", "Headmaster", "Prefect", "Monitor"],
+                    hint: "The authority referenced across the FAQ and rules."
+                },
+                {
+                    lines: [
+                        "When schedules clash and worries rise,",
+                        "You’ll find the truth without disguise.",
+                        "For policies, maps, and where to sign,",
+                        "Consult the ______ to align."
+                    ],
+                    correct: "FAQ",
+                    options: ["FAQ", "Ledger", "Syllabus", "Gazette"],
+                    hint: "The frequently asked questions document students rely on."
+                },
+                {
+                    lines: [
+                        "Curfew bells and quiet halls,",
+                        "Keep peace within our padded walls.",
+                        "If night-time roaming tempts your feet,",
+                        "Return to dorm at ______ complete."
+                    ],
+                    correct: "Nightfall",
+                    options: ["Nightfall", "Dusk", "Midnight", "Sundown"],
+                    hint: "The typical cutoff mentioned in policies."
+                },
+                {
+                    lines: [
+                        "Need help fast? Don’t go it alone,",
+                        "Assistance waits by badge and tone.",
+                        "For safety first and gentle aid,",
+                        "Call a Hall ______ unafraid."
+                    ],
+                    correct: "Monitor",
+                    options: ["Monitor", "Marshal", "Prefect", "Runner"],
+                    hint: "Student helpers referenced throughout the handbook."
+                },
+                {
+                    lines: [
+                        "From cantrips small to lessons grand,",
+                        "You’ll learn to weave with steady hand.",
+                        "To tidy spills and sweeten scent,",
+                        "Try Little ______ as it’s meant."
+                    ],
+                    correct: "Miracle",
+                    options: ["Miracle", "Blessing", "Grace", "Charm"],
+                    hint: "A frequently cited helpful spell in the FAQ."
+                }
+            ]
         };
 
         // 2. Rewards (Treats)
@@ -868,6 +1100,7 @@
             errorMsg: document.getElementById('nameError'),
             quizUser: document.getElementById('quizUserDisplay'),
             verseNum: document.getElementById('verseNumber'),
+            answeredCount: document.getElementById('answeredCount'),
             verseText: document.getElementById('verseText'),
             optionsContainer: document.getElementById('optionsContainer'),
             submitBtn: document.getElementById('submitAnswerBtn'),
@@ -882,7 +1115,10 @@
         window.openAssetModal = function(name, desc, imgSrc) {
             const modal = document.getElementById('assetModal');
             document.getElementById('assetModalTitle').innerText = name;
-            document.getElementById('assetModalDesc').innerText = desc;
+            const descEl = document.getElementById('assetModalDesc');
+            // Reset description area to default text layout for single asset view
+            descEl.className = 'text-blue-100 text-lg font-sans text-center';
+            descEl.innerText = desc;
             const imgEl = document.getElementById('assetModalImage');
             if (imgSrc) {
                 imgEl.src = imgSrc;
@@ -917,9 +1153,18 @@
             currentState.answers = [];
             currentState.selectedOption = null;
 
-            // Randomly choose which carol to use this run
+            // Randomly choose which carol to use this run (slight bias for easy carols)
             const keys = Object.keys(carolSets);
-            const chosenKey = keys[Math.floor(Math.random() * keys.length)];
+            const weights = {};
+            keys.forEach(k => { weights[k] = 1; });
+            ['discipline','faq','races'].forEach(k => { if (weights[k] !== undefined) weights[k] += 0.03; });
+            // Build a weighted pool (scaled to whole numbers for simplicity)
+            const pool = [];
+            keys.forEach(k => {
+                const count = Math.max(1, Math.round(weights[k] * 100));
+                for (let i = 0; i < count; i++) pool.push(k);
+            });
+            const chosenKey = pool[Math.floor(Math.random() * pool.length)];
             currentState.activeCarolKey = chosenKey;
             currentState.activeCarolVerses = carolSets[chosenKey];
             
@@ -927,6 +1172,7 @@
             views.intro.classList.add('hidden');
             views.quiz.classList.remove('hidden');
             elements.quizUser.innerText = `Singer: ${name}`;
+            elements.answeredCount.innerText = '0';
             
             loadQuestion();
         }
@@ -946,9 +1192,14 @@
             });
             elements.verseText.innerHTML = html;
 
-            // Build multiple-choice options
+            // Build multiple-choice options (shuffle order)
             elements.optionsContainer.innerHTML = "";
-            currentQ.options.forEach(opt => {
+            const opts = [...currentQ.options];
+            for (let i = opts.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [opts[i], opts[j]] = [opts[j], opts[i]];
+            }
+            opts.forEach(opt => {
                 const btn = document.createElement('button');
                 btn.type = 'button';
                 btn.textContent = opt;
@@ -979,6 +1230,7 @@
 
             if (isCorrect) currentState.score++;
             currentState.answers.push(isCorrect);
+            elements.answeredCount.innerText = String(currentState.answers.length);
 
             nextQuestion();
         }
@@ -1007,25 +1259,74 @@
             elements.scoreDisplay.innerHTML = `You got <span class="font-bold text-white">${score}</span> out of 5 verses correct.`;
 
             if (isNice) {
-                // TREAT
+                // TREAT: multiple candies with perfect-score magic probabilities
                 elements.resultTitle.innerText = "A Merry Harvest & Wintertide!";
                 elements.resultTitle.className = "text-4xl font-bold mb-4 font-cinzel text-[var(--accent-ice)]";
                 elements.rewardBox.className = "bg-blue-900/60 p-6 rounded-lg border-2 border-[var(--accent-ice)] mb-8";
-                
-                const reward = rand(treats);
-                const imgSrc = (typeof getImageForResult === 'function')
-                    ? getImageForResult({ name: reward.name, type: reward.type })
-                    : null;
-                
-                // Construct Reward HTML - Added frost-frame to result image
-                let html = `
-                    <div class="text-[var(--accent-gold)] text-xl font-bold mb-4">You earned a Treat!</div>
-                    ${imgSrc ? `<img src="${imgSrc}" class="w-[24rem] max-w-[90%] h-auto object-contain mx-auto mb-4 frost-frame cursor-pointer" onclick="openAssetModal('${reward.name.replace(/'/g, "\\'")}', '${reward.desc.replace(/'/g, "\\'")}', '${imgSrc}')">` : ''}
-                    <div class="text-2xl text-white font-cinzel mb-2">${reward.name}</div>
-                    <div class="text-blue-200 italic">${reward.desc}</div>
-                    <div class="text-sm mt-4 text-[var(--accent-ice)] border px-3 py-1 rounded border-blue-500 inline-block">${reward.type}</div>
-                `;
-                elements.rewardContent.innerHTML = html;
+
+                // Reward count and magical upgrade distribution
+                let rewardCount = 2 + Math.floor(Math.random() * 2); // 2-3 for normal success
+                let magicalUpgrades = 0;
+                if (score === 5) {
+                    rewardCount = Math.max(5, rewardCount);
+                    const roll = Math.random();
+                    if (roll < 0.25) magicalUpgrades = 2; // 25%
+                    else if (roll < 0.75) magicalUpgrades = 1; // 50%
+                    else magicalUpgrades = 0; // 25%
+                }
+
+                const rewards = [];
+                for (let i = 0; i < rewardCount; i++) {
+                    const pool = magicalUpgrades > 0 ? magicalCandies : treats;
+                    const r = rand(pool);
+                    rewards.push(r);
+                    if (magicalUpgrades > 0) magicalUpgrades--;
+                }
+
+                // Persist to Treat Sack with timestamp
+                saveRewardsForUser(currentState.username, rewards);
+
+                // Render a grid of bordered cards
+                elements.rewardContent.innerHTML = '';
+                const grid = document.createElement('div');
+                grid.className = 'grid grid-cols-1 sm:grid-cols-2 gap-4 w-full';
+                rewards.forEach(r => {
+                    const imgSrc = (typeof getImageForResult === 'function') ? getImageForResult({ name: r.name, type: r.type }) : null;
+                    const borderClass = r.type === 'Magical Candy' ? 'border-purple-300' : (r.type === 'Full-Sized Treat' ? 'border-yellow-300' : 'border-blue-300');
+                    const card = document.createElement('div');
+                    card.className = `bg-blue-950/70 rounded-lg p-3 border ${borderClass}`;
+                    const title = document.createElement('h3');
+                    title.className = 'text-lg font-bold text-[var(--accent-ice)]';
+                    title.innerText = r.name;
+                    const img = document.createElement('img');
+                    img.className = 'w-64 max-w-full frost-frame mx-auto';
+                    img.alt = r.name;
+                    if (imgSrc) img.src = imgSrc;
+                    const desc = document.createElement('p');
+                    desc.className = 'text-blue-100 text-sm mt-2 font-sans';
+                    desc.innerText = r.desc;
+                    const tag = document.createElement('div');
+                    tag.className = 'text-xs mt-2 text-[var(--accent-ice)] border px-2 py-1 rounded border-blue-500 inline-block';
+                    tag.innerText = r.type;
+                    const btn = document.createElement('button');
+                    btn.className = 'mt-2 text-sm bg-[var(--accent-gold)] hover:bg-yellow-300 text-blue-900 font-bold py-1 px-3 rounded';
+                    btn.innerText = 'View';
+                    btn.addEventListener('click', () => openAssetModal(r.name, r.desc, imgSrc));
+                    card.appendChild(title);
+                    card.appendChild(img);
+                    card.appendChild(desc);
+                    card.appendChild(tag);
+                    card.appendChild(btn);
+                    grid.appendChild(card);
+                });
+                elements.rewardContent.appendChild(grid);
+
+                // Treat Sack button
+                const sackBtn = document.createElement('button');
+                sackBtn.className = 'mt-4 bg-[var(--accent-ice)] hover:bg-white text-blue-900 font-bold py-2 px-4 rounded';
+                sackBtn.innerText = 'Open Treat Sack';
+                sackBtn.addEventListener('click', openTreatSack);
+                elements.rewardContent.appendChild(sackBtn);
 
             } else {
                 // TRICK (PRANK)
@@ -1044,8 +1345,70 @@
                     html += `<div class="mt-3 text-sm text-red-200 opacity-75 font-serif border-t border-red-800 pt-2">(Includes a ${trickEntry.diaperType} diaper effect!)</div>`;
                 }
 
+                // Offer immediate retry if prank implies reroll/advantage
+                const textLower = trickEntry.text.toLowerCase();
+                if (textLower.includes('roll') || textLower.includes('advantage')) {
+                    html += `<div class="mt-4"><button class="bg-[var(--accent-ice)] hover:bg-white text-blue-900 font-bold py-2 px-4 rounded" id="retryNowBtn">Try Again Now</button></div>`;
+                }
+
                 elements.rewardContent.innerHTML = html;
+
+                const retryBtn = document.getElementById('retryNowBtn');
+                if (retryBtn) {
+                    retryBtn.addEventListener('click', () => {
+                        // Restart same carol with same username immediately
+                        views.result.classList.add('hidden');
+                        views.quiz.classList.remove('hidden');
+                        currentState.qIndex = 0;
+                        currentState.score = 0;
+                        currentState.answers = [];
+                        currentState.selectedOption = null;
+                        elements.quizUser.innerText = `Singer: ${currentState.username}`;
+                        elements.answeredCount && (elements.answeredCount.innerText = '0');
+                        loadQuestion();
+                    });
+                }
             }
+        }
+
+        // --- TREAT SACK STORAGE & UI ---
+        const TREAT_SACK_KEY = 'wintertideTreatSack';
+        function getTreatSack() {
+            try { return JSON.parse(localStorage.getItem(TREAT_SACK_KEY) || '{}'); } catch { return {}; }
+        }
+        function saveTreatSack(sack) {
+            localStorage.setItem(TREAT_SACK_KEY, JSON.stringify(sack));
+        }
+        function saveRewardsForUser(username, rewards) {
+            const sack = getTreatSack();
+            const now = new Date().toISOString();
+            if (!sack[username]) sack[username] = [];
+            rewards.forEach(r => {
+                const img = (typeof getImageForResult === 'function') ? getImageForResult({ name: r.name, type: r.type }) : null;
+                sack[username].push({ name: r.name, type: r.type, desc: r.desc, img, timestamp: now });
+            });
+            saveTreatSack(sack);
+        }
+        function openTreatSack() {
+            const username = currentState.username || elements.nameInput.value.trim() || 'Guest';
+            const sack = getTreatSack();
+            const items = sack[username] || [];
+            const modal = document.getElementById('assetModal');
+            document.getElementById('assetModalTitle').innerText = `${username}'s Treat Sack (${items.length})`;
+            const descEl = document.getElementById('assetModalDesc');
+            // Configure description area as a responsive grid for tiled rewards
+            descEl.innerText = '';
+            // Fixed two-column layout for larger tiles
+            descEl.className = 'grid grid-cols-2 gap-6 text-blue-100 font-sans';
+            const imgEl = document.getElementById('assetModalImage');
+            imgEl.classList.add('hidden');
+            const listHtml = items.slice().reverse().map(it => {
+                const date = new Date(it.timestamp || Date.now()).toLocaleString();
+                const imgTag = it.img ? `<img src="${it.img}" alt="${it.name}" class="w-40 h-40 object-contain frost-frame mb-2" />` : '';
+                return `<div class="bg-blue-900/40 border border-[var(--accent-ice)] rounded-lg p-4 flex flex-col items-center">${imgTag}<div class="text-blue-100 text-sm text-center"><div class="font-bold">${it.name}</div><div class="italic text-blue-300">${it.type}</div><div class="text-blue-400">${date}</div></div></div>`;
+            }).join('');
+            descEl.innerHTML = listHtml || '<div class="col-span-full text-center text-blue-100">No treats yet—sing a carol!</div>';
+            modal.classList.remove('hidden');
         }
 
         function restart() {
