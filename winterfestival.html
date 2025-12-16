@@ -825,7 +825,15 @@
             { name: "Padded Playground Pebbles", desc: "Simple candy-coated chocolate pieces in a variety of bright, primary colors.", type: "Mundane Candy" },
             { name: "Plushie-Pal Gummy", desc: "Assorted fruit gummies shaped like common plush animals: bears, rabbits, penguins, and dragons.", type: "Mundane Candy" },
             { name: "Pumpkin Patch 'Mud'", desc: "A small cup of chocolate pudding with a crushed-cookie 'dirt' topping and a tiny candy pumpkin.", type: "Mundane Candy" },
-            { name: "'Juice Box' Jelly", desc: "A rectangular, juice-filled gummy designed to be bitten into, releasing a burst of flavor.", type: "Mundane Candy" }
+            { name: "'Juice Box' Jelly", desc: "A rectangular, juice-filled gummy designed to be bitten into, releasing a burst of flavor.", type: "Mundane Candy" },
+            // Winter Candy Effects (Mundane)
+            { name: "Gloom-Bloom Licorice Whips", desc: "Recover an additional 1d4 hit points.", type: "Mundane Candy" },
+            { name: "Grin-Eater's Gummi Guts", desc: "Recover an additional 1d4 hit points.", type: "Mundane Candy" },
+            { name: "Phantom's Fine Fuzz Cotton Candy", desc: "Recover an additional 1d4 hit points.", type: "Mundane Candy" },
+            { name: "Mistweaver Mints", desc: "Recover an additional 1d4 hit points.", type: "Mundane Candy" },
+            { name: "Siren's Scale Suckers", desc: "Recover an additional 1d4 hit points.", type: "Mundane Candy" },
+            { name: "Void-Pup Pop Rocks", desc: "Recover an additional 1d4 hit points.", type: "Mundane Candy" },
+            { name: "Whispering Wraith Fudge", desc: "Recover an additional 1d4 hit points.", type: "Mundane Candy" }
         ];
 
         const magicalCandies = [
@@ -842,7 +850,13 @@
             { name: "Conjurer's 'Diaper' Cookie", desc: "A sugar cookie with a diaper pin etched in the frosting. (Cast the *Diapering* cantrip at will for 8 hours.) If consumed within 2 rounds of receiving it, you must make a Potty Check.", type: "Magical Candy" },
             { name: "Sleeper's Sucker", desc: "A lavender and honey-flavored lollipop. (Cast *Sleep* (1st-level) once.) If consumed within 2 rounds of receiving it, you must make a Potty Check.", type: "Magical Candy" },
             { name: "Magical 'Tough' Toffee", desc: "This brick-hard toffee is magically enchanted. (Cast *Blade Ward* as a bonus action for 8 hours.) If consumed within 2 rounds of receiving it, you must make a Potty Check.", type: "Magical Candy" },
-            { name: "'Fear' Fizzie", desc: "A sour, fizzy candy associated with Umbra's 'protection.' (Cast *Cause Fear* (1st-level) once.) If consumed within 2 rounds of receiving it, you must make a Potty Check.", type: "Magical Candy" }
+            { name: "'Fear' Fizzie", desc: "A sour, fizzy candy associated with Umbra's 'protection.' (Cast *Cause Fear* (1st-level) once.) If consumed within 2 rounds of receiving it, you must make a Potty Check.", type: "Magical Candy" },
+            // Winter Candy Effects (Magical)
+            { name: "Clockwork Critter Caramels", desc: "Recover an additional 1d4 hit points. AND Your movement speed increases by 10 feet for 1 hour.", type: "Magical Candy" },
+            { name: "Shambling Shroom Truffle", desc: "Recover an additional 1d4 hit points. AND Choose one saving throw (Strength, Dexterity, Constitution, Intelligence, Wisdom, or Charisma). You gain advantage on your next saving throw of that type made within the next hour.", type: "Magical Candy" },
+            { name: "Iron Tooth Jawbreaker", desc: "Recover an additional 1d4 hit points. AND For the next 30 minutes, your unarmed strikes deal an extra 1d4 bludgeoning damage.", type: "Magical Candy" },
+            { name: "Grave-Bloom Jelly Beans", desc: "Recover an additional 1d4 hit points. AND You gain advantage on your next Wisdom (Survival) check made within the next 2 hours.", type: "Magical Candy" },
+            { name: "Sire Reaver Scotch Gold Drops", desc: "Recover an additional 1d4 hit points. AND You gain 5 temporary hit points. Additionally, your next successful attack roll deals an extra 1d6 radiant damage.", type: "Magical Candy" }
         ];
 
         const fullSizedBars = [
@@ -975,6 +989,33 @@
             umbraltribefocuschew: CANDY_IMAGE_BASE + 'umbraltribefocuschew.webp',
             umbraveil: CANDY_IMAGE_BASE + 'umbraveil.webp'
         };
+        // Winter Candy Effects image mappings (normalized keys)
+        // These extend the lookup used by findBestCandyImage
+        // Provided asset paths in src/assets/images/candies
+        (function(){
+            const extra = {
+                // Note: file on disk currently has double extension .webp.webp
+                gloombloomlicoricewhips: CANDY_IMAGE_BASE + 'gloombloomlicoricewhips.webp.webp',
+                clockworkcrittercaramels: CANDY_IMAGE_BASE + 'clockworkcrittercaramels.webp',
+                grineatersgummiguts: CANDY_IMAGE_BASE + 'grineatersgummiguts.webp',
+                // Support both name variants for Phantom’s candy
+                phantomfuzzcottoncandy: CANDY_IMAGE_BASE + 'phantomfuzzcottoncandy.webp',
+                phantomfinefuzzcottoncandy: CANDY_IMAGE_BASE + 'phantomfuzzcottoncandy.webp',
+                shamblingshroomtruffle: CANDY_IMAGE_BASE + 'shamblingshroomtruffle.webp',
+                mistweavermints: CANDY_IMAGE_BASE + 'mistweavermints.webp',
+                sirensscalesuckers: CANDY_IMAGE_BASE + 'sirensscalesuckers.webp',
+                // singular alias for variants
+                sirensscalesucker: CANDY_IMAGE_BASE + 'sirensscalesuckers.webp',
+                voidpuppoprocks: CANDY_IMAGE_BASE + 'voidpuppoprocks.webp',
+                irontoothjawbreaker: CANDY_IMAGE_BASE + 'irontoothjawbreaker.webp',
+                whisperingwraithfudge: CANDY_IMAGE_BASE + 'whisperingwraithfudge.webp',
+                // Ensure Grave-Bloom normalization hits the correct file
+                gravebloomjellybeans: CANDY_IMAGE_BASE + 'gravebloomjellybeans.webp',
+                sirereaverscotchgolddrops: CANDY_IMAGE_BASE + 'sirereaverscotchgolddrops.webp',
+                goodiegumdropsunshinebar: CANDY_IMAGE_BASE + 'goodiegumdropsunshinebar.webp'
+            };
+            Object.assign(candyImageIndex, extra);
+        })();
 
         // Magical diaper images (local)
         const magicalDiaperImageIndex = {
@@ -1037,6 +1078,10 @@
             if (key.includes('plushie') && key.includes('pal') && (key.includes('gummy') || key.includes('gummies'))) return candyImageIndex['plushiepalgummy'];
             if (key.includes('kittenfolk') && key.includes('kat') && key.includes('tongue')) return candyImageIndex['kittenfolkkatstongue'];
             if (key.includes('playground') && key.includes('pebbles')) return candyImageIndex['paddedplaygroundpebbles'];
+            // Specific support for Siren's Scale Suckers name variants
+            if (key.includes('siren') && key.includes('scale') && (key.includes('sucker') || key.includes('suckers'))) return candyImageIndex['sirensscalesuckers'];
+            // Specific support for Grin-Eater's Gummi Guts variants
+            if ((key.includes('grineater') || (key.includes('grin') && key.includes('eater'))) && key.includes('gummi') && key.includes('guts')) return candyImageIndex['grineatersgummiguts'];
             if (key.includes('scholia') && key.includes('crestcoin')) {
                 if (key.includes('dark')) return candyImageIndex['schoolcrestcoindark'];
                 if (key.includes('white')) return candyImageIndex['schoolcrestcoinwhite'];

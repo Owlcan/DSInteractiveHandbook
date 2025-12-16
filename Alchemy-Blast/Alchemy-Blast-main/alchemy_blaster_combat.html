@@ -135,6 +135,17 @@
     <script>
         // Hide loading screen once all assets are loaded
         window.addEventListener('load', function() {
+            // Runtime check: ensure EnemySystem is loaded before Alchemy Blaster
+            try {
+                var hasEnemySystem = typeof window.Enemy === 'function';
+                console.log('[Combat HTML] EnemySystem availability at load:', hasEnemySystem);
+                if (!hasEnemySystem) {
+                    console.error('[Combat HTML] window.Enemy is undefined. Verify that assets/js/expedition/EnemySystem.js is present and loaded before alchemyblaster.js');
+                }
+            } catch (e) {
+                console.error('[Combat HTML] Error checking EnemySystem availability:', e);
+            }
+
             setTimeout(function() {
                 const loadingScreen = document.getElementById('loading');
                 loadingScreen.style.opacity = '0';

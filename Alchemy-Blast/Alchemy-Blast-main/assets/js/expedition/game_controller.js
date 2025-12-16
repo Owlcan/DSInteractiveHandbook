@@ -1025,6 +1025,11 @@ class GameController {
         
         // Initialize player based on character selection
         this.initializePlayer(character);
+
+        // Safety: ensure player starts centered and visible in the renderer's centered coordinate system
+        this.player.position.x = 0;
+        this.player.position.y = 200; // renderer sets this too; keep logic consistent
+        this.player.direction = this.player.direction || 'right';
         
         // Reset game elements
         this.enemies = [];
@@ -1227,12 +1232,16 @@ class GameController {
                     }
                 }
                 
-                // Play the shared spellfire sound (cycles between variants)
-                if (window.audioManager) {
-                    window.audioManager.playSpellfireSound();
-                } else if (this.audioManager) {
-                    this.audioManager.playSfx('playerShot');
-                }
+                // Play the shared spellfire sound (cycles between variants) with fallback
+                try {
+                    if (window.audioManager && typeof window.audioManager.playSpellfireSound === 'function') {
+                        window.audioManager.playSpellfireSound();
+                    } else if (this.audioManager && typeof this.audioManager.playSfx === 'function') {
+                        // Prefer canonical key; fallback to generic 'shoot' if missing
+                        try { this.audioManager.playSfx('playerShot'); }
+                        catch (_) { try { this.audioManager.playSfx('shoot'); } catch (_) {} }
+                    }
+                } catch (_) {}
             }
         } else if (character === 'aliza') {
             // Aliza: Technical shots with special patterns
@@ -1373,12 +1382,15 @@ class GameController {
                         break;
                 }
                 
-                // Play the shared spellfire sound (cycles between variants) - same as Dere
-                if (window.audioManager) {
-                    window.audioManager.playSpellfireSound();
-                } else if (this.audioManager) {
-                    this.audioManager.playSfx('playerShot');
-                }
+                // Play the shared spellfire sound with fallback
+                try {
+                    if (window.audioManager && typeof window.audioManager.playSpellfireSound === 'function') {
+                        window.audioManager.playSpellfireSound();
+                    } else if (this.audioManager && typeof this.audioManager.playSfx === 'function') {
+                        try { this.audioManager.playSfx('playerShot'); }
+                        catch (_) { try { this.audioManager.playSfx('shoot'); } catch (_) {} }
+                    }
+                } catch (_) {}
             }
         } else if (character === 'shinshi') {
             // Shinshi: Beam attack
@@ -1468,21 +1480,22 @@ class GameController {
         const screenWidth = this.canvas ? this.canvas.width : 800;
         const screenHeight = this.canvas ? this.canvas.height : 600;
         
-        // Create 5 vertical beams that span the entire screen
-        for (let i = 0; i < 5; i++) {
-            // Calculate beam position to center across the screen
-            // Divide screen into 5 equal sections, put beam in center of each section
+        // Create 7 vertical beams with edge coverage (slightly beyond screen) and extra height for off-screen enemies
+        const beamCount = 7; // -1..5 indices using original spacing yields two extra off-screen columns
+        const beamWidth = 70; // Slightly wider for overlap
+        const beamHeight = screenHeight * 4; // Extend well beyond top/bottom of screen
+        for (let i = -1; i <= 5; i++) {
+            // Divide screen into 5 equal sections, use i=-1 and i=5 for off-screen edge coverage
             const xPos = (i * (screenWidth / 5)) + (screenWidth / 10);
-            
             this.projectiles.specialBeams.push({
-                x: xPos - (screenWidth / 2), // Convert to game coordinates (centered at 0,0)
+                x: xPos - (screenWidth / 2), // Convert to centered game coordinates
                 y: 0,
-                width: 60, // Beam width
-                height: screenHeight * 2, // Ensure beam covers entire screen
+                width: beamWidth,
+                height: beamHeight,
                 damage: 15,
-                isVertical: true, // Mark as vertical beam
+                isVertical: true,
                 createdAt: Date.now(),
-                duration: 200 // Set duration to 200ms
+                duration: 200
             });
         }
         
@@ -1500,16 +1513,34 @@ class GameController {
         // Get damage from character mechanics
         const flashDamage = this.monsterLogic.characterMechanics.dere.firing.special.damage || 30;
         
+        // Helper to get enemy position (supports both formation objects and EnemySystem instances)
+        const getEnemyPos = (enemy) => {
+            if (!enemy) return { x: 0, y: 0 };
+            if (enemy.position && typeof enemy.position.x === 'number' && typeof enemy.position.y === 'number') {
+                return { x: enemy.position.x, y: enemy.position.y };
+            }
+            const cw = this.canvas ? this.canvas.width : 800;
+            const ch = this.canvas ? this.canvas.height : 600;
+            const ex = (typeof enemy.x === 'number') ? enemy.x - cw / 2 : 0;
+            const ey = (typeof enemy.y === 'number') ? enemy.y - ch / 2 : 0;
+            return { x: ex, y: ey };
+        };
+
         // Apply damage to all enemies on screen with visual effect
         for (const enemy of this.enemies) {
-            enemy.health -= flashDamage;
+            // Use EnemySystem's damage handler when available
+            if (enemy && typeof enemy.update === 'function' && 'x' in enemy && 'y' in enemy && typeof enemy.takeDamage === 'function') {
+                enemy.takeDamage(flashDamage);
+            } else {
+                enemy.health -= flashDamage;
+            }
             
             // Visual effect (to be rendered)
             if (!this.effects) this.effects = [];
-            
+            const ep = getEnemyPos(enemy);
             this.effects.push({
                 type: 'flash',
-                position: { x: enemy.position.x, y: enemy.position.y },
+                position: { x: ep.x, y: ep.y },
                 duration: 500,
                 startTime: Date.now()
             });
@@ -1802,6 +1833,29 @@ class GameController {
                 points: this.monsterLogic.getPoints(enemyPos.type),
                 isInFormation: true
             };
+
+            // Boss teleport scheduling state for controller-managed bosses
+            if (enemy.type && enemy.type.includes('boss') && !enemy.type.startsWith('darkmidboss')) {
+                let baseCooldown = 2000;
+                let distancePx = 240;
+                let minCooldown = 1000;
+                switch (enemy.type) {
+                    case 'darklingboss1':
+                        baseCooldown = 2500; distancePx = 180; break;
+                    case 'darklingboss2':
+                        baseCooldown = 2000; distancePx = 240; break;
+                    case 'darklingboss3':
+                        baseCooldown = 1600; distancePx = 300; break;
+                }
+                enemy.__tpBaseCooldownMs = baseCooldown;
+                enemy.__tpMinCooldownMs = minCooldown;
+                enemy.__tpDistancePx = distancePx;
+                enemy.__tpPauseFrames = 10;
+                enemy.__tpStartMs = Date.now();
+                const initialJitter = 300 + Math.random() * 400;
+                enemy.__tpNextAt = Date.now() + baseCooldown + initialJitter;
+                enemy.__tpPauseLeft = 0;
+            }
             
             // Add special properties from the formation
             if (enemyPos.isBoss) {
@@ -1864,40 +1918,177 @@ class GameController {
             
             this.enemies.push(enemy);
         }
+
+        // Normalize all spawned enemy positions into on-screen centered bounds to prevent off-screen spacing
+        {
+            const canvasWidth = this.canvas ? this.canvas.width : 800;
+            const canvasHeight = this.canvas ? this.canvas.height : 600;
+            const leftBound = -canvasWidth/2 + 40;
+            const rightBound = canvasWidth/2 - 40;
+            const topBound = -canvasHeight/2 + 60;
+            const bottomBound = canvasHeight/2 - 240; // keep well above player row
+            for (const e of this.enemies) {
+                if (!e || !e.position) continue;
+                if (e.position.x < leftBound) e.position.x = leftBound;
+                if (e.position.x > rightBound) e.position.x = rightBound;
+                if (e.position.y < topBound) e.position.y = topBound;
+                if (e.position.y > bottomBound) e.position.y = bottomBound;
+                if (e.basePosition) {
+                    if (e.basePosition.x < leftBound) e.basePosition.x = leftBound;
+                    if (e.basePosition.x > rightBound) e.basePosition.x = rightBound;
+                    if (e.basePosition.y < topBound) e.basePosition.y = topBound;
+                    if (e.basePosition.y > bottomBound) e.basePosition.y = bottomBound;
+                }
+            }
+        }
+
+        // Normalize mid-boss initial/base positions to keep them centered and well within bounds
+        // This prevents formations from anchoring mid-bosses near edges before movement/clamps run
+        if (this.enemies && this.enemies.length > 0) {
+            const canvasWidth = this.canvas ? this.canvas.width : 800;
+            const canvasHeight = this.canvas ? this.canvas.height : 600;
+            const marginX = 140; // match/stricter than runtime clamps
+            const marginTop = 60;
+            const marginBottom = 200;
+            const leftBound = -canvasWidth/2 + marginX;
+            const rightBound = canvasWidth/2 - marginX;
+            const topBound = -canvasHeight/2 + marginTop;
+            const bottomBound = canvasHeight/2 - marginBottom;
+
+            for (const e of this.enemies) {
+                if (e.type && (e.isMidBoss || e.type.startsWith('darkmidboss'))) {
+                    // Clamp basePosition first so formation math starts in a safe zone
+                    if (e.basePosition.x < leftBound) e.basePosition.x = leftBound;
+                    if (e.basePosition.x > rightBound) e.basePosition.x = rightBound;
+                    if (e.basePosition.y < topBound) e.basePosition.y = topBound;
+                    if (e.basePosition.y > bottomBound) e.basePosition.y = bottomBound;
+
+                    // Nudge position toward screen center to avoid initial edge loitering
+                    const dxCenter = 0 - e.basePosition.x;
+                    e.basePosition.x += Math.sign(dxCenter) * 10; // small immediate bias
+                    // Sync current position to base to avoid snap
+                    e.position.x = e.basePosition.x;
+                    e.position.y = e.basePosition.y;
+                }
+            }
+        }
         
         // Add mid-bosses if present in the formation
         if (formation.midBoss) {
             console.log('Adding mid-boss:', formation.midBoss.type);
-            this.enemies.push({
-                type: formation.midBoss.type,
-                position: { ...formation.midBoss.position },
-                basePosition: { ...formation.midBoss.position },
-                health: this.monsterLogic.getInitialHealth(formation.midBoss.type),
-                lastShotTime: Date.now(),
-                shotCooldown: this.monsterLogic.getShotCooldown(formation.midBoss.type),
-                speed: this.monsterLogic.getSpeed(formation.midBoss.type),
-                points: this.monsterLogic.getPoints(formation.midBoss.type),
-                isInFormation: false,
-                isMidBoss: true
-            });
+            const pos = formation.midBoss.position || { x: 0, y: 0 };
+            const gameProxy = {
+                canvas: this.canvas,
+                assets: this.assets || (this.gameModule && this.gameModule.assets) || {},
+                gameController: this,
+                particleSystem: this.particleSystem,
+                audioManager: this.audioManager,
+                spawnPowerup: this.spawnPowerup ? this.spawnPowerup.bind(this) : undefined,
+                enemyShoot: this.enemyShoot ? this.enemyShoot.bind(this) : undefined
+            };
+            try {
+                const enemyInst = (typeof window !== 'undefined' && typeof window.Enemy === 'function')
+                    ? new window.Enemy(gameProxy, formation.midBoss.type, pos.x, pos.y)
+                    : null;
+                if (enemyInst) {
+                    this.enemies.push(enemyInst);
+                    console.log('[GameController] Mid-boss spawned via EnemySystem at', Math.round(pos.x), Math.round(pos.y));
+                } else {
+                    console.error('[GameController] window.Enemy unavailable. Falling back to plain mid-boss object.');
+                    this.enemies.push({
+                        type: formation.midBoss.type,
+                        position: { ...pos },
+                        basePosition: { ...pos },
+                        health: this.monsterLogic.getInitialHealth(formation.midBoss.type),
+                        lastShotTime: Date.now(),
+                        shotCooldown: this.monsterLogic.getShotCooldown(formation.midBoss.type),
+                        speed: this.monsterLogic.getSpeed(formation.midBoss.type),
+                        points: this.monsterLogic.getPoints(formation.midBoss.type),
+                        isInFormation: false,
+                        isMidBoss: true
+                    });
+                }
+            } catch (err) {
+                console.error('[GameController] Failed to create EnemySystem mid-boss:', err);
+            }
         }
         
         // Add multiple mid-bosses if present
         if (formation.midBosses && Array.isArray(formation.midBosses)) {
             console.log(`Adding ${formation.midBosses.length} mid-bosses`);
             for (const midBoss of formation.midBosses) {
-                this.enemies.push({
-                    type: midBoss.type,
-                    position: { ...midBoss.position },
-                    basePosition: { ...midBoss.position },
-                    health: this.monsterLogic.getInitialHealth(midBoss.type),
-                    lastShotTime: Date.now(),
-                    shotCooldown: this.monsterLogic.getShotCooldown(midBoss.type),
-                    speed: this.monsterLogic.getSpeed(midBoss.type),
-                    points: this.monsterLogic.getPoints(midBoss.type),
-                    isInFormation: false,
-                    isMidBoss: true
-                });
+                const pos = midBoss.position || { x: 0, y: 0 };
+                const gameProxy = {
+                    canvas: this.canvas,
+                    assets: this.assets || (this.gameModule && this.gameModule.assets) || {},
+                    gameController: this,
+                    particleSystem: this.particleSystem,
+                    audioManager: this.audioManager,
+                    spawnPowerup: this.spawnPowerup ? this.spawnPowerup.bind(this) : undefined,
+                    enemyShoot: this.enemyShoot ? this.enemyShoot.bind(this) : undefined
+                };
+                try {
+                    const enemyInst = (typeof window !== 'undefined' && typeof window.Enemy === 'function')
+                        ? new window.Enemy(gameProxy, midBoss.type, pos.x, pos.y)
+                        : null;
+                    if (enemyInst) {
+                        this.enemies.push(enemyInst);
+                        console.log('[GameController] Mid-boss spawned via EnemySystem at', Math.round(pos.x), Math.round(pos.y));
+                    } else {
+                        console.error('[GameController] window.Enemy unavailable. Falling back to plain mid-boss object.');
+                        this.enemies.push({
+                            type: midBoss.type,
+                            position: { ...pos },
+                            basePosition: { ...pos },
+                            health: this.monsterLogic.getInitialHealth(midBoss.type),
+                            lastShotTime: Date.now(),
+                            shotCooldown: this.monsterLogic.getShotCooldown(midBoss.type),
+                            speed: this.monsterLogic.getSpeed(midBoss.type),
+                            points: this.monsterLogic.getPoints(midBoss.type),
+                            isInFormation: false,
+                            isMidBoss: true
+                        });
+                    }
+                } catch (err) {
+                    console.error('[GameController] Failed to create EnemySystem mid-boss:', err);
+                }
+            }
+        }
+
+        // Normalize boss initial/base positions as well to avoid edge/low spawn anomalies
+        if (this.enemies && this.enemies.length > 0) {
+            const canvasWidth = this.canvas ? this.canvas.width : 800;
+            const canvasHeight = this.canvas ? this.canvas.height : 600;
+            const marginX = 120; // bosses slightly wider
+            const marginTop = 80;
+            const marginBottom = 240;
+            const leftBound = -canvasWidth/2 + marginX;
+            const rightBound = canvasWidth/2 - marginX;
+            const topBound = -canvasHeight/2 + marginTop;
+            const bottomBound = canvasHeight/2 - marginBottom;
+
+            for (const e of this.enemies) {
+                if (e.type && e.type.includes('boss') && !e.type.startsWith('darkmidboss')) {
+                    if (!e.basePosition) e.basePosition = { ...e.position };
+                    // Clamp basePosition first so formation math starts in a safe zone
+                    if (e.basePosition.x < leftBound) e.basePosition.x = leftBound;
+                    if (e.basePosition.x > rightBound) e.basePosition.x = rightBound;
+                    if (e.basePosition.y < topBound) e.basePosition.y = topBound;
+                    if (e.basePosition.y > bottomBound) e.basePosition.y = bottomBound;
+                    // Nudge toward center
+                    const dxCenter = 0 - e.basePosition.x;
+                    e.basePosition.x += Math.sign(dxCenter) * 10;
+                    // Sync current position to base
+                    e.position.x = e.basePosition.x;
+                    e.position.y = e.basePosition.y;
+                }
+            }
+        }
+
+        // Overhaul containment: ensure mid-bosses and bosses do NOT stay in formation; movement lives in EnemySystem helpers only
+        for (const e of this.enemies) {
+            if (e.type && (e.type.startsWith('darkmidboss') || e.type.includes('boss'))) {
+                e.isInFormation = false;
             }
         }
         
@@ -2102,12 +2293,68 @@ class GameController {
     updateEnemies(timestamp) {
         for (let i = this.enemies.length - 1; i >= 0; i--) {
             const enemy = this.enemies[i];
+            // If this is an EnemySystem instance (has update() and x/y), let it fully manage itself
+            if (enemy && typeof enemy.update === 'function' && 'x' in enemy && 'y' in enemy) {
+                const remove = enemy.update(timestamp || Date.now());
+                if (remove) {
+                    this.enemies.splice(i, 1);
+                }
+                // Skip controller formation/teleport logic for EnemySystem-managed enemies
+                continue;
+            }
             
-            // HARD CONSTRAINT: Force mid-bosses to stay on screen
-            // Store original position before any movement
-            const originalPosition = { ...enemy.position };
+            // REMOVE HARD CONSTRAINT: EnemySystem owns mid-boss/boss bounds; do not force position here
+            // const originalPosition = { ...enemy.position }; // no longer used
+
+            // Boss teleport check (controller-managed bosses)
+            if (enemy && enemy.type && enemy.type.includes('boss') && !enemy.type.startsWith('darkmidboss')) {
+                const nowMs = timestamp || Date.now();
+                if (enemy.__tpNextAt && nowMs >= enemy.__tpNextAt) {
+                    const canvasW = this.canvas ? this.canvas.width : 800;
+                    const canvasH = this.canvas ? this.canvas.height : 600;
+                    const boundsPadding = 60;
+                    const angle = Math.random() * Math.PI * 2;
+                    const minMag = 60;
+                    const maxMag = Math.max(minMag, enemy.__tpDistancePx || 240);
+                    const mag = minMag + Math.random() * (maxMag - minMag);
+                    let targetX = enemy.position.x + Math.cos(angle) * mag;
+                    let targetY = enemy.position.y + Math.sin(angle) * mag;
+
+                    // Horizontal clamps
+                    if (targetX < boundsPadding) targetX = boundsPadding;
+                    if (targetX > canvasW - boundsPadding) targetX = canvasW - boundsPadding;
+
+                    // Player Y lane avoidance ±100px
+                    const playerY = this.canvas ? (this.canvas.height - 275) : 275;
+                    const laneHalf = 100;
+                    const laneMin = playerY - laneHalf;
+                    const laneMax = playerY + laneHalf;
+                    if (targetY >= laneMin && targetY <= laneMax) {
+                        const distToMin = Math.abs(targetY - laneMin);
+                        const distToMax = Math.abs(laneMax - targetY);
+                        targetY = distToMin < distToMax ? (laneMin - 1) : (laneMax + 1);
+                    }
+
+                    // Vertical safety
+                    const bossBottomCap = canvasH - 260;
+                    if (targetY > bossBottomCap) targetY = bossBottomCap;
+                    if (targetY < 0) targetY = 0;
+
+                    // Apply snap and pause
+                    enemy.position.x = targetX;
+                    enemy.position.y = targetY;
+                    enemy.__tpPauseLeft = enemy.__tpPauseFrames || 10;
+
+                    // Schedule next teleport with time-decay (−40ms/sec)
+                    const elapsed = (nowMs - (enemy.__tpStartMs || nowMs));
+                    const decayMs = 40 * (elapsed / 1000);
+                    const baseCd = enemy.__tpBaseCooldownMs || 2000;
+                    const nextCd = Math.max(enemy.__tpMinCooldownMs || 1000, baseCd - decayMs);
+                    enemy.__tpNextAt = nowMs + nextCd;
+                }
+            }
             
-            // Update enemy position based on formation and individual movement
+            // Update enemy position based on formation and individual movement (non-EnemySystem objects only)
             if (enemy.isInFormation) {
                 // Apply formation movement
                 enemy.position.x = enemy.basePosition.x + this.formationOffset.x;
@@ -2237,66 +2484,156 @@ class GameController {
                 }
                 
                 // Add individual minor movement relative to formation position
-                const enemyMovement = this.monsterLogic.getEnemyMovement(
-                    enemy.type, 
-                    enemy.position.x, 
-                    enemy.position.y, 
-                    true
-                )(timestamp);
-                
-                enemy.position.x = enemyMovement.x;
-                enemy.position.y = enemyMovement.y;
+                if (enemy.type.startsWith('darkmidboss')) {
+                    // Use EnemySystemHelpers for mid-boss movement deltas (centered coords)
+                    const canvasW = this.canvas ? this.canvas.width : 800;
+                    const canvasH = this.canvas ? this.canvas.height : 600;
+                    const cx = enemy.position.x - canvasW / 2;
+                    const cy = enemy.position.y - canvasH / 2;
+                    const d = window.EnemySystemHelpers.getMidBossDelta(
+                        enemy.type,
+                        cx,
+                        cy,
+                        canvasW,
+                        canvasH,
+                        timestamp
+                    );
+                    // Suppress movement during boss teleport pause
+                    if (enemy.__tpPauseLeft && enemy.__tpPauseLeft > 0) {
+                        enemy.__tpPauseLeft -= 1;
+                    } else {
+                        enemy.position.x += (d.x || 0);
+                        enemy.position.y += (d.y || 0);
+                    }
+                } else if (enemy.type.includes('boss')) {
+                    // Use EnemySystemBossHelpers for boss movement deltas (centered coords)
+                    const canvasW = this.canvas ? this.canvas.width : 800;
+                    const canvasH = this.canvas ? this.canvas.height : 600;
+                    const cx = enemy.position.x - canvasW / 2;
+                    const cy = enemy.position.y - canvasH / 2;
+                    const d = window.EnemySystemBossHelpers.getBossDelta(
+                        enemy.type,
+                        cx,
+                        cy,
+                        canvasW,
+                        canvasH,
+                        timestamp
+                    );
+                    // Suppress movement during teleport pause
+                    if (enemy.__tpPauseLeft && enemy.__tpPauseLeft > 0) {
+                        enemy.__tpPauseLeft -= 1;
+                    } else {
+                        enemy.position.x += (d.x || 0);
+                        enemy.position.y += (d.y || 0);
+                    }
+                } else {
+                    const enemyMovement = this.monsterLogic.getEnemyMovement(
+                        enemy.type, 
+                        enemy.position.x, 
+                        enemy.position.y, 
+                        true
+                    )(timestamp);
+                    // IMPORTANT: Treat movement function as delta, not absolute position
+                    enemy.position.x += (enemyMovement.x || 0);
+                    enemy.position.y += (enemyMovement.y || 0);
+                }
             } else {
                 // If enemy has broken from formation, update with individual pattern
-                const enemyMovement = this.monsterLogic.getEnemyMovement(
-                    enemy.type, 
-                    enemy.position.x, 
-                    enemy.position.y, 
-                    false
-                )(timestamp);
-                
-                enemy.position.x = enemyMovement.x;
-                enemy.position.y = enemyMovement.y;
+                if (enemy.type.startsWith('darkmidboss')) {
+                    const canvasW = this.canvas ? this.canvas.width : 800;
+                    const canvasH = this.canvas ? this.canvas.height : 600;
+                    const cx = enemy.position.x - canvasW / 2;
+                    const cy = enemy.position.y - canvasH / 2;
+                    const d = window.EnemySystemHelpers.getMidBossDelta(
+                        enemy.type,
+                        cx,
+                        cy,
+                        canvasW,
+                        canvasH,
+                        timestamp
+                    );
+                    enemy.position.x += (d.x || 0);
+                    enemy.position.y += (d.y || 0);
+                } else if (enemy.type.includes('boss')) {
+                    const canvasW = this.canvas ? this.canvas.width : 800;
+                    const canvasH = this.canvas ? this.canvas.height : 600;
+                    const cx = enemy.position.x - canvasW / 2;
+                    const cy = enemy.position.y - canvasH / 2;
+                    const d = window.EnemySystemBossHelpers.getBossDelta(
+                        enemy.type,
+                        cx,
+                        cy,
+                        canvasW,
+                        canvasH,
+                        timestamp
+                    );
+                    enemy.position.x += (d.x || 0);
+                    enemy.position.y += (d.y || 0);
+                } else {
+                    const enemyMovement = this.monsterLogic.getEnemyMovement(
+                        enemy.type, 
+                        enemy.position.x, 
+                        enemy.position.y, 
+                        false
+                    )(timestamp);
+                    // IMPORTANT: Treat movement function as delta, not absolute position
+                    enemy.position.x += (enemyMovement.x || 0);
+                    enemy.position.y += (enemyMovement.y || 0);
+                }
             }
             
-            // HARD CONSTRAINT: Force mid-bosses to stay on screen
-            // After all movement calculations, enforce boundary constraints for mid-bosses
-            if (enemy.isMidBoss || enemy.type.startsWith('darkmidboss')) {
-                // Get canvas bounds
+            // Clamp regular (non-boss, non-midboss) enemies to safe on-screen centered bounds each frame
+            // This prevents formations in Round 2+ from drifting below the player's confined space.
+            if (!(enemy.type && (enemy.type.includes('boss') || enemy.type.startsWith('darkmidboss'))) && !enemy.isFlyby) {
+                const cw = this.canvas ? this.canvas.width : 800;
+                const ch = this.canvas ? this.canvas.height : 600;
+                const leftBound = -cw / 2 + 40;
+                const rightBound = cw / 2 - 40;
+                const topBound = -ch / 2 + 60;
+                const bottomBound = ch / 2 - 240; // keep well above the player lane (~y=200)
+
+                if (enemy.position) {
+                    if (enemy.position.x < leftBound) enemy.position.x = leftBound;
+                    if (enemy.position.x > rightBound) enemy.position.x = rightBound;
+                    if (enemy.position.y < topBound) enemy.position.y = topBound;
+                    if (enemy.position.y > bottomBound) enemy.position.y = bottomBound;
+                }
+            }
+            
+            // Minimal hard clamp for extreme out-of-bounds to safeguard rendering
+            if (enemy.isMidBoss || enemy.type.startsWith('darkmidboss') || enemy.type.includes('boss')) {
                 const canvasWidth = this.canvas ? this.canvas.width : 800;
                 const canvasHeight = this.canvas ? this.canvas.height : 600;
-                
-                // Define strict boundaries (allow 50px of enemy to go off-screen at most)
-                const margin = 50;
-                const leftBound = -canvasWidth/2 + margin;
-                const rightBound = canvasWidth/2 - margin;
-                const topBound = -canvasHeight/2 + margin;
-                const bottomBound = canvasHeight/2 - margin;
-                
-                // Force position to stay within bounds
-                if (enemy.position.x < leftBound) enemy.position.x = leftBound;
-                if (enemy.position.x > rightBound) enemy.position.x = rightBound;
-                if (enemy.position.y < topBound) enemy.position.y = topBound;
-                if (enemy.position.y > bottomBound) enemy.position.y = bottomBound;
-                
-                // If position was constrained, also update basePosition to prevent elastic snapping
-                if (enemy.position.x !== originalPosition.x || enemy.position.y !== originalPosition.y) {
-                    enemy.basePosition.x += (enemy.position.x - originalPosition.x);
-                    enemy.basePosition.y += (enemy.position.y - originalPosition.y);
-                    
-                    // Debug log
-                    console.log(`CONSTRAINING MID-BOSS: Forced ${enemy.type} to stay on screen at (${enemy.position.x.toFixed(0)}, ${enemy.position.y.toFixed(0)})`);
-                }
+                const hardLeft = 0;
+                const hardRight = canvasWidth - (enemy.width || 80);
+                const hardTop = 0;
+                const hardBottom = canvasHeight - (enemy.height || 80);
+                if (enemy.position.x < hardLeft) enemy.position.x = hardLeft;
+                if (enemy.position.x > hardRight) enemy.position.x = hardRight;
+                if (enemy.position.y < hardTop) enemy.position.y = hardTop;
+                if (enemy.position.y > hardBottom) enemy.position.y = hardBottom;
             }
             
             // Handle enemy shooting
             if (Date.now() - enemy.lastShotTime > enemy.shotCooldown) {
-                const projectiles = this.monsterLogic.createProjectiles(
-                    enemy.type,
-                    enemy.position.x,
-                    enemy.position.y,
-                    this.player.position
-                );
+                let projectiles;
+                if (enemy.type.startsWith('darkmidboss')) {
+                    // Use EnemySystemHelpers to generate mid-boss projectiles
+                    projectiles = window.EnemySystemHelpers.getMidBossProjectiles(
+                        enemy.type,
+                        enemy.position.x,
+                        enemy.position.y,
+                        this.player.position.x,
+                        this.canvas ? (this.canvas.height - 275) : 275 // player collision Y
+                    );
+                } else {
+                    projectiles = this.monsterLogic.createProjectiles(
+                        enemy.type,
+                        enemy.position.x,
+                        enemy.position.y,
+                        this.player.position
+                    );
+                }
                 
                 // Properly register each projectile with the ProjectileManager
                 if (projectiles && projectiles.length > 0) {
@@ -2362,6 +2699,19 @@ class GameController {
      * @param {number} timestamp - Current timestamp for animation
      */
     updateProjectiles(timestamp) {
+        // Helper to get enemy position in centered coordinates (works for both EnemySystem and formation enemies)
+        const getEnemyPos = (enemy) => {
+            if (!enemy) return { x: 0, y: 0 };
+            if (enemy.position && typeof enemy.position.x === 'number' && typeof enemy.position.y === 'number') {
+                return { x: enemy.position.x, y: enemy.position.y };
+            }
+            const cw = this.canvas ? this.canvas.width : 800;
+            const ch = this.canvas ? this.canvas.height : 600;
+            const ex = (typeof enemy.x === 'number') ? enemy.x - cw / 2 : 0;
+            const ey = (typeof enemy.y === 'number') ? enemy.y - ch / 2 : 0;
+            return { x: ex, y: ey };
+        };
+
         // Update player projectiles
         for (let i = this.projectiles.player.length - 1; i >= 0; i--) {
             const projectile = this.projectiles.player[i];
@@ -2381,8 +2731,9 @@ class GameController {
                     let closestDistance = Infinity;
                     
                     for (const enemy of this.enemies) {
-                        const dx = enemy.position.x - projectile.x;
-                        const dy = enemy.position.y - projectile.y;
+                        const ep = getEnemyPos(enemy);
+                        const dx = ep.x - projectile.x;
+                        const dy = ep.y - projectile.y;
                         const distance = Math.sqrt(dx * dx + dy * dy);
                         
                         if (distance < closestDistance) {
@@ -2393,8 +2744,9 @@ class GameController {
                     
                     // Adjust velocity to home in on target
                     if (closestEnemy) {
-                        const dx = closestEnemy.position.x - projectile.x;
-                        const dy = closestEnemy.position.y - projectile.y;
+                        const ep = getEnemyPos(closestEnemy);
+                        const dx = ep.x - projectile.x;
+                        const dy = ep.y - projectile.y;
                         const angle = Math.atan2(dy, dx);
                         
                         // Use homingStrength to determine how aggressively projectile turns
@@ -2508,6 +2860,19 @@ class GameController {
      * Check collisions between game objects
      */
     checkCollisions() {
+        // Helper to get enemy position in centered coordinates for both shapes
+        const getEnemyPos = (enemy) => {
+            if (!enemy) return { x: 0, y: 0 };
+            if (enemy.position && typeof enemy.position.x === 'number' && typeof enemy.position.y === 'number') {
+                return { x: enemy.position.x, y: enemy.position.y };
+            }
+            // EnemySystem instances have canvas-space x/y; convert to centered space
+            const cw = this.canvas ? this.canvas.width : 800;
+            const ch = this.canvas ? this.canvas.height : 600;
+            const ex = (typeof enemy.x === 'number') ? enemy.x - cw / 2 : 0;
+            const ey = (typeof enemy.y === 'number') ? enemy.y - ch / 2 : 0;
+            return { x: ex, y: ey };
+        };
         // Player projectiles vs enemies
         for (let i = this.projectiles.player.length - 1; i >= 0; i--) {
             const projectile = this.projectiles.player[i];
@@ -2515,11 +2880,10 @@ class GameController {
             
             for (let j = this.enemies.length - 1; j >= 0; j--) {
                 const enemy = this.enemies[j];
-                
-                // Calculate distance WITHOUT applying the -350 offset
-                // since both projectile and enemy should use the same coordinate system
-                const dx = enemy.position.x - projectile.x;
-                const dy = enemy.position.y - projectile.y; 
+            const ep = getEnemyPos(enemy);
+            // Calculate distance in centered coordinate system
+            const dx = ep.x - projectile.x;
+            const dy = ep.y - projectile.y; 
                 const distance = Math.sqrt(dx * dx + dy * dy);
                 
                 // Collision radius depends on enemy type
@@ -2527,7 +2891,16 @@ class GameController {
                 
                 if (distance < collisionRadius) {
                     // Enemy hit
-                    enemy.health -= projectile.damage;
+                    // If EnemySystem instance, use its damage handler to trigger defeat/animation
+                    if (enemy && typeof enemy.update === 'function' && 'x' in enemy && 'y' in enemy && typeof enemy.takeDamage === 'function') {
+                        const defeated = enemy.takeDamage(projectile.damage || 1);
+                        if (defeated) {
+                            // Score will be added during EnemySystem defeat; keep controller wave count honest
+                            this.gameState.enemiesRemaining = Math.max(0, this.gameState.enemiesRemaining - 1);
+                        }
+                    } else {
+                        enemy.health -= projectile.damage;
+                    }
                     hitEnemy = true;
                     
                     // Break loop if not a piercing projectile
@@ -2548,20 +2921,24 @@ class GameController {
             for (const beam of this.projectiles.beams) {
                 for (let j = this.enemies.length - 1; j >= 0; j--) {
                     const enemy = this.enemies[j];
-                    
-                    // Check if enemy is within the beam's horizontal range
-                    // Beam extends from its x position with width
-                    const beamLeftX = beam.x - beam.width / 2;
-                    const beamRightX = beam.x + beam.width / 2;
+                    const ep = getEnemyPos(enemy);
+                    // Check if enemy is within the beam's horizontal range (with a small tolerance)
+                    const tolerance = 15; // widen collision slightly to remove deadzone feel
+                    const beamLeftX = beam.x - beam.width / 2 - tolerance;
+                    const beamRightX = beam.x + beam.width / 2 + tolerance;
                     
                     // Check if enemy is within the beam's vertical range
                     // Beam extends from player position to top of screen
-                    const enemyAdjustedY = enemy.position.y - 150; // Apply rendering offset
+                    const enemyAdjustedY = ep.y - 150; // Apply rendering offset
                     
-                    if (enemy.position.x >= beamLeftX && enemy.position.x <= beamRightX && 
-                        enemy.position.y <= this.player.position.y) {
+                    if (ep.x >= beamLeftX && ep.x <= beamRightX && 
+                        ep.y <= this.player.position.y) {
                         // Enemy is hit by the beam
-                        enemy.health -= beam.damage;
+                        if (enemy && typeof enemy.update === 'function' && 'x' in enemy && 'y' in enemy && typeof enemy.takeDamage === 'function') {
+                            enemy.takeDamage(beam.damage || 1);
+                        } else {
+                            enemy.health -= beam.damage;
+                        }
                         
                         // Add visual effect if we have a particle system
                         if (this.game && this.game.particleSystem) {
@@ -2579,16 +2956,23 @@ class GameController {
             for (const specialBeam of this.projectiles.specialBeams) {
                 for (let j = this.enemies.length - 1; j >= 0; j--) {
                     const enemy = this.enemies[j];
-                    const enemyAdjustedY = enemy.position.y - 350; // Apply rendering offset
+                    const ep = getEnemyPos(enemy);
+                    const enemyAdjustedY = ep.y; // Use centered Y; beam height already oversized for off-screen
                     
                     // Check if enemy is within the horizontal beam's vertical range
                     // Beam has full width but specific height
                     const beamTopY = specialBeam.y - specialBeam.height / 2;
                     const beamBottomY = specialBeam.y + specialBeam.height / 2;
+                    const beamLeftX = specialBeam.x - specialBeam.width / 2;
+                    const beamRightX = specialBeam.x + specialBeam.width / 2;
                     
-                    if (enemyAdjustedY >= beamTopY && enemyAdjustedY <= beamBottomY) {
+                    if (enemyAdjustedY >= beamTopY && enemyAdjustedY <= beamBottomY && ep.x >= beamLeftX && ep.x <= beamRightX) {
                         // Enemy is hit by the special beam
-                        enemy.health -= specialBeam.damage;
+                        if (enemy && typeof enemy.update === 'function' && 'x' in enemy && 'y' in enemy && typeof enemy.takeDamage === 'function') {
+                            enemy.takeDamage(specialBeam.damage || 1);
+                        } else {
+                            enemy.health -= specialBeam.damage;
+                        }
                     }
                 }
             }
@@ -2825,3 +3209,37 @@ class GameController {
 
 // Use a global variable instead to make the class accessible
 window.GameController = GameController;
+
+// Patch: Ensure bosses and mid-bosses are not re-anchored by formation logic
+// Wrap updateEnemies to delegate movement to EnemySystem and skip absolute formation overrides for these types.
+if (typeof GameController !== 'undefined' && !GameController.__enemyUpdatePatched) {
+    const originalUpdateEnemies = GameController.prototype.updateEnemies;
+    GameController.prototype.updateEnemies = function(timestamp) {
+        // Call original if it exists to retain regular enemy flow, but guard bosses/mid-bosses
+        if (typeof originalUpdateEnemies === 'function') {
+            // Before running original, mark bosses/mid-bosses out of formation
+            for (let i = 0; i < this.enemies.length; i++) {
+                const e = this.enemies[i];
+                if (!e) continue;
+                const isBoss = e.type && e.type.includes('boss');
+                const isMidBoss = e.type && e.type.startsWith('darkmidboss');
+                if (isBoss || isMidBoss) {
+                    e.isInFormation = false;
+                }
+            }
+            originalUpdateEnemies.call(this, timestamp);
+        } else {
+            // Fallback: minimal update loop
+            for (let i = this.enemies.length - 1; i >= 0; i--) {
+                const enemy = this.enemies[i];
+                if (!enemy) continue;
+                const isBoss = enemy.type && enemy.type.includes('boss');
+                const isMidBoss = enemy.type && enemy.type.startsWith('darkmidboss');
+                if (isBoss || isMidBoss) enemy.isInFormation = false;
+                const remove = typeof enemy.update === 'function' ? enemy.update(timestamp) : false;
+                if (remove) this.enemies.splice(i, 1);
+            }
+        }
+    };
+    GameController.__enemyUpdatePatched = true;
+}

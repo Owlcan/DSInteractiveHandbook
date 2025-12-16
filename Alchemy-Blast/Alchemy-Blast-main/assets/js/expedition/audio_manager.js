@@ -55,8 +55,8 @@ class AudioManager {
         
         this.sfx = {};
         this.currentMusic = null;
-        this.musicVolume = 0.5;
-        this.sfxVolume = 0.6;
+        this.musicVolume = 0.5; // Default music volume
+        this.sfxVolume = 0.6; // Default sound effects volume
         this.muted = false;
         this.currentRound = 0;
         this.currentWave = 0;
@@ -75,8 +75,8 @@ class AudioManager {
      */
     initAudio() {
         // Load sound effects only - music will use singleton player
-        this.loadSfx('playerShot', 'assets/sounds/playershot.wav');
-        this.loadSfx('enemyShot', 'assets/sounds/enemyshot.wav');
+        this.loadSfx('playerShot', 'assets/sounds/playershot.wav'); // Player shot sound
+        this.loadSfx('enemyShot', 'assets/sounds/enemyshot.wav'); // Enemy shot sound
         this.loadSfx('explosion', 'assets/sounds/explosion.wav');
         this.loadSfx('hit', 'assets/sounds/hit.wav');
         this.loadSfx('powerup', 'assets/sounds/powerup.wav');
@@ -184,7 +184,7 @@ class AudioManager {
         const soundId = `spellfire${this.lastSpellfireVariant}`;
         
         console.log(`[AUDIO MANAGER] Playing shared spellfire sound: ${soundId}`);
-        return this.playSfx(soundId);
+        return this.playSfx(soundId); // Play the selected spellfire sound
     }
     
     /**

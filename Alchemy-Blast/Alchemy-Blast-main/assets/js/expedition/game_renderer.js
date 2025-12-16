@@ -53,19 +53,26 @@ class GameRenderer {
      * Load all game sprites
      */
     loadSprites() {
-        const characterSprites = this.gameController.monsterLogic.characterSprites;
+        const characterSprites = (this.gameController && this.gameController.monsterLogic && this.gameController.monsterLogic.characterSprites) || null;
         
         // Load character sprites
         for (const character of ['dere', 'aliza', 'shinshi']) {
             for (const type of ['select', 'left', 'right', 'gameover']) {
-                this.loadSprite(`${character}_${type}`, characterSprites[character][type]);
+                const fallbackPath = `assets/images/darklings/${character}_${type}.png`;
+                const path = characterSprites && characterSprites[character] && characterSprites[character][type]
+                    ? characterSprites[character][type]
+                    : fallbackPath;
+                this.loadSprite(`${character}_${type}`, path);
             }
-            
+
             // Load victory images for all three characters
             this.loadSprite(`${character}victory`, `assets/images/darklings/${character}victory.png`);
-            
-            // Load shot sprites
-            characterSprites[character].shots.forEach((shot, index) => {
+
+            // Load shot sprites (fallback to known asset names if monster logic is missing)
+            const shots = (characterSprites && characterSprites[character] && Array.isArray(characterSprites[character].shots))
+                ? characterSprites[character].shots
+                : [];
+            shots.forEach((shot, index) => {
                 this.loadSprite(`${character}_shot_${index}`, shot);
             });
         }
@@ -555,6 +562,18 @@ class GameRenderer {
             // Keep the player's x position unchanged, but use the fixed 200 for y
             // This is the logical game position, not the visual position
             player.position.y = 200;
+        } else {
+            // Fallback: draw a visible placeholder so player is always rendered
+            const width = 60;
+            const height = 80;
+            const playerYPosition = 200;
+            this.ctx.fillStyle = '#33ff66';
+            this.ctx.strokeStyle = '#ffffff';
+            this.ctx.lineWidth = 2;
+            this.ctx.fillRect(player.position.x - width/2, playerYPosition - height/2, width, height);
+            this.ctx.strokeRect(player.position.x - width/2, playerYPosition - height/2, width, height);
+            // Ensure logical position is set
+            player.position.y = 200;
         }
         
         // Draw shield if active
@@ -617,62 +636,65 @@ class GameRenderer {
      */
     renderEnemies(enemies, timestamp) {
         for (const enemy of enemies) {
+            if (!enemy || !enemy.type) continue;
             const spriteName = enemy.type;
             const sprite = this.sprites[spriteName];
-            
+
+            // Support both plain objects (position.x/y centered coords) and EnemySystem instances (x/y canvas coords)
+            const usingPosition = !!(enemy.position && typeof enemy.position.x === 'number' && typeof enemy.position.y === 'number');
+            const cw = this.canvas ? this.canvas.width : (this.ctx && this.ctx.canvas ? this.ctx.canvas.width : 800);
+            const ch = this.canvas ? this.canvas.height : (this.ctx && this.ctx.canvas ? this.ctx.canvas.height : 600);
+            let posX, posY;
+            if (usingPosition) {
+                // Controller/plain enemies already in centered coordinates
+                posX = enemy.position.x;
+                posY = enemy.position.y;
+            } else {
+                // EnemySystem instances use canvas coordinates; convert to centered space
+                const ex = (typeof enemy.x === 'number') ? enemy.x : 0;
+                const ey = (typeof enemy.y === 'number') ? enemy.y : 0;
+                posX = ex - cw / 2;
+                posY = ey - ch / 2;
+            }
+
             if (sprite && sprite.complete) {
-                // Add slight bobbing animation
-                const bobOffset = Math.sin(timestamp * 0.003 + enemy.position.x * 0.1) * 3;
-                
+                // Add slight bobbing animation using X for phase
+                const bobOffset = Math.sin(timestamp * 0.003 + posX * 0.1) * 3;
+
                 // Determine scaling factor based on enemy type
                 let scaleFactor = 1.0;
-                
-                // Special scaling for final boss and its minions
                 if (enemy.type === 'darklingboss3') {
-                    // Final boss at 100% of native resolution (no scaling down)
-                    scaleFactor = 1.0;
+                    scaleFactor = 1.0; // Final boss
                 } else if (enemy.type.includes('darkling11') || enemy.type.includes('darkling12') || enemy.type.includes('darkling13')) {
-                    // Special vanguard minions at 2.5x normal size
-                    scaleFactor = 2.5;
+                    scaleFactor = 2.5; // Vanguard minions
                 } else if (enemy.type.includes('boss')) {
-                    // Other bosses get standard boss scaling
-                    scaleFactor = 1.0;
-                } else {
-                    // Regular enemy scaling
                     scaleFactor = 1.0;
                 }
-                
+
                 // Scale down oversized sprites
-                const maxDimension = enemy.type === 'darklingboss3' ? 200 : // Much larger for final boss
-                                    enemy.type.includes('darkling11') || 
-                                    enemy.type.includes('darkling12') || 
-                                    enemy.type.includes('darkling13') ? 120 : // Larger for vanguard minions
-                                    enemy.type.includes('boss') ? 96 : 48; // Standard sizes for other enemies
-                
+                const maxDimension = enemy.type === 'darklingboss3' ? 200 :
+                                    (enemy.type.includes('darkling11') || enemy.type.includes('darkling12') || enemy.type.includes('darkling13')) ? 120 :
+                                    enemy.type.includes('boss') ? 96 : 48;
                 let width = sprite.width * scaleFactor;
                 let height = sprite.height * scaleFactor;
-                
-                // Scale down if the sprite is too large
                 if (width > maxDimension || height > maxDimension) {
                     const scale = Math.min(maxDimension / width, maxDimension / height);
                     width *= scale;
                     height *= scale;
                 }
-                
-                // Draw the enemy using its original position - no manual Y offset needed now
-                // The global transform handles the offset for all rendered elements
+
                 this.ctx.drawImage(
                     sprite,
-                    enemy.position.x - width / 2,
-                    enemy.position.y - height / 2 + bobOffset,
+                    posX - width / 2,
+                    posY - height / 2 + bobOffset,
                     width,
                     height
                 );
-                
+
                 // Draw health bar for enemies with more than 1 health
-                if (enemy.health > 1) {
-                    // No need for adjustedY anymore - use enemy's actual position
-                    this.renderEnemyHealthBar(enemy, enemy.position.y);
+                const healthVal = (typeof enemy.health === 'number') ? enemy.health : (typeof enemy.maxHealth === 'number' ? enemy.maxHealth : 1);
+                if (healthVal > 1) {
+                    this.renderEnemyHealthBar(enemy, posY);
                 }
             }
         }
@@ -685,12 +707,17 @@ class GameRenderer {
      */
     renderEnemyHealthBar(enemy, yPosition) {
         const initialHealth = this.gameController.monsterLogic.getInitialHealth(enemy.type);
-        const healthPercent = Math.max(0, enemy.health / initialHealth);
-        
+        const healthPercent = Math.max(0, ((typeof enemy.health === 'number' ? enemy.health : (enemy.maxHealth || initialHealth)) / initialHealth));
+
         const barWidth = 40;
         const barHeight = 5;
-        const x = enemy.position.x - barWidth / 2;
-        const y = yPosition + 25; // Position below enemy, using the original position
+        // Support both plain formation enemies (position.x) and EnemySystem instances (x/y)
+        const usingPosition = !!(enemy.position && typeof enemy.position.x === 'number');
+        const cw = this.canvas ? this.canvas.width : (this.ctx && this.ctx.canvas ? this.ctx.canvas.width : 800);
+        const ch = this.canvas ? this.canvas.height : (this.ctx && this.ctx.canvas ? this.ctx.canvas.height : 600);
+        const ex = usingPosition ? enemy.position.x : (((typeof enemy.x === 'number') ? enemy.x : 0) - cw / 2);
+        const x = ex - barWidth / 2;
+        const y = yPosition + 25; // Position below enemy, using the render-space Y passed in
         
         // Background
         this.ctx.fillStyle = '#333333';
@@ -739,9 +766,19 @@ class GameRenderer {
                 if (sprite && sprite.complete) {
                     this.ctx.drawImage(
                         sprite, 
-                        projectile.x - sprite.width / 2, 
-                        projectile.y - sprite.height / 2
+                        projectile.x - (sprite.width / 2), 
+                        projectile.y - (sprite.height / 2)
                     );
+                } else {
+                    // Fallback: draw a small glowing dot so projectiles never break rendering
+                    this.ctx.save();
+                    this.ctx.shadowColor = '#88ffff';
+                    this.ctx.shadowBlur = 8;
+                    this.ctx.fillStyle = '#88ffff';
+                    this.ctx.beginPath();
+                    this.ctx.arc(projectile.x, projectile.y, 6, 0, Math.PI * 2);
+                    this.ctx.fill();
+                    this.ctx.restore();
                 }
             }
         }
@@ -764,10 +801,14 @@ class GameRenderer {
                     }
                 } else {
                     // Fallback rendering if sprite not found
-                    this.ctx.fillStyle = '#FF0000';
+                    this.ctx.save();
+                    this.ctx.shadowColor = '#ff6666';
+                    this.ctx.shadowBlur = 8;
+                    this.ctx.fillStyle = '#ff6666';
                     this.ctx.beginPath();
-                    this.ctx.arc(projectile.x, projectile.y, 5, 0, Math.PI * 2);
+                    this.ctx.arc(projectile.x, projectile.y, Math.max(4, (projectile.width||10)/4), 0, Math.PI * 2);
                     this.ctx.fill();
+                    this.ctx.restore();
                 }
             }
         }

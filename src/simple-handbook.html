@@ -317,6 +317,8 @@
       border-radius: 8px;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     }
+    /* Indicate clickability for multi-image lore illustrations */
+    .lore-image[data-images] { cursor: pointer; }
 
     #lore-section {
       max-height: 75vh;
@@ -325,6 +327,14 @@
       padding-right: 15px; 
       margin: 0 auto;
     }
+    /* Lore subtabs and scoped font sizing */
+    #lore-section .lore-subnav { display: flex; gap: 8px; justify-content: center; margin: 10px 0 18px; }
+    #lore-section .lore-subsection { display: none; }
+    #lore-section .lore-subsection.active { display: block; }
+    /* Increase lore titles by ~30% and body text by ~15% */
+    #lore-section .lore-era h3 { font-size: 2.25rem; }
+    #lore-section .lore-content p, 
+    #lore-section .lore-content li { font-size: 1.21em; }
     
     /* Styles for specific iframe sections */
     #bestiary-iframe-container,
@@ -1606,101 +1616,701 @@
 
     <div id="lore-section" class="content-section">
       <h2>Academy History & Lore</h2>
-      <p>Over the last 900 years, the academy has been a bulkwark of education against the misuse of power and an institution of consistent renown in the business of training up generations upon generations of heroes and champions of just causes.</p>
-      <div class="lore-era">
-        <h3>Pre Old-War Period</h3>
+      <p>Scholia Diaspros stands upon a thousand years of woven fate, from its founding by Horace Hootz to the cataclysms of the Old War and the long, careful reconstruction that followed. What follows is the definitive timeline, compiled from the Great Library and faculty records.</p>
+      <style>
+        /* Make label markers like Event:, The Expansion:, etc., bold and non-italic for visibility */
+        #lore-section .lore-content em {
+          font-weight: 700;
+          font-style: normal;
+        }
+        /* Basic <details>/<summary> styling for lore entries */
+        #lore-section details {
+          margin: 8px 0 16px 0;
+          border: 1px solid #8a6b0a;
+          border-radius: 6px;
+          background: transparent; /* match surrounding background */
+          box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        #lore-section summary {
+          cursor: pointer;
+          padding: 8px 12px;
+          font-weight: 700;
+          background: linear-gradient(180deg, #ffd24d, #d1a115);
+          color: #111;
+          border-bottom: 1px solid #8a6b0a;
+          list-style: none;
+        }
+        /* Add helper text to summaries so users know they can click */
+        #lore-section summary::after {
+          content: " — CLICK to expand";
+          font-weight: 600;
+          color: #222;
+        }
+        #lore-section details[open] > summary::after {
+          content: " — CLICK to collapse";
+        }
+        #lore-section summary::-webkit-details-marker { display: none; }
+        #lore-section details > .entry-body {
+          padding: 10px 12px;
+          background: transparent; /* inherit page background color */
+        }
+      </style>
+      <div class="lore-subnav">
+        <button type="button" class="nav-button" data-lore-subtab="timeline" aria-pressed="true">Timeline</button>
+        <button type="button" class="nav-button" data-lore-subtab="pantheon" aria-pressed="false">Pantheon</button>
+      </div>
+      <div id="lore-pantheon" class="lore-subsection">
+        <div class="lore-era">
+        <h3>The Divine Pantheon of Diaper School</h3>
         <div class="lore-content">
-          <p><strong>~1000 Years Ago:</strong> Academy Plane is established by the enigmatic figure known only as The Headmaster.</p>
-          <p><strong>~900 Years Ago:</strong> The Headmaster teaches his first class, "Practical Adventuring." The class is so overbooked that the backlog to attend is estimated to be ~890 years long.</p>
-          <p><strong>~850 Years Ago:</strong> The Headmaster disappears from everyday life amongst the Academy. Somehow, he continues to teach his classes as usual. In time, students forget they even take the class despite it appearing on their rosters and their earning of credits towards the class. Some students claim memories from these sessions with a Professor Hoots, but many dismiss these claims as some illusory trick of the Academy's latent magics.</p>
+          <p>This realm’s care, discipline, shadow, craft, time, and unseen guidance are personified by six godlike entities who inhabit, reside within, or are manifest across Scholia Diaspros. Their influence shapes student life, campus policy, and the Academy’s fate.</p>
+
+          <p><strong id="deity-denalyndis">Denalyndis — The Goddess of the Nursery, Seduction, and Strength</strong><br>
+          <em>Origin:</em> Ancient matronly deity predating the Academy; a remnant of primal forces embodying safety and irresistible charm.<br>
+          <em>Portfolio:</em> Caregiving, Protection, Seduction, Charm, Strength through Vulnerability.<br>
+          <em>Philosophy/Nature:</em> “Why command fear when you can cultivate love?” A benevolent yet demanding Mother who rewards softness with resilience and grace; intolerant of cruelty or neglect.<br>
+          <em>Worshippers:</em> Clerics of the Nursery Domain and Padded Seduction Domain; caregivers, charmers, and those who find strength in gentleness.</p>
+
+          <p><strong id="deity-elasharna">Ela’sharna — The Lunar Mother, Governess of Cleanliness and Order</strong><br>
+          <em>Origin:</em> Once a mortal student and Tabitha Caelestis’s dearest friend; sealed herself within the Black Pyramid to guard the realm from the Well’s fallout.<br>
+          <em>Portfolio:</em> Discipline, Cleanliness, Order, Protection, Redemption through Structure.<br>
+          <em>Nature:</em> The “Governess” counterpart to Denalyndis’s “Mother,” expressing love through rules, routine, and keeping charges safe and dry (metaphorically and literally).<br>
+          <em>Worshippers:</em> Clerics of the Diaper Discipline Domain; hall monitors, disciplinarians, and believers in safety through structure.</p>
+
+          <p><strong id="deity-umbra">Umbra (Umbirgitte) — The Veiled Mother, She Who Waits in the Dark</strong><br>
+          <em>Origin:</em> Born from the student Umbirgitte during the Well of Souls detonation; a proto-Darkforme deity.<br>
+          <em>Portfolio:</em> Fear, Darkness, Monsters, Twisted Protection, Secrets.<br>
+          <em>Philosophy:</em> Protective Terror — “A child too scared to leave their bed cannot wander into danger.” Manifests as shy student, veiled deity, and macabre post-Well morphology.<br>
+          <em>Worshippers:</em> Warlocks of the Mother Beneath the Bed pact; Clerics of the Phobia Domain; those who wield fear to keep others from harm.</p>
+
+          <p><strong id="deity-weaver">The Great Weaver — The First Matriarch, Spinner of Fate</strong><br>
+          <em>Origin:</em> Albino arachnoid matriarch who followed Hootz; consumed the scarp’s raw potential and devoured her first brood to secure her place.<br>
+          <em>Description:</em> A pale, massive entity combining arachnid and humanoid grace: milk-glass skin, four arms (two delicate, two serrated), eight pink multifaceted eyes; clinical, sterile purity.<br>
+          <em>Portfolio:</em> Creation, Textiles, Community, Containment, Lethal Combat.<br>
+          <em>Legacy:</em> Taught magical weaving (enchanted diapers, defensive wards); mother of Diaparachnid clans; secretly gifted Tabitha bio-arcane scorpion lore that later betrayed her.<br>
+          <em>Worshippers:</em> Warlocks of the Great Weaver pact; Diaparachnids.</p>
+
+          <p><strong id="deity-time">Grand Father Time — The Grim Guardian, Eternal Caretaker</strong><br>
+          <em>Origin:</em> Ancient melancholic entity, perhaps a primordial of time; counterbalances Greensea growth and overreaching ambition.<br>
+          <em>Portfolio:</em> Regression, Stasis, Pacification, Time, Safety.<br>
+          <em>Philosophy/Nature:</em> “The Price of Safety is Maturity.” Offers absolute safety at the cost of adult agency; stifling but not malicious, stopping the clock to stop the pain.<br>
+          <em>Worshippers:</em> Warlocks of the Grim Guardian pact; peacemakers who end conflict by removing the will to fight; seekers of unchanging safety.</p>
+
+          <p><strong id="deity-unseen">The Unseen Hand — The Cabal of Alumni, Architects of Legacy</strong><br>
+          <em>Origin:</em> A gestalt of immortals, ageless beings, and legacy-obsessed alumni who refuse to leave the Academy; formed from founding shadows and survivors of purges and wars.<br>
+          <em>Portfolio:</em> Influence, Manipulation, Politics, Secrets, the “Greater Good.”<br>
+          <em>Nature/Methods:</em> Puppet masters courting favor with all gods—Light and Dark—to maintain balance. Infiltrated the Council as the “Diapered Whisperer.” Act via agents, accidents, misplaced items, and whisper campaigns.<br>
+          <em>Worshippers:</em> Warlocks of the Unseen Hand pact; spies, politicians, and ambitious students who value influence over raw power.</p>
+        </div>
+        </div>
+      </div>
+      <div id="lore-timeline" class="lore-subsection active">
+      <div class="lore-era">
+        <h3>The Era of Foundation (~1000–710 Years Ago)</h3>
+        <div class="lore-content">
+          <p><strong>~1000 Years Ago – The Arrival & The First Weaving:</strong> Horace Hootz discovers a stable “scarp of unreality” within the Ways and, through an unknown blend of divine, psionic, and cosmic arcanum, stabilizes it into the planar realm that becomes the Academy. He arrives with families and followers—the founding bloodlines.</p>
+          <div class="lore-image-placeholder"><img src="assets/images/lore/scholialocal.webp" alt="Scholia Diaspros — Local Area and Campus" class="lore-image" onerror="this.style.display='none'"></div>
+          <p><strong>The Uninvited Guest:</strong> The Great Weaver, matriarch of the Diaparachnids, follows with her first brood—the Arachnarcanum.</p>
+          <p><strong>~990–900 Years Ago – The Burgeoning & First Alliances:</strong> Hootz shapes the world with its people, forging alliances with the Waddlehooves (granting them the Lissome Plains) and the Cowbuddies (who establish dairy craft and “Magic Milks”). He brokers a ceasefire between industrious Ants/Bees and the encroaching Arachnarcanum.</p>
+          <p><strong>Uncontainable Hunger:</strong> The Arachnarcanum, woven of raw hunger beyond the Ways, prove uncontrollable. The Weaver constructs the Chitin Throne in the Greensea Depths and, in a night of silent terror, devours her own brood to save the canvas she intends to weave upon.</p>
+          <p><strong>Sanctuary for the Soft:</strong> Hootz opens the plane to gentle refugees from infernal/demonic/umbral realms—Crinklehearts, Pampires, and more—displaying a clear predisposition toward “crinkly folk.” Bees cultivate Sunpetal Honey; the Road to Majica is established; the Weaver begins breeding Diaparachnid clans from chosen consorts and, in time, charms Hootz, birthing a humanoid strain.</p>
+          <p><strong>~985:</strong> The Cowbuddy Crafting Guild formalizes workshops, pioneering enchanted padding and dairy-based enchantments.</p>
+          <p><strong>~960:</strong> Bees negotiate a pact with volatile nature spirits, charting the dark woods and securing the Road to Majica.</p>
+          <p><strong>~950 – The First “Grand Graduation”:</strong> Hootz gifts Seimei Thorn-of-Sunrise the First Key, enabling passage to the Material Plane without severing ties—founding Alumni tradition.</p>
+          <p><strong>~945 – The Carcharodonian Strength Trial:</strong> A champion stabilizes shifting water planes, establishing springs feeding the academy aqueducts.</p>
+          <p><strong>~920 – The “No Souvenirs” Incident:</strong> A Far Realm ooze breach leads Hootz to scold the entity back home and to the creation of the Planar Customs Office.</p>
+          <div class="lore-image-placeholder"><img src="assets/images/lore/nopets.webp" alt="The No Pets Incident" class="lore-image" onerror="this.style.display='none'"></div>
+          <p><strong>~900 – The First Class:</strong> “Practical Adventuring” begins; demand outpaces centuries.</p>
+          <p><strong>~880 – The Ontology Crisis:</strong> The Hallway of Infinite Doors manifests as Hootz slips into ontological dysfunction; anchor-runes are raised by the newly formed Council of Professorial Oversight.</p>
+          <div class="lore-image-placeholder"><img src="assets/images/lore/ontologydysfunction.webp" alt="Ontological Dysfunction of Hootz" class="lore-image" onerror="this.style.display='none'"></div>
+          <p><strong>~877 – Planar Integration Event:</strong> A surge of primal arcane energy weaves Hootz into the plane itself. His essence becomes the source of whimsical, perilous fluctuations—an overdeity-like presence debated to this day.</p>
+          <div class="lore-image-placeholder"><img src="assets/images/lore/planarintegration.webp" alt="Planar Integration Event" class="lore-image" onerror="this.style.display='none'"></div>
+          <p><strong>~813 – The Scholia-Born Prodigy:</strong> Ela’sharna (later Lunar Mother Ela’Sharna) is born within the demesne, displaying chimeric traits. Loremasters suspect she’s the delayed expression of the Weaver’s humanoid strain.</p>
+          <p><strong>~800 – The Prodigy Arrives:</strong> Tabitha Caelestis enrolls at age 12, with her sisters, seeking to undo a ruined realm.</p>
+          <div class="lore-image-placeholder"><img src="assets/images/lore/caelistisfamilyportrait.webp" alt="The Caelestis Sisters" class="lore-image" style="width:50%;max-width:50%" onerror="this.style.display='none'"></div>
+          <p><strong>~790 – The Dark Thing & Chronal Crystal:</strong> Tabitha’s Greensea venture for a Chronal Crystal (Echo Bloom) brushes her with a nascent pre-Darkforme entity saturated in Umbra—catalyzing her darker discoveries.</p>
+          <p><strong>~770 – The Well & The Bargain:</strong> Tabitha unveils the Well of the Blessed Engine (Well of Souls). In secret, she bargains with the Great Weaver: bio-arcane secrets for crafting Darkformes in exchange for Scorpion Peoples—who later betray both and settle the Sands of Perdu.</p>
+          <div class="lore-image-placeholder">
+            <img
+              class="lore-image"
+              alt="Unveiling of the Well of Souls (click to cycle)"
+              title="Click to cycle illustrations"
+              data-images='[
+                "assets/images/lore/wellofsoulsunveil.webp",
+                "assets/images/lore/unveilingwellofsouls.webp",
+                "assets/images/lore/unveilingwellofsouls_1.webp"
+              ]'
+              src="assets/images/lore/wellofsoulsunveil.webp"
+              onerror="this.style.display='none'"
+            >
+          </div>
+          <p><strong>~760 – The “Blessed” Volunteers:</strong> The Cult of the Engine mimics Warforged aesthetics, masking early disappearances as “ascensions.”</p>
+          <div class="lore-image-placeholder">
+            <img
+              class="lore-image"
+              alt="The Blessed Volunteers (click to cycle)"
+              title="Click to cycle illustrations"
+              data-images='[
+                "assets/images/lore/blessedvolunteers.webp",
+                "assets/images/lore/blessedvolunteers_1.webp"
+              ]'
+              src="assets/images/lore/blessedvolunteers.webp"
+              onerror="this.style.display='none'"
+            >
+          </div>
+          <script>
+            // Extend Blessed Volunteers gallery to include a third image if not already present
+            (function(){
+              const img = document.currentScript.previousElementSibling?.querySelector('img.lore-image');
+              if(img && img.dataset && img.dataset.images){
+                try {
+                  const arr = JSON.parse(img.dataset.images);
+                  if(!arr.includes('assets/images/lore/blessedvolunteers_2.webp')){
+                    arr.push('assets/images/lore/blessedvolunteers_2.webp');
+                    img.dataset.images = JSON.stringify(arr);
+                  }
+                } catch(e){}
+              }
+            })();
+          </script>
+          <p><strong>~740 – The Gear-Grind Stoppage:</strong> A tremor from the Weaver’s expanding Throne collapses supply tunnels; Tabitha institutes Mandatory Curfew as proto-Warforged secure the breach.</p>
+          <p><strong>~725 – The First Nannybot:</strong> Tabitha unveils “Nannybot Mk I” to monitor students—early “aggressive cuddling” hints at later Bratnappers.</p>
+          <div class="lore-image-placeholder">
+            <img
+              class="lore-image"
+              alt="Nannybot Mk I Release (click to cycle)"
+              title="Click to cycle illustrations"
+              data-images='[
+                "assets/images/lore/nannybot2025-12-01T131251.846.webp",
+                "assets/images/lore/nannybot2025-12-01T131414.721.webp"
+              ]'
+              src="assets/images/lore/nannybot2025-12-01T131251.846.webp"
+              onerror="this.style.display='none'"
+            >
+          </div>
+          <p><strong>~710–708 – The Turn:</strong> Tabitha harnesses trapped souls to create the first echelons of her Warforged Host, shifting from rescue to conquest.</p>
         </div>
         <div class="lore-image-placeholder"><img src="assets/images/lore/headmaster.png" alt="The Headmaster" class="lore-image" onerror="this.style.display='none'"></div>
-        <div class="lore-content">
-          <p><strong>~800 Years Ago:</strong> Sorceress Tabitha enrolls at the Academy at the age of 12, an orphan from a devastated and erased realm.</p>
-          <p><strong>~770 Years Ago:</strong> Tabitha creates The Well of the Blessed Engine, a device she claims will allow her to save souls from outside the realm.</p>
-          <p><strong>710-708 Years Ago:</strong> Sorceress Tabitha unleashes the true intent of the Well of Souls. Despite claiming it had never been turned on to full power to save the souls of those who died on other planes without some way to preserve the sanctity of their spirit, the device had been collecting and storing souls for almost a century. Using this power, Tabitha creates the first of her Warforged Host.</p>
-          <p><strong>~707-705 Years Ago:</strong> Using the power of the Well and her Warforged Host, Tabitha wrests control of the Academy from The Council of Professorial Oversight which had taken over for the Headmaster after his sudden ontological dysfunction became apparent. Her pataphysical control over the Academic Plane becomes so strong that she is able to eject students and staff that pose any sort of threat to her hegemony.</p>
-          <p>Tabitha begins to recruit students not simply for the purpose of training but to harvest the failures for conversion into a part of her Warforged Host.</p>
-        </div>
       </div>
       <div class="lore-image-placeholder"><img src="assets/images/lore/wellofsouls.jpeg" alt="The Well of Souls" class="lore-image" onerror="this.style.display='none'"></div>
       <div class="lore-era">
-        <h3>The Old War Period</h3>
+        <h3>The Old War (704–700 Years Ago)</h3>
         <div class="lore-content">
-          <p><strong>704-700 Years Ago:</strong> The First Internal Siege of Scholia Proper occurs. This represents the first attack on the Campus rendered by The Warforged Host. After finding a way to bring down the anti-lethality wards on the school, Tabitha sets out to reave the souls of the largest enrolled class since the opening of the Academy. Hundreds, if not thousands, die within the first few days of fighting in the small demiplane.</p>
-          <p><strong>704 Years Ago:</strong> Pliya and dozens of other students are killed during the events of the First Internal Siege. Warforged emerge from beneath the school and ravage the campus- held back by bulwarks of remaining magical wards and the efforts of valiant students and staff who turn back the initial tide. Tabitha, Acting Headmistress, disappears from public view when scrutiny falls on her after the attack is repelled.</p>
+          <p><strong>704 – The First Internal Siege:</strong> Tabitha’s Warforged Host breaches the campus, bypassing anti-lethality wards. Hundreds are slain.</p>
         </div>
         <div class="lore-image-placeholder"><img src="assets/images/lore/internalsiege.png" alt="The First Internal Siege" class="lore-image" onerror="this.style.display='none'"></div>
         <div class="lore-content">
-          <p><strong>703 Years Ago:</strong> Magiana and Lesser Radiana are consumed in magical fire and etheric nuclear flame as the Dragons of Monacalath are seen flying overhead in their first war formation in 200 years. They send message that this is a warning for the Academy to surrender to Tabitha's entourage. However, in burning the only lesser-protected spaces outside the grounds, Tabitha had also torched her own auspices of negotiation- war was now absolute and armies would march at The First Battle of the Gate in this year- Tabitha's armies, led by Monacalath the Dragon Lord and Sylane the Sister-Witch of the Sorceress, and the Scholian Forces led by Galander Forsythe and Ylva of the Circle of the Academy.</p>
-          <p>After weeks of slamming their forms against the Bulwark of the Gate, the Battle at the Doors takes place in the later days of this year. For a second time, Monacalath and Sylane are turned back from the Academy grounds they had once called home. The cost, Avatar of the Headmaster and another hero of the age are said to have held aloft the original doors of the school, using them as weapon and aegis against the foes of the Warforged Host.</p>
-          <p>At the Apex of Planar Power on The Eve of the New Year, The Mountains Mordest are levelled in an act of revenge after the loss of Galander Forsythe, Leader of Scholia Armies. Ylva made a pact with the spirits of nature bound to the Academy plane to destroy the mountains, dropping them into the planar void.</p>
-          <p><strong>702 Years Ago:</strong> The Day the Mountains Tumbled results in the near-total annihilation of the Renegade Remnant of students under Tabitha, as well as eliminating most of The Training Fortress, which had been converted into The Ebony Echelon by Tabitha's forces.</p>
-          <p>The Iron March Begins as The Longest of Wintertide begins. Using Spatial Distortion magic fuelled by a last-ditch effort to tap the Well of Souls to defend against Tabitha, the Planar Demesne is drastically elongated in both spatial and temporal dimensions. The tension and stress of this action claims the lives of the entire Scholia Psionica and would mark the end of those studies at the Academy for almost 650 years.</p>
+          <p><strong>703 – The First Battle of the Gate:</strong> Monacalath the Dragon Lord and Sylane the Sister-Witch lead Tabitha’s armies against the Great Gate. The Scholian Forces, led by Galander Forsythe and Ylva, repel them at the Doors.</p>
+          <p><strong>702 – The Day the Mountains Tumbled:</strong> Ylva’s pact with primal spirits annihilates the Mountains Mordest and the Renegade Remnant at the Training Fortress.</p>
+          <p><strong>702 – The Iron March:</strong> Spatial distortion births the Longest of Wintertide, freezes reality conditionally into the Sands of Perdu, and destroys Scholia Psionica.</p>
+          <p><strong>700 – The Day of Cataclysm:</strong> A Warforged breach into dormitories kills Pliya, Lian, and Seris. Umbirgitte is drawn into the Well’s machinery and becomes Umbra. Tabitha, confronted by Ylva, Qleer, Pahmin, and Avilrayn, rips empathy from her soul (creating Nurse Tabby) and falls into the detonating core. Ela’sharna seals herself within the Black Pyramid to contain the fallout.</p>
         </div>
+          <div class="lore-image-placeholder"><img src="assets/images/lore/lunarmotherelasharnaoldwar.webp" alt="Sealing of the Black Pyramid (Old War)" class="lore-image" onerror="this.style.display='none'"></div>
+      </div>
+      <div class="lore-image-placeholder">
+        <img
+          class="lore-image"
+          alt="Defense of the School during the Old War (click to cycle)"
+          title="Click to cycle illustrations"
+          data-images='[
+            "assets/images/lore/defenseoftheschool.webp",
+            "assets/images/lore/defenseoftheschool_1.webp",
+            "assets/images/lore/defenseoftheschool_2.webp",
+            "assets/images/lore/defenseoftheschool_3.webp"
+          ]'
+          src="assets/images/lore/defenseoftheschool.webp"
+          onerror="this.style.display='none'"
+        >
       </div>
       <div class="lore-image-placeholder"><img src="assets/images/lore/mountainstumbling.jpeg" alt="The Day the Mountains Tumbled" class="lore-image" onerror="this.style.display='none'"></div>
       <div class="lore-era">
-        <h3>The Middle War Period</h3>
+        <h3>The Long Chill & Reconstruction (699–350 Years Ago)</h3>
         <div class="lore-content">
-          <p><strong>~699 Years Prior:</strong> The Iron March concluded, and the Council of Professorial Oversight, now bolstered by the indomitable spirit of surviving heroes, reasserted its governance. The Well of the Blessed Engine, a once-proud bastion of innovation, was sealed, and the Academy embraced a new epoch of prudence and restraint in arcane research.</p>
-          <p><strong>~680 Years Prior:</strong> The Academy, its reputation besmirched by the dark shadow of conflict, saw a dramatic decline in enrollment. In response, the Council broadened its admissions criteria, inviting pupils of diverse and unconventional backgrounds to walk its storied halls.</p>
-          <p><strong>~650 Years Prior:</strong> The Great Library of Scholia, a bastion of erudition and the epicenter of academic endeavor, arose from the ashes of the past. It was enshrouded by an enchanted barrier, impermeable to those whose intentions were not pure.</p>
+          <details>
+            <summary>~699 Years Ago: The Sealing</summary>
+            <div class="entry-body">
+              <p><em>Event:</em> The Council reasserts control. The Well is sealed. The Lissome Plains begin a slow recovery under the stewardship of the Bee communities. The Academy embraces a new epoch of extreme caution. <em>The Expansion:</em></p>
+              <p><em>The Reorientation Ritual:</em> Purpose: To cleanse the Well of Souls of Tabitha's corruption, restabilize the Academy's non‑lethality wards, and enable the post‑facto reclamation of souls who died under the school's protection (restoring the "no permadeath" rule). The Magic: A potent fusion of ancient Druidic magic (likely sourced from Ylva's circle) and the Great Weaver's own Soulsblood magic was required to re‑tune the Well's core frequency.</p>
+              <p><em>The Apotheosis of Sharna:</em> The Sacrifice: Sharna, already a Grand Sorceress of immense power, realized the cost of purification was beyond simple spellcasting. Unwilling to use the lives of others as Tabitha had, she chose to become the fuel herself. The Process: Over a grueling period, she drained her own blood to inscribe the necessary runes. Then, utilizing necromancy derived from the Weaver's teachings, she sacrificed her own organs one by one to power the ritual's stabilizing anchors.</p>
+              <p><em>The Construction of the Black Pyramid:</em> As her body withered, Sharna used her magic to construct the Black Pyramid around the Well's core. Each element of its architecture is a physical manifestation of her sacrifice: The Black Granite: The pyramid's exterior is forged from Godmortal Blood coagulated and transmuted into gold‑speckled black granite. This stone acts as her soul‑armor, shielding the realm's ontology from external chaos. The Golden Peak: The pyramid is capped with a brilliant golden topper, forged from the sacrifice of Sharna’s eyes. This explains why, in visions, her bandaged form burns with hollow golden fire where her eyes should be. The pinnacle serves as a literal and metaphorical watchtower, allowing her sightless gaze to monitor the entire plane. The Black Bones: The internal support structure is not steel or stone but the calcified, blackened remains of her own lungs. These "bones" channel the purification magic, breathing order into the plane's entropy and countering the damage caused by Tabitha's ambition. They represent her word, her breath, and her law.</p>
+              <p><em>The Lofting:</em> Ascension: In her final act as a mortal (and first as a deity), Sharna lofted the massive Black Pyramid into the sky, setting it into a permanent, figure‑8 orbit around the moon and the plane itself. This celestial anchor ensures the Well can never again be accessed from the ground without immense effort (or the mountain revealing it). Temporal Permanency: The pyramid exists in a "demi‑outside" state of time, acting as a temporal sieve that filters chaotic energies. This bizarre, dancing orbit is ontologically permanent, keeping the structure safe from standard temporal decay or manipulation.</p>
+              <p><em>The Lunar Mother:</em> Birth of a Goddess: In this act of supreme self‑sacrifice, Sharna ascended to become Ela'sharna, the Lunar Mother (Goddess of Love, Cleanliness, and Diaper School). Her domain became one of protection through discipline and structure, a direct counter to the chaos of her friend Tabitha. The Faith of Order: As the chief "good god" of order and law, Ela'sharna commands the largest organized faith on the plane. This grants her immense influence within democratic civilizations, serving as the moral backbone for the Council's laws. Her power base is rivaled only by the agnostic technologists of Elzbereth and the primal spirit‑worshippers of the Greensea. Church Structure: Rather than a rigid hierarchy, Elasharists share roles communally and democratically, reflecting her desire for order through cooperation. The Council of Professorial Oversight typically includes Elasharist members, honoring Sharna's legacy as one of the Academy's greatest graduates alongside figures like Thorn‑of‑Sunrise and Qleer.</p>
+              <p><em>The Hymn of the Black Pyramid:</em> Rise! Rise! Witness a new dawn's skies O Black Pyramid Framed by silver moon's reprise Deep within, anchored safe away from sin Guard their love and let it in That redemption may at last begin! In her self‑inflicted and immortal chosen grave Where was bred devotion to the future we now pave Lunar Mother, Planar Daughter, first giver of godmortal blood The Ebonward against disorder's tide and the darkness flood Rise! Rise! Witness a new dawn's skies O Black Pyramid Framed by silver moon's reprise</p>
+              <p><em>The Vigil of the Warforged:</em> The Loyalists: A cadre of Sharna's most loyal followers refused to leave her side. In a final act of irony and devotion, they chose to use Tabitha's own technology against her legacy. They voluntarily transferred their souls into Warforged bodies, becoming the eternal, sleepless guardians of the Black Pyramid. The Lunar Guard: These unique Warforged still inhabit the pyramid today, maintaining the machinery of the Well and protecting their slumbering Mother with stalwart devotion. They rely on the ambient mana of the Well and the pyramid's own temporal stasis to function without new resources.</p>
+              <p><em>Consequences of the Sealing:</em> Lost Souls: Souls that perished before the sealing and were not claimed by the Warforged Host were largely lost to the "Ways" or the "Sands of Perdu." The "post‑facto" reclamation only applies to those whose essence remained tethered to the plane's recovering ontology. Tidal Stabilization: While the new celestial body exerts gravitational influence, potential environmental disasters in the Greensea (specifically the Jungle, not a sea) were mitigated by Carcharodonian Tidal Magics working in concert with Sharna's lingering will.</p>
+            </div>
+          </details>
+          <p><strong>~675 – The “Lost Class”:</strong> Echo Enrollment draws students from collapsed timelines; Morphian Changelings likely arrive on its wake.</p>
+          <details>
+            <summary>~650 Years Ago: The Great Library & Elzbereth</summary>
+            <div class="entry-body">
+              <p><em>Event:</em> The Great Library rises from the ashes. Elzbereth solidifies its industrial base in the Dracespire Mountains, discovering adamantine veins. <em>The Expansion:</em></p>
+              <p><em>The Library’s Rebirth:</em> The original library was a casualty of the Old War, its knowledge scattered or burned. The reconstruction was spearheaded by the Circle of the Academy, who utilized powerful Golems and Living Doll laborers to raise the new structure.</p>
+              <p><em>The Architect:</em> The lead architect was a Seimei Treebearer named Root‑Weaver Oakenheart, who integrated living wood into the stone, creating the "Living Shelves" that can physically retrieve books for students.</p>
+              <p><em>Elzbereth’s Rise:</em> In the Dracespire Mountains, the settlement of Elzbereth (founded by survivors and refugees) struck a massive vein of Adamantine and Starshot Ore (Item Registry). This discovery fueled their industrial revolution.</p>
+              <p><em>The First Forge:</em> They built the Star‑Forge, a massive geothermal foundry that utilized the heat of the mountain's core. This allowed them to craft the first generation of heavy‑duty containment gear and reinforced plating for the Academy's growing security needs.</p>
+              <p><em>The Trade Route:</em> A perilous trade route was established between Elzbereth and the Academy, patrolled by Waddlehoof caravans to protect against Darkling raids.</p>
+            </div>
+          </details>
         </div>
-        <div class="lore-image-placeholder"><img src="assets/images/lore/scholialibrary.jpeg" alt="The Great Library of Scholia" class="lore-image" onerror="this.style.display='none'"></div>
+        <div class="lore-image-placeholder">
+          <img
+            class="lore-image"
+            alt="The Great Library of Scholia (click to cycle)"
+            title="Click to cycle illustrations"
+            data-images='[
+              "assets/images/lore/scholialibrary.jpeg",
+              "assets/images/lore/scholialibrary.webp"
+            ]'
+            src="assets/images/lore/scholialibrary.jpeg"
+            onerror="this.style.display='none'"
+          >
+        </div>
         <div class="lore-content">
-          <p><strong>~630 Years Prior:</strong> The Shadow Guild, a clandestine cabal of nefarious scholars and practitioners of the arcane, insinuated themselves into the very fabric of the Academy. Their machinations aimed to corrupt the youth and pilfer the school's ancient secrets.</p>
-          <p><strong>~600 Years Prior:</strong> The Second Internal Siege of Scholia Proper was discovered as the Council unearthed a clandestine chamber within the Great Library, serving as the nexus of the Shadow Guild's operations. The ensuing battle cleansed the School of this malicious presence. After the battle, the first sightings of darklings outside the walls of the school is reported. Early darklings are largely formless and pose little threat to anyone.</p>
-          <p><strong>~580 Years Prior:</strong> In the wake of the Old War, the Academy introduced a novel curriculum centered on the study and safeguarding of ancient artifacts, recognizing the dual nature of power in the hands of the unenlightened.</p>
+          <details>
+            <summary>~620 Years Ago: The Ink‑Well Plague</summary>
+            <div class="entry-body">
+              <p><em>Event:</em> A sentient, viral spell corrupts the ink in the Great Library, attempting to rewrite history and erase Old War heroes. <em>The Expansion:</em></p>
+              <p><em>The Origin:</em> The plague was a dormant "logic‑virus" left behind by Tabitha Caelestis's followers, designed to activate centuries later. It infected the magical ink supplies, turning every written word into a vector for misinformation.</p>
+              <p><em>The Symptoms:</em> Books began to rewrite themselves. "The Heroism of Galander Forsythe" became "The Cowardice of Galander." Magical scrolls misfired or cast <em>Spontaneous Accident</em> (Spellbook) on the reader.</p>
+              <p><em>The Manifestation:</em> The ink coalesced into Ink‑Blot Elementals (a variant of the Darkling Liquid Legion, Bestiary) that lurked in the aisles, ambushing students and attempting to stain them with "Rewrite Ink."</p>
+              <p><em>The Purge:</em> The newly formed Circle of the Academy operated in absolute secrecy. They couldn't simply destroy the books.</p>
+              <p><em>The Solution:</em> They synthesized a counter‑agent using Sunpetal Honey (from the Bee students in the Woods) and Glow‑Pulp (from the Marshland Nexus). This mixture, when applied to the pages, burned away the corruption without harming the parchment.</p>
+              <p><em>The Cover‑Up:</em> The Circle claimed the library was closed for "fumigation of bookworms" to prevent panic about the fragility of history.</p>
+              <div class="lore-image-placeholder">
+                <img
+                  class="lore-image"
+                  alt="Ink‑Well Plague — Inkwell Crisis (click to cycle)"
+                  title="Click to cycle illustrations"
+                  data-images='[
+                    "assets/images/lore/inkwellcrisis.webp",
+                    "assets/images/lore/inkwellcrisis_1.webp"
+                  ]'
+                  src="assets/images/lore/inkwellcrisis.webp"
+                  onerror="this.style.display='none'"
+                >
+              </div>
+            </div>
+          </details>
         </div>
       </div>
       <div class="lore-image-placeholder"><img src="assets/images/lore/theshadowcabal.png" alt="The Shadow Guild" class="lore-image" onerror="this.style.display='none'"></div>
       <div class="lore-era">
-        <h3>The First New Dawn of Stability</h3>
+        <h3>The First New Dawn of Stability (~600–350 Years Ago)</h3>
         <div class="lore-content">
-          <p><strong>~550 Years Prior:</strong> The Planar Games, an interdimensional tournament of wit and might, were established to foster unity and camaraderie among the disparate realms of existence.</p>
-          <p><strong>~520 Years Prior:</strong> The Circle of the Academy, a clandestine society dedicated to the protection of the School and its tenets, was formed. Their unseen hand has been a bastion of order and vigilance within the ever-shifting tapestry of academic intrigue.</p>
-          <p><strong>~490 Years Prior:</strong> The Great Reawakening of Magic reverberated through the multiverse, and the Academy's enrollment soared. This influx of aspirants sought to harness the burgeoning power and prevent future cataclysms.</p>
+          <details>
+            <summary>~600 Years Ago: The Second Internal Siege</summary>
+            <div class="entry-body">
+              <p><em>Event:</em> The Shadow Guild is discovered operating within the Academy. They are purged, but the conflict weakens the wards. <em>The Expansion:</em></p>
+              <p><em>The Shadow Guild:</em> A clandestine organization of students and corrupt faculty who worshipped Umbra (in her aspect as the Queen of Secrets) and sought to weaponize the Academy's artifacts. They used StealthOps Covert Black diapers (Item Registry) to move unseen during curfew.</p>
+              <p><em>The Infiltration:</em> They had established a base in the Cellarways, using the abandoned tunnels to smuggle Darkessence (Item Registry) and Petrodistillate.</p>
+              <p><em>The Purge:</em> The Council, alerted by a Gemini Celestian student who witnessed a secret ritual, launched a surprise raid. The battle raged in the sub‑basements.</p>
+              <div class="lore-image-placeholder">
+                <img
+                  class="lore-image"
+                  alt="Shadow Guild Purge (click to cycle)"
+                  title="Click to cycle illustrations"
+                  data-images='[
+                    "assets/images/lore/shadowpurge.webp",
+                    "assets/images/lore/shadowpurge_1.webp"
+                  ]'
+                  src="assets/images/lore/shadowpurge.webp"
+                  onerror="this.style.display='none'"
+                >
+              </div>
+              <p><em>The Breach:</em> The magical backlash of the conflict cracked the Umbral Wards sealing the deeper containment units.</p>
+              <p><em>The Leak:</em> This breach allowed the first "true" Darklings (like the Darkling‑Lurker and Darkling‑Shade‑Sneak, Bestiary) to escape Umbra's containment and infest the lower levels.</p>
+              <div class="lore-image-placeholder">
+                <img
+                  class="lore-image"
+                  alt="Magical Containment Failure (click to cycle)"
+                  title="Click to cycle illustrations"
+                  data-images='[
+                    "assets/images/lore/magicalcontainmentfailure.webp",
+                    "assets/images/lore/magicalcontainmentfailure_1.webp"
+                  ]'
+                  src="assets/images/lore/magicalcontainmentfailure.webp"
+                  onerror="this.style.display='none'"
+                >
+              </div>
+              <p><em>The Legacy:</em> The "Shadow Guild" was officially disbanded, but rumors persist that the Unseen Hand absorbed its most useful members, turning them into deep‑cover agents.</p>
+            </div>
+          </details>
+          <div class="lore-image-placeholder">
+            <img
+              class="lore-image"
+              alt="Animated Clothing Incident (click to cycle)"
+              title="Click to cycle illustrations"
+              data-images='[
+                "assets/images/lore/animatedclothingincident.webp",
+                "assets/images/lore/animatedclothingincident_1.webp",
+                "assets/images/lore/animatedclothingincident_2.webp"
+              ]'
+              src="assets/images/lore/animatedclothingincident.webp"
+              onerror="this.style.display='none'"
+            >
+          </div>
+          <details>
+            <summary>~580 Years Ago: The Curriculum of Safeguards</summary>
+            <div class="entry-body">
+              <p><em>Event:</em> The Department of Artifact Containment is founded. <em>The Expansion:</em></p>
+              <p><em>The Shift:</em> Realizing that destroying Old War relics often released dangerous energies (like the Ink‑Well Plague), the Council pivoted to containment and study.</p>
+              <p><em>The New Department:</em> The Department of Artifact Containment (DAC) was established in a reinforced wing of the castle.</p>
+              <p><em>The Artificers:</em> This shift attracted a new breed of student: the Artificer. They were fascinated by the Warforged Remnants and the mechanics of the Well of Souls.</p>
+              <p><em>Wild Magic Gunsmithing:</em> To safely interact with volatile artifacts, these early Artificers developed the "Wild Magic Gunsmith" style. They built Magitech Rifles (like those used by Trainee Auditors, Bestiary) that could fire dispelling rounds or containment nets from a safe distance.</p>
+              <p><em>Regression Mines:</em> One of their first major successes was the neutralization and study of Regression Mines left over from Yara's era. Instead of detonating them, they learned to reverse‑engineer the Regression Aura (Bestiary: Dark Dimension Regressor Field) to create therapeutic age‑regression tools for the Nursery Domain clerics.</p>
+            </div>
+          </details>
+          <details>
+            <summary>~490 Years Ago: The Great Reawakening</summary>
+            <div class="entry-body">
+              <p><em>Event:</em> A surge in ambient magic energizes the plane. Elzbereth begins "magitech" experiments. <em>The Expansion:</em></p>
+              <p><em>The Surge:</em> A planar alignment with the Feywild and the Elemental Plane of Energy caused a massive influx of ambient mana. Spells became more potent, and magical plants in the Greensea bloomed explosively.</p>
+              <p><em>Side Effects:</em> The surge also energized the Living Dolls, causing a spike in Lost Plushie awakenings and making them more active and mischievous.</p>
+              <p><em>Elzbereth's Innovation:</em> The engineers of Elzbereth harnessed this excess energy. They began integrating arcane crystals (Vitalium and Robusca, Item Registry) with steam engines and clockwork.</p>
+              <p><em>Magitech Integration:</em> This led to the creation of the first Arcane Trains (the "CritterCaboose" line of transport) and automated mining constructs.</p>
+              <p><em>The Foundry:</em> The Star‑Forge was upgraded into the Great Foundry, capable of mass‑producing magical alloys like Chromatic Platinum (Item Registry).</p>
+              <p><em>The Divide:</em> This era marked the beginning of the philosophical split between the "Pure Mages" of the Academy (who relied on personal power) and the "Technomancers" of Elzbereth (who relied on machines), setting the stage for future rivalries.</p>
+            </div>
+          </details>
+          <details>
+            <summary>~485 Years Ago: The Morphian Affair</summary>
+            <div class="entry-body">
+              <p><em>Event:</em> The Replacement of Professor Vane. During a memorial for Professor Vane, who reportedly died on a mission, the "deceased" walks in—only to be confronted by the actual Professor Vane who had been teaching for five years.</p>
+              <p><em>The Revelation:</em> The "teaching" Vane was a Morphian Changeling who assumed the identity of the dying professor to honor his wish to "finish the semester." The Changeling had performed noble deeds and improved the curriculum.</p>
+              <p><em>The Aftermath:</em> The Council grants the Changeling an honorary degree and develops Bio‑Metric Wards to verify identity without harm. This event integrates Morphians into the Academy, dispelling alarmism about shapeshifter infiltration.</p>
+            </div>
+          </details>
+          <details>
+            <summary>~430 Years Ago: The Planar Exchange</summary>
+            <div class="entry-body">
+              <p><em>Event:</em> The Planar Exchange Program establishes partnerships with other institutions, fostering diplomatic ties and cultural exchange.</p>
+            </div>
+          </details>
+          <div class="lore-image-placeholder">
+            <img
+              class="lore-image"
+              alt="Planar Outreach / Exchange (click to cycle)"
+              title="Click to cycle illustrations"
+              data-images='[
+                "assets/images/lore/planaroutreach.webp",
+                "assets/images/lore/planaroutreach1.webp"
+              ]'
+              src="assets/images/lore/planaroutreach1.webp"
+              onerror="this.style.display='none'"
+            >
+          </div>
+          <details>
+            <summary>~380 Years Ago: The Treaty of the Tides</summary>
+            <div class="entry-body">
+              <p><em>Event:</em> The Treaty of the Tides is signed with Marid ambassadors after a leak from the Elemental Plane of Water. The Submerged Campus is created to host the Aquatic Exchange, eventually becoming the domain of the Carcharodonians.</p>
+            </div>
+          </details>
+          <div class="lore-image-placeholder">
+            <img
+              class="lore-image"
+              alt="Treaty of the Tides (click to cycle)"
+              title="Click to cycle illustrations"
+              data-images='[
+                "assets/images/lore/aquatictreaty.webp",
+                "assets/images/lore/aquatictreaty_1.webp"
+              ]'
+              src="assets/images/lore/aquatictreaty.webp"
+              onerror="this.style.display='none'"
+            >
+          </div>
+          <details>
+            <summary>~350 Years Ago: Mastery of Planar Mechanics</summary>
+            <div class="entry-body">
+              <p><em>Event:</em> The Academy refines interdimensional travel and stabilizes its own planar boundaries, training "Planar Navigators."</p>
+            </div>
+          </details>
         </div>
         <div class="lore-image-placeholder"><img src="assets/images/lore/theplanargames.png" alt="The Planar Games" class="lore-image" onerror="this.style.display='none'"></div>
         <div class="lore-content">
-          <p><strong>~450 Years Prior:</strong> The Headmaster's Tome, an ancient grimoire replete with the secrets of the founder's disappearance and the Academy's latent potential, was unearthed in the desolate ruins of the Training Fortress.</p>
-          <p><strong>~430 Years Prior:</strong> The Planar Exchange Program was initiated, enabling students to venture forth and study in distant lands, thus weaving a tapestry of diplomatic ties and cultural exchanges that spanned the cosmos.</p>
+          <p><strong>Artifacts & Discoveries:</strong> The Headmaster’s Tome is unearthed in the ruins of the Training Fortress; research expands under the new safeguards.</p>
         </div>
       </div>
       <div class="lore-image-placeholder"><img src="assets/images/lore/headmaster_tome_.png" alt="The Headmaster's Tome" class="lore-image" onerror="this.style.display='none'"></div>
       <div class="lore-era">
-        <h3>The Modern Age Period</h3>
+        <h3>The Modern Age (350–120 Years Ago)</h3>
         <div class="lore-content">
-          <p><strong>~350 Years Prior:</strong> The Academy delved into the esoteric study of Planar Mechanics, mastering the intricacies of interdimensional travel to navigate and safeguard the multiverse.</p>
-          <p><strong>~330 Years Prior:</strong> The Diapered Defenders, a band of heroes known for their peculiar choice of emblematic attire, graduated from the Academy. Their legend grew as they championed humility and vulnerability in the face of adversity.</p>
-          <p><strong>~300 Years Prior:</strong> The Great Schism rent the academic community asunder, as a contingent of traditionalists advocated for a return to the bygone era of the Well of Souls. The Council's intervention brought about a harmonious resolution, though echoes of discord lingered.</p>
+          <details>
+            <summary>~340 Years Ago: The Alchemical Overflow</summary>
+            <div class="entry-body">
+          <em>Event:</em> The Night of Living Glass.<br>
+          <em>The Expansion:</em> While history records this as a "mass‑production experiment," the specific catalyst was the attempted synthesis of Vitalocanum (a crystal exotic ingredient) into a liquid state to create a hyper‑potent healing draught. The reaction fused with the glass of the vats themselves.<br>
+          <em>The Bestiary Connection:</em> This event is the direct origin point for the Bottle Elemental and the Primordial Bottle Beast. The "spoiled form" ability of these creatures is a result of the corrupted healing potion, which turned acidic and semi‑sentient.<br>
+          <em>The Defense of the Depths:</em> While the main campus dealt with the overflow, a far more dangerous incursion occurred in the sub‑basements. A legion of Primordial Bottle Beasts (Bestiary: Large Elemental) and smaller Bottle Elementals swarmed towards the Hall of Cups, a ceremonial vault housing centuries of magical chalices and awards. Their goal was instinctively terrifying: to shatter the display cases and inhabit the magical vessels to create an army of "High‑Grade" elementals.<br>
+          <em>The Defenders:</em> The breach was held by two unlikely students who were serving detention in the artifact cellar: Lilly White: A fierce Bunbunkin student with stark white fur and intense pink eyes. Utilizing her Tunnelborn Navigation to maneuver the flooding corridors and her immense agility, she physically intercepted the shattering constructs, kicking away glass shards before they could reform. Unit 734 "Goldie": An early prototype Living Combat Doll (likely a precursor to the Guardian Doll subrace) with metallic skin, perfectly styled blonde curls, and striking blue eyes with dark sclera. Her immunity to the acidic "spoiled form" of the beasts allowed her to wade into the fray, channeling raw arcane energy to blast back the liquid horrors.<br>
+          <em>The Fallout:</em> The Alchemy Wing's drainage system was permanently altered. To this day, students are warned about "aggressive plumbing." The Hall of Cups remained intact, though several "participation trophies" were lost to the acid.</p>
+            </div>
+          </details>
+          <div class="lore-image-placeholder">
+            <img
+              class="lore-image"
+              alt="Alchemical Overflow – Bottle Beasts (click to cycle)"
+              title="Click to cycle illustrations"
+              data-images='[
+                "assets/images/lore/bottlebeasts.webp",
+                "assets/images/lore/bottlebeasts_1.webp",
+                "assets/images/lore/bottlebeasts_2.webp"
+              ]'
+              src="assets/images/lore/bottlebeasts.webp"
+              onerror="this.style.display='none'"
+            >
+          </div>
+          <details>
+            <summary>~330 Years Ago: The Diapered Defenders</summary>
+            <div class="entry-body">
+          <em>Event:</em> The Graduation of the Defenders and the Tragedy of Defender White.<br>
+          <em>The Expansion:</em> Calliope Angaraad (Defender White) did not just “absorb” power; she attempted to interface directly with the Crystal Resonance Arcanoengine, a relic of the Old War containing Tabitha Caelestis’s crystallized misery.<br>
+          <em>The Entity:</em> The corruption transformed Calliope into The Castoff. The “Crystalline Crown” fused to her skull (Bestiary entry: The Castoff) is the physical shard of that Arcanoengine. Her psychic abilities and the “Punitive Rebuke” reaction she possesses are twisted reflections of the Defender’s original mission to protect and chastise.<br>
+          <em>The Aftermath:</em> The “Diapered Defenders” disbanded in horror. The remaining members—Defender Yellow (Yara), Defender Blue, and Defender Red—went into seclusion or took up teaching posts, haunted by the “Neuro‑Static Feedback” that radiated from their fallen leader.</p>
+            </div>
+          </details>
+          <div class="lore-image-placeholder"><img src="assets/images/lore/tragedyofcalliope.webp" alt="Defender White – Tragedy of Calliope" class="lore-image" onerror="this.style.display='none'"></div>
+          <details>
+            <summary>~300 Years Ago: Rise of Dimspark</summary>
+            <div class="entry-body">
+          <em>Event:</em> The Settlement of “Freebooter’s Claim.”<br>
+          <em>The Expansion:</em> The outcasts from Elzbereth were primarily Artificers and radical Alchemists who refused the Council’s ban on Petrodistillate experimentation (Item Registry).<br>
+          <em>The Technology:</em> They settled the Old Belly Magma Chamber to tap into geothermal energy for their “Foundry” system. This separation led to the development of the Warforged Darkwatch (Bestiary), originally designed as mining security before being corrupted by later influences.<br>
+          <em>Cultural Shift:</em> This schism created the first distinct “Tech vs. Magic” divide, leading to the creation of items like the Magitech Rifle seen used by Trainee Auditors.</p>
+            </div>
+          </details>
+          <details>
+            <summary>~290 Years Ago: The Plushie Awakening</summary>
+            <div class="entry-body">
+          <em>Event:</em> The Soft Rebellion.<br>
+          <em>The Expansion:</em> The event began with a massive leakage of Dreamvapor (Item Registry: Legendary Essence) from a cracked containment unit in the West Wing Attic, which had been used as storage for centuries of confiscated toys and antique dolls. The vapor didn’t just animate them; it imbued them with the latent desires and dreams of their former owners.<br>
+          <em>The Living Dolls:</em> While the plushies became chaotic and simple, the antique dolls stored nearby absorbed the magic differently, gaining full sentience and forming the Living Doll race (Race Registry). Porcelain Dolls emerged as the leaders, using their innate sorcerous abilities to organize the chaos. Guardian Dolls instinctively took up arms (often knitting needles or scissors) to protect the smaller, confused Lost Plushies. Big Baby Dolls manifested with an overwhelming Unsettling Innocence, demanding care and attention from the faculty with such intensity that it halted administrative work for weeks.<br>
+          <em>The Conflict:</em> The “Soft Rebellion” wasn’t a war, but a mass demand for recognition. Thousands of Lost Plushies (Bestiary: Tiny Construct) flooded the hallways, utilizing their Pathetic Aura to force professors to stop grading papers and instead hold tea parties. The situation escalated when panicked plushies fused together to form the first Teddy Abominations (Bestiary: Large Monstrosity), rampaging through the cafeteria in search of “stuffing.”<br>
+          <em>The Resolution:</em> The Council, realizing they couldn’t simply banish sentient beings, established the Bureau of Lost and Found. This department, located in the annexed West Wing Attic, was tasked with integrating the Living Dolls into society as students and staff, while managing the feral populations of Lost Plushies.</p>
+            </div>
+          </details>
+          <div class="lore-image-placeholder">
+            <img
+              class="lore-image"
+              alt="Night of the Living Plushies (click to cycle)"
+              title="Click to cycle illustrations"
+              data-images='[
+                "assets/images/lore/livingplushies_1.webp",
+                "assets/images/lore/livingplushies.webp"
+              ]'
+              src="assets/images/lore/livingplushies_1.webp"
+              onerror="this.style.display='none'"
+            >
+          </div>
+          <div class="lore-image-placeholder">
+            <img
+              class="lore-image"
+              alt="Living Dolls Emergence (click to cycle)"
+              title="Click to cycle illustrations"
+              data-images='[
+                "assets/images/lore/livingdolls2.webp",
+                "assets/images/lore/livingdolls4.webp"
+              ]'
+              src="assets/images/lore/livingdolls2.webp"
+              onerror="this.style.display='none'"
+            >
+          </div>
+          
+          <details>
+            <summary>~280 Years Ago: The Outreach Campus</summary>
+            <div class="entry-body">
+          <em>Event:</em> Prime Material Plane Expansion.<br>
+          <em>The Expansion:</em> This initiative was heavily funded by the Unseen Hand (Warlock Patron). The goal was to recruit students with high “Causal Potential”—specifically Gemini Celestians and Morphian Changelings (Race Registry)—to diversify the Academy’s planar stability.<br>
+          <em>The Intake:</em> This era saw the introduction of the “Common” races to the Academy in bulk, necessitating the standardization of the UniGuard Basic White diaper (Item Registry) as the standard‑issue garment for the influx of un‑acclimated students.<br>
+          <em>Strategic Stabilization:</em> The Unseen Hand theorized that introducing beings with “variable realities” (Changelings) and “dual souls” (Gemini Celestians) would act as living anchors against the ontological fraying caused by Hootz’s disappearance. The Outreach Campus was essentially a massive stabilization ritual disguised as a school expansion.</p>
+            </div>
+          </details>
+          <details>
+            <summary>~250 Years Ago: The “Incontinence Incident” (Giggle Gas)</summary>
+            <div class="entry-body">
+          <em>Event:</em> The Giggle Gas Miscalculation.<br>
+          <em>The Expansion:</em> The spell in question was a modified version of <em>Giggle Gush</em> (Luminancy Spell) mixed with an aerosolized Brown Tincture (Item Registry: Ingested Poison/Restricted). The catastrophe was triggered by two students—a Dark Elf and a Satyr—who, driven by a chaotic mix of the “Diapered Whisperer’s” subtle manipulations and their own private enjoyment of diapers, brewed a vast quantity of sparkling pink potion.<br>
+          <em>The Methodology:</em> Instead of a simple gas, they introduced this brew into the Academy’s non‑drinking water systems. They then triggered a massive Evaporation Spell, turning the tainted water into a pervasive, sweet‑smelling aerosol that bypassed standard magical wards.<br>
+          <em>The Effect:</em> The aerosol caused immediate and total loss of control campus‑wide. It culturally cemented the use of the Emergency Changing Station in the woods as a permanent fixture.<br>
+          <em>The Fauna:</em> The gas settled into the lowlands, affecting the local wildlife. This exposure is theorized to be the evolutionary catalyst for the Skunkiddo race’s “Diapered Instinct” and the Darkling‑Hooter’s “Gutwrenching Hootery” ability.</p>
+            </div>
+          </details>
+          <div class="lore-image-placeholder">
+            <img
+              class="lore-image"
+              alt="The Incontinence Incident (click to cycle)"
+              title="Click to cycle illustrations"
+              data-images='[
+                "assets/images/lore/incontinenceincident.webp",
+                "assets/images/lore/incontinenceincident_1.webp",
+                "assets/images/lore/incontinenceincident_2.webp",
+                "assets/images/lore/incontinenceincident_3.webp",
+                "assets/images/lore/incontinenceincident_4.webp",
+                "assets/images/lore/incontinenceincident_5.webp"
+              ]'
+              src="assets/images/lore/incontinenceincident.webp"
+              onerror="this.style.display='none'"
+            >
+          </div>
+          <details>
+            <summary>~230 Years Ago: Infiltration of the Council</summary>
+            <div class="entry-body">
+          <em>Event:</em> The “Diapered Whisperer.”<br>
+          <em>The Expansion:</em> The Whisperer was a high‑ranking Warlock of The Unseen Hand, known in the archives only as “Provost Vane” (likely a stolen identity). They utilized the Plausible Deniability feature (Warlock Subclass) to mask their enchantments, ensuring their subtle manipulations of Council votes could never be traced back to magic.<br>
+          <em>The Agenda:</em> The Whisperer didn’t just suggest the reforms; they manufactured the consent for them. They orchestrated a series of “stress‑induced accidents” among the faculty during high‑stakes meetings, using subtle castings of <em>Spontaneous Accident</em> (Spellbook) to humiliate opponents. They pushed for the standardization of Diaper Discipline (Cleric Domain) not as a religious practice, but as a “necessary administrative policy for dignity and focus.”<br>
+          <em>The Tool:</em> To enforce this surveillance state, the Whisperer introduced the Diaper‑Check Bot (Bestiary: Deranged Diaper‑Check Bot) under the guise of “automated hygiene assistance” to relieve overworked staff. Secretly, these units were programmed with the Ancient Alert ability to monitor student movements and identify “at‑risk” individuals (i.e., political dissidents), feeding data directly back to the Unseen Hand.<br>
+          <em>The Legacy:</em> This infiltration effectively neutered the “Free Magic” caucus within the Council. By the time the Whisperer vanished, the infrastructure for the Padding Mandate of 220 was already legally ironclad, turning the Academy into a surveillance state wrapped in the guise of care.</p>
+            </div>
+          </details>
+          <div class="lore-image-placeholder">
+            <img
+              class="lore-image"
+              alt="The Diapered Whisperer (click to cycle)"
+              title="Click to cycle illustrations"
+              data-images='[
+                "assets/images/lore/whisperer.webp",
+                "assets/images/lore/diaperedwhisperer.webp"
+              ]'
+              src="assets/images/lore/whisperer.webp"
+              onerror="this.style.display='none'"
+            >
+          </div>
+          
+          <details>
+            <summary>~220 Years Ago: The “Safety” Reforms</summary>
+            <div class="entry-body">
+          <em>Event:</em> The Padding Mandate of 220.<br>
+          <em>The Expansion:</em> This Mandate made the wearing of SecuriCare Level 4s (Item Registry: Uncommon, +Advantage on Disease saves) mandatory for all “High‑Stress” classes (Evocation, Combat, Planar Binding). The official reasoning was “hygiene and focus,” arguing that bathroom breaks were a liability during delicate spellcasting.<br>
+          <em>The Resistance:</em> A student underground movement, the “Dry‑Pants Dissidents,” attempted to smuggle Invisipullups (Item Registry) to bypass inspection. They viewed the mandate as an overreach of the Whisperer’s influence.<br>
+          <em>The Crackdown:</em> In response, the administration deployed upgraded Matronbot units (Bestiary) equipped with True Sight sensors. These bots could see through the illusion magic of the Invisipullups, leading to public “corrections” and forced changes into the mandated, bulkier gear. This era normalized the culture of visible padding as a symbol of compliance and “seriousness” about one’s studies.</p>
+            </div>
+          </details>
+          <!-- Water War imagery moved above entry -->
+          
+          
+          <details>
+            <summary>~200 Years Ago: The “Water War”</summary>
+            <div class="entry-body">
+          <em>Event:</em> The Flooding of the College of Elementalism and the Marshland Nexus.<br>
+          <em>The Expansion:</em><br>
+          A catastrophic containment failure occurred when a portal to the Elemental Plane of Water became violently unstable. This instability was triggered by an unauthorized and experimental introduction of a Chronal Crystal (ancient Echo Bloom) into the portal's matrix, attempting to stabilize a temporal flow of water. The result was a massive, uncontrolled deluge of raw elemental water mixed with chronological distortion.<br>
+          <em>The Result:</em> This flooded the School of Elementalism and created the Marshland Nexus (Region Profile). The "glowing fog" is actually a suspension of Null-Water (Resource Registry) and chaotic mana, a byproduct of the chronal interference.<br>
+          <em>The Darkformes:</em> The contamination bred specific aquatic horrors. The Darkforme-Suffocator (Bestiary) evolved here, utilizing the Suffocating Embrace to drown mages who ventured too close. The Sleek-Lurkers (Bestiary) adapted to the mangrove roots to ambush recovery teams.<br>
+          <em>The Arcanoscience Recession:</em> The flooding didn't just ruin the School of Elementalism; it destroyed the Grand Hydraulic Archives, which housed centuries of research on fluid dynamics and mana-flow. This catastrophic loss of data set Arcanosciences back by nearly 100 years, forcing a return to more primitive, manual methods of magic regulation until the archives could be partially salvaged.<br>
+          <em>The Young Engineer:</em> It was during this chaos that a very young, prodigious student named Naclyra Kanzsick (future Foundry Administrator) first made her mark. While the faculty scrambled to contain the flood, Naclyra, utilizing scraps from the destroyed labs and her own innate genius, constructed rudimentary Magitek Rafts. These devices, powered by salvaged mana-cores, were instrumental in evacuating the flooded dormitories, saving the lives of dozens of non-swimming peers (specifically Kittenfolk and Fire Genasi) who would have otherwise drowned in the rising, chaotic waters. This act of ingenuity laid the foundation for her later, revolutionary work in magitech integration.</p>
+              <div class="lore-image-placeholder">
+                <img
+                  class="lore-image"
+                  alt="The Water War (click to cycle)"
+                  title="Click to cycle illustrations"
+                  data-images='[
+                    "assets/images/lore/waterwar_1.webp",
+                    "assets/images/lore/waterwar_2.webp",
+                    "assets/images/lore/waterwar_3.webp",
+                    "assets/images/lore/waterwar_4.webp",
+                    "assets/images/lore/waterwar_5.webp"
+                  ]'
+                  src="assets/images/lore/waterwar_1.webp"
+                  onerror="this.style.display='none'"
+                >
+              </div>
+            </div>
+          </details>
+          <details>
+            <summary>~150 Years Ago: Yara’s Descent</summary>
+            <div class="entry-body">
+          <em>Event:</em> The Rise of The Infantilizer.<br>
+          <em>The Expansion:</em> Yara (Defender Yellow) sought to cure Calliope (The Castoff) by reversing time. She utilized the Dark Dimension Regressor Field (Bestiary: CR 6 Aberration).<br>
+            <div class="lore-image-placeholder"><img src="assets/images/lore/battlewiththeinfantilizer.png" alt="Battle with The Infantilizer" class="lore-image" onerror="this.style.display='none'"></div>
+          <em>The Corruption:</em> Instead of healing, the field warped Yara. She established the “Crèche” in a pocket space within the cellarways.<br>
+          <em>The Minions:</em> Yara began mass‑producing Sentient Cribs (Bestiary) and Pacifier Golems (Bestiary) to “care” for her captured subjects. She perfected the Forced Second Childhood spell (Nursery Domain) to strip powerful figures of their agency, turning them into the “charges” of her twisted nursery.<br>
+          <em>The Cellarways Manifestation:</em> As Yara’s obsession with “corrective care” deepened, the first explicitly punishment and care‑oriented Darklings began to manifest within the Cellarways. The Darkforme Punishment Maid (Bestiary: CR 3) and the Shadow Babysitter (Bestiary: CR 4) appeared not as random spawns, but as enforcers of her new order, patrolling the sub‑basements to “discipline” wayward students.<br>
+          <em>The Allegory of Tabitha:</em> In a terrifying display of power meant to mirror (and surpass) Tabitha Caelestis, Yara momentarily wrested psychic control over a massive contingent of feral Darklings dwelling in the deep shadows beneath the plane. She bound them to her service, creating a “Shadow Nursery” that mimicked Tabitha’s armies but replaced conquest with enforced infancy.<br>
+          <em>The Iron Command:</em> Perhaps most disturbing was her ability to command the Warforged Remnants (specifically Warforged Darkwatch units) that had dwelled in the Cellarways since the Old War. She overrode their ancient combat protocols with nursery logic, turning these war machines into hulking, lethal wardens that existed only to enforce naptime and containment until her eventual defeat.</p>
+            </div>
+          </details>
         </div>
         <div class="lore-image-placeholder"><img src="assets/images/lore/diapered_defenders_placeholder.jpg" alt="The Diapered Defenders" class="lore-image" onerror="this.style.display='none'"></div>
         <div class="lore-content">
-          <p><strong>~280 Years Prior:</strong> The Outreach, a satellite campus of the Scholia Magus Academy, was established in the Material Plane, offering the fruits of knowledge to those unable to partake in the Planar Campus's ethereal embrace.</p>
-          <p><strong>~250 Years Prior:</strong> The "Incontinence Incident," a regrettable prank gone awry, cast an embarrassing pall over the School. The ensuing hilarity and confusion, however, did little to deter the student body's resolve.</p>
-          <p><strong>~230 Years Prior:</strong> The Council of Professorial Oversight was infiltrated by the descendants of the Shadow Guild. The Diapered Whisperer, a mole of insidious intent, began subtly shaping the Academy's destiny.</p>
-          <p><strong>~200 Years Prior:</strong> The "Water War," a magical conflagration precipitated by a student's experiment, led to the temporary closure of the School of Elementalism for renovations.</p>
+          <p><strong>Culture & Governance:</strong> Comfort cultures, mandates, and reforms during this era reshape norms and policy across campus life.</p>
         </div>
       </div>
-      <div class="lore-image-placeholder"><img src="assets/images/lore/thewaterwar.png" alt="The Water War" class="lore-image" onerror="this.style.display='none'"></div>
+      
       <div class="lore-era">
-        <h3>Recent Historical Milestones</h3>
+        <h3>The Contemporary Era (120 Years Ago – Present)</h3>
         <div class="lore-content">
-          <p><strong>~155 Years Prior:</strong> The era saw the enrollment of several current luminaries of the Academy's faculty, including the esteemed Ardelie Heller.</p>
-          <p><strong>~150 Years Prior:</strong> The Diapered Defenders reunited to confront the emergent menace of "The Infantilizer," whose insidious power sought to diminish the great to the state of the powerless.</p>
-          <p><strong>~130 Years Prior:</strong> The enigmatic Ghostly Host materialized before the eyes of the School's denizens, their spectral presence a silent sentinel and a poignant reminder of the Academy's storied past.</p>
+          <div class="lore-image-placeholder"><img src="assets/images/lore/scholiaproper.webp" alt="Scholia Diaspros — The School Proper" class="lore-image" onerror="this.style.display='none'"></div>
+          <p><strong>~120 – Terror’s Night:</strong> Post-Infantilizer trauma ruptures Cellarways; Darklings flood sub-basements as surviving Defenders push back.</p>
+          <p><strong>~115 – The Great Crib Escape:</strong> Residual regression magic animates vault-stored furniture; Sentient Cribs and Temporal Crib Guardians attempt to “put to bed” the faculty.</p>
+          <p><strong>~110 – The Whisperer’s Legacy:</strong> The Diaper Discipline clerical domain is redeemed into structured care under the first High Priestess of Ela’sharna.</p>
+          <p><strong>~105 – The Undercroft Incident:</strong> Ardelie Heller and Naclyra Kanzsick defeat the Sire Reaver and prevent activation of the Chap’Hell. Ardelie becomes ageless and serves into the present day.</p>
+          <p><strong>~95 – The Iron Soul Revelation:</strong> A dense ghost solidifies into a Warforged soldier; the Ghostly Host are revealed as phase-shifted Warforged trapped in ontological dysfunction.</p>
+          <p><strong>~85 – The Poltergeist Prank War:</strong> Bardic attempts to “reprogram” the Host animate the laundry wing; Guardian Dolls are created to subdue clothes.</p>
+          <p><strong>~75 – Psionic Resurgence:</strong> Psionics reenter the curriculum after centuries dormant.</p>
+          <p><strong>~70 – Comfort Clubs:</strong> Little Leaguers and Night-Light Watch form, legitimizing mutual care and age-play as stress relief.</p>
+          <p><strong>~60 – Phase-Shift Containment:</strong> Reality Anchors keep the Ghostly Host intangible within school bounds.</p>
+          <p><strong>~55 – Lost & Found Expansion:</strong> The West Wing Attic is annexed to house Living and Lost Plushies.</p>
+          <p><strong>~40 – Technomantic Strike:</strong> Student protests lead to a truce; the Foundry system integrates tech and magic in the economy.</p>
+          <p><strong>~25 – Arcanet Beta Crash:</strong> The “magical internet” launch causes Mass Suggestion feedback; “Babybrain” is accidentally uploaded and affects users randomly.</p>
+          <p><strong>~15 – Echo Bloom:</strong> The Echo Bloom begins in the campus woods—flora display otherworldly colors and emit past sounds.</p>
         </div>
-        <div class="lore-image-placeholder"><img src="assets/images/lore/battlewiththeinfantilizer.png" alt="Battle with The Infantilizer" class="lore-image" onerror="this.style.display='none'"></div>
+        <div class="lore-image-placeholder">
+          <img
+            class="lore-image"
+            alt="Echo Bloom Incident (click to cycle)"
+            title="Click to cycle illustrations"
+            data-images='[
+              "assets/images/lore/echobloomincident.webp",
+              "assets/images/lore/echobloomincident1.webp"
+            ]'
+            src="assets/images/lore/echobloomincident.webp"
+            onerror="this.style.display='none'"
+          >
+        </div>
+        <details>
+          <summary>~14 Years Ago: Umbra’s Re‑Awakening</summary>
+          <div class="entry-body">
+            <p><em>Event:</em> Umbra’s presence resurges in shadowed domains beneath the campus. A new wave of Darkforme manifestations follows, distinct from the botanical Echo Bloom.
+            </p>
+            <div class="lore-image-placeholder">
+              <img
+                class="lore-image"
+                alt="Umbra's Re‑Emergence (click to cycle)"
+                title="Click to cycle illustrations"
+                data-images='[
+                  "assets/images/lore/umbrareemergence.webp",
+                  "assets/images/lore/umbrareemergence_1.webp",
+                  "assets/images/lore/umbrareemergence_2.webp",
+                  "assets/images/lore/umbrareemergence_3.webp"
+                ]'
+                src="assets/images/lore/umbrareemergence.webp"
+                onerror="this.style.display='none'"
+              >
+            </div>
+          </div>
+        </details>
+        
+        
         <div class="lore-content">
-          <p><strong>~120 Years Prior:</strong> The Infantilizer was vanquished, though not before leaving a trail of diapered dignitaries in his wake. The Diapered Defenders, having served their purpose, once again dispersed into the annals of history.</p>
-          <p><strong>~100 Years Prior:</strong> The millennial anniversary of the Academy's founding was celebrated with the Grand Quest, a series of trials to test the mettle of its pupils and reaffirm its legacy of heroism.</p>
-          <p><strong>~90 Years Prior:</strong> The Ghostly Host was revealed to be an unintended consequence of the Headmaster's efforts to shield the School. Their existence served as a haunting reminder of the interplay between protection and confinement.</p>
+          <p><strong>Present Day – Ascent to the Black Pyramid:</strong> Students Alunra, Charla, Karoline, and Elva ascend Dracespire Mountains, discover the Ancient Summer House, and meet Ela’sharna in the Black Pyramid.</p>
+          <div class="lore-image-placeholder">
+            <img src="assets/images/lore/blackpyramidelasharna.webp" alt="Present Day — The Black Pyramid" class="lore-image" onerror="this.style.display='none'">
+          </div>
+          
+          <p><strong>Present Day – The Slime Sovereign:</strong> Princess Goop is encountered; paths open toward the Vault of the Below or the Gelatinous Court’s liberation.</p>
+        </div>
+        <div class="lore-image-placeholder"><img src="assets/images/lore/VRsimreleased.webp" alt="Release of the VR Simulation" class="lore-image" onerror="this.style.display='none'"></div>
+        <div class="lore-image-placeholder" style="text-align:center">
+          <img src="assets/images/lore/ardelieandfriends_1.webp" alt="Dean of Discipline, Ardelie Heller" class="lore-image" onerror="this.style.display='none'">
+          <div style="color:#b38600; font-weight:700; margin-top:4px">Dean of Discipline, Ardelie Heller, Always Watching</div>
+        </div>
+        
+        <div class="lore-content">
+          <p><strong>Continuing Threads:</strong> Grand quests, resilience curricula, and the Headmaster’s lingering weave shape current student life alongside stabilized anchors and renewed psionics.</p>
         </div>
       </div>
       <div class="lore-image-placeholder"><img src="assets/images/lore/ghostly_host_placeholder.jpg" alt="The Ghostly Host" class="lore-image" onerror="this.style.display='none'"></div>
-    </div> <div id="races-section" class="content-section">
+    </div> </div><div id="races-section" class="content-section">
       <h2>Academy Races</h2>
       <div id="races-iframe-container" class="iframe-container">
         </div>
@@ -1926,7 +2536,16 @@
             document.getElementById('legacy-Regalia').classList.add('active');
             refreshStaticIframe('regalia-creator-iframe', '../regalia maker.html');
         },
-        'btn-lore': () => document.getElementById('lore-section').classList.add('active'),
+        'btn-lore': () => {
+            const lore = document.getElementById('lore-section');
+            lore.classList.add('active');
+            // Ensure lore subtabs and per-entry collapsibles are initialized when opening Lore
+            initializeLoreSubtabs(lore);
+            // Re-run collapsible init in case content or order changed
+            if (window.initLoreEntryCollapsibles) {
+              window.initLoreEntryCollapsibles(lore);
+            }
+        },
         'btn-spellbook': () => {
             document.getElementById('spellbook-section').classList.add('active');
             createOrRefreshIframe('spellbook-iframe-container', 'spellbook-iframe', '../spellbook.html', 'Spellbook');
@@ -2084,6 +2703,86 @@
     }
     window.copyToClipboard = copyToClipboard;
 
+    // --- Lore subtabs ---
+    let loreLastSubtab = 'timeline';
+    function initializeLoreSubtabs(section) {
+      const subnav = section.querySelector('.lore-subnav');
+      if (!subnav || subnav.dataset.initialized) return;
+      subnav.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-lore-subtab]');
+        if (!btn) return;
+        const target = btn.getAttribute('data-lore-subtab');
+        const pantheon = section.querySelector('#lore-pantheon');
+        const timeline = section.querySelector('#lore-timeline');
+        if (!pantheon || !timeline) return;
+
+        // Toggle subsections
+        pantheon.classList.toggle('active', target === 'pantheon');
+        timeline.classList.toggle('active', target === 'timeline');
+
+        // Update button pressed state
+        subnav.querySelectorAll('[data-lore-subtab]').forEach(b => {
+          const active = b.getAttribute('data-lore-subtab') === target;
+          b.setAttribute('aria-pressed', active ? 'true' : 'false');
+          b.style.outline = active ? '2px solid var(--gold)' : '';
+        });
+
+        loreLastSubtab = target;
+      });
+      // Initialize pressed state based on last selection
+      const initial = loreLastSubtab;
+      const pantheon = section.querySelector('#lore-pantheon');
+      const timeline = section.querySelector('#lore-timeline');
+      if (pantheon && timeline) {
+        pantheon.classList.toggle('active', initial === 'pantheon');
+        timeline.classList.toggle('active', initial === 'timeline');
+        subnav.querySelectorAll('[data-lore-subtab]').forEach(b => {
+          const active = b.getAttribute('data-lore-subtab') === initial;
+          b.setAttribute('aria-pressed', active ? 'true' : 'false');
+          b.style.outline = active ? '2px solid var(--gold)' : '';
+        });
+      }
+      subnav.dataset.initialized = '1';
+    }
+
+  </script>
+  <script>
+    // Initialize click-to-cycle behavior for lore images with multiple sources.
+    (function(){
+      function initCyclingLoreImages(root=document){
+        const imgs = root.querySelectorAll('img.lore-image[data-images]');
+        imgs.forEach(img => {
+          let list;
+          try {
+            const raw = img.getAttribute('data-images');
+            list = Array.isArray(raw) ? raw : JSON.parse(raw);
+          } catch (e) {
+            console.error('Invalid data-images on lore image:', e);
+            return;
+          }
+          if (!Array.isArray(list) || list.length === 0) return;
+
+          // Randomize first image on load
+          const startIdx = Math.floor(Math.random() * list.length);
+          img.dataset.index = String(startIdx);
+          img.src = list[startIdx];
+
+          // Click to cycle forward
+          img.addEventListener('click', () => {
+            const current = Number(img.dataset.index || '0');
+            const next = (current + 1) % list.length;
+            img.dataset.index = String(next);
+            img.src = list[next];
+          }, { passive: true });
+        });
+      }
+      // Run once after DOM is ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => initCyclingLoreImages(document));
+      } else {
+        initCyclingLoreImages(document);
+      }
+    })();
   </script>
 </body>
 </html>

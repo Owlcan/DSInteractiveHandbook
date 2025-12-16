@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Story Generator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- JSZip for ZIP export fallback -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <style>
+    :root { --gold: #daac17; --parchment: #2C2614; --parchment-dark: #1E1C12; }
+    body { font-family: 'Inter', sans-serif; }
+    .drop-zone { border: 2px dashed #9ca3af; }
+    .text-preview { max-height: 40vh; overflow: auto; line-height: 1.75; }
+  </style>
+</head>
+<body class="bg-neutral-900 text-neutral-100">
+  <div class="max-w-6xl mx-auto p-4">
+    <h1 class="text-2xl font-bold mb-2">Story Generator</h1>
+    <p class="text-sm text-neutral-300 mb-6">Build pages with text and multiple images, then export to a standalone viewer (like BSStory). Supports quick-save and drag & drop images.</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+      <div>
+        <label class="block text-sm mb-1">Story Title</label>
+        <input id="storyTitle" type="text" class="w-full px-3 py-2 rounded bg-neutral-800 border border-neutral-700" placeholder="e.g., Ascent to the Black Pyramid" />
+      </div>
+      <div>
+        <label class="block text-sm mb-1">Asset Folder Slug (for export)</label>
+        <input id="assetSlug" type="text" class="w-full px-3 py-2 rounded bg-neutral-800 border border-neutral-700" placeholder="e.g., blackpyramidstory" />
+        <p class="text-xs text-neutral-400 mt-1">Images are assumed under src/assets/images/lore/<span class="italic">slug</span>/</p>
+      </div>
+      <div class="flex items-end gap-2">
+        <button id="btnSave" class="px-4 py-2 rounded bg-emerald-600 hover:bg-emerald-500">Quick Save</button>
+        <button id="btnLoad" class="px-4 py-2 rounded bg-blue-600 hover:bg-blue-500">Load</button>
+        <button id="btnExport" class="px-4 py-2 rounded bg-yellow-600 hover:bg-yellow-500">Export HTML</button>
+        <button id="btnExportFolder" class="px-4 py-2 rounded bg-orange-600 hover:bg-orange-500">Export Folder</button>
+        <button id="btnPreview" class="px-4 py-2 rounded bg-purple-600 hover:bg-purple-500">Preview Story</button>
+      </div>
+    </div>
+    <!-- Root paths configuration -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+      <div>
+        <label class="block text-sm mb-1">Images Root Path</label>
+        <input id="imagesRoot" type="text" class="w-full px-3 py-2 rounded bg-neutral-800 border border-neutral-700" placeholder="src/assets/images/lore" value="src/assets/images/lore" />
+        <p class="text-xs text-neutral-400 mt-1">Base directory for images. Export will use <code>imagesRoot/slug/filename</code>.</p>
+      </div>
+      <div>
+        <label class="block text-sm mb-1">Story Export Root (optional)</label>
+        <input id="storyRoot" type="text" class="w-full px-3 py-2 rounded bg-neutral-800 border border-neutral-700" placeholder="e.g., src/assets/stories" />
+        <p class="text-xs text-neutral-400 mt-1">Informational only; included in exported viewer for reference.</p>
+      </div>
+      <div class="flex items-end">
+        <div class="text-xs text-neutral-400">
+          <span class="block">Computed image base:</span>
+          <span id="computedBasePreview" class="block font-mono mt-1">src/assets/images/lore/&lt;slug&gt;/</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
+      <div class="lg:col-span-1 bg-neutral-800 border border-neutral-700 rounded p-3">
+        <div class="flex items-center justify-between mb-2">
+          <h2 class="font-semibold">Pages</h2>
+          <div class="text-sm text-neutral-300">Total: <span id="pageCount">0</span></div>
+        </div>
+        <div class="flex gap-2 mb-3">
+          <button id="btnAddPage" class="px-3 py-1 rounded bg-neutral-700 hover:bg-neutral-600 text-sm">Add Page</button>
+          <button id="btnAddChapter" class="px-3 py-1 rounded bg-neutral-700 hover:bg-neutral-600 text-sm">Add Chapter Page</button>
+        </div>
+        <div class="flex items-center gap-2 mb-3">
+          <label for="jumpInput" class="sr-only">Jump to page number</label>
+          <input id="jumpInput" type="number" min="1" class="w-20 px-2 py-1 rounded bg-neutral-900 border border-neutral-700 text-sm" placeholder="#" title="Jump to page number" />
+          <button id="btnJump" class="px-3 py-1 rounded bg-neutral-700 hover:bg-neutral-600 text-sm" aria-label="Jump to page">Go</button>
+        </div>
+        <ul id="pagesList" class="space-y-1 text-sm"></ul>
+      </div>
+
+      <div class="lg:col-span-3 bg-neutral-800 border border-neutral-700 rounded p-4">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <div class="text-sm text-neutral-300">Editing Page <span id="currentPageNumber">1</span> (<span id="currentPageType">title</span>)</div>
+          </div>
+          <div class="flex gap-2">
+            <button id="btnPrevPage" class="px-3 py-1 rounded bg-neutral-700 hover:bg-neutral-600 text-sm">Prev</button>
+            <button id="btnNextPage" class="px-3 py-1 rounded bg-neutral-700 hover:bg-neutral-600 text-sm">Next</button>
+            <button id="btnInsertAfter" class="px-3 py-1 rounded bg-neutral-700 hover:bg-neutral-600 text-sm">Insert After</button>
+            <button id="btnDeletePage" class="px-3 py-1 rounded bg-red-700 hover:bg-red-600 text-sm">Delete Page</button>
+          </div>
+        </div>
+
+        <div id="titleControls" class="mb-4 hidden">
+          <label class="block text-sm mb-1">Title Page Heading</label>
+          <input id="titleHeading" type="text" class="w-full px-3 py-2 rounded bg-neutral-900 border border-neutral-700" placeholder="Main Title" />
+        </div>
+        <div id="chapterControls" class="mb-4 hidden">
+          <label class="block text-sm mb-1">Chapter Heading</label>
+          <input id="chapterHeading" type="text" class="w-full px-3 py-2 rounded bg-neutral-900 border border-neutral-700" placeholder="Chapter Title" />
+          <div class="mt-3">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-sm">Chapter Items</span>
+              <button id="btnAddChapterItem" class="px-3 py-1 rounded bg-neutral-700 hover:bg-neutral-600 text-sm">Add Row</button>
+            </div>
+            <ul id="chapterItems" class="space-y-2"></ul>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label class="block text-sm mb-1">Images (drag & drop files below; arrow through variants)</label>
+          <div id="dropZone" class="drop-zone rounded p-6 text-center text-neutral-300">Drop images here or click to select</div>
+          <label for="filePicker" class="sr-only">Select images to add to this page</label>
+          <input id="filePicker" type="file" accept="image/*" class="hidden" multiple aria-label="Select images to add to this page" title="Select images" />
+          <div class="mt-3 flex items-center gap-2" id="imageControls">
+            <button id="btnPrevImg" class="px-3 py-1 rounded bg-neutral-700 hover:bg-neutral-600 text-sm">◄</button>
+            <span id="imgCounter" class="text-sm text-neutral-300">0 of 0</span>
+            <button id="btnNextImg" class="px-3 py-1 rounded bg-neutral-700 hover:bg-neutral-600 text-sm">►</button>
+          </div>
+          <div id="imgPreview" class="mt-3 h-48 bg-neutral-900 border border-neutral-700 rounded flex items-center justify-center">
+            <span class="text-neutral-400 text-sm">No image</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm mb-1">Page Text</label>
+            <textarea id="pageText" class="w-full h-48 px-3 py-2 rounded bg-neutral-900 border border-neutral-700" placeholder="Write page text here..."></textarea>
+          </div>
+          <div>
+            <label class="block text-sm mb-1">Preview</label>
+            <div id="textPreview" class="text-preview bg-neutral-900 border border-neutral-700 rounded p-3"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Inactive media warning footer -->
+  <div id="inactiveWarning" class="max-w-6xl mx-auto mt-2 px-4">
+    <div class="hidden" role="status" aria-live="polite"></div>
+  </div>
+
+  <script>
+    const pages = [];
+    let currentIndex = 0;
+    // Keep a map of image File objects keyed by filename for folder export
+    const imageFiles = new Map();
+
+    function newPage(type = 'page') {
+      return { type, title: '', listItems: [], text: '', images: [], imageActive: {}, imgIndex: 0 };
+    }
+
+    function init() {
+      pages.push(newPage('title'));
+      currentIndex = 0;
+      refreshPagesList();
+      renderCurrentPage();
+
+      document.getElementById('btnAddPage').addEventListener('click', () => {
+        pages.push(newPage('page'));
+        refreshPagesList();
+        selectPage(pages.length - 1);
+      });
+      document.getElementById('btnAddChapter').addEventListener('click', () => {
+        const idx = currentIndex + 1;
+        pages.splice(idx, 0, newPage('chapter'));
+        refreshPagesList();
+        selectPage(idx);
+      });
+      document.getElementById('btnInsertAfter').addEventListener('click', () => {
+        const idx = currentIndex + 1;
+        pages.splice(idx, 0, newPage('page'));
+        refreshPagesList();
+        selectPage(idx);
+      });
+      document.getElementById('btnPrevPage').addEventListener('click', () => { if (currentIndex > 0) selectPage(currentIndex - 1); });
+      document.getElementById('btnNextPage').addEventListener('click', () => { if (currentIndex < pages.length - 1) selectPage(currentIndex + 1); });
+      document.getElementById('btnJump').addEventListener('click', () => {
+        const n = parseInt(document.getElementById('jumpInput').value, 10) - 1;
+        if (!isNaN(n) && n >= 0 && n < pages.length) selectPage(n);
+      });
+      document.getElementById('btnDeletePage').addEventListener('click', deleteCurrentPage);
+
+      document.getElementById('titleHeading').addEventListener('input', (e) => {
+        pages[currentIndex].title = e.target.value; refreshPagesList();
+      });
+      document.getElementById('chapterHeading').addEventListener('input', (e) => {
+        pages[currentIndex].title = e.target.value; refreshPagesList();
+      });
+      document.getElementById('btnAddChapterItem').addEventListener('click', () => {
+        const p = pages[currentIndex];
+        if (!Array.isArray(p.listItems)) p.listItems = [];
+        p.listItems.push({ text: '', page: '' });
+        renderChapterItems();
+      });
+
+      document.getElementById('pageText').addEventListener('input', (e) => {
+        pages[currentIndex].text = e.target.value; renderTextPreview();
+      });
+
+      const dropZone = document.getElementById('dropZone');
+      const filePicker = document.getElementById('filePicker');
+      dropZone.addEventListener('click', () => filePicker.click());
+      filePicker.addEventListener('change', (e) => handleFiles(e.target.files));
+      dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('bg-neutral-700'); });
+      dropZone.addEventListener('dragleave', () => dropZone.classList.remove('bg-neutral-700'));
+      dropZone.addEventListener('drop', (e) => { e.preventDefault(); dropZone.classList.remove('bg-neutral-700'); handleFiles(e.dataTransfer.files); });
+
+      document.getElementById('btnPrevImg').addEventListener('click', () => { const p = pages[currentIndex]; if (p.images.length > 0) { p.imgIndex = Math.max(0, p.imgIndex - 1); renderImagePreview(); }});
+      document.getElementById('btnNextImg').addEventListener('click', () => { const p = pages[currentIndex]; if (p.images.length > 0) { p.imgIndex = Math.min(p.images.length - 1, p.imgIndex + 1); renderImagePreview(); }});
+
+      document.getElementById('btnSave').addEventListener('click', quickSave);
+      document.getElementById('btnLoad').addEventListener('click', quickLoad);
+      document.getElementById('btnExport').addEventListener('click', exportHtml);
+      document.getElementById('btnExportFolder').addEventListener('click', exportFolder);
+      document.getElementById('btnPreview').addEventListener('click', previewHtml);
+
+      // Keep computed base preview up to date
+      document.getElementById('assetSlug').addEventListener('input', updateComputedBasePreview);
+      document.getElementById('imagesRoot').addEventListener('input', updateComputedBasePreview);
+      updateComputedBasePreview();
+      renderInactiveMediaWarning();
+    }
+
+    function handleFiles(files) {
+      const p = pages[currentIndex];
+      for (const f of files) {
+        if (!f.type.startsWith('image/')) continue;
+        // Avoid duplicates; mark existing names active instead of adding again
+        if (!p.images.includes(f.name)) {
+          p.images.push(f.name);
+        }
+        if (!p.imageActive) p.imageActive = {};
+        p.imageActive[f.name] = true;
+        try { imageFiles.set(f.name, f); } catch {}
+      }
+      p.imgIndex = p.images.length > 0 ? Math.min(p.imgIndex, p.images.length - 1) : 0;
+      renderImagePreview(); updateImgCounter(); refreshPagesList();
+      renderInactiveMediaWarning();
+    }
+
+    function escapeHtml(s) {
+      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+    }
+    function refreshPagesList() {
+      const ul = document.getElementById('pagesList'); ul.innerHTML = '';
+      pages.forEach((p,i) => {
+        const li = document.createElement('li');
+        li.className = 'flex items-center justify-between px-2 py-1 rounded ' + (i===currentIndex?'bg-neutral-700':'bg-neutral-900');
+        const label = p.type==='title'?'Title':p.type==='chapter'?'Chapter':'Page';
+        const left = document.createElement('span');
+        left.innerHTML = `${i+1}. ${label}${p.title?': '+escapeHtml(p.title):''}`;
+        const del = document.createElement('button');
+        del.className = 'px-2 py-1 rounded bg-red-700 hover:bg-red-600 text-xs';
+        del.textContent = 'Delete';
+        del.addEventListener('click', (e) => { e.stopPropagation(); deletePage(i); });
+        li.appendChild(left);
+        li.appendChild(del);
+        li.addEventListener('click', () => selectPage(i));
+        ul.appendChild(li);
+      });
+      document.getElementById('pageCount').textContent = pages.length;
+      document.getElementById('currentPageNumber').textContent = currentIndex + 1;
+    }
+
+    function deleteCurrentPage(){ deletePage(currentIndex); }
+    function deletePage(index){
+      if (pages.length <= 1) { alert('You must have at least one page.'); return; }
+      const confirmMsg = `Delete page ${index+1}?`;
+      if (!window.confirm(confirmMsg)) return;
+      pages.splice(index, 1);
+      if (currentIndex >= pages.length) currentIndex = pages.length - 1;
+      else if (index < currentIndex) currentIndex = Math.max(0, currentIndex - 1);
+      refreshPagesList();
+      renderCurrentPage();
+      renderInactiveMediaWarning();
+    }
+    function selectPage(i){ currentIndex=i; renderCurrentPage(); refreshPagesList(); renderInactiveMediaWarning(); }
+    function renderCurrentPage(){
+      const p = pages[currentIndex];
+      document.getElementById('currentPageType').textContent = p.type;
+      document.getElementById('currentPageNumber').textContent = currentIndex + 1;
+      document.getElementById('titleControls').classList.toggle('hidden', p.type!=='title');
+      document.getElementById('chapterControls').classList.toggle('hidden', p.type!=='chapter');
+      document.getElementById('titleHeading').value = p.type==='title'?(p.title||''):'';
+      document.getElementById('chapterHeading').value = p.type==='chapter'?(p.title||''):'';
+      if (p.type==='chapter') renderChapterItems();
+      document.getElementById('pageText').value = p.text || '';
+      renderTextPreview(); renderImagePreview(); updateImgCounter();
+    }
+    function renderChapterItems(){
+      const p = pages[currentIndex]; const ul = document.getElementById('chapterItems'); ul.innerHTML='';
+      (p.listItems||[]).forEach((item,idx)=>{
+        const li=document.createElement('li'); li.className='grid grid-cols-7 items-center gap-2';
+        const label=document.createElement('input'); label.type='text'; label.placeholder='Link label'; label.value=(item && item.text) ? item.text : ''; label.className='col-span-5 px-3 py-1 rounded bg-neutral-900 border border-neutral-700'; label.addEventListener('input',(e)=>{ if(!p.listItems[idx]) p.listItems[idx]={text:'',page:''}; p.listItems[idx].text=e.target.value; });
+        const page=document.createElement('input'); page.type='number'; page.min='1'; page.placeholder='#'; page.value=(item && item.page) ? item.page : ''; page.className='col-span-1 px-3 py-1 rounded bg-neutral-900 border border-neutral-700'; page.addEventListener('input',(e)=>{ if(!p.listItems[idx]) p.listItems[idx]={text:'',page:''}; p.listItems[idx].page=e.target.value; });
+        const btn=document.createElement('button'); btn.textContent='Remove'; btn.className='px-3 py-1 rounded bg-red-700 hover:bg-red-600 text-sm'; btn.addEventListener('click',()=>{p.listItems.splice(idx,1); renderChapterItems();});
+        li.appendChild(label); li.appendChild(page); li.appendChild(btn); ul.appendChild(li);
+      });
+    }
+    function renderTextPreview(){
+      const p=pages[currentIndex]; const preview=document.getElementById('textPreview');
+      const paras=(p.text||'').split(/\n\s*\n/).map(s=>s.trim()).filter(Boolean).map(s=>`<p>${escapeHtml(s)}</p>`).join('');
+      preview.innerHTML = paras || '<p class="text-neutral-500">No text</p>';
+    }
+    function renderImagePreview(){
+      const p=pages[currentIndex]; const div=document.getElementById('imgPreview'); div.innerHTML='';
+      if(p.images.length===0){ div.innerHTML='<span class="text-neutral-400 text-sm">No images</span>'; return; }
+      const list=document.createElement('div'); list.className='flex flex-wrap gap-2';
+      p.images.forEach((n,i)=>{
+        const active = p.imageActive && p.imageActive[n];
+        const chip=document.createElement('button');
+        chip.type='button';
+        chip.className='px-2 py-1 rounded border text-xs ' +
+          (active ? 'text-green-300 border-green-500' : 'text-neutral-400 border-neutral-700') +
+          (i===p.imgIndex ? ' bg-neutral-700' : '');
+        chip.textContent=n;
+        chip.title = active ? 'Active (file present)' : 'Inactive (re-upload to activate)';
+        chip.addEventListener('click',()=>{ p.imgIndex=i; updateImgCounter(); renderImagePreview(); });
+        list.appendChild(chip);
+      });
+      div.appendChild(list);
+    }
+    function updateImgCounter(){
+      const p=pages[currentIndex];
+      const total=p.images.length;
+      const activeCount = p.images.filter(n => p.imageActive && p.imageActive[n]).length;
+      const cur=total?(p.imgIndex+1):0;
+      document.getElementById('imgCounter').textContent=`${cur} of ${total} (active ${activeCount})`;
+    }
+
+    function storageKey(){
+      const slug=(document.getElementById('assetSlug').value.trim()||'story').replace(/[^a-z0-9-]+/ig,'-');
+      return `storygen:${slug}`;
+    }
+    function quickSave(){ const data={ title: document.getElementById('storyTitle').value.trim()||'Untitled Story', slug: (document.getElementById('assetSlug').value.trim()||'story').replace(/[^a-z0-9-]+/ig,'-'), imagesRoot: document.getElementById('imagesRoot').value.trim(), storyRoot: document.getElementById('storyRoot').value.trim(), pages }; localStorage.setItem(storageKey(), JSON.stringify(data)); }
+    function quickLoad(){ const raw=localStorage.getItem(storageKey()); if(!raw) return; const obj=JSON.parse(raw); document.getElementById('storyTitle').value=obj.title||''; document.getElementById('assetSlug').value=obj.slug||''; if(obj.imagesRoot!==undefined) document.getElementById('imagesRoot').value=obj.imagesRoot; if(obj.storyRoot!==undefined) document.getElementById('storyRoot').value=obj.storyRoot; pages.splice(0,pages.length,...obj.pages.map(p=>({...p}))); currentIndex=0; 
+      // Ensure imageActive exists and mark none active after load
+      pages.forEach(p=>{ if (!p.imageActive) p.imageActive = {}; });
+      refreshPagesList(); renderCurrentPage(); updateComputedBasePreview(); }
+
+    function computeInactiveSummary(){
+      const names = new Set();
+      let pagesWithInactive = 0;
+      pages.forEach(p=>{
+        let pageHasInactive = false;
+        (p.images||[]).forEach(n=>{
+          if(!(p.imageActive && p.imageActive[n])){ names.add(n); pageHasInactive = true; }
+        });
+        if(pageHasInactive) pagesWithInactive++;
+      });
+      return { count: names.size, names: Array.from(names), pages: pagesWithInactive };
+    }
+
+    function renderInactiveMediaWarning(){
+      const wrap = document.querySelector('#inactiveWarning > div');
+      if(!wrap) return;
+      const { count, names, pages } = computeInactiveSummary();
+      if(count === 0){ wrap.classList.add('hidden'); wrap.innerHTML=''; return; }
+      wrap.classList.remove('hidden');
+      const chips = names.slice(0, 12).map(n=>`<span class="px-2 py-1 text-xs rounded border border-yellow-600 bg-neutral-800 text-yellow-200 mr-1 mb-1 inline-block">${escapeHtml(n)}</span>`).join('');
+      const more = names.length > 12 ? `<span class="text-xs text-neutral-300">+${names.length-12} more</span>` : '';
+      wrap.innerHTML = `
+        <div class="border border-yellow-700 bg-neutral-800 text-yellow-200 rounded p-3 flex items-start justify-between gap-3">
+          <div>
+            <div class="font-semibold">Inactive media detected</div>
+            <div class="text-sm">${count} file(s) inactive across ${pages} page(s). Re-upload the matching files to activate them.</div>
+            <div class="mt-2">${chips} ${more}</div>
+          </div>
+          <div class="shrink-0">
+            <button id="btnReuploadMissing" class="px-3 py-2 rounded bg-yellow-600 hover:bg-yellow-500 text-black text-sm">Select Files</button>
+          </div>
+        </div>`;
+      const btn = document.getElementById('btnReuploadMissing');
+      if(btn){ btn.onclick = () => { try { document.getElementById('filePicker').click(); } catch {} }; }
+    }
+    // Migrate old chapter listItems (strings) to objects {text, page:''}
+    (function migrateChapterItems(){
+      pages.forEach(p=>{
+        if(p && p.type==='chapter' && Array.isArray(p.listItems)){
+          p.listItems = p.listItems.map(it => (typeof it === 'string') ? { text: it, page: '' } : it);
+        }
+      });
+    })();
+
+    function getImagesRoot(){
+      let root = document.getElementById('imagesRoot').value.trim() || 'src/assets/images/lore';
+      root = root.replace(/\\/g,'/');
+      if(!root.endsWith('/')) root += '/';
+      return root;
+    }
+    function updateComputedBasePreview(){
+      const slug=(document.getElementById('assetSlug').value.trim()||'story').replace(/[^a-z0-9-]+/ig,'-');
+      const base = getImagesRoot() + slug + '/';
+      document.getElementById('computedBasePreview').textContent = base;
+    }
+
+    function pageToHtml(p){
+      if(p.type==='title'){
+        const heading=escapeHtml(p.title||'');
+        return `<div class="p-6 text-center"><h1 class="text-3xl font-bold mb-2">${heading}</h1></div>`;
+      }
+      if(p.type==='chapter'){
+        const heading=escapeHtml(p.title||'Chapter');
+        const items=(p.listItems||[]).map(it=>{
+          const label = escapeHtml((it && it.text) ? it.text : String(it||''));
+          const page = (it && it.page) ? String(it.page) : '';
+          const dataAttr = page ? ` data-page="${escapeHtml(page)}"` : '';
+          const href = page ? '#' : 'javascript:void(0)';
+          return `<li><a href="${href}" class="chapter-link"${dataAttr}>${label}</a></li>`;
+        }).join('');
+        return `<div class="p-6"><h2>${heading}</h2><ul class="list-disc pl-6">${items}</ul></div>`;
+      }
+      const paras=(p.text||'').split(/\n\s*\n/).map(s=>s.trim()).filter(Boolean).map(s=>`<p>${escapeHtml(s)}</p>`).join('');
+      return `<div class="p-6">${paras}</div>`;
+    }
+
+    function exportHtml(){
+      const title=document.getElementById('storyTitle').value.trim()||'Untitled Story';
+      const slug=(document.getElementById('assetSlug').value.trim()||'story').replace(/[^a-z0-9-]+/ig,'-');
+      const base= getImagesRoot() + slug + '/';
+      updateComputedBasePreview();
+      const storyRoot = document.getElementById('storyRoot').value.trim();
+      const allFiles=new Set(); pages.forEach(p=>p.images.forEach(n=>allFiles.add(n)));
+      const storyData=pages.map(p=>({ text: pageToHtml(p), images: p.images.map(n=>base+n) }));
+      const html=buildExportHtml(title, base, Array.from(allFiles), storyData, storyRoot);
+      downloadFile(slug + '.html', html);
+    }
+
+    function previewHtml(){
+      try {
+        const title = document.getElementById('storyTitle').value.trim() || 'Untitled Story';
+        const slug = (document.getElementById('assetSlug').value.trim() || 'story').replace(/[^a-z0-9-]+/ig,'-');
+        const storyRoot = document.getElementById('storyRoot').value.trim();
+        const allFiles = new Set(); pages.forEach(p=>p.images.forEach(n=>allFiles.add(n)));
+        const blobUrls = new Map();
+        for (const name of allFiles) {
+          const f = imageFiles.get(name);
+          if (f) {
+            try { blobUrls.set(name, URL.createObjectURL(f)); } catch {}
+          }
+        }
+        const storyData = pages.map(p => ({
+          text: pageToHtml(p),
+          images: p.images.map(n => blobUrls.has(n) ? blobUrls.get(n) : ('images/' + n))
+        }));
+        const html = buildExportHtml(title, 'images/', Array.from(allFiles), storyData, storyRoot);
+        const blob = new Blob([html], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        const w = window.open(url, '_blank');
+        if (!w) {
+          alert('Popup blocked. Please allow popups for this page to preview.');
+        }
+        // Revoke URLs after a short delay
+        setTimeout(() => {
+          URL.revokeObjectURL(url);
+          for (const u of blobUrls.values()) {
+            try { URL.revokeObjectURL(u); } catch {}
+          }
+        }, 60000);
+      } catch (err) {
+        console.error(err);
+        alert('Preview failed: ' + (err && err.message ? err.message : String(err)));
+      }
+    }
+
+    async function exportFolder(){
+      try {
+        if (typeof window.showDirectoryPicker !== 'function') {
+          // Fallback to ZIP export when directory access isn't available
+          await exportZip();
+          return;
+        }
+        const title = document.getElementById('storyTitle').value.trim() || 'Untitled Story';
+        const slug = (document.getElementById('assetSlug').value.trim() || 'story').replace(/[^a-z0-9-]+/ig,'-');
+        const storyRoot = document.getElementById('storyRoot').value.trim();
+        const dirHandle = await window.showDirectoryPicker();
+        const storyDir = await dirHandle.getDirectoryHandle(slug, { create: true });
+        const imagesDir = await storyDir.getDirectoryHandle('images', { create: true });
+
+        // Build viewer HTML that references ./images/<filename>
+        const allFiles = new Set(); pages.forEach(p=>p.images.forEach(n=>allFiles.add(n)));
+        const storyData = pages.map(p => ({ text: pageToHtml(p), images: p.images.map(n => 'images/' + n) }));
+        const html = buildExportHtml(title, 'images/', Array.from(allFiles), storyData, storyRoot);
+
+        // Write index.html
+        const htmlHandle = await storyDir.getFileHandle('index.html', { create: true });
+        const htmlWritable = await htmlHandle.createWritable();
+        await htmlWritable.write(html);
+        await htmlWritable.close();
+
+        // Copy images we have as File objects
+        const missing = [];
+        for (const name of allFiles) {
+          const fileObj = imageFiles.get(name);
+          if (fileObj) {
+            const fHandle = await imagesDir.getFileHandle(name, { create: true });
+            const fWritable = await fHandle.createWritable();
+            await fWritable.write(fileObj);
+            await fWritable.close();
+          } else {
+            missing.push(name);
+          }
+        }
+
+        let msg = `Exported folder "${slug}" with index.html and ${allFiles.size - missing.length} image(s).`;
+        if (missing.length) {
+          msg += `\n\nMissing ${missing.length} image(s) (not added via drag/drop):\n- ` + missing.join('\n- ');
+          msg += `\n\nTip: Drag or select those images in the editor so the app can copy them.`;
+        }
+        alert(msg);
+      } catch (err) {
+        console.error(err);
+        // If folder export fails, try creating a ZIP as a fallback
+        try {
+          await exportZip();
+        } catch (zipErr) {
+          alert('Export failed and ZIP fallback also failed: ' + (zipErr && zipErr.message ? zipErr.message : String(zipErr)));
+        }
+      }
+    }
+
+    async function exportZip(){
+      const title = document.getElementById('storyTitle').value.trim() || 'Untitled Story';
+      const slug = (document.getElementById('assetSlug').value.trim() || 'story').replace(/[^a-z0-9-]+/ig,'-');
+      const storyRoot = document.getElementById('storyRoot').value.trim();
+      const allFiles = new Set(); pages.forEach(p=>p.images.forEach(n=>allFiles.add(n)));
+      const storyData = pages.map(p => ({ text: pageToHtml(p), images: p.images.map(n => 'images/' + n) }));
+      const html = buildExportHtml(title, 'images/', Array.from(allFiles), storyData, storyRoot);
+
+      if (typeof JSZip === 'undefined') {
+        // As a last resort, download HTML only; inform user
+        downloadFile(slug + '.html', html);
+        alert('ZIP library not available. Exported standalone HTML as a last resort.');
+        return;
+      }
+      const zip = new JSZip();
+      zip.file('index.html', html);
+      const imgFolder = zip.folder('images');
+      const missing = [];
+      for (const name of allFiles) {
+        const fileObj = imageFiles.get(name);
+        if (fileObj) {
+          const buf = await fileObj.arrayBuffer();
+          imgFolder.file(name, buf);
+        } else {
+          missing.push(name);
+        }
+      }
+      if (missing.length) {
+        const msg = 'Missing image files (not added via drag/drop):\n' + missing.map(n=>' - '+n).join('\n') + '\n\nTip: Drag or select those images in the editor so the app can include them.';
+        zip.file('MISSING.txt', msg);
+      }
+      const blob = await zip.generateAsync({ type: 'blob' });
+      downloadBlob(slug + '.zip', blob);
+      let alertMsg = `Exported ZIP "${slug}.zip" with index.html and ${allFiles.size - missing.length} image(s).`;
+      if (missing.length) alertMsg += `\n\nSee MISSING.txt for details on ${missing.length} missing file(s).`;
+      alert(alertMsg);
+    }
+
+    function downloadBlob(filename, blob){ const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=filename; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url); }
+
+    function buildExportHtml(title, base, files, data, storyRoot){
+      const filesSet=files.map(n=>"'"+n.replace(/'/g,"\\'")+"'").join(',\n            ');
+      const storyJson=JSON.stringify(data,null,2);
+      const htmlParts=[];
+      htmlParts.push('<!DOCTYPE html>');
+      htmlParts.push('<html lang="en">');
+      htmlParts.push('<head>');
+      htmlParts.push('  <meta charset="UTF-8">');
+      htmlParts.push('  <meta name="viewport" content="width=device-width, initial-scale=1.0">');
+      htmlParts.push('  <title>'+escapeHtml(title)+'</title>');
+      // Output a proper script tag without breaking this generator's script parsing
+      htmlParts.push('  <scr'+'ipt src="https://cdn.tailwindcss.com"></scr'+'ipt>');
+      htmlParts.push('  <style>');
+      htmlParts.push('    :root { --gold: #daac17; --parchment: #2C2614; --parchment-dark: #1E1C12; }');
+      htmlParts.push('    body { background-color: #2c2619; color: #c7a81d; }');
+      htmlParts.push('    #storybook-app { display:flex; flex-direction:column; max-width:90rem; margin:1rem auto; border-radius:.75rem; overflow:hidden; background-color: var(--parchment); border: 12px solid #97740a; }');
+      htmlParts.push('    #image-container { position: relative; width: 100%; aspect-ratio: 16/9; background-color: var(--parchment-dark); border-bottom: 2px solid var(--gold); }');
+      htmlParts.push('    #story-image { width: 100%; height: 100%; object-fit: contain; transition: opacity .3s ease-in-out; }');
+      htmlParts.push('    #text-container { padding: 1rem; max-height: 40vh; overflow-y: auto; line-height: 1.75; }');
+      htmlParts.push('    .cover-link { display:inline-block; padding:.5rem 1rem; background:#daac17; color:#1e1c12; border-radius:.5rem; margin:.25rem; font-weight:700; }');
+      htmlParts.push('    #page-navigation { display:flex; justify-content:space-between; align-items:center; padding: 1rem; border-top:2px solid var(--gold); background-color: var(--parchment-dark); }');
+      htmlParts.push('    @media (min-width: 1024px) {');
+      htmlParts.push('      #storybook-app { flex-direction: row; height: 93vh; max-height: 1080px; margin: 2rem auto; }');
+      htmlParts.push('      #image-container { width: 55%; height: 100%; aspect-ratio: auto; }');
+      htmlParts.push('      #content-wrapper { width: 45%; height: 100%; display: flex; flex-direction: column; }');
+      htmlParts.push('      #text-container { flex-grow: 1; max-height: none; overflow-y: auto; }');
+      htmlParts.push('      #page-navigation { flex-shrink: 0; }');
+      htmlParts.push('    }');
+      htmlParts.push('  </style>');
+      htmlParts.push('</head>');
+      htmlParts.push('<body>');
+      htmlParts.push('  <div id="storybook-app">');
+      htmlParts.push('    <div id="image-container">');
+      htmlParts.push('      <img id="story-image" alt="Story Scene" />');
+      htmlParts.push('      <div id="variant-controls" class="hidden absolute bottom-2 left-1/2 -translate-x-1/2 bg-black/60 text-yellow-200 rounded-full px-3 py-1 flex items-center gap-2">');
+      htmlParts.push('        <button id="prev-image-btn" class="px-2">◄</button>');
+      htmlParts.push('        <span id="variant-counter" class="text-sm"></span>');
+      htmlParts.push('        <button id="next-image-btn" class="px-2">►</button>');
+      htmlParts.push('      </div>');
+      htmlParts.push('    </div>');
+      htmlParts.push('    <div id="content-wrapper">');
+      htmlParts.push('      <div id="text-container"></div>');
+      htmlParts.push('      <div id="page-navigation">');
+      htmlParts.push('        <button id="prev-page-btn" class="px-3 py-1 bg-yellow-600 text-black rounded">Prev Page</button>');
+      htmlParts.push('        <span id="page-counter"></span>');
+      htmlParts.push('        <button id="next-page-btn" class="px-3 py-1 bg-yellow-600 text-black rounded">Next Page</button>');
+      htmlParts.push('      </div>');
+      htmlParts.push('    </div>');
+      htmlParts.push('  </div>');
+      htmlParts.push('');
+      htmlParts.push('  <scr'+'ipt>');
+      htmlParts.push('    const STORY_ROOT = \'' + (storyRoot || '').replace(/'/g, "\\'") + '\';');
+      htmlParts.push('    const LOCAL_IMAGE_BASE = \'' + base.replace(/'/g, "\\'") + '\';');
+      htmlParts.push('    const LOCAL_FILES = new Set([');
+      htmlParts.push('            ' + filesSet);
+      htmlParts.push('    ]);');
+      htmlParts.push('    const storyData = ' + storyJson + ';');
+      htmlParts.push('');
+      htmlParts.push('    let currentPageIndex = 0;');
+      htmlParts.push('    let currentImageIndex = 0;');
+      htmlParts.push('');
+      htmlParts.push("    const textContent = document.getElementById('text-container');");
+      htmlParts.push("    const storyImage = document.getElementById('story-image');");
+      htmlParts.push("    // Fallback to placeholder if the image fails to load");
+      htmlParts.push("    storyImage.addEventListener('error', () => { storyImage.src = 'https://placehold.co/1280x720/111827/d1d5db?text=Image+Not+Found'; });");
+      htmlParts.push("    const prevPageBtn = document.getElementById('prev-page-btn');");
+      htmlParts.push("    const nextPageBtn = document.getElementById('next-page-btn');");
+      htmlParts.push("    const pageCounter = document.getElementById('page-counter');");
+      htmlParts.push("    const variantControls = document.getElementById('variant-controls');");
+      htmlParts.push("    const prevImageBtn = document.getElementById('prev-image-btn');");
+      htmlParts.push("    const nextImageBtn = document.getElementById('next-image-btn');");
+      htmlParts.push("    const variantCounter = document.getElementById('variant-counter');");
+      htmlParts.push('');
+      // Click chapter links to navigate to their target page number
+      htmlParts.push("    document.addEventListener('click', (e) => { const a = e.target.closest('a.chapter-link'); if (a) { e.preventDefault(); const n = parseInt(a.getAttribute('data-page'), 10); if (!isNaN(n)) { currentPageIndex = Math.max(0, Math.min(storyData.length - 1, n - 1)); renderPage(); } } });");
+      htmlParts.push('');
+      htmlParts.push('    function renderPage() {');
+      htmlParts.push('      const page = storyData[currentPageIndex];');
+      htmlParts.push('      currentImageIndex = 0;');
+      htmlParts.push('      textContent.innerHTML = page.text;');
+      htmlParts.push('      renderImage();');
+      htmlParts.push("      pageCounter.textContent = 'Page ' + (currentPageIndex + 1) + ' of ' + storyData.length;");
+      htmlParts.push('      prevPageBtn.disabled = (currentPageIndex === 0);');
+      htmlParts.push('      nextPageBtn.disabled = (currentPageIndex === storyData.length - 1);');
+      htmlParts.push('    }');
+      htmlParts.push('    function renderImage() {');
+      htmlParts.push('      const page = storyData[currentPageIndex];');
+      htmlParts.push('      const images = page.images || [];');
+      htmlParts.push('      storyImage.style.opacity = 0;');
+      htmlParts.push('      setTimeout(() => {');
+      htmlParts.push('        if (images[currentImageIndex]) {');
+      htmlParts.push('          storyImage.src = images[currentImageIndex];');
+      htmlParts.push('        } else {');
+      htmlParts.push("          storyImage.src = 'https://placehold.co/1280x720/111827/d1d5db?text=Image+Not+Found';");
+      htmlParts.push('        }');
+      htmlParts.push('        storyImage.style.opacity = 1;');
+      htmlParts.push('      }, 300);');
+      htmlParts.push('      if (images.length > 1) {');
+      htmlParts.push("        variantControls.classList.remove('hidden');");
+      htmlParts.push("        variantCounter.textContent = (currentImageIndex + 1) + ' of ' + images.length;");
+      htmlParts.push('        prevImageBtn.disabled = (currentImageIndex === 0);');
+      htmlParts.push('        nextImageBtn.disabled = (currentImageIndex === images.length - 1);');
+      htmlParts.push('      } else {');
+      htmlParts.push("        variantControls.classList.add('hidden');");
+      htmlParts.push('      }');
+      htmlParts.push('    }');
+      htmlParts.push("    prevPageBtn.addEventListener('click', () => { if (currentPageIndex > 0) { currentPageIndex--; renderPage(); } });");
+      htmlParts.push("    nextPageBtn.addEventListener('click', () => { if (currentPageIndex < storyData.length - 1) { currentPageIndex++; renderPage(); } });");
+      htmlParts.push("    prevImageBtn.addEventListener('click', () => { if (currentImageIndex > 0) { currentImageIndex--; renderImage(); } });");
+      htmlParts.push("    nextImageBtn.addEventListener('click', () => { const images = storyData[currentPageIndex].images || []; if (currentImageIndex < images.length - 1) { currentImageIndex++; renderImage(); } });");
+      htmlParts.push('');
+      htmlParts.push("    document.addEventListener('DOMContentLoaded', renderPage);");
+      htmlParts.push('  </scr'+'ipt>');
+      htmlParts.push('</body>');
+      htmlParts.push('</html>');
+      return htmlParts.join('\n');
+    }
+
+    function downloadFile(filename, content){ const blob=new Blob([content],{type:'text/html'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=filename; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url); }
+
+    init();
+  </script>
+</body>
+</html>

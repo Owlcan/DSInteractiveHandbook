@@ -1,6 +1,7 @@
 // Alchemy Blaster - Rail Shooter Mini-Game
 class AlchemyBlaster {
     constructor(options = {}) {
+        try { if (typeof console !== 'undefined') console.log('[AlchemyBlaster] Loaded'); } catch (_) {}
         // Save options
         this.options = options;
         this.container = options.container || document.getElementById('expedition-container');
@@ -241,6 +242,14 @@ class AlchemyBlaster {
     initGame() {
         this.gameState = 'menu';
         this.player = new Player(this);
+        // Runtime assert: EnemySystem availability
+        try {
+            if (typeof window.Enemy === 'function') {
+                console.log('[AlchemyBlaster] EnemySystem detected: window.Enemy is available');
+            } else {
+                console.error('[AlchemyBlaster] EnemySystem NOT detected: window.Enemy is undefined');
+            }
+        } catch (_) {}
         this.startGameLoop();
     }
 
@@ -495,7 +504,10 @@ class AlchemyBlaster {
 
     updateEnemies() {
         const time = Date.now();
-        this.enemies = this.enemies.filter(enemy => !enemy.update(time));
+        // Defensive: drop any invalid entries and only keep enemies with numeric x/y and an update()
+        this.enemies = this.enemies
+            .filter(e => e && typeof e.update === 'function' && typeof e.x === 'number' && typeof e.y === 'number')
+            .filter(enemy => !enemy.update(time));
     }
 
     updateParticles() {
@@ -520,7 +532,12 @@ class AlchemyBlaster {
     }
 
     drawEnemies() {
-        this.enemies.forEach(enemy => enemy.draw());
+        // Defensive: only draw enemies that have a draw() method
+        this.enemies.forEach(enemy => {
+            if (enemy && typeof enemy.draw === 'function') {
+                enemy.draw();
+            }
+        });
     }
 
     drawParticles() {
@@ -886,13 +903,41 @@ class AlchemyBlaster {
             }
 
             const enemy = enemies[spawned];
-            const newEnemy = new Enemy(
-                enemy.x,
-                enemy.y,
-                enemy.type,
-                this,
-                enemy.pattern
-            );
+            // Instantiate Enemy from EnemySystem to centralize movement/teleports
+            // EnemySystem.Enemy signature: (game, type, x, y)
+            let newEnemy;
+            try {
+                if (typeof window.Enemy === 'function') {
+                    newEnemy = new window.Enemy(this, enemy.type, enemy.x, enemy.y);
+                    console.log(`[AlchemyBlaster] Spawned via EnemySystem: ${enemy.type} at (${Math.round(enemy.x)}, ${Math.round(enemy.y)})`);
+                } else {
+                    console.error('[AlchemyBlaster] window.Enemy undefined. Legacy fallback engaged. Check script order to load EnemySystem.js before alchemyblaster.js');
+                    // Provide a safe default movement pattern function for legacy enemies
+                    const patternFn = typeof enemy.pattern === 'function'
+                        ? enemy.pattern
+                        : (t => ({
+                              // Slow downward drift with slight horizontal wobble
+                              x: Math.sin((t - (enemy.spawnTime || Date.now())) * 0.002) * 50,
+                              y: (enemy.y || -120) + ((t - (enemy.spawnTime || Date.now())) * 0.02)
+                          }));
+                    newEnemy = new ABLegacyEnemy(enemy.x, enemy.y, enemy.type, this, patternFn);
+                }
+            } catch (err) {
+                console.error('EnemySystem.Enemy constructor failed, falling back to legacy Enemy', err);
+                const patternFn = typeof enemy.pattern === 'function'
+                    ? enemy.pattern
+                    : (t => ({
+                          x: Math.sin((t - (enemy.spawnTime || Date.now())) * 0.002) * 50,
+                          y: (enemy.y || -120) + ((t - (enemy.spawnTime || Date.now())) * 0.02)
+                      }));
+                newEnemy = new ABLegacyEnemy(
+                    (typeof enemy.x === 'number') ? enemy.x : this.canvas.width / 2,
+                    (typeof enemy.y === 'number') ? enemy.y : -120,
+                    enemy.type || 'darkling1',
+                    this,
+                    patternFn
+                );
+            }
             
             this.enemies.push(newEnemy);
             spawned++;
@@ -2625,7 +2670,9 @@ Player.prototype.triggerBurstFire = function() {
     return true;
 };
 
-class Enemy {
+// Legacy local Enemy class is deprecated; EnemySystem provides the authoritative Enemy.
+// Do not use this class; it remains to preserve file integrity but should never be instantiated.
+class ABLegacyEnemy {
     constructor(x, y, type, game, pattern) {
         this.x = x;
         this.y = y;
@@ -2727,6 +2774,6 @@ class Enemy {
     }
 
     shoot() {
-        this.game.player.shoot();
+        // No-op in legacy class; EnemySystem handles projectile patterns
     }
 }

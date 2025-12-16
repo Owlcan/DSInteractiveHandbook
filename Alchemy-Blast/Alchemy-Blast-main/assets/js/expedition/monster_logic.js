@@ -1053,11 +1053,11 @@ class MonsterLogic {
             'darklingboss2': 1500,
             'darklingboss3': 1500,
             'darkling1': 0,     // Doesn't shoot
-            'darkling2': 2500,
-            'darkling3': 2500,
-            'darkling4': 2500,
-            'darkling5': 2000,
-            'darkling6': 2000,
+            'darkling2': Math.floor(2500 * 1.1), // Early-game: 10% less frequent
+            'darkling3': Math.floor(2500 * 1.1), // Early-game: 10% less frequent
+            'darkling4': Math.floor(2500 * 1.1), // Early-game: 10% less frequent
+            'darkling5': Math.floor(2000 * 1.1), // Early-game: 10% less frequent
+            'darkling6': Math.floor(2000 * 1.1), // Early-game: 10% less frequent
             'darkling7': 2000,
             'darkling8': 1500,
             'darkling9': 0,     // Doesn't shoot
@@ -1707,22 +1707,54 @@ const baseScale = 0.8 + Math.sin(t * 0.001) * 0.2;
      * @returns {Function} - Function that returns x,y position based on time
      */
     getEnemyMovement(type, x, y, isInFormation = true) {
+        // Containment: mid-bosses and bosses movement handled by EnemySystem helpers.
+        // Return zero deltas here so we don't override positions if consulted.
+        if (type && (type.startsWith('darkmidboss') || type.includes('boss'))) {
+            return (t) => ({ x: 0, y: 0 });
+        }
         // If the enemy is part of a formation, use simpler movement patterns
         // as the formation itself will move
         if (isInFormation) {
+            // Mid-bosses in formation: return DELTAS with center bias and edge-aware corrections
+            if (type.startsWith('darkmidboss')) {
+                return t => {
+                    const canvasW = (this.game && this.game.canvas && Number.isFinite(this.game.canvas.width)) ? this.game.canvas.width : 800;
+                    const canvasH = (this.game && this.game.canvas && Number.isFinite(this.game.canvas.height)) ? this.game.canvas.height : 600;
+                    const centerX = 0; // formation coords are centered
+                    const bottomCap = (canvasH / 2) - 220; // keep higher than bosses
+
+                    // Use stronger, always-on oscillations + center pull that don't depend on absolute position
+                    let dx = Math.sin(t * 0.004) * 2.0; // stronger horizontal oscillation
+                    dx += Math.max(-1.2, Math.min(1.2, (centerX - x) * 0.01)); // center pull regardless of base
+
+                    let dy = Math.sin(t * 0.002) * 1.0; // vertical oscillation
+                    if (y > bottomCap) dy -= 2.2; // stronger upward nudge when too low
+
+                    return { x: dx, y: dy };
+                };
+            }
             if (type.includes('boss')) {
                 // Bosses move in special patterns even in formations
-                if (type === 'darklingboss2') {
-                    // Simplified, more aggressive movement for Round 2 boss
-                    return t => ( {
-                        x: x + Math.sin(t * 0.002) * 120, // Wider horizontal movement
-                        y: y + Math.sin(t * 0.001) * 20   // Subtle vertical movement
-                    });
-                }
-                return t => ( {
-                    x: x + Math.sin(t * 0.002) * 30,
-                    y: y + Math.sin(t * 0.003) * 20
-                });
+                return t => {
+                    // Center-focused movement within formation to avoid edges & low descent
+                    const cx = (this.game.canvas.width - 80) / 2; // approximate center
+                    const dx = (cx - x) * 0.002;
+                    const oscX = Math.sin(t * 0.002) * 30;
+                    const safeMargin = 120;
+                    let edgeCorr = 0;
+                    const currentX = x + oscX; // approximate
+                    if (currentX <= safeMargin) edgeCorr = 1.5;
+                    else if (currentX >= (this.game.canvas.width - safeMargin - 80)) edgeCorr = -1.5;
+
+                    const oscY = Math.sin(t * 0.003) * 12;
+                    const homeY = Math.max(60, y);
+                    const yGuard = (homeY + 20) - y; // slight upward bias if y drifts lower
+
+                    return {
+                        x: x + oscX + dx + edgeCorr,
+                        y: y + oscY + Math.max(-1.2, Math.min(1.2, yGuard * 0.01))
+                    };
+                };
             }
             
             // Basic enemies in formations just have minor movement relative to their position
@@ -1735,31 +1767,91 @@ const baseScale = 0.8 + Math.sin(t * 0.001) * 0.2;
         // If not in formation (special enemies or escaped from formation),
         // use more complex movement patterns from the original logic
         switch(type) {
+            // Mid-bosses (not in formation): return DELTAS with center bias and edge-aware corrections
+            case 'darkmidboss1':
+            case 'darkmidboss2':
+            case 'darkmidboss3':
+            case 'darkmidboss4':
+            case 'darkmidboss5':
+            case 'darkmidboss6':
+            case 'darkmidboss7':
+            case 'darkmidboss8':
+            case 'darkmidboss9':
+            case 'darkmidboss10':
+            case 'darkmidboss11':
+                return t => {
+                    const canvasW = (this.game && this.game.canvas && Number.isFinite(this.game.canvas.width)) ? this.game.canvas.width : 800;
+                    const canvasH = (this.game && this.game.canvas && Number.isFinite(this.game.canvas.height)) ? this.game.canvas.height : 600;
+                    const cx = 0; // centered coords when out of formation too
+                    const bottomCap = (canvasH / 2) - 220;
+
+                    // Stronger, always-on horizontal motion + center pull
+                    let dx = Math.sin(t * 0.004) * 2.2;
+                    dx += Math.max(-1.4, Math.min(1.4, (cx - x) * 0.01));
+
+                    // Vertical: keep above bottom cap with stronger upward nudge
+                    let dy = Math.sin(t * 0.002) * 1.0;
+                    if (y > bottomCap) dy -= 2.2;
+
+                    return { x: dx, y: dy };
+                };
             case 'darklingboss1':
-                return t => ( {
-                    x: x + Math.sin(t * 0.002) * 120,
-                    y: y + Math.sin(t * 0.001) * 60
-                });
+                return t => {
+                    const canvasW = (this.game && this.game.canvas && Number.isFinite(this.game.canvas.width)) ? this.game.canvas.width : 800;
+                    const canvasH = (this.game && this.game.canvas && Number.isFinite(this.game.canvas.height)) ? this.game.canvas.height : 600;
+                    const cx = (canvasW - 80) / 2;
+                    const dx = (cx - x) * 0.002;
+                    const oscX = Math.sin(t * 0.002) * 90;
+                    const safeMargin = 120;
+                    const approxX = x + oscX;
+                    let edgeCorr = 0;
+                    if (approxX <= safeMargin) edgeCorr = 1.8;
+                    else if (approxX >= (canvasW - safeMargin - 80)) edgeCorr = -1.8;
+                    const oscY = Math.sin(t * 0.001) * 40;
+                    const yGuard = Math.max(-1.5, Math.min(1.5, ((Math.max(80, y) + 30) - y) * 0.01));
+                    const ny = y + oscY + yGuard;
+                    return { x: x + oscX + dx + edgeCorr, y: Math.max(0, Math.min(canvasH - 260, Number.isFinite(ny) ? ny : (y || 150))) };
+                };
                 
             case 'darklingboss2':
-                // More aggressive movement for Round 2 boss when not in formation too
-                return t => ( {
-                    x: x + Math.sin(t * 0.002) * 120, // Faster, wider horizontal motion
-                    y: y + Math.sin(t * 0.001) * 20   // Slight vertical movement
-                });
+                return t => {
+                    const canvasW = (this.game && this.game.canvas && Number.isFinite(this.game.canvas.width)) ? this.game.canvas.width : 800;
+                    const canvasH = (this.game && this.game.canvas && Number.isFinite(this.game.canvas.height)) ? this.game.canvas.height : 600;
+                    const cx = (canvasW - 80) / 2;
+                    const dx = (cx - x) * 0.002;
+                    const oscX = Math.sin(t * 0.002) * 100;
+                    const safeMargin = 120;
+                    const approxX = x + oscX;
+                    let edgeCorr = 0;
+                    if (approxX <= safeMargin) edgeCorr = 2.0;
+                    else if (approxX >= (canvasW - safeMargin - 80)) edgeCorr = -2.0;
+                    const oscY = Math.sin(t * 0.001) * 20;
+                    const yGuard = Math.max(-1.5, Math.min(1.5, ((Math.max(90, y) + 30) - y) * 0.01));
+                    const ny = y + oscY + yGuard;
+                    return { x: x + oscX + dx + edgeCorr, y: Math.max(0, Math.min(canvasH - 260, Number.isFinite(ny) ? ny : (y || 140))) };
+                };
                 
             case 'darklingboss3':
                 return t => {
-                    // Teleport mechanic for final boss
+                    // Teleport mechanic remains, but constrain result toward center and above low band
                     if (!this.lastTeleport || Date.now() - this.lastTeleport > 8000) {
-                        this.teleportX = Math.random() * 240 - 120;
+                        this.teleportX = Math.random() * 160 - 80; // narrower teleport band
                         this.lastTeleport = Date.now();
                     }
-                    
-                    return {
-                        x: x + this.teleportX + Math.sin(t * 0.002) * 30,
-                        y: y + Math.sin(t * 0.001) * 50
-                    };
+                    const canvasW = (this.game && this.game.canvas && Number.isFinite(this.game.canvas.width)) ? this.game.canvas.width : 800;
+                    const canvasH = (this.game && this.game.canvas && Number.isFinite(this.game.canvas.height)) ? this.game.canvas.height : 600;
+                    const cx = (canvasW - 80) / 2;
+                    const dx = (cx - x) * 0.002;
+                    const oscX = Math.sin(t * 0.002) * 30;
+                    const targetX = x + this.teleportX + oscX + dx;
+                    const safeMargin = 120;
+                    let edgeCorr = 0;
+                    if (targetX <= safeMargin) edgeCorr = 2.0;
+                    else if (targetX >= (canvasW - safeMargin - 80)) edgeCorr = -2.0;
+                    const oscY = Math.sin(t * 0.001) * 35;
+                    const yGuard = Math.max(-2.0, Math.min(2.0, ((Math.max(100, y) + 30) - y) * 0.015));
+                    const ny = y + oscY + yGuard;
+                    return { x: targetX + edgeCorr, y: Math.max(0, Math.min(canvasH - 260, Number.isFinite(ny) ? ny : (y || 120))) };
                 };
                 
             default:
@@ -2408,7 +2500,7 @@ function getMidBossMovement(bossType, startX, startY) {
         }
     };
     
-    // Mid-bosses should have a slow, deliberate movement pattern like a slower version of the final boss
+    // Mid-bosses should have deliberate, center-focused movement and avoid edges/low descent
     return (timestamp) => {
         // Different movement patterns based on boss type
         let wiggleX, wiggleY;
@@ -2554,9 +2646,33 @@ function getMidBossMovement(bossType, startX, startY) {
                 wiggleY = Math.sin(timestamp * 0.00015) * 40 + Math.sin(timestamp * 0.0003) * 15;
         }
         
+        // Base position from oscillation
+        let targetX = startX + wiggleX + state.teleportX;
+        let targetY = startY + wiggleY + state.teleportY;
+
+        // Center pull to reduce edge clustering
+        const canvasWidth = (typeof window !== 'undefined' && window.game && window.game.canvas) ? window.game.canvas.width : 800;
+        const canvasHeight = (typeof window !== 'undefined' && window.game && window.game.canvas) ? window.game.canvas.height : 600;
+        const spriteW = 80;
+        const centerX = (canvasWidth - spriteW) / 2;
+        const dxToCenter = centerX - targetX;
+        const centerPull = Math.max(-20, Math.min(20, dxToCenter * 0.05));
+        targetX += centerPull;
+
+        // Edge-aware horizontal corrections
+        const safeMargin = 120;
+        if (targetX <= safeMargin) targetX += 2.0;
+        else if (targetX >= (canvasWidth - safeMargin - spriteW)) targetX -= 2.0;
+
+        // Vertical guardrails: keep above lower region and bias back toward start band
+        const bottomCap = canvasHeight - 240;
+        if (targetY > bottomCap) targetY = bottomCap - 2.0;
+        const homeBiasY = Math.max(-2.0, Math.min(2.0, ((Math.max(80, startY) + 30) - targetY) * 0.02));
+        targetY += homeBiasY;
+
         // Apply movement constraints to keep bosses on screen but allow more freedom
-        const finalX = Math.max(state.movementRange.x.min, Math.min(state.movementRange.x.max, startX + wiggleX));
-        const finalY = Math.max(state.movementRange.y.min, Math.min(state.movementRange.y.max, startY + wiggleY));
+        const finalX = Math.max(state.movementRange.x.min, Math.min(state.movementRange.x.max, targetX));
+        const finalY = Math.max(state.movementRange.y.min, Math.min(state.movementRange.y.max, targetY));
         
         return {
             x: finalX,
