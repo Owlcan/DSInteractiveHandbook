@@ -192,6 +192,93 @@
       max-height: 2000px; 
       padding: 1rem;
     }
+
+    /* Map App preview thumbnails + lightbox */
+    .mapapp-preview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .mapapp-preview-thumb {
+      border: 1px solid var(--gold);
+      border-radius: 8px;
+      padding: 0;
+      background: rgba(218, 165, 32, 0.05);
+      cursor: pointer;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+    }
+
+    .mapapp-preview-thumb:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
+    }
+
+    .mapapp-preview-thumb img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .h2p-lightbox-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.78);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 22px;
+      z-index: 9999;
+    }
+
+    .h2p-lightbox-backdrop.open {
+      display: flex;
+    }
+
+    .h2p-lightbox {
+      width: min(1100px, 96vw);
+      max-height: 92vh;
+      background-color: var(--parchment);
+      background-image: url('https://www.transparenttextures.com/patterns/parchment.png');
+      border: 2px solid var(--gold);
+      border-radius: 10px;
+      box-shadow: 0 12px 45px rgba(0, 0, 0, 0.65);
+      position: relative;
+      padding: 12px;
+    }
+
+    .h2p-lightbox-close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      padding: 8px 12px;
+      font-size: 16px;
+      line-height: 1;
+    }
+
+    .h2p-lightbox-figure {
+      margin: 0;
+      margin-top: 42px;
+    }
+
+    .h2p-lightbox-img {
+      width: 100%;
+      max-height: calc(92vh - 110px);
+      object-fit: contain;
+      border-radius: 8px;
+      border: 1px solid rgba(218, 165, 32, 0.35);
+      background: rgba(0, 0, 0, 0.25);
+      display: block;
+    }
+
+    .h2p-lightbox-caption {
+      margin: 10px 4px 0;
+      color: var(--ink);
+      font-size: 1.1rem;
+    }
     
     .arrow {
       transition: transform 0.3s ease;
@@ -533,6 +620,142 @@
         box-shadow: 0 4px 8px var(--shadow);
       }
       #games-section .btn--play { font-size: 1.14rem; font-weight: 800; padding: 12px 18px; }
+
+      /* Pop-out buttons for iframe tools */
+      .section-header-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      .section-header-row h2 { margin: 0; }
+      .popout-btn {
+        padding: 8px 16px;
+        font-size: 16px;
+        margin-bottom: 0;
+        border-radius: 10px;
+      }
+
+      /* Global search drawer */
+      .glossary-toggle {
+        position: fixed;
+        right: 18px;
+        top: 18px;
+        z-index: 10000;
+        padding: 10px 14px;
+        font-size: 16px;
+        border-radius: 999px;
+      }
+
+      .glossary-drawer-backdrop {
+        position: fixed;
+        inset: 0;
+        z-index: 10001;
+        display: none;
+        background: rgba(0, 0, 0, 0.65);
+      }
+
+      .glossary-drawer-backdrop.open {
+        display: block;
+      }
+
+      .glossary-drawer {
+        position: absolute;
+        right: 0;
+        top: 0;
+        height: 100vh;
+        width: min(520px, 92vw);
+        background-color: var(--parchment);
+        background-image: url('https://www.transparenttextures.com/patterns/parchment.png');
+        border-left: 8px solid var(--gold-dark);
+        box-shadow: -12px 0 40px rgba(0, 0, 0, 0.55);
+        padding: 14px;
+        overflow: auto;
+      }
+
+      .glossary-drawer-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      .glossary-drawer-header h2 {
+        margin: 6px 0 10px;
+        border-bottom: none;
+        font-size: 1.9rem;
+      }
+
+      .glossary-search-row {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        margin: 8px 0 10px;
+      }
+
+      .glossary-search-row input[type="search"] {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid var(--gold);
+        border-radius: 8px;
+        background: rgba(44, 38, 25, 0.45);
+        color: var(--ink);
+        font-size: 16px;
+      }
+
+      .glossary-search-row input[type="search"]:focus {
+        outline: 2px solid var(--gold);
+        box-shadow: 0 0 8px rgba(218, 172, 23, 0.35);
+      }
+
+      .glossary-results {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-top: 8px;
+      }
+
+      .glossary-result {
+        text-align: left;
+        width: 100%;
+        border: 1px solid rgba(218, 172, 23, 0.7);
+        border-radius: 10px;
+        background: rgba(218, 165, 32, 0.08);
+        padding: 10px 12px;
+        cursor: pointer;
+      }
+
+      .glossary-result:focus {
+        outline: 2px solid var(--gold);
+      }
+
+      .glossary-result-title {
+        font-family: 'MedievalSharp', cursive;
+        color: var(--accent);
+        font-size: 1.18rem;
+        margin-bottom: 4px;
+      }
+
+      .glossary-result-meta {
+        font-size: 1.05rem;
+        color: var(--ink);
+        opacity: 0.95;
+      }
+
+      .glossary-hint {
+        margin: 12px 2px 6px;
+        font-size: 1.05rem;
+        opacity: 0.9;
+      }
+
+      @media (max-width: 600px) {
+        .glossary-toggle {
+          right: 12px;
+          top: 12px;
+          padding: 10px 12px;
+        }
+      }
     
   </style>
 </head>
@@ -544,6 +767,8 @@
     <div class="corner-decoration bottom-right"></div>
     
     <h1>Interactive Handbook</h1>
+
+    <button id="glossary-toggle" class="glossary-toggle" type="button" aria-controls="glossary-drawer-backdrop" aria-expanded="false">Search</button>
     
     <nav>
       <button id="btn-welcome">Welcome</button>
@@ -567,6 +792,21 @@
       <button id="btn-trinket-generator" class="nav-button">Trinkets</button>
       <button id="btn-auto-dm" class="nav-button">Auto-DM</button>
     </nav>
+
+    <div id="glossary-drawer-backdrop" class="glossary-drawer-backdrop" aria-hidden="true">
+      <aside id="glossary-drawer" class="glossary-drawer" role="dialog" aria-modal="true" aria-label="Search handbook">
+        <div class="glossary-drawer-header">
+          <h2>Search</h2>
+          <button id="glossary-close" type="button">Close</button>
+        </div>
+        <div class="glossary-search-row">
+          <input id="glossary-search" type="search" placeholder="Search tabs, monsters, items, spells…" autocomplete="off" />
+          <button id="glossary-clear" type="button">Clear</button>
+        </div>
+        <div id="glossary-results" class="glossary-results" role="listbox" aria-label="Search results"></div>
+        <div class="glossary-hint">Try: “owlbear”, “adhesive”, “radiant lance”, “code of conduct”.</div>
+      </aside>
+    </div>
     
     <div id="welcome-section" class="content-section active">
       <h2>Welcome to the Interactive Handbook</h2>
@@ -581,7 +821,10 @@
     </div>
 
     <div id="bestiary-section" class="content-section">
-      <h2>Bestiary</h2>
+      <div class="section-header-row">
+        <h2>Bestiary</h2>
+        <button type="button" class="popout-btn" onclick="window.popOutTool && window.popOutTool('bestiary')">Pop out</button>
+      </div>
       <div id="bestiary-iframe-container" class="iframe-container">
         </div>
     </div>
@@ -801,6 +1044,57 @@
     	 </div>
   	 </div>
   	 <p style="margin-top: 2rem; text-align: center;">Remember, little heroes, the most important rule is to have FUN and be kind to your fellow adventurers! Now go forth and have some amazing Diaper School adventures!</p>
+
+    <h2 id="tips-downloads" style="margin-top: 3rem; text-align: center;">Downloads</h2>
+    <p style="text-align: center; margin-bottom: 2rem;">Grab offline tools and mini-apps here:</p>
+
+    <div class="h2p-accordion-item">
+      <h3 class="h2p-accordion-header">Cellarways Dungeon Mini-App<span class="arrow">&#9662;</span></h3>
+      <div class="h2p-accordion-content">
+        <p>
+          <a href="https://drive.google.com/file/d/1v1hji0j_gk29monZ8JEmUjJtogWyIyEs/view?usp=drive_link" target="_blank" rel="noopener noreferrer">Download the Cellarways Dungeon Mini-App</a>
+        </p>
+      </div>
+    </div>
+
+    <div class="h2p-accordion-item">
+      <h3 class="h2p-accordion-header">Tabletop Tools Map App<span class="arrow">&#9662;</span></h3>
+      <div class="h2p-accordion-content">
+        <p>
+          <a href="https://drive.google.com/file/d/1H_dLghDGli7f0TK2GLwvQl6BZXEMNj_B/view?usp=sharing" target="_blank" rel="noopener noreferrer">Download the Tabletop Tools Map App</a>
+        </p>
+
+        <p style="margin-top: 0.75rem;">Preview screenshots (click to enlarge):</p>
+        <div class="mapapp-preview-grid" aria-label="Map App preview screenshots">
+          <button type="button" class="mapapp-preview-thumb" data-mapapp-preview-src="assets/images/otherimages/MapAppPreviews%20(1).webp" data-mapapp-preview-label="Map App preview 1">
+            <img src="assets/images/otherimages/MapAppPreviews%20(1).webp" alt="Map App preview 1" loading="lazy" decoding="async">
+          </button>
+          <button type="button" class="mapapp-preview-thumb" data-mapapp-preview-src="assets/images/otherimages/MapAppPreviews%20(2).webp" data-mapapp-preview-label="Map App preview 2">
+            <img src="assets/images/otherimages/MapAppPreviews%20(2).webp" alt="Map App preview 2" loading="lazy" decoding="async">
+          </button>
+          <button type="button" class="mapapp-preview-thumb" data-mapapp-preview-src="assets/images/otherimages/MapAppPreviews%20(3).webp" data-mapapp-preview-label="Map App preview 3">
+            <img src="assets/images/otherimages/MapAppPreviews%20(3).webp" alt="Map App preview 3" loading="lazy" decoding="async">
+          </button>
+          <button type="button" class="mapapp-preview-thumb" data-mapapp-preview-src="assets/images/otherimages/MapAppPreviews%20(4).webp" data-mapapp-preview-label="Map App preview 4">
+            <img src="assets/images/otherimages/MapAppPreviews%20(4).webp" alt="Map App preview 4" loading="lazy" decoding="async">
+          </button>
+          <button type="button" class="mapapp-preview-thumb" data-mapapp-preview-src="assets/images/otherimages/MapAppPreviews%20(5).webp" data-mapapp-preview-label="Map App preview 5">
+            <img src="assets/images/otherimages/MapAppPreviews%20(5).webp" alt="Map App preview 5" loading="lazy" decoding="async">
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Map App lightbox (used by preview thumbnails) -->
+    <div id="mapapp-lightbox" class="h2p-lightbox-backdrop" role="dialog" aria-modal="true" aria-label="Map App preview" aria-hidden="true">
+      <div class="h2p-lightbox" role="document">
+        <button type="button" id="mapapp-lightbox-close" class="h2p-lightbox-close">Close</button>
+        <figure class="h2p-lightbox-figure">
+          <img id="mapapp-lightbox-img" class="h2p-lightbox-img" alt="">
+          <figcaption id="mapapp-lightbox-caption" class="h2p-lightbox-caption"></figcaption>
+        </figure>
+      </div>
+    </div>
 
     <div class="faq-section">
         <h2 style="margin-top: 3rem; text-align: center; border-top: 2px solid var(--gold); padding-top: 2rem;">Frequently Asked Questions (FAQ)</h2>
@@ -1573,6 +1867,17 @@
         </article>
 
         <article class="game-card">
+          <header class="game-card__header">Pam Platformer</header>
+          <div class="game-card__body">
+            <img class="game-card__banner" src="../src/assets/images/expeditionandgames/pamplatformertitle.webp" alt="Pam Platformer banner" loading="lazy">
+            <p class="game-card__desc">Climb, jump, and dodge falling danger as you chase a high score.</p>
+            <div class="actions">
+              <a class="btn btn--play" href="../src/Pamplatformer/Pamplatformer.html">Play</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="game-card">
           <header class="game-card__header">Darkling Roundup</header>
           <div class="game-card__body">
             <img class="game-card__banner" src="../src/assets/images/expeditionandgames/darklingroundup.webp" alt="Darkling Roundup banner" loading="lazy">
@@ -1587,7 +1892,10 @@
     </div>
 
     <div id="pamperlogue" class="content-section">
-      <h2>Pamperlogue</h2>
+      <div class="section-header-row">
+        <h2>Pamperlogue</h2>
+        <button type="button" class="popout-btn" onclick="window.popOutTool && window.popOutTool('pamperlogue')">Pop out</button>
+      </div>
       <div id="pamperlogue-iframe-container" class="iframe-container">
         <div class="iframe-loading">Loading catalog...</div>
         <iframe id="pamperlogue-iframe" src="../pamperlogue.html" data-original-src="../pamperlogue.html" onload="this.previousElementSibling.style.display='none'"></iframe>
@@ -1595,12 +1903,18 @@
     </div>
 </div>
      <div id="potty-checker" class="content-section">
-      <h2>Potty Checker</h2>
+      <div class="section-header-row">
+        <h2>Potty Checker</h2>
+        <button type="button" class="popout-btn" onclick="window.popOutTool && window.popOutTool('pottychecker')">Pop out</button>
+      </div>
       <div id="potty-checker-iframe-container" class="iframe-container">
         </div>
     </div>
  <div id="book-reader-section" class="content-section">
-      <h2>Book Reader</h2>
+      <div class="section-header-row">
+        <h2>Book Reader</h2>
+        <button type="button" class="popout-btn" onclick="window.popOutTool && window.popOutTool('library')">Pop out</button>
+      </div>
       <div id="book-reader-menu" class="inline-block" style="margin: 10px 0; display: flex; gap: 8px; flex-wrap: wrap;">
         <button type="button" class="nav-button" data-variant="pdf" title="Open PDF Reader (default)">Handbook (PDF)</button>
         <button type="button" class="nav-button" data-variant="bsstory" title="Ascent to the Black Pyramid storybook">Ascent to the Black Pyramid</button>
@@ -2311,17 +2625,26 @@
       </div>
       <div class="lore-image-placeholder"><img src="assets/images/lore/ghostly_host_placeholder.jpg" alt="The Ghostly Host" class="lore-image" onerror="this.style.display='none'"></div>
     </div> </div><div id="races-section" class="content-section">
-      <h2>Academy Races</h2>
+      <div class="section-header-row">
+        <h2>Academy Races</h2>
+        <button type="button" class="popout-btn" onclick="window.popOutTool && window.popOutTool('races')">Pop out</button>
+      </div>
       <div id="races-iframe-container" class="iframe-container">
         </div>
     </div>    <div id="backgrounds-section" class="content-section">
-      <h2>Backgrounds</h2>
+      <div class="section-header-row">
+        <h2>Backgrounds</h2>
+        <button type="button" class="popout-btn" onclick="window.popOutTool && window.popOutTool('backgrounds')">Pop out</button>
+      </div>
       <div id="backgrounds-iframe-container" class="iframe-container">
         </div>
     </div>
 
     <div id="origin-feats-section" class="content-section">
-      <h2>Origin Feats</h2>
+      <div class="section-header-row">
+        <h2>Origin Feats</h2>
+        <button type="button" class="popout-btn" onclick="window.popOutTool && window.popOutTool('feats')">Pop out</button>
+      </div>
       <div id="origin-feats-iframe-container" class="iframe-container">
         </div>
     </div>
@@ -2333,13 +2656,19 @@
     </div>
 
     <div id="auto-dm-section" class="content-section">
-      <h2>Auto-DM</h2>
+      <div class="section-header-row">
+        <h2>Auto-DM</h2>
+        <button type="button" class="popout-btn" onclick="window.popOutTool && window.popOutTool('autodm')">Pop out</button>
+      </div>
       <div id="auto-dm-iframe-container" class="iframe-container">
         </div>
     </div>
 
     <div id="school-events-section" class="content-section">
-      <h2>School Events Generator</h2>
+      <div class="section-header-row">
+        <h2>School Events Generator</h2>
+        <button type="button" class="popout-btn" onclick="window.popOutTool && window.popOutTool('events')">Pop out</button>
+      </div>
       <div id="school-events-menu" class="inline-block" style="margin: 10px 0; display: flex; gap: 8px; flex-wrap: wrap;">
         <button type="button" class="nav-button" data-variant="school" title="Original School Events">School Events</button>
         <button type="button" class="nav-button" data-variant="forest" title="Forest Events Generator">Forest Events</button>
@@ -2354,7 +2683,10 @@
     
 
     <div id="spellbook-section" class="content-section">
-      <h2>Spellbook</h2>
+      <div class="section-header-row">
+        <h2>Spellbook</h2>
+        <button type="button" class="popout-btn" onclick="window.popOutTool && window.popOutTool('spellbook')">Pop out</button>
+      </div>
       <div id="spellbook-iframe-container" class="iframe-container">
         </div>
     </div>
@@ -2432,7 +2764,7 @@
         const srcMap = {
           school: { src: '../School Events Generator.html', title: 'School Events Generator' },
           forest: { src: '../Forest Events Generator.html', title: 'Forest Events Generator' },
-          cellarways: { src: '../CellarwaysGenerator.html', title: 'Cellarways Generator' },
+          cellarways: { src: '../Cellardungeon%20Miniapp/cellardungeon.html', title: 'Cellarways Corridor & Room Generator' },
           harvest: { src: '../harvestfestivaltrickortreat.html', title: 'Harvest Festival Trick or Treat' },
           winter: { src: '../winterfestival.html', title: 'Wintertide Caroling Quiz & Treats' },
         };
@@ -2479,6 +2811,90 @@
     }
     window.loadBookReaderVariant = loadBookReaderVariant;
 
+    // --- Pop-out helpers (opens current iframe in a new window/tab) ---
+    function popOutByIframeId(iframeId, fallbackSrc, windowTitle) {
+      const iframe = document.getElementById(iframeId);
+      let src = '';
+
+      if (iframe && typeof iframe.src === 'string' && iframe.src && !iframe.src.startsWith('about:')) {
+        src = iframe.src;
+      } else if (fallbackSrc) {
+        src = fallbackSrc;
+      }
+
+      if (!src) {
+        console.warn('Pop out: no src available for', iframeId);
+        return;
+      }
+
+      // Must be initiated by a user click or it will be blocked by pop-up blockers.
+      const w = Math.min(1400, Math.max(900, window.innerWidth - 120));
+      const h = Math.min(1000, Math.max(700, window.innerHeight - 120));
+      const left = Math.max(0, Math.round((window.screenX || window.screenLeft || 0) + (window.innerWidth - w) / 2));
+      const top = Math.max(0, Math.round((window.screenY || window.screenTop || 0) + (window.innerHeight - h) / 2));
+      const features = `popup=yes,width=${w},height=${h},left=${left},top=${top}`;
+
+      const newWin = window.open(src, windowTitle || '_blank', features);
+      if (newWin) {
+        try { newWin.opener = null; } catch (e) {}
+        try { newWin.focus(); } catch (e) {}
+      }
+    }
+
+    function popOutTool(tool) {
+      switch (tool) {
+        case 'bestiary':
+          popOutByIframeId('bestiary-iframe', '../bestiary.html', 'Bestiary');
+          break;
+        case 'pottychecker':
+          popOutByIframeId('potty-checker-iframe', '../pottychecker.html', 'Potty Checker');
+          break;
+        case 'pamperlogue':
+          popOutByIframeId('pamperlogue-iframe', '../pamperlogue.html', 'Pamperlogue');
+          break;
+        case 'library': {
+          const libMap = {
+            pdf: 'BookReader.html',
+            bsstory: '../BSStory.html'
+          };
+          const fallback = libMap[bookReaderLastVariant] || libMap.pdf;
+          popOutByIframeId('book-reader-iframe', fallback, 'Library');
+          break;
+        }
+        case 'spellbook':
+          popOutByIframeId('spellbook-iframe', '../spellbook.html', 'Spellbook');
+          break;
+        case 'races':
+          popOutByIframeId('races-iframe', 'races.html', 'Academy Races');
+          break;
+        case 'backgrounds':
+          popOutByIframeId('backgrounds-iframe', '../backgrounds.html', 'Backgrounds');
+          break;
+        case 'feats':
+          popOutByIframeId('origin-feats-iframe', '../originfeats.html', 'Origin Feats');
+          break;
+        case 'autodm':
+          popOutByIframeId('auto-dm-iframe', '../AutoDM App.html', 'Auto-DM');
+          break;
+        case 'events': {
+          const eventsMap = {
+            school: '../School Events Generator.html',
+            forest: '../Forest Events Generator.html',
+            cellarways: '../Cellardungeon%20Miniapp/cellardungeon.html',
+            harvest: '../harvestfestivaltrickortreat.html',
+            winter: '../winterfestival.html',
+          };
+          const fallback = eventsMap[schoolEventsLastVariant] || eventsMap.school;
+          popOutByIframeId('school-events-iframe', fallback, 'Events');
+          break;
+        }
+        default:
+          console.warn('Pop out: unknown tool', tool);
+      }
+    }
+
+    window.popOutTool = popOutTool;
+
     /**
      * Refreshes a statically placed iframe by resetting its src.
      */
@@ -2506,6 +2922,759 @@
             console.error(`Static iframe with ID ${iframeId} not found for refresh.`);
         }
   }
+
+    // --- Global Search Drawer ---
+    function initializeGlossaryDrawer() {
+      const toggleBtn = document.getElementById('glossary-toggle');
+      const backdrop = document.getElementById('glossary-drawer-backdrop');
+      const closeBtn = document.getElementById('glossary-close');
+      const clearBtn = document.getElementById('glossary-clear');
+      const searchInput = document.getElementById('glossary-search');
+      const resultsEl = document.getElementById('glossary-results');
+      if (!toggleBtn || !backdrop || !closeBtn || !clearBtn || !searchInput || !resultsEl) return;
+
+      // Centralized tool targets: safe deep-search via ?q= by reusing createOrRefreshIframe.
+      const TOOL_TARGETS = {
+        bestiary: {
+          buttonId: 'btn-bestiary',
+          containerId: 'bestiary-iframe-container',
+          iframeId: 'bestiary-iframe',
+          baseSrc: '../bestiary.html',
+          title: 'Bestiary'
+        },
+        items: {
+          buttonId: 'btn-items',
+          containerId: 'items-iframe-container',
+          iframeId: 'items-iframe',
+          baseSrc: 'items.html',
+          title: 'Item Compendium'
+        },
+        spellbook: {
+          buttonId: 'btn-spellbook',
+          containerId: 'spellbook-iframe-container',
+          iframeId: 'spellbook-iframe',
+          baseSrc: '../spellbook.html',
+          title: 'Spellbook'
+        },
+        races: {
+          buttonId: 'btn-races',
+          containerId: 'races-iframe-container',
+          iframeId: 'races-iframe',
+          baseSrc: 'races.html',
+          title: 'Races'
+        },
+        backgrounds: {
+          buttonId: 'btn-backgrounds',
+          containerId: 'backgrounds-iframe-container',
+          iframeId: 'backgrounds-iframe',
+          baseSrc: '../backgrounds.html',
+          title: 'Backgrounds'
+        },
+        originfeats: {
+          buttonId: 'btn-origin-feats',
+          containerId: 'origin-feats-iframe-container',
+          iframeId: 'origin-feats-iframe',
+          baseSrc: '../originfeats.html',
+          title: 'Origin Feats'
+        },
+        library: {
+          buttonId: 'btn-book-reader',
+          containerId: 'book-reader-iframe-container',
+          iframeId: 'book-reader-iframe',
+          baseSrc: 'BookReader.html',
+          title: 'Library'
+        }
+      };
+
+      // Helpers to keep the glossary format easy to extend.
+      const Dest = {
+        tab: (buttonId, anchorId = null) => ({ kind: 'tab', buttonId, anchorId }),
+        tool: (toolKey, query = null) => ({ kind: 'tool', toolKey, query })
+      };
+
+      function entry(term, dest, opts = {}) {
+        const e = {
+          term,
+          aliases: Array.isArray(opts.aliases) ? opts.aliases : [],
+          description: typeof opts.description === 'string' ? opts.description : '',
+          dest
+        };
+        prepareEntryForSearch(e);
+        return e;
+      }
+
+      function normalize(text) {
+        return String(text || '').toLowerCase().trim();
+      }
+
+      // "Lazy" search helpers: normalize punctuation, tokenize, light stemming, and a few synonyms.
+      const STOP_WORDS = new Set([
+        'a','an','and','are','as','at','be','but','by','can','do','does','for','from','how','i','if','in','into','is','it',
+        'me','my','of','on','or','our','so','the','then','this','to','we','what','when','where','which','why','with','you','your'
+      ]);
+
+      const SYNONYMS = new Map([
+        ['magical', 'magic'],
+        ['enchanted', 'magic'],
+        ['enchant', 'magic'],
+        ['enchanting', 'magic'],
+        ['armour', 'armor'],
+        ['armours', 'armor'],
+        ['armors', 'armor'],
+        ['weapons', 'weapon'],
+        ['spells', 'spell'],
+        ['monsters', 'monster'],
+        ['creatures', 'creature'],
+        ['items', 'item']
+      ]);
+
+      function normalizeLoose(text) {
+        return String(text || '')
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, ' ')
+          .replace(/\s+/g, ' ')
+          .trim();
+      }
+
+      function stemWord(w) {
+        const s = String(w || '').toLowerCase();
+        if (s.length <= 3) return s;
+        if (s.endsWith('ies') && s.length > 4) return s.slice(0, -3) + 'y';
+        if (s.endsWith('es') && s.length > 4) return s.slice(0, -2);
+        if (s.endsWith('s') && s.length > 3) return s.slice(0, -1);
+        return s;
+      }
+
+      function tokenize(text) {
+        const norm = normalizeLoose(text);
+        if (!norm) return [];
+        const raw = norm.split(' ');
+        const out = [];
+        for (const part of raw) {
+          if (!part) continue;
+          const syn = SYNONYMS.get(part) || part;
+          const w = stemWord(syn);
+          if (!w || w.length < 2) continue;
+          if (STOP_WORDS.has(w)) continue;
+          out.push(w);
+        }
+        return out;
+      }
+
+      function prepareEntryForSearch(e) {
+        if (!e || e._preparedForSearch) return;
+        const blob = [e.term, ...(Array.isArray(e.aliases) ? e.aliases : []), e.description].filter(Boolean).join(' ');
+        const normBlob = normalizeLoose(blob);
+        const toks = tokenize(normBlob);
+        e._normTerm = normalizeLoose(e.term);
+        e._normBlob = normBlob;
+        e._tokens = toks;
+        e._tokenSet = new Set(toks);
+        // Bucket keys based on token initials so "magical" finds "Can I buy magical weapons..."
+        const keys = new Set();
+        for (const t of toks) {
+          const k = t.slice(0, 1) || '#';
+          keys.add(k);
+          if (keys.size > 12) break; // safety cap per entry
+        }
+        if (keys.size === 0) keys.add((e._normTerm.slice(0, 1) || '#'));
+        e._bucketKeys = Array.from(keys);
+        e._preparedForSearch = true;
+      }
+
+      function appendQuery(src, key, value) {
+        const s = String(src || '');
+        const parts = s.split('#');
+        const baseAndQuery = parts[0];
+        const hash = parts.length > 1 ? '#' + parts.slice(1).join('#') : '';
+        const qParts = baseAndQuery.split('?');
+        const base = qParts[0];
+        const params = new URLSearchParams(qParts[1] || '');
+        params.set(key, value);
+        const query = params.toString();
+        return base + (query ? `?${query}` : '') + hash;
+      }
+
+      function openDrawer() {
+        backdrop.classList.add('open');
+        backdrop.setAttribute('aria-hidden', 'false');
+        toggleBtn.setAttribute('aria-expanded', 'true');
+        // Focus the search box for fast typing.
+        searchInput.focus();
+        renderResults(searchInput.value);
+      }
+
+      function closeDrawer() {
+        backdrop.classList.remove('open');
+        backdrop.setAttribute('aria-hidden', 'true');
+        toggleBtn.setAttribute('aria-expanded', 'false');
+        toggleBtn.focus();
+      }
+
+      function goToTab(buttonId, anchorId) {
+        const btn = document.getElementById(buttonId);
+        if (btn) btn.click();
+        if (anchorId) {
+          setTimeout(() => {
+            const el = document.getElementById(anchorId);
+            if (el) {
+              el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '-1');
+              try { el.focus({ preventScroll: true }); } catch (e) {}
+            }
+          }, 60);
+        }
+      }
+
+      function goToTool(toolKey, query) {
+        const t = TOOL_TARGETS[toolKey];
+        if (!t) return;
+        const btn = document.getElementById(t.buttonId);
+        if (btn) btn.click();
+
+        // After the tab is active, refresh the iframe with a ?q= query.
+        if (query && typeof createOrRefreshIframe === 'function') {
+          const src = appendQuery(t.baseSrc, 'q', query);
+          setTimeout(() => createOrRefreshIframe(t.containerId, t.iframeId, src, t.title), 60);
+        }
+      }
+
+      // Curated entries are the “easy to add” layer.
+      // Add more by appending: entry('Term', Dest.tool('bestiary', 'Owlbear'), { aliases:[...], description:'...' })
+      function makeLibraryDocEntry(fileName) {
+        const base = String(fileName || '').trim().replace(/\.[a-z0-9]+$/i, '').trim();
+        const nice = base.replace(/_/g, ' ').replace(/\s+/g, ' ').trim();
+
+        const short = nice.replace(/\s*-\s*the\s+homebrewery\s*$/i, '').trim();
+        const withoutHomebrewery = nice
+          .replace(/\bthe\s+homebrewery\b/ig, '')
+          .replace(/\s*-\s*$/g, '')
+          .replace(/\s+/g, ' ')
+          .trim();
+
+        const aliases = [
+          base,
+          `${base}.pdf`,
+          nice,
+          `${nice}.pdf`,
+          short,
+          `${short}.pdf`,
+          withoutHomebrewery,
+          `${withoutHomebrewery}.pdf`
+        ].filter(Boolean);
+
+        return entry(nice, Dest.tool('library', short || withoutHomebrewery || nice), {
+          aliases,
+          description: 'Document (Library)'
+        });
+      }
+
+      // Library documents (pinned so they are always searchable, even if tool indexing can’t load)
+      const pinnedLibraryDocs = [
+        'ABDL Domains - The Homebrewery.pdf',
+        'Barbarous Babes of Diaperland - The Homebrewery.pdf',
+        'Carcharodonians.pdf',
+        'Combat Academy Regulation Handbook - The Homebrewery.pdf',
+        'Crinkleheart.pdf',
+        'Crinkly CQC Fighters - The Homebrewery.pdf',
+        'Cryptic Crinkles_ Stealthy Stinker Archetypes - The Homebrewery.pdf',
+        'Diaparachnids.pdf',
+        'Diaper Bards - The Homebrewery.pdf',
+        'Diapered Destinies_Sorcerous Origins - The Homebrewery.pdf',
+        'Diapers and Druids - The Homebrewery.pdf',
+        'Monastic Traditions of the Scholia Diaspros - The Homebrewery.pdf',
+        'Padded Pacts - The Homebrewery.pdf',
+        'Pampered Paladins - The Homebrewery.pdf',
+        'Pampires.pdf',
+        'Scampersaurians.pdf',
+        'Swaddlers of the Wild_ Diaper School Rangers - The Homebrewery.pdf',
+        'Waddlehooves.pdf',
+        'Wizard Traditions of Diaper School - The Homebrewery.pdf'
+      ].map(makeLibraryDocEntry);
+
+      const curated = [
+        entry('Bestiary', Dest.tool('bestiary'), { aliases: ['monsters', 'creatures'], description: 'Browse creatures and search by name.' }),
+        entry('Items', Dest.tool('items'), { aliases: ['gear', 'equipment', 'loot'], description: 'Search the item compendium.' }),
+        entry('Spellbook', Dest.tool('spellbook'), { aliases: ['spells', 'magic'], description: 'Browse and filter spells.' }),
+        entry('Races', Dest.tool('races'), { aliases: ['species', 'ancestry'], description: 'Browse races and jump by name.' }),
+        entry('Library', Dest.tool('library'), { aliases: ['books', 'documents', 'pdf', 'tomes'], description: 'Open the Library and select a document.' }),
+        ...pinnedLibraryDocs,
+        entry('Code of Conduct', Dest.tab('btn-conduct'), { aliases: ['rules', 'conduct'], description: 'Community rules and safety.' }),
+        entry('How to Play', Dest.tab('btn-tips'), { aliases: ['tips', 'avrae'], description: 'Gameplay help and commands.' }),
+        entry('Downloads', Dest.tab('btn-tips', 'tips-downloads'), { aliases: ['offline', 'installer', 'map app'], description: 'Offline tools and mini-app downloads.' }),
+        entry('Owlbear', Dest.tool('bestiary', 'Owlbear'), { aliases: ['owl bear'], description: 'Search the bestiary for Owlbear.' }),
+        entry('Adhesive', Dest.tool('items', 'Adhesive'), { description: 'Search items for Adhesive.' }),
+        entry('Radiant Lance', Dest.tool('spellbook', 'Radiant Lance'), { description: 'Search spells for Radiant Lance.' }),
+
+        // Races (pinned so they always appear, even if tool indexing can’t load)
+        entry('Kittenfolk', Dest.tool('races', 'Kittenfolk'), { aliases: ['kittenfolk', 'kittenfolk (kittenling/konekojin)', 'kittenling', 'konekojin', 'kittenfolk race', 'kittenfolk species', 'kittenfolk ancestry'], description: 'Race (Races)' }),
+        entry('Pupperlings', Dest.tool('races', 'Pupperlings'), { aliases: ['pupperlings', 'pupperling', 'pupperlings race', 'pupperlings species', 'pupperling race', 'pupperling species'], description: 'Race (Races)' }),
+        entry('Bunbunkin', Dest.tool('races', 'Bunbunkin'), { aliases: ['bunbunkin', 'bunbunkin race', 'bunbunkin species'], description: 'Race (Races)' }),
+        entry('Skunkiddo', Dest.tool('races', 'Skunkiddo'), { aliases: ['skunkiddo', 'skunkiddo race', 'skunkiddo species'], description: 'Race (Races)' }),
+        entry('Darklings', Dest.tool('races', 'Darklings'), { aliases: ['darklings', 'darkling', 'darklings race', 'darkling race'], description: 'Race (Races)' }),
+        entry('Seimei', Dest.tool('races', 'Seimei'), { aliases: ['seimei', 'seimei race', 'seimei species'], description: 'Race (Races)' }),
+        entry('Ghost', Dest.tool('races', 'Ghost'), { aliases: ['ghost', 'ghosts', 'ghost race', 'ghost subraces', 'ghost traits', 'ghost species'], description: 'Race (Races)' }),
+        entry('Morphian Changeling', Dest.tool('races', 'Morphian Changeling'), { aliases: ['morphian', 'changeling', 'morphian changeling', 'morphian-changeling', 'morphian race', 'changeling race'], description: 'Race (Races)' }),
+        entry('Tanukijin', Dest.tool('races', 'Tanukijin'), { aliases: ['tanukijin', 'tanuki', 'tanuki people', 'tanuki-people', 'tanukijin (tanuki people)', 'tanukijin-tanuki-people'], description: 'Race (Races)' }),
+        entry('Foxfolk', Dest.tool('races', 'Foxfolk'), { aliases: ['foxfolk', 'fox', 'vulpine', 'vulpine kin', 'vulpine-kin', 'foxfolk (vulpine kin)', 'foxfolk-vulpine-kin'], description: 'Race (Races)' }),
+        entry('Demi-Gorgons', Dest.tool('races', 'Demi-Gorgons'), { aliases: ['demi gorgon', 'demi-gorgon', 'demi gorgons', 'demi-gorgons', 'not quite big kids yet', 'demi-gorgons-not-quite-big-kids-yet'], description: 'Race (Races)' }),
+        entry('Semi-Gorgons', Dest.tool('races', 'Semi-Gorgons'), { aliases: ['semi gorgon', 'semi-gorgon', 'semi gorgons', 'semi-gorgons', 'semi-gorgons'], description: 'Race (Races)' }),
+        entry('Gemini Celestian', Dest.tool('races', 'Gemini Celestian'), { aliases: ['gemini celestian', 'gemini-celestian', 'gemini', 'celestian gemini'], description: 'Race (Races)' }),
+        entry('Celestian Archist', Dest.tool('races', 'Celestian Archist'), { aliases: ['celestian archist', 'celestian-archist', 'archist', 'celestian'], description: 'Race (Races)' }),
+        entry('Pampire', Dest.tool('races', 'Pampire'), { aliases: ['pampire', 'pampires', 'pampire race', 'pampire species'], description: 'Race (Races)' }),
+        entry('Possumfolk', Dest.tool('races', 'Possumfolk'), { aliases: ['possumfolk', 'possum', 'possum folk', 'possum-folk', 'possumfolk race'], description: 'Race (Races)' }),
+        entry('Living Dolls', Dest.tool('races', 'Living Dolls'), { aliases: ['living dolls', 'living doll', 'dolls', 'doll race', 'living-dolls'], description: 'Race (Races)' }),
+        entry('Crinklehearts', Dest.tool('races', 'Crinklehearts'), { aliases: ['crinklehearts', 'crinkleheart', 'crinkleheart race', 'crinklehearts race', 'crinkleheart'], description: 'Race (Races)' }),
+        entry('Cowbuddies', Dest.tool('races', 'Cowbuddies'), { aliases: ['cowbuddies', 'cowbuddy', 'cow buddies', 'cow-buddies'], description: 'Race (Races)' }),
+        entry('Carcharodonian', Dest.tool('races', 'Carcharodonian'), { aliases: ['carcharodonian', 'carcharodonians', 'carcharodon', 'shark', 'sharkfolk', 'shark folk'], description: 'Race (Races)' }),
+        entry('Waddlehooves', Dest.tool('races', 'Waddlehooves'), { aliases: ['waddlehooves', 'waddlehoove', 'waddle hooves', 'waddle-hooves'], description: 'Race (Races)' }),
+        entry('Scampersaurians', Dest.tool('races', 'Scampersaurians'), { aliases: ['scampersaurians', 'scampersaurian', 'scampersaur', 'dino', 'dinosaur', 'scampersaurians race'], description: 'Race (Races)' }),
+        entry('Diaparachnid', Dest.tool('races', 'Diaparachnid'), { aliases: ['diaparachnid', 'diaparachnids', 'diaper arachnid', 'arachnid', 'spider', 'spiderfolk'], description: 'Race (Races)' })
+      ];
+
+      // Auto-index: every nav button becomes a searchable destination.
+      const autoTabs = Array.from(document.querySelectorAll('nav button[id^="btn-"]'))
+        .map(btn => entry(btn.textContent.trim(), Dest.tab(btn.id), { description: 'Open this tab.' }));
+
+      function slugify(text) {
+        return String(text || '')
+          .toLowerCase()
+          .replace(/['"]/g, '')
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-+|-+$/g, '')
+          .slice(0, 60) || 'section';
+      }
+
+      function uniqueId(base) {
+        let id = base;
+        let i = 2;
+        while (document.getElementById(id)) {
+          id = `${base}-${i++}`;
+        }
+        return id;
+      }
+
+      function buttonIdForSection(sectionId) {
+        if (!sectionId) return null;
+        const overrides = {
+          'code-of-conduct-section': 'btn-conduct',
+          'book-reader-section': 'btn-book-reader',
+          'legacy-Regalia': 'btn-regalia'
+        };
+        if (overrides[sectionId]) return overrides[sectionId];
+        if (sectionId.startsWith('legacy-')) return `btn-${sectionId}`;
+        if (sectionId.endsWith('-section')) {
+          const core = sectionId.replace(/-section$/, '');
+          return `btn-${core}`;
+        }
+        // Some sections don't use -section suffix (pamperlogue/potty-checker/achievement-tracker)
+        const fallback = {
+          'pamperlogue': 'btn-pamperlogue',
+          'potty-checker': 'btn-potty-checker',
+          'achievement-tracker': 'btn-achievement-tracker'
+        };
+        return fallback[sectionId] || null;
+      }
+
+      // Auto-index the handbook content itself (headings + accordion headers)
+      // so searching "FAQ" or an accordion title jumps to the exact spot.
+      function buildPageContentEntries() {
+        const root = document.getElementById('app');
+        if (!root) return [];
+
+        const candidates = root.querySelectorAll('h2, h3, h4, .h2p-accordion-header');
+        const entries = [];
+        candidates.forEach(el => {
+          // Skip the drawer UI itself
+          if (el.closest('#glossary-drawer-backdrop')) return;
+
+          const label = String(el.textContent || '').replace(/\s+/g, ' ').trim();
+          if (!label) return;
+
+          // Find which tab this lives under
+          const section = el.closest('.content-section');
+          const sectionId = section ? section.id : null;
+          const buttonId = buttonIdForSection(sectionId) || 'btn-tips';
+
+          // Ensure anchor id exists
+          if (!el.id) {
+            const base = uniqueId(`h-${slugify(label)}`);
+            el.id = base;
+          }
+
+          // Friendly location label
+          let where = 'Handbook';
+          if (buttonId === 'btn-conduct') where = 'Code of Conduct';
+          else if (buttonId === 'btn-tips') where = 'How to Play';
+          else if (buttonId === 'btn-lore') where = 'Lore';
+
+          entries.push(entry(label, Dest.tab(buttonId, el.id), { description: where }));
+        });
+        return entries;
+      }
+
+      // The index grows over time:
+      // - curated terms
+      // - all nav tabs
+      // - all headings/accordion titles inside the handbook
+      // - tool names async (bestiary/items/spellbook)
+      const pageContent = buildPageContentEntries();
+      let index = [...curated, ...autoTabs, ...pageContent];
+
+      // Lightweight buckets for faster searching once index is large.
+      let buckets = null;
+      function rebuildBuckets() {
+        buckets = new Map();
+        index.forEach(e => {
+          prepareEntryForSearch(e);
+          const keys = Array.isArray(e._bucketKeys) ? e._bucketKeys : [normalize(e.term).slice(0, 1) || '#'];
+          for (const key of keys) {
+            if (!buckets.has(key)) buckets.set(key, []);
+            buckets.get(key).push(e);
+          }
+        });
+      }
+      rebuildBuckets();
+
+      // Always offer tool-search actions for arbitrary text, even if indexing fails.
+      function toolSearchActions(q) {
+        const nq = normalize(q);
+        if (!nq) return [];
+        return [
+          entry(`Search Bestiary for “${q}”`, Dest.tool('bestiary', q), { description: 'Opens Bestiary and searches by name.' }),
+          entry(`Search Items for “${q}”`, Dest.tool('items', q), { description: 'Opens Items and searches by name.' }),
+          entry(`Search Spellbook for “${q}”`, Dest.tool('spellbook', q), { description: 'Opens Spellbook and searches by name.' }),
+          entry(`Search Races for “${q}”`, Dest.tool('races', q), { description: 'Opens Races and jumps to a matching race/subrace.' }),
+          entry(`Search Backgrounds for “${q}”`, Dest.tool('backgrounds', q), { description: 'Opens Backgrounds and jumps to a matching entry.' }),
+          entry(`Search Feats for “${q}”`, Dest.tool('originfeats', q), { description: 'Opens Origin Feats and jumps to a matching feat.' }),
+          entry(`Search Library for “${q}”`, Dest.tool('library', q), { description: 'Opens the Library and selects a matching document.' })
+        ];
+      }
+
+      function addToIndex(entries) {
+        if (!Array.isArray(entries) || entries.length === 0) return;
+        // Dedupe by normalized term + dest signature.
+        const seen = new Set(index.map(e => `${normalize(e.term)}|${e.dest?.kind || ''}|${e.dest?.toolKey || ''}|${e.dest?.buttonId || ''}|${e.dest?.anchorId || ''}|${e.dest?.query || ''}`));
+        for (const e of entries) {
+          prepareEntryForSearch(e);
+          const key = `${normalize(e.term)}|${e.dest?.kind || ''}|${e.dest?.toolKey || ''}|${e.dest?.buttonId || ''}|${e.dest?.anchorId || ''}|${e.dest?.query || ''}`;
+          if (seen.has(key)) continue;
+          seen.add(key);
+          index.push(e);
+        }
+        rebuildBuckets();
+      }
+
+      async function tryFetchText(src) {
+        try {
+          const res = await fetch(src, { cache: 'force-cache' });
+          if (!res.ok) return null;
+          return await res.text();
+        } catch (e) {
+          return null;
+        }
+      }
+
+      function uniqStrings(list) {
+        const out = [];
+        const s = new Set();
+        for (const v of list) {
+          const t = String(v || '').trim();
+          if (!t) continue;
+          const k = t.toLowerCase();
+          if (s.has(k)) continue;
+          s.add(k);
+          out.push(t);
+        }
+        return out;
+      }
+
+      function extractMatches(text, regex, groupIdx = 1) {
+        const found = [];
+        if (!text) return found;
+        let m;
+        while ((m = regex.exec(text)) !== null) {
+          found.push(m[groupIdx]);
+          if (found.length > 20000) break; // safety cap
+        }
+        return found;
+      }
+
+      async function loadToolNameIndex() {
+        // This is optional; search still works without it.
+        resultsEl.innerHTML = '<div class="glossary-result"><div class="glossary-result-title">Loading index…</div><div class="glossary-result-meta">Building monster/item/spell search (one-time).</div></div>';
+
+        // Bestiary (root): JSON-like data with quoted keys.
+        const bestiaryText = await tryFetchText('../bestiary.html');
+        if (bestiaryText) {
+          // Try to focus on creature names by scanning for "_id" and "name" pairs.
+          const names = uniqStrings(extractMatches(bestiaryText, /"name"\s*:\s*"([^"\\]*(?:\\.[^"\\]*)*)"/g));
+          const monsterEntries = names
+            .filter(n => n.length >= 2)
+            .filter(n => !/\bmain bestiary\b/i.test(n))
+            .map(n => entry(n, Dest.tool('bestiary', n), { description: 'Monster (Bestiary)' }));
+          addToIndex(monsterEntries);
+        }
+
+        // Items (same folder): JS object literal with unquoted keys.
+        const itemsText = await tryFetchText('items.html');
+        if (itemsText) {
+          const names = uniqStrings(extractMatches(itemsText, /\bname\s*:\s*"([^"\\]*(?:\\.[^"\\]*)*)"/g));
+          const itemEntries = names
+            .filter(n => n.length >= 2)
+            .map(n => entry(n, Dest.tool('items', n), { description: 'Item (Items)' }));
+          addToIndex(itemEntries);
+        }
+
+        // Spellbook (root): JSON-like with quoted keys.
+        const spellText = await tryFetchText('../spellbook.html');
+        if (spellText) {
+          const names = uniqStrings(extractMatches(spellText, /"name"\s*:\s*"([^"\\]*(?:\\.[^"\\]*)*)"/g));
+          const spellEntries = names
+            .filter(n => n.length >= 2)
+            .map(n => entry(n, Dest.tool('spellbook', n), { description: 'Spell (Spellbook)' }));
+          addToIndex(spellEntries);
+        }
+
+        // Backgrounds (root): JS data array with unquoted keys.
+        const backgroundsText = await tryFetchText('../backgrounds.html');
+        if (backgroundsText) {
+          const names = uniqStrings(extractMatches(backgroundsText, /\bname\s*:\s*"([^"\\]*(?:\\.[^"\\]*)*)"/g));
+          const bgEntries = names
+            .filter(n => n.length >= 2)
+            .filter(n => !/^quick\s+navigation$/i.test(n))
+            .map(n => entry(n, Dest.tool('backgrounds', n), { description: 'Background (Backgrounds)' }));
+          addToIndex(bgEntries);
+        }
+
+        // Races (src): JS data array with unquoted keys. Includes navigation + many race pages.
+        const racesText = await tryFetchText('races.html');
+        if (racesText) {
+          // Prefer the explicit race entry names.
+          const names = uniqStrings(extractMatches(racesText, /\bname\s*:\s*"([^"\\]*(?:\\.[^"\\]*)*)"/g));
+          const raceEntries = names
+            .filter(n => n.length >= 2)
+            .filter(n => !/^species\s+quick\s+navigation$/i.test(n))
+            .map(n => entry(n, Dest.tool('races', n), { description: 'Race (Races)' }));
+          addToIndex(raceEntries);
+
+          // Also pull obvious subrace headers (keep this reasonably bounded).
+          const subraces = uniqStrings(extractMatches(racesText, /<h4>\s*<strong>\s*([^<]{2,80}?)\s*<\/strong>\s*<\/h4>/gi));
+          const subraceEntries = subraces
+            .filter(n => n.length >= 2)
+            .map(n => entry(n, Dest.tool('races', n), { description: 'Subrace (Races)' }));
+          addToIndex(subraceEntries);
+        }
+
+        // Origin Feats (root): static-ish cards with <h3> names.
+        const featsText = await tryFetchText('../originfeats.html');
+        if (featsText) {
+          const names = uniqStrings(extractMatches(featsText, /<h3[^>]*>\s*([^<]{2,80}?)\s*<\/h3>/gi));
+          const featEntries = names
+            .filter(n => n.length >= 2)
+            .map(n => entry(n, Dest.tool('originfeats', n), { description: 'Feat (Origin Feats)' }));
+          addToIndex(featEntries);
+        }
+
+        // Library (src): BookReader select options. Index the visible titles.
+        const bookReaderText = await tryFetchText('BookReader.html');
+        if (bookReaderText) {
+          const titles = [];
+          const aliasesByTitle = new Map();
+          // Capture: <option value="...">Title</option>
+          const re = /<option\s+[^>]*value\s*=\s*"([^"]+)"[^>]*>([^<]{2,120}?)<\/option>/gi;
+          let m;
+          while ((m = re.exec(bookReaderText)) !== null) {
+            const value = String(m[1] || '').trim();
+            const title = String(m[2] || '').replace(/\s+/g, ' ').trim();
+            if (!title) continue;
+            if (/^choose\s+a\s+document/i.test(title)) continue;
+            titles.push(title);
+
+            // Derive a few aliases from the filename (minus extension), for partial matching.
+            const fname = value.split('/').pop() || '';
+            const base = fname.replace(/\.[a-z0-9]+$/i, '');
+            const nice = base.replace(/[_-]+/g, ' ').replace(/\s+/g, ' ').trim();
+            const list = [];
+            if (nice && nice.toLowerCase() !== title.toLowerCase()) list.push(nice);
+            if (base && base.toLowerCase() !== title.toLowerCase()) list.push(base);
+            if (list.length) aliasesByTitle.set(title, list);
+          }
+
+          const uniqTitles = uniqStrings(titles);
+          const libEntries = uniqTitles
+            .filter(t => t.length >= 2)
+            .map(t => entry(t, Dest.tool('library', t), {
+              description: 'Document (Library)',
+              aliases: aliasesByTitle.get(t) || []
+            }));
+          addToIndex(libEntries);
+        }
+
+        // Re-render if drawer is open.
+        renderResults(searchInput.value);
+      }
+
+      // Kick off async index build (best-effort). This will work when served via the local server.
+      // If the handbook is opened via file://, fetch may be blocked; curated + tool-search actions remain.
+      setTimeout(() => { loadToolNameIndex(); }, 0);
+
+      function scoreEntry(e, q) {
+        const nq = normalizeLoose(q);
+        if (!nq) return 0;
+        prepareEntryForSearch(e);
+
+        // Fast exact/substring matches.
+        if (e._normTerm === nq) return 100;
+        if (e._normTerm && e._normTerm.startsWith(nq)) return 85;
+        if (e._normTerm && e._normTerm.includes(nq)) return 70;
+        if (e._normBlob && e._normBlob.includes(nq)) return 55;
+
+        // Token overlap scoring ("lazy" matching).
+        const qTokens = tokenize(nq);
+        if (qTokens.length === 0) return 0;
+
+        let hits = 0;
+        let prefixHits = 0;
+        for (const qt of qTokens) {
+          if (e._tokenSet && e._tokenSet.has(qt)) {
+            hits++;
+            continue;
+          }
+          // Prefix match helps "mag" -> "magic" and similar.
+          if (e._tokens) {
+            for (const et of e._tokens) {
+              if (et.startsWith(qt)) { prefixHits++; break; }
+            }
+          }
+        }
+
+        const total = qTokens.length;
+        if (hits === 0 && prefixHits === 0) return 0;
+
+        // Base score with strong boost when all tokens match.
+        let score = 20;
+        score += Math.round(50 * (hits / total));
+        score += Math.round(20 * (prefixHits / total));
+        if (hits === total) score += 25;
+        return Math.min(95, score);
+      }
+
+      function getResults(q) {
+        const nq = normalizeLoose(q);
+        if (!nq) {
+          // When empty, show a small curated set instead of everything.
+          return curated.slice(0, 10);
+        }
+
+        const actions = toolSearchActions(q);
+
+        // For big indices, search a pool built from token buckets.
+        // This avoids missing entries like "Can I buy magical weapons..." when searching "magical".
+        const qTokens = tokenize(nq);
+        let pool = index;
+        if (buckets && qTokens.length > 0) {
+          const set = new Set();
+          for (const t of qTokens) {
+            const key = t.slice(0, 1) || '#';
+            const b = buckets.get(key);
+            if (!b) continue;
+            for (const e of b) set.add(e);
+            if (set.size > 8000) break; // cap worst-case work
+          }
+          // If the pool is suspiciously small, fall back to full index.
+          if (set.size >= 30) pool = Array.from(set);
+        }
+
+        const scored = pool
+          .map(e => ({ e, s: scoreEntry(e, nq) }))
+          .filter(x => x.s > 0)
+          .sort((a, b) => b.s - a.s)
+          .slice(0, 30)
+          .map(x => x.e);
+
+        // Put the generic actions first so users can always jump.
+        return [...actions, ...scored].slice(0, 30);
+      }
+
+      function renderResults(q) {
+        const results = getResults(q);
+        resultsEl.innerHTML = '';
+        if (results.length === 0) {
+          const empty = document.createElement('div');
+          empty.className = 'glossary-result';
+          empty.innerHTML = `<div class="glossary-result-title">No matches</div><div class="glossary-result-meta">Try a shorter term or a tab name.</div>`;
+          resultsEl.appendChild(empty);
+          return;
+        }
+
+        results.forEach((r, idx) => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'glossary-result';
+          btn.dataset.index = String(idx);
+
+          const where = r.dest.kind === 'tool'
+            ? (TOOL_TARGETS[r.dest.toolKey]?.title || 'Tool')
+            : 'Handbook';
+          const meta = r.description ? `${where} • ${r.description}` : where;
+
+          btn.innerHTML = `
+            <div class="glossary-result-title">${r.term}</div>
+            <div class="glossary-result-meta">${meta}</div>
+          `;
+
+          btn.addEventListener('click', () => {
+            if (r.dest.kind === 'tool') {
+              goToTool(r.dest.toolKey, r.dest.query);
+            } else {
+              goToTab(r.dest.buttonId, r.dest.anchorId);
+            }
+            closeDrawer();
+          });
+
+          resultsEl.appendChild(btn);
+        });
+      }
+
+      // Events
+      toggleBtn.addEventListener('click', () => {
+        if (backdrop.classList.contains('open')) closeDrawer();
+        else openDrawer();
+      });
+
+      closeBtn.addEventListener('click', closeDrawer);
+      clearBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        searchInput.focus();
+        renderResults('');
+      });
+
+      backdrop.addEventListener('click', (e) => {
+        if (e.target === backdrop) closeDrawer();
+      });
+
+      searchInput.addEventListener('input', () => renderResults(searchInput.value));
+
+      document.addEventListener('keydown', (e) => {
+        if (!backdrop.classList.contains('open')) return;
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          closeDrawer();
+          return;
+        }
+        if (e.key === 'Enter') {
+          const first = resultsEl.querySelector('.glossary-result');
+          if (first) {
+            e.preventDefault();
+            first.click();
+          }
+        }
+      });
+
+      // Initial paint (so the drawer isn’t empty when opened).
+      renderResults('');
+    }
 
 
     // --- Event Listeners Setup ---
@@ -2639,6 +3808,9 @@
   // Board game controls removed; integrated into Games tab launcher
       
       initializeAccordions(document); 
+
+      // Global search drawer
+      initializeGlossaryDrawer();
     });
 
     function initializeAccordions(parentElement) {
@@ -2781,6 +3953,69 @@
         document.addEventListener('DOMContentLoaded', () => initCyclingLoreImages(document));
       } else {
         initCyclingLoreImages(document);
+      }
+    })();
+  </script>
+
+  <script>
+    // Map App preview lightbox
+    (function(){
+      function initMapAppLightbox(){
+        const backdrop = document.getElementById('mapapp-lightbox');
+        const closeBtn = document.getElementById('mapapp-lightbox-close');
+        const img = document.getElementById('mapapp-lightbox-img');
+        const caption = document.getElementById('mapapp-lightbox-caption');
+        if (!backdrop || !closeBtn || !img || !caption) return;
+
+        let lastActiveElement = null;
+
+        function openLightbox(src, label){
+          lastActiveElement = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+          img.src = src;
+          img.alt = label || 'Map App preview';
+          caption.textContent = label || '';
+          backdrop.classList.add('open');
+          backdrop.setAttribute('aria-hidden', 'false');
+          closeBtn.focus();
+        }
+
+        function closeLightbox(){
+          backdrop.classList.remove('open');
+          backdrop.setAttribute('aria-hidden', 'true');
+          img.removeAttribute('src');
+          img.alt = '';
+          caption.textContent = '';
+          if (lastActiveElement) lastActiveElement.focus();
+        }
+
+        document.addEventListener('click', (e) => {
+          const trigger = e.target && e.target.closest ? e.target.closest('.mapapp-preview-thumb') : null;
+          if (trigger) {
+            const src = trigger.getAttribute('data-mapapp-preview-src');
+            const label = trigger.getAttribute('data-mapapp-preview-label') || '';
+            if (src) openLightbox(src, label);
+            return;
+          }
+
+          if (e.target === backdrop) {
+            closeLightbox();
+          }
+        });
+
+        closeBtn.addEventListener('click', closeLightbox);
+
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && backdrop.classList.contains('open')) {
+            e.preventDefault();
+            closeLightbox();
+          }
+        });
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initMapAppLightbox);
+      } else {
+        initMapAppLightbox();
       }
     })();
   </script>

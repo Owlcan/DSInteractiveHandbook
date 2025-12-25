@@ -1,0 +1,884 @@
+<div id="gameContainer" style="position:fixed; inset:0; width:100vw; height:100vh; background:black; overflow:hidden; display:flex; align-items:center; justify-content:center;">
+  <canvas id="gameCanvasEl" style="display:block; background:transparent; width:100vw; height:calc(100vw * 4 / 3); max-height:100vh; max-width:calc(100vh * 3 / 4); box-shadow:0 0 32px #222,0 0 0 4px #fffbe0cc;"></canvas>
+  <!-- Health bar replaces livesEl -->
+  <div id="healthBarContainer" style="position:absolute; top:20px; left:20px; height:28px; width:360px; z-index:10; white-space:nowrap; overflow:hidden;"></div>
+  <div id="scoreEl" style="position:absolute; top:54px; left:20px; color:white; font-size:20px; font-family:Arial;">Score: 0</div>
+  <button id="pauseBtn" style="position:absolute; top:20px; right:20px; padding:8px 14px; font-size:18px; background:rgba(255,215,0,0.95); border:none; border-radius:10px; cursor:pointer;">Pause</button>
+  <div id="pausedEl" hidden style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); color:white; font-size:44px; font-family:Arial; text-align:center; text-shadow:0 0 18px rgba(255,255,255,0.45);">
+    Paused<br>
+    <span style="font-size:18px; opacity:0.85">Press P or click Pause</span>
+  </div>
+  <!-- New Game Over Overlay -->
+  <div id="gameOverEl" style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:100; display:flex; flex-direction:column; align-items:center; justify-content:center; display:none;">
+    <img id="gameOverImg" src="deregameover.webp" alt="Game Over" style="max-width:80vw; max-height:40vh; border-radius:24px; box-shadow:0 0 32px gold,0 0 8px #fff; margin-bottom:32px;" />
+    <button id="restartBtn" style="padding:18px 54px; font-size:2.2rem; font-family:inherit; background:linear-gradient(90deg,#ffe066 0%,#ffd700 50%,#fffbe0 100%); color:#b8860b; border:none; border-radius:18px; box-shadow:0 4px 24px #ffd70099,0 1px 2px #fff; font-weight:bold; cursor:pointer; text-shadow:0 2px 8px #fffbe0,0 0 2px #ffd700; transition:transform 0.1s;">Restart</button>
+  </div>
+
+  <!-- Title Screen Overlay -->
+  <div id="titleScreen" style="position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.97); z-index:9999; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+    <div id="titleScreen" style="position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.97); z-index:9999; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+    <img src="pamplatformer.webp" alt="Pam Platformer" style="height:100vh; width:auto; max-width:100vw; object-fit:cover; display:block; margin:0 auto; border:8px solid #FFD700; box-shadow:0 0 48px 12px #FFD70099,0 0 0 12px #fffbe0cc inset; border-radius:32px;" />
+    <button id="playBtn" style="position:absolute; left:50%; bottom:7vh; transform:translateX(-50%); padding:22px 70px; font-size:2.5rem; font-family:inherit; background:linear-gradient(90deg,#ffe066 0%,#ffd700 50%,#fffbe0 100%); color:#b8860b; border:none; border-radius:22px; box-shadow:0 4px 32px #ffd70099,0 1px 2px #fff; font-weight:bold; cursor:pointer; text-shadow:0 2px 12px #fffbe0,0 0 2px #ffd700; font-variant:small-caps; letter-spacing:2px; transition:transform 0.1s; z-index:2;">Play</button>
+  </div>
+</div>
+
+<script>
+  const canvas = document.getElementById('gameCanvasEl');
+  const ctx = canvas.getContext('2d');
+
+  const livesEl = document.getElementById('livesEl');
+  const scoreEl = document.getElementById('scoreEl');
+  const pauseBtn = document.getElementById('pauseBtn');
+  const pausedEl = document.getElementById('pausedEl');
+  const gameOverEl = document.getElementById('gameOverEl');
+  // Ensure game over screen is hidden at start
+  if (gameOverEl) gameOverEl.style.display = 'none';
+
+  const gameContainerEl = document.getElementById('gameContainer');
+  const viewport = { w: 0, h: 0, dpr: 1 };
+      
+  // Game state
+  let lives = 3;
+  let gameRunning = true;
+  let paused = false;
+  let camera = { x: 0, y: 0 };
+
+  const WORLD_SCALE = 1.6; // zoom closer on the action
+  const SCORE_PER_PX = 2;
+  const EXTRA_LIFE_EVERY = 5000;
+  const RESPAWN_GRACE_FRAMES = 120;
+  let elapsedSeconds = 0;
+  let score = 0;
+  let bestClimbPx = 0;
+  let playerStartY = 0;
+  let nextExtraLifeAt = EXTRA_LIFE_EVERY;
+  let respawnGrace = 0;
+  
+  // Player
+  let player = {
+    x: 0,
+    y: 0,
+    w: 56,
+    h: 56,
+    vx: 0,
+    vy: 0,
+    speed: 6,
+    jumpPower: 16,
+    onGround: false,
+    facing: -1 // -1 = left (default), 1 = right
+  };
+
+  // Player sprite (faces left by default)
+  const playerSprite = new Image();
+  let playerSpriteLoaded = false;
+  playerSprite.onload = () => { playerSpriteLoaded = true; };
+  playerSprite.onerror = () => { playerSpriteLoaded = false; };
+  playerSprite.src = 'magiduel (10).webp';
+
+  // Platform images
+  const platformImgGround = new Image();
+  const platformImgCloud = new Image();
+  let platformImgGroundLoaded = false;
+  let platformImgCloudLoaded = false;
+  const platformDims = {
+    land: { w: 320, h: 64 },
+    cloud: { w: 256, h: 64 }
+  };
+  // Desired on-screen (world) platform size caps. Art will be uniformly scaled down to fit.
+  const platformTarget = {
+    land: { w: 280, h: 56 },
+    cloud: { w: 260, h: 56 }
+  };
+  let platformsSizedFromArt = false;
+
+  function getPlatformScale(kind) {
+    const nativeW = platformDims[kind]?.w || 1;
+    const nativeH = platformDims[kind]?.h || 1;
+    const targetW = platformTarget[kind]?.w || nativeW;
+    const targetH = platformTarget[kind]?.h || nativeH;
+    // Uniform scale; can shrink but never enlarge.
+    return Math.min(1, targetW / nativeW, targetH / nativeH);
+  }
+
+  function getScaledPlatformDims(kind) {
+    const scale = getPlatformScale(kind);
+    return {
+      w: Math.max(1, Math.round(platformDims[kind].w * scale)),
+      h: Math.max(1, Math.round(platformDims[kind].h * scale)),
+      scale
+    };
+  }
+
+  function buildStartingPlatform() {
+    const startDims = getScaledPlatformDims('land');
+    startingPlatform = {
+      x: viewport.w / 2 - (startDims.w / 2),
+      y: viewport.h - (startDims.h + 40),
+      w: startDims.w,
+      h: startDims.h,
+      kind: 'land',
+      scale: startDims.scale,
+      color: '#90EE90',
+      isStarting: true
+    };
+    return startingPlatform;
+  }
+
+  function populatePlatformsFromStart() {
+    if (!startingPlatform) buildStartingPlatform();
+    platforms = [startingPlatform];
+
+    let prev = startingPlatform;
+    let y = (viewport.h - 50) - 140;
+    for (let i = 1; i <= 26; i++) {
+      const step = Math.round(randRange(120, 190));
+      y -= step;
+      const p = createPlatform(y, prev, i);
+      platforms.push(p);
+      prev = p;
+    }
+  }
+
+  function respawnAtStart() {
+    // Rebuild a playable platform set so respawns are never "empty world".
+    buildStartingPlatform();
+    populatePlatformsFromStart();
+
+    player.x = startingPlatform.x + startingPlatform.w / 2 - player.w / 2;
+    player.y = startingPlatform.y - player.h + getPlatformStandInset(startingPlatform);
+    player.vx = 0;
+    player.vy = 0;
+    player.onGround = false;
+    player.facing = -1;
+
+    camera.x = 0;
+    camera.y = 0;
+
+    respawnGrace = RESPAWN_GRACE_FRAMES;
+    pellets = [];
+    pelletTimer = 0;
+  }
+
+  platformImgGround.onload = () => {
+    platformImgGroundLoaded = true;
+    platformDims.land.w = platformImgGround.naturalWidth || platformImgGround.width || platformDims.land.w;
+    platformDims.land.h = platformImgGround.naturalHeight || platformImgGround.height || platformDims.land.h;
+    if (platformImgCloudLoaded && !platformsSizedFromArt) {
+      platformsSizedFromArt = true;
+      initGame();
+    }
+  };
+  platformImgGround.onerror = () => { platformImgGroundLoaded = false; };
+  platformImgCloud.onload = () => {
+    platformImgCloudLoaded = true;
+    platformDims.cloud.w = platformImgCloud.naturalWidth || platformImgCloud.width || platformDims.cloud.w;
+    platformDims.cloud.h = platformImgCloud.naturalHeight || platformImgCloud.height || platformDims.cloud.h;
+    if (platformImgGroundLoaded && !platformsSizedFromArt) {
+      platformsSizedFromArt = true;
+      initGame();
+    }
+  };
+  platformImgCloud.onerror = () => { platformImgCloudLoaded = false; };
+  platformImgGround.src = 'groundlayer1.webp';
+  platformImgCloud.src = 'cloud1.webp';
+
+  // Background image (space.webp)
+  const bgImg = new Image();
+  let bgImgLoaded = false;
+  bgImg.onload = () => { bgImgLoaded = true; };
+  bgImg.onerror = () => { bgImgLoaded = false; };
+  bgImg.src = 'space.webp';
+  
+  // Platforms
+  let platforms = [];
+  let platformColors = ['#FFD700', '#FFA500', '#FF8C00', '#FFFF00'];
+  let startingPlatform = null; // Track the special starting platform
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
+  const randRange = (min, max) => min + Math.random() * (max - min);
+
+  function getPlatformStandInset(platform) {
+    const kind = platform?.kind || (platform?.isStarting ? 'land' : 'cloud');
+    const pct = (kind === 'cloud') ? 0.25 : 0.10;
+    const h = Math.max(1, Number(platform?.h || 0));
+    return Math.max(0, Math.round(h * pct));
+  }
+
+  function createPlatform(y, prevPlatform, index) {
+    const climbed = Math.max(0, (startingPlatform?.y ?? playerStartY) - y);
+    const landChance = climbed < 1200 ? 0.7 : 0.45; // use land sections too
+    const kind = (Math.random() < landChance) ? 'land' : 'cloud';
+
+    // Uniformly shrink art (no distortion) and use that as the hitbox.
+    const dims = getScaledPlatformDims(kind);
+    const w = dims.w;
+    const h = dims.h;
+    const maxLeft = Math.max(0, viewport.w - w);
+
+    const centerX = viewport.w / 2;
+    const prevCenter = prevPlatform ? (prevPlatform.x + prevPlatform.w / 2) : centerX;
+    const drift = randRange(-260, 260);
+    const nextCenter = clamp(prevCenter + drift, w / 2, viewport.w - w / 2);
+    const x = clamp(Math.round(nextCenter - w / 2), 0, maxLeft);
+
+    return {
+      x,
+      y,
+      w,
+      h,
+      kind,
+      scale: dims.scale,
+      color: platformColors[index % platformColors.length],
+      isStarting: false
+    };
+  }
+  
+  // Pellets
+  let pellets = [];
+  let pelletTimer = 0;
+  let pelletIdCounter = 1;
+  let frameCount = 0;
+  
+  // Input
+  let keys = {};
+  
+  // Resize canvas
+  function resizeCanvas() {
+    // 3:4 aspect ratio, centered
+    let winW = window.innerWidth;
+    let winH = window.innerHeight;
+    let targetW = winW;
+    let targetH = Math.round(winW * 4 / 3);
+    if (targetH > winH) {
+      targetH = winH;
+      targetW = Math.round(winH * 3 / 4);
+    }
+    const dpr = Math.max(1, Math.floor(window.devicePixelRatio || 1));
+
+    viewport.w = targetW;
+    viewport.h = targetH;
+    viewport.dpr = dpr;
+
+    canvas.style.width = targetW + 'px';
+    canvas.style.height = targetH + 'px';
+    canvas.width = targetW * dpr;
+    canvas.height = targetH * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+  
+  // Input handlers
+  window.addEventListener('keydown', (e) => {
+    keys[e.key.toLowerCase()] = true;
+    if (e.key.toLowerCase() === 'p') {
+      togglePause();
+      e.preventDefault();
+    }
+    if (e.key === ' ') e.preventDefault();
+  });
+  
+  window.addEventListener('keyup', (e) => {
+    keys[e.key.toLowerCase()] = false;
+  });
+  
+  // --- AUDIO SYSTEM ---
+  const music = new Audio('The Day When I Will Recap You.mp3');
+  music.loop = true;
+  music.volume = 0.7;
+  let musicStarted = false;
+
+  const derestart = new Audio('derestart.wav');
+  const gameoverSfx = new Audio('gameover.wav');
+  const derehitSounds = [
+    new Audio('derehit1.wav'),
+    new Audio('derehit2.wav'),
+    new Audio('derehit3.wav'),
+  ];
+  const derehitRare = new Audio('derehit.wav');
+
+  function playHitSound() {
+    if (Math.random() < 0.02) {
+      derehitRare.currentTime = 0;
+      derehitRare.play();
+    } else {
+      const idx = Math.floor(Math.random() * derehitSounds.length);
+      derehitSounds[idx].currentTime = 0;
+      derehitSounds[idx].play();
+    }
+  }
+
+  function playGameOverSound() {
+    gameoverSfx.currentTime = 0;
+    gameoverSfx.play();
+  }
+
+  function playRestartSoundAndMusic() {
+    derestart.currentTime = 0;
+    derestart.play();
+    setTimeout(() => {
+      music.currentTime = 0;
+      music.play();
+      musicStarted = true;
+    }, 600); // delay music start after derestart
+  }
+
+  // --- TITLE SCREEN LOGIC ---
+  const titleScreen = document.getElementById('titleScreen');
+  const playBtn = document.getElementById('playBtn');
+  playBtn.onclick = () => {
+    // Remove title screen from DOM so it cannot be retriggered or block the game
+    if (titleScreen && titleScreen.parentNode) {
+      titleScreen.parentNode.removeChild(titleScreen);
+    }
+    if (gameOverEl) gameOverEl.style.display = 'none';
+    playRestartSoundAndMusic();
+    resetGame();
+  };
+
+  // --- GAME OVER LOGIC ---
+  const restartBtn = document.getElementById('restartBtn');
+  restartBtn.onclick = () => {
+     if (gameOverEl) {
+      gameOverEl.style.display = 'none';
+      gameOverEl.hidden = true;
+     }
+     playRestartSoundAndMusic();
+     resetGame();
+  };
+
+  // --- STOP MUSIC ON GAME OVER ---
+  function gameOver() {
+    gameRunning = false;
+    if (gameOverEl) gameOverEl.style.display = 'flex';
+    if (musicStarted) music.pause();
+    playGameOverSound();
+  }
+  
+  // --- HEALTH BAR SYSTEM ---
+const healthBarContainer = document.getElementById('healthBarContainer');
+let maxHealth = 10;
+let health = 3;
+
+function updateHealthBar() {
+  healthBarContainer.innerHTML = '';
+  for (let i = 0; i < maxHealth; i++) {
+    const seg = document.createElement('div');
+    seg.style.display = 'inline-block';
+    seg.style.width = '22px';
+    seg.style.height = '22px';
+    seg.style.marginRight = '4px';
+    seg.style.borderRadius = '7px';
+    seg.style.background = i < health ? 'linear-gradient(90deg,#ff2a2a,#ff5555 60%,#ffb3b3)' : 'linear-gradient(90deg,#333,#555)';
+    seg.style.border = '2px solid #a00';
+    seg.style.boxShadow = i < health ? '0 0 8px #ff2a2a,0 0 2px #fff' : 'none';
+    if (health === maxHealth) {
+      seg.style.animation = 'sparkle 0.7s infinite linear';
+      seg.style.background = 'linear-gradient(90deg,#ff2a2a,#ffd700 60%,#fffbe0)';
+    }
+    healthBarContainer.appendChild(seg);
+  }
+}
+
+// Sparkle animation for max health
+const style = document.createElement('style');
+style.innerHTML = `@keyframes sparkle { 0%{box-shadow:0 0 8px #ffd700,0 0 2px #fff;} 50%{box-shadow:0 0 18px #fffbe0,0 0 8px #ffd700;} 100%{box-shadow:0 0 8px #ffd700,0 0 2px #fff;} }`;
+document.head.appendChild(style);
+
+function setHealth(val) {
+  health = Math.max(0, Math.min(maxHealth, val));
+  updateHealthBar();
+}
+
+function addHealth(amount) {
+  setHealth(health + amount);
+}
+function loseHealth(amount) {
+  setHealth(health - amount);
+}
+
+// Initialize game
+  function initGame() {
+    paused = false;
+    pausedEl.hidden = true;
+    pauseBtn.textContent = 'Pause';
+
+    // Create platforms
+    buildStartingPlatform();
+    populatePlatformsFromStart();
+
+    // Reset player (position on starting platform)
+    player.x = startingPlatform.x + startingPlatform.w / 2 - player.w / 2;
+    player.y = startingPlatform.y - player.h + getPlatformStandInset(startingPlatform);
+    player.vx = 0;
+    player.vy = 0;
+    player.onGround = false;
+    player.facing = -1;
+    respawnGrace = RESPAWN_GRACE_FRAMES;
+
+    // Score baseline
+    playerStartY = player.y;
+    bestClimbPx = 0;
+    score = 0;
+    nextExtraLifeAt = EXTRA_LIFE_EVERY;
+    scoreEl.textContent = 'Score: 0';
+    elapsedSeconds = 0;
+    
+    // Clear pellets
+    pellets = [];
+    pelletTimer = 0;
+    pelletIdCounter = 1;
+    frameCount = 0;
+    
+    // Reset camera
+    camera.x = 0;
+    camera.y = 0;
+    
+    // Reset lives and health
+    lives = 3;
+    setHealth(3);
+    updateHealthBar();
+    if (gameOverEl) gameOverEl.style.display = 'none';
+    gameRunning = true;
+  }
+
+  // --- PAUSE LOGIC EXTENSION ---
+  const muteBtn = document.createElement('button');
+  muteBtn.textContent = 'Mute';
+  muteBtn.style = 'margin-top:18px; padding:8px 24px; font-size:1.2rem; background:#ffd700; border:none; border-radius:10px; cursor:pointer; font-weight:bold;';
+  const volumeSlider = document.createElement('input');
+  volumeSlider.type = 'range';
+  volumeSlider.min = '0';
+  volumeSlider.max = '1';
+  volumeSlider.step = '0.01';
+  volumeSlider.value = music.volume;
+  volumeSlider.style = 'margin-top:12px; width:120px;';
+
+  let isMuted = false;
+
+  muteBtn.onclick = () => {
+    isMuted = !isMuted;
+    music.muted = isMuted;
+    muteBtn.textContent = isMuted ? 'Unmute' : 'Mute';
+  };
+  volumeSlider.oninput = () => {
+    music.volume = Number(volumeSlider.value);
+  };
+
+  function showPauseControls() {
+    pausedEl.appendChild(muteBtn);
+    pausedEl.appendChild(volumeSlider);
+  }
+  function hidePauseControls() {
+    if (pausedEl.contains(muteBtn)) pausedEl.removeChild(muteBtn);
+    if (pausedEl.contains(volumeSlider)) pausedEl.removeChild(volumeSlider);
+  }
+
+  function togglePause() {
+    if (!gameRunning) return;
+    paused = !paused;
+    pausedEl.hidden = !paused;
+    pauseBtn.textContent = paused ? 'Resume' : 'Pause';
+    if (paused) {
+      if (musicStarted) music.pause();
+      showPauseControls();
+    } else {
+      if (musicStarted && !isMuted) music.play();
+      hidePauseControls();
+    }
+  }
+
+  pauseBtn.addEventListener('click', () => togglePause());
+  
+  // Spawn pellet
+  function spawnPellet(topVisibleWorldY, leftVisibleWorldX, rightVisibleWorldX, speedMult) {
+    const left = Number.isFinite(leftVisibleWorldX) ? leftVisibleWorldX : 0;
+    const right = Number.isFinite(rightVisibleWorldX) ? rightVisibleWorldX : viewport.w;
+    const top = Number.isFinite(topVisibleWorldY) ? topVisibleWorldY : 0;
+    const w = 12;
+    const h = 12;
+    const xMin = Math.min(left, right);
+    const xMax = Math.max(left, right) - w;
+    const x = xMin + Math.random() * Math.max(1, (xMax - xMin));
+
+    pellets.push({
+      id: pelletIdCounter++,
+      x,
+      // Spawn just above the current view so the player can’t "out-climb" the spawn origin.
+      y: top - 40,
+      vx: (Math.random() - 0.5) * 1.6,
+      vy: (2.2 + Math.random() * 3.2) * (speedMult || 1),
+      w,
+      h,
+      color: '#ff2222' // bright red for hazard
+    });
+  }
+  
+  // Check collision
+  function checkCollision(a, b) {
+    return a.x < b.x + b.w &&
+           a.x + a.w > b.x &&
+           a.y < b.y + b.h &&
+           a.y + a.h > b.y;
+  }
+  
+  // --- POST-HIT INVULNERABILITY AND HIT SOUND ---
+let hitInvulnFrames = 0;
+const HIT_INVULN_DURATION = 60; // 1 second at 60fps
+
+function triggerHit() {
+  if (hitInvulnFrames > 0 || respawnGrace > 0) return;
+  loseHealth(1);
+  playHitSound();
+  hitInvulnFrames = HIT_INVULN_DURATION;
+  if (health <= 0) {
+    gameOver();
+  }
+}
+
+  // Update game
+  function update() {
+    if (!gameRunning || paused) return;
+
+    frameCount++;
+
+    // Difficulty ramp
+    elapsedSeconds += 1 / 60;
+
+    if (respawnGrace > 0) respawnGrace--;
+    
+    // Player movement
+    if (keys['a'] || keys['arrowleft']) {
+      player.vx = -player.speed;
+      player.facing = -1; // left
+    } else if (keys['d'] || keys['arrowright']) {
+      player.vx = player.speed;
+      player.facing = 1; // right
+    } else {
+      player.vx *= 0.8; // Friction
+    }
+    
+    // Jump
+    if ((keys[' '] || keys['w'] || keys['arrowup']) && player.onGround) {
+      player.vy = -player.jumpPower;
+      player.onGround = false;
+    }
+    
+    // Apply gravity
+    player.vy += 0.405;
+    
+    // Update position
+    player.x += player.vx;
+    player.y += player.vy;
+    
+    // Keep player in bounds
+    if (player.x < 0) player.x = 0;
+    if (player.x + player.w > viewport.w) player.x = viewport.w - player.w;
+    
+    // Check platform collisions
+    player.onGround = false;
+    for (let platform of platforms) {
+      if (checkCollision(player, platform)) {
+        // Stand slightly inside the platform top (visual inset)
+        const inset = getPlatformStandInset(platform);
+        const standY = platform.y - player.h + inset;
+        const bottom = player.y + player.h;
+
+        // Landing / resting on top region
+        if (player.vy >= 0 && bottom >= platform.y && bottom <= platform.y + inset + 12) {
+          player.y = standY;
+          player.vy = 0;
+          player.onGround = true;
+        }
+      }
+    }
+    
+    // Update camera to follow player
+    const targetCameraX = (viewport.w / (2 * WORLD_SCALE)) - (player.x + player.w / 2);
+    const targetCameraY = (viewport.h / (2 * WORLD_SCALE)) - player.y;
+    camera.x += (targetCameraX - camera.x) * 0.12;
+    camera.y += (targetCameraY - camera.y) * 0.12;
+
+    // Compute visible bounds AFTER camera updates (critical with zoom)
+    const topVisibleWorldY = -camera.y;
+    const bottomVisibleWorldY = -camera.y + (viewport.h / WORLD_SCALE);
+    const leftVisibleWorldX = -camera.x;
+    const rightVisibleWorldX = -camera.x + (viewport.w / WORLD_SCALE);
+
+    const difficulty01 = Math.min(1, elapsedSeconds / 180); // 0→1 over ~3 minutes
+    const speedMult = 1 + difficulty01 * 0.8;              // up to +80% fall speed
+    const spawnRateMult = 1 + difficulty01 * 1.2;          // up to 2.2x spawn frequency
+
+    // Score based on max height climbed
+    const climbedPx = Math.max(0, playerStartY - player.y);
+    if (climbedPx > bestClimbPx) {
+      bestClimbPx = climbedPx;
+      score = Math.floor(bestClimbPx * SCORE_PER_PX);
+      scoreEl.textContent = `Score: ${score}`;
+
+      while (score >= nextExtraLifeAt) {
+        addHealth(1);
+        nextExtraLifeAt += EXTRA_LIFE_EVERY;
+      }
+    }
+    
+    // Generate more platforms if needed
+    let highestPlatform = Math.min(...platforms.map(p => p.y));
+    if (highestPlatform > topVisibleWorldY - (viewport.h / WORLD_SCALE)) {
+      const currentTop = platforms.reduce((best, p) => (p.y < best.y ? p : best), platforms[0]);
+      let prev = currentTop;
+      let y = currentTop.y;
+      for (let i = 0; i < 6; i++) {
+        const step = Math.round(randRange(120, 190));
+        y -= step;
+        const p = createPlatform(y, prev, i + 1);
+        platforms.push(p);
+        prev = p;
+      }
+    }
+    
+    // Remove platforms that are too far below (but never cull the starting platform here)
+    platforms = platforms.filter(p => p.isStarting || p.y < bottomVisibleWorldY + 200);
+    
+    // Remove starting platform if it's off screen
+    // Guard: never despawn it at the very beginning (prevents instant death loops).
+    const climbedSoFar = Math.max(0, playerStartY - player.y);
+    if (startingPlatform && climbedSoFar > 600 && startingPlatform.y > bottomVisibleWorldY + 120) {
+      let index = platforms.indexOf(startingPlatform);
+      if (index > -1) {
+        platforms.splice(index, 1);
+        startingPlatform = null;
+      }
+    }
+    
+    // Spawn pellets
+    pelletTimer++;
+    const baseMin = 85;
+    const baseJitter = 170;
+    const threshold = (baseMin / spawnRateMult) + (Math.random() * baseJitter / spawnRateMult);
+    if (pelletTimer > threshold) {
+      const extraChance = Math.max(0, spawnRateMult - 1) * 0.18;
+      const count = (Math.random() < extraChance) ? 2 : 1;
+      for (let n = 0; n < count; n++) {
+        spawnPellet(topVisibleWorldY, leftVisibleWorldX, rightVisibleWorldX, speedMult);
+      }
+      pelletTimer = 0;
+    }
+    
+    // Update pellets
+    for (let i = pellets.length - 1; i >= 0; i--) {
+      let pellet = pellets[i];
+      pellet.x += pellet.vx;
+      pellet.y += pellet.vy;
+      
+      // Check pellet collision with player
+      if (respawnGrace === 0 && hitInvulnFrames === 0 && checkCollision(player, pellet)) {
+        pellets.splice(i, 1);
+        triggerHit();
+      }
+      
+      // Remove pellets that are off screen
+      else if (pellet.y > bottomVisibleWorldY + 200) {
+        pellets.splice(i, 1);
+      }
+    }
+    
+    // Check if player fell off the bottom
+    if (respawnGrace === 0 && player.y > bottomVisibleWorldY + 240) {
+      loseHealth(1);
+      if (health > 0) {
+        respawnAtStart();
+      } else {
+        gameOver();
+      }
+    }
+
+    // Decrement invuln timer
+    if (hitInvulnFrames > 0) hitInvulnFrames--;
+  }
+  
+  // Draw game
+  function draw() {
+    // Draw seamless, zoomed, vertically scrolling background (3:4, centered, no repetition, seamless wrap)
+    if (bgImgLoaded) {
+      // Zoom to fill 3:4 view, center horizontally
+      const viewW = viewport.w;
+      const viewH = viewport.h;
+      const bgW = bgImg.width;
+      const bgH = bgImg.height;
+      // Calculate zoom to cover the 3:4 view
+      const zoom = Math.max(viewW / bgW, viewH / bgH) * 1.08; // slight zoom in
+      const drawW = bgW * zoom;
+      const drawH = bgH * zoom;
+      // Center horizontally
+      const offsetX = (viewW - drawW) / 2;
+      // Vertical scroll: player.y mapped to background, seamless wrap
+      // When player.y = 0, show bottom of bg; as player ascends, scroll up, wrap at top
+      let scrollPx = ((player.y * 0.25) % bgH);
+      if (scrollPx < 0) scrollPx += bgH;
+      // The y offset in the source image to start drawing from (so bottom is at y=0)
+      let srcY = (bgH - scrollPx) % bgH;
+      // Draw first segment (from srcY to bottom)
+      let segH1 = Math.min(bgH - srcY, viewH / zoom);
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(0, 0, viewW, viewH);
+      ctx.clip();
+      // Draw from srcY to bottom
+      ctx.drawImage(
+        bgImg,
+        0, srcY, bgW, segH1,
+        offsetX, 0, drawW, segH1 * zoom
+      );
+      // If needed, draw from top to fill the rest
+      if (segH1 * zoom < viewH) {
+        let segH2 = (viewH - segH1 * zoom) / zoom;
+        ctx.drawImage(
+          bgImg,
+          0, 0, bgW, segH2,
+          offsetX, segH1 * zoom, drawW, segH2 * zoom
+        );
+      }
+      ctx.restore();
+    } else {
+      // fallback: black background
+      ctx.fillStyle = 'black';
+      ctx.fillRect(0, 0, viewport.w, viewport.h);
+    }
+
+    // Save context
+    ctx.save();
+    
+    // Apply zoom + camera transform (world units)
+    ctx.scale(WORLD_SCALE, WORLD_SCALE);
+    ctx.translate(camera.x, camera.y);
+    
+    // Draw platforms
+    ctx.shadowBlur = 20;
+    ctx.shadowColor = 'gold';
+    for (let platform of platforms) {
+      const img = (platform.kind === 'land' || platform.isStarting) ? platformImgGround : platformImgCloud;
+      const imgOk = (platform.kind === 'land' || platform.isStarting) ? platformImgGroundLoaded : platformImgCloudLoaded;
+
+      if (imgOk) {
+        // Draw at hitbox size (uniform scale computed in platform.w/platform.h).
+        ctx.drawImage(img, platform.x, platform.y, platform.w, platform.h);
+      } else {
+        // Fallback if images fail to load
+        ctx.fillStyle = platform.color;
+        ctx.fillRect(platform.x, platform.y, platform.w, platform.h);
+      }
+      
+      // ...no border for starting platform...
+    }
+    ctx.shadowBlur = 0;
+    
+    // Draw pellets
+    for (let pellet of pellets) {
+      const cx = pellet.x + pellet.w / 2;
+      const cy = pellet.y + pellet.h / 2;
+      const r = pellet.w / 2;
+
+      ctx.save();
+      ctx.globalCompositeOperation = 'lighter';
+
+      // Soft red glow
+      const glowR = r * 4.2;
+      const g = ctx.createRadialGradient(cx, cy, r * 0.6, cx, cy, glowR);
+      g.addColorStop(0, 'rgba(255,32,32,0.95)');
+      g.addColorStop(0.35, 'rgba(255,32,32,0.22)');
+      g.addColorStop(1, 'rgba(255,32,32,0)');
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(cx, cy, glowR, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Core
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.fillStyle = '#ff2222';
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Red sparkles (stable-ish per pellet)
+      ctx.globalCompositeOperation = 'lighter';
+      const t = frameCount * 0.12;
+      for (let s = 0; s < 4; s++) {
+        const phase = (pellet.id * 13.37 + s * 9.19);
+        const ang = (phase + t) % (Math.PI * 2);
+        const dist = r * (1.2 + (Math.sin(phase + t * 1.3) + 1) * 0.6);
+        const sx = cx + Math.cos(ang) * dist;
+        const sy = cy + Math.sin(ang) * dist;
+        const len = 2 + (Math.sin(phase + t * 2.1) + 1) * 2;
+        ctx.strokeStyle = 'rgba(255,32,32,0.85)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(sx - len, sy);
+        ctx.lineTo(sx + len, sy);
+        ctx.moveTo(sx, sy - len);
+        ctx.lineTo(sx, sy + len);
+        ctx.stroke();
+      }
+
+      ctx.restore();
+    }
+    
+    // Draw player
+    let drawX, drawY, drawW, drawH;
+    if (playerSpriteLoaded) {
+      if (hitInvulnFrames > 0 && (frameCount % 8 < 4)) {
+        ctx.globalAlpha = 0.35;
+      }
+      // Preserve aspect ratio: shrink uniformly to fit the player's hitbox.
+      const nw = playerSprite.naturalWidth || playerSprite.width || 1;
+      const nh = playerSprite.naturalHeight || playerSprite.height || 1;
+      const scale = Math.min(player.w / nw, player.h / nh);
+      drawW = Math.max(1, Math.round(nw * scale));
+      drawH = Math.max(1, Math.round(nh * scale));
+      drawX = Math.round(player.x + (player.w - drawW) / 2);
+      drawY = Math.round(player.y + (player.h - drawH) / 2);
+      if (player.facing === 1) {
+        // Flip horizontally to face right
+        ctx.save();
+        ctx.translate(drawX + drawW, drawY);
+        ctx.scale(-1, 1);
+        ctx.drawImage(playerSprite, 0, 0, drawW, drawH);
+        ctx.restore();
+      } else {
+        ctx.drawImage(playerSprite, drawX, drawY, drawW, drawH);
+      }
+      ctx.globalAlpha = 1.0;
+    } else {
+      // Fallback if image fails to load
+      ctx.font = '40px Arial';
+      ctx.fillText('👩', player.x, player.y + player.h - 5);
+      drawX = player.x;
+      drawY = player.y;
+      drawW = player.w;
+      drawH = player.h;
+    }
+
+    // ...no gold border around player...
+    
+    // Restore context
+    ctx.restore();
+  }
+  
+  // ...existing code...
+  
+  // Reset game
+  function resetGame() {
+    initGame();
+  }
+  
+  // Game loop
+  function gameLoop() {
+    update();
+    draw();
+    requestAnimationFrame(gameLoop);
+  }
+  
+  // Start game
+  initGame();
+  gameLoop();
+</script>

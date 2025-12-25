@@ -76,6 +76,15 @@ select {
   font-family: 'Cormorant Garamond', serif;
 }
 
+input[type="text"] {
+	padding: 8px;
+	border-radius: 4px;
+	border: 1px solid var(--gold-dark);
+	background-color: var(--parchment-dark);
+	color: var(--ink);
+	font-family: 'Cormorant Garamond', serif;
+}
+
 button {
   padding: 8px 15px;
   background-color: var(--gold-dark);
@@ -200,6 +209,12 @@ button:hover {
           <option value="luminancy">Luminancy</option>
         </select>
       </div>
+
+			<div class="filter-group">
+				<label for="name-filter">Name: </label>
+				<input id="name-filter" type="text" placeholder="Search spells…" />
+			</div>
+
       <button id="apply-filters">Apply Filters</button>
       <button id="reset-filters">Reset</button>
       <button id="toggle-view">Condensed View</button>
@@ -2437,9 +2452,11 @@ button:hover {
     // Get filter values with error handling
     const levelFilter = document.getElementById('level-filter');
     const schoolFilter = document.getElementById('school-filter');
+	const nameFilter = document.getElementById('name-filter');
     
 		const levelValue = levelFilter ? levelFilter.value : 'all';
 		const schoolValue = schoolFilter ? schoolFilter.value : 'all';
+		const nameValue = nameFilter ? String(nameFilter.value || '').toLowerCase().trim() : '';
 
 		// Helpers for normalization
 		const normalizeSchool = (s) => {
@@ -2483,6 +2500,11 @@ button:hover {
 		if (schoolValue !== 'all') {
 			const target = normalizeSchool(schoolValue);
 			filteredSpells = filteredSpells.filter(spell => normalizeSchool(spell.school) === target);
+		}
+
+		// Apply name filter
+		if (nameValue) {
+			filteredSpells = filteredSpells.filter(spell => String(spell.name || '').toLowerCase().includes(nameValue));
 		}
     
     // Display spells
@@ -2615,6 +2637,7 @@ button:hover {
     const toggleViewButton = document.getElementById('toggle-view');
     const levelFilterEl = document.getElementById('level-filter');
     const schoolFilterEl = document.getElementById('school-filter');
+	const nameFilterEl = document.getElementById('name-filter');
     
 		// Add event listeners only if elements exist
 		if (applyFiltersButton) {
@@ -2622,13 +2645,16 @@ button:hover {
 		}
 		if (levelFilterEl) levelFilterEl.addEventListener('change', loadSpells);
 		if (schoolFilterEl) schoolFilterEl.addEventListener('change', loadSpells);
+		if (nameFilterEl) nameFilterEl.addEventListener('input', loadSpells);
     
 		if (resetFiltersButton) {
 			resetFiltersButton.addEventListener('click', function() {
 				const levelFilter = document.getElementById('level-filter');
 				const schoolFilter = document.getElementById('school-filter');
+				const nameFilter = document.getElementById('name-filter');
 				if (levelFilter) levelFilter.value = 'all';
 				if (schoolFilter) schoolFilter.value = 'all';
+				if (nameFilter) nameFilter.value = '';
 				loadSpells();
 			});
 		}
@@ -2644,6 +2670,11 @@ button:hover {
 		}
     
     // Initial load of spells
+		// Deep-link support: ?q=Radiant%20Lance will prefill name filter.
+		try {
+			const q = new URLSearchParams(window.location.search || '').get('q');
+			if (q && nameFilterEl) nameFilterEl.value = q;
+		} catch (e) {}
     loadSpells();
   }
   

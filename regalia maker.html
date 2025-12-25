@@ -280,11 +280,11 @@
             <p style="text-align: center; margin-bottom: 15px; font-size: 0.9em;">Choose magical enhancement level. Each level adds AC and upgrade slots.</p>
             <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 10px;">
               <button id="enhanceNone" class="enhanceBtn" style="background: linear-gradient(to bottom, #d4b78c, #a88665); color: #4a3b2a; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-family: 'Cinzel', serif;">None</button>
-              <button id="enhance1" class="enhanceBtn" style="background: linear-gradient(to bottom, #d4b78c, #a88665); color: #4a3b2a; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-family: 'Cinzel', serif;">+1 (1,000 GP)</button>
-              <button id="enhance2" class="enhanceBtn" style="background: linear-gradient(to bottom, #d4b78c, #a88665); color: #4a3b2a; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-family: 'Cinzel', serif;">+2 (4,000 GP)</button>
-              <button id="enhance3" class="enhanceBtn" style="background: linear-gradient(to bottom, #d4b78c, #a88665); color: #4a3b2a; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-family: 'Cinzel', serif;">+3 (16,000 GP)</button>
-              <button id="enhance4" class="enhanceBtn" style="background: linear-gradient(to bottom, #d4b78c, #a88665); color: #4a3b2a; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-family: 'Cinzel', serif;">+4 (48,000 GP)</button>
-              <button id="enhance5" class="enhanceBtn" style="background: linear-gradient(to bottom, #d4b78c, #a88665); color: #4a3b2a; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-family: 'Cinzel', serif;">+5 (125,000 GP)</button>
+              <button id="enhance1" class="enhanceBtn" style="background: linear-gradient(to bottom, #d4b78c, #a88665); color: #4a3b2a; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-family: 'Cinzel', serif;">+1 (1,200 GP)</button>
+              <button id="enhance2" class="enhanceBtn" style="background: linear-gradient(to bottom, #d4b78c, #a88665); color: #4a3b2a; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-family: 'Cinzel', serif;">+2 (4,800 GP)</button>
+              <button id="enhance3" class="enhanceBtn" style="background: linear-gradient(to bottom, #d4b78c, #a88665); color: #4a3b2a; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-family: 'Cinzel', serif;">+3 (19,200 GP)</button>
+              <button id="enhance4" class="enhanceBtn" style="background: linear-gradient(to bottom, #d4b78c, #a88665); color: #4a3b2a; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-family: 'Cinzel', serif;">+4 (57,600 GP)</button>
+              <button id="enhance5" class="enhanceBtn" style="background: linear-gradient(to bottom, #d4b78c, #a88665); color: #4a3b2a; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-family: 'Cinzel', serif;">+5 (150,000 GP)</button>
             </div>
             <div id="enhancementDisplay" style="text-align: center; margin-top: 15px; font-weight: bold; color: #8c693a;">No Enhancement Selected</div>
           </div>
@@ -329,6 +329,16 @@
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
                 <span style="color: #5c4d3e; font-size: 0.9em;">Enhancements:</span>
                 <span id="enhancementCostDisplay" style="color: #8c693a; font-weight: bold;">0 GP</span>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                <span style="color: #5c4d3e; font-size: 0.9em;">Upgrades:</span>
+                <span id="upgradesCostDisplay" style="color: #8c693a; font-weight: bold;">0 GP</span>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                <span style="color: #5c4d3e; font-size: 0.9em;">Creation Cost:</span>
+                <span id="creationCostDisplay" style="color: #8c693a; font-weight: bold;">0 GP</span>
               </div>
               
               <hr style="border: none; border-top: 1px solid #b08d57; margin: 10px 0;">
@@ -516,6 +526,10 @@ const enhancementPricing = {
   "+4": { cost: 48000, slots: 4 },
   "+5": { cost: 125000, slots: 5 }
 };
+
+// Regalia pricing is intentionally 20% more expensive than Legacy Weapon pricing.
+const REGALIA_PRICE_MULTIPLIER = 1.2;
+const applyRegaliaPremium = (gp) => Math.ceil(Math.max(0, Number(gp) || 0) * REGALIA_PRICE_MULTIPLIER);
 
 // Global variables for enhancement
 let selectedEnhancement = "";
@@ -1000,7 +1014,8 @@ const regaliaUpgrades = [
     regaliaTypes.forEach(regalia => {
       const option = document.createElement('option');
       option.value = regalia.name;
-      let displayText = `${regalia.name} (AC ${regalia.ac}) - ${regalia.value.toLocaleString()} GP`;
+      const premiumBase = applyRegaliaPremium(regalia.value || 0);
+      let displayText = `${regalia.name} (AC ${regalia.ac}) - ${premiumBase.toLocaleString()} GP`;
       if (regalia.notes && regalia.notes.length < 50) {
         displayText += ` - ${regalia.notes}`;
       }
@@ -1114,12 +1129,14 @@ const regaliaUpgrades = [
     const display = document.getElementById('enhancementDisplay');
     if (level) {
       const pricing = enhancementPricing[level];
-      display.textContent = `${level} Enhancement Selected (+${level.replace('+', '')} AC, +${pricing.slots} slots, ${pricing.cost.toLocaleString()} GP)`;
+      const premiumCost = applyRegaliaPremium(pricing.cost);
+      display.textContent = `${level} Enhancement Selected (+${level.replace('+', '')} AC, +${pricing.slots} slots, ${premiumCost.toLocaleString()} GP)`;
     } else {
       display.textContent = 'No Enhancement Selected';
     }
     
     updateSlotDisplay();
+    if (typeof updateCostDisplay === 'function') updateCostDisplay();
   }
 
  function renderSlotIndicators() {
@@ -1327,53 +1344,45 @@ const regaliaUpgrades = [
     state.regaliaName = regaliaNameInput.value.trim();
   }
 
-  // Calculate total enhancement cost based on slot pricing (similar to weapon creator)
-  function calculateEnhancementCost() {
-    const slotCosts = {
-      1: 1500,
-      2: 1500, // 3000 total - 1500 from slot 1
-      3: 2250, // 5250 total - 3000 from slots 1-2
-      4: 2250, // 7500 total - 5250 from slots 1-3
-      5: 2250, // 9750 total - 7500 from slots 1-4
-      6: 3000, // 12750 total - 9750 from slots 1-5
-      7: 3000, // 15750 total - 12750 from slots 1-6
-      8: 3750, // 19500 total - 15750 from slots 1-7
-      9: 3750, // 23250 total - 19500 from slots 1-8
-      10: 4500 // 27750 total - 23250 from slots 1-9
-    };
-    
-    let totalCost = 0;
-    const usedSlotCount = state.totalSlots - state.remainingSlots;
-    
-    for (let i = 1; i <= usedSlotCount; i++) {
-      totalCost += slotCosts[i] || 4500; // Default to highest cost for slots beyond 10
-    }
-    
-    return totalCost;
+  // Legacy Weapon slot-installation pricing (per slot), then apply 20% regalia premium.
+  function getLegacySlotInstallationRatePerSlot(totalSlots) {
+    const n = Math.max(1, Number(totalSlots) || 1);
+    if (n >= 9) return 45000;
+    if (n >= 7) return 25000;
+    if (n >= 5) return 15000;
+    if (n >= 3) return 7000;
+    return 5000;
   }
 
-  // Calculate slot installation cost based on pricing table
   function calculateSlotCost() {
-    const slotInstallationCosts = {
-      1: 1500,
-      2: 3000,
-      3: 5250,
-      4: 7500,
-      5: 9750,
-      6: 12750,
-      7: 15750,
-      8: 19500,
-      9: 23250,
-      10: 27750
-    };
-    
-    return slotInstallationCosts[state.totalSlots] || (27750 + (state.totalSlots - 10) * 4500);
+    const n = Math.max(1, Number(state.totalSlots) || 1);
+    const perSlotLegacy = getLegacySlotInstallationRatePerSlot(n);
+    const perSlotPremium = applyRegaliaPremium(perSlotLegacy);
+    return n * perSlotPremium;
+  }
+
+  // Upgrades use Legacy Weapon enchantment pricing by slot-cost, then apply regalia premium.
+  function calculateUpgradesCost() {
+    const upgrades = Array.isArray(state.selectedUpgrades) ? state.selectedUpgrades : [];
+    let total = 0;
+    for (const u of upgrades) {
+      const slotsUsed = Math.max(1, Number(u?.cost) || 1);
+      const legacy = (slotsUsed === 1) ? 4000 : (slotsUsed === 2) ? 7000 : 10000;
+      total += applyRegaliaPremium(legacy);
+    }
+    return total;
+  }
+
+  function calculateEnhancementCost() {
+    if (!selectedEnhancement) return 0;
+    const base = enhancementPricing?.[selectedEnhancement]?.cost || 0;
+    return applyRegaliaPremium(base);
   }
 
   // Get base regalia cost
   function getBaseCost() {
     if (!state.selectedRegaliaBase) return 0;
-    return state.selectedRegaliaBase.value || 0;
+    return applyRegaliaPremium(state.selectedRegaliaBase.value || 0);
   }
 
   // Calculate total cost (base + slots + enhancements)
@@ -1381,60 +1390,49 @@ const regaliaUpgrades = [
     const baseCost = getBaseCost();
     const slotCost = calculateSlotCost();
     const enhancementCost = calculateEnhancementCost();
-    
+    const upgradesCost = calculateUpgradesCost();
+    const creationCost = applyRegaliaPremium(150);
+
     state.baseCost = baseCost;
     state.slotCost = slotCost;
-    state.totalCost = enhancementCost;
-    
-    return baseCost + slotCost + enhancementCost;
+    state.enhancementCost = enhancementCost;
+    state.upgradesCost = upgradesCost;
+    state.creationCost = creationCost;
+
+    return baseCost + slotCost + enhancementCost + upgradesCost + creationCost;
   }
 
   // Update cost display
   function updateCostDisplay() {
     if (!state.selectedRegaliaBase) return;
-    
-    const baseCost = state.selectedRegaliaBase.value;
-    const enhancementCost = selectedEnhancement ? enhancementPricing[selectedEnhancement].cost : 0;
-    const upgradesCost = state.selectedUpgrades.reduce((sum, upgrade) => sum + (upgrade.cost * 500), 0);
-    const creationCost = 150;
-    
-    const totalCost = baseCost + enhancementCost + upgradesCost + creationCost;
-    
-    const costDisplayEl = document.getElementById('totalCostDisplay');
-    if (costDisplayEl) {
-      costDisplayEl.textContent = `${totalCost.toLocaleString()} GP`;
+
+    const totalCost = calculateTotalCost();
+
+    const baseCostEl = document.getElementById('baseCostDisplay');
+    const slotCostEl = document.getElementById('slotCostDisplay');
+    const enhancementCostEl = document.getElementById('enhancementCostDisplay');
+    const upgradesCostEl = document.getElementById('upgradesCostDisplay');
+    const creationCostEl = document.getElementById('creationCostDisplay');
+    const totalCostEl = document.getElementById('totalCostDisplay');
+
+    if (baseCostEl) baseCostEl.textContent = `${state.baseCost.toLocaleString()} GP`;
+    if (slotCostEl) {
+      const n = Math.max(1, Number(state.totalSlots) || 1);
+      const perSlotLegacy = getLegacySlotInstallationRatePerSlot(n);
+      const perSlotPremium = applyRegaliaPremium(perSlotLegacy);
+      slotCostEl.textContent = `${state.slotCost.toLocaleString()} GP (${n} × ${perSlotPremium.toLocaleString()})`;
     }
-    
-    // Update detailed cost breakdown in the cost display container
-    const costDisplay = document.getElementById('costDisplayCtn');
-    if (costDisplay) {
-      let enhancementText = selectedEnhancement ? 
-        `<div style=\"display: flex; justify-content: space-between; margin-bottom: 5px;\">
-          <span>Enhancement (${selectedEnhancement}):</span>
-          <span>${enhancementCost.toLocaleString()} GP</span>
-        </div>` : '';
-      
-      costDisplay.innerHTML = `
-        <div style=\"display: flex; justify-content: space-between; margin-bottom: 5px;\">
-          <span>Base Regalia:</span>
-          <span>${baseCost.toLocaleString()} GP</span>
-        </div>
-        ${enhancementText}
-        <div style=\"display: flex; justify-content: space-between; margin-bottom: 5px;\">
-          <span>Upgrades (${state.selectedUpgrades.length}):</span>
-          <span>${upgradesCost.toLocaleString()} GP</span>
-        </div>
-        <div style=\"display: flex; justify-content: space-between; margin-bottom: 5px;\">
-          <span>Creation Cost:</span>
-          <span>${creationCost.toLocaleString()} GP</span>
-        </div>
-        <hr style=\"border-color: #b08d57; margin: 10px 0;\">
-        <div style=\"display: flex; justify-content: space-between; font-weight: bold; font-size: 1.2em; color: #8c693a;\">
-          <span>Total Cost:</span>
-          <span>${totalCost.toLocaleString()} GP</span>
-        </div>
-        <div style=\"font-size: 0.8em; color: #5c4d3e; margin-top: 8px; font-style: italic; text-align: center;\">*Includes all regalia creation costs</div>
-      `;
+    if (enhancementCostEl) {
+      enhancementCostEl.textContent = `${state.enhancementCost.toLocaleString()} GP`;
+    }
+    if (upgradesCostEl) {
+      upgradesCostEl.textContent = `${state.upgradesCost.toLocaleString()} GP`;
+    }
+    if (creationCostEl) {
+      creationCostEl.textContent = `${state.creationCost.toLocaleString()} GP`;
+    }
+    if (totalCostEl) {
+      totalCostEl.textContent = `${totalCost.toLocaleString()} GP`;
     }
   }
   
@@ -1470,11 +1468,7 @@ const regaliaUpgrades = [
     }
     
     // Calculate total cost
-    const baseCost = state.selectedRegaliaBase.value;
-    const enhancementCost = selectedEnhancement ? enhancementPricing[selectedEnhancement].cost : 0;
-    const upgradesCost = state.selectedUpgrades.reduce((sum, upgrade) => sum + (upgrade.cost * 500), 0);
-    const creationCost = 150;
-    const totalCost = baseCost + enhancementCost + upgradesCost + creationCost;
+    const totalCost = calculateTotalCost();
     
     let summaryHTML = `
       <div style="border: 2px solid #b08d57; border-radius: 5px; padding: 20px; background-color: #e0c8a0;">
@@ -1495,7 +1489,7 @@ const regaliaUpgrades = [
           <p><strong>Final AC:</strong> ${finalAC}</p>
           <p><strong>Total Value:</strong> ${totalCost.toLocaleString()} GP</p>
         </div>
-        ${selectedEnhancement ? `<div style="margin-bottom: 10px; color: #5c4d3e;"><p><strong>Enhancement:</strong> ${selectedEnhancement} (+${selectedEnhancement.replace('+', '')} AC, ${enhancementPricing[selectedEnhancement].cost.toLocaleString()} GP)</p></div>` : ''}
+        ${selectedEnhancement ? `<div style="margin-bottom: 10px; color: #5c4d3e;"><p><strong>Enhancement:</strong> ${selectedEnhancement} (+${selectedEnhancement.replace('+', '')} AC, ${applyRegaliaPremium(enhancementPricing[selectedEnhancement].cost).toLocaleString()} GP)</p></div>` : ''}
         <div style="margin-bottom: 20px; color: #5c4d3e;">
             <p><strong>Notes:</strong> ${finalNotes || "None"}</p>
             <p><strong>Total Slots Used:</strong> ${state.totalSlots - state.remainingSlots} / ${state.totalSlots + (selectedEnhancement ? enhancementPricing[selectedEnhancement].slots : 0)}</p>

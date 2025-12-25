@@ -994,6 +994,26 @@
             }
         }
 
+        function applyInitialQueryFromUrl() {
+            try {
+                const params = new URLSearchParams(window.location.search || '');
+                const raw = (params.get('q') || params.get('id') || '').trim();
+                if (!raw) return;
+                const nq = raw.toLowerCase();
+
+                let idx = backgroundsData.findIndex(bg => String(bg.id || '').toLowerCase() === nq);
+                if (idx === -1) idx = backgroundsData.findIndex(bg => String(bg.name || '').toLowerCase() === nq);
+                if (idx === -1) idx = backgroundsData.findIndex(bg => String(bg.name || '').toLowerCase().includes(nq));
+                if (idx === -1) idx = backgroundsData.findIndex(bg => String(bg.contentHTML || '').toLowerCase().includes(nq));
+                if (idx !== -1) {
+                    currentPage = idx;
+                    displayBackground(currentPage);
+                }
+            } catch (e) {
+                // no-op
+            }
+        }
+
         prevButton.addEventListener('click', () => {
             if (currentPage > 0) {
                 currentPage--;
@@ -1014,6 +1034,7 @@
 
         if (backgroundsData.length > 0) {
             displayBackground(currentPage);
+            applyInitialQueryFromUrl();
         } else {
             backgroundContentDiv.innerHTML = "<p>No background data found.</p>";
             prevButton.disabled = true;

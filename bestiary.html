@@ -12988,6 +12988,23 @@
             
             // Set up search functionality
             setupSearch();
+
+            // Apply deep-link query (?q=...) if present
+            applyInitialQueryFromUrl();
+        }
+
+        function applyInitialQueryFromUrl() {
+            try {
+                const q = new URLSearchParams(window.location.search || '').get('q');
+                if (!q) return;
+                const searchInput = document.getElementById('monsterSearch');
+                if (!searchInput) return;
+                searchInput.value = q;
+                const searchTerm = String(q).toLowerCase().trim();
+                filterMonsters(searchTerm);
+            } catch (e) {
+                // Ignore URL parsing errors
+            }
         }
         
         // Set up search functionality
@@ -13126,15 +13143,17 @@
                 
                 // Get the base score (without modifier)
                 const abilityScoreStr = monster.stats.abilityScoreStrs[ability.name];
-                const baseScore = parseInt(abilityScoreStr.split(' ')[0]);
+                const baseScore = parseInt(abilityScoreStr.split(' ')[0], 10);
                 
                 const abilityValue = document.createElement('div');
                 abilityValue.className = 'ability-value';
                 abilityValue.textContent = baseScore;
                 
-                // Extract the modifier from the string (e.g., "+2" or "-1")
-                const modifierMatch = abilityScoreStr.match(/\(([+\-]\d+)\)/);
-                const modifier = modifierMatch ? modifierMatch[1] : "+0";
+                // Compute the modifier from the score so negatives render correctly.
+                // D&D: floor((score - 10) / 2)
+                const safeScore = Number.isFinite(baseScore) ? baseScore : 10;
+                const modValue = Math.floor((safeScore - 10) / 2);
+                const modifier = modValue >= 0 ? `+${modValue}` : String(modValue);
                 
                 const abilityBonus = document.createElement('div');
                 abilityBonus.className = 'ability-bonus';

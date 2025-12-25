@@ -1024,7 +1024,18 @@
 
     // --- Initial Load ---
     populateFilters();
-    displayItems(itemsData); // Display all items initially
+    // Deep-link support: ?q=Adhesive will prefill and filter.
+    try {
+      const q = new URLSearchParams(window.location.search || '').get('q');
+      if (q) {
+        searchInput.value = q;
+        filterAndSearchItems();
+      } else {
+        displayItems(itemsData); // Display all items initially
+      }
+    } catch (e) {
+      displayItems(itemsData);
+    }
 
   </script>
 </body>

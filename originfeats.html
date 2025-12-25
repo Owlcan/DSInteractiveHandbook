@@ -717,6 +717,52 @@
                     { passive: true }
                 );
             });
+
+            function slugify(text) {
+                return String(text || '')
+                    .toLowerCase()
+                    .replace(/['"]/g, '')
+                    .replace(/[^a-z0-9]+/g, '-')
+                    .replace(/^-+|-+$/g, '')
+                    .slice(0, 60) || 'feat';
+            }
+
+            // Ensure each feat title has an id so we can scroll via ?q=.
+            const titles = document.querySelectorAll('.feat-card h3');
+            titles.forEach((h3) => {
+                if (h3.id) return;
+                const base = `feat-${slugify(h3.textContent)}`;
+                let id = base;
+                let i = 2;
+                while (document.getElementById(id)) id = `${base}-${i++}`;
+                h3.id = id;
+            });
+
+            function applyInitialQueryFromUrl() {
+                try {
+                    const params = new URLSearchParams(window.location.search || '');
+                    const raw = (params.get('q') || params.get('id') || '').trim();
+                    if (!raw) return;
+                    const nq = raw.toLowerCase();
+
+                    let best = null;
+                    titles.forEach((h3) => {
+                        const t = String(h3.textContent || '').toLowerCase().trim();
+                        if (!t) return;
+                        if (t === nq) best = best || h3;
+                        else if (!best && t.includes(nq)) best = h3;
+                    });
+
+                    if (best) {
+                        const card = best.closest('.feat-card') || best;
+                        try { card.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (e) { card.scrollIntoView(true); }
+                    }
+                } catch (e) {
+                    // no-op
+                }
+            }
+
+            applyInitialQueryFromUrl();
         });
     </script>
 

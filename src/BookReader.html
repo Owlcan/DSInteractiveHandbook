@@ -156,6 +156,59 @@
     const iframe = document.getElementById('pdf-iframe');
     const loader = document.getElementById('loader');
 
+      function normalizeLoose(text) {
+        return String(text || '')
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, ' ')
+          .replace(/\s+/g, ' ')
+          .trim();
+      }
+
+      function selectDocumentByQuery(rawQuery) {
+        const q = String(rawQuery || '').trim();
+        if (!q) return false;
+
+        const nq = normalizeLoose(q);
+        if (!nq) return false;
+
+        const options = Array.from(pdfSelect.querySelectorAll('option'))
+          .filter(o => o.value && !o.disabled);
+
+        let best = null;
+        let bestScore = -1;
+
+        for (const opt of options) {
+          const label = normalizeLoose(opt.textContent);
+          const val = normalizeLoose(opt.value);
+          if (!label && !val) continue;
+
+          let score = 0;
+          if (label === nq) score = 100;
+          else if (label.includes(nq)) score = 80;
+          else if (val.includes(nq)) score = 60;
+          else {
+            // Token overlap fallback
+            const qTokens = nq.split(' ').filter(Boolean);
+            const blob = `${label} ${val}`.trim();
+            let hits = 0;
+            for (const t of qTokens) {
+              if (t.length < 2) continue;
+              if (blob.includes(t)) hits++;
+            }
+            if (qTokens.length) score = Math.round((hits / qTokens.length) * 50);
+          }
+
+          if (score > bestScore) {
+            best = opt;
+            bestScore = score;
+          }
+        }
+
+        if (!best || bestScore <= 0) return false;
+        pdfSelect.value = best.value;
+        pdfSelect.dispatchEvent(new Event('change', { bubbles: true }));
+        return true;
+      }
     pdfSelect.addEventListener('change', e => {
         const url = e.target.value;
         if (url) {
@@ -171,6 +224,17 @@
             iframe.style.display = 'none';
         }
     });
+
+      // Deep link support from the handbook search drawer: BookReader.html?q=Crinkleheart
+      (function applyInitialQueryFromUrl() {
+        try {
+          const params = new URLSearchParams(window.location.search || '');
+          const q = (params.get('q') || params.get('doc') || '').trim();
+          if (q) selectDocumentByQuery(q);
+        } catch (e) {
+          // no-op
+        }
+      })();
 
   </script>
 </body>

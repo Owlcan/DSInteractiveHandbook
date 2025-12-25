@@ -17,3 +17,20 @@ GlimpseGenerator.html
 blackypyramidstory.html
 src/add this info.txt
 src/{{frontCover}}.txt
+
+# Node/Tailwind build artifacts
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build/cache (optional)
+.cache/
+.parcel-cache/
+dist/
+build/
+
+# OS/editor noise
+.DS_Store
+Thumbs.db

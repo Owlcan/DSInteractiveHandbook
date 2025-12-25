@@ -199,10 +199,8 @@
         .content-page tbody tr:nth-child(even) {
             background-color: rgba(218, 172, 23, 0.1);
         }
-        /* Ensure user's inline styles on table elements are not overridden by overly specific CSS */
-        .content-page table[style], .content-page tr[style], .content-page td[style], .content-page th[style] {
-            /* Allow inline styles to take precedence */
-        }
+        /* Ensure user's inline styles on table elements are not overridden by overly specific CSS.
+           (No extra overrides needed; leaving this as a note.) */
 
         .nav-button {
             background-color: var(--gold);
@@ -2723,6 +2721,44 @@
             }
         }
 
+        function scrollToFirstMatchInPage(query) {
+            const q = String(query || '').trim().toLowerCase();
+            if (!q) return;
+            // Scan headings first (best UX), then strong text.
+            const candidates = raceContentDiv.querySelectorAll('h2,h3,h4,h5,strong');
+            for (const el of candidates) {
+                const t = String(el.textContent || '').replace(/\s+/g, ' ').trim().toLowerCase();
+                if (!t) continue;
+                if (t === q || t.includes(q)) {
+                    try { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (e) { el.scrollIntoView(true); }
+                    return;
+                }
+            }
+        }
+
+        function applyInitialQueryFromUrl() {
+            try {
+                const params = new URLSearchParams(window.location.search || '');
+                const raw = (params.get('q') || params.get('id') || '').trim();
+                if (!raw) return;
+                const nq = raw.toLowerCase();
+
+                let idx = racesData.findIndex(r => String(r.id || '').toLowerCase() === nq);
+                if (idx === -1) idx = racesData.findIndex(r => String(r.name || '').toLowerCase() === nq);
+                if (idx === -1) idx = racesData.findIndex(r => String(r.name || '').toLowerCase().includes(nq));
+                if (idx === -1) idx = racesData.findIndex(r => String(r.contentHTML || '').toLowerCase().includes(nq));
+
+                if (idx !== -1) {
+                    currentPage = idx;
+                    displayRace(currentPage);
+                    // Defer so DOM is updated.
+                    setTimeout(() => scrollToFirstMatchInPage(raw), 0);
+                }
+            } catch (e) {
+                // no-op
+            }
+        }
+
         prevButton.addEventListener('click', () => {
             if (currentPage > 0) {
                 currentPage--;
@@ -2740,6 +2776,7 @@
         // Initial display
         if (racesData.length > 0) {
             displayRace(currentPage);
+            applyInitialQueryFromUrl();
         } else {
             raceContentDiv.innerHTML = "<p>No race data found. Please check the 'racesData' array in the script.</p>";
             prevButton.disabled = true;

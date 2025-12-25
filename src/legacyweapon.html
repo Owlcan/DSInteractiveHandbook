@@ -2023,45 +2023,43 @@
   
   // Calculate total enchantment cost based on slot pricing
   function calculateEnchantmentCost() {
-    const slotCosts = {
-      1: 1500,
-      2: 1500, // 3000 total - 1500 from slot 1
-      3: 2250, // 5250 total - 3000 from slots 1-2
-      4: 2250, // 7500 total - 5250 from slots 1-3
-      5: 2250, // 9750 total - 7500 from slots 1-4
-      6: 3000, // 12750 total - 9750 from slots 1-5
-      7: 3000, // 15750 total - 12750 from slots 1-6
-      8: 3750, // 19500 total - 15750 from slots 1-7
-      9: 3750, // 23250 total - 19500 from slots 1-8
-      10: 4500 // 27750 total - 23250 from slots 1-9
-    };
-    
+    // New rules:
+    // - 1-slot enchantments cost 4000
+    // - 2-slot enchantments cost 7000
+    // - 3+ slot enchantments cost 10000
+    const upgrades = Array.isArray(state.selectedUpgrades) ? state.selectedUpgrades : [];
     let totalCost = 0;
-    const usedSlotCount = state.totalSlots - state.remainingSlots;
-    
-    for (let i = 1; i <= usedSlotCount; i++) {
-      totalCost += slotCosts[i] || 4500; // Default to highest cost for slots beyond 10
+
+    for (const u of upgrades) {
+      const slotsUsed = Math.max(1, Number(u?.cost) || 1);
+      if (slotsUsed === 1) totalCost += 4000;
+      else if (slotsUsed === 2) totalCost += 7000;
+      else totalCost += 10000;
     }
-    
+
     return totalCost;
   }
   
   // Calculate slot installation cost based on your pricing table
+  function getSlotInstallationRatePerSlot(totalSlots) {
+    const n = Math.max(1, Number(totalSlots) || 1);
+    // Per-slot pricing based on total slots on the weapon:
+    // - 1-2 slots: 5000 per slot
+    // - 3-4 slots: 7000 per slot
+    // - 5-6 slots: 15000 per slot
+    // - 7-8 slots: 25000 per slot
+    // - 9+ slots:  45000 per slot
+    if (n >= 9) return 45000;
+    if (n >= 7) return 25000;
+    if (n >= 5) return 15000;
+    if (n >= 3) return 7000;
+    return 5000;
+  }
+
   function calculateSlotCost() {
-    const slotInstallationCosts = {
-      1: 1500,
-      2: 3000,
-      3: 5250,
-      4: 7500,
-      5: 9750,
-      6: 12750,
-      7: 15750,
-      8: 19500,
-      9: 23250,
-      10: 27750
-    };
-    
-    return slotInstallationCosts[state.totalSlots] || (27750 + (state.totalSlots - 10) * 4500);
+    const totalSlots = Math.max(1, Number(state.totalSlots) || 1);
+    const perSlot = getSlotInstallationRatePerSlot(totalSlots);
+    return totalSlots * perSlot;
   }
   
   // Get base weapon cost
@@ -2098,7 +2096,11 @@
     const enchantCostEl = document.getElementById('enchantCostDisplay');
     
     if (baseCostEl) baseCostEl.textContent = `${state.baseCost.toLocaleString()} GP`;
-    if (slotCostEl) slotCostEl.textContent = `${state.slotCost.toLocaleString()} GP`;
+    if (slotCostEl) {
+      const nSlots = Math.max(1, Number(state.totalSlots) || 1);
+      const perSlot = getSlotInstallationRatePerSlot(nSlots);
+      slotCostEl.textContent = `${state.slotCost.toLocaleString()} GP (${nSlots} × ${perSlot.toLocaleString()})`;
+    }
     if (enchantCostEl) enchantCostEl.textContent = `${state.totalCost.toLocaleString()} GP`;
   }
   
