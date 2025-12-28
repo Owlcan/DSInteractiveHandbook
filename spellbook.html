@@ -2231,7 +2231,7 @@ button:hover {
     	"ritual": false,
 		"description": "You evoke an overwhelming aura of repulsion and olfactory disgust. Choose one creature within range; the target must make a Wisdom saving throw. On a failure, it is incapacitated with revulsion for the duration, and all attack rolls against it are made at disadvantage as foes recoil in utter disgust. The affected creature may repeat the saving throw at the end of each of its turns, ending the effect on a success.\n\n*“A stench so foul, it stops foes in their tracks—literally!”*"
 	},
-,
+
 	{
 		"name": "Forced Second Childhood",
 		"level": 4,
@@ -2608,7 +2608,7 @@ button:hover {
       card.className = 'card condensed';
       card.innerHTML = `
         <h3>${spell.name}</h3>
-	<span class="spell-meta">${getOrdinal(Number(spell.level))}-level ${schoolText}</span>
+				<span class="spell-meta">${getOrdinal(Number(spell.level))}-level ${schoolText}</span>
       `;
       card.addEventListener('click', () => expandSpell(card, spell));
     });
