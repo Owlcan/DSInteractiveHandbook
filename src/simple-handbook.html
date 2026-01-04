@@ -35,9 +35,21 @@
       background-image: url('https://www.transparenttextures.com/patterns/parchment.png');
       border-radius: 8px;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-      padding: 20px;
-      border: 12px solid var(--gold-dark);
+      --app-pad: 20px;
+      --app-pad2: 40px;
+      --app-border: 12px;
+      padding: var(--app-pad);
+      border: var(--app-border) solid var(--gold-dark);
       position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Wide layout for full-screen style tools (more horizontal breathing room) */
+    body.wide-layout #app {
+      max-width: min(2200px, 98vw);
+      --app-pad: 10px;
+      --app-pad2: 20px;
+      --app-border: 8px;
     }
     
     .corner-decoration {
@@ -128,6 +140,9 @@
       box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
       box-sizing: border-box; /* Added for better height calculation with padding */
     }
+
+    /* Let iframe sections use more width inside the app frame */
+    body.wide-layout .content-section { padding: 12px; }
     
     .content-section.active {
       display: block;
@@ -137,8 +152,10 @@
     /* Styles for iframe containers and loading messages */
     .iframe-container { /* Used by dynamically created iframes */
         position: relative;
-        width: 100%;
-        height: 85vh; /* Consistent height for dynamic iframe sections */
+      width: calc(100% + var(--app-pad2));
+      margin-left: calc(var(--app-pad) * -1);
+      margin-right: calc(var(--app-pad) * -1);
+      height: 85vh; /* Consistent height for dynamic iframe sections */
         overflow: hidden; 
     }
 
@@ -146,7 +163,7 @@
   #legacy-Weapons.active,
   #legacy-Regalia.active {
         display: block; /* or flex if needed for alignment */
-        height: 90vh; /* Give these sections a large height */
+      height: 90vh; /* Give these sections a large height */
         padding: 10px; /* Reduce padding if iframe is meant to be edge-to-edge */
     }
 
@@ -426,11 +443,12 @@
     /* Styles for specific iframe sections */
     #bestiary-iframe-container,
     #items-iframe-container,
+    #crafting-iframe-container,
     #races-iframe-container,
     #spellbook-iframe-container,
     #potty-checker-iframe-container,
     #pamperlogue-iframe-container {
-        height: 90vh; 
+      height: 90vh; 
     }    #backgrounds-iframe-container {
         height: 95vh; 
     }
@@ -457,6 +475,7 @@
     #spellbook-iframe,
     #potty-checker-iframe, 
     #pamperlogue-iframe,
+    #crafting-iframe,
     #legacy-weapon-iframe,
   #regalia-creator-iframe {
         width: 100%;
@@ -465,6 +484,27 @@
         display: block; 
         border-radius: 8px; 
         box-shadow: 0 2px 10px rgba(0,0,0,0.2); 
+    }
+
+    /* Optional: hide the nav tab bar while keeping floating controls available */
+    body.tabs-hidden nav { display: none; }
+
+    .tabs-toggle {
+      position: fixed;
+      left: 18px;
+      top: 18px;
+      z-index: 10000;
+      padding: 10px 14px;
+      font-size: 16px;
+      border-radius: 999px;
+    }
+
+    @media (max-width: 600px) {
+      .tabs-toggle {
+        left: 12px;
+        top: 12px;
+        padding: 10px 12px;
+      }
     }
     
     /* Corrected spellbook display rule */
@@ -769,12 +809,14 @@
     <h1>Interactive Handbook</h1>
 
     <button id="glossary-toggle" class="glossary-toggle" type="button" aria-controls="glossary-drawer-backdrop" aria-expanded="false">Search</button>
+    <button id="tabs-toggle" class="tabs-toggle" type="button" aria-pressed="false">Hide Tabs</button>
     
     <nav>
       <button id="btn-welcome">Welcome</button>
       <button id="btn-conduct" class="nav-button">Code of Conduct</button>
       <button id="btn-bestiary">Bestiary</button>
       <button id="btn-items">Items</button> 
+      <button id="btn-crafting" class="nav-button">Crafting</button>
       <button id="btn-tips" class="nav-button">How to Play</button>
       <button id="btn-legacy-Weapons">Legacy Weapons</button>
       <button id="btn-regalia" class="section-button">Regalia Creator</button>
@@ -833,6 +875,14 @@
       <h2>Item Compendium</h2>
       <div id="items-iframe-container" class="iframe-container">
         </div>
+    </div>
+
+    <div id="crafting-section" class="content-section" data-prefer-hide-tabs="true" data-prefer-wide-layout="true">
+      <div class="section-header-row">
+        <h2>Crafting</h2>
+        <button type="button" class="popout-btn" onclick="window.popOutTool && window.popOutTool('crafting')">Pop out</button>
+      </div>
+      <div id="crafting-iframe-container" class="iframe-container"></div>
     </div>
 
      <div id="tips-section" class="content-section">
@@ -1928,7 +1978,7 @@
         </div>
     </div>
 
-    <div id="lore-section" class="content-section">
+    <div id="lore-section" class="content-section" data-prefer-hide-tabs="true">
       <h2>Academy History & Lore</h2>
       <p>Scholia Diaspros stands upon a thousand years of woven fate, from its founding by Horace Hootz to the cataclysms of the Old War and the long, careful reconstruction that followed. What follows is the definitive timeline, compiled from the Great Library and faculty records.</p>
       <style>
@@ -2710,6 +2760,7 @@
         // Dynamically created iframes (container will be cleared)
         { containerId: 'bestiary-iframe-container', iframeId: 'bestiary-iframe', type: 'dynamic' },
         { containerId: 'items-iframe-container', iframeId: 'items-iframe', type: 'dynamic' },
+        { containerId: 'crafting-iframe-container', iframeId: 'crafting-iframe', type: 'dynamic' },
         { containerId: 'spellbook-iframe-container', iframeId: 'spellbook-iframe', type: 'dynamic' },
         { containerId: 'book-reader-iframe-container', iframeId: 'book-reader-iframe', type: 'dynamic' },
         { containerId: 'potty-checker-iframe-container', iframeId: 'potty-checker-iframe', type: 'dynamic' },
@@ -2864,6 +2915,9 @@
         case 'spellbook':
           popOutByIframeId('spellbook-iframe', '../spellbook.html', 'Spellbook');
           break;
+        case 'crafting':
+          popOutByIframeId('crafting-iframe', 'AlchemyExplorer.html', 'Crafting');
+          break;
         case 'races':
           popOutByIframeId('races-iframe', 'races.html', 'Academy Races');
           break;
@@ -2948,6 +3002,13 @@
           iframeId: 'items-iframe',
           baseSrc: 'items.html',
           title: 'Item Compendium'
+        },
+        crafting: {
+          buttonId: 'btn-crafting',
+          containerId: 'crafting-iframe-container',
+          iframeId: 'crafting-iframe',
+          baseSrc: 'AlchemyExplorer.html',
+          title: 'Crafting'
         },
         spellbook: {
           buttonId: 'btn-spellbook',
@@ -3679,6 +3740,59 @@
 
     // --- Event Listeners Setup ---
     document.addEventListener('DOMContentLoaded', function() {
+      // Tab bar visibility toggle (persisted)
+      const TABS_HIDDEN_KEY = 'handbook_tabs_hidden_v1';
+      const tabsToggleBtn = document.getElementById('tabs-toggle');
+      const navEl = document.querySelector('nav');
+
+      function applyWideLayoutForSection(sectionEl) {
+        const preferWide = !!sectionEl && sectionEl.dataset && sectionEl.dataset.preferWideLayout === 'true';
+        document.body.classList.toggle('wide-layout', preferWide);
+      }
+
+      function readStoredTabsHidden() {
+        try {
+          const v = localStorage.getItem(TABS_HIDDEN_KEY);
+          if (v === '1') return true;
+          if (v === '0') return false;
+          return null;
+        } catch (e) {
+          return null;
+        }
+      }
+
+      function applyTabsHidden(hidden, persist = true) {
+        document.body.classList.toggle('tabs-hidden', !!hidden);
+        if (tabsToggleBtn) {
+          tabsToggleBtn.textContent = hidden ? 'Show Tabs' : 'Hide Tabs';
+          tabsToggleBtn.setAttribute('aria-pressed', hidden ? 'true' : 'false');
+        }
+        if (persist) {
+          try { localStorage.setItem(TABS_HIDDEN_KEY, hidden ? '1' : '0'); } catch (e) {}
+        }
+      }
+
+      function applySectionUiPreferences(sectionEl) {
+        applyWideLayoutForSection(sectionEl);
+        // Only auto-hide tabs if the user hasn't set a preference yet.
+        if (readStoredTabsHidden() === null && sectionEl && sectionEl.dataset && sectionEl.dataset.preferHideTabs === 'true') {
+          applyTabsHidden(true, true);
+        }
+      }
+
+      // Initial state from storage (if present)
+      const storedHidden = readStoredTabsHidden();
+      if (storedHidden !== null) {
+        applyTabsHidden(storedHidden, false);
+      }
+
+      if (tabsToggleBtn) {
+        tabsToggleBtn.addEventListener('click', () => {
+          const isHidden = document.body.classList.contains('tabs-hidden');
+          applyTabsHidden(!isHidden, true);
+        });
+      }
+
       const navActions = {
         'btn-welcome': () => document.getElementById('welcome-section').classList.add('active'),
         'btn-conduct': () => {
@@ -3686,28 +3800,48 @@
             initializeAccordions(document.getElementById('code-of-conduct-section'));
         },
         'btn-bestiary': () => {
-            document.getElementById('bestiary-section').classList.add('active');
+          const section = document.getElementById('bestiary-section');
+          section.classList.add('active');
+          applySectionUiPreferences(section);
             createOrRefreshIframe('bestiary-iframe-container', 'bestiary-iframe', '../bestiary.html', 'Bestiary');
         },
         'btn-items': () => { 
-            document.getElementById('items-section').classList.add('active');
+          const section = document.getElementById('items-section');
+          section.classList.add('active');
+          applySectionUiPreferences(section);
             createOrRefreshIframe('items-iframe-container', 'items-iframe', 'items.html', 'Item Compendium');
         },
+        'btn-crafting': () => {
+          const section = document.getElementById('crafting-section');
+          section.classList.add('active');
+          applySectionUiPreferences(section);
+          createOrRefreshIframe('crafting-iframe-container', 'crafting-iframe', 'AlchemyExplorer.html', 'Crafting');
+
+          // Prefer hiding tabs for crafting-style full-screen tools (first run only)
+          // (Now handled by applySectionUiPreferences)
+        },
         'btn-tips': () => {
-            document.getElementById('tips-section').classList.add('active');
+          const section = document.getElementById('tips-section');
+          section.classList.add('active');
+          applySectionUiPreferences(section);
             initializeAccordions(document.getElementById('tips-section'));
         },
         'btn-legacy-Weapons': () => {
-            document.getElementById('legacy-Weapons').classList.add('active');
+          const section = document.getElementById('legacy-Weapons');
+          section.classList.add('active');
+          applySectionUiPreferences(section);
             refreshStaticIframe('legacy-weapon-iframe', 'legacyweapon.html');
         },
         'btn-regalia': () => {
-            document.getElementById('legacy-Regalia').classList.add('active');
+          const section = document.getElementById('legacy-Regalia');
+          section.classList.add('active');
+          applySectionUiPreferences(section);
             refreshStaticIframe('regalia-creator-iframe', '../regalia maker.html');
         },
         'btn-lore': () => {
             const lore = document.getElementById('lore-section');
             lore.classList.add('active');
+          applySectionUiPreferences(lore);
             // Ensure lore subtabs and per-entry collapsibles are initialized when opening Lore
             initializeLoreSubtabs(lore);
             // Re-run collapsible init in case content or order changed
@@ -3716,26 +3850,35 @@
             }
         },
         'btn-spellbook': () => {
-            document.getElementById('spellbook-section').classList.add('active');
+          const section = document.getElementById('spellbook-section');
+          section.classList.add('active');
+          applySectionUiPreferences(section);
             createOrRefreshIframe('spellbook-iframe-container', 'spellbook-iframe', '../spellbook.html', 'Spellbook');
         },
     'btn-games': () => {
-      document.getElementById('games-section').classList.add('active');
+        const section = document.getElementById('games-section');
+        section.classList.add('active');
+        applySectionUiPreferences(section);
       // No iframe; launcher is inlined in the DOM.
     },
         'btn-pamperlogue': () => {
-            document.getElementById('pamperlogue').classList.add('active');
+          const section = document.getElementById('pamperlogue');
+          section.classList.add('active');
+          applySectionUiPreferences(section);
             // Pamperlogue specific: rely on its internal onload and hideAllSections reset for loader.
             // The hideAllSections already makes its loader visible. Refresh just sets src.
             refreshStaticIframe('pamperlogue-iframe', '../pamperlogue.html', true); // Pass true for isPamperlogue
         },
         'btn-potty-checker': () => {
-            document.getElementById('potty-checker').classList.add('active');
+          const section = document.getElementById('potty-checker');
+          section.classList.add('active');
+          applySectionUiPreferences(section);
             createOrRefreshIframe('potty-checker-iframe-container', 'potty-checker-iframe', '../pottychecker.html', 'Potty Checker');
         },
         'btn-book-reader': () => {
             const section = document.getElementById('book-reader-section');
             section.classList.add('active');
+          applySectionUiPreferences(section);
             // Initialize Library menu click handler once
             const menu = document.getElementById('book-reader-menu');
             if (menu && !menu.dataset.initialized) {
@@ -3751,31 +3894,44 @@
             window.loadBookReaderVariant(bookReaderLastVariant);
         },
         'btn-achievement-tracker': () => {
-            document.getElementById('achievement-tracker').classList.add('active');
+          const section = document.getElementById('achievement-tracker');
+          section.classList.add('active');
+          applySectionUiPreferences(section);
             createOrRefreshIframe('achievement-tracker-iframe-container', 'achievement-tracker-iframe', '../Academy Excellence Tracker.html', 'Achievement Tracker');
         },
         'btn-races': () => { 
-            document.getElementById('races-section').classList.add('active');
+          const section = document.getElementById('races-section');
+          section.classList.add('active');
+          applySectionUiPreferences(section);
             createOrRefreshIframe('races-iframe-container', 'races-iframe', 'races.html', 'Academy Races');
         },        'btn-backgrounds': () => { 
-            document.getElementById('backgrounds-section').classList.add('active');
+          const section = document.getElementById('backgrounds-section');
+          section.classList.add('active');
+          applySectionUiPreferences(section);
             createOrRefreshIframe('backgrounds-iframe-container', 'backgrounds-iframe', '../backgrounds.html', 'Backgrounds');
         },
         'btn-origin-feats': () => { 
-            document.getElementById('origin-feats-section').classList.add('active');
+          const section = document.getElementById('origin-feats-section');
+          section.classList.add('active');
+          applySectionUiPreferences(section);
             createOrRefreshIframe('origin-feats-iframe-container', 'origin-feats-iframe', '../originfeats.html', 'Origin Feats');
         },
         'btn-trinket-generator': () => { 
-            document.getElementById('trinket-generator-section').classList.add('active');
+          const section = document.getElementById('trinket-generator-section');
+          section.classList.add('active');
+          applySectionUiPreferences(section);
             createOrRefreshIframe('trinket-generator-iframe-container', 'trinket-generator-iframe', '../trinketgenerator.html', 'Trinket & Bauble Generator');
         },
         'btn-auto-dm': () => { 
-            document.getElementById('auto-dm-section').classList.add('active');
+          const section = document.getElementById('auto-dm-section');
+          section.classList.add('active');
+          applySectionUiPreferences(section);
             createOrRefreshIframe('auto-dm-iframe-container', 'auto-dm-iframe', '../AutoDM App.html', 'Auto-DM');
         },
   'btn-school-events': () => { 
             const section = document.getElementById('school-events-section');
             section.classList.add('active');
+          applySectionUiPreferences(section);
             const menu = document.getElementById('school-events-menu');
             if (menu && !menu.dataset.initialized) {
               menu.addEventListener('click', (e) => {
@@ -3798,6 +3954,7 @@
           button.parentNode.replaceChild(newButton, button);
           newButton.addEventListener('click', () => {
             hideAllSections();
+            document.body.classList.remove('wide-layout');
             navActions[btnId]();
           });
         } else {

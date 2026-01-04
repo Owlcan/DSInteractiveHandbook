@@ -34,3 +34,6 @@ build/
 # OS/editor noise
 .DS_Store
 Thumbs.db
+morespells.json
+spellbook_missing_from_morespells.txt
+tools/diff_spellbook_vs_morespells.js

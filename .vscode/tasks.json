@@ -1,0 +1,14 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Diff spellbook vs morespells",
+			"type": "shell",
+			"command": "node",
+			"args": [
+				"tools/diff_spellbook_vs_morespells.js"
+			],
+			"isBackground": false
+		}
+	]
+}

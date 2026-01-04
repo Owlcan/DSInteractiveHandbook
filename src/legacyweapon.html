@@ -402,6 +402,17 @@
             <label for="weaponImageInput" style="display: block; margin-bottom: 5px; color: #ffd700;">Weapon Image URL (optional):</label>
             <input type="text" id="weaponImageInput" placeholder="Enter an image URL..." style="width: 100%; padding: 12px; background-color: #2a2a2a; color: #e0d2b4; border: 1px solid #c0a060; border-radius: 4px; font-family: 'Cinzel', serif;">
           </div>
+
+          <div>
+            <label for="weaponImageFileInput" style="display: block; margin-bottom: 5px; color: #ffd700;">Or upload an image (stays in your browser):</label>
+            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+              <input type="file" id="weaponImageFileInput" accept="image/*" style="flex: 1; min-width: 240px; padding: 10px; background-color: #2a2a2a; color: #e0d2b4; border: 1px solid #c0a060; border-radius: 4px; font-family: 'Cinzel', serif;">
+              <button id="clearWeaponImageBtn" type="button" style="background: linear-gradient(to bottom, #4a4a4a, #2a2a2a); color: #e0d2b4; border: none; border-radius: 4px; padding: 10px 14px; font-weight: bold; cursor: pointer; font-family: 'Cinzel', serif;">Clear</button>
+            </div>
+            <div style="font-size: 0.8em; color: #e0d2b4; margin-top: 6px; font-style: italic;">
+              *This does not upload anywhere. It only loads the image into this page for preview and your summary.
+            </div>
+          </div>
           
           <div id="imagePreviewCtn" style="display: none; margin: 15px auto; max-width: 300px; border: 1px solid #c0a060; padding: 5px; background-color: #2a2a2a;">
             <img id="imagePreviewEl" src="" alt="Weapon Preview" style="max-width: 100%; max-height: 200px; display: block; margin: 0 auto;">
@@ -1569,6 +1580,7 @@
     usedSlots: [],  // Track which slots are used and their types
     weaponName: "", // Added for storing custom weapon name
     weaponImageUrl: "", // Added for storing weapon image URL
+    weaponImageObjectUrl: "", // For cleanup when using local uploads
     totalCost: 0, // Track total enchantment cost
     baseCost: 0, // Track base weapon cost
     slotCost: 0 // Track slot installation cost
@@ -1662,7 +1674,72 @@
     if (weaponNameInput) {
       weaponNameInput.addEventListener("input", updateWeaponName);
     }
+
+    // Local image upload (kept in-memory; nothing is stored or uploaded)
+    const weaponImageFileInputEl = document.getElementById("weaponImageFileInput");
+    if (weaponImageFileInputEl) {
+      weaponImageFileInputEl.addEventListener("change", onWeaponImageFileSelected);
+    }
+    const clearWeaponImageBtnEl = document.getElementById("clearWeaponImageBtn");
+    if (clearWeaponImageBtnEl) {
+      clearWeaponImageBtnEl.addEventListener("click", clearWeaponImage);
+    }
   });
+
+  function onWeaponImageFileSelected(e) {
+    const input = e.currentTarget;
+    const file = input && input.files ? input.files[0] : null;
+    if (!file) return;
+    if (!file.type || !file.type.startsWith("image/")) {
+      alert("Please choose an image file.");
+      input.value = "";
+      return;
+    }
+
+    // If the user previously used an object URL, revoke it.
+    if (state.weaponImageObjectUrl) {
+      try { URL.revokeObjectURL(state.weaponImageObjectUrl); } catch (_) {}
+      state.weaponImageObjectUrl = "";
+    }
+
+    // Read as a data URL so the summary image continues to work in-page.
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = typeof reader.result === "string" ? reader.result : "";
+      state.weaponImageUrl = result;
+
+      const urlInput = document.getElementById("weaponImageInput");
+      if (urlInput) urlInput.value = "";
+
+      const previewImg = document.getElementById("imagePreviewEl");
+      const previewCtn = document.getElementById("imagePreviewCtn");
+      if (previewImg && previewCtn) {
+        previewImg.src = state.weaponImageUrl;
+        previewCtn.style.display = state.weaponImageUrl ? "block" : "none";
+      }
+    };
+    reader.onerror = () => {
+      alert("Could not read that image file.");
+      input.value = "";
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function clearWeaponImage() {
+    state.weaponImageUrl = "";
+    if (state.weaponImageObjectUrl) {
+      try { URL.revokeObjectURL(state.weaponImageObjectUrl); } catch (_) {}
+      state.weaponImageObjectUrl = "";
+    }
+    const urlInput = document.getElementById("weaponImageInput");
+    if (urlInput) urlInput.value = "";
+    const fileInput = document.getElementById("weaponImageFileInput");
+    if (fileInput) fileInput.value = "";
+    const previewImg = document.getElementById("imagePreviewEl");
+    const previewCtn = document.getElementById("imagePreviewCtn");
+    if (previewImg) previewImg.src = "";
+    if (previewCtn) previewCtn.style.display = "none";
+  }
   
   // Function to populate weapon dropdown with formatted options
   function populateWeaponDropdown() {
@@ -1948,15 +2025,16 @@
       });
     });
     
-    // Update button visibility based on upgrade selection
+    // Update button visibility
     const hasUpgrades = state.selectedUpgrades.length > 0;
     const allSlotsFilled = state.remainingSlots === 0;
-    const showCustomization = hasUpgrades; // Show customization if any upgrades are selected
+    const showCustomization = !!state.selectedWeapon; // Allow naming/image even for empty weapons
     
-    // Show Complete Weapon button if upgrades are selected but not all slots are filled
+    // Allow completing an "empty" weapon (no upgrades selected)
     const completeWeaponBtn = document.getElementById('completeWeaponBtn');
     if (completeWeaponBtn) {
-      completeWeaponBtn.style.display = (hasUpgrades && !allSlotsFilled) ? "block" : "none";
+      completeWeaponBtn.style.display = state.selectedWeapon ? "block" : "none";
+      completeWeaponBtn.textContent = hasUpgrades ? "Complete Weapon" : "Complete Weapon (No Upgrades)";
     }
     
     // Show Proceed to Next Tier button only when all slots are filled
@@ -2160,7 +2238,10 @@
   
   // New function to update image preview
   function updateImagePreview() {
+    // If the user types/pastes a URL, prefer that and clear any uploaded file selection.
     state.weaponImageUrl = weaponImageInput.value.trim();
+    const fileInput = document.getElementById("weaponImageFileInput");
+    if (fileInput) fileInput.value = "";
     
     if (state.weaponImageUrl) {
       imagePreviewEl.src = state.weaponImageUrl;
@@ -2185,7 +2266,8 @@
   function proceedToNextTier() {
     // Capture weapon name and image before proceeding
     state.weaponName = weaponNameInput.value.trim() || state.selectedWeapon;
-    state.weaponImageUrl = weaponImageInput.value.trim();
+    // Preserve an uploaded image (already stored in state.weaponImageUrl)
+    state.weaponImageUrl = weaponImageInput.value.trim() || state.weaponImageUrl;
     
     // For now, just show a message as we're only implementing Tier 1
     alert("Congratulations! You've completed Tier 1. In the full implementation, you would now proceed to Tier 2 with double the slots.");
@@ -2249,7 +2331,11 @@
         <h4 style="color: #ffd700; border-bottom: 1px solid #c0a060; padding-bottom: 5px;">Upgrades</h4>
         <ul style="list-style-type: none; padding: 0;">
     `;
-    
+
+    if (!state.selectedUpgrades || state.selectedUpgrades.length === 0) {
+      summaryHTML += `<li style="margin-bottom: 15px; background-color: rgba(192, 160, 96, 0.1); padding: 15px; border-radius: 5px; border: 1px dashed #c0a060; color: #e0d2b4;">No upgrades selected (empty legacy weapon).</li>`;
+    }
+
     state.selectedUpgrades.forEach(upgrade => {
       // Determine class for color indication
       let typeClass = "";
