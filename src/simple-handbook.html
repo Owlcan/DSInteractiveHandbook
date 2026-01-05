@@ -27,6 +27,11 @@
       color: var(--ink);
       line-height: 1.6;
     }
+
+    /* Full-frame tool mode: maximize viewport usage (useful for iframes like AlchemyExplorer) */
+    body.full-frame {
+      padding: 0;
+    }
     
     #app {
       max-width: 1600px;
@@ -50,6 +55,28 @@
       --app-pad: 10px;
       --app-pad2: 20px;
       --app-border: 8px;
+    }
+
+    /* Full-frame: remove shell constraints so iframe can truly fill the screen */
+    body.full-frame #app {
+      max-width: 100vw;
+      width: 100vw;
+      margin: 0;
+      border-radius: 0;
+      box-shadow: none;
+      --app-pad: 0px;
+      --app-pad2: 0px;
+      --app-border: 0px;
+    }
+
+    body.full-frame .corner-decoration { display: none; }
+    body.full-frame h1 { margin: 6px 0 8px; font-size: 2.6rem; }
+    body.full-frame nav { margin: 8px 0; }
+    body.full-frame .content-section { padding: 0; }
+    body.full-frame .iframe-container {
+      width: 100%;
+      margin-left: 0;
+      margin-right: 0;
     }
     
     .corner-decoration {
@@ -877,7 +904,7 @@
         </div>
     </div>
 
-    <div id="crafting-section" class="content-section" data-prefer-hide-tabs="true" data-prefer-wide-layout="true">
+    <div id="crafting-section" class="content-section" data-prefer-hide-tabs="true" data-prefer-wide-layout="true" data-prefer-full-frame="true">
       <div class="section-header-row">
         <h2>Crafting</h2>
         <button type="button" class="popout-btn" onclick="window.popOutTool && window.popOutTool('crafting')">Pop out</button>
@@ -3750,6 +3777,37 @@
         document.body.classList.toggle('wide-layout', preferWide);
       }
 
+      function applyFullFrameForSection(sectionEl) {
+        const preferFull = !!sectionEl && sectionEl.dataset && sectionEl.dataset.preferFullFrame === 'true';
+        document.body.classList.toggle('full-frame', preferFull);
+      }
+
+      function resizeActiveIframeContainers() {
+        const active = document.querySelector('.content-section.active');
+        if (!active) return;
+
+        // Only force-resize in full-frame mode.
+        if (!document.body.classList.contains('full-frame')) {
+          // Clear any previous forced sizing.
+          active.querySelectorAll('.iframe-container').forEach(ctn => {
+            ctn.style.height = '';
+          });
+          return;
+        }
+
+        active.querySelectorAll('.iframe-container').forEach(ctn => {
+          const rect = ctn.getBoundingClientRect();
+          const bottomPadding = 10;
+          const available = Math.max(320, Math.floor(window.innerHeight - rect.top - bottomPadding));
+          ctn.style.height = available + 'px';
+        });
+      }
+
+      window.addEventListener('resize', () => {
+        // Debounce-ish via rAF
+        window.requestAnimationFrame(resizeActiveIframeContainers);
+      });
+
       function readStoredTabsHidden() {
         try {
           const v = localStorage.getItem(TABS_HIDDEN_KEY);
@@ -3773,11 +3831,15 @@
       }
 
       function applySectionUiPreferences(sectionEl) {
+        applyFullFrameForSection(sectionEl);
         applyWideLayoutForSection(sectionEl);
         // Only auto-hide tabs if the user hasn't set a preference yet.
         if (readStoredTabsHidden() === null && sectionEl && sectionEl.dataset && sectionEl.dataset.preferHideTabs === 'true') {
           applyTabsHidden(true, true);
         }
+
+        // If we're in full-frame mode, size the iframe container to fill remaining viewport.
+        window.requestAnimationFrame(resizeActiveIframeContainers);
       }
 
       // Initial state from storage (if present)
@@ -3955,6 +4017,7 @@
           newButton.addEventListener('click', () => {
             hideAllSections();
             document.body.classList.remove('wide-layout');
+            document.body.classList.remove('full-frame');
             navActions[btnId]();
           });
         } else {
