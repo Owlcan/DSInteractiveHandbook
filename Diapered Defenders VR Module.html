@@ -391,6 +391,9 @@
                             ac: norm.ac,
                             armorType: norm.armorType,
                             hpStr: norm.hpStr,
+                            speed: norm.speed,
+                            speedModes: norm.speedModes,
+                            speedNotes: norm.speedNotes,
                             abilityScores: norm.abilityScores,
                             actions: norm.actions,
                             size: norm.size,
@@ -960,8 +963,9 @@
             const cr = md.cr || '—';
             const ac = md.ac ? `AC ${md.ac}${md.armorType?` (${md.armorType})`:''}` : '';
             const hp = md.hpStr ? `HP ${md.hpStr}` : '';
+            const spd = md.speed ? `Speed ${md.speed}` : '';
             const size = md.size || '';
-            const rowTop = [ac, hp].filter(Boolean).join(' | ');
+            const rowTop = [ac, hp, spd].filter(Boolean).join(' | ');
             const abil = md.abilityScores || {};
             const abilStr = (['str','dex','con','int','wis','cha']
                 .map(k=> abil[k]!=null? `${k.toUpperCase()}:${abil[k]}`:null).filter(Boolean).join('  '));

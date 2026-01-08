@@ -2,10 +2,14 @@
 	"name": "interactive-handbook",
 	"version": "1.0.0",
 	"private": true,
+	"dependencies": {
+		"ws": "^8.18.3"
+	},
 	"devDependencies": {
 		"tailwindcss": "^3.4.17"
 	},
 	"scripts": {
+		"start": "node server.js",
 		"build:tailwind": "tailwindcss -i ./styles/tailwind-input.css -o ./styles/tailwind.css --minify",
 		"watch:tailwind": "tailwindcss -i ./styles/tailwind-input.css -o ./styles/tailwind.css --watch"
 	}

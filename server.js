@@ -22,6 +22,12 @@ const server = http.createServer((req, res) => {
     else if (filePath.endsWith('.js')) contentType = 'application/javascript';
     else if (filePath.endsWith('.css')) contentType = 'text/css';
     else if (filePath.endsWith('.json')) contentType = 'application/json';
+    else if (filePath.endsWith('.png')) contentType = 'image/png';
+    else if (filePath.endsWith('.webp')) contentType = 'image/webp';
+    else if (filePath.endsWith('.jpg') || filePath.endsWith('.jpeg')) contentType = 'image/jpeg';
+    else if (filePath.endsWith('.gif')) contentType = 'image/gif';
+    else if (filePath.endsWith('.svg')) contentType = 'image/svg+xml';
+    else if (filePath.endsWith('.ico')) contentType = 'image/x-icon';
 
     res.writeHead(200, { 'Content-Type': contentType });
     fs.createReadStream(filePath).pipe(res);

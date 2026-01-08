@@ -46,6 +46,64 @@
     return '👾';
   };
 
+  const parseSpeed = (speedStr) => {
+    const rawInput = String(speedStr || '').trim();
+    if (!rawInput) return { raw: '', modes: {}, notes: {} };
+
+    // Normalize common formatting issues: missing spaces (fly30ft), missing spaces after commas, etc.
+    const normalized = rawInput
+      .replace(/\u00a0/g, ' ')
+      .replace(/([a-zA-Z])(?=\d)/g, '$1 ')
+      .replace(/(\d+)\s*ft\.?\b/gi, '$1 ft.')
+      .replace(/\s*,\s*/g, ', ')
+      .replace(/\s+/g, ' ')
+      .trim();
+
+    const modes = {};
+    const notes = {};
+    const parts = normalized.split(',').map(p => p.trim()).filter(Boolean);
+
+    const setMode = (mode, feet, note) => {
+      if (!mode) return;
+      if (typeof feet === 'number' && !isNaN(feet)) modes[mode] = feet;
+      if (note) notes[mode] = note;
+    };
+
+    for (const part of parts) {
+      // Extract any parenthetical note, e.g. "fly 15 ft. (clumsy)"
+      const noteMatch = part.match(/\(([^)]+)\)\s*$/);
+      const note = noteMatch ? `(${noteMatch[1]})` : '';
+      const partNoNote = part.replace(/\s*\([^)]*\)\s*$/g, '').trim();
+
+      // Attempt to parse movement mode + feet
+      const feetMatch = partNoNote.match(/(\d+)\s*(?:ft\.?|feet)\b/i);
+      const feet = feetMatch ? parseInt(feetMatch[1], 10) : null;
+
+      let mode = null;
+      const lower = partNoNote.toLowerCase();
+
+      // Examples:
+      // - "35 ft." => walk
+      // - "climb 20 ft." => climb
+      // - "fly 15 ft." => fly
+      // - "teleport 20 ft." => teleport
+      if (/^(climb|climbing)\b/.test(lower)) mode = 'climb';
+      else if (/^(fly|flying)\b/.test(lower)) mode = 'fly';
+      else if (/^(swim|swimming)\b/.test(lower)) mode = 'swim';
+      else if (/^(burrow|burrowing|dig)\b/.test(lower)) mode = 'burrow';
+      else if (/^(glide|gliding)\b/.test(lower)) mode = 'glide';
+      else if (/^(teleport|teleportation)\b/.test(lower)) mode = 'teleport';
+      else if (/^(walk|walking)\b/.test(lower)) mode = 'walk';
+      else if (/^\d+\s*(?:ft\.?|feet)\b/i.test(lower)) mode = 'walk';
+
+      if (mode) {
+        setMode(mode, feet, note);
+      }
+    }
+
+    return { raw: normalized, modes, notes };
+  };
+
   const buildAliasMap = (byKey) => {
     // Map legacy keys used in VR/Editor to bestiary slugs
     const nameToKey = {};
@@ -96,6 +154,7 @@
       const ac = (typeof stats.armorClass === 'number' || typeof stats.armorClass === 'string') ? stats.armorClass : null;
       const armorType = stats.armorType || stats.armorTypeStr || '';
       const hpStr = stats.hitPointsStr || '';
+      const speedParsed = parseSpeed(stats.speed);
       const abilityScores = {
         str: stats.strength ?? stats.STR ?? null,
         dex: stats.dexterity ?? stats.DEX ?? null,
@@ -119,6 +178,12 @@
         ac,
         armorType,
         hpStr,
+        // Raw speed string as written in the bestiary (normalized for minor formatting issues)
+        speed: speedParsed.raw,
+        // Structured movement modes (feet). Example: { walk: 35, climb: 20, glide: 10 }
+        speedModes: speedParsed.modes,
+        // Notes per mode, if any. Example: { fly: "(clumsy)" }
+        speedNotes: speedParsed.notes,
         abilityScores,
         emoji: pickEmoji(name, race),
         tier: crTier(cr)
