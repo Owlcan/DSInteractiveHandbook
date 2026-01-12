@@ -23,21 +23,20 @@
             margin: 0;
             padding: 5px;
             background-color: #2c2619;
-            background-image: url('https://www.transparenttextures.com/patterns/dark-wood.png');
-            color: var(--ink);
+color: var(--ink);
             line-height: 1.6;
         }
 
         .game-container {
-            max-width: 1600px;
+            max-width: 1850px;
             margin: 0 auto;
             background-color: var(--parchment);
-            background-image: url('https://www.transparenttextures.com/patterns/parchment.png');
-            border-radius: 8px;
+border-radius: 8px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
             padding: 10px;
             border: 6px solid var(--gold-dark);
             position: relative;
+            overflow: hidden; /* Prevent scroll bars */
         }
 
         .corner-decoration {
@@ -45,8 +44,7 @@
             width: 60px;
             height: 60px;
             background-color: var(--gold);
-            background-image: url('https://www.transparenttextures.com/patterns/asfalt-light.png');
-            z-index: 1;
+z-index: 1;
         }
 
         .top-left { top: -6px; left: -6px; border-top-left-radius: 15px; }
@@ -73,6 +71,17 @@
             margin: 10px auto;
         }
 
+        /* Title logo image styling */
+        .title-logo {
+            display: block;
+            margin: 0 auto;
+            width: min(85vw, 900px);
+            max-height: 160px;
+            height: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 6px rgba(0,0,0,0.45));
+        }
+
         .party-selection {
             background: rgba(46, 38, 20, 0.95);
             border-radius: 15px;
@@ -83,13 +92,13 @@
         }
 
         .selection-status {
-            background: var(--parchment-dark);
-            border-radius: 8px;
-            padding: 15px;
-            margin: 20px 0;
+            background: transparent;
+            border-radius: 0;
+            padding: 0;
+            margin: 14px 0 6px;
             text-align: center;
             font-weight: bold;
-            border: 2px solid var(--gold);
+            border: none;
         }
 
         .selected-indicator {
@@ -151,10 +160,15 @@
         }
 
         .character-description {
-            font-size: 0.9rem;
+            font-size: 1.08rem;
             color: var(--ink2);
-            line-height: 1.4;
+            line-height: 1.5;
         }
+            .character-description strong {
+                color: var(--gold-light);
+                font-weight: 900;
+                text-shadow: 0 1px 2px rgba(0,0,0,0.45), 0 0 6px rgba(250,231,145,0.35);
+            }
 
         .character-image {
             width: 120px;
@@ -215,7 +229,7 @@
 
         .battle-layout {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
             gap: 15px;
             margin-bottom: 20px;
             position: relative;
@@ -227,6 +241,7 @@
             border-radius: 12px;
             background: rgba(46, 38, 20, 0.9);
             border: 2px solid var(--gold-dark);
+            -webkit-backdrop-filter: blur(5px);
             backdrop-filter: blur(5px);
         }
 
@@ -256,7 +271,7 @@
             margin-top: 80px;
             border: 3px solid var(--gold-dark);
             grid-column: 1 / -1;
-            overflow: visible;
+            overflow: hidden; /* Contain all effects within battlefield */
         }
 
         .party-sprites {
@@ -265,7 +280,7 @@
             left: 50%;
             transform: translateX(-50%);
             display: flex;
-            gap: 40px;
+            gap: 108px; /* +15% spacing to match larger sprites */
             z-index: 10;
         }
 
@@ -278,9 +293,9 @@
             gap: 15px;
             z-index: 10;
             justify-content: center;
-            max-width: 90%;
-            flex-wrap: nowrap;
-            overflow-x: auto;
+            max-width: 98%;
+            flex-wrap: nowrap; /* Force single row */
+            overflow: visible; /* Allow enemy selection highlights */
         }
 
         .sprite-character {
@@ -317,20 +332,24 @@
 
         .character-hp-bar, .enemy-hp-bar {
             width: 100%;
-            height: 24px;
+            height: 28px; /* slightly taller */
             background: var(--parchment-dark);
             border-radius: 10px;
             margin: 10px 0;
             overflow: hidden;
             border: 2px solid var(--gold-dark);
         }
-
         .hp-fill {
             height: 100%;
             background: linear-gradient(90deg, var(--gold), var(--gold-light));
             transition: width 0.3s ease;
-            font-size: 0.9rem;
-            font-weight: bold;
+            font-size: 1rem;
+            font-weight: 900;
+            color: #1b1a14;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-shadow: 0 1px 0 rgba(255,255,255,0.4), 0 0 6px rgba(0,0,0,0.4);
         }
 
         .action-buttons {
@@ -346,12 +365,16 @@
             background: var(--gold-dark);
             color: var(--parchment);
             border: none;
-            padding: 18px 24px;
+            padding: 12px 16px;
             border-radius: 8px;
             cursor: pointer;
             font-weight: bold;
             transition: all 0.3s ease;
             font-family: 'Cormorant Garamond', serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
             border: 2px solid var(--gold);
             font-size: 1.15rem;
         }
@@ -416,9 +439,9 @@
             background: var(--gold-dark);
             color: var(--parchment);
             border: none;
-            padding: 15px 30px;
+        padding: 16px 36px;
             border-radius: 8px;
-            font-size: 1.2rem;
+        font-size: 1.35rem;
             font-weight: bold;
             cursor: pointer;
             margin: 20px auto;
@@ -452,12 +475,13 @@
 
         .stat {
             background: var(--parchment-dark);
-            padding: 12px 16px;
+            padding: 6px 8px; /* reduced padding to keep box size */
             border-radius: 4px;
             text-align: center;
             border: 1px solid var(--gold-dark);
-            font-weight: bold;
-            font-size: 1.25rem;
+            font-weight: 800;
+            font-size: 1.45rem; /* larger text */
+            line-height: 1.1;
         }
 
         .elemental-weakness {
@@ -484,6 +508,16 @@
             border-radius: 12px;
             font-size: 0.8rem;
         }
+
+    /* Styled element labels */
+    .elt { font-weight: 900; letter-spacing: 0.3px; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
+    .elt-light { color: #fbbf24; }
+    .elt-water { color: #3b82f6; }
+    .elt-earth { color: #8b5e34; }
+    .elt-fire { color: #ef4444; }
+    .elt-wind { color: #06b6d4; }
+    .elt-lightning { color: #a78bfa; }
+    .elt-physical { color: #9CA3AF; }
 
         .level-up-notification {
             position: fixed;
@@ -514,8 +548,318 @@
             animation: damage 0.5s ease-in-out;
         }
 
+        @keyframes flash {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(2) saturate(1.5); }
+        }
+
+        .flash-animation {
+            animation: flash 0.5s ease-in-out; /* slowed a bit */
+        }
+
+        /* New: sprite shake and colored flashes for incoming enemy hits */
+        @keyframes shake {
+            0% { transform: translate(0,0); }
+            20% { transform: translate(-6px, 0); }
+            40% { transform: translate(6px, 0); }
+            60% { transform: translate(-4px, 0); }
+            80% { transform: translate(4px, 0); }
+            100% { transform: translate(0,0); }
+        }
+        .shake {
+            animation: shake 0.6s ease;
+        }
+        @keyframes flashTintYellow {
+            0% { filter: brightness(1) saturate(1); box-shadow: none; }
+            50% { filter: brightness(1.4) sepia(0.8) saturate(2) hue-rotate(10deg); box-shadow: 0 0 18px 6px rgba(255, 235, 59, 0.7); }
+            100% { filter: brightness(1) saturate(1); box-shadow: none; }
+        }
+        .flash-yellow { animation: flashTintYellow 0.6s ease; }
+        @keyframes flashTintRed {
+            0% { filter: brightness(1) saturate(1); box-shadow: none; }
+            50% { filter: brightness(1.4) sepia(0.9) saturate(2.2) hue-rotate(-15deg); box-shadow: 0 0 18px 6px rgba(255, 80, 80, 0.75); }
+            100% { filter: brightness(1) saturate(1); box-shadow: none; }
+        }
+        .flash-red { animation: flashTintRed 0.6s ease; }
+
+        .damage-number {
+            position: absolute;
+            color: #ff4444;
+            font-weight: bold;
+            font-size: 1.5rem;
+            pointer-events: none;
+            z-index: 1000;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            animation: damageNumber 1s ease-out forwards;
+        }
+
+        .damage-number.critical {
+            color: #ffaa00;
+            font-size: 2rem;
+        }
+
+        .damage-number.weakness {
+            color: #ff0088;
+            font-size: 1.8rem;
+        }
+
+        @keyframes damageNumber {
+            0% { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+            100% { 
+                opacity: 0; 
+                transform: translateY(-50px); 
+            }
+        }
+
+        .ability-text {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(46, 38, 20, 0.95);
+            color: var(--gold);
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: 2px solid var(--gold);
+            font-weight: bold;
+            font-size: 1.2rem;
+            z-index: 1001;
+            animation: abilityText 2s ease-out forwards;
+            text-align: center;
+            min-width: 200px;
+        }
+
+        @keyframes abilityText {
+            0% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            70% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            100% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+        }
+
+        .enemy-selectable {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .enemy-selectable:hover {
+            transform: scale(1.05);
+            filter: brightness(1.2);
+        }
+
+        .enemy-selected {
+            border: 3px solid var(--gold) !important;
+            box-shadow: 0 0 15px var(--gold);
+        }
+
+        .magic-orb {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            z-index: 1000;
+            box-shadow: 0 0 15px currentColor;
+            animation: orbShoot 0.8s ease-out forwards;
+        }
+
+        .fire-orb {
+            background: radial-gradient(circle, #ff6b35, #ff4500);
+            color: #ff4500;
+        }
+
+        .ice-orb {
+            background: radial-gradient(circle, #87ceeb, #4682b4);
+            color: #4682b4;
+        }
+
+        .earth-orb {
+            background: radial-gradient(circle, #daa520, #8b4513);
+            color: #8b4513;
+        }
+
+        .physical-orb {
+            background: radial-gradient(circle, rgba(255,255,255,0.8), rgba(200,200,200,0.6));
+            color: #ffffff;
+        }
+
+        @keyframes orbShoot {
+            0% { 
+                transform: scale(0.5);
+                opacity: 1;
+            }
+            70% { 
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% { 
+                transform: scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        .particle-burst {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            animation: particleBurst 1.3s ease-out forwards; /* slowed a bit */
+        }
+
+        .fire-particle {
+            background: linear-gradient(45deg, #ff6b35, #ff4500);
+            box-shadow: 0 0 6px #ff4500;
+        }
+
+        .ice-particle {
+            background: linear-gradient(45deg, #87ceeb, #4682b4);
+            box-shadow: 0 0 6px #4682b4;
+        }
+
+        .earth-particle {
+            background: linear-gradient(45deg, #daa520, #8b4513);
+            box-shadow: 0 0 6px #8b4513;
+        }
+
+        .physical-particle {
+            background: linear-gradient(45deg, rgba(255,255,255,0.8), rgba(200,200,200,0.6));
+            box-shadow: 0 0 6px rgba(255,255,255,0.8);
+        }
+
+        @keyframes particleBurst {
+            0% { 
+                opacity: 1;
+                transform: scale(1);
+            }
+            100% { 
+                opacity: 0;
+                transform: scale(0.3);
+            }
+        }
+
+        .screen-flash {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2000;
+            pointer-events: none;
+            opacity: 0;
+        }
+
+        .water-flash {
+            background: radial-gradient(circle, rgba(0,100,200,0.4), rgba(0,50,150,0.6));
+            animation: screenFlash 1s ease-out forwards;
+        }
+
+        .lightning-flash {
+            background: radial-gradient(circle, rgba(255,255,100,0.5), rgba(200,200,0,0.7));
+            animation: screenFlash 0.6s ease-out forwards;
+        }
+
+        .light-flash {
+            background: radial-gradient(circle, rgba(255,255,255,0.6), rgba(255,255,200,0.8));
+            animation: screenFlash 0.8s ease-out forwards;
+        }
+
+        @keyframes screenFlash {
+            0% { opacity: 0; }
+            20% { opacity: 0.8; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        .screen-darken {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1999;
+            pointer-events: none;
+            opacity: 0;
+            animation: screenDarken 1.2s ease-out forwards;
+        }
+
+        @keyframes screenDarken {
+            0% { opacity: 0; }
+            25% { opacity: 0.7; }
+            75% { opacity: 0.7; }
+            100% { opacity: 0; }
+        }
+
         .hidden {
             display: none;
+        }
+
+        /* Intro cutscene overlay */
+        .intro-overlay {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 200000; /* above everything */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .intro-overlay video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .skip-hint {
+            position: absolute;
+            bottom: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255,255,255,0.92);
+            background: rgba(0,0,0,0.42);
+            border: 1px solid rgba(255,255,255,0.25);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1rem;
+            letter-spacing: 0.5px;
+            display: none; /* shown after 25s */
+        }
+
+        /* Full-screen attack overlay (for special moves like Dere Strike) */
+        .fs-attack-overlay {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            /* Bias view 10% from the top to avoid cropping important top content */
+            background-position: 50% 10%;
+            background-repeat: no-repeat;
+            pointer-events: none;
+            z-index: 100000; /* over battle actions overlay */
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        .fs-attack-gold-flash {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(255,215,0,0.55), rgba(255,195,0,0.35) 40%, rgba(255,180,0,0.15) 70%, rgba(255,170,0,0));
+            mix-blend-mode: screen;
+            pointer-events: none;
+            animation: goldFlash 0.4s ease-out forwards;
+        }
+        @keyframes goldFlash {
+            0% { opacity: 0; filter: saturate(1) brightness(1); }
+            25% { opacity: 1; filter: saturate(1.3) brightness(1.6); }
+            60% { opacity: 0.85; filter: saturate(1.2) brightness(1.3); }
+            100% { opacity: 0; filter: saturate(1) brightness(1); }
         }
 
         .mp-bar {
@@ -553,6 +897,11 @@
             top: 20px;
             right: 20px;
             z-index: 100;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 8px;
+            max-width: 50vw;
         }
 
         .music-toggle {
@@ -565,6 +914,7 @@
             font-weight: bold;
             font-size: 0.9rem;
             transition: all 0.3s ease;
+            -webkit-backdrop-filter: blur(5px);
             backdrop-filter: blur(5px);
             border: 2px solid var(--gold);
             font-family: 'Cormorant Garamond', serif;
@@ -601,6 +951,27 @@
             color: var(--ink);
             font-size: 1.1rem;
         }
+        #battleActionsOverlay {
+                    z-index: 99999 !important;
+                    box-shadow: 0 0 24px 8px rgba(0,0,0,0.7);
+                    background: rgba(46,38,20,0.98);
+                    border-radius: 12px;
+                    border: 2px solid var(--gold);
+                    /* If any backgrounds are used directly on this overlay, bias them 10% from the top */
+                    background-position: 50% 10% !important;
+                }
+        /* Ensure any images inside the battle actions overlay are biased 10% from the top */
+        #battleActionsOverlay img {
+            object-position: 50% 10% !important;
+        }
+        
+        /* Offset standard overlay imagery down by 10% without stretching */
+        .std-anim-img {
+            /* Works when std-anim uses <img> with object-fit */
+            object-position: 50% 10% !important;
+            /* And when std-anim uses background-image on an element */
+            background-position: 50% 10% !important;
+        }
     </style>
 </head>
 <body>
@@ -610,125 +981,194 @@
         <div class="corner-decoration bottom-left"></div>
         <div class="corner-decoration bottom-right"></div>
         
-        <h1 class="title">⚔️ Battle on the Plains ⚔️</h1>
+        <h1 class="title">
+            <img class="title-logo" src="src/assets/images/expeditionandgames/plainsRPG/dsrpglogo.webp" alt="DS RPG" />
+        </h1>
         
         <div class="party-selection" id="partySelection">
-            <h2 style="text-align: center; margin-bottom: 20px;">Choose Your Party of 3 Heroes</h2>
-            <p style="text-align: center; color: #6B7280;">Select 3 different heroes to form your party</p>
+            <h2 style="text-align: center; margin-bottom: 14px;">Character Select</h2>
+            <!-- Pre-battle music controls to avoid hiccups -->
+            <div class="music-controls" style="justify-content:center; margin: 10px auto 6px; max-width: 760px;">
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <button class="music-toggle" id="preMusicToggle" onclick="toggleMusic()">🎵 Music ON</button>
+                    <div style="display:inline-flex; align-items:center; gap:8px; background: rgba(30,25,10,0.5); padding:6px 10px; border-radius: 20px; border:1px solid var(--gold-dark);">
+                        <label for="preMasterVolume" style="font-weight:bold; color: var(--gold-light);">Vol</label>
+                        <input id="preMasterVolume" type="range" min="0" max="100" value="50" step="1" aria-label="Master Volume" title="Master Volume" style="width:120px;" />
+                    </div>
+                </div>
+            </div>
             
             <div class="character-grid">
                 <div class="character-card" data-class="archer">
                     <div class="selected-indicator">✓</div>
-                    <img src="src/assets/images/expeditionandgames/plainsRPG/characterfaces/archerface.png" alt="Archer Face" class="character-image" onerror="this.style.display='none'">
+                    <img src="src/assets/images/expeditionandgames/plainsRPG/characterfaces/archerface.png" alt="Archer Face" class="character-image">
                     <div class="character-name">🏹 Archer</div>
                     <div class="character-description">
-                        <strong>Mark Target:</strong> Increases crit chance on marked enemy<br>
-                        <strong>Wind Arrow:</strong> Wind elemental attack<br>
-                        <strong>Role:</strong> Physical DPS with utility
+                        <strong>Ultimate:</strong> Arrow Rain — 2 turns of AOE volley<br>
+                        <strong>Element:</strong> <span style="color:#06b6d4; font-weight:700;">Wind</span> • <strong>Role:</strong> Physical DPS + setup<br>
+                        <strong>Aimed Shot:</strong> Basic physical shot<br>
+                        <strong>Mark Target:</strong> Mark a foe to greatly raise crit chance<br>
+                        <strong>Wind Arrow:</strong> Wind elemental damage
                     </div>
                 </div>
                 
                 <div class="character-card" data-class="cleric">
                     <div class="selected-indicator">✓</div>
-                    <img src="src/assets/images/expeditionandgames/plainsRPG/characterfaces/clericface.png" alt="Cleric Face" class="character-image" onerror="this.style.display='none'">
+                    <img src="src/assets/images/expeditionandgames/plainsRPG/characterfaces/clericface.png" alt="Cleric Face" class="character-image">
                     <div class="character-name">✨ Cleric</div>
                     <div class="character-description">
-                        <strong>Heal:</strong> Restore ally HP<br>
-                        <strong>Holy Light:</strong> Light elemental damage<br>
-                        <strong>Role:</strong> Healer and support
+                        <strong>Ultimate:</strong> Grand Intervention — party heal + holy AOE<br>
+                        <strong>Element:</strong> <span style="color:#fbbf24; font-weight:700;">Light</span> • <strong>Role:</strong> Healer/support<br>
+                        <strong>Sacred Strike:</strong> Basic light strike<br>
+                        <strong>Heal:</strong> Restore a large amount of HP to one ally<br>
+                        <strong>Party Heal:</strong> Heal all allies moderately<br>
+                        <strong>Holy Light:</strong> Light elemental damage
                     </div>
                 </div>
                 
                 <div class="character-card" data-class="monk">
                     <div class="selected-indicator">✓</div>
-                    <img src="src/assets/images/expeditionandgames/plainsRPG/characterfaces/monkface.png" alt="Monk Face" class="character-image" onerror="this.style.display='none'">
+                    <img src="src/assets/images/expeditionandgames/plainsRPG/characterfaces/monkface.png" alt="Monk Face" class="character-image">
                     <div class="character-name">👊 Monk</div>
                     <div class="character-description">
-                        <strong>Flurry:</strong> 2-4 hits per attack<br>
-                        <strong>Chi Boost:</strong> Increase next turn damage<br>
-                        <strong>Earth Slam:</strong> Earth elemental attack
+                        <strong>Ultimate:</strong> Tempest Flurry — empowered sustained strikes<br>
+                        <strong>Element:</strong> <span style="color:#8b5e34; font-weight:700;">Earth</span> • <strong>Role:</strong> Bruiser/armor break<br>
+                        <strong>Flurry of Blows:</strong> 2–4 hits; breaks armor (lower defense)<br>
+                        <strong>Chi Boost:</strong> Next attack deals double damage<br>
+                        <strong>Earth Slam:</strong> Earth elemental strike
                     </div>
                 </div>
                 
                 <div class="character-card" data-class="bard">
                     <div class="selected-indicator">✓</div>
-                    <img src="src/assets/images/expeditionandgames/plainsRPG/characterfaces/bardface.png" alt="Bard Face" class="character-image" onerror="this.style.display='none'">
+                    <img src="src/assets/images/expeditionandgames/plainsRPG/characterfaces/bardface.png" alt="Bard Face" class="character-image">
                     <div class="character-name">🎵 Bard</div>
                     <div class="character-description">
-                        <strong>Song of Healing:</strong> Lesser heal<br>
-                        <strong>MP Melody:</strong> Restore ally MP<br>
-                        <strong>Water Wave:</strong> Water elemental attack
+                        <strong>Ultimate:</strong> Song of Renewal — party heal and empower<br>
+                        <strong>Element:</strong> <span style="color:#3b82f6; font-weight:700;">Water</span> • <strong>Role:</strong> Support/heals/MP<br>
+                        <strong>Melodic Strike:</strong> Water‑infused basic attack<br>
+                        <strong>Song of Healing:</strong> Heal a single ally
+                        <br><strong>MP Melody:</strong> Restore an ally’s MP
+                        <br><strong>Water Wave:</strong> AOE water damage
                     </div>
                 </div>
                 
                 <div class="character-card" data-class="sorceress">
                     <div class="selected-indicator">✓</div>
-                    <img src="src/assets/images/expeditionandgames/plainsRPG/characterfaces/sorceressface.png" alt="Sorceress Face" class="character-image" onerror="this.style.display='none'">
+                    <img src="src/assets/images/expeditionandgames/plainsRPG/characterfaces/sorceressface.png" alt="Sorceress Face" class="character-image">
                     <div class="character-name">🔮 Sorceress</div>
                     <div class="character-description">
-                        <strong>Lightning Bolt:</strong> Lightning damage<br>
-                        <strong>Water Torrent:</strong> Water damage<br>
-                        <strong>Earth Spike:</strong> Earth damage<br>
-                        <strong>Role:</strong> Elemental specialist
+                        <strong>Ultimate:</strong> Meteor — heavy radiant AOE<br>
+                        <strong>Element:</strong> <span style="color:#fbbf24; font-weight:700;">Light</span> • <strong>Role:</strong> Elemental DPS<br>
+                        <strong>Magic Missile:</strong> Basic light magic attack<br>
+                        <strong>Lightning Bolt:</strong> Lightning damage
+                        <br><strong>Water Torrent:</strong> Water damage
+                        <br><strong>Earth Spike:</strong> AOE earth damage
                     </div>
                 </div>
                 
                 <div class="character-card" data-class="ninja">
                     <div class="selected-indicator">✓</div>
-                    <img src="src/assets/images/expeditionandgames/plainsRPG/characterfaces/ninjaface.png" alt="Ninja Face" class="character-image" onerror="this.style.display='none'">
-                    <div class="character-name">🥷 Ninja</div>
+                    <img src="src/assets/images/expeditionandgames/plainsRPG/characterfaces/ninjaface.png" alt="Ninja Face" class="character-image">
+                    <div class="character-name">🗡️ Ninja</div>
                     <div class="character-description">
-                        <strong>Hide:</strong> Become transparent, 75% crit next attack<br>
-                        <strong>Sneak Attack:</strong> High damage on crit<br>
-                        <strong>Fire Shuriken:</strong> Fire elemental attack
+                        <strong>Ultimate:</strong> Assassination — lethal strike after setup<br>
+                        <strong>Element:</strong> <span style="color:#ef4444; font-weight:700;">Fire</span> • <strong>Role:</strong> Burst assassin<br>
+                        <strong>Strike:</strong> Basic physical attack<br>
+                        <strong>Hide:</strong> Become hidden, +defense, 75% crit chance next hit
+                        <br><strong>Fire Shuriken:</strong> AOE fire damage
+                    </div>
+                </div>
+
+                <div class="character-card" data-class="purrchant">
+                    <div class="selected-indicator">✓</div>
+                    <img src="src/assets/images/expeditionandgames/plainsRPG/characterfaces/purrchantface.png" alt="Purrchant Face" class="character-image">
+                    <div class="character-name">😺 Purrchant</div>
+                    <div class="character-description">
+                        <strong>Ultimate:</strong> Flash Sale! — non‑revival items don’t decrease
+                        <br><strong>Element:</strong> <span style="color:#9CA3AF; font-weight:700;">Physical</span> • <strong>Role:</strong> Item support
+                        <strong>Bap:</strong> Basic smack
+                        <br><strong>Catnap:</strong> Heal self 50%
+                        <br><strong>Re‑Stock!:</strong> Spend 75% MP to restock items (+1 Revive)
+                        <br><strong>Passive — Save Me!:</strong> 50% chance to redirect ally damage
                     </div>
                 </div>
             </div>
             
             <div class="selection-status">
-                <p id="selectionStatus">Selected: <span id="selectedCount">0</span>/3</p>
-                <button class="start-btn" id="startGame" disabled>Start Battle!</button>
+                <button class="start-btn" id="startGame" disabled>Start Battle! (0/4 selected)</button>
             </div>
         </div>
 
         <div class="battle-screen" id="battleScreen">
             <div class="battlefield-background" id="battlefieldBackground"></div>
             <div class="music-controls">
-                <button class="music-toggle" id="musicToggle" onclick="toggleMusic()">
-                    🎵 Music ON
-                </button>
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <button class="music-toggle" id="musicToggle" onclick="toggleMusic()">
+                        🎵 Music ON
+                    </button>
+                    <div style="display:inline-flex; align-items:center; gap:8px; background: rgba(30,25,10,0.5); padding:6px 10px; border-radius: 20px; border:1px solid var(--gold-dark);">
+                        <label for="masterVolume" style="font-weight:bold; color: var(--gold-light);">Vol</label>
+                        <input id="masterVolume" type="range" min="0" max="100" value="50" step="1" aria-label="Master Volume" title="Master Volume" style="width:120px;" />
+                    </div>
+                </div>
+                <div id="battleMessage" style="display:block; background: rgba(30,25,10,0.9); padding:10px 14px; border-radius: 10px; border:1px solid var(--gold); color: var(--gold-light); font-weight:900; font-size:1.15rem; max-width: 50vw; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); align-self: center; text-align: center;"></div>
             </div>
-            
+
             <div class="battle-header">
                 <div class="round-info" id="roundInfo">Round 1</div>
                 <div id="bossIndicator" class="boss-indicator hidden">
                     🏆 BOSS BATTLE! 🏆
                 </div>
             </div>
-            
+
+            <!-- Overlay action commands above battlefield and character panels -->
+
             <div class="battle-field-container" id="battleFieldContainer">
+                <!-- Full-screen attack overlay (images slide in here) -->
+                <div id="fsAttackOverlay" class="fs-attack-overlay hidden"></div>
                 <div class="party-sprites" id="partySprites"></div>
                 <div class="enemy-sprites" id="enemySprites"></div>
+                
+                <!-- Combat menu overlay positioned in bottom left of battlefield area -->
+                <div id="battleActionsOverlay" style="position: absolute; left: 10px; bottom: 10px; z-index: 99999; padding: 8px 6px; pointer-events: auto; background: rgba(46,38,20,0.95); border-radius: 6px; border: 1px solid var(--gold); box-shadow: 0 0 12px 3px rgba(0,0,0,0.6); min-width: 120px; min-height: 60px; font-size: 0.75rem; width: 340px;">
+                    <div style="color: white; font-weight: bold; margin-bottom: 6px; font-size: 0.7rem;">COMBAT</div>
+                    <div id="currentPlayerActions" class="action-buttons" style="gap: 6px;">
+                        <button class="action-btn" style="padding: 8px 10px; font-size: 0.75rem;">Attack</button>
+                        <button class="action-btn" style="padding: 8px 10px; font-size: 0.75rem;">Skill</button>
+                        <button class="action-btn" style="padding: 8px 10px; font-size: 0.75rem;">Defend</button>
+                        <button class="action-btn" style="padding: 8px 10px; font-size: 0.75rem;">Guard</button>
+                    </div>
+                    <div style="margin-top: 4px;">
+                        <div id="currentPlayerInventory" class="inventory-section" style="gap: 4px;">
+                            <button class="item-btn" style="padding: 6px 8px; font-size: 0.7rem;">Half Heal</button>
+                            <button class="item-btn" style="padding: 6px 8px; font-size: 0.7rem;">Full Heal</button>
+                            <button class="item-btn" style="padding: 6px 8px; font-size: 0.7rem;">MP Restore</button>
+                            <button class="item-btn" style="padding: 6px 8px; font-size: 0.7rem;">Revive</button>
+                        </div>
+                    </div>
+                </div>
             </div>
             
             <div class="battle-layout">
                 <div class="party-section">
-                    <h3 style="margin-top: 0; color: #059669;">Character 1</h3>
                     <div id="partyMember0"></div>
                 </div>
                 
                 <div class="party-section">
-                    <h3 style="margin-top: 0; color: #059669;">Character 2</h3>
                     <div id="partyMember1"></div>
                 </div>
                 
                 <div class="party-section">
-                    <h3 style="margin-top: 0; color: #059669;">Character 3</h3>
                     <div id="partyMember2"></div>
+                </div>
+                
+                <div class="party-section">
+                    <div id="partyMember3"></div>
                 </div>
             </div>
             
-            <div class="log-section" id="battleLog"></div>
+            <div class="log-section" id="battleLog" style="display:none"></div>
         </div>
 
         <div class="level-up-notification" id="levelUpNotification">
@@ -738,34 +1178,119 @@
         </div>
     </div>
 
+    <script src="src/data/RPGmonsters.js"></script>
     <script>
-        // Game Data
+            // Game Data
+
+        // Monster roster (loaded from src/data/RPGmonsters.js)
+        // RPGmonsters.js assigns window.monsters/window.bossMonsters.
+        // Alias them here so this file can safely reference `monsters`/`bossMonsters`.
+        const monsters = Array.isArray(window.monsters) ? window.monsters : [];
+        const bossMonsters = Array.isArray(window.bossMonsters) ? window.bossMonsters : [];
+        const __monsterDataLoaded = monsters.length > 0 && bossMonsters.length > 0;
+
+        function showMonsterDataLoadError() {
+            const msg = 'Monster data failed to load. Expected src/data/RPGmonsters.js to define window.monsters and window.bossMonsters.';
+            console.error(msg, { monsters: window.monsters, bossMonsters: window.bossMonsters });
+            try { addToLog(msg); } catch (_) {}
+            try { alert(msg); } catch (_) {}
+        }
+
+                 // Global animation barrier so enemy actions wait until player visuals finish
+        let __lastAnimEndsAt = 0;
+        function markAnim(durationMs) {
+            const endAt = Date.now() + Math.max(0, durationMs || 0);
+            __lastAnimEndsAt = Math.max(__lastAnimEndsAt, endAt);
+        }
+        function waitForAnims() {
+            const wait = Math.max(0, __lastAnimEndsAt - Date.now());
+            __lastAnimEndsAt = 0; // reset for next phase
+            return new Promise(resolve => setTimeout(resolve, wait));
+        }
+        // Preload special attack images (extendable)
+        const specialAttackImages = {
+            // Existing
+            dereStrike: 'src/assets/images/expeditionandgames/plainsRPG/abilities/derestrike.webp',
+            // Archer
+            archer_windarrow: 'src/assets/images/expeditionandgames/plainsRPG/abilities/windarrow.webp',
+            archer_attack: 'src/assets/images/expeditionandgames/plainsRPG/abilities/archerattack.webp',
+            archer_defend: 'src/assets/images/expeditionandgames/plainsRPG/abilities/archerdefend.webp',
+            archer_mark: 'src/assets/images/expeditionandgames/plainsRPG/abilities/archermark.webp',
+            archer_arrowrain: 'src/assets/images/expeditionandgames/plainsRPG/abilities/arrowrain.webp',
+            // Cleric
+            cleric_holylight: 'src/assets/images/expeditionandgames/plainsRPG/abilities/holylight.webp',
+            cleric_partyheal: 'src/assets/images/expeditionandgames/plainsRPG/abilities/partyheal.webp',
+            cleric_grandintervention: 'src/assets/images/expeditionandgames/plainsRPG/abilities/grandintervention.webp',
+            cleric_heal: 'src/assets/images/expeditionandgames/plainsRPG/abilities/heal.webp',
+            // Monk
+            monk_tempestflurry: 'src/assets/images/expeditionandgames/plainsRPG/abilities/tempestflurry.webp',
+            monk_chiboost: 'src/assets/images/expeditionandgames/plainsRPG/abilities/chiboost.webp',
+            monk_earthslam: 'src/assets/images/expeditionandgames/plainsRPG/abilities/earthslam.webp',
+            monk_flurry: 'src/assets/images/expeditionandgames/plainsRPG/abilities/flurry.webp',
+            // Sorceress
+            sorc_tidalwave: 'src/assets/images/expeditionandgames/plainsRPG/abilities/tidalwave.webp',
+            sorc_alizabolt: 'src/assets/images/expeditionandgames/plainsRPG/abilities/alizabolt.webp',
+            sorc_earthspike: 'src/assets/images/expeditionandgames/plainsRPG/abilities/earthspike.webp',
+            sorc_magicmissile: 'src/assets/images/expeditionandgames/plainsRPG/abilities/magicmissile.webp',
+            sorc_meteor: 'src/assets/images/expeditionandgames/plainsRPG/abilities/meteor.webp',
+            // Bard
+            bard_shinnywave: 'src/assets/images/expeditionandgames/plainsRPG/abilities/shinnywave.webp',
+            bard_melodicstrike: 'src/assets/images/expeditionandgames/plainsRPG/abilities/melodicstrike.webp',
+            bard_mpheal: 'src/assets/images/expeditionandgames/plainsRPG/abilities/mpheal.webp',
+            bard_shinnyattack: 'src/assets/images/expeditionandgames/plainsRPG/abilities/shinnyattack.webp',
+            bard_shinnyultimate: 'src/assets/images/expeditionandgames/plainsRPG/abilities/shinnyultimate.webp',
+            // Ninja
+            ninja_sneakattack: 'src/assets/images/expeditionandgames/plainsRPG/abilities/sneakattack.webp',
+            ninja_assassinate: 'src/assets/images/expeditionandgames/plainsRPG/abilities/assassinate.webp',
+            ninja_fireshuriken: 'src/assets/images/expeditionandgames/plainsRPG/abilities/fireshuriken.webp',
+            ninja_hide: 'src/assets/images/expeditionandgames/plainsRPG/abilities/hide.webp',
+            ninja_kagurattac: 'src/assets/images/expeditionandgames/plainsRPG/abilities/kagurattac.webp',
+            // Purrchant
+            purr_restock: 'src/assets/images/expeditionandgames/plainsRPG/abilities/restock.webp',
+            purr_bap: 'src/assets/images/expeditionandgames/plainsRPG/abilities/bap.webp',
+            purr_catnap: 'src/assets/images/expeditionandgames/plainsRPG/abilities/catnap.webp',
+            purr_flashsale: 'src/assets/images/expeditionandgames/plainsRPG/abilities/flashsale.webp'
+        };
+        const preloadedImages = {};
+        for (const [key, url] of Object.entries(specialAttackImages)) {
+            const img = new Image();
+            img.src = url;
+            preloadedImages[key] = img;
+        }
+
+        // Animation timing constants (ms)
+        const DERE_ATTACK_ANIM = {
+            slideIn: 600,
+            hold: 1200, // increased so total >= 2500ms
+            fadeOut: 700,
+        };
+        Object.defineProperty(DERE_ATTACK_ANIM, 'total', { get() { return this.slideIn + this.hold + this.fadeOut; } });
         const battlefields = [
-            'src/assets/images/expeditionandgames/plainsRPG/battlefields/plainsbattlefield (1).jpg',
-            'src/assets/images/expeditionandgames/plainsRPG/battlefields/plainsbattlefield (2).jpg',
-            'src/assets/images/expeditionandgames/plainsRPG/battlefields/plainsbattlefield (3).jpg',
-            'src/assets/images/expeditionandgames/plainsRPG/battlefields/plainsbattlefield (4).jpg',
-            'src/assets/images/expeditionandgames/plainsRPG/battlefields/plainsbattlefield (5).jpg',
-            'src/assets/images/expeditionandgames/plainsRPG/battlefields/plainsbattlefield (6).jpg'
-        ];
+    'src/assets/images/expeditionandgames/plainsRPG/battlefields/plainsbattlefield (1).jpg',
+    'src/assets/images/expeditionandgames/plainsRPG/battlefields/plainsbattlefield (2).jpg',
+    'src/assets/images/expeditionandgames/plainsRPG/battlefields/plainsbattlefield (3).jpg',
+    'src/assets/images/expeditionandgames/plainsRPG/battlefields/plainsbattlefield (4).jpg',
+    'src/assets/images/expeditionandgames/plainsRPG/battlefields/plainsbattlefield (5).jpg',
+    'src/assets/images/expeditionandgames/plainsRPG/battlefields/plainsbattlefield (6).jpg'
+];
 
         const battleMusic = [
-            'src/assets/audio/RPG Music/Against_the_Shadows.mp3',
-            'src/assets/audio/RPG Music/Bravery_Rises.mp3',
-            'src/assets/audio/RPG Music/Darkness Unleashed.mp3',
-            'src/assets/audio/RPG Music/I Can Win!.mp3',
-            'src/assets/audio/RPG Music/Stand Up or Stand Down.mp3',
-            'src/assets/audio/RPG Music/The Struggle Never Ends.mp3',
-            'src/assets/audio/RPG Music/Unyielding Shadows.mp3',
-            'src/assets/audio/RPG Music/Us_Against.mp3'
+            'https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/against-the-shadows.mp3',
+            'https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/bravery-rises.mp3',
+            'https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/darkness-unleashed.mp3',
+            'https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/i-can-win.mp3',
+            'https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/stand-up-or-stand-down.mp3',
+            'https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/the-struggle-never-ends.mp3',
+            'https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/unyielding-shadows.mp3',
+            'https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/us-against.mp3'
         ];
 
         const bossMusic = [
-            'src/assets/audio/RPG Music/(BOSS)Face Your Foes; Face Your Fears.mp3',
-            'src/assets/audio/RPG Music/(BOSS)ShadowDuel.mp3',
-            'src/assets/audio/RPG Music/(BOSS)Sound! The War Horn Blares.mp3',
-            'src/assets/audio/RPG Music/(BOSS)Stand Ready for My Arrival, Fools.mp3',
-            'src/assets/audio/RPG Music/(BOSS)Unsettling Confrontation.mp3'
+            'https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/bossface-your-foes-face-your-fears.mp3',
+            'https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/bossshadowduel.mp3',
+            'https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/bosssound-the-war-horn-blares.mp3',
+            'https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/bossstand-ready-for-my-arrival-fools.mp3',
+            'https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/07/bossunsettling-confrontation.mp3'
         ];
 
         const characterClasses = {
@@ -778,10 +1303,11 @@
                 attack: 45,
                 defense: 30,
                 element: "wind",
+                ultimate: { name: "Arrow Rain" },
                 skills: {
                     attack: { name: "Aimed Shot", cost: 0 },
-                    mark: { name: "Mark Target", cost: 15, description: "Mark enemy for increased crit chance" },
-                    windArrow: { name: "Wind Arrow", cost: 20, element: "wind", description: "Wind elemental attack" }
+                    mark: { name: "Mark Target", cost: 8, description: "Mark enemy for increased crit chance" }, // Halved from 15
+                    windArrow: { name: "Wind Arrow", cost: 10, element: "wind", description: "Wind elemental attack" } // Halved from 20
                 }
             },
             cleric: {
@@ -793,10 +1319,12 @@
                 attack: 35,
                 defense: 35,
                 element: "light",
+                ultimate: { name: "Grand Intervention" },
                 skills: {
                     attack: { name: "Sacred Strike", cost: 0 },
-                    heal: { name: "Heal", cost: 25, description: "Restore ally HP" },
-                    holyLight: { name: "Holy Light", cost: 30, element: "light", description: "Light elemental damage" }
+                    heal: { name: "Heal", cost: 13, description: "Restore ally HP" }, // Halved from 25
+                    partyHeal: { name: "Party Heal", cost: 20, description: "Heal all party members" }, // New skill
+                    holyLight: { name: "Holy Light", cost: 15, element: "light", description: "Light elemental damage" } // Halved from 30
                 }
             },
             monk: {
@@ -808,10 +1336,11 @@
                 attack: 40,
                 defense: 40,
                 element: "earth",
+                ultimate: { name: "Tempest Flurry" },
                 skills: {
-                    attack: { name: "Flurry of Blows", cost: 0, multiHit: true },
-                    chiBoost: { name: "Chi Boost", cost: 20, description: "Boost next attack damage" },
-                    earthSlam: { name: "Earth Slam", cost: 25, element: "earth", description: "Earth elemental attack" }
+                    attack: { name: "Flurry of Blows", cost: 0, multiHit: true, armorBreak: true }, // Added armor break
+                    chiBoost: { name: "Chi Boost", cost: 10, description: "Boost next attack damage" }, // Halved from 20
+                    earthSlam: { name: "Earth Slam", cost: 13, element: "earth", description: "Earth elemental attack" } // Halved from 25
                 }
             },
             bard: {
@@ -823,11 +1352,12 @@
                 attack: 30,
                 defense: 25,
                 element: "water",
+                ultimate: { name: "Song of Renewal" },
                 skills: {
-                    attack: { name: "Melodic Strike", cost: 0 },
-                    songHeal: { name: "Song of Healing", cost: 20, description: "Lesser heal" },
+                    attack: { name: "Melodic Strike", cost: 0, element: "water" }, // Added water element
+                    songHeal: { name: "Song of Healing", cost: 10, description: "Lesser heal" }, // Halved from 20
                     mpMelody: { name: "MP Melody", cost: 0, description: "Restore ally MP" },
-                    waterWave: { name: "Water Wave", cost: 25, element: "water", description: "Water elemental attack" }
+                    waterWave: { name: "Water Wave", cost: 13, element: "water", description: "Water elemental attack" } // Halved from 25
                 }
             },
             sorceress: {
@@ -838,12 +1368,13 @@
                 mp: 100,
                 attack: 50,
                 defense: 20,
-                element: "lightning",
+                element: "light", // Changed from lightning to light/radiant
+                ultimate: { name: "Meteor" },
                 skills: {
-                    attack: { name: "Magic Missile", cost: 0 },
-                    lightning: { name: "Lightning Bolt", cost: 30, element: "lightning", description: "Lightning damage" },
-                    water: { name: "Water Torrent", cost: 25, element: "water", description: "Water damage" },
-                    earth: { name: "Earth Spike", cost: 25, element: "earth", description: "Earth damage" }
+                    attack: { name: "Magic Missile", cost: 0, element: "light", magical: true }, // Added light element and magical flag
+                    lightning: { name: "Lightning Bolt", cost: 15, element: "lightning", description: "Lightning damage" }, // Halved from 30
+                    water: { name: "Water Torrent", cost: 13, element: "water", description: "Water damage" }, // Halved from 25
+                    earth: { name: "Earth Spike", cost: 13, element: "earth", description: "Earth damage" } // Halved from 25
                 }
             },
             ninja: {
@@ -855,241 +1386,40 @@
                 attack: 50,
                 defense: 25,
                 element: "fire",
+                ultimate: { name: "Assassination" },
                 skills: {
                     attack: { name: "Strike", cost: 0 },
-                    hide: { name: "Hide", cost: 15, description: "Become transparent, 75% crit chance next attack" },
-                    fireShuriken: { name: "Fire Shuriken", cost: 20, element: "fire", description: "Fire elemental attack" }
+                    hide: { name: "Hide", cost: 8, description: "Become transparent, 75% crit chance next attack + defense boost" }, // Halved from 15, added def boost
+                    fireShuriken: { name: "Fire Shuriken", cost: 10, element: "fire", description: "Fire elemental attack" } // Halved from 20
                 }
+            },
+            purrchant: {
+                name: "Cuppy",
+                displayName: "Cuppy (Purrchant)",
+                icon: "🐱",
+                hp: 70,
+                mp: 60,
+                attack: 25,
+                defense: 35,
+                element: "physical",
+                ultimate: { name: "Flash Sale!" },
+                skills: {
+                    attack: { name: "Bap", cost: 0 },
+                    catnap: { name: "Catnap", cost: 0, description: "Heal self 50%" },
+                    restock: { name: "Re-Stock!", cost: 0, description: "Restock items (75% MP)" }
+                },
+                passive: { name: "Save Me!", description: "50% chance to redirect damage from an ally to Purrchant." }
             }
         };
 
-        // Monster data from bestiary
-        const monsters = [
-            // CR 0-1 (Rounds 1-3)
-            {
-                name: "Lost Plushie",
-                hp: 8,
-                attack: 1,
-                defense: 10,
-                cr: 0.125,
-                weaknesses: ["fire"],
-                image: "https://ik.imagekit.io/owlcan/Monsters/lostplushie1.png",
-                attacks: [{ name: "Sad Cuddle", damage: 1 }]
-            },
-            {
-                name: "Darkling-Caller",
-                hp: 8,
-                attack: 8,
-                defense: 12,
-                cr: 0.25,
-                weaknesses: ["light"],
-                image: "https://ik.imagekit.io/owlcan/Monsters/Darkling%20Caller.png",
-                attacks: [{ name: "Bite", damage: 4 }, { name: "Piercing Call", damage: 6 }]
-            },
-            {
-                name: "Darkling-Yowler",
-                hp: 24,
-                attack: 10,
-                defense: 12,
-                cr: 0.5,
-                weaknesses: ["light"],
-                image: "https://ik.imagekit.io/owlcan/Monsters/Darkling%20Yowler.png",
-                attacks: [{ name: "Bite", damage: 5 }, { name: "Ordure Wail", damage: 8 }]
-            },
-            {
-                name: "Darkling Bellowbelly Cubling",
-                hp: 21,
-                attack: 12,
-                defense: 12,
-                cr: 0.5,
-                weaknesses: ["light"],
-                image: "https://ik.imagekit.io/owlcan/Monsters/Darkling%20Cubling.png",
-                attacks: [{ name: "Bite", damage: 6 }, { name: "Swarm Call", damage: 4 }]
-            },
-            {
-                name: "Darkling Weed-Tangler",
-                hp: 36,
-                attack: 15,
-                defense: 13,
-                cr: 0.5,
-                weaknesses: ["fire"],
-                image: "https://ik.imagekit.io/owlcan/Monsters/weedtangler.png",
-                attacks: [{ name: "Vine Whip", damage: 6 }, { name: "Entangle", damage: 8 }]
-            },
-            {
-                name: "Darkling-Slurper",
-                hp: 28,
-                attack: 18,
-                defense: 13,
-                cr: 0.5,
-                weaknesses: ["light"],
-                image: "https://ik.imagekit.io/owlcan/Monsters/Darkling%20Slurper.png",
-                attacks: [{ name: "Grapple Bite", damage: 8 }, { name: "Draining Slurp", damage: 6 }]
-            },
-            {
-                name: "Darkling Gloom-Newt",
-                hp: 45,
-                attack: 16,
-                defense: 13,
-                cr: 0.75,
-                weaknesses: ["light"],
-                image: "https://ik.imagekit.io/owlcan/Monsters/gloomnewt1.png",
-                attacks: [{ name: "Toxic Bite", damage: 7 }, { name: "Gloom Spit", damage: 9 }]
-            },
-            {
-                name: "Darkling-Lurker",
-                hp: 60,
-                attack: 22,
-                defense: 14,
-                cr: 1,
-                weaknesses: ["light"],
-                image: "https://ik.imagekit.io/owlcan/Monsters/Darkling%20Lurker.png",
-                attacks: [{ name: "Claw Slash", damage: 9 }, { name: "Pounce", damage: 7 }, { name: "Shadow Strike", damage: 12 }]
-            },
-            
-            // CR 2-4 (Rounds 4-7)
-            {
-                name: "Darkforme Overwatch",
-                hp: 80,
-                attack: 28,
-                defense: 13,
-                cr: 2,
-                weaknesses: ["light"],
-                image: "https://ik.imagekit.io/owlcan/Monsters/Darkforme-Overwatch.png",
-                attacks: [{ name: "Shadow Blast", damage: 10 }, { name: "Dark Command", damage: 15 }]
-            },
-            {
-                name: "Darkling Liquid Legion",
-                hp: 66,
-                attack: 25,
-                defense: 11,
-                cr: 2,
-                weaknesses: ["fire"],
-                image: "https://ik.imagekit.io/owlcan/Monsters/liquidlegion1.png",
-                attacks: [{ name: "Pseudopod", damage: 8 }, { name: "Engulf", damage: 12 }]
-            },
-            {
-                name: "Dark Dimension Changebot",
-                hp: 60,
-                attack: 30,
-                defense: 15,
-                cr: 2,
-                weaknesses: ["earth"],
-                image: "https://ik.imagekit.io/owlcan/Monsters/nannybot.jpg",
-                attacks: [{ name: "Pincer Claw", damage: 9 }, { name: "Forced Change", damage: 14 }]
-            },
-            {
-                name: "Darkforme Punishment Maid",
-                hp: 130,
-                attack: 35,
-                defense: 14,
-                cr: 4,
-                weaknesses: ["light"],
-                image: "https://ik.imagekit.io/owlcan/Monsters/darkpunishmentmaid.png",
-                attacks: [{ name: "Disciplinary Strike", damage: 15 }, { name: "Shadow Whip", damage: 22 }]
-            },
-            
-            // CR 5+ (Rounds 8-9 and bosses)
-            {
-                name: "Darkling Blood-Gorger",
-                hp: 168,
-                attack: 40,
-                defense: 16,
-                cr: 5,
-                weaknesses: ["light"],
-                image: "https://ik.imagekit.io/owlcan/Monsters/bloodgorger.png",
-                attacks: [{ name: "Blood Drain", damage: 18 }, { name: "Savage Bite", damage: 25 }]
-            },
-            {
-                name: "Darkling-Paralurker",
-                hp: 140,
-                attack: 45,
-                defense: 16,
-                cr: 5,
-                weaknesses: ["light"],
-                image: "https://ik.imagekit.io/owlcan/Monsters/weirdling-paralurker.png",
-                attacks: [{ name: "Paralyzing Bite", damage: 20 }, { name: "Shadow Claw", damage: 18 }, { name: "Dark Ambush", damage: 30 }]
-            },
-            {
-                name: "Sky-Darkener Nightveil",
-                hp: 85,
-                attack: 35,
-                defense: 17,
-                cr: 5,
-                weaknesses: ["radiant"],
-                image: "https://ik.imagekit.io/owlcan/Monsters/sky-darkener-nightveil.png ",
-                attacks: [{ name: "Taloned Strike", damage: 20 }, { name: "Swoop and Dive", damage: 25 }]
-            },
-            {
-                name: "Darkaconda",
-                hp: 102,
-                attack: 35,
-                defense: 16,
-                cr: 4,
-                weaknesses: ["radiant"],
-                image: "https://ik.imagekit.io/owlcan/Monsters/darkaconda.png",
-                attacks: [{ name: "Shadow Lunge", damage: 22 }, { name: "Crushing Coil", damage: 18 }]
-            },
-            {
-                name: "Darkforme Nightsipper",
-                hp: 120,
-                attack: 30,
-                defense: 13,
-                cr: 4,
-                weaknesses: ["radiant"],
-                image: "https://ik.imagekit.io/owlcan/Monsters/nightsipper.png",
-                attacks: [{ name: "Siphoning Bite", damage: 18 }, { name: "Brown-Note Screech", damage: 15 }]
-            }
-        ];
+    // Monster data moved to external src/data/RPGmonsters.js
+    // Use global arrays: monsters, bossMonsters
 
-        // Boss monsters (CR 5+)
-        const bossMonsters = [
-            {
-                name: "Night-Mare Shadowstorm",
-                hp: 250,
-                attack: 55,
-                defense: 19,
-                cr: 9,
-                weaknesses: ["light"],
-                image: "https://ik.imagekit.io/owlcan/Monsters/shadowstorm.png",
-                attacks: [
-                    { name: "Lance of Dusk", damage: 20 },
-                    { name: "Hoof Stomp", damage: 23 },
-                    { name: "Charging Trample", damage: 28 },
-                    { name: "Shadowy Tendrils", damage: 35 }
-                ]
-            },
-            {
-                name: "Dark Dimension Auditarch",
-                hp: 280,
-                attack: 60,
-                defense: 18,
-                cr: 7,
-                weaknesses: ["wind"],
-                image: "https://ik.imagekit.io/owlcan/Monsters/annapasted-image_bria.png",
-                attacks: [
-                    { name: "Empowered Saber", damage: 17 },
-                    { name: "Arcane Volley", damage: 25 },
-                    { name: "Commanding Presence", damage: 30 }
-                ]
-            },
-            {
-                name: "Shadow Slimepress",
-                hp: 320,
-                attack: 70,
-                defense: 15,
-                cr: 10,
-                weaknesses: ["fire"],
-                image: "https://ik.imagekit.io/owlcan/Monsters/slimepress.png",
-                attacks: [
-                    { name: "Pseudopod Lash", damage: 21 },
-                    { name: "Engulf", damage: 35 },
-                    { name: "Demanding Decree", damage: 40 }
-                ]
-            }
-        ];
+    // Global visual/balance settings
+    const BOSS_SIZE_MULTIPLIER = 1.35; // easy-to-tune boss sprite scale
+    const FIRST_LIQUID_LEGION_IS_BOSSY = true; // visually enlarge first Legion encounter
 
-        // Game State
+    // Game State
         let gameState = {
             selectedClasses: [],
             party: [],
@@ -1104,13 +1434,547 @@
                 revivalNanites: 2
             },
             currentMusic: null,
-            musicEnabled: true
+            musicEnabled: true,
+            selectedEnemyIndex: 0, // Index of currently selected enemy for targeting
+            selectedAllyIndex: 0, // Index of currently selected ally for item targeting
+            arrowRainTurns: 0, // Archer ultimate effect tracker
+            midGameBoostGranted: false, // One-time level-up after Round 5
+            firstLiquidLegionSeen: false // used for early visual bossing of Legion
         };
 
         // Audio Management
-        let currentAudio = null;
+    let currentAudio = null;
+    let masterVolume = Math.max(0, Math.min(1, parseFloat(localStorage.getItem('plains_master_volume') || '0.5')));
 
-        function playBattleMusic(isBoss = false) {
+        // Analytics: compute and log average monster attack damages (exclude Cubling)
+        function reportMonsterAverageDamages() {
+            try {
+                const all = [...monsters, ...bossMonsters];
+                const results = all
+                    .filter(m => !String(m.name).includes('Cubling'))
+                    .map(m => {
+                        const avg = (m.attacks && m.attacks.length)
+                            ? (m.attacks.reduce((s,a)=> s + (a.damage||0), 0) / m.attacks.length)
+                            : 0;
+                        return { name: m.name, avg: Number(avg.toFixed(2)) };
+                    });
+                console.log('[Monster Avg Damage]', results);
+                // Keep these analytics in console only to avoid spamming the on-screen message
+                // If needed, toggle a debug flag to surface these in the UI.
+            } catch (e) {
+                console.warn('Avg damage report failed', e);
+            }
+        }
+
+        // Visual Effects Functions
+        function showDamageNumber(damage, element, isCritical = false, isWeakness = false) {
+            const damageDiv = document.createElement('div');
+            damageDiv.className = 'damage-number';
+            if (isCritical) damageDiv.classList.add('critical');
+            if (isWeakness) damageDiv.classList.add('weakness');
+            damageDiv.textContent = `-${damage}`;
+            
+            // Position above the element
+            const rect = element.getBoundingClientRect();
+            const container = document.getElementById('battleFieldContainer');
+            const containerRect = container.getBoundingClientRect();
+            
+            damageDiv.style.left = `${rect.left - containerRect.left + rect.width / 2 - 20}px`;
+            damageDiv.style.top = `${rect.top - containerRect.top - 20}px`;
+            
+            container.appendChild(damageDiv);
+            
+            // Remove after animation
+            setTimeout(() => {
+                if (damageDiv.parentNode) {
+                    damageDiv.parentNode.removeChild(damageDiv);
+                }
+            }, 1000);
+        }
+
+        function showAbilityText(abilityName, playerName) {
+            const abilityDiv = document.createElement('div');
+            abilityDiv.className = 'ability-text';
+            abilityDiv.textContent = `${playerName} uses ${abilityName}!`;
+            
+            const container = document.getElementById('battleFieldContainer');
+            container.appendChild(abilityDiv);
+            
+            // Remove after animation
+            setTimeout(() => {
+                if (abilityDiv.parentNode) {
+                    abilityDiv.parentNode.removeChild(abilityDiv);
+                }
+            }, 2000);
+            // Account for ability text duration in the animation barrier
+            markAnim(2000);
+        }
+
+        function flashElement(element, color) {
+            if (!element) return;
+            // Default white flash
+            if (!color) {
+                element.classList.add('flash-animation');
+                setTimeout(() => { element.classList.remove('flash-animation'); }, 500);
+                return;
+            }
+            const cls = color === 'red' ? 'flash-red' : 'flash-yellow';
+            element.classList.add(cls);
+            setTimeout(() => { element.classList.remove(cls); }, 600);
+        }
+
+        function shakeElement(element) {
+            if (!element) return;
+            element.classList.add('shake');
+            setTimeout(() => element.classList.remove('shake'), 600);
+        }
+
+        function selectEnemy(index) {
+            gameState.selectedEnemyIndex = index;
+            updateEnemySelection();
+        }
+
+        function selectAlly(index) {
+            if (!gameState || !Array.isArray(gameState.party) || gameState.party.length === 0) return;
+            const safeIndex = Math.max(0, Math.min(index, gameState.party.length - 1));
+            gameState.selectedAllyIndex = safeIndex;
+            updateAllySelection();
+        }
+
+        function updateEnemySelection() {
+            const enemySprites = document.querySelectorAll('#enemySprites > div');
+            enemySprites.forEach((sprite, index) => {
+                sprite.classList.remove('enemy-selected');
+                if (index === gameState.selectedEnemyIndex) {
+                    sprite.classList.add('enemy-selected');
+                }
+            });
+        }
+
+        function updateAllySelection() {
+            const allySprites = document.querySelectorAll('#partySprites img');
+            allySprites.forEach((sprite, index) => {
+                sprite.style.outline = '';
+                sprite.style.boxShadow = '';
+                if (index === gameState.selectedAllyIndex) {
+                    sprite.style.outline = '3px solid var(--gold)';
+                    sprite.style.boxShadow = '0 0 14px rgba(218, 172, 23, 0.75)';
+                }
+            });
+        }
+
+        function getCurrentPlayerSafe() {
+            if (!gameState || !Array.isArray(gameState.party)) return null;
+            const idx = gameState.currentPlayerIndex;
+            if (typeof idx !== 'number' || idx < 0 || idx >= gameState.party.length) return null;
+            return gameState.party[idx] || null;
+        }
+
+        function isPlayerAbleToAct(player) {
+            const hp = Number(player?.currentHp);
+            return Number.isFinite(hp) && hp > 0;
+        }
+
+        function createMagicalEffect(element, spellType, playerElement, player) {
+            const container = document.getElementById('battleFieldContainer');
+            const containerRect = container.getBoundingClientRect();
+            const elementRect = element.getBoundingClientRect();
+            
+            // Calculate actual player position from their sprite
+            let playerX = containerRect.width * 0.2; // fallback position
+            let playerY = containerRect.height * 0.8; // fallback position
+            
+            if (player) {
+                const playerIndex = gameState.party.indexOf(player);
+                const partySprites = document.querySelectorAll('#partySprites img');
+                if (partySprites[playerIndex]) {
+                    const playerSpriteRect = partySprites[playerIndex].getBoundingClientRect();
+                    playerX = playerSpriteRect.left - containerRect.left + playerSpriteRect.width / 2;
+                    playerY = playerSpriteRect.top - containerRect.top + playerSpriteRect.height / 2;
+                }
+            }
+            
+            // Calculate target position
+            const targetX = elementRect.left - containerRect.left + elementRect.width / 2;
+            const targetY = elementRect.top - containerRect.top + elementRect.height / 2;
+            
+            if (spellType === 'orb') {
+                createMagicOrb(playerX, playerY, targetX, targetY, playerElement, container);
+            } else if (spellType === 'flash') {
+                createScreenFlash(playerElement);
+            } else if (spellType === 'physical') {
+                createPhysicalBurst(targetX, targetY, container);
+            }
+        }
+
+        function createMagicOrb(startX, startY, endX, endY, element, container) {
+            const orb = document.createElement('div');
+            orb.className = `magic-orb ${element}-orb`;
+            orb.style.left = `${startX}px`;
+            orb.style.top = `${startY}px`;
+            
+            container.appendChild(orb);
+            
+            // Animate orb to target
+            const deltaX = endX - startX;
+            const deltaY = endY - startY;
+            
+            orb.style.setProperty('--deltaX', `${deltaX}px`);
+            orb.style.setProperty('--deltaY', `${deltaY}px`);
+            
+            // Update animation to move to target
+            orb.style.animation = 'none';
+            orb.offsetHeight; // Force reflow
+            orb.style.animation = 'orbMove 0.8s ease-out forwards';
+            
+            // Add dynamic keyframe
+            const style = document.createElement('style');
+            style.textContent = `
+            @keyframes orbShoot {
+                    0% { transform: translate(0, 0) scale(0.5); opacity: 1; }
+                    70% { transform: translate(${deltaX}px, ${deltaY}px) scale(1); opacity: 1; }
+                    100% { transform: translate(${deltaX}px, ${deltaY}px) scale(1.2); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            // Create particle burst on impact
+            setTimeout(() => {
+                createParticleBurst(endX, endY, element, container);
+                orb.remove();
+                style.remove();
+            }, 800);
+        }
+
+        function createParticleBurst(x, y, element, container) {
+            const burst = document.createElement('div');
+            burst.className = 'particle-burst';
+            burst.style.left = `${x - 50}px`;
+            burst.style.top = `${y - 50}px`;
+            
+            // Create 12 particles
+            for (let i = 0; i < 12; i++) {
+                const particle = document.createElement('div');
+                particle.className = `particle ${element}-particle`;
+                
+                const angle = (i * 30) * Math.PI / 180; // 30 degrees apart
+                const distance = 30 + Math.random() * 20; // Random distance
+                const x_offset = Math.cos(angle) * distance;
+                const y_offset = Math.sin(angle) * distance;
+                
+                particle.style.left = `${50 + x_offset}px`;
+                particle.style.top = `${50 + y_offset}px`;
+                
+                // Random animation delay
+                particle.style.animationDelay = `${Math.random() * 0.2}s`;
+                
+                burst.appendChild(particle);
+            }
+            
+            container.appendChild(burst);
+            
+            // Remove after animation
+            setTimeout(() => {
+                burst.remove();
+            }, 1200);
+        }
+
+        function createPhysicalBurst(x, y, container) {
+            const burst = document.createElement('div');
+            burst.className = 'particle-burst';
+            burst.style.left = `${x - 50}px`;
+            burst.style.top = `${y - 50}px`;
+            
+            // Create 8 white particles for physical attacks
+            for (let i = 0; i < 8; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle physical-particle';
+                
+                const angle = (i * 45) * Math.PI / 180; // 45 degrees apart
+                const distance = 20 + Math.random() * 15;
+                const x_offset = Math.cos(angle) * distance;
+                const y_offset = Math.sin(angle) * distance;
+                
+                particle.style.left = `${50 + x_offset}px`;
+                particle.style.top = `${50 + y_offset}px`;
+                particle.style.animationDelay = `${Math.random() * 0.1}s`;
+                
+                burst.appendChild(particle);
+            }
+            
+            container.appendChild(burst);
+            
+            setTimeout(() => {
+                burst.remove();
+            }, 1000);
+        }
+
+        function createScreenFlash(element) {
+            // Create darkening overlay first
+            const darken = document.createElement('div');
+            darken.className = 'screen-darken';
+            document.body.appendChild(darken);
+            
+            // Create colored flash
+            setTimeout(() => {
+                const flash = document.createElement('div');
+                flash.className = `screen-flash ${element}-flash`;
+                document.body.appendChild(flash);
+                
+                // Remove flash after animation
+                setTimeout(() => {
+                    flash.remove();
+                }, 1000);
+            }, 300); // Delay flash slightly after darkening
+            
+            // Remove darkening after animation
+            setTimeout(() => {
+                darken.remove();
+            }, 1200);
+        }
+
+        // Plays a full-screen attack overlay animation.
+        // config = { imageUrl, timings: { slideIn, hold, fadeOut } }
+        function playFsAttackOverlay(config) {
+            const overlay = document.getElementById('fsAttackOverlay');
+            if (!overlay) return Promise.resolve();
+
+            const { imageUrl, timings } = config;
+            const slideIn = timings.slideIn ?? 600;
+            const hold = timings.hold ?? 800;
+            const fadeOut = timings.fadeOut ?? 700;
+
+            // Prepare overlay
+            overlay.style.backgroundImage = `url('${imageUrl}')`;
+            overlay.classList.remove('hidden');
+            overlay.style.transition = 'none';
+            overlay.style.transform = 'translateX(100%)';
+            overlay.style.opacity = '0';
+
+            // Force reflow
+            overlay.getBoundingClientRect();
+
+            // Slide in
+            overlay.style.transition = `transform ${slideIn}ms ease-out, opacity ${slideIn}ms ease-out`;
+            overlay.style.transform = 'translateX(0)';
+            overlay.style.opacity = '1';
+
+            // Gold flash element
+            const flash = document.createElement('div');
+            flash.className = 'fs-attack-gold-flash';
+            overlay.appendChild(flash);
+
+            // Inform barrier roughly how long this will take
+            try {
+                const total = slideIn + hold + fadeOut;
+                markAnim(total > 0 ? total : 2500);
+            } catch(_) { markAnim(2500); }
+
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    // Hold, then fade out
+                    setTimeout(() => {
+                        overlay.style.transition = `opacity ${fadeOut}ms ease-in`;
+                        overlay.style.opacity = '0';
+                        setTimeout(() => {
+                            overlay.classList.add('hidden');
+                            overlay.style.transition = 'none';
+                            overlay.style.transform = 'translateX(100%)';
+                            overlay.style.backgroundImage = '';
+                            // Clean up flash
+                            try { flash.remove(); } catch {}
+                            resolve();
+                        }, fadeOut);
+                    }, hold);
+                }, slideIn);
+            });
+        }
+
+        // Standard overlay animation: CSS injection and helpers
+        (function injectStdAnimCss(){
+            if (document.getElementById('std-anim-style')) return;
+            const css = `
+            .std-anim-overlay{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);pointer-events:none;z-index:600;opacity:0}
+            .std-anim-img{max-width:100vw;max-height:100vh;object-fit:cover}
+            @keyframes stdFadeIn{from{opacity:0}to{opacity:1}}
+            @keyframes stdFadeOut{from{opacity:1}to{opacity:0}}
+            @keyframes slideFromLeft{from{transform:translate(-150%,-50%)}to{transform:translate(-50%,-50%)}}
+            @keyframes slideFromRight{from{transform:translate(50%,-50%)}to{transform:translate(-50%,-50%)}}
+            @keyframes slideFromTop{from{transform:translate(-50%,-150%)}to{transform:translate(-50%,-50%)}}
+            @keyframes slideFromBottom{from{transform:translate(-50%,50%)}to{transform:translate(-50%,-50%)}}
+            @keyframes flashWhite{0%{filter:brightness(1)}30%{filter:brightness(2)}60%{filter:brightness(1)}100%{filter:brightness(1)}}
+            @keyframes pulseBase{0%{transform:translate(-50%,-50%) scale(1);opacity:1}50%{transform:translate(-50%,-50%) scale(1.05);opacity:1}100%{transform:translate(-50%,-50%) scale(1);opacity:1}}
+            .flash-filter-white{filter:drop-shadow(0 0 14px #fff) brightness(1.8)}
+            .flash-filter-blue{filter:drop-shadow(0 0 14px #66c2ff) brightness(1.6)}
+            .flash-filter-green{filter:drop-shadow(0 0 14px #4ade80) brightness(1.6)}
+            .flash-filter-gold{filter:drop-shadow(0 0 14px #ffd84a) brightness(1.6)}
+            .flash-filter-purple{filter:drop-shadow(0 0 14px #a78bfa) brightness(1.6)}
+            .flash-filter-red{filter:drop-shadow(0 0 14px #ff4a4a) brightness(1.6)}
+            .flash-filter-orange{filter:drop-shadow(0 0 14px #ff9f43) brightness(1.6)}
+            .flash-filter-pink{filter:drop-shadow(0 0 14px #ff69b4) brightness(1.6)}
+            .flash-filter-black{filter:brightness(0.3)}
+            .screen-overlay{position:absolute;inset:0;z-index:590;pointer-events:none}
+            .screen-red-flash{background:rgba(255,60,60,0.25);animation:stdFadeIn 120ms ease, stdFadeOut 420ms ease 180ms forwards}
+            .screen-black{background:rgba(0,0,0,0.85);animation:stdFadeIn 160ms ease}
+            `;
+            const s = document.createElement('style'); s.id = 'std-anim-style'; s.textContent = css; document.head.appendChild(s);
+        })();
+
+        function playStdAnimation(config){
+            const container = document.getElementById('battleFieldContainer') || document.querySelector('.battle-field-container') || document.getElementById('battleScreen') || document.body;
+            const wrap = document.createElement('div'); wrap.className = 'std-anim-overlay';
+            const img = document.createElement('img'); img.className = 'std-anim-img'; img.src = config.imageUrl;
+            wrap.appendChild(img); container.appendChild(wrap);
+
+            const MIN_DURATION = 2500; // ms baseline
+            const animStart = performance.now();
+
+            const enter = (config.enterFrom||'center');
+            let enterAnim;
+            switch(enter){
+                case 'left': enterAnim = 'slideFromLeft 320ms ease-out forwards'; break;
+                case 'right': enterAnim = 'slideFromRight 320ms ease-out forwards'; break;
+                case 'top': enterAnim = 'slideFromTop 320ms ease-out forwards'; break;
+                case 'bottom': enterAnim = 'slideFromBottom 320ms ease-out forwards'; break;
+                default: enterAnim = 'stdFadeIn 320ms ease-out forwards';
+            }
+            wrap.style.opacity = '1';
+            wrap.style.animation = enterAnim;
+
+            const removeFilters = ()=> img.classList.remove('flash-filter-white','flash-filter-blue','flash-filter-green','flash-filter-gold','flash-filter-red','flash-filter-orange','flash-filter-pink','flash-filter-black');
+            const applyFlash = (col)=>{ removeFilters(); if (col) img.classList.add(`flash-filter-${col}`); img.style.animation = 'flashWhite 320ms ease'; };
+            const applyPulse = ()=>{ removeFilters(); img.style.animation = 'pulseBase 480ms ease-in-out'; };
+
+            // Roughly mark standard overlay min duration
+            markAnim(MIN_DURATION + 400);
+            setTimeout(()=>{
+                const mode = (config.mode||'flash');
+                const pulses = Math.max(1, config.pulses||1);
+                const seq = (config.colorSequence && config.colorSequence.length? config.colorSequence : [config.color||'white']);
+                let i = 0, n = 0;
+                const stepDelay = (mode==='flash') ? 360 : 520;
+                const step = ()=>{
+                    const col = seq[i % seq.length];
+                    if (mode === 'flash') applyFlash(col); else applyPulse();
+                    i++; n++;
+                    if (n < pulses) setTimeout(step, stepDelay);
+                    else {
+                        // Ensure total visible time >= MIN_DURATION before starting fade-out
+                        const now = performance.now();
+                        const elapsed = now - animStart;
+                        const fadeOutDur = 360;
+                        const minHoldBeforeFade = Math.max(0, MIN_DURATION - elapsed - fadeOutDur);
+                        setTimeout(()=>{ wrap.style.animation = `stdFadeOut ${fadeOutDur}ms ease forwards`; setTimeout(()=> wrap.remove(), fadeOutDur + 40); }, Math.max(200, minHoldBeforeFade));
+                    }
+                };
+                step();
+            }, 340);
+        }
+
+        function screenDarken(){
+            const container = document.getElementById('battleFieldContainer') || document.querySelector('.battle-field-container') || document.getElementById('battleScreen') || document.body;
+            const d = document.createElement('div'); d.className = 'screen-overlay screen-black';
+            container.appendChild(d);
+            return d;
+        }
+        function screenFlashRed(){
+            const container = document.getElementById('battleFieldContainer') || document.querySelector('.battle-field-container') || document.getElementById('battleScreen') || document.body;
+            const f = document.createElement('div'); f.className = 'screen-overlay screen-red-flash';
+            container.appendChild(f); setTimeout(()=> f.remove(), 800);
+        }
+
+        function screenDarken(){
+            const container = document.getElementById('battleFieldContainer') || document.querySelector('.battle-field-container') || document.getElementById('battleScreen') || document.body;
+            const d = document.createElement('div'); d.className = 'screen-overlay screen-black';
+            container.appendChild(d);
+            return d;
+        }
+        function screenFlashRed(){
+            const container = document.getElementById('battleFieldContainer') || document.querySelector('.battle-field-container') || document.getElementById('battleScreen') || document.body;
+            const f = document.createElement('div'); f.className = 'screen-overlay screen-red-flash';
+            container.appendChild(f); setTimeout(()=> f.remove(), 800);
+        }
+
+        const classSkillAnims = {
+            archer: {
+                attack: { imageUrl: specialAttackImages.archer_attack, enterFrom: 'left', mode: 'flash', color: 'white', pulses: 1 },
+                defend: { imageUrl: specialAttackImages.archer_defend, enterFrom: 'bottom', mode: 'flash', color: 'green', pulses: 1 },
+                mark: { imageUrl: specialAttackImages.archer_mark, enterFrom: 'top', mode: 'flash', color: 'green', pulses: 1 },
+                windArrow: { imageUrl: specialAttackImages.archer_windarrow, enterFrom: 'right', mode: 'flash', color: 'green', pulses: 1 },
+                arrowRain: { imageUrl: specialAttackImages.archer_arrowrain, enterFrom: 'center', mode: 'pulse', color: 'green', pulses: 3 },
+            },
+            cleric: {
+                heal: { imageUrl: specialAttackImages.cleric_heal, enterFrom: 'right', mode: 'flash', colorSequence: ['white','blue'], pulses: 2 },
+                partyHeal: { imageUrl: specialAttackImages.cleric_partyheal, enterFrom: 'center', mode: 'pulse', color: 'white', pulses: 1 },
+                grandintervention: { imageUrl: specialAttackImages.cleric_grandintervention, enterFrom: 'center', mode: 'pulse', colorSequence: ['white','gold','white'], pulses: 3 },
+                holyLight: { imageUrl: specialAttackImages.cleric_holylight, enterFrom: 'right', mode: 'flash', colorSequence: ['white','blue'], pulses: 2 },
+            },
+            monk: {
+                tempestflurry: { imageUrl: specialAttackImages.monk_tempestflurry, enterFrom: 'right', mode: 'pulse', color: 'red', pulses: 3 },
+                chiBoost: { imageUrl: specialAttackImages.monk_chiboost, enterFrom: 'bottom', mode: 'pulse', color: 'white', pulses: 2 },
+                earthSlam: { imageUrl: specialAttackImages.monk_earthslam, enterFrom: 'top', mode: 'flash', color: 'orange', pulses: 1 },
+                flurry: { imageUrl: specialAttackImages.monk_flurry, enterFrom: 'center', mode: 'pulse', color: 'white', pulses: 3 },
+                attack: { imageUrl: specialAttackImages.monk_flurry, enterFrom: 'center', mode: 'pulse', color: 'white', pulses: 2 },
+            },
+            sorceress: {
+                water: { imageUrl: specialAttackImages.sorc_tidalwave, enterFrom: 'bottom', mode: 'pulse', color: 'blue', pulses: 2 },
+                lightning: { imageUrl: specialAttackImages.sorc_alizabolt, enterFrom: 'top', mode: 'pulse', colorSequence: ['purple','white'], pulses: 2 },
+                earth: { imageUrl: specialAttackImages.sorc_earthspike, enterFrom: 'top', mode: 'flash', color: 'gold', pulses: 1 },
+                attack: { imageUrl: specialAttackImages.sorc_magicmissile, enterFrom: 'right', mode: 'flash', color: 'white', pulses: 1 },
+                meteor: { imageUrl: specialAttackImages.sorc_meteor, enterFrom: 'top', mode: 'pulse', colorSequence: ['white','gold','white'], pulses: 3 },
+            },
+            bard: {
+                shinnywave: { imageUrl: specialAttackImages.bard_shinnywave, enterFrom: 'bottom', mode: 'flash', color: 'blue', pulses: 1 },
+                melodicstrike: { imageUrl: specialAttackImages.bard_melodicstrike, enterFrom: 'right', mode: 'flash', color: 'gold', pulses: 1 },
+                mpMelody: { imageUrl: specialAttackImages.bard_mpheal, enterFrom: 'right', mode: 'pulse', color: 'white', pulses: 1 },
+                attack: { imageUrl: specialAttackImages.bard_shinnyattack, enterFrom: 'left', mode: 'flash', color: 'white', pulses: 1 },
+                shinnyultimate: { imageUrl: specialAttackImages.bard_shinnyultimate, enterFrom: 'bottom', mode: 'pulse', colorSequence: ['blue','white','gold'], pulses: 3 },
+                songHeal: { imageUrl: specialAttackImages.bard_mpheal, enterFrom: 'center', mode: 'pulse', color: 'white', pulses: 1 },
+                waterWave: { imageUrl: specialAttackImages.bard_shinnywave, enterFrom: 'bottom', mode: 'flash', color: 'blue', pulses: 1 },
+            },
+            ninja: {
+                sneakattack: { imageUrl: specialAttackImages.ninja_sneakattack, enterFrom: 'bottom', mode: 'flash', color: 'black', pulses: 1 },
+                assassinate: { imageUrl: specialAttackImages.ninja_assassinate, enterFrom: 'bottom', mode: 'flash', color: 'red', pulses: 1, screen: 'darken+flash-red' },
+                fireShuriken: { imageUrl: specialAttackImages.ninja_fireshuriken, enterFrom: 'bottom', mode: 'flash', color: 'red', pulses: 1, screen: 'flash-red' },
+                hide: { imageUrl: specialAttackImages.ninja_hide, enterFrom: 'center', mode: 'pulse', color: 'black', pulses: 2 },
+                kagurattac: { imageUrl: specialAttackImages.ninja_kagurattac, enterFrom: 'right', mode: 'pulse', color: 'white', pulses: 1 },
+                attack: { imageUrl: specialAttackImages.ninja_kagurattac, enterFrom: 'right', mode: 'pulse', color: 'white', pulses: 1 },
+            },
+            purrchant: {
+                restock: { imageUrl: specialAttackImages.purr_restock, enterFrom: 'bottom', mode: 'flash', color: 'pink', pulses: 1 },
+                bap: { imageUrl: specialAttackImages.purr_bap, enterFrom: 'right', mode: 'flash', color: 'white', pulses: 1 },
+                catnap: { imageUrl: specialAttackImages.purr_catnap, enterFrom: 'center', mode: 'pulse', color: 'pink', pulses: 2 },
+                flashsale: { imageUrl: specialAttackImages.purr_flashsale, enterFrom: 'bottom', mode: 'pulse', colorSequence: ['gold','pink','gold'], pulses: 3 },
+                attack: { imageUrl: specialAttackImages.purr_bap, enterFrom: 'right', mode: 'flash', color: 'white', pulses: 1 },
+            }
+        };
+
+        function maybePlayClassAnimFor(actionKey, player){
+            const cls = (player.classType||'').toLowerCase();
+            const map = classSkillAnims[cls]; if (!map) return;
+            const cfg = map[actionKey];
+            if (!cfg) return;
+            let darkRef = null;
+            if (cfg.screen === 'darken+flash-red') { darkRef = screenDarken(); setTimeout(screenFlashRed, 120); }
+            else if (cfg.screen === 'flash-red') screenFlashRed();
+            playStdAnimation(cfg);
+            if (darkRef) setTimeout(()=> darkRef.remove(), 700);
+        }
+
+        function getSpellEffectType(element) {
+            const orbElements = ['fire', 'ice', 'earth'];
+            const flashElements = ['water', 'lightning', 'light'];
+            
+            if (orbElements.includes(element)) {
+                return 'orb';
+            } else if (flashElements.includes(element)) {
+                return 'flash';
+            } else {
+                return 'physical';
+            }
+        }
+
+    function playBattleMusic(isBoss = false) {
             // Stop current music if playing
             if (currentAudio) {
                 currentAudio.pause();
@@ -1125,7 +1989,7 @@
 
             currentAudio = new Audio(selectedTrack);
             currentAudio.loop = true;
-            currentAudio.volume = 0.3; // Set to 30% volume for background music
+            currentAudio.volume = 0.3 * masterVolume; // tie to master volume
             
             // Handle audio loading and play
             currentAudio.addEventListener('canplaythrough', () => {
@@ -1152,17 +2016,75 @@
             gameState.currentMusic = null;
         }
 
+        // Sound Effects URLs for different actions
+        const soundEffects = {
+            attack: 'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav',
+            magic: 'https://www.soundjay.com/misc/sounds/magic-chime-02.wav',
+            heal: 'https://www.soundjay.com/misc/sounds/magic-chime-07.wav',
+            critical: 'https://www.soundjay.com/misc/sounds/bell-ringing-07.wav',
+            damage: 'https://www.soundjay.com/misc/sounds/impact-02.wav'
+        };
+
+        // Function to play a sound effect
+        function playSoundEffect(soundType) {
+            if (soundEffects[soundType]) {
+                const audio = new Audio(soundEffects[soundType]);
+                audio.volume = 0.6 * masterVolume; // tie SFX to master volume
+                audio.play().catch(e => {
+                    console.log('Sound effect failed to play:', e);
+                });
+            }
+        }
+
+        // Master Volume UI
+        function initMasterVolumeUI() {
+            const slider = document.getElementById('masterVolume');
+            if (!slider) return;
+            slider.value = String(Math.round(masterVolume * 100));
+            slider.addEventListener('input', (e) => {
+                const pct = Math.max(0, Math.min(100, parseFloat(e.target.value || '50')));
+                masterVolume = pct / 100;
+                localStorage.setItem('plains_master_volume', String(masterVolume));
+                // Update music now
+                if (currentAudio) {
+                    currentAudio.volume = 0.3 * masterVolume;
+                }
+            });
+        }
+
+        // Pre-battle volume UI (party select screen)
+        function initPreBattleVolumeUI() {
+            const slider = document.getElementById('preMasterVolume');
+            if (!slider) return;
+            slider.value = String(Math.round(masterVolume * 100));
+            slider.addEventListener('input', (e) => {
+                const pct = Math.max(0, Math.min(100, parseFloat(e.target.value || '50')));
+                masterVolume = pct / 100;
+                localStorage.setItem('plains_master_volume', String(masterVolume));
+                if (currentAudio) currentAudio.volume = 0.3 * masterVolume;
+            });
+            // Reflect current toggle state on pre-battle button
+            const preBtn = document.getElementById('preMusicToggle');
+            if (preBtn) {
+                preBtn.textContent = gameState.musicEnabled ? '🎵 Music ON' : '🔇 Music OFF';
+                preBtn.classList.toggle('disabled', !gameState.musicEnabled);
+            }
+        }
+
         function toggleMusic() {
             gameState.musicEnabled = !gameState.musicEnabled;
             const musicToggle = document.getElementById('musicToggle');
+            const preMusicToggle = document.getElementById('preMusicToggle');
             
             if (!gameState.musicEnabled) {
                 stopBattleMusic();
                 musicToggle.textContent = '🔇 Music OFF';
                 musicToggle.classList.add('disabled');
+                if (preMusicToggle) { preMusicToggle.textContent = '🔇 Music OFF'; preMusicToggle.classList.add('disabled'); }
             } else {
                 musicToggle.textContent = '🎵 Music ON';
                 musicToggle.classList.remove('disabled');
+                if (preMusicToggle) { preMusicToggle.textContent = '🎵 Music ON'; preMusicToggle.classList.remove('disabled'); }
                 if (gameState.currentEnemies && gameState.currentEnemies.length > 0) {
                     const isBoss = gameState.currentRound % 10 === 0;
                     playBattleMusic(isBoss);
@@ -1174,7 +2096,6 @@
         function initPartySelection() {
             const cards = document.querySelectorAll('.character-card');
             const startBtn = document.getElementById('startGame');
-            const selectedCount = document.getElementById('selectedCount');
 
             cards.forEach(card => {
                 card.addEventListener('click', () => {
@@ -1184,22 +2105,28 @@
                         // Deselect
                         card.classList.remove('selected');
                         gameState.selectedClasses = gameState.selectedClasses.filter(c => c !== classType);
-                    } else if (gameState.selectedClasses.length < 3) {
+                    } else if (gameState.selectedClasses.length < 4) {
                         // Select
                         card.classList.add('selected');
                         gameState.selectedClasses.push(classType);
                     }
                     
-                    selectedCount.textContent = gameState.selectedClasses.length;
-                    startBtn.disabled = gameState.selectedClasses.length !== 3;
+            const count = gameState.selectedClasses.length;
+            startBtn.textContent = `Start Battle! (${count}/4 selected)`;
+            startBtn.disabled = count !== 4;
                 });
             });
-
+        // Initialize button text on first load
+        startBtn.textContent = `Start Battle! (${gameState.selectedClasses.length}/4 selected)`;
             startBtn.addEventListener('click', startGame);
         }
 
-        // Start the game
-        function startGame() {
+    // Start the game
+    function startGame() {
+            if (!__monsterDataLoaded) {
+                showMonsterDataLoadError();
+                return;
+            }
             // Create party from selected classes
             gameState.party = gameState.selectedClasses.map((classType, index) => {
                 const template = characterClasses[classType];
@@ -1212,20 +2139,95 @@
                     maxHp: template.hp,
                     maxMp: template.mp,
                     statusEffects: [],
-                    level: 1
+                    level: 1,
+                    ultCharge: 0, // 0-100
+                    monkTempestActive: false,
+                    bardRenewalActive: false,
+                    ninjaAssassinationPrimed: false
                 };
             });
 
-            // Hide party selection, show battle screen
+            // Hide party selection
             document.getElementById('partySelection').style.display = 'none';
+            // Show battle screen (needed so overlay/video can cover it); we'll start after intro
             document.getElementById('battleScreen').style.display = 'block';
 
-            // Start first round
-            startRound();
+            // Initialize master volume slider now that it's visible
+            initMasterVolumeUI();
+
+            // Play intro cutscene; then start the game
+            playIntroCutscene(() => {
+                // Trigger music playback when battle starts (not in startRound)
+                playBattleMusic(false);
+                // Start first round
+                startRound();
+            });
         }
+
+        // Intro cutscene helper
+        function playIntroCutscene(onDone) {
+            // If already played in this session, immediately continue
+            if (sessionStorage.getItem('plains_intro_played') === '1') {
+                onDone && onDone();
+                return;
+            }
+            const overlay = document.createElement('div');
+            overlay.className = 'intro-overlay';
+
+            const video = document.createElement('video');
+            video.src = 'src/assets/images/expeditionandgames/plainsRPG/vidu-video-2906609577730410.mp4';
+            video.autoplay = true; // start due to user click for Start Game
+            video.playsInline = true;
+            video.controls = false;
+
+            const hint = document.createElement('div');
+            hint.className = 'skip-hint';
+            hint.textContent = 'Press Space to Skip';
+
+            overlay.appendChild(video);
+            overlay.appendChild(hint);
+            document.body.appendChild(overlay);
+
+            let skipEnabled = false;
+            const timer = setTimeout(()=>{ skipEnabled = true; hint.style.display = 'block'; }, 25000);
+
+            function cleanup(){
+                try { clearTimeout(timer); } catch {}
+                document.removeEventListener('keydown', onKey);
+                if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
+            }
+            function finish(){
+                cleanup();
+                sessionStorage.setItem('plains_intro_played','1');
+                onDone && onDone();
+            }
+            function onKey(e){
+                if (!skipEnabled) return;
+                if (e.code === 'Space' || e.key === ' ' || e.keyCode === 32){
+                    e.preventDefault();
+                    try { video.pause(); } catch {}
+                    finish();
+                }
+            }
+            document.addEventListener('keydown', onKey);
+            video.addEventListener('ended', finish);
+            video.addEventListener('error', finish);
+            // In case autoplay is blocked (shouldn't be due to click), fallback after short delay
+            video.play().catch(()=> setTimeout(finish, 2000));
+        }
+
+        // Ensure slider initializes if DOM is ready before game start
+        document.addEventListener('DOMContentLoaded', () => {
+            initMasterVolumeUI();
+            initPreBattleVolumeUI();
+        });
 
         // Start a new round
         function startRound() {
+            if (!__monsterDataLoaded) {
+                showMonsterDataLoadError();
+                return;
+            }
             // Check for boss battles (every 10th round)
             const isBossRound = gameState.currentRound % 10 === 0;
             
@@ -1242,10 +2244,15 @@
                 const bossIndex = Math.floor((gameState.currentRound - 10) / 10) % bossMonsters.length;
                 const boss = JSON.parse(JSON.stringify(bossMonsters[bossIndex]));
                 // Bosses get extra HP on higher rounds
-                const hpMultiplier = 1 + (Math.floor(gameState.currentRound / 10) - 1) * 0.3;
-                boss.hp = Math.floor(boss.hp * hpMultiplier);
+                const baseBossHpMult = 1 + (Math.floor(gameState.currentRound / 10) - 1) * 0.3;
+                // Additional post-6 scaling: bosses also get modest atk/def boosts and extra hp scaling
+                const post6Factor = gameState.currentRound > 6 ? 1 + ((gameState.currentRound - 6) * 0.04) : 1;
+                boss.hp = Math.floor(boss.hp * baseBossHpMult * (0.85 + post6Factor * 0.15));
+                boss.attack = Math.floor(boss.attack * (0.95 + post6Factor * 0.08));
+                boss.defense = Math.floor(boss.defense * (0.95 + post6Factor * 0.06));
                 boss.currentHp = boss.hp;
                 boss.id = 0;
+                boss.isBoss = true;
                 gameState.currentEnemies = [boss];
                 
                 // Play boss music
@@ -1283,13 +2290,31 @@
                     // Add multiple of the primary monster
                     for (let i = 0; i < groupSize; i++) {
                         const enemy = JSON.parse(JSON.stringify(primaryMonster));
-                        // Scale enemy HP and attack based on round
-                        const scaleMultiplier = 1 + (gameState.currentRound - 1) * 0.15;
+                        // Scale enemy stats by round; stronger after round 6
+                        const baseMult = 1 + (gameState.currentRound - 1) * 0.12;
+                        const post6 = gameState.currentRound > 6 ? 1 + ((gameState.currentRound - 6) * 0.06) : 1;
+                        const scaleMultiplier = baseMult * post6;
                         enemy.hp = Math.floor(enemy.hp * scaleMultiplier);
-                        enemy.attack = Math.floor(enemy.attack * scaleMultiplier);
+                        enemy.attack = Math.floor(enemy.attack * (0.9 + scaleMultiplier * 0.35));
+                        enemy.defense = Math.floor((enemy.defense||10) * (0.9 + scaleMultiplier * 0.25));
+                        // Early-game spice: slight +damage/+defense for low CR packs
+                        if (gameState.currentRound <= 3) {
+                            if ((enemy.cr || 0) <= 0.5) {
+                                enemy.attack = Math.floor(enemy.attack * 1.12);
+                                enemy.defense = Math.floor((enemy.defense||10) * 1.08);
+                            } else if ((enemy.cr || 0) <= 1) {
+                                enemy.attack = Math.floor(enemy.attack * 1.08);
+                                enemy.defense = Math.floor((enemy.defense||10) * 1.05);
+                            }
+                        }
                         enemy.currentHp = enemy.hp;
                         enemy.id = gameState.currentEnemies.length;
                         enemy.name = enemy.name + ` ${i + 1}`; // Add numbers to distinguish
+                        // Special: first Liquid Legion appears enlarged for impact
+                        if (FIRST_LIQUID_LEGION_IS_BOSSY && !gameState.firstLiquidLegionSeen && enemy.name.startsWith('Darkling Liquid Legion')) {
+                            enemy.isBossyVisual = true;
+                            gameState.firstLiquidLegionSeen = true;
+                        }
                         gameState.currentEnemies.push(enemy);
                     }
                     
@@ -1300,11 +2325,27 @@
                         if (otherMonsters.length > 0) {
                             const randomMonster = otherMonsters[Math.floor(Math.random() * otherMonsters.length)];
                             const enemy = JSON.parse(JSON.stringify(randomMonster));
-                            const scaleMultiplier = 1 + (gameState.currentRound - 1) * 0.15;
+                            const baseMult = 1 + (gameState.currentRound - 1) * 0.12;
+                            const post6 = gameState.currentRound > 6 ? 1 + ((gameState.currentRound - 6) * 0.06) : 1;
+                            const scaleMultiplier = baseMult * post6;
                             enemy.hp = Math.floor(enemy.hp * scaleMultiplier);
-                            enemy.attack = Math.floor(enemy.attack * scaleMultiplier);
+                            enemy.attack = Math.floor(enemy.attack * (0.9 + scaleMultiplier * 0.35));
+                            enemy.defense = Math.floor((enemy.defense||10) * (0.9 + scaleMultiplier * 0.25));
+                            if (gameState.currentRound <= 3) {
+                                if ((enemy.cr || 0) <= 0.5) {
+                                    enemy.attack = Math.floor(enemy.attack * 1.12);
+                                    enemy.defense = Math.floor((enemy.defense||10) * 1.08);
+                                } else if ((enemy.cr || 0) <= 1) {
+                                    enemy.attack = Math.floor(enemy.attack * 1.08);
+                                    enemy.defense = Math.floor((enemy.defense||10) * 1.05);
+                                }
+                            }
                             enemy.currentHp = enemy.hp;
                             enemy.id = gameState.currentEnemies.length;
+                            if (FIRST_LIQUID_LEGION_IS_BOSSY && !gameState.firstLiquidLegionSeen && enemy.name === 'Darkling Liquid Legion') {
+                                enemy.isBossyVisual = true;
+                                gameState.firstLiquidLegionSeen = true;
+                            }
                             gameState.currentEnemies.push(enemy);
                         }
                     }
@@ -1313,11 +2354,28 @@
                     for (let i = 0; i < enemyCount; i++) {
                         const randomMonster = availableMonsters[Math.floor(Math.random() * availableMonsters.length)];
                         const enemy = JSON.parse(JSON.stringify(randomMonster));
-                        const scaleMultiplier = 1 + (gameState.currentRound - 1) * 0.15;
+                        const baseMult = 1 + (gameState.currentRound - 1) * 0.12;
+                        const post6 = gameState.currentRound > 6 ? 1 + ((gameState.currentRound - 6) * 0.06) : 1;
+                        const scaleMultiplier = baseMult * post6;
                         enemy.hp = Math.floor(enemy.hp * scaleMultiplier);
-                        enemy.attack = Math.floor(enemy.attack * scaleMultiplier);
+                        enemy.attack = Math.floor(enemy.attack * (0.9 + scaleMultiplier * 0.35));
+                        enemy.defense = Math.floor((enemy.defense||10) * (0.9 + scaleMultiplier * 0.25));
+                        if (gameState.currentRound <= 3) {
+                            if ((enemy.cr || 0) <= 0.5) {
+                                enemy.attack = Math.floor(enemy.attack * 1.12);
+                                enemy.defense = Math.floor((enemy.defense||10) * 1.08);
+                            } else if ((enemy.cr || 0) <= 1) {
+                                enemy.attack = Math.floor(enemy.attack * 1.08);
+                                enemy.defense = Math.floor((enemy.defense||10) * 1.05);
+                            }
+                        }
                         enemy.currentHp = enemy.hp;
                         enemy.id = i;
+                        // First encounter with Liquid Legion: make it visually larger/imposing
+                        if (FIRST_LIQUID_LEGION_IS_BOSSY && !gameState.firstLiquidLegionSeen && enemy.name === 'Darkling Liquid Legion') {
+                            enemy.isBossyVisual = true;
+                            gameState.firstLiquidLegionSeen = true;
+                        }
                         gameState.currentEnemies.push(enemy);
                     }
                 }
@@ -1326,14 +2384,21 @@
                 playBattleMusic(false);
             }
 
-            // Check for level up (every 10 rounds)
+            // Check for level ups
+            // Primary cadence: every 10 rounds starting at 11 (11, 21, 31, ...)
             if (gameState.currentRound > 1 && gameState.currentRound % 10 === 1) {
+                levelUpParty();
+            }
+            // Mid-cycle cadence: every 10 rounds starting at 16 (16, 26, 36, ...);
+            // Skip the special one-time boost at 6 (handled in nextRound)
+            if (gameState.currentRound > 6 && gameState.currentRound % 10 === 6) {
                 levelUpParty();
             }
 
             updateDisplay();
             updateBattlefieldSprites();
             gameState.currentPlayerIndex = 0;
+            gameState.selectedEnemyIndex = 0; // Reset enemy selection to first enemy
             startPlayerTurn();
         }
 
@@ -1342,18 +2407,43 @@
             // Update party sprites
             const partySprites = document.getElementById('partySprites');
             partySprites.innerHTML = '';
-            gameState.party.forEach(member => {
+            gameState.party.forEach((member, index) => {
                 const sprite = document.createElement('img');
-                // Use class type for sprite path, not character name
-                const spriteSrc = `src/assets/images/expeditionandgames/plainsRPG/${member.classType}.png`;
-                sprite.src = spriteSrc;
+                                // Local sprite images (self-hosted for GitHub Pages)
+                sprite.src = `src/assets/images/expeditionandgames/plainsRPG/${member.classType}.png`;
+                sprite.onerror = function () {
+                    this.onerror = null;
+                    this.src = 'src/assets/images/expeditionandgames/plainsRPG/archer.png';
+                };
+                // Hard code face image URLs for each class and allow name override for Cuppy
+const faceMap = {
+                    archer: 'src/assets/images/expeditionandgames/plainsRPG/characterfaces/archerface.png',
+                    bard: 'src/assets/images/expeditionandgames/plainsRPG/characterfaces/bardface.png',
+                    cleric: 'src/assets/images/expeditionandgames/plainsRPG/characterfaces/clericface.png',
+                    monk: 'src/assets/images/expeditionandgames/plainsRPG/characterfaces/monkface.png',
+                    ninja: 'src/assets/images/expeditionandgames/plainsRPG/characterfaces/ninjaface.png',
+                    sorceress: 'src/assets/images/expeditionandgames/plainsRPG/characterfaces/sorceressface.png',
+                    purrchant: 'src/assets/images/expeditionandgames/plainsRPG/characterfaces/purrchantface.png',
+                    cuppy: 'src/assets/images/expeditionandgames/plainsRPG/characterfaces/purrchantface.png',
+                };
+                if (member.classType === 'purrchant' || member.name === 'Cuppy') {
+                    member.faceImage = faceMap['cuppy'];
+                } else {
+                    member.faceImage = faceMap[member.classType];
+                }
                 sprite.alt = member.name + ' Sprite';
                 sprite.title = `${member.name} (${member.currentHp}/${member.maxHp} HP)`;
-                    // Make bard sprite (Shinny) 15% bigger
+                    // Custom sizing for each character
                     if (member.classType === 'bard') {
-                        sprite.style.height = '207px'; // 180px * 1.15 = 207px
+                        sprite.style.height = '261px'; /* 227 * 1.15 */
+                    } else if (member.classType === 'archer') {
+                        sprite.style.height = '196px'; /* 170 * 1.15 */
+                    } else if (member.classType === 'sorceress' || member.name === 'Aliza') {
+                        sprite.style.height = '196px'; /* 170 * 1.15 */
+                    } else if (member.classType === 'purrchant' || member.name === 'Cuppy') {
+                        sprite.style.height = '173px'; /* 150 * 1.15 */
                     } else {
-                        sprite.style.height = '180px';
+                        sprite.style.height = '228px'; /* 198 * 1.15 */
                     }
                     sprite.style.width = 'auto'; // Allow width to adjust based on height
                     sprite.style.objectFit = 'scale-down'; // Scales down while preserving aspect ratio
@@ -1361,12 +2451,41 @@
                     sprite.style.border = 'none';
                     sprite.style.borderRadius = '0';
                     sprite.style.opacity = member.currentHp > 0 ? '1' : '0.5';
+                    sprite.style.cursor = 'pointer';
+                    sprite.onclick = () => selectAlly(index);
                     partySprites.appendChild(sprite);
             });
+
+            // Keep selected ally index sane and selection highlighted
+            if (Array.isArray(gameState.party) && gameState.party.length > 0) {
+                if (typeof gameState.selectedAllyIndex !== 'number') gameState.selectedAllyIndex = 0;
+                gameState.selectedAllyIndex = Math.max(0, Math.min(gameState.selectedAllyIndex, gameState.party.length - 1));
+            } else {
+                gameState.selectedAllyIndex = 0;
+            }
+            updateAllySelection();
             
             // Update enemy sprites with simple HP bars and names
             const enemySprites = document.getElementById('enemySprites');
             enemySprites.innerHTML = '';
+            // centralized enemy size map
+            const enemySizeMap = {
+                'Darkling Gloom-Newt': { h: 160, w: 150 },
+                'Darkling Weed-Tangler': { h: 170, w: 150 },
+                'Darkling Liquid Legion': { h: 160 },
+                'Dark Dimension Changebot': { h: 170 },
+                'Darkforme Overwatch': { h: 170 },
+                'Darkforme Punishment Maid': { h: 200 },
+                'Darkling Blood-Gorger': { h: 180 },
+                'Darkling-Paralurker': { h: 190 },
+                'Sky-Darkener Nightveil': { h: 180 },
+                'Darkaconda': { h: 200 },
+                'Darkforme Nightsipper': { h: 180 },
+                // Bosses
+                'Night-Mare Shadowstorm': { h: 180 },
+                'Dark Dimension Auditarch': { h: 180 },
+                'Shadow Slimepress': { h: 180 }
+            };
             gameState.currentEnemies.forEach((enemy, index) => {
                 const enemyContainer = document.createElement('div');
                 enemyContainer.style.position = 'relative';
@@ -1374,11 +2493,15 @@
                 enemyContainer.style.flexDirection = 'column';
                 enemyContainer.style.alignItems = 'center';
                 enemyContainer.style.margin = '0 5px';
+                enemyContainer.classList.add('enemy-selectable');
+                
+                // Make enemies clickable for targeting
+                enemyContainer.onclick = () => selectEnemy(index);
                 
                 // HP bar above sprite
                 const hpBar = document.createElement('div');
                 hpBar.style.width = '120px';
-                hpBar.style.height = '8px';
+                hpBar.style.height = '12px';
                 hpBar.style.background = 'rgba(139, 69, 19, 0.8)';
                 hpBar.style.borderRadius = '4px';
                 hpBar.style.marginBottom = '5px';
@@ -1392,36 +2515,51 @@
                 hpFill.style.height = '100%';
                 hpFill.style.background = hpPercent > 60 ? '#4ade80' : hpPercent > 30 ? '#facc15' : '#ef4444';
                 hpFill.style.transition = 'width 0.3s ease';
+                hpFill.style.display = 'flex';
+                hpFill.style.alignItems = 'center';
+                hpFill.style.justifyContent = 'center';
+                hpFill.style.fontSize = '0.7rem';
+                hpFill.style.fontWeight = '900';
+                hpFill.style.color = '#1b1a14';
+                hpFill.style.textShadow = '0 1px 0 rgba(255,255,255,0.4), 0 0 6px rgba(0,0,0,0.3)';
+                hpFill.textContent = `${Math.max(0, enemy.currentHp)}/${enemy.hp}`;
                 hpBar.appendChild(hpFill);
                 
                 // Enemy sprite
-                const sprite = document.createElement('img');
-                sprite.src = enemy.image;
-                sprite.alt = enemy.name + ' Sprite';
-                sprite.title = `${enemy.name} (${enemy.currentHp}/${enemy.hp} HP)`;
-                sprite.style.height = '180px';
-                // For Gloom Newt and Weed-Tangler, set a fixed width to reduce their length
-                if (enemy.name === 'Darkling Gloom-Newt' || enemy.name === 'Darkling Weed-Tangler') {
-                    sprite.style.width = '150px';
-                } else {
-                    sprite.style.width = 'auto';
-                }
-                sprite.style.objectFit = 'scale-down';
-                sprite.style.background = 'none';
-                sprite.style.border = 'none';
-                sprite.style.borderRadius = '0';
-                sprite.style.opacity = enemy.currentHp > 0 ? '1' : '0.3';
-                sprite.style.filter = 'drop-shadow(2px 2px 4px rgba(0,0,0,0.5))';
+                    const sprite = document.createElement('img');
+                    sprite.src = enemy.image;
+                    sprite.alt = enemy.name + ' Sprite';
+                    sprite.title = `${enemy.name} (${enemy.currentHp}/${enemy.hp} HP)`;
+                    // Strip numeric suffix for size lookup
+                    const baseEnemyName = enemy.name.replace(/\s\d+$/, '');
+                    const s = enemySizeMap[baseEnemyName] || { h: 180 };
+                    // Apply global boss size multiplier and special Liquid Legion intro boost
+                    let scale = 1;
+                    if (enemy.isBoss || enemy.isBossyVisual) scale *= BOSS_SIZE_MULTIPLIER;
+                    const finalH = Math.round((s.h || 180) * scale);
+                    sprite.style.height = finalH + 'px';
+                    if (s.w) {
+                        const finalW = Math.round(s.w * scale);
+                        sprite.style.width = finalW + 'px';
+                    } else {
+                        sprite.style.width = 'auto';
+                    }
+                    sprite.style.objectFit = 'scale-down';
+                    sprite.style.background = 'none';
+                    sprite.style.border = 'none';
+                    sprite.style.borderRadius = '0';
+                    sprite.style.opacity = enemy.currentHp > 0 ? '1' : '0.3';
+                    sprite.style.filter = 'drop-shadow(2px 2px 4px rgba(0,0,0,0.5))';
                 
                 // Name below sprite
                 const nameLabel = document.createElement('div');
                 nameLabel.textContent = enemy.name;
                 nameLabel.style.color = '#b91c1c';
-                nameLabel.style.fontSize = '1rem';
-                nameLabel.style.fontWeight = 'bold';
+                nameLabel.style.fontSize = '1.2rem';
+                nameLabel.style.fontWeight = '900';
                 nameLabel.style.textAlign = 'center';
                 nameLabel.style.marginTop = '5px';
-                nameLabel.style.textShadow = '2px 2px 4px rgba(0,0,0,0.8)';
+                nameLabel.style.textShadow = '3px 3px 6px rgba(0,0,0,0.9), 1px 1px 2px rgba(0,0,0,1)';
                 nameLabel.style.maxWidth = '140px';
                 nameLabel.style.wordWrap = 'break-word';
                 
@@ -1430,6 +2568,9 @@
                 enemyContainer.appendChild(nameLabel);
                 enemySprites.appendChild(enemyContainer);
             });
+            
+            // Update enemy selection visuals
+            updateEnemySelection();
         }
 
         // Get enemy icon based on name
@@ -1473,17 +2614,18 @@
 
             // Level up each party member
             gameState.party.forEach(member => {
-                if (member.currentHp > 0) {
-                    member.level++;
-                    member.maxHp += 10;
-                    member.maxMp += 8;
-                    member.attack += 5;
-                    member.defense += 3;
-                    // Full heal
-                    member.currentHp = member.maxHp;
-                    member.currentMp = member.maxMp;
-                    member.statusEffects = [];
-                }
+                member.level = (member.level || 1) + 1;
+                member.maxHp += 10;
+                member.maxMp += 8;
+                member.attack += 5;
+                member.defense += 3;
+                // Full heal (revive if KO'd)
+                member.currentHp = member.maxHp;
+                member.currentMp = member.maxMp;
+                member.statusEffects = [];
+                member.defending = false;
+                member.defenseBoost = false;
+                member.hidden = false;
             });
 
             // Restore inventory and add revival nanite
@@ -1491,28 +2633,34 @@
                 halfHeal: 5,
                 fullHeal: 3,
                 mpRestore: 3,
-                revivalNanites: gameState.inventory.revivalNanites + 1
+                revivalNanites: (gameState.inventory?.revivalNanites || 0) + 1
             };
 
             addToLog("🎉 LEVEL UP! Your party has grown stronger and been fully healed!");
             addToLog(`📦 Inventory restocked! +1 Revival Nanite (now have ${gameState.inventory.revivalNanites})`);
+            updateDisplay();
         }
 
         // Start player turn
         function startPlayerTurn() {
-            // Find next living party member
-            while (gameState.currentPlayerIndex < gameState.party.length && 
-                   gameState.party[gameState.currentPlayerIndex].currentHp <= 0) {
+            // Find next living party member. KO'd members do not take turns.
+            while (gameState.currentPlayerIndex < gameState.party.length &&
+                   (!gameState.party[gameState.currentPlayerIndex] || gameState.party[gameState.currentPlayerIndex].currentHp <= 0)) {
                 gameState.currentPlayerIndex++;
             }
 
             if (gameState.currentPlayerIndex >= gameState.party.length) {
-                // All party members dead
+                // If anyone is alive but we ran past the end, it's simply the end of the party segment.
+                if (Array.isArray(gameState.party) && gameState.party.some(m => (m?.currentHp || 0) > 0)) {
+                    enemyTurn();
+                    return;
+                }
                 endGame(false);
                 return;
             }
 
             const currentPlayer = gameState.party[gameState.currentPlayerIndex];
+            gameState.selectedAllyIndex = gameState.currentPlayerIndex;
             updatePlayerActions(currentPlayer);
         }
 
@@ -1521,16 +2669,39 @@
             // Update the display first to show the current player
             updateDisplay();
             // Then populate the action buttons in the current player's section
-            const actionContainer = document.getElementById('currentPlayerActions');
-            const inventoryContainer = document.getElementById('currentPlayerInventory');
+            // Always use the overlay containers inside battleActionsOverlay
+            const actionContainer = document.querySelector('#battleActionsOverlay #currentPlayerActions');
+            const inventoryContainer = document.querySelector('#battleActionsOverlay #currentPlayerInventory');
             if (!actionContainer || !inventoryContainer) return;
+            
             actionContainer.innerHTML = '';
             inventoryContainer.innerHTML = '';
+            
             // Ability buttons (2x2 grid, always 4)
             actionContainer.className = 'action-buttons';
             const buttons = [];
+            // Click protection: only allow one action per character per turn
+            let actionTaken = false;
+            function protectedAction(fn) {
+                return function() {
+                    const current = getCurrentPlayerSafe();
+                    if (!current || current !== player) {
+                        addToLog("It is not this character's turn.");
+                        return;
+                    }
+                    if (!isPlayerAbleToAct(current)) {
+                        addToLog(`${current.name} is KO'd and cannot act!`);
+                        return;
+                    }
+                    if (actionTaken) return;
+                    actionTaken = true;
+                    // Disable all action buttons immediately
+                    Array.from(actionContainer.querySelectorAll('button')).forEach(b => b.disabled = true);
+                    fn();
+                };
+            }
             // Basic attack (always first)
-            buttons.push(createActionButton('⚔️ Attack', () => performAttack(player)));
+            buttons.push(createActionButton('⚔️ Attack', protectedAction(() => performAttack(player))));
             // Find the main skill (not attack, priority to elemental/special abilities)
             const skills = Object.entries(player.skills).filter(([key]) => key !== 'attack');
             let mainSkill = null;
@@ -1545,39 +2716,47 @@
             if (mainSkill) {
                 const [skillKey, skill] = mainSkill;
                 const canUse = player.currentMp >= skill.cost;
-                buttons.push(createActionButton(`${skill.name || skillKey} (${skill.cost}MP)`, () => useSkill(player, skillKey, skill), !canUse));
+                const skillIcon = skill.icon || '✨';
+                buttons.push(createActionButton(`${skillIcon} ${skill.name} (${skill.cost} MP)`, protectedAction(() => useSkill(player, skillKey, skill)), !canUse));
+            } else {
+                buttons.push(createActionButton('No Skill', () => {}, true));
             }
-            // Add up to 2 more skills
-            const remainingSkills = skills.filter(([key]) => !mainSkill || key !== mainSkill[0]);
-            for (let i = 0; i < Math.min(2, remainingSkills.length); i++) {
-                const [skillKey, skill] = remainingSkills[i];
+            // Add other skills or defend/guard
+            const otherSkills = skills.filter(([key]) => key !== (mainSkill ? mainSkill[0] : null));
+            if (otherSkills.length > 0) {
+                const [skillKey, skill] = otherSkills[0];
                 const canUse = player.currentMp >= skill.cost;
-                buttons.push(createActionButton(`${skill.name || skillKey} (${skill.cost}MP)`, () => useSkill(player, skillKey, skill), !canUse));
+                const skillIcon = skill.icon || '✨';
+                buttons.push(createActionButton(`${skillIcon} ${skill.name} (${skill.cost} MP)`, protectedAction(() => useSkill(player, skillKey, skill)), !canUse));
+            } else {
+                buttons.push(createActionButton('🛡️ Defend', protectedAction(() => performDefend(player))));
             }
-            // Ensure we have exactly 4 buttons (fill with empty if needed)
+            // Fourth button - defend or another skill
+            if (otherSkills.length > 1) {
+                const [skillKey, skill] = otherSkills[1];
+                const canUse = player.currentMp >= skill.cost;
+                const skillIcon = skill.icon || '✨';
+                buttons.push(createActionButton(`${skillIcon} ${skill.name} (${skill.cost} MP)`, protectedAction(() => useSkill(player, skillKey, skill)), !canUse));
+            } else {
+                buttons.push(createActionButton('🛡️ Defend', protectedAction(() => performDefend(player))));
+            }
+            // Ensure we have exactly 4 buttons
             while (buttons.length < 4) {
-                const emptyBtn = document.createElement('button');
-                emptyBtn.className = 'action-btn';
-                emptyBtn.disabled = true;
-                emptyBtn.style.visibility = 'hidden';
-                buttons.push(emptyBtn);
+                buttons.push(createActionButton('', () => {}, true));
             }
-            // Style all buttons for larger font and padding
-            buttons.forEach(btn => {
-                btn.style.fontSize = '1.15rem';
-                btn.style.padding = '18px 24px';
-                actionContainer.appendChild(btn);
-            });
-            // Item buttons (2x2 grid, always 4)
+            buttons.slice(0, 4).forEach(btn => actionContainer.appendChild(btn));
+            
+            // Items section (2x2 grid, always 4)
             inventoryContainer.className = 'inventory-section';
-            const itemOrder = ['halfHeal', 'fullHeal', 'mpRestore', 'revivalNanites'];
             const itemButtons = [];
+            const itemOrder = ['halfHeal', 'fullHeal', 'mpRestore', 'revivalNanites'];
             const labelMap = {
                 halfHeal: 'Half Heal',
-                fullHeal: 'Full Heal',
+                fullHeal: 'Full Heal', 
                 mpRestore: 'MP Restore',
                 revivalNanites: 'Revive'
             };
+            
             itemOrder.forEach(item => {
                 const count = gameState.inventory[item];
                 const label = `${labelMap[item]}${count > 0 ? ` (${count})` : ''}`;
@@ -1587,9 +2766,10 @@
                 btn.disabled = count <= 0;
                 btn.style.fontSize = '1.15rem';
                 btn.style.padding = '14px 20px';
-                if (count > 0) btn.onclick = () => useItem(item);
+                if (count > 0) btn.onclick = protectedAction(() => useItem(item));
                 itemButtons.push(btn);
             });
+            
             while (itemButtons.length < 4) {
                 const emptyBtn = document.createElement('button');
                 emptyBtn.className = 'item-btn';
@@ -1612,58 +2792,121 @@
 
         // Use item
         function useItem(itemType) {
-            if (gameState.inventory[itemType] <= 0) return;
+            if (!gameState || !gameState.inventory || gameState.inventory[itemType] <= 0) return;
 
-            let target = gameState.party[gameState.currentPlayerIndex];
+            const actor = getCurrentPlayerSafe();
+            if (!actor) {
+                addToLog('Error: Invalid active character.');
+                return;
+            }
+            if (!isPlayerAbleToAct(actor)) {
+                addToLog(`${actor.name} is KO'd and cannot use items!`);
+                return;
+            }
+
+            const party = Array.isArray(gameState.party) ? gameState.party : [];
+            const safeAllyIndex = (typeof gameState.selectedAllyIndex === 'number')
+                ? Math.max(0, Math.min(gameState.selectedAllyIndex, Math.max(0, party.length - 1)))
+                : gameState.currentPlayerIndex;
+
+            let target = party[safeAllyIndex] || actor;
             
             switch (itemType) {
                 case 'halfHeal':
+                    if (target.currentHp <= 0) {
+                        addToLog(`${target.name} is KO'd — healing won't work. Use Revive instead.`);
+                        return;
+                    }
                     const halfHealAmount = Math.floor(target.maxHp * 0.5);
                     target.currentHp = Math.min(target.maxHp, target.currentHp + halfHealAmount);
                     addToLog(`${target.name} used Half Heal potion and recovered ${halfHealAmount} HP!`);
                     break;
                     
                 case 'fullHeal':
+                    if (target.currentHp <= 0) {
+                        addToLog(`${target.name} is KO'd — healing won't work. Use Revive instead.`);
+                        return;
+                    }
                     const fullHealAmount = target.maxHp - target.currentHp;
                     target.currentHp = target.maxHp;
                     addToLog(`${target.name} used Full Heal potion and recovered ${fullHealAmount} HP!`);
                     break;
                     
                 case 'mpRestore':
+                    if (target.currentHp <= 0) {
+                        addToLog(`${target.name} is KO'd — MP items won't work. Use Revive instead.`);
+                        return;
+                    }
                     const mpRestoreAmount = target.maxMp - target.currentMp;
                     target.currentMp = target.maxMp;
                     addToLog(`${target.name} used MP Restore potion and recovered ${mpRestoreAmount} MP!`);
                     break;
                     
                 case 'revivalNanites':
-                    // Find first dead party member
-                    const deadMember = gameState.party.find(member => member.currentHp <= 0);
-                    if (deadMember) {
-                        deadMember.currentHp = Math.floor(deadMember.maxHp * 0.5);
-                        addToLog(`Revival Nanite used! ${deadMember.name} is revived with ${deadMember.currentHp} HP!`);
-                    } else {
-                        addToLog("No one needs revival!");
-                        return;
+                    {
+                        const selected = party[safeAllyIndex];
+                        const reviveTarget = (selected && selected.currentHp <= 0)
+                            ? selected
+                            : party.find(member => (member?.currentHp || 0) <= 0);
+
+                        if (!reviveTarget) {
+                            addToLog('No one needs revival!');
+                            return;
+                        }
+                        reviveTarget.currentHp = Math.floor(reviveTarget.maxHp * 0.5);
+                        addToLog(`Revival Nanite used! ${reviveTarget.name} is revived with ${reviveTarget.currentHp} HP!`);
                     }
                     break;
             }
 
-            gameState.inventory[itemType]--;
+            // During Flash Sale!, non-revival items do not decrease
+            if (!(gameState.flashSaleActive && (itemType === 'halfHeal' || itemType === 'fullHeal' || itemType === 'mpRestore'))) {
+                gameState.inventory[itemType]--;
+            }
             updateDisplay();
             endPlayerTurn();
         }
 
         // Perform basic attack
-        function performAttack(player) {
-            // If multiple enemies, target first living enemy
+    function performAttack(player) {
+            // If multiple enemies, target selected enemy or first living enemy
             const livingEnemies = gameState.currentEnemies.filter(enemy => enemy.currentHp > 0);
             if (livingEnemies.length === 0) {
                 nextRound();
                 return;
             }
-            const target = livingEnemies[0]; // Target first living enemy
             
-            let damage = calculateDamage(player.attack, target.defense);
+            let target;
+            if (gameState.selectedEnemyIndex < gameState.currentEnemies.length && 
+                gameState.currentEnemies[gameState.selectedEnemyIndex].currentHp > 0) {
+                target = gameState.currentEnemies[gameState.selectedEnemyIndex];
+            } else {
+                target = livingEnemies[0]; // Fallback to first living enemy
+                gameState.selectedEnemyIndex = gameState.currentEnemies.indexOf(target);
+            }
+            
+            // Show ability text
+            showAbilityText(player.skills.attack.name, player.name);
+            // Standard animation for basic attack (skip if Dere FS overlay)
+            const isDereBasic = (player.name === 'Dere' || player.displayName?.includes('Dere')) && player.classType === 'cleric';
+            if (!isDereBasic) {
+                maybePlayClassAnimFor('attack', player);
+            }
+            
+            // Pass skill info for sorceress magical attacks and monk armor break
+            const attackSkill = player.skills.attack;
+            const damageResult = calculateDamage(player.attack, target.defense, player.element, target.weaknesses, target, player, attackSkill);
+            let damage = damageResult.damage;
+            // Persistent buffs
+            if (player.bardRenewalActive) damage = Math.floor(damage * 1.3);
+            if (player.monkTempestActive) damage = Math.floor(damage * 1.5);
+            
+            // Clear status effects after calculating damage
+            if (target.marked) target.marked = false;
+            if (player.hidden) {
+                player.hidden = false;
+                player.defenseBoost = false; // Remove ninja defense boost
+            }
             
             // Check for monk multi-hit
             if (player.skills.attack.multiHit) {
@@ -1674,50 +2917,332 @@
                     totalDamage += hitDamage;
                 }
                 damage = totalDamage;
-                addToLog(`${player.name} attacks ${target.name} ${hits} times for ${damage} total damage!`);
+                let logMessage = `${player.name} attacks ${target.name} ${hits} times for ${damage} total damage!`;
+                if (damageResult.isCritical) logMessage += " CRITICAL HIT!";
+                if (damageResult.isWeakness) logMessage += " WEAKNESS EXPLOITED!";
+                if (attackSkill.armorBreak) logMessage += " ARMOR BROKEN!";
+                addToLog(logMessage);
             } else {
-                addToLog(`${player.name} attacks ${target.name} for ${damage} damage!`);
+                let logMessage = `${player.name} attacks ${target.name} for ${damage} damage!`;
+                if (damageResult.isCritical) logMessage += " CRITICAL HIT!";
+                if (damageResult.isWeakness) logMessage += " WEAKNESS EXPLOITED!";
+                if (attackSkill.magical) logMessage += " MAGICAL DAMAGE!";
+                addToLog(logMessage);
             }
 
-            applyDamageToEnemy(damage, target);
+            // Visual effects
+            const enemySprites = document.querySelectorAll('#enemySprites > div');
+            const targetSprite = enemySprites[gameState.selectedEnemyIndex];
+            if (targetSprite) {
+                // Determine effect for standard classes
+                const attackElement = attackSkill.element || player.element || 'physical';
+                const effectType = getSpellEffectType(attackElement);
+
+                const playStandardVfx = () => {
+                    createMagicalEffect(targetSprite, effectType, attackElement, player);
+                    playSoundEffect(effectType === 'orb' ? 'magic' : 'attack');
+                    setTimeout(() => {
+                        flashElement(targetSprite);
+                        showDamageNumber(damage, targetSprite, damageResult.isCritical, damageResult.isWeakness);
+                        if (damageResult.isCritical) playSoundEffect('critical');
+                    }, effectType === 'orb' ? 800 : (effectType === 'flash' ? 300 : 0));
+                };
+
+                // Special case: Dere's basic attack uses fullscreen overlay
+                const isDere = (player.name === 'Dere' || player.displayName?.includes('Dere')) && player.classType === 'cleric';
+                if (isDere) {
+                    playFsAttackOverlay({
+                        imageUrl: specialAttackImages.dereStrike,
+                        timings: DERE_ATTACK_ANIM,
+                    }).then(() => {
+                        // After overlay, flash target and show damage number
+                        flashElement(targetSprite);
+                        showDamageNumber(damage, targetSprite, damageResult.isCritical, damageResult.isWeakness);
+                        if (damageResult.isCritical) playSoundEffect('critical');
+                    });
+                    // Also play an attack sound immediately to sell the hit
+                    playSoundEffect('attack');
+                } else {
+                    playStandardVfx();
+                }
+            }
+
+            // Ninja Assassination handling on basic attack
+            if (player.classType === 'ninja' && player.ninjaAssassinationPrimed) {
+                const isBoss = bossMonsters.some(b => (target.name || '').startsWith(b.name));
+                const canSlay = (!isBoss) || (isBoss && target.currentHp <= Math.floor(target.hp * 0.5) && Math.random() < 0.5);
+                if (canSlay) {
+                    damage = Math.max(damage, target.currentHp);
+                    addToLog(`ASSASSINATION! ${target.name} is slain in a single strike!`);
+                } else {
+                    damage = Math.floor(damage * 4);
+                    addToLog(`Assassination attempt isn't lethal, but deals crushing damage!`);
+                }
+                player.ninjaAssassinationPrimed = false;
+            }
+
+            // Purrchant Bap vs Final Boss bonus
+            if (player.classType === 'purrchant' && attackSkill && attackSkill.name === 'Bap') {
+                const finalBoss = bossMonsters[bossMonsters.length - 1].name;
+                if ((target.name || '').startsWith(finalBoss)) {
+                    damage = damage * 10;
+                }
+            }
+
+            // For Dere overlay, delay damage application slightly to align with visual
+            const isDere = (player.name === 'Dere' || player.displayName?.includes('Dere')) && player.classType === 'cleric';
+            if (isDere) {
+                setTimeout(() => {
+                    applyDamageToEnemy(damage, target);
+                // mark expected overlay duration
+                try { markAnim(DERE_ATTACK_ANIM.total || 2500); } catch(_) { markAnim(2500); }
+                endPlayerTurn();
+                }, Math.min(DERE_ATTACK_ANIM.total, 2500));
+            } else {
+                applyDamageToEnemy(damage, target);
+                // Give a small grace for standard overlay flashes
+                markAnim(600);
+                endPlayerTurn();
+            }
+        }
+
+        // Perform defend action
+        function performDefend(player) {
+            addToLog(`${player.name} takes a defensive stance, reducing incoming damage this turn.`);
+            // Class-specific defend animation
+            maybePlayClassAnimFor('defend', player);
+            player.defending = true; // Flag for enemy turn damage reduction
             endPlayerTurn();
         }
 
         // Use skill
-        function useSkill(player, skillKey, skill) {
+    async function useSkill(player, skillKey, skill) {
             if (player.currentMp < skill.cost) return;
 
             player.currentMp -= skill.cost;
 
+            // Show ability text for all skills
+            showAbilityText(skill.name, player.name);
+            // Class standard animation for this skill
+            maybePlayClassAnimFor(skillKey, player);
+
             switch (skillKey) {
+                // AOE conversions
+                case 'earth': { // Sorceress Earth Spike (element key for sorceress)
+                    const targets = gameState.currentEnemies.filter(e => e.currentHp > 0);
+                    if (targets.length === 0) break;
+                    let total = 0;
+                    for (const enemy of targets) {
+                        const res = calculateDamage(player.attack * 1.2, enemy.defense, 'earth', enemy.weaknesses, enemy, player, { ...skill, magical: true });
+                        let dmg = res.damage;
+                        if (player.bardRenewalActive) dmg = Math.floor(dmg * 1.3);
+                        if (player.monkTempestActive) dmg = Math.floor(dmg * 1.5);
+                        enemy.currentHp = Math.max(0, enemy.currentHp - dmg);
+                        total += dmg;
+                        // Per-target visuals
+                        try {
+                            const enemySprites = document.querySelectorAll('#enemySprites > div');
+                            const idx = gameState.currentEnemies.indexOf(enemy);
+                            const sprite = enemySprites[idx];
+                            if (sprite) {
+                                createMagicalEffect(sprite, 'flash', 'earth', player);
+                                setTimeout(()=>{ flashElement(sprite.querySelector('img')); showDamageNumber(dmg, sprite, res.isCritical, res.isWeakness); }, 300);
+                            }
+                        } catch {}
+                    }
+                    // Remove dead enemies and check for end
+                    gameState.currentEnemies = gameState.currentEnemies.filter(e => {
+                        if (e.currentHp <= 0) { addToLog(`${e.name} is defeated!`); return false; }
+                        return true;
+                    });
+                    if (gameState.currentEnemies.length === 0) { updateDisplay(); nextRound(); return; }
+                    addToLog(`${player.name} erupts Earth Spike! All foes take ${total} total damage!`);
+                    break;
+                }
+                case 'waterWave': { // Bard Water Wave AOE
+                    const targets = gameState.currentEnemies.filter(e => e.currentHp > 0);
+                    if (targets.length === 0) break;
+                    let total = 0;
+                    for (const enemy of targets) {
+                        const res = calculateDamage(player.attack * 1.2, enemy.defense, 'water', enemy.weaknesses, enemy, player, { ...skill, magical: true });
+                        let dmg = res.damage;
+                        if (player.bardRenewalActive) dmg = Math.floor(dmg * 1.3);
+                        if (player.monkTempestActive) dmg = Math.floor(dmg * 1.5);
+                        enemy.currentHp = Math.max(0, enemy.currentHp - dmg);
+                        total += dmg;
+                        try {
+                            const enemySprites = document.querySelectorAll('#enemySprites > div');
+                            const idx = gameState.currentEnemies.indexOf(enemy);
+                            const sprite = enemySprites[idx];
+                            if (sprite) {
+                                createMagicalEffect(sprite, 'flash', 'water', player);
+                                setTimeout(()=>{ flashElement(sprite.querySelector('img')); showDamageNumber(dmg, sprite, res.isCritical, res.isWeakness); }, 300);
+                            }
+                        } catch {}
+                    }
+                    gameState.currentEnemies = gameState.currentEnemies.filter(e => {
+                        if (e.currentHp <= 0) { addToLog(`${e.name} is defeated!`); return false; }
+                        return true;
+                    });
+                    if (gameState.currentEnemies.length === 0) { updateDisplay(); nextRound(); return; }
+                    addToLog(`${player.name} unleashes Water Wave! All foes take ${total} total damage!`);
+                    break;
+                }
+                case 'fireShuriken': { // Ninja Fire Shuriken AOE
+                    const targets = gameState.currentEnemies.filter(e => e.currentHp > 0);
+                    if (targets.length === 0) break;
+                    let total = 0;
+                    for (const enemy of targets) {
+                        const res = calculateDamage(player.attack * 1.2, enemy.defense, 'fire', enemy.weaknesses, enemy, player, { ...skill });
+                        let dmg = res.damage;
+                        if (player.bardRenewalActive) dmg = Math.floor(dmg * 1.3);
+                        if (player.monkTempestActive) dmg = Math.floor(dmg * 1.5);
+                        enemy.currentHp = Math.max(0, enemy.currentHp - dmg);
+                        total += dmg;
+                        try {
+                            const enemySprites = document.querySelectorAll('#enemySprites > div');
+                            const idx = gameState.currentEnemies.indexOf(enemy);
+                            const sprite = enemySprites[idx];
+                            if (sprite) {
+                                createMagicalEffect(sprite, 'orb', 'fire', player);
+                                setTimeout(()=>{ flashElement(sprite.querySelector('img')); showDamageNumber(dmg, sprite, res.isCritical, res.isWeakness); }, 500);
+                            }
+                        } catch {}
+                    }
+                    gameState.currentEnemies = gameState.currentEnemies.filter(e => {
+                        if (e.currentHp <= 0) { addToLog(`${e.name} is defeated!`); return false; }
+                        return true;
+                    });
+                    if (gameState.currentEnemies.length === 0) { updateDisplay(); nextRound(); return; }
+                    addToLog(`${player.name} hurls Fire Shuriken! All foes take ${total} total damage!`);
+                    break;
+                }
                 case 'mark':
-                    // Mark first living enemy
-                    const markTargets = gameState.currentEnemies.filter(enemy => enemy.currentHp > 0);
-                    if (markTargets.length > 0) {
-                        markTargets[0].marked = true;
-                        addToLog(`${player.name} marks ${markTargets[0].name} for increased critical hit chance!`);
+                    // Mark selected enemy or first living enemy
+                    let markTarget;
+                    if (gameState.selectedEnemyIndex < gameState.currentEnemies.length && 
+                        gameState.currentEnemies[gameState.selectedEnemyIndex].currentHp > 0) {
+                        markTarget = gameState.currentEnemies[gameState.selectedEnemyIndex];
+                    } else {
+                        const markTargets = gameState.currentEnemies.filter(enemy => enemy.currentHp > 0);
+                        if (markTargets.length > 0) {
+                            markTarget = markTargets[0];
+                        }
+                    }
+                    
+                    if (markTarget) {
+                        markTarget.marked = true;
+                        addToLog(`${player.name} marks ${markTarget.name} for increased critical hit chance!`);
                     }
                     break;
                     
                 case 'heal':
                     const healTarget = selectHealTarget();
+                    if (!healTarget) {
+                        addToLog(`${player.name} tries to heal, but no ally can be healed.`);
+                        break;
+                    }
                     const healAmount = Math.floor(healTarget.maxHp * 0.6);
                     healTarget.currentHp = Math.min(healTarget.maxHp, healTarget.currentHp + healAmount);
                     addToLog(`${player.name} heals ${healTarget.name} for ${healAmount} HP!`);
+                    // Ultimate charge on healing an ally
+                    player.ultCharge = Math.min(100, (player.ultCharge || 0) + 20);
+                    
+                    // Flash the healed party member
+                    const partySprites = document.querySelectorAll('#partySprites img');
+                    const healedIndex = gameState.party.indexOf(healTarget);
+                    if (partySprites[healedIndex]) {
+                        flashElement(partySprites[healedIndex]);
+                    }
+                    break;
+                    
+                case 'partyHeal':
+                    // New cleric party heal - 66% of single heal effectiveness
+                    const partyHealAmount = Math.floor(player.maxHp * 0.4); // 40% of max HP per party member
+                    let healedCount = 0;
+                    gameState.party.forEach(member => {
+                        if (isPlayerAbleToAct(member)) {
+                            const actualHeal = Math.min(partyHealAmount, member.maxHp - member.currentHp);
+                            member.currentHp = Math.min(member.maxHp, member.currentHp + actualHeal);
+                            if (actualHeal > 0) healedCount++;
+                        }
+                    });
+                    addToLog(`${player.name} heals the entire party for ${partyHealAmount} HP each! (${healedCount} members healed)`);
+                    player.ultCharge = Math.min(100, (player.ultCharge || 0) + 15);
+                    
+                    // Flash all party members
+                    const allPartySprites = document.querySelectorAll('#partySprites img');
+                    allPartySprites.forEach(sprite => flashElement(sprite));
+                    
+                    // Play healing sound effect
+                    playSoundEffect('heal');
                     break;
                     
                 case 'songHeal':
                     const songHealTarget = selectHealTarget();
+                    if (!songHealTarget) {
+                        addToLog(`${player.name} tries to sing a healing melody, but no ally can be healed.`);
+                        break;
+                    }
                     const songHealAmount = Math.floor(songHealTarget.maxHp * 0.4);
                     songHealTarget.currentHp = Math.min(songHealTarget.maxHp, songHealTarget.currentHp + songHealAmount);
                     addToLog(`${player.name} sings healing melody to ${songHealTarget.name} for ${songHealAmount} HP!`);
+                    player.ultCharge = Math.min(100, (player.ultCharge || 0) + 12);
+                    break;
+                case 'catnap':
+                    // Purrchant heals self for 50%
+                    const selfHeal = Math.floor(player.maxHp * 0.5);
+                    player.currentHp = Math.min(player.maxHp, player.currentHp + selfHeal);
+                    addToLog(`${player.name} uses Catnap and restores ${selfHeal} HP!`);
+                    // Count as healing an ally (self) for ult charge
+                    player.ultCharge = Math.min(100, (player.ultCharge || 0) + 12);
+                    break;
+                case 'restock':
+                    if (player.classType !== 'purrchant') break;
+                    // Cost 75% of max MP
+                    const restockCost = Math.ceil(player.maxMp * 0.75);
+                    if (player.currentMp + skill.cost < restockCost) { // skill.cost already deducted
+                        addToLog(`${player.name} doesn't have enough MP to Re-Stock!`);
+                        // Refund the earlier generic cost deduction
+                        player.currentMp += skill.cost;
+                        break;
+                    }
+                    // Adjust MP to reflect the 75% cost
+                    player.currentMp = player.currentMp + skill.cost - restockCost;
+                    // Fully restock items
+                    gameState.inventory = {
+                        halfHeal: 5,
+                        fullHeal: 3,
+                        mpRestore: 3,
+                        revivalNanites: gameState.inventory.revivalNanites + 1
+                    };
+                    addToLog(`${player.name} cries Re-Stock! Your supplies are fully replenished! (+1 Revive)`);
+                    break;
+                    
+                    // Flash the healed party member
+                    const bardPartySprites = document.querySelectorAll('#partySprites img');
+                    const songHealedIndex = gameState.party.indexOf(songHealTarget);
+                    if (bardPartySprites[songHealedIndex]) {
+                        flashElement(bardPartySprites[songHealedIndex]);
+                    }
                     break;
                     
                 case 'mpMelody':
                     const mpTarget = selectMpTarget();
+                    if (!mpTarget) {
+                        addToLog(`${player.name} tries to restore MP, but no ally can receive it.`);
+                        break;
+                    }
                     const mpAmount = Math.floor(mpTarget.maxMp * 0.5);
                     mpTarget.currentMp = Math.min(mpTarget.maxMp, mpTarget.currentMp + mpAmount);
                     addToLog(`${player.name} restores ${mpAmount} MP to ${mpTarget.name}!`);
+                    
+                    // Flash the MP restored party member
+                    const mpPartySprites = document.querySelectorAll('#partySprites img');
+                    const mpRestoredIndex = gameState.party.indexOf(mpTarget);
+                    if (mpPartySprites[mpRestoredIndex]) {
+                        flashElement(mpPartySprites[mpRestoredIndex]);
+                    }
                     break;
                     
                 case 'chiBoost':
@@ -1727,23 +3252,75 @@
                     
                 case 'hide':
                     player.hidden = true;
-                    addToLog(`${player.name} becomes hidden! Next attack has 75% critical hit chance!`);
+                    player.defenseBoost = true; // Add defense boost
+                    addToLog(`${player.name} becomes hidden! Next attack has 75% critical hit chance and gains defense boost!`);
                     break;
                     
                 default:
-                    // Elemental attacks - target first living enemy
+                    // Elemental attacks - target selected enemy or first living enemy
                     const attackTargets = gameState.currentEnemies.filter(enemy => enemy.currentHp > 0);
                     if (attackTargets.length === 0) return;
                     
-                    const target = attackTargets[0];
-                    let damage = calculateDamage(player.attack * 1.2, target.defense);
-                    
-                    // Check for elemental weakness
-                    if (target.weaknesses.includes(skill.element)) {
-                        damage = Math.floor(damage * 1.5);
-                        addToLog(`${player.name} uses ${skill.name} on ${target.name}! It's super effective! ${damage} damage!`);
+                    let target;
+                    if (gameState.selectedEnemyIndex < gameState.currentEnemies.length && 
+                        gameState.currentEnemies[gameState.selectedEnemyIndex].currentHp > 0) {
+                        target = gameState.currentEnemies[gameState.selectedEnemyIndex];
                     } else {
-                        addToLog(`${player.name} uses ${skill.name} on ${target.name} for ${damage} damage!`);
+                        target = attackTargets[0];
+                        gameState.selectedEnemyIndex = gameState.currentEnemies.indexOf(target);
+                    }
+                    
+                    const damageResult = calculateDamage(player.attack * 1.2, target.defense, skill.element || player.element, target.weaknesses, target, player, skill);
+                    let damage = damageResult.damage;
+                    if (player.bardRenewalActive) damage = Math.floor(damage * 1.3);
+                    if (player.monkTempestActive) damage = Math.floor(damage * 1.5);
+                    
+                    // Clear status effects after calculating damage
+                    if (target.marked) target.marked = false;
+                    if (player.hidden) {
+                        player.hidden = false;
+                        player.defenseBoost = false; // Remove ninja defense boost
+                    }
+                    
+                    // Apply elemental skill damage
+                    if (target.weaknesses.includes(skill.element)) {
+                        let logMessage = `${player.name} uses ${skill.name} on ${target.name}! It's super effective! ${damage} damage!`;
+                        if (damageResult.isCritical) logMessage += " CRITICAL HIT!";
+                        addToLog(logMessage);
+                    } else {
+                        let logMessage = `${player.name} uses ${skill.name} on ${target.name} for ${damage} damage!`;
+                        if (damageResult.isCritical) logMessage += " CRITICAL HIT!";
+                        addToLog(logMessage);
+                    }
+                    
+                    // Visual effects
+                    const enemySprites = document.querySelectorAll('#enemySprites > div');
+                    const targetSprite = enemySprites[gameState.selectedEnemyIndex];
+                    if (targetSprite) {
+                        // Determine effect type based on skill element
+                        const skillElement = skill.element || player.element || 'physical';
+                        const effectType = getSpellEffectType(skillElement);
+                        
+                        // Create magical effect
+                        createMagicalEffect(targetSprite, effectType, skillElement, player);
+                        
+                        // Play sound effect
+                        if (skill.name === 'Party Heal') {
+                            playSoundEffect('heal');
+                        } else {
+                            playSoundEffect(effectType === 'orb' ? 'magic' : 'attack');
+                        }
+                        
+                        // Delay flash and damage number to sync with effect
+                        setTimeout(() => {
+                            flashElement(targetSprite);
+                            showDamageNumber(damage, targetSprite, damageResult.isCritical, damageResult.isWeakness);
+                            
+                            // Play additional sound for critical hits
+                            if (damageResult.isCritical) {
+                                playSoundEffect('critical');
+                            }
+                        }, effectType === 'orb' ? 800 : (effectType === 'flash' ? 300 : 0));
                     }
                     
                     applyDamageToEnemy(damage, target);
@@ -1751,12 +3328,15 @@
             }
 
             updateDisplay();
+            // Wait for animations before handing turn to enemies
+            await waitForAnims();
             endPlayerTurn();
         }
 
         // Select heal target (prioritize lowest HP%)
         function selectHealTarget() {
-            const livingMembers = gameState.party.filter(member => member.currentHp > 0);
+            const livingMembers = gameState.party.filter(isPlayerAbleToAct);
+            if (livingMembers.length === 0) return null;
             return livingMembers.reduce((target, member) => {
                 const memberHpPercent = member.currentHp / member.maxHp;
                 const targetHpPercent = target.currentHp / target.maxHp;
@@ -1766,7 +3346,8 @@
 
         // Select MP target (prioritize lowest MP%)
         function selectMpTarget() {
-            const livingMembers = gameState.party.filter(member => member.currentHp > 0);
+            const livingMembers = gameState.party.filter(isPlayerAbleToAct);
+            if (livingMembers.length === 0) return null;
             return livingMembers.reduce((target, member) => {
                 const memberMpPercent = member.currentMp / member.maxMp;
                 const targetMpPercent = target.currentMp / target.maxMp;
@@ -1774,80 +3355,219 @@
             });
         }
 
-        // Calculate damage
-        function calculateDamage(attack, defense) {
-            const baseDamage = Math.max(1, attack - defense);
+        // Calculate damage with weakness exploitation and critical hits
+        function calculateDamage(attack, defense, playerElement = null, targetWeaknesses = [], target = null, player = null, skill = null) {
+            // Normalize element synonyms (treat 'radiant'/'holy' as 'light')
+            const normEl = (playerElement || '').toString().toLowerCase();
+            const playerEl = (normEl === 'radiant' || normEl === 'holy') ? 'light' : normEl;
+            const weaknesses = (targetWeaknesses || []).map(w => {
+                const s = (w || '').toString().toLowerCase();
+                if (s === 'radiant' || s === 'holy') return 'light';
+                return s;
+            });
+
+            let baseDamage = Math.max(1, attack - defense);
+            let isCritical = false;
+            let isWeakness = false;
+            let effectiveDefense = defense;
+            
+            // Monk armor break - reduces enemy defense by 25%
+            if (skill && skill.armorBreak) {
+                effectiveDefense = Math.floor(defense * 0.75);
+                baseDamage = Math.max(1, attack - effectiveDefense);
+            }
+            
+            // Magical damage bypasses 50% of defense
+            if (skill && skill.magical) {
+                effectiveDefense = Math.floor(defense * 0.5);
+                baseDamage = Math.max(1, attack - effectiveDefense);
+            }
+            
+            // Check for weakness exploitation - massive damage bonus
+            if (playerEl && weaknesses.includes(playerEl)) {
+                baseDamage = Math.max(1, attack - Math.floor(effectiveDefense * 0.3)); // Reduce defense by 70%
+                baseDamage = Math.floor(baseDamage * 2.5); // 2.5x damage multiplier
+                isWeakness = true;
+            }
+            
+            // Check for physical weakness (applies to basic attacks and non-elemental skills)
+            if (!playerEl && weaknesses.includes("physical")) {
+                baseDamage = Math.max(1, attack - Math.floor(effectiveDefense * 0.3)); // Reduce defense by 70%
+                baseDamage = Math.floor(baseDamage * 2.5); // 2.5x damage multiplier
+                isWeakness = true;
+            }
+            
+            // Spell and ability damage boost - 50% more damage for skills with MP cost or special attack properties
+            if (skill && (skill.cost > 0 || skill.magical || skill.multiHit || skill.armorBreak || skill.element)) {
+                baseDamage = Math.floor(baseDamage * 1.5);
+            }
+            
+            // Critical hit chance
+            let critChance = 0.05; // Base 5% crit chance
+            if (target && target.marked) critChance += 0.3; // +30% for marked targets
+            if (player && player.hidden) critChance += 0.7; // +70% for hidden ninja
+            
+            if (Math.random() < critChance) {
+                baseDamage = Math.floor(baseDamage * 2); // 2x damage on crit
+                isCritical = true;
+            }
+            
             const variation = Math.random() * 0.4 + 0.8; // 80-120% variation
-            return Math.floor(baseDamage * variation);
+            const finalDamage = Math.floor(baseDamage * variation);
+            
+            // Return damage info for better logging
+            return {
+                damage: finalDamage,
+                isCritical: isCritical,
+                isWeakness: isWeakness
+            };
         }
 
         // Apply damage to enemy
-        function applyDamageToEnemy(damage, enemy) {
+    function applyDamageToEnemy(damage, enemy) {
             enemy.currentHp -= damage;
             
             if (enemy.currentHp <= 0) {
                 addToLog(`${enemy.name} is defeated!`);
+        // Ultimate charge for the acting player on kill
+        const killer = getCurrentPlayerSafe();
+        if (killer) killer.ultCharge = Math.min(100, (killer.ultCharge || 0) + 25);
                 
-                // Brief pause in music for dramatic effect
-                if (currentAudio) {
-                    const currentVolume = currentAudio.volume;
-                    currentAudio.volume = 0.1;
-                    setTimeout(() => {
-                        if (currentAudio) currentAudio.volume = currentVolume;
-                    }, 1000);
+                // Remove defeated enemy from the array
+                const enemyIndex = gameState.currentEnemies.indexOf(enemy);
+                if (enemyIndex > -1) {
+                    gameState.currentEnemies.splice(enemyIndex, 1);
                 }
                 
                 // Check if all enemies are defeated
-                const livingEnemies = gameState.currentEnemies.filter(e => e.currentHp > 0);
-                if (livingEnemies.length === 0) {
+                if (gameState.currentEnemies.length === 0) {
                     nextRound();
                 }
             }
             updateDisplay();
         }
 
-        // End player turn
-        function endPlayerTurn() {
+    // End player turn
+    async function endPlayerTurn() {
             gameState.currentPlayerIndex++;
             
             if (gameState.currentPlayerIndex >= gameState.party.length || 
-                gameState.party.filter(member => member.currentHp > 0).length === 0) {
+                !gameState.party.some(isPlayerAbleToAct)) {
                 // End of party turn, enemy attacks
-                enemyTurn();
+        await enemyTurn();
             } else {
                 startPlayerTurn();
             }
         }
 
         // Enemy turn
-        function enemyTurn() {
+    async function enemyTurn() {
+        // Ensure all player animations have completed before enemies act
+        await waitForAnims();
             const livingEnemies = gameState.currentEnemies.filter(enemy => enemy.currentHp > 0);
             if (livingEnemies.length === 0) return;
 
-            const livingMembers = gameState.party.filter(member => member.currentHp > 0);
+            const livingMembers = gameState.party.filter(isPlayerAbleToAct);
             
             if (livingMembers.length === 0) {
                 endGame(false);
                 return;
             }
 
-            // Each living enemy attacks
+            // Each living enemy attacks; allow some to act ~1.5x on average
             livingEnemies.forEach(enemy => {
-                if (livingMembers.filter(m => m.currentHp > 0).length === 0) return;
+                const freq = Math.max(1, Math.min(2, enemy.attackFrequency || 1));
+                // If freq ~1.5, do a 50% chance of 2 attacks, else 1
+                const extra = (freq > 1 && Math.random() < (freq - 1)) ? 1 : 0;
+                const attacksThisTurn = 1 + extra;
+                for (let k = 0; k < attacksThisTurn; k++) {
+                if (!gameState.party.some(isPlayerAbleToAct)) return;
                 
                 const attack = enemy.attacks[Math.floor(Math.random() * enemy.attacks.length)];
-                const availableTargets = gameState.party.filter(member => member.currentHp > 0);
-                const target = availableTargets[Math.floor(Math.random() * availableTargets.length)];
-                const damage = Math.max(1, attack.damage - Math.floor(target.defense / 2));
+                const availableTargets = gameState.party.filter(isPlayerAbleToAct);
+                let target = availableTargets[Math.floor(Math.random() * availableTargets.length)];
+                // Purrchant Save Me!: if Purrchant is targeted, 50% chance to redirect to another ally
+                if (target && target.classType === 'purrchant' && availableTargets.length > 1 && Math.random() < 0.5) {
+                    const others = availableTargets.filter(m => m !== target);
+                    const newTarget = others[Math.floor(Math.random() * others.length)];
+                    addToLog(`Save Me! ${newTarget.name} gets roped into taking the hit for Purrchant!`);
+                    target = newTarget;
+                }
                 
+                // Show ability text for enemy attack
+                showAbilityText(attack.name, enemy.name);
+                
+                // Apply ninja defense boost
+                let effectiveDefense = target.defense;
+                if (target.defenseBoost) {
+                    effectiveDefense = Math.floor(target.defense * 1.5); // 50% defense boost
+                }
+                
+                // Use enemy's attack stat + attack damage bonus, minus target defense
+                const totalAttack = enemy.attack + attack.damage;
+                let damage = Math.max(1, totalAttack - effectiveDefense);
+                
+                // Apply defending reduction
+                if (target.defending) {
+                    damage = Math.floor(damage * 0.5); // 50% damage reduction when defending
+                    target.defending = false; // Reset defending status
+                }
+                
+                // Simple crit chance for monsters (10%)
+                let isCrit = Math.random() < 0.1;
+                if (isCrit) damage = Math.floor(damage * 1.5);
+
                 target.currentHp -= damage;
-                addToLog(`${enemy.name} uses ${attack.name} on ${target.name} for ${damage} damage!`);
+                let logMessage = `${enemy.name} uses ${attack.name} on ${target.name} for ${damage} damage!` + (isCrit ? ' CRITICAL!' : '');
+                if (target.defenseBoost) logMessage += " (Defense boosted!)";
+                if (target.defending) logMessage += " (Defending!)";
+                addToLog(logMessage);
+                
+                // Visual effects on hit player
+                const partySprites = document.querySelectorAll('#partySprites img');
+                const targetIndex = gameState.party.indexOf(target);
+                if (partySprites[targetIndex]) {
+                    const spriteEl = partySprites[targetIndex];
+                    // Particles on impact at sprite center
+                    const container = document.getElementById('battleFieldContainer');
+                    const cRect = container.getBoundingClientRect();
+                    const sRect = spriteEl.getBoundingClientRect();
+                    const cx = sRect.left - cRect.left + sRect.width/2;
+                    const cy = sRect.top - cRect.top + sRect.height/2;
+                    createParticleBurst(cx, cy, isCrit ? 'fire' : 'physical', container);
+                    // Shake and color-coded flash
+                    shakeElement(spriteEl);
+                    flashElement(spriteEl, isCrit ? 'red' : 'yellow');
+                    // Damage number
+                    showDamageNumber(damage, spriteEl, isCrit, false);
+                    
+                    // Play damage sound effect
+                    playSoundEffect('damage');
+                }
                 
                 if (target.currentHp <= 0) {
                     target.currentHp = 0;
                     addToLog(`${target.name} is defeated!`);
                 }
+                }
             });
+
+            // Archer Arrow Rain at end of round (enemy turn): damages all enemies for two rounds if active
+            if (gameState.arrowRainTurns > 0 && gameState.currentEnemies.length > 0) {
+                let total = 0;
+                gameState.currentEnemies.forEach(e => {
+                    const dmg = Math.floor(15 + Math.random() * 15);
+                    e.currentHp = Math.max(0, e.currentHp - dmg);
+                    total += dmg;
+                });
+                addToLog(`Arrow Rain continues to batter the enemies for ${total} total damage!`);
+                // Remove dead enemies
+                gameState.currentEnemies = gameState.currentEnemies.filter(e => {
+                    if (e.currentHp <= 0) { addToLog(`${e.name} is felled by the storm of arrows!`); return false; }
+                    return true;
+                });
+                gameState.arrowRainTurns--;
+            }
 
             // Add damage animation
             const partySection = document.querySelector('.party-section');
@@ -1857,7 +3577,7 @@
             updateDisplay();
 
             // Check if all party members are dead
-            if (gameState.party.every(member => member.currentHp <= 0)) {
+            if (!gameState.party.some(isPlayerAbleToAct)) {
                 endGame(false);
                 return;
             }
@@ -1870,6 +3590,12 @@
         // Next round
         function nextRound() {
             gameState.currentRound++;
+            // One-time mid-game boost after Round 5
+            if (!gameState.midGameBoostGranted && gameState.currentRound === 6) {
+                levelUpParty();
+                gameState.midGameBoostGranted = true;
+                updateDisplay();
+            }
             
             // Add a brief delay before starting next round to let music transition
             setTimeout(() => {
@@ -1897,63 +3623,71 @@
             gameState.party.forEach((member, index) => {
                 const memberContainer = document.getElementById(`partyMember${index}`);
                 if (!memberContainer) return;
-                
                 memberContainer.innerHTML = '';
-                
+                // Make the box fill available space and portrait larger
                 const memberDiv = document.createElement('div');
-                memberDiv.style.padding = '10px';
+                memberDiv.style.display = 'flex';
+                memberDiv.style.flexDirection = 'column';
+                memberDiv.style.alignItems = 'center';
+                memberDiv.style.justifyContent = 'center';
+                memberDiv.style.height = '100%';
+                memberDiv.style.padding = '18px 8px';
                 memberDiv.style.border = '1px solid #E5E7EB';
-                memberDiv.style.borderRadius = '8px';
-                
+                memberDiv.style.borderRadius = '12px';
+                memberDiv.style.background = 'rgba(46,38,20,0.93)';
                 // Highlight current player
                 if (index === gameState.currentPlayerIndex && member.currentHp > 0) {
                     memberDiv.style.border = '3px solid var(--gold)';
-                    memberDiv.style.backgroundColor = 'rgba(218, 172, 23, 0.1)';
+                    memberDiv.style.backgroundColor = 'rgba(218, 172, 23, 0.13)';
                 }
-                
                 const hpPercent = (member.currentHp / member.maxHp) * 100;
                 const mpPercent = (member.currentMp / member.maxMp) * 100;
-                const faceImgSrc = `src/assets/images/expeditionandgames/plainsRPG/characterfaces/${member.classType}face.png`;
-                
+                const faceMap = {
+                    archer: 'src/assets/images/expeditionandgames/plainsRPG/characterfaces/archerface.png',
+                    bard: 'src/assets/images/expeditionandgames/plainsRPG/characterfaces/bardface.png',
+                    cleric: 'src/assets/images/expeditionandgames/plainsRPG/characterfaces/clericface.png',
+                    monk: 'src/assets/images/expeditionandgames/plainsRPG/characterfaces/monkface.png',
+                    ninja: 'src/assets/images/expeditionandgames/plainsRPG/characterfaces/ninjaface.png',
+                    sorceress: 'src/assets/images/expeditionandgames/plainsRPG/characterfaces/sorceressface.png',
+                    purrchant: 'src/assets/images/expeditionandgames/plainsRPG/characterfaces/purrchantface.png',
+                    cuppy: 'src/assets/images/expeditionandgames/plainsRPG/characterfaces/purrchantface.png',
+                };
+                let faceImgSrc = faceMap[member.classType];
+                if (member.classType === 'purrchant' || member.name === 'Cuppy') {
+                    faceImgSrc = faceMap['cuppy'];
+                }
+                const prettyElement = (el)=>{
+                    if (!el) return '<span class="elt">None</span>';
+                    const name = String(el).toLowerCase();
+                    const cap = name.charAt(0).toUpperCase() + name.slice(1);
+                    return `<span class="elt elt-${name}">${cap}</span>`;
+                };
                 let memberHTML = `
-                    <img src="${faceImgSrc}" alt="${member.name} Face" class="character-image" style="width:60px;height:60px;object-fit:cover;margin-bottom:5px;" onerror="this.style.display='none'">
-                    <h3 style="font-weight: bold; color: ${member.currentHp > 0 ? 'var(--gold)' : '#EF4444'}; font-size:1rem; margin: 5px 0;">${member.icon} ${member.displayName || member.name}</h3>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3px; font-size: 0.7rem; margin: 5px 0;">
+                    <img src="${faceImgSrc}" alt="${member.name} Face" class="character-image" style="width:110px;height:110px;object-fit:cover;margin-bottom:8px;box-shadow:0 2px 12px #000;" onerror="this.style.display='none'">
+                    <h3 style="font-weight: bold; color: ${member.currentHp > 0 ? 'var(--gold)' : '#EF4444'}; font-size:1.15rem; margin: 5px 0 2px 0;">${member.icon} ${member.displayName || member.name}</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 0.85rem; margin: 7px 0; width:100%;">
                         <div class="stat">ATK: ${member.attack}</div>
                         <div class="stat">DEF: ${member.defense}</div>
-                        <div class="stat">${member.element}</div>
+                        <div class="stat">${prettyElement(member.element)}</div>
                         <div class="stat">MP: ${member.currentMp}/${member.maxMp}</div>
                     </div>
-                    <div class="character-hp-bar" style="height: 15px; margin: 5px 0;">
-                        <div class="hp-fill" style="width:${hpPercent}%;background:linear-gradient(90deg,#10B981,#34D399);"></div>
+                    <div class="character-hp-bar" style="height: 24px; margin: 7px 0; width:100%; position: relative;">
+                        <div class="hp-fill" style="width:${hpPercent}%;background:linear-gradient(90deg,#10B981,#34D399);">${member.currentHp}/${member.maxHp}</div>
                     </div>
-                    <div style="font-size:0.8rem;color:#059669;">HP: ${member.currentHp}/${member.maxHp}</div>
-                    <div class="mp-bar" style="height: 10px; margin: 3px 0;">
+                    <div class="mp-bar" style="height: 14px; margin: 5px 0; width:100%;">
                         <div class="mp-fill" style="width:${mpPercent}%;background:linear-gradient(90deg,#3B82F6,#60A5FA);"></div>
                     </div>
+                    <div class="mp-bar" title="Ultimate" style="height: 18px; margin: 10px 0 0 0; background: #3a2f12; border: 2px solid var(--gold-dark); width:100%;">
+                        <div class="mp-fill" style="width:${Math.min(100, member.ultCharge || 0)}%;background:linear-gradient(90deg,#f59e0b,#fbbf24);"></div>
+                    </div>
+                    ${member.ultCharge >= 100 ? `<button class="item-btn" style="width:100%;margin-top:10px;background:var(--gold);font-size:1.1rem;" onclick="(function(){window.__useUltimate(${index});})()">🟡 Ultimate: ${(member.ultimate && member.ultimate.name) || 'Use Ultimate'}</button>` : ''}
+                    ${(member.bardRenewalActive ? '<div class="status-effect">Song of Renewal</div>' : '') + (member.monkTempestActive ? '<div class="status-effect">Tempest Flurry</div>' : '')}
                     ${member.statusEffects && member.statusEffects.length > 0 ? `
                         <div class="status-effects">
                             ${member.statusEffects.map(effect => `<span class="status-effect">${effect}</span>`).join('')}
                         </div>
                     ` : ''}
                 `;
-                
-                // Add action buttons if this is the current player's turn
-                if (index === gameState.currentPlayerIndex && member.currentHp > 0) {
-                    memberHTML += `
-                        <div style="margin-top: 10px; padding-top: 8px; border-top: 2px solid var(--gold);">
-                            <h5 style="margin: 0 0 8px 0; color: var(--accent); font-size: 0.9rem;">Your Turn!</h5>
-                            <div id="currentPlayerActions" style="display: grid; grid-template-columns: 1fr; gap: 5px; margin-bottom: 8px;">
-                            </div>
-                            <div style="margin-top: 8px;">
-                                <h6 style="margin: 3px 0; color: var(--ink); font-size: 0.8rem;">Items</h6>
-                                <div id="currentPlayerInventory" style="display: grid; grid-template-columns: 1fr; gap: 3px;">
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                }
-                
                 memberDiv.innerHTML = memberHTML;
                 memberContainer.appendChild(memberDiv);
             });
@@ -1965,15 +3699,159 @@
         // Add to battle log
         function addToLog(message) {
             gameState.battleLog.push(message);
-            const logElement = document.getElementById('battleLog');
-            logElement.innerHTML += message + '\n';
-            logElement.scrollTop = logElement.scrollHeight;
+            const msgEl = document.getElementById('battleMessage');
+            if (msgEl) {
+                msgEl.textContent = message;
+            } else {
+                const logElement = document.getElementById('battleLog');
+                if (logElement) {
+                    logElement.textContent = message + '\n';
+                    logElement.scrollTop = logElement.scrollHeight;
+                }
+            }
         }
 
         // Initialize the game
         document.addEventListener('DOMContentLoaded', () => {
             initPartySelection();
+            // Set music button to OFF and update appearance on load
+            const musicToggle = document.getElementById('musicToggle');
+            if (musicToggle) {
+                musicToggle.textContent = '🔇 Music OFF';
+                musicToggle.classList.add('disabled');
+            }
+            // Print monster damage report once
+            if (__monsterDataLoaded) {
+                reportMonsterAverageDamages();
+            } else {
+                showMonsterDataLoadError();
+            }
         });
+
+        // Ultimate System
+        window.__useUltimate = function(index){
+            const player = gameState.party[index];
+            if (!player || (player.ultCharge||0) < 100 || player.currentHp <= 0) return;
+            if (index !== gameState.currentPlayerIndex) {
+                addToLog('It is not your turn to use an Ultimate.');
+                return;
+            }
+            const cls = player.classType;
+            player.ultCharge = 0;
+            // Play class ultimate animation if available
+            try {
+                if (cls === 'archer') maybePlayClassAnimFor('arrowRain', player);
+                if (cls === 'cleric') maybePlayClassAnimFor('grandintervention', player);
+                if (cls === 'monk') maybePlayClassAnimFor('tempestflurry', player);
+                if (cls === 'bard') maybePlayClassAnimFor('shinnyultimate', player);
+                if (cls === 'sorceress') maybePlayClassAnimFor('meteor', player);
+                if (cls === 'ninja') maybePlayClassAnimFor('assassinate', player);
+                if (cls === 'purrchant') maybePlayClassAnimFor('flashsale', player);
+            } catch {}
+            switch(cls){
+                case 'archer':
+                    addToLog(`${player.name} unleashes Arrow Rain! For two turns, a storm of arrows batters all foes!`);
+                    gameState.arrowRainTurns = 2;
+                    break;
+                case 'cleric':
+                    // Heal party for 50% and light damage AOE
+                    gameState.party.forEach(m=>{
+                        if (m.currentHp > 0) {
+                            const heal = Math.floor(m.maxHp * 0.5);
+                            m.currentHp = Math.min(m.maxHp, m.currentHp + heal);
+                        }
+                    });
+                    addToLog(`${player.name} casts Grand Intervention! The party is restored and holy light scorches the enemies!`);
+                    // Light AOE damage modest
+                    {
+                        const container = document.getElementById('battleFieldContainer');
+                        gameState.currentEnemies.forEach(enemy=>{
+                            const dmg = Math.max(12, Math.floor(player.attack * 1.6));
+                            enemy.currentHp -= dmg;
+                            if (enemy.currentHp <= 0) enemy.currentHp = 0;
+                            // small light burst per enemy
+                            try {
+                                const enemySprites = document.querySelectorAll('#enemySprites > div');
+                                const idx = gameState.currentEnemies.indexOf(enemy);
+                                const img = enemySprites[idx]?.querySelector('img');
+                                if (img) {
+                                    const cRect = container.getBoundingClientRect();
+                                    const sRect = img.getBoundingClientRect();
+                                    const cx = sRect.left - cRect.left + sRect.width/2;
+                                    const cy = sRect.top - cRect.top + sRect.height/2;
+                                    createParticleBurst(cx, cy, 'light', container);
+                                    flashElement(img, 'yellow');
+                                }
+                            } catch {}
+                        });
+                        playSoundEffect('heal');
+                    }
+                    break;
+                case 'monk':
+                    player.monkTempestActive = true;
+                    addToLog(`${player.name} enters Tempest Flurry! Their strikes are empowered for the rest of the battle!`);
+                    break;
+                case 'bard':
+                    // Full heal and damage buff flag
+                    gameState.party.forEach(m=>{
+                        if (m.currentHp > 0) {
+                            m.currentHp = m.maxHp;
+                        }
+                    });
+                    player.bardRenewalActive = true;
+                    addToLog(`${player.name} sings the Song of Renewal! The party is fully healed and empowered!`);
+                    playSoundEffect('heal');
+                    break;
+                case 'sorceress':
+                    // Meteor: heavy radiant AOE, bypasses resistance: ignore defense mostly
+                    addToLog(`${player.name} summons Meteor! Radiant meteors crash into all foes!`);
+                    {
+                        const container = document.getElementById('battleFieldContainer');
+                        // Screen darken + flash
+                        try { const d = screenDarken(); setTimeout(()=>{ screenFlashRed(); setTimeout(()=> d.remove(), 700); }, 120); } catch {}
+                        gameState.currentEnemies.forEach(enemy=>{
+                            const base = Math.floor(player.attack * 3.5);
+                            const variation = 0.85 + Math.random()*0.3;
+                            const dmg = Math.floor(base * variation);
+                            enemy.currentHp -= dmg;
+                            if (enemy.currentHp <= 0) enemy.currentHp = 0;
+                            try {
+                                const enemySprites = document.querySelectorAll('#enemySprites > div');
+                                const idx = gameState.currentEnemies.indexOf(enemy);
+                                const img = enemySprites[idx]?.querySelector('img');
+                                if (img) {
+                                    const cRect = container.getBoundingClientRect();
+                                    const sRect = img.getBoundingClientRect();
+                                    const cx = sRect.left - cRect.left + sRect.width/2;
+                                    const cy = sRect.top - cRect.top + sRect.height/2;
+                                    createParticleBurst(cx, cy, 'earth', container);
+                                    flashElement(img, 'yellow');
+                                }
+                            } catch {}
+                        });
+                    }
+                    break;
+                case 'ninja':
+                    // Prime assassination for next sneak attack
+                    player.ninjaAssassinationPrimed = true;
+                    addToLog(`${player.name} prepares an Assassination! Their next sneak attack can be lethal.`);
+                    break;
+                case 'purrchant':
+                    // Flash Sale!: non-revival items do not decrease
+                    gameState.flashSaleActive = true;
+                    addToLog(`Purrchant starts a Flash Sale! Non-revival items are free for the rest of the battle!`);
+                    break;
+            }
+            // Remove defeated enemies and possibly advance round
+            gameState.currentEnemies = gameState.currentEnemies.filter(e=>{
+                if (e.currentHp <= 0) { addToLog(`${e.name} is obliterated by the ultimate!`); return false; }
+                return true;
+            });
+            updateDisplay();
+            // End the player's turn after ultimate
+            gameState.currentPlayerIndex = index; // ensure correct pointer
+            endPlayerTurn();
+        }
     </script>
 </body>
 </html>

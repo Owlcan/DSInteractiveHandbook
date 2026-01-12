@@ -4,6 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Spellbook</title>
+	<script>
+		(function () {
+			try {
+				if (window.self !== window.top) {
+					document.documentElement.classList.add('embedded');
+				}
+			} catch (e) {
+				// If cross-origin framing blocks access to window.top, treat as embedded.
+				document.documentElement.classList.add('embedded');
+			}
+		})();
+	</script>
   <style>
 :root {
   --gold-dark: #97740a;
@@ -25,6 +37,11 @@ body {
   line-height: 1.6;
   max-width: 1600px;
   margin: 0 auto;
+}
+
+/* When embedded in the handbook iframe, allow the spellbook to use the full frame width. */
+html.embedded body {
+	max-width: none;
 }
 
 .content-section {
@@ -117,6 +134,11 @@ button:hover {
   border: 1px solid var(--gold-dark);
 }
 
+/* If a spell includes a markdown table, let its card take a whole row so the table isn't cramped. */
+.card.has-md-table {
+	grid-column: 1 / -1;
+}
+
 .card:hover {
   transform: translateY(-5px);
   box-shadow: 0 5px 15px var(--shadow), 0 0 5px var(--ink);
@@ -140,6 +162,65 @@ button:hover {
 
 .card em {
   color: var(--ink2);
+}
+
+/* Rendered markdown-like content (tables, paragraphs) */
+.spell-desc {
+	color: var(--ink);
+}
+
+.spell-desc p {
+	margin: 0.65em 0;
+}
+
+.spell-desc .md-table-wrap {
+	margin: 12px 0;
+	border: 1px solid var(--gold-dark);
+	border-radius: 10px;
+	overflow-x: hidden;
+	background: rgba(30, 28, 18, 0.55);
+}
+
+.spell-desc table.md-table {
+	width: 100%;
+	border-collapse: collapse;
+	table-layout: fixed;
+}
+
+.spell-desc table.md-table th,
+.spell-desc table.md-table td {
+	padding: 10px 12px;
+	border-bottom: 1px solid rgba(151, 116, 10, 0.45);
+	vertical-align: top;
+	word-break: break-word;
+	overflow-wrap: anywhere;
+}
+
+/* Common "die result" first column stays compact. */
+.spell-desc table.md-table th:first-child,
+.spell-desc table.md-table td:first-child {
+	width: 72px;
+	white-space: nowrap;
+}
+
+.spell-desc table.md-table thead th {
+	background: linear-gradient(to bottom, rgba(151, 116, 10, 0.35), rgba(151, 116, 10, 0.15));
+	color: var(--ink);
+	font-weight: 700;
+	border-bottom: 1px solid rgba(151, 116, 10, 0.65);
+}
+
+.spell-desc table.md-table tbody tr:nth-child(even) td {
+	background: rgba(44, 38, 20, 0.35);
+}
+
+@media print {
+	.spell-desc .md-table-wrap { overflow: visible; }
+}
+
+/* On small screens, allow horizontal scrolling as a last resort. */
+@media (max-width: 520px) {
+	.spell-desc .md-table-wrap { overflow-x: auto; }
 }
 
 .card.condensed {
@@ -2425,6 +2506,153 @@ button:hover {
 
   let isCondensedView = false;
 
+	function escapeHtml(text) {
+		return String(text ?? '')
+			.replace(/&/g, '&amp;')
+			.replace(/</g, '&lt;')
+			.replace(/>/g, '&gt;')
+			.replace(/"/g, '&quot;')
+			.replace(/'/g, '&#39;');
+	}
+
+	function renderInlineMarkdown(text) {
+		// Escape first, then selectively re-introduce a small subset of formatting.
+		let out = escapeHtml(text);
+		// **bold**
+		out = out.replace(/\*\*([^*]+?)\*\*/g, '<strong>$1</strong>');
+		// *italics*
+		out = out.replace(/(^|[^*])\*([^*\n]+?)\*(?!\*)/g, '$1<em>$2</em>');
+		// `code`
+		out = out.replace(/`([^`\n]+?)`/g, '<code>$1</code>');
+		return out;
+	}
+
+	function splitTableRow(line) {
+		let t = String(line || '').trim();
+		if (t.startsWith('|')) t = t.slice(1);
+		if (t.endsWith('|')) t = t.slice(0, -1);
+		return t.split('|').map(c => c.trim());
+	}
+
+	function isMarkdownTableHeaderLine(line) {
+		const t = String(line || '').trim();
+		return t.startsWith('|') && t.includes('|');
+	}
+
+	function isMarkdownTableSeparatorLine(line) {
+		const t = String(line || '').trim();
+		if (!t.startsWith('|')) return false;
+		const cells = splitTableRow(t);
+		if (cells.length === 0) return false;
+		return cells.every(c => /^:?-{3,}:?$/.test(c));
+	}
+
+	function parseMarkdownTable(lines, startIndex) {
+		const headerCells = splitTableRow(lines[startIndex]);
+		const alignCells = splitTableRow(lines[startIndex + 1]);
+		const colCount = headerCells.length;
+		const aligns = alignCells.slice(0, colCount).map(c => {
+			const left = c.startsWith(':');
+			const right = c.endsWith(':');
+			if (left && right) return 'center';
+			if (right) return 'right';
+			return 'left';
+		});
+
+		let i = startIndex + 2;
+		const bodyRows = [];
+		for (; i < lines.length; i++) {
+			const raw = String(lines[i] || '');
+			if (raw.trim() === '') break;
+			if (!raw.trim().startsWith('|')) break;
+			const cells = splitTableRow(raw);
+			const row = cells.slice(0, colCount);
+			while (row.length < colCount) row.push('');
+			bodyRows.push(row);
+		}
+
+		const headHtml = headerCells
+			.slice(0, colCount)
+			.map((cell, idx) => {
+				const align = aligns[idx] || 'left';
+				return `<th style="text-align:${align}">${renderInlineMarkdown(cell)}</th>`;
+			})
+			.join('');
+
+		const bodyHtml = bodyRows
+			.map(row => {
+				const cellsHtml = row
+					.map((cell, idx) => {
+						const align = aligns[idx] || 'left';
+						return `<td style="text-align:${align}">${renderInlineMarkdown(cell)}</td>`;
+					})
+					.join('');
+				return `<tr>${cellsHtml}</tr>`;
+			})
+			.join('');
+
+		const tableHtml = `<div class="md-table-wrap"><table class="md-table"><thead><tr>${headHtml}</tr></thead><tbody>${bodyHtml}</tbody></table></div>`;
+		return { html: tableHtml, nextIndex: i };
+	}
+
+	function containsMarkdownTable(rawText) {
+		const text = String(rawText || '').replace(/\r\n/g, '\n');
+		if (!text) return false;
+		const lines = text.split('\n');
+		for (let i = 0; i < lines.length - 1; i++) {
+			if (isMarkdownTableHeaderLine(lines[i]) && isMarkdownTableSeparatorLine(lines[i + 1])) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	function renderSpellRichText(rawText) {
+		const text = String(rawText || '').replace(/\r\n/g, '\n');
+		if (!text) return '<div class="spell-desc"></div>';
+
+		const lines = text.split('\n');
+		const htmlParts = ['<div class="spell-desc">'];
+		let paragraphLines = [];
+
+		const flushParagraph = () => {
+			if (paragraphLines.length === 0) return;
+			const paraText = paragraphLines.join('\n');
+			const html = renderInlineMarkdown(paraText).replace(/\n/g, '<br>');
+			htmlParts.push(`<p>${html}</p>`);
+			paragraphLines = [];
+		};
+
+		for (let i = 0; i < lines.length; ) {
+			const line = lines[i];
+
+			if (
+				isMarkdownTableHeaderLine(line) &&
+				i + 1 < lines.length &&
+				isMarkdownTableSeparatorLine(lines[i + 1])
+			) {
+				flushParagraph();
+				const parsed = parseMarkdownTable(lines, i);
+				htmlParts.push(parsed.html);
+				i = parsed.nextIndex;
+				continue;
+			}
+
+			if (String(line || '').trim() === '') {
+				flushParagraph();
+				i++;
+				continue;
+			}
+
+			paragraphLines.push(line);
+			i++;
+		}
+
+		flushParagraph();
+		htmlParts.push('</div>');
+		return htmlParts.join('');
+	}
+
   // Function to load and display spells
   function loadSpells() {
     const spellsContainer = document.getElementById('spellbook-container');
@@ -2515,6 +2743,9 @@ button:hover {
 				card.addEventListener('click', () => expandSpell(card, spell));
 			} else {
 				// Full view - all details
+				if (containsMarkdownTable(spell.description || '')) {
+					card.classList.add('has-md-table');
+				}
 				// Create components string
 				let componentsText = [];
 				if (spell.components) {
@@ -2529,7 +2760,10 @@ button:hover {
 				const castTime = spell.casttime || '—';
 				const range = spell.range || 'Self';
 				const duration = spell.duration || '—';
-				const desc = (spell.description || '').replace(/\n/g, '<br>');
+				const descHtml = renderSpellRichText(spell.description || '');
+				const higherHtml = spell.higherlevels
+					? renderInlineMarkdown(spell.higherlevels).replace(/\n/g, '<br>')
+					: '';
         
 				card.innerHTML = `
 					<h3>${spell.name}</h3>
@@ -2539,8 +2773,8 @@ button:hover {
 					<p><strong>Components:</strong> ${componentsText.join(', ') || 'None'}</p>
 					<p><strong>Duration:</strong> ${duration}</p>
 					${spell.ritual ? '<p><strong>Ritual</strong></p>' : ''}
-					<p>${desc}</p>
-					${spell.higherlevels ? `<p><strong>At Higher Levels:</strong> ${spell.higherlevels}</p>` : ''}
+					${descHtml}
+					${spell.higherlevels ? `<p><strong>At Higher Levels:</strong> ${higherHtml}</p>` : ''}
 				`;
 			}
       
@@ -2562,7 +2796,13 @@ button:hover {
     
     // Switch to full view for this card
     card.className = 'card';
-		const desc = (spell.description || '').replace(/\n/g, '<br>');
+		if (containsMarkdownTable(spell.description || '')) {
+			card.classList.add('has-md-table');
+		}
+		const descHtml = renderSpellRichText(spell.description || '');
+		const higherHtml = spell.higherlevels
+			? renderInlineMarkdown(spell.higherlevels).replace(/\n/g, '<br>')
+			: '';
 		const castTime = spell.casttime || '—';
 		const range = spell.range || 'Self';
 		const duration = spell.duration || '—';
@@ -2579,8 +2819,8 @@ button:hover {
 			<p><strong>Components:</strong> ${componentsText.join(', ') || 'None'}</p>
 			<p><strong>Duration:</strong> ${duration}</p>
 			${spell.ritual ? '<p><strong>Ritual</strong></p>' : ''}
-			<p>${desc}</p>
-			${spell.higherlevels ? `<p><strong>At Higher Levels:</strong> ${spell.higherlevels}</p>` : ''}
+			${descHtml}
+			${spell.higherlevels ? `<p><strong>At Higher Levels:</strong> ${higherHtml}</p>` : ''}
 			<button class="collapse-btn" style="margin-top: 10px; font-size: 0.9em;">Collapse</button>
 		`;
     

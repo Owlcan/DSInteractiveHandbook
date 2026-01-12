@@ -1184,6 +1184,21 @@
     <script src="src/data/RPGmonsters.js"></script>
     <script>
             // Game Data
+
+        // Monster roster (loaded from src/data/RPGmonsters.js)
+        // RPGmonsters.js assigns window.monsters/window.bossMonsters.
+        // Alias them here so this file can safely reference `monsters`/`bossMonsters`.
+        const monsters = Array.isArray(window.monsters) ? window.monsters : [];
+        const bossMonsters = Array.isArray(window.bossMonsters) ? window.bossMonsters : [];
+        const __monsterDataLoaded = monsters.length > 0 && bossMonsters.length > 0;
+
+        function showMonsterDataLoadError() {
+            const msg = 'Monster data failed to load. Expected src/data/RPGmonsters.js to define window.monsters and window.bossMonsters.';
+            console.error(msg, { monsters: window.monsters, bossMonsters: window.bossMonsters });
+            try { addToLog(msg); } catch (_) {}
+            try { alert(msg); } catch (_) {}
+        }
+
                  // Global animation barrier so enemy actions wait until player visuals finish
         let __lastAnimEndsAt = 0;
         function markAnim(durationMs) {
@@ -1424,6 +1439,7 @@
             currentMusic: null,
             musicEnabled: true,
             selectedEnemyIndex: 0, // Index of currently selected enemy for targeting
+            selectedAllyIndex: 0, // Index of currently selected ally for item targeting
             arrowRainTurns: 0, // Archer ultimate effect tracker
             midGameBoostGranted: false, // One-time level-up after Round 5
             firstLiquidLegionSeen: false // used for early visual bossing of Legion
@@ -1521,6 +1537,13 @@
             updateEnemySelection();
         }
 
+        function selectAlly(index) {
+            if (!gameState || !Array.isArray(gameState.party) || gameState.party.length === 0) return;
+            const safeIndex = Math.max(0, Math.min(index, gameState.party.length - 1));
+            gameState.selectedAllyIndex = safeIndex;
+            updateAllySelection();
+        }
+
         function updateEnemySelection() {
             const enemySprites = document.querySelectorAll('#enemySprites > div');
             enemySprites.forEach((sprite, index) => {
@@ -1529,6 +1552,30 @@
                     sprite.classList.add('enemy-selected');
                 }
             });
+        }
+
+        function updateAllySelection() {
+            const allySprites = document.querySelectorAll('#partySprites img');
+            allySprites.forEach((sprite, index) => {
+                sprite.style.outline = '';
+                sprite.style.boxShadow = '';
+                if (index === gameState.selectedAllyIndex) {
+                    sprite.style.outline = '3px solid var(--gold)';
+                    sprite.style.boxShadow = '0 0 14px rgba(218, 172, 23, 0.75)';
+                }
+            });
+        }
+
+        function getCurrentPlayerSafe() {
+            if (!gameState || !Array.isArray(gameState.party)) return null;
+            const idx = gameState.currentPlayerIndex;
+            if (typeof idx !== 'number' || idx < 0 || idx >= gameState.party.length) return null;
+            return gameState.party[idx] || null;
+        }
+
+        function isPlayerAbleToAct(player) {
+            const hp = Number(player?.currentHp);
+            return Number.isFinite(hp) && hp > 0;
         }
 
         function createMagicalEffect(element, spellType, playerElement, player) {
@@ -2079,6 +2126,10 @@
 
     // Start the game
     function startGame() {
+            if (!__monsterDataLoaded) {
+                showMonsterDataLoadError();
+                return;
+            }
             // Create party from selected classes
             gameState.party = gameState.selectedClasses.map((classType, index) => {
                 const template = characterClasses[classType];
@@ -2176,6 +2227,10 @@
 
         // Start a new round
         function startRound() {
+            if (!__monsterDataLoaded) {
+                showMonsterDataLoadError();
+                return;
+            }
             // Check for boss battles (every 10th round)
             const isBossRound = gameState.currentRound % 10 === 0;
             
@@ -2355,7 +2410,7 @@
             // Update party sprites
             const partySprites = document.getElementById('partySprites');
             partySprites.innerHTML = '';
-            gameState.party.forEach(member => {
+            gameState.party.forEach((member, index) => {
                 const sprite = document.createElement('img');
                 // Try multiple month folders for sprite images
                 const months = ['07', '08', '09', '10', '11', '12']; // Add more as needed
@@ -2413,8 +2468,19 @@
                     sprite.style.border = 'none';
                     sprite.style.borderRadius = '0';
                     sprite.style.opacity = member.currentHp > 0 ? '1' : '0.5';
+                    sprite.style.cursor = 'pointer';
+                    sprite.onclick = () => selectAlly(index);
                     partySprites.appendChild(sprite);
             });
+
+            // Keep selected ally index sane and selection highlighted
+            if (Array.isArray(gameState.party) && gameState.party.length > 0) {
+                if (typeof gameState.selectedAllyIndex !== 'number') gameState.selectedAllyIndex = 0;
+                gameState.selectedAllyIndex = Math.max(0, Math.min(gameState.selectedAllyIndex, gameState.party.length - 1));
+            } else {
+                gameState.selectedAllyIndex = 0;
+            }
+            updateAllySelection();
             
             // Update enemy sprites with simple HP bars and names
             const enemySprites = document.getElementById('enemySprites');
@@ -2594,33 +2660,24 @@
 
         // Start player turn
         function startPlayerTurn() {
-            // Find next living party member or one that can be revived
-            while (gameState.currentPlayerIndex < gameState.party.length) {
-                const player = gameState.party[gameState.currentPlayerIndex];
-                if (player.currentHp > 0) {
-                    // Player is alive, let them act
-                    break;
-                } else {
-                    // Player is KO'd
-                    const hasRevive = gameState.inventory['revivalNanites'] > 0;
-                    if (!hasRevive) {
-                        // No revives, skip their turn
-                        gameState.currentPlayerIndex++;
-                        continue;
-                    } else {
-                        // Has revive, let them act (so they can use it)
-                        break;
-                    }
-                }
+            // Find next living party member. KO'd members do not take turns.
+            while (gameState.currentPlayerIndex < gameState.party.length &&
+                   (!gameState.party[gameState.currentPlayerIndex] || gameState.party[gameState.currentPlayerIndex].currentHp <= 0)) {
+                gameState.currentPlayerIndex++;
             }
 
             if (gameState.currentPlayerIndex >= gameState.party.length) {
-                // All party members dead or skipped
+                // If anyone is alive but we ran past the end, it's simply the end of the party segment.
+                if (Array.isArray(gameState.party) && gameState.party.some(m => (m?.currentHp || 0) > 0)) {
+                    enemyTurn();
+                    return;
+                }
                 endGame(false);
                 return;
             }
 
             const currentPlayer = gameState.party[gameState.currentPlayerIndex];
+            gameState.selectedAllyIndex = gameState.currentPlayerIndex;
             updatePlayerActions(currentPlayer);
         }
 
@@ -2644,6 +2701,15 @@
             let actionTaken = false;
             function protectedAction(fn) {
                 return function() {
+                    const current = getCurrentPlayerSafe();
+                    if (!current || current !== player) {
+                        addToLog("It is not this character's turn.");
+                        return;
+                    }
+                    if (!isPlayerAbleToAct(current)) {
+                        addToLog(`${current.name} is KO'd and cannot act!`);
+                        return;
+                    }
                     if (actionTaken) return;
                     actionTaken = true;
                     // Disable all action buttons immediately
@@ -2717,7 +2783,7 @@
                 btn.disabled = count <= 0;
                 btn.style.fontSize = '1.15rem';
                 btn.style.padding = '14px 20px';
-                if (count > 0) btn.onclick = () => useItem(item);
+                if (count > 0) btn.onclick = protectedAction(() => useItem(item));
                 itemButtons.push(btn);
             });
             
@@ -2743,20 +2809,29 @@
 
         // Use item
         function useItem(itemType) {
-            if (gameState.inventory[itemType] <= 0) return;
+            if (!gameState || !gameState.inventory || gameState.inventory[itemType] <= 0) return;
 
-            let target = gameState.party[gameState.currentPlayerIndex];
-            
-            // Safety check: ensure target exists
-            if (!target) {
-                addToLog("Error: Invalid player index!");
+            const actor = getCurrentPlayerSafe();
+            if (!actor) {
+                addToLog('Error: Invalid active character.');
                 return;
             }
+            if (!isPlayerAbleToAct(actor)) {
+                addToLog(`${actor.name} is KO'd and cannot use items!`);
+                return;
+            }
+
+            const party = Array.isArray(gameState.party) ? gameState.party : [];
+            const safeAllyIndex = (typeof gameState.selectedAllyIndex === 'number')
+                ? Math.max(0, Math.min(gameState.selectedAllyIndex, Math.max(0, party.length - 1)))
+                : gameState.currentPlayerIndex;
+
+            let target = party[safeAllyIndex] || actor;
             
             switch (itemType) {
                 case 'halfHeal':
                     if (target.currentHp <= 0) {
-                        addToLog(`${target.name} is KO'd and cannot use healing items! Use Revival Nanites instead.`);
+                        addToLog(`${target.name} is KO'd — healing won't work. Use Revive instead.`);
                         return;
                     }
                     const halfHealAmount = Math.floor(target.maxHp * 0.5);
@@ -2766,7 +2841,7 @@
                     
                 case 'fullHeal':
                     if (target.currentHp <= 0) {
-                        addToLog(`${target.name} is KO'd and cannot use healing items! Use Revival Nanites instead.`);
+                        addToLog(`${target.name} is KO'd — healing won't work. Use Revive instead.`);
                         return;
                     }
                     const fullHealAmount = target.maxHp - target.currentHp;
@@ -2776,7 +2851,7 @@
                     
                 case 'mpRestore':
                     if (target.currentHp <= 0) {
-                        addToLog(`${target.name} is KO'd and cannot use MP items! Use Revival Nanites instead.`);
+                        addToLog(`${target.name} is KO'd — MP items won't work. Use Revive instead.`);
                         return;
                     }
                     const mpRestoreAmount = target.maxMp - target.currentMp;
@@ -2785,14 +2860,18 @@
                     break;
                     
                 case 'revivalNanites':
-                    // Find first dead party member
-                    const deadMember = gameState.party.find(member => member.currentHp <= 0);
-                    if (deadMember) {
-                        deadMember.currentHp = Math.floor(deadMember.maxHp * 0.5);
-                        addToLog(`Revival Nanite used! ${deadMember.name} is revived with ${deadMember.currentHp} HP!`);
-                    } else {
-                        addToLog("No one needs revival!");
-                        return;
+                    {
+                        const selected = party[safeAllyIndex];
+                        const reviveTarget = (selected && selected.currentHp <= 0)
+                            ? selected
+                            : party.find(member => (member?.currentHp || 0) <= 0);
+
+                        if (!reviveTarget) {
+                            addToLog('No one needs revival!');
+                            return;
+                        }
+                        reviveTarget.currentHp = Math.floor(reviveTarget.maxHp * 0.5);
+                        addToLog(`Revival Nanite used! ${reviveTarget.name} is revived with ${reviveTarget.currentHp} HP!`);
                     }
                     break;
             }
@@ -3076,6 +3155,10 @@
                     
                 case 'heal':
                     const healTarget = selectHealTarget();
+                    if (!healTarget) {
+                        addToLog(`${player.name} tries to heal, but no ally can be healed.`);
+                        break;
+                    }
                     const healAmount = Math.floor(healTarget.maxHp * 0.6);
                     healTarget.currentHp = Math.min(healTarget.maxHp, healTarget.currentHp + healAmount);
                     addToLog(`${player.name} heals ${healTarget.name} for ${healAmount} HP!`);
@@ -3095,7 +3178,7 @@
                     const partyHealAmount = Math.floor(player.maxHp * 0.4); // 40% of max HP per party member
                     let healedCount = 0;
                     gameState.party.forEach(member => {
-                        if (member.currentHp > 0) {
+                        if (isPlayerAbleToAct(member)) {
                             const actualHeal = Math.min(partyHealAmount, member.maxHp - member.currentHp);
                             member.currentHp = Math.min(member.maxHp, member.currentHp + actualHeal);
                             if (actualHeal > 0) healedCount++;
@@ -3114,10 +3197,15 @@
                     
                 case 'songHeal':
                     const songHealTarget = selectHealTarget();
+                    if (!songHealTarget) {
+                        addToLog(`${player.name} tries to sing a healing melody, but no ally can be healed.`);
+                        break;
+                    }
                     const songHealAmount = Math.floor(songHealTarget.maxHp * 0.4);
                     songHealTarget.currentHp = Math.min(songHealTarget.maxHp, songHealTarget.currentHp + songHealAmount);
                     addToLog(`${player.name} sings healing melody to ${songHealTarget.name} for ${songHealAmount} HP!`);
                     player.ultCharge = Math.min(100, (player.ultCharge || 0) + 12);
+                    break;
                 case 'catnap':
                     // Purrchant heals self for 50%
                     const selfHeal = Math.floor(player.maxHp * 0.5);
@@ -3158,6 +3246,10 @@
                     
                 case 'mpMelody':
                     const mpTarget = selectMpTarget();
+                    if (!mpTarget) {
+                        addToLog(`${player.name} tries to restore MP, but no ally can receive it.`);
+                        break;
+                    }
                     const mpAmount = Math.floor(mpTarget.maxMp * 0.5);
                     mpTarget.currentMp = Math.min(mpTarget.maxMp, mpTarget.currentMp + mpAmount);
                     addToLog(`${player.name} restores ${mpAmount} MP to ${mpTarget.name}!`);
@@ -3260,7 +3352,8 @@
 
         // Select heal target (prioritize lowest HP%)
         function selectHealTarget() {
-            const livingMembers = gameState.party.filter(member => member.currentHp > 0);
+            const livingMembers = gameState.party.filter(isPlayerAbleToAct);
+            if (livingMembers.length === 0) return null;
             return livingMembers.reduce((target, member) => {
                 const memberHpPercent = member.currentHp / member.maxHp;
                 const targetHpPercent = target.currentHp / target.maxHp;
@@ -3270,7 +3363,8 @@
 
         // Select MP target (prioritize lowest MP%)
         function selectMpTarget() {
-            const livingMembers = gameState.party.filter(member => member.currentHp > 0);
+            const livingMembers = gameState.party.filter(isPlayerAbleToAct);
+            if (livingMembers.length === 0) return null;
             return livingMembers.reduce((target, member) => {
                 const memberMpPercent = member.currentMp / member.maxMp;
                 const targetMpPercent = target.currentMp / target.maxMp;
@@ -3353,7 +3447,7 @@
             if (enemy.currentHp <= 0) {
                 addToLog(`${enemy.name} is defeated!`);
         // Ultimate charge for the acting player on kill
-        const killer = gameState.party[gameState.currentPlayerIndex];
+        const killer = getCurrentPlayerSafe();
         if (killer) killer.ultCharge = Math.min(100, (killer.ultCharge || 0) + 25);
                 
                 // Remove defeated enemy from the array
@@ -3375,7 +3469,7 @@
             gameState.currentPlayerIndex++;
             
             if (gameState.currentPlayerIndex >= gameState.party.length || 
-                gameState.party.filter(member => member.currentHp > 0).length === 0) {
+                !gameState.party.some(isPlayerAbleToAct)) {
                 // End of party turn, enemy attacks
         await enemyTurn();
             } else {
@@ -3390,7 +3484,7 @@
             const livingEnemies = gameState.currentEnemies.filter(enemy => enemy.currentHp > 0);
             if (livingEnemies.length === 0) return;
 
-            const livingMembers = gameState.party.filter(member => member.currentHp > 0);
+            const livingMembers = gameState.party.filter(isPlayerAbleToAct);
             
             if (livingMembers.length === 0) {
                 endGame(false);
@@ -3404,10 +3498,10 @@
                 const extra = (freq > 1 && Math.random() < (freq - 1)) ? 1 : 0;
                 const attacksThisTurn = 1 + extra;
                 for (let k = 0; k < attacksThisTurn; k++) {
-                if (livingMembers.filter(m => m.currentHp > 0).length === 0) return;
+                if (!gameState.party.some(isPlayerAbleToAct)) return;
                 
                 const attack = enemy.attacks[Math.floor(Math.random() * enemy.attacks.length)];
-                const availableTargets = gameState.party.filter(member => member.currentHp > 0);
+                const availableTargets = gameState.party.filter(isPlayerAbleToAct);
                 let target = availableTargets[Math.floor(Math.random() * availableTargets.length)];
                 // Purrchant Save Me!: if Purrchant is targeted, 50% chance to redirect to another ally
                 if (target && target.classType === 'purrchant' && availableTargets.length > 1 && Math.random() < 0.5) {
@@ -3500,7 +3594,7 @@
             updateDisplay();
 
             // Check if all party members are dead
-            if (gameState.party.every(member => member.currentHp <= 0)) {
+            if (!gameState.party.some(isPlayerAbleToAct)) {
                 endGame(false);
                 return;
             }
@@ -3644,13 +3738,21 @@
                 musicToggle.classList.add('disabled');
             }
             // Print monster damage report once
-            reportMonsterAverageDamages();
+            if (__monsterDataLoaded) {
+                reportMonsterAverageDamages();
+            } else {
+                showMonsterDataLoadError();
+            }
         });
 
         // Ultimate System
         window.__useUltimate = function(index){
             const player = gameState.party[index];
             if (!player || (player.ultCharge||0) < 100 || player.currentHp <= 0) return;
+            if (index !== gameState.currentPlayerIndex) {
+                addToLog('It is not your turn to use an Ultimate.');
+                return;
+            }
             const cls = player.classType;
             player.ultCharge = 0;
             // Play class ultimate animation if available

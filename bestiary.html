@@ -13495,6 +13495,16 @@
             ['Darkforme Disciplinary Dean', 'darkformedisciplinedean.webp'],
             ['Dark Dimension Void Scholar', 'darkdimensionvoidscholar.webp'],
             ['Darkling Hall Monitor', 'darklinghallmonitor.webp'],
+            // GitHub Pages is case-sensitive; these files are Title Case / spaced / hyphenated on disk
+            ['Darkling-Caller', 'Darkling Caller.webp'],
+            ['Darkling-Yowler', 'Darkling Yowler.webp'],
+            ['Darkling-Slurper', 'Darkling Slurper.webp'],
+            ['Darkling-Lurker', 'Darkling Lurker.webp'],
+            ['Darkforme Overwatch', 'Darkforme-Overwatch.webp'],
+            ['Darkling-Brackling', 'bracklings.webp'],
+            // Newly added imagery (lowercase filenames)
+            ['Darkling-Ossuite Charger Omega', 'darkformeossuitechargeromega.webp'],
+            ['Darkling-Cactine', 'darklingcactine.webp'],
             ['Tiny Slime Darkling', 'tiny darkling slime.webp'],
             ['Small Slime Darkling', 'smalldarklingslime.webp'],
             ['The Viscounts of Viscera', 'viscountofviscera.webp'],
@@ -13670,11 +13680,18 @@
             return Array.from(joins).filter(Boolean);
         }
 
-        function buildCandidatePaths(name) {
+        function buildCandidatePaths(name, titleCaseOnly = false) {
             const base = normalizeName(name);
             const tokens = base.split(/\s+/).filter(Boolean);
             const stems = tokenVariants(tokens);
             const paths = [];
+
+            const toTitleCaseStem = (s) => {
+                // Capitalize each alphanumeric "word" segment while preserving separators like spaces/dashes.
+                return (s || '').replace(/[A-Za-z][A-Za-z0-9]*/g, (w) => {
+                    return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();
+                });
+            };
 
             // Expand with targeted fixes for known patterns
             const expansions = new Set();
@@ -13730,7 +13747,29 @@
                 // Morphology: disciplinary → discipline
                 if (s.includes('disciplinary')) expansions.add(s.replace(/disciplinary/g, 'discipline'));
             });
-            const allStems = Array.from(new Set([...stems, ...expansions]));
+            const allStemsLower = Array.from(new Set([...stems, ...expansions]));
+            let allStems = allStemsLower;
+
+            // GitHub Pages is case-sensitive; if the lowercase pass fails, try Title Case variants.
+            // Kept as a separate pass (titleCaseOnly=true) so we don't balloon the normal candidate list.
+            if (titleCaseOnly) {
+                const titleStems = new Set();
+                for (const s of allStemsLower) {
+                    if (!s) continue;
+                    // Only bother title-casing likely-lowercase candidates.
+                    if (s === s.toLowerCase()) {
+                        const titled = toTitleCaseStem(s);
+                        if (titled && titled !== s) {
+                            titleStems.add(titled);
+                            // Also try unspaced TitleCase (covers filenames like DarklingCaller.webp)
+                            if (/[\s\-_]/.test(s)) {
+                                titleStems.add(titled.replace(/[\s\-_]+/g, ''));
+                            }
+                        }
+                    }
+                }
+                allStems = Array.from(titleStems);
+            }
 
             for (const baseDir of IMAGE_BASE_DIRS) {
                 for (const stem of allStems) {
@@ -13778,7 +13817,7 @@
                 }
             }
 
-            const candidates = buildCandidatePaths(name);
+            const candidates = buildCandidatePaths(name, false);
             if (DEBUG_IMG) {
                 console.debug('[IMG] Resolving', name, 'candidates (first 20):', candidates.slice(0,20));
             }
@@ -13786,6 +13825,20 @@
                 try {
                     await preload(c);
                     if (DEBUG_IMG) console.debug('[IMG] Resolved', name, '->', c);
+                    imageCache.set(name, c);
+                    return c;
+                } catch (_) { /* try next */ }
+            }
+
+            // Fallback pass: Title Case + TitleCaseNoSeparators (helps on GitHub Pages)
+            const titleCandidates = buildCandidatePaths(name, true);
+            if (DEBUG_IMG && titleCandidates.length) {
+                console.debug('[IMG] TitleCase fallback', name, 'candidates (first 20):', titleCandidates.slice(0,20));
+            }
+            for (const c of titleCandidates) {
+                try {
+                    await preload(c);
+                    if (DEBUG_IMG) console.debug('[IMG] Resolved (TitleCase)', name, '->', c);
                     imageCache.set(name, c);
                     return c;
                 } catch (_) { /* try next */ }
