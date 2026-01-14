@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crafting Tools</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/tooltip.css">
+    <link rel="stylesheet" href="assets/css/expedition.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="crafting-app">
+        <header>
+            <h1>Alchemy Explorer</h1>
+            <p id="tagline">Kiki Calls It 'Slappy Pots!'</p>
+            <div class="nav-buttons">
+                <button id="compendium-btn" class="fancy-button">Compendium</button>
+                <button id="recipe-book-btn" class="fancy-button">Recipe Book</button>
+                <button id="expedition-btn" class="fancy-button">Zone Patrol</button>
+                <button id="logbook-btn" class="fancy-button">Logbook</button>
+                <button id="export-save-btn" class="fancy-button">Export Save</button>
+                <button id="import-save-btn" class="fancy-button">Load Save</button>
+                <button id="upload-bundle-btn" class="fancy-button">Upload Bundle</button>
+            </div>
+        </header>
+        
+        <main>
+            <div class="crafting-station">
+                <!-- Ingredient slots -->
+                <div class="slots-container">
+                    <img class="alchemy-station-overlay" src="assets/images/alchemyexploreroverlay.webp" alt="" aria-hidden="true">
+                    <div id="slot-a" class="ingredient-slot" data-position="a"></div>
+                    <div id="channel-a-b" class="channel horizontal"></div>
+                    <div id="slot-b" class="ingredient-slot" data-position="b"></div>
+                    <div id="channel-b-c" class="channel horizontal"></div>
+                    <div id="slot-c" class="ingredient-slot" data-position="c"></div>
+                    <div id="channel-c-d" class="channel horizontal"></div>
+                    <div id="slot-d" class="ingredient-slot" data-position="d"></div>
+                    <div id="slot-e" class="ingredient-slot exotic-slot" data-position="e"></div>
+                    <div class="brew-button-container">
+                        <img id="brew-btn" src="assets/images/button1a.webp" alt="Craft">
+                    </div>
+                    <div id="result-chamber"></div>
+                </div>
+            </div>
+            
+            <div class="ingredients-drawer">
+                <div class="category-filters">
+                    <button class="category-btn active" data-category="all">All</button>
+                    <button class="category-btn" data-category="herb">Herbs</button>
+                    <button class="category-btn" data-category="crystal">Crystals</button>
+                    <button class="category-btn" data-category="metal">Metals</button>
+                    <button class="category-btn" data-category="essence">Essences</button>
+                    <button class="category-btn" data-category="legendary">Legendary</button>
+                </div>
+                
+                <div id="ingredients-container" class="ingredients-container"></div>
+            </div>
+            
+            <div class="crafted-items-drawer">
+                <h3>Crafted Items</h3>
+                <div id="crafted-items-container"></div>
+            </div>
+        </main>
+        
+        <!-- Modals -->
+        <div id="compendium-modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Compendium</h2>
+                <div class="category-filters">
+                    <button class="comp-category-btn active" data-category="all">All</button>
+                    <button class="comp-category-btn" data-category="herb">Herbs</button>
+                    <button class="comp-category-btn" data-category="crystal">Crystals</button>
+                    <button class="comp-category-btn" data-category="metal">Metals</button>
+                    <button class="comp-category-btn" data-category="essence">Essences</button>
+                    <button class="comp-category-btn" data-category="food">Food</button>
+                    <button class="comp-category-btn" data-category="legendary">Legendary</button>
+                </div>
+                <div class="compendium-items"></div>
+            </div>
+        </div>
+        
+        <div id="result-modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <div class="result-details">
+                    <div class="result-image-container">
+                        <img id="result-image" src="" alt="Crafted item">
+                    </div>
+                    <div class="result-text">
+                        <h3 id="result-name"></h3>
+                        <p id="result-description"></p>
+                        <p><strong>Effects:</strong> <span id="result-effects"></span></p>
+                        <p id="crafted-count"></p>
+                    </div>
+                </div>
+                <button id="collect-btn">Collect</button>
+            </div>
+        </div>
+        
+        <div id="recipe-book-modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Recipe Book</h2>
+                <div class="recipe-book-items"></div>
+            </div>
+        </div>
+
+        <!-- Use Crafted Item Modal -->
+        <div id="use-crafted-modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Use Crafted Item</h2>
+                <div class="result-details">
+                    <div class="result-image-container">
+                        <img id="use-crafted-image" src="" alt="Crafted item">
+                    </div>
+                    <div class="result-text">
+                        <h3 id="use-crafted-name"></h3>
+                        <p id="use-crafted-description"></p>
+                        <p><strong>Effects:</strong> <span id="use-crafted-effects"></span></p>
+                        <p><strong>Available:</strong> <span id="use-crafted-available">0</span></p>
+                        <label for="use-crafted-amount"><strong>Amount to use</strong></label>
+                        <input id="use-crafted-amount" type="number" min="1" value="1" />
+                    </div>
+                </div>
+                <div class="use-crafted-actions">
+                    <button id="use-crafted-confirm" class="fancy-button">Use</button>
+                    <button id="use-crafted-cancel" class="fancy-button">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="logbook-modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Logbook</h2>
+                <div class="logbook-controls">
+                    <button id="logbook-refresh-btn" class="fancy-button">Refresh</button>
+                    <button id="logbook-save-btn" class="fancy-button">Save</button>
+                    <div class="logbook-help">Tracks Zone Patrol rewards + first-time crafts.</div>
+                </div>
+                <div id="logbook-entries" class="logbook-entries"></div>
+            </div>
+        </div>
+
+        <!-- Dev Reset Modal (hidden gesture: E E A A B + Craft) -->
+        <div id="dev-reset-modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Dev Reset</h2>
+                <p>This will wipe your local save data and restart with the fresh starter inventory.</p>
+                <div class="use-crafted-actions">
+                    <button id="dev-reset-confirm" class="fancy-button">Yes</button>
+                    <button id="dev-reset-cancel" class="fancy-button">No</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="expedition-modal" class="modal">
+            <div class="modal-content expedition-content">
+                <span class="close">&times;</span>
+
+                <!-- Level Select Screen -->
+                <div id="expedition-level-select">
+                    <h2>Zone Patrol</h2>
+                    <div class="level-list">
+                        <div class="level-thumbnail" data-level="lissome-plains">
+                            <img src="assets/images/darklings/lissomeplainsthumb.webp" alt="Lissome Plains">
+                            <div class="level-info">
+                                <h3>Lissome Plains</h3>
+                                <p>A peaceful meadow overrun by mischievous darklings. Clear them out to gather rare ingredients.</p>
+                            </div>
+                        </div>
+
+                        <div class="level-thumbnail" data-level="greensea-expanse">
+                            <img src="assets/images/darklings/greenseaBG1.webp" alt="Greensea Expanse">
+                            <div class="level-info">
+                                <h3>Greensea Expanse</h3>
+                                <p>A dense jungle zone with fewer, tougher darklings and stronger drops. Survive the patrol to earn Greensea ingredients.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game Container -->
+                <div id="expedition-container"></div>
+            </div>
+        </div>
+
+        <!-- Load game components FIRST -->
+        <script src="assets/js/expedition/monster_logic.js"></script>
+        <script src="assets/js/expedition/zones.js"></script>
+        <script src="assets/js/expedition/expeditionapp.js"></script>
+        
+        <!-- Load data after game components -->
+        <script src="ingredients.js"></script>
+        <script src="recipes.js"></script>
+        
+        <!-- Then load the main application -->
+        <script src="assets/js/logbook.js"></script>
+        <script src="assets/js/logbook_ui.js"></script>
+        <script src="app.js"></script>
+        
+        <!-- Load debug utilities last -->
+        <script src="debug.js"></script>
+        <!-- Remove duplicates -->
+        <!-- <script src="assets/js/debug.js"></script> -->
+        <!-- <script src="document.js"></script> -->
+    </div>
+
+    <!-- Layout Tuner (Ctrl+Alt+L to toggle) -->
+    <div id="layout-tuner" class="layout-tuner" aria-hidden="true">
+        <div class="layout-tuner__header">
+            <strong>Layout Tuner</strong>
+            <button id="layout-tuner-close" class="layout-tuner__close" type="button" aria-label="Close">×</button>
+        </div>
+        <div class="layout-tuner__row">
+            <label for="layout-overlay-y">
+                <span>Overlay Y (%)</span>
+                <span id="layout-overlay-y-value">0</span>
+            </label>
+            <input id="layout-overlay-y" type="range" min="-140" max="140" step="0.5" value="0" />
+        </div>
+        <div class="layout-tuner__row">
+            <label for="layout-brew-y">
+                <span>Craft Button Y (%)</span>
+                <span id="layout-brew-y-value">0</span>
+            </label>
+            <input id="layout-brew-y" type="range" min="-140" max="140" step="0.5" value="0" />
+        </div>
+        <div class="layout-tuner__row">
+            <label for="layout-overlay-scale">
+                <span>Overlay Size (%)</span>
+                <span id="layout-overlay-scale-value">100</span>
+            </label>
+            <input id="layout-overlay-scale" type="range" min="50" max="150" step="1" value="100" />
+        </div>
+        <div class="layout-tuner__row">
+            <label for="layout-brew-scale">
+                <span>Craft Button Size (%)</span>
+                <span id="layout-brew-scale-value">90</span>
+            </label>
+            <input id="layout-brew-scale" type="range" min="50" max="150" step="1" value="90" />
+        </div>
+
+        <div class="layout-tuner__row">
+            <label for="layout-target">
+                <span>Position Target</span>
+                <span id="layout-target-label">Overlay</span>
+            </label>
+            <select id="layout-target">
+                <option value="overlay">Overlay</option>
+                <option value="brew">Craft Button (container)</option>
+                <option value="slot-a">Slot A</option>
+                <option value="slot-b">Slot B</option>
+                <option value="slot-c">Slot C</option>
+                <option value="slot-d">Slot D</option>
+                <option value="slot-e">Slot E</option>
+                <option value="result">Result Chamber</option>
+                <option value="channels">Channels (all)</option>
+            </select>
+        </div>
+
+        <div class="layout-tuner__row">
+            <label for="layout-target-x">
+                <span>Target X (%)</span>
+                <span id="layout-target-x-value">0</span>
+            </label>
+            <input id="layout-target-x" type="range" min="-140" max="140" step="0.5" value="0" />
+        </div>
+
+        <div class="layout-tuner__row">
+            <label for="layout-target-y">
+                <span>Target Y (%)</span>
+                <span id="layout-target-y-value">0</span>
+            </label>
+            <input id="layout-target-y" type="range" min="-140" max="140" step="0.5" value="0" />
+        </div>
+        <div class="layout-tuner__buttons">
+            <button id="layout-copy-css" type="button">Copy CSS</button>
+            <button id="layout-reset" type="button">Reset</button>
+        </div>
+        <div class="layout-tuner__hint">
+            Tip: open this panel, then drag the overlay or Craft button to fine-tune. Use “Copy CSS” when it’s perfect.
+        </div>
+        <textarea id="layout-css-output" class="layout-tuner__output" readonly></textarea>
+    </div>
+    
+    <!-- Audio elements -->
+    <audio id="legendary-success-sound" src="assets/sounds/legendarysuccess.wav" preload="auto"></audio>
+    <audio id="liquid-flow-sound" src="assets/sounds/liquid_flow.mp3" preload="auto"></audio>
+    <audio id="slot-remove-sound" src="assets/sounds/remove(reversed).mp3" preload="auto"></audio>
+    <audio id="success-sound" src="assets/sounds/success.wav" preload="auto"></audio>
+    <audio id="fail-sound" src="assets/sounds/fail.mp3" preload="auto"></audio>
+    <audio id="slot-sound" src="assets/sounds/set.mp3" preload="auto"></audio>
+
+    <!-- Expedition game audio -->
+    <audio id="shoot-sound" src="assets/sounds/shoot.wav" preload="auto"></audio>
+    <audio id="hit1-sound" src="assets/sounds/hit1.wav" preload="auto"></audio>
+    <audio id="hit2-sound" src="assets/sounds/hit2.wav" preload="auto"></audio>
+    <audio id="victory-sound" src="assets/sounds/victory.wav" preload="auto"></audio>
+    <audio id="victory1-sound" src="assets/sounds/victory1.wav" preload="auto"></audio>
+    <audio id="victory2-sound" src="assets/sounds/victory2.wav" preload="auto"></audio>
+    <audio id="gameover-sound" src="assets/sounds/gameover.wav" preload="auto"></audio>
+    <audio id="gameover1-sound" src="assets/sounds/gameover1.wav" preload="auto"></audio>
+    <audio id="spellfire-sound" src="assets/sounds/spellfire.wav" preload="auto"></audio>
+    <audio id="spellfire1-sound" src="assets/sounds/spellfire1.mp3" preload="auto"></audio>
+    <audio id="spellfire2-sound" src="assets/sounds/spellfire2.mp3" preload="auto"></audio>
+    <audio id="spellfire3-sound" src="assets/sounds/spellfire3.mp3" preload="auto"></audio>
+
+    <!-- Aliza's audio elements -->
+    <audio id="aliza-hit1-sound" src="assets/sounds/alizahit1.wav" preload="auto"></audio>
+    <audio id="aliza-hit2-sound" src="assets/sounds/alizahit2.wav" preload="auto"></audio>
+    <audio id="aliza-victory1-sound" src="assets/sounds/alizavictory1.wav" preload="auto"></audio>
+    <audio id="aliza-victory2-sound" src="assets/sounds/alizavictory2.wav" preload="auto"></audio>
+    <audio id="aliza-gameover1-sound" src="assets/sounds/alizagameover1.wav" preload="auto"></audio>
+    <audio id="aliza-gameover2-sound" src="assets/sounds/alizagameover2.wav" preload="auto"></audio>
+    
+    <!-- Expedition-specific audio and fallbacks are loaded in expedition.html -->
+
+    <!-- Fix channel animations, especially C-D -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Override any JavaScript that might animate channel-c-d to only 50%
+            const originalSetTimeout = window.setTimeout;
+            window.setTimeout = function(callback, delay) {
+                // Intercept setTimeout calls
+                if (typeof callback === 'function') {
+                    const wrappedCallback = function() {
+                        // Execute the original callback
+                        callback();
+                        
+                        // Then check if any channel-filled elements need fixing
+                        const channelCDFill = document.querySelector('#channel-c-d .channel-filled');
+                        if (channelCDFill && channelCDFill.style.width === '50%') {
+                            console.log('Fixing channel C-D animation that was set to 50%');
+                            channelCDFill.style.width = '100%';
+                        }
+                    };
+                    return originalSetTimeout(wrappedCallback, delay);
+                }
+                return originalSetTimeout(callback, delay);
+            };
+        });
+    </script>
+
+    <!-- Remove any recipe-preview elements -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Clean up any existing preview elements
+            document.querySelectorAll('.recipe-preview').forEach(el => el.remove());
+        });
+    </script>
+
+    <!-- Core Styling -->
+    <style>
+        /* Base channel styles */
+        .channel {
+            height: var(--channel-h);
+            width: var(--channel-w);
+            background: #2d2d2d;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .channel div {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: linear-gradient(to bottom, #A3E2EF 35%, #4F9CC0);
+            height: 100%;
+            width: 0%;
+            animation: grow 2s forwards;
+            box-shadow: 0 0 8px 1px white inset;
+        }
+
+        .channel div:before {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: none;
+            mix-blend-mode: overlay;
+            opacity: 0.5;
+        }
+
+        .use-crafted-actions {
+            margin-top: 12px;
+            display: flex;
+            gap: 8px;
+        }
+
+        @keyframes grow {
+            from { width: 0%; }
+            to { width: 100%; }
+        }
+
+        /* Grid Layout */
+        .slots-container {
+            display: grid;
+            grid-template-columns: auto var(--channel-w) auto var(--channel-w) auto var(--channel-w) auto;
+            grid-template-rows: auto auto auto auto;
+            grid-template-areas: 
+                "slotA channelAB slotB channelBC slotC channelCD slotD"
+                ". . . slotE . . ."
+                ". . . result . . ."
+                ". . . brew . . .";
+            justify-content: center;
+            align-items: center;
+            column-gap: var(--slots-col-gap);
+            row-gap: var(--slots-row-gap);
+            max-width: 1700px;
+            margin: 0 auto;
+            padding: var(--slots-pad);
+            padding-top: calc(var(--slots-pad) + 10%);
+            position: relative;
+        }
+
+        .alchemy-station-overlay {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            height: auto;
+            pointer-events: none;
+            -webkit-user-select: none;
+            user-select: none;
+            z-index: 5;
+        }
+
+        .brew-button-container {
+            grid-area: brew;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 0;
+        }
+
+        #brew-btn {
+            transform: scale(0.9);
+            transform-origin: center;
+        }
+
+        /* Slots and Result Chamber */
+        .ingredient-slot {
+            width: var(--slot-size);
+            height: var(--slot-size);
+            background-color: #3e2723;
+            border: 2px solid #d4af37;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #result-chamber {
+            width: var(--result-size);
+            height: var(--result-size);
+            background-color: #3e2723;
+            border: 2px solid #d4af37;
+            border-radius: 50%;
+            margin: 0;
+            justify-self: center;
+            align-self: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            transform: translateY(5%);
+        }
+
+        #slot-e {
+            transform: translateX(-10%);
+        }
+
+        #result-chamber img {
+            width: 80%;
+            height: 80%;
+            object-fit: contain;
+            display: block;
+        }
+
+        /* Modal Styling */
+        .modal-content {
+            background-color: #5d4037;
+            background-image: linear-gradient(to bottom, #4e342e, #5d4037, #6d4c41);
+            border: 8px solid #3e2723;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+            color: #e0e0e0;
+        }
+
+        #recipe-book-modal .modal-content {
+            max-width: 1012px;
+            width: 95%;
+        }
+
+        /* Recipe Elements */
+        .recipe-ingredient {
+            border: 2px solid #8d6e63;
+            background-color: #3e2723;
+            min-width: 45px;
+            min-height: 45px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .collapse-btn {
+            display: none;
+        }
+
+        /* Crafting Station */
+        .crafting-station {
+            margin-top: 20px;
+            margin-bottom: 0;
+            padding-bottom: 0;
+            min-height: 0;
+        }
+
+        .game-over-screen {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            padding: 20px;
+            text-align: center;
+            border-radius: 10px;
+            color: white;
+            min-width: 300px;
+            z-index: 1000;
+        }
+
+        .game-over-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .game-over-content img {
+            max-width: 200px;
+            margin-bottom: 10px;
+        }
+
+        .game-over-content h2 {
+            color: #ff4444;
+            font-size: 32px;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .game-over-content p {
+            font-size: 18px;
+            margin: 5px 0;
+        }
+
+        .game-over-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .game-over-buttons button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.3s;
+        }
+
+        .game-over-buttons button:hover {
+            transform: scale(1.05);
+        }
+
+        .retry-btn {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .retry-btn:hover {
+            background: #45a049;
+        }
+
+        .menu-btn {
+            background: #2196F3;
+            color: white;
+        }
+
+        .menu-btn:hover {
+            background: #1e87dc;
+        }
+
+        .exit-btn {
+            background: #f44336;
+            color: white;
+        }
+
+        .exit-btn:hover {
+            background: #da190b;
+        }
+    </style>
+</body>
+</html>

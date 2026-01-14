@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Zone Patrol</title>
+
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="assets/css/expedition.css" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    body {
+      background: #1e1e1e;
+      color: #fff;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    .expedition-page {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 16px;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      gap: 16px;
+    }
+
+    .expedition-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      background: rgba(0,0,0,0.35);
+      border: 2px solid #444;
+      border-radius: 10px;
+    }
+
+    .expedition-header h1 {
+      margin: 0;
+      font-size: 22px;
+      letter-spacing: 0.5px;
+    }
+
+    .expedition-header a {
+      color: #d4af37;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .expedition-main {
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+
+    @media (max-width: 980px) {
+      .expedition-main {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .panel {
+      background: rgba(0,0,0,0.35);
+      border: 2px solid #444;
+      border-radius: 10px;
+      padding: 14px;
+    }
+
+    #expedition-level-select h2 {
+      margin: 0 0 12px 0;
+      font-size: 18px;
+    }
+
+    .level-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .level-thumbnail {
+      display: grid;
+      grid-template-columns: 92px 1fr;
+      gap: 12px;
+      align-items: center;
+      background: rgba(0,0,0,0.35);
+      border: 2px solid #555;
+      border-radius: 10px;
+      padding: 10px;
+      cursor: pointer;
+    }
+
+    .level-thumbnail:hover {
+      border-color: #d4af37;
+    }
+
+    .level-thumbnail img {
+      width: 92px;
+      height: 92px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 2px solid rgba(255,255,255,0.15);
+    }
+
+    .level-info h3 {
+      margin: 0 0 6px 0;
+      font-size: 16px;
+    }
+
+    .level-info p {
+      margin: 0;
+      opacity: 0.85;
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    #expedition-container {
+      width: 640px;
+      height: 800px;
+      max-width: 100%;
+      margin: 0 auto;
+      position: relative;
+      background: #111;
+      border: 2px solid #555;
+      border-radius: 10px;
+      overflow: hidden;
+      display: none;
+    }
+
+    #expedition-container canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .hint {
+      margin-top: 10px;
+      font-size: 12px;
+      opacity: 0.8;
+    }
+
+    #expedition-toast {
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.85);
+      border: 1px solid rgba(255,255,255,0.25);
+      padding: 10px 12px;
+      border-radius: 10px;
+      max-width: min(92vw, 600px);
+      display: none;
+      z-index: 9999;
+    }
+  </style>
+</head>
+<body>
+  <div class="expedition-page">
+    <div class="expedition-header">
+      <h1>Zone Patrol</h1>
+      <div class="expedition-header-links">
+        <a href="#" id="expedition-logbook-link">Logbook</a>
+        <a href="index.html">Back to Crafting</a>
+      </div>
+    </div>
+
+    <div class="expedition-main">
+      <div class="panel">
+        <div id="expedition-level-select">
+          <h2>Select a location</h2>
+          <div class="level-list">
+            <div class="level-thumbnail" data-level="lissome-plains">
+              <img src="assets/images/darklings/lissomeplainsthumb.webp" alt="Lissome Plains" />
+              <div class="level-info">
+                <h3>Lissome Plains</h3>
+                <p>A peaceful meadow overrun by mischievous darklings. Clear them out to gather rare ingredients.</p>
+              </div>
+            </div>
+
+            <div class="level-thumbnail" data-level="greensea-expanse">
+              <img src="assets/images/darklings/greenseaBG1.webp" alt="Greensea Expanse" />
+              <div class="level-info">
+                <h3>Greensea Expanse</h3>
+                <p>A dense jungle zone with fewer, tougher darklings and stronger drops. Survive the patrol to earn Greensea ingredients.</p>
+              </div>
+            </div>
+          </div>
+          <div class="hint">Tip: rewards are saved to the same inventory via localStorage.</div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div id="expedition-container"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="expedition-toast"></div>
+
+  <div id="logbook-modal" class="modal">
+    <div class="modal-content logbook-modal-content">
+      <div class="logbook-modal-header">
+        <h2 class="logbook-modal-title">Logbook</h2>
+        <button id="logbook-close" class="logbook-close-btn">Close</button>
+      </div>
+      <div class="logbook-controls">
+        <button id="logbook-refresh-btn" class="logbook-action-btn">Refresh</button>
+        <button id="logbook-save-btn" class="logbook-action-btn">Save</button>
+      </div>
+      <div id="logbook-entries" class="logbook-entries"></div>
+    </div>
+  </div>
+
+  <!-- Expedition game audio -->
+  <audio id="shoot-sound" src="assets/sounds/shoot.wav" preload="auto"></audio>
+  <audio id="hit1-sound" src="assets/sounds/hit1.wav" preload="auto"></audio>
+  <audio id="hit2-sound" src="assets/sounds/hit2.wav" preload="auto"></audio>
+  <audio id="victory-sound" src="assets/sounds/victory.wav" preload="auto"></audio>
+  <audio id="victory1-sound" src="assets/sounds/victory1.wav" preload="auto"></audio>
+  <audio id="victory2-sound" src="assets/sounds/victory2.wav" preload="auto"></audio>
+  <audio id="gameover-sound" src="assets/sounds/gameover.wav" preload="auto"></audio>
+  <audio id="gameover1-sound" src="assets/sounds/gameover1.wav" preload="auto"></audio>
+  <audio id="spellfire-sound" src="assets/sounds/spellfire.wav" preload="auto"></audio>
+  <audio id="spellfire1-sound" src="assets/sounds/spellfire1.mp3" preload="auto"></audio>
+  <audio id="spellfire2-sound" src="assets/sounds/spellfire2.mp3" preload="auto"></audio>
+  <audio id="spellfire3-sound" src="assets/sounds/spellfire3.mp3" preload="auto"></audio>
+
+  <!-- Aliza's audio elements -->
+  <audio id="aliza-hit1-sound" src="assets/sounds/alizahit1.wav" preload="auto"></audio>
+  <audio id="aliza-hit2-sound" src="assets/sounds/alizahit2.wav" preload="auto"></audio>
+  <audio id="aliza-victory1-sound" src="assets/sounds/alizavictory1.wav" preload="auto"></audio>
+  <audio id="aliza-victory2-sound" src="assets/sounds/alizavictory2.wav" preload="auto"></audio>
+  <audio id="aliza-gameover1-sound" src="assets/sounds/alizagameover1.wav" preload="auto"></audio>
+  <audio id="aliza-gameover2-sound" src="assets/sounds/alizagameover2.wav" preload="auto"></audio>
+
+  <script>
+    function createSilentAudio(id) {
+      const audio = document.createElement('audio');
+      audio.id = id;
+      audio.src = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA';
+      document.body.appendChild(audio);
+      return audio;
+    }
+
+    const requiredAudio = [
+      'shoot-sound',
+      'hit1-sound',
+      'hit2-sound',
+      'victory-sound',
+      'victory1-sound',
+      'victory2-sound',
+      'gameover-sound',
+      'gameover1-sound',
+      'spellfire-sound',
+      'spellfire1-sound',
+      'spellfire2-sound',
+      'spellfire3-sound'
+    ];
+
+    window.addEventListener('DOMContentLoaded', function() {
+      requiredAudio.forEach(id => {
+        if (!document.getElementById(id)) {
+          console.warn('Creating silent placeholder for missing audio:', id);
+          createSilentAudio(id);
+        }
+      });
+    });
+  </script>
+
+  <!-- Game components -->
+  <script src="assets/js/logbook.js"></script>
+  <script src="assets/js/expedition/monster_logic.js"></script>
+  <script src="assets/js/expedition/zones.js"></script>
+  <script src="assets/js/expedition/expeditionapp.js"></script>
+  <script src="assets/js/expedition/expedition_page.js"></script>
+</body>
+</html>

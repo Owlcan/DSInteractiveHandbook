@@ -58,6 +58,26 @@
       min-height: 100vh;
     }
 
+    /* Utility used throughout this file (tailwind-like) */
+    .hidden { display: none !important; }
+
+    /* Prevent layout shift when the vertical scrollbar appears/disappears */
+    @supports (scrollbar-gutter: stable) {
+      html { scrollbar-gutter: stable; }
+    }
+    @supports not (scrollbar-gutter: stable) {
+      html { overflow-y: scroll; }
+    }
+
+    /* Iframe/embed mode: don't force standalone page padding/centering */
+    body.embedded {
+      padding: 0;
+      background: transparent;
+      background-image: none;
+      display: block;
+      min-height: 0;
+    }
+
    .tooltip-container {
     	 position: relative;
     	 display: inline-block;
@@ -108,7 +128,42 @@
     	 opacity: 1;
    }
    /* Ensure images in catalogue don't break layout */
-   #catalogue-list img { object-fit: cover; }
+   /* NOTE: The catalogue is rendered in an overlay outside #fishing-section,
+      so catalogue layout styles must NOT be scoped under #fishing-section. */
+   #catalogue-list img {
+     width: 7rem;
+     height: 5rem;
+     max-width: 7rem;
+     max-height: 5rem;
+     object-fit: cover;
+     display: block;
+     border-radius: 0.375rem;
+     border: 2px solid var(--gold-dark);
+     background-color: var(--parchment-dark);
+   }
+   #catalogue-list li {
+     background-color: var(--parchment-dark);
+     border: 1px solid var(--gold-dark);
+     padding: 0.9rem 1rem;
+     margin-bottom: 0.6rem;
+     display: grid;
+     grid-template-columns: 1fr auto;
+     align-items: center;
+     border-radius: 0.5rem;
+     gap: 1rem;
+   }
+   #catalogue-list li:nth-child(odd) { background-color: #241f14; }
+   #catalogue-list h4 {
+     color: var(--accent);
+     font-size: 1.35rem;
+     font-weight: 700;
+     margin: 0;
+   }
+   #catalogue-list p {
+     color: var(--ink);
+     font-size: 1.05rem;
+     margin: 0.15rem 0;
+   }
    .tab-button {
     	 transition: background-color 0.3s ease, color 0.3s ease;
    }
@@ -630,13 +685,15 @@
     #mash-instructions { margin-top: 10px; font-size: 0.95rem; color: var(--ink2); }
   </style>
 
-  <body>
+</head>
+<body>
   <div id="fishing-section" class="w-full max-w-3xl bg-white shadow-2xl rounded-xl p-6 md:p-8 mx-auto">
    <header class="mb-6 text-center">
     	 <h1 class="text-3xl sm:text-4xl font-bold text-blue-700">Fishing Adventure</h1> <p class="text-sm text-gray-500" id="user-id-display">User ID: Loading...</p> </header>
 
    <div class="mb-6 flex border-b border-gray-300"> <button id="fishing-tab-button" class="tab-button py-3 px-6 font-semibold rounded-t-lg focus:outline-none">Fishing</button>
-    	 <button id="catalogue-tab-button" class="tab-button py-3 px-6 font-semibold rounded-t-lg focus:outline-none ml-1">Catalogue</button>
+	     <button id="catalogue-tab-button" class="tab-button py-3 px-6 font-semibold rounded-t-lg focus:outline-none ml-1">Catalogue</button>
+	     <button id="history-tab-button" class="tab-button py-3 px-6 font-semibold rounded-t-lg focus:outline-none ml-1">History</button>
    </div>
 
    <div id="fishing-content">
@@ -684,6 +741,39 @@
         	 <p class="text-md" id="fish-value">Value: 0gp</p>
              <p class="text-sm italic mt-2" id="fish-properties">Properties...</p>
     	 </div>
+   </div>
+
+   <div id="history-content" class="hidden">
+     <div class="p-4 bg-sky-50 rounded-lg border border-sky-200">
+       <div class="flex items-center justify-between mb-3">
+         <h2 class="text-xl font-semibold text-sky-700" style="margin:0;">Session History</h2>
+         <div class="flex items-center" style="gap:8px;">
+           <button id="history-copy" type="button" class="px-4 py-3 rounded-md">Copy</button>
+           <button id="history-clear" type="button" class="px-4 py-3 rounded-md">Clear</button>
+         </div>
+       </div>
+       <p class="text-sm text-gray-600 mb-2" id="history-summary">No rolls yet.</p>
+       <div style="overflow-x:auto;">
+         <table id="history-table" style="width:100%; border-collapse: collapse;">
+           <thead>
+             <tr>
+               <th style="text-align:left; padding:8px; border-bottom: 1px solid var(--gold-dark);">Time</th>
+               <th style="text-align:left; padding:8px; border-bottom: 1px solid var(--gold-dark);">Cast</th>
+               <th style="text-align:left; padding:8px; border-bottom: 1px solid var(--gold-dark);">Region</th>
+               <th style="text-align:left; padding:8px; border-bottom: 1px solid var(--gold-dark);">Fish (DC)</th>
+               <th style="text-align:left; padding:8px; border-bottom: 1px solid var(--gold-dark);">Attempt</th>
+               <th style="text-align:left; padding:8px; border-bottom: 1px solid var(--gold-dark);">Roll</th>
+               <th style="text-align:left; padding:8px; border-bottom: 1px solid var(--gold-dark);">Bonuses</th>
+               <th style="text-align:left; padding:8px; border-bottom: 1px solid var(--gold-dark);">Total</th>
+               <th style="text-align:left; padding:8px; border-bottom: 1px solid var(--gold-dark);">Outcome</th>
+               <th style="text-align:left; padding:8px; border-bottom: 1px solid var(--gold-dark);">Notes</th>
+             </tr>
+           </thead>
+           <tbody id="history-body">
+           </tbody>
+         </table>
+       </div>
+     </div>
    </div>
 
   <!-- Catalogue is now a modal overlay -->
@@ -734,8 +824,25 @@
       </div>
     </div>
   </div>
-  </body>
+
   <script>
+// Detect embedding (iframe) and adjust styling
+try {
+  if (window.self !== window.top) {
+    document.body.classList.add('embedded');
+    const section = document.getElementById('fishing-section');
+    if (section) {
+      section.style.maxWidth = '100%';
+      section.style.width = '100%';
+      section.style.margin = '0';
+      section.style.borderRadius = '0';
+    }
+  }
+} catch (e) {
+  // If cross-origin blocks access to window.top, treat as embedded.
+  document.body.classList.add('embedded');
+}
+
 // Determine extreme rarity for gating
 function isExtremeRare(fish) {
   const named = new Set([
@@ -979,7 +1086,13 @@ function initializeFishingMinigame() {
    let currentTab = 'fishing';
    const fishingTabButton = document.getElementById('fishing-tab-button');
    const catalogueTabButton = document.getElementById('catalogue-tab-button');
+  const historyTabButton = document.getElementById('history-tab-button');
   const fishingContent = document.getElementById('fishing-content');
+  const historyContent = document.getElementById('history-content');
+  const historyBody = document.getElementById('history-body');
+  const historySummary = document.getElementById('history-summary');
+  const historyCopyBtn = document.getElementById('history-copy');
+  const historyClearBtn = document.getElementById('history-clear');
   const catalogueOverlay = document.getElementById('catalogue-overlay');
   const catalogueCloseBtn = document.getElementById('catalogue-close');
    const rodSelect = document.getElementById('rod-select');
@@ -1281,6 +1394,66 @@ function initializeFishingMinigame() {
    // Session tracker (resets on page refresh)
    let sessionTotalValue = 0;
    let sessionCatchCount = 0;
+   // Roll history tracker (session-only)
+   let sessionCastCounter = 0;
+   const sessionHistory = [];
+   const maxHistoryRows = 250;
+
+   function formatTime(d) {
+     const pad = (n) => String(n).padStart(2, '0');
+     return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+   }
+
+   function historyRowToText(r) {
+     const parts = [
+       r.time,
+       `Cast ${r.castId}`,
+       r.region || '-',
+       r.fish || '-',
+       (r.attempt != null ? `Attempt ${r.attempt}` : '-'),
+       (r.roll != null ? `Roll ${r.roll}` : '-'),
+       (r.bonuses || '-'),
+       (r.total != null ? `Total ${r.total}` : '-'),
+       r.outcome || '-',
+       r.notes || ''
+     ];
+     return parts.join(' | ').trim();
+   }
+
+   function renderHistory() {
+     if (!historyBody || !historySummary) return;
+     if (sessionHistory.length === 0) {
+       historyBody.innerHTML = '';
+       historySummary.textContent = 'No rolls yet.';
+       return;
+     }
+     historySummary.textContent = `${sessionHistory.length} event(s) this session. Tip: screenshot this tab for roll confirmation.`;
+     historyBody.innerHTML = sessionHistory.map(r => {
+       const outcomeColor = r.outcome === 'SUCCESS'
+         ? 'color:#66bb6a;font-weight:700;'
+         : (r.outcome === 'FAIL' ? 'color:#ef5350;font-weight:700;' : '');
+       const safe = (v) => String(v ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+       return `
+         <tr>
+           <td style="padding:8px; border-bottom: 1px solid rgba(151,116,10,0.35);">${safe(r.time)}</td>
+           <td style="padding:8px; border-bottom: 1px solid rgba(151,116,10,0.35);">${safe(r.castId)}</td>
+           <td style="padding:8px; border-bottom: 1px solid rgba(151,116,10,0.35);">${safe(r.region)}</td>
+           <td style="padding:8px; border-bottom: 1px solid rgba(151,116,10,0.35);">${safe(r.fish)}</td>
+           <td style="padding:8px; border-bottom: 1px solid rgba(151,116,10,0.35);">${safe(r.attempt != null ? r.attempt : '')}</td>
+           <td style="padding:8px; border-bottom: 1px solid rgba(151,116,10,0.35);">${safe(r.roll != null ? r.roll : '')}</td>
+           <td style="padding:8px; border-bottom: 1px solid rgba(151,116,10,0.35);">${safe(r.bonuses)}</td>
+           <td style="padding:8px; border-bottom: 1px solid rgba(151,116,10,0.35);">${safe(r.total != null ? r.total : '')}</td>
+           <td style="padding:8px; border-bottom: 1px solid rgba(151,116,10,0.35); ${outcomeColor}">${safe(r.outcome)}</td>
+           <td style="padding:8px; border-bottom: 1px solid rgba(151,116,10,0.35);">${safe(r.notes)}</td>
+         </tr>`;
+     }).join('');
+   }
+
+   function pushHistory(entry) {
+     sessionHistory.unshift(entry);
+     if (sessionHistory.length > maxHistoryRows) sessionHistory.length = maxHistoryRows;
+     if (currentTab === 'history') renderHistory();
+   }
    function updateSessionStats() {
      if (sessionStatsValueEl) {
        sessionStatsValueEl.textContent = `${sessionTotalValue} gp (${sessionCatchCount} fish)`;
@@ -1490,7 +1663,28 @@ function selectRandomFish() {
         	 return;
     	 }
 
-    	 fishingLog.innerHTML += `<p class="text-blue-600 font-semibold">You cast your line hoping to catch a ${targetFish.name} (DC: ${targetFish.dc})...</p>`; // text-blue-600 will use themed color
+      const castId = ++sessionCastCounter;
+      const castStartedAt = new Date();
+      const selectedRegionIndexForHistory = parseInt(regionSelect.value);
+      const regionNameForHistory = (fishingRegions[selectedRegionIndexForHistory] && fishingRegions[selectedRegionIndexForHistory].name) ? fishingRegions[selectedRegionIndexForHistory].name : 'Unknown';
+      const rodNameForHistory = rodSelect.options[rodSelect.selectedIndex] ? rodSelect.options[rodSelect.selectedIndex].text : '';
+      const lureNameForHistory = lureSelect.options[lureSelect.selectedIndex] ? lureSelect.options[lureSelect.selectedIndex].text : '';
+      const fishLabelForHistory = `${targetFish.name} (DC ${targetFish.dc})`;
+
+      pushHistory({
+        time: formatTime(castStartedAt),
+        castId,
+        region: regionNameForHistory,
+        fish: fishLabelForHistory,
+        attempt: null,
+        roll: null,
+        bonuses: `Rod +${selectedRodBonus}, Lure +${selectedLureBonus}, Player +${playerBonus}`,
+        total: null,
+        outcome: 'CAST',
+        notes: 'Cast started'
+      });
+
+      fishingLog.innerHTML += `<p class="text-blue-600 font-semibold">You cast your line hoping to catch a ${targetFish.name} (DC: ${targetFish.dc})...</p>`; // text-blue-600 will use themed color
 
     let successfulRolls = 0;
     let attempts = 0;
@@ -1509,14 +1703,50 @@ function selectRandomFish() {
              if (!kept) {
                let failLog = `Attempt ${i}: The line went slack! <span class="text-red-500 font-bold">Failed to keep tension.</span>`;
                fishingLog.innerHTML += `<p>${failLog}</p>`;
+               pushHistory({
+                 time: formatTime(new Date()),
+                 castId,
+                 region: regionNameForHistory,
+                 fish: fishLabelForHistory,
+                 attempt: i,
+                 roll: null,
+                 bonuses: `Rod +${selectedRodBonus}, ${(i === 1 ? `Lure +${selectedLureBonus}, ` : '')}Player +${playerBonus}, Timing +${timingBonus}`,
+                 total: null,
+                 outcome: 'FAIL',
+                 notes: 'Pre-roll tension failed (line slack)'
+               });
                // Count as failed attempt and continue
                if (attempts - successfulRolls >= 2 && attempts >=2) {
                  fishingLog.innerHTML += `<p class="text-red-600 font-bold mt-2">The fish got away...</p>`;
+                 pushHistory({
+                   time: formatTime(new Date()),
+                   castId,
+                   region: regionNameForHistory,
+                   fish: fishLabelForHistory,
+                   attempt: null,
+                   roll: null,
+                   bonuses: '',
+                   total: null,
+                   outcome: 'FAIL',
+                   notes: 'Fish got away (too many failed attempts)'
+                 });
                  break;
                }
                continue;
              } else {
                fishingLog.innerHTML += `<p class="text-green-500">Attempt ${i}: Line tension maintained.</p>`;
+               pushHistory({
+                 time: formatTime(new Date()),
+                 castId,
+                 region: regionNameForHistory,
+                 fish: fishLabelForHistory,
+                 attempt: i,
+                 roll: null,
+                 bonuses: '',
+                 total: null,
+                 outcome: 'OK',
+                 notes: 'Pre-roll tension maintained'
+               });
              }
            }
 
@@ -1539,6 +1769,18 @@ function selectRandomFish() {
              if (i === 1 && roll === 20) {
              	 attemptLog += `<span class="text-yellow-500 font-bold">Natural 20 on the first roll!</span> Hook secured!`; // text-yellow-500 themed
              	 fishingLog.innerHTML += `<p>${attemptLog}</p>`;
+               pushHistory({
+                 time: formatTime(new Date()),
+                 castId,
+                 region: regionNameForHistory,
+                 fish: fishLabelForHistory,
+                 attempt: i,
+                 roll,
+                 bonuses: `Rod +${selectedRodBonus}, Lure +${selectedLureBonus}, Player +${playerBonus}, Timing +${timingBonus}`,
+                 total: finalRoll,
+                 outcome: 'SUCCESS',
+                 notes: 'Natural 20 (first roll): hook secured'
+               });
              	 successfulRolls = 2;
              	 break;
         	 }
@@ -1547,17 +1789,65 @@ function selectRandomFish() {
             	 successfulRolls++;
             	 attemptLog += `<span class="text-green-500 font-bold">Success!</span>`; // text-green-500 themed
             	 fishingLog.innerHTML += `<p>${attemptLog}</p>`;
+       pushHistory({
+         time: formatTime(new Date()),
+         castId,
+         region: regionNameForHistory,
+         fish: fishLabelForHistory,
+         attempt: i,
+         roll,
+         bonuses: `Rod +${selectedRodBonus}, ${(i === 1 ? `Lure +${selectedLureBonus}, ` : '')}Player +${playerBonus}, Timing +${timingBonus}`,
+         total: finalRoll,
+         outcome: 'SUCCESS',
+         notes: ''
+       });
         	 } else {
             	 attemptLog += `<span class="text-red-500 font-bold">Fail!</span>`; // text-red-500 themed
             	 fishingLog.innerHTML += `<p>${attemptLog}</p>`;
+       pushHistory({
+         time: formatTime(new Date()),
+         castId,
+         region: regionNameForHistory,
+         fish: fishLabelForHistory,
+         attempt: i,
+         roll,
+         bonuses: `Rod +${selectedRodBonus}, ${(i === 1 ? `Lure +${selectedLureBonus}, ` : '')}Player +${playerBonus}, Timing +${timingBonus}`,
+         total: finalRoll,
+         outcome: 'FAIL',
+         notes: ''
+       });
         	 }
 
         	 if (successfulRolls >= 2) {
             	 fishingLog.innerHTML += `<p class="text-green-600 font-bold mt-2">Hooked! Time to reel in the ${targetFish.name}...</p>`; // text-green-600 themed
+       pushHistory({
+         time: formatTime(new Date()),
+         castId,
+         region: regionNameForHistory,
+         fish: fishLabelForHistory,
+         attempt: null,
+         roll: null,
+         bonuses: '',
+         total: null,
+         outcome: 'OK',
+         notes: 'Hooked (2 successes)'
+       });
             	 break;
         	 }
         	 if (attempts - successfulRolls >= 2 && attempts >=2) {
              	 fishingLog.innerHTML += `<p class="text-red-600 font-bold mt-2">The fish got away...</p>`; // text-red-600 themed
+       pushHistory({
+         time: formatTime(new Date()),
+         castId,
+         region: regionNameForHistory,
+         fish: fishLabelForHistory,
+         attempt: null,
+         roll: null,
+         bonuses: '',
+         total: null,
+         outcome: 'FAIL',
+         notes: 'Fish got away (too many failed attempts)'
+       });
              	 break;
         	 }
     	 }
@@ -1568,9 +1858,33 @@ function selectRandomFish() {
         	 const reeledIn = await playMashMinigame(targetFish.dc);
         	 if (!reeledIn) {
         	 	 fishingLog.innerHTML += `<p class="text-red-600 font-bold mt-1">The hook slipped at the last moment! The ${targetFish.name} got away...</p>`;
+       pushHistory({
+         time: formatTime(new Date()),
+         castId,
+         region: regionNameForHistory,
+         fish: fishLabelForHistory,
+         attempt: null,
+         roll: null,
+         bonuses: '',
+         total: null,
+         outcome: 'FAIL',
+         notes: 'Final reel tension failed (hook slipped)'
+       });
         	 	 return;
         	 }
         	 fishingLog.innerHTML += `<p class=\"text-green-600 font-bold mt-1\">Landed the ${targetFish.name}!</p>`;
+     pushHistory({
+       time: formatTime(new Date()),
+       castId,
+       region: regionNameForHistory,
+       fish: fishLabelForHistory,
+       attempt: null,
+       roll: null,
+       bonuses: '',
+       total: null,
+       outcome: 'SUCCESS',
+       notes: `Landed fish (+${targetFish.value}gp)`
+     });
         	 const selectedRegionIndex = parseInt(regionSelect.value);
         	 const regionName = fishingRegions[selectedRegionIndex].name;
 
@@ -1607,6 +1921,18 @@ function selectRandomFish() {
         	 updateSessionStats();
     	 } else if (attempts < 3 && successfulRolls < 2 && (attempts - successfulRolls < 2 || attempts <2) ) {
         	 fishingLog.innerHTML += `<p class="text-red-600 font-bold mt-2">The fish got away...</p>`;
+     pushHistory({
+       time: formatTime(new Date()),
+       castId,
+       region: regionNameForHistory,
+       fish: fishLabelForHistory,
+       attempt: null,
+       roll: null,
+       bonuses: '',
+       total: null,
+       outcome: 'FAIL',
+       notes: 'Fish got away'
+     });
     	 }
    }
 
@@ -1716,15 +2042,25 @@ function selectRandomFish() {
             return;
         }
     	 currentTab = tabName;
-		 if (tabName === 'fishing') {
-      	 fishingContent.classList.remove('hidden');
-      	 fishingTabButton.classList.add('active');
-      	 fishingTabButton.classList.remove('bg-gray-200', 'text-gray-700');
-      	 catalogueTabButton.classList.remove('active');
-		 } else if (tabName === 'catalogue') {
-      	 // Open overlay instead of switching content
-      	 showCatalogueOverlay();
-		 }
+     // Default hide panels
+     if (fishingContent) fishingContent.classList.add('hidden');
+     if (historyContent) historyContent.classList.add('hidden');
+     // Deactivate buttons
+     if (fishingTabButton) fishingTabButton.classList.remove('active');
+     if (catalogueTabButton) catalogueTabButton.classList.remove('active');
+     if (historyTabButton) historyTabButton.classList.remove('active');
+
+     if (tabName === 'fishing') {
+        fishingContent.classList.remove('hidden');
+        fishingTabButton.classList.add('active');
+     } else if (tabName === 'catalogue') {
+        // Open overlay instead of switching content
+        showCatalogueOverlay();
+     } else if (tabName === 'history') {
+      if (historyContent) historyContent.classList.remove('hidden');
+      if (historyTabButton) historyTabButton.classList.add('active');
+      renderHistory();
+     }
    }
 
   function showCatalogueOverlay() {
@@ -1761,7 +2097,24 @@ function selectRandomFish() {
 
   if (fishingTabButton) fishingTabButton.addEventListener('click', () => switchTab('fishing'));
   if (catalogueTabButton) catalogueTabButton.addEventListener('click', () => showCatalogueOverlay());
+  if (historyTabButton) historyTabButton.addEventListener('click', () => switchTab('history'));
   if (catalogueCloseBtn) catalogueCloseBtn.addEventListener('click', hideCatalogueOverlay);
+
+  if (historyClearBtn) historyClearBtn.addEventListener('click', () => {
+    sessionHistory.length = 0;
+    renderHistory();
+  });
+  if (historyCopyBtn) historyCopyBtn.addEventListener('click', async () => {
+    try {
+      const lines = sessionHistory.slice().reverse().map(historyRowToText).join('\n');
+      await navigator.clipboard.writeText(lines);
+      if (historySummary) historySummary.textContent = 'Copied history to clipboard.';
+      setTimeout(() => { renderHistory(); }, 1200);
+    } catch (e) {
+      if (historySummary) historySummary.textContent = 'Copy failed (browser blocked clipboard).';
+      setTimeout(() => { renderHistory(); }, 1200);
+    }
+  });
 
     if (playerBonusLabel && playerBonusTooltip) {
         playerBonusLabel.addEventListener('mouseenter', () => playerBonusTooltip.classList.remove('hidden'));
@@ -1777,5 +2130,8 @@ function selectRandomFish() {
 
 document.addEventListener('DOMContentLoaded', initializeFishingMinigame);
   </script>
+
+</body>
+</html>
 
 

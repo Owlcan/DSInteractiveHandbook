@@ -1870,7 +1870,7 @@
             <img class="game-card__banner" src="../src/assets/images/expeditionandgames/fishinggame.webp" alt="Fishing Adventure banner" loading="lazy">
             <p class="game-card__desc">Cast your line, time the hook in the golden sweet spot, and reel in loot with a skill-based twist.</p>
             <div class="actions">
-              <a class="btn btn--play" href="../src/fishingminigame.html">Play</a>
+              <a class="btn btn--play" href="../src/fishingminigame.html" data-open-in-iframe="true" data-game-title="Fishing Adventure">Play</a>
             </div>
           </div>
         </article>
@@ -2943,7 +2943,7 @@
           popOutByIframeId('spellbook-iframe', '../spellbook.html', 'Spellbook');
           break;
         case 'crafting':
-          popOutByIframeId('crafting-iframe', 'AlchemyExplorer.html', 'Crafting');
+          popOutByIframeId('crafting-iframe', 'AlchemyExplorer/index.html', 'Crafting');
           break;
         case 'races':
           popOutByIframeId('races-iframe', 'races.html', 'Academy Races');
@@ -3034,7 +3034,7 @@
           buttonId: 'btn-crafting',
           containerId: 'crafting-iframe-container',
           iframeId: 'crafting-iframe',
-          baseSrc: 'AlchemyExplorer.html',
+          baseSrc: 'AlchemyExplorer/index.html',
           title: 'Crafting'
         },
         spellbook: {
@@ -3877,7 +3877,7 @@
           const section = document.getElementById('crafting-section');
           section.classList.add('active');
           applySectionUiPreferences(section);
-          createOrRefreshIframe('crafting-iframe-container', 'crafting-iframe', 'AlchemyExplorer.html', 'Crafting');
+          createOrRefreshIframe('crafting-iframe-container', 'crafting-iframe', 'AlchemyExplorer/index.html', 'Crafting');
 
           // Prefer hiding tabs for crafting-style full-screen tools (first run only)
           // (Now handled by applySectionUiPreferences)
@@ -4024,6 +4024,134 @@
             console.warn(`Button with ID ${btnId} not found.`);
         }
       }
+
+      // Games: open selected games in an in-page iframe overlay (useful for fishing verification screenshots)
+      (function initGameIframeOverlay(){
+        const gamesSection = document.getElementById('games-section');
+        if (!gamesSection || gamesSection.dataset.gameOverlayInitialized) return;
+
+        function ensureOverlay(){
+          let overlay = document.getElementById('game-iframe-overlay');
+          if (overlay) return overlay;
+
+          overlay = document.createElement('div');
+          overlay.id = 'game-iframe-overlay';
+          overlay.style.cssText = [
+            'position: fixed',
+            'inset: 0',
+            'background: rgba(0,0,0,0.75)',
+            'display: none',
+            'align-items: center',
+            'justify-content: center',
+            'z-index: 10001',
+            'padding: 16px'
+          ].join(';');
+
+          const panel = document.createElement('div');
+          panel.id = 'game-iframe-panel';
+          panel.style.cssText = [
+            // ~20% larger than the previous overlay size
+            'width: min(1680px, 99vw)',
+            'height: min(1100px, 94vh)',
+            'background: var(--parchment)',
+            'border: 2px solid var(--gold-dark)',
+            'border-radius: 12px',
+            'box-shadow: 0 12px 40px rgba(0,0,0,0.55)',
+            'display: flex',
+            'flex-direction: column',
+            'overflow: hidden'
+          ].join(';');
+
+          const header = document.createElement('div');
+          header.style.cssText = [
+            'display:flex',
+            'align-items:center',
+            'justify-content: space-between',
+            'gap: 10px',
+            'padding: 10px 12px',
+            'background: rgba(0,0,0,0.15)',
+            'border-bottom: 1px solid var(--gold-dark)'
+          ].join(';');
+
+          const title = document.createElement('div');
+          title.id = 'game-iframe-title';
+          title.textContent = 'Game';
+          title.style.cssText = 'font-family: MedievalSharp, cursive; color: var(--gold-light); font-size: 1.2rem;';
+
+          const buttons = document.createElement('div');
+          buttons.style.cssText = 'display:flex; gap:8px;';
+
+          const popBtn = document.createElement('button');
+          popBtn.type = 'button';
+          popBtn.id = 'game-iframe-popout';
+          popBtn.textContent = 'Pop out';
+          popBtn.className = 'nav-button';
+
+          const closeBtn = document.createElement('button');
+          closeBtn.type = 'button';
+          closeBtn.id = 'game-iframe-close';
+          closeBtn.textContent = 'Close';
+          closeBtn.className = 'nav-button';
+
+          buttons.appendChild(popBtn);
+          buttons.appendChild(closeBtn);
+          header.appendChild(title);
+          header.appendChild(buttons);
+
+          const iframe = document.createElement('iframe');
+          iframe.id = 'game-iframe';
+          iframe.title = 'Game';
+          iframe.style.cssText = 'width:100%; height:100%; border:0; display:block; background: transparent;';
+
+          panel.appendChild(header);
+          panel.appendChild(iframe);
+          overlay.appendChild(panel);
+          document.body.appendChild(overlay);
+
+          // Close behavior
+          function close(){
+            overlay.style.display = 'none';
+            iframe.src = 'about:blank';
+          }
+
+          closeBtn.addEventListener('click', close);
+          overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
+          document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && overlay.style.display !== 'none') {
+              e.preventDefault();
+              close();
+            }
+          });
+
+          popBtn.addEventListener('click', () => {
+            if (iframe.src && !iframe.src.startsWith('about:')) {
+              try { window.open(iframe.src, '_blank'); } catch (e) {}
+            }
+          });
+
+          return overlay;
+        }
+
+        gamesSection.addEventListener('click', (e) => {
+          const link = e.target && e.target.closest ? e.target.closest('a[data-open-in-iframe="true"]') : null;
+          if (!link) return;
+          e.preventDefault();
+
+          const overlay = ensureOverlay();
+          const iframe = document.getElementById('game-iframe');
+          const titleEl = document.getElementById('game-iframe-title');
+          const title = link.getAttribute('data-game-title') || link.textContent || 'Game';
+
+          if (titleEl) titleEl.textContent = title;
+          if (iframe) {
+            iframe.title = title;
+            iframe.src = link.getAttribute('href');
+          }
+          overlay.style.display = 'flex';
+        });
+
+        gamesSection.dataset.gameOverlayInitialized = '1';
+      })();
       
   // Board game controls removed; integrated into Games tab launcher
       
