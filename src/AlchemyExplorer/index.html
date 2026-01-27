@@ -22,6 +22,13 @@
                 <button id="recipe-book-btn" class="fancy-button">Recipe Book</button>
                 <button id="expedition-btn" class="fancy-button">Zone Patrol</button>
                 <button id="logbook-btn" class="fancy-button">Logbook</button>
+                <div class="dropdown">
+                    <button id="inventory-tools-btn" class="fancy-button dropdown-toggle" aria-haspopup="true" aria-expanded="false">Inventory Tools</button>
+                    <div id="inventory-tools-menu" class="dropdown-menu" role="menu" aria-label="Inventory Tools">
+                        <button id="inventory-copy-plain-btn" class="dropdown-item" role="menuitem">Copy Inventory as Plain Text List</button>
+                        <button id="inventory-export-md-btn" class="dropdown-item" role="menuitem">Export Inventory as Markdown table</button>
+                    </div>
+                </div>
                 <button id="export-save-btn" class="fancy-button">Export Save</button>
                 <button id="import-save-btn" class="fancy-button">Load Save</button>
                 <button id="upload-bundle-btn" class="fancy-button">Upload Bundle</button>
@@ -132,6 +139,26 @@
                 <div class="use-crafted-actions">
                     <button id="use-crafted-confirm" class="fancy-button">Use</button>
                     <button id="use-crafted-cancel" class="fancy-button">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Inventory Remove/Consume Modal (Right-click) -->
+        <div id="inventory-remove-modal" class="modal">
+            <div class="modal-content modal-sm">
+                <span class="close">&times;</span>
+                <h2 id="inventory-remove-title">Consume / Remove</h2>
+                <div class="result-details">
+                    <div class="result-text inventory-remove-text">
+                        <h3 id="inventory-remove-name"></h3>
+                        <p><strong>Available:</strong> <span id="inventory-remove-available">0</span></p>
+                        <label for="inventory-remove-amount"><strong>Amount</strong></label>
+                        <input id="inventory-remove-amount" type="number" min="1" value="1" />
+                    </div>
+                </div>
+                <div class="use-crafted-actions">
+                    <button id="inventory-remove-confirm" class="fancy-button">Consume/Remove</button>
+                    <button id="inventory-remove-cancel" class="fancy-button">Cancel</button>
                 </div>
             </div>
         </div>

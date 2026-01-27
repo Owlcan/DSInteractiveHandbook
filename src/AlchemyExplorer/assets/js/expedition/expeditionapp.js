@@ -1,4 +1,4 @@
-// Alchemy Blaster - Rail Shooter Mini-Game
+// Zone Patrol - Rail Shooter Mini-Game
 class AlchemyBlaster {
     constructor(options = {}) {
         // Save options
@@ -146,9 +146,10 @@ class AlchemyBlaster {
 
     getComboMultiplier() {
         const c = Math.max(0, Number(this.comboCount) || 0);
-        // Zone Patrol design: combo is a *multiplier* that increases by +0.25 per collected drop.
+        // Zone Patrol design: combo is a *multiplier* that increases by a fixed amount per collected drop.
+        // Nerf: ~25% slower gain.
         const rate = Math.max(0.01, Number(this.comboRateMultiplier) || 1);
-        return 1 + c * 0.25 * rate;
+        return 1 + c * 0.1875 * rate;
     }
 
     breakCombo() {
@@ -3325,15 +3326,43 @@ class AlchemyBlaster {
         
         const scoreForRewards = (typeof scoreOverride === 'number') ? scoreOverride : this.score;
 
-        // Calculate number of rewards based on score: 1 item per 1000 points.
-        // Drops should be ~10% less overall (before rarity-shift scaling).
-        const baseRewardCount = Math.floor(scoreForRewards / 1000);
-        const reducedCount = Math.floor(baseRewardCount * 0.9);
+        const RAW_SCORE = Math.max(0, Number(scoreForRewards) || 0);
 
-        // Cap at 100 items maximum
-        const rewardCount = Math.min(reducedCount, 100);
+        // Score-based drops (end-of-run) are capped by rarity.
+        // NOTE: caps do NOT apply to in-run pickups queued via _queuedEndRewards.
+        const SCORE_DROP_CAPS = {
+            common: 150,
+            uncommon: 100,
+            rare: 50,
+            legendary: 25
+        };
 
-        console.log(`Distributing ${rewardCount} rewards based on score: ${scoreForRewards}`);
+        // Drop rate plateau: after 50M score, additional score yields diminishing returns
+        // until it reaches a max drop-rate threshold.
+        const SOFTCAP_START = 50_000_000;
+        const MAX_EFFECTIVE_SCORE = 200_000_000;
+        const SOFTCAP_TAU = 120_000_000;
+
+        // Ensure the maximum is reachable at a finite score.
+        // (The exponential approach alone asymptotes and never quite hits the max.)
+        let effectiveScore = RAW_SCORE;
+        if (RAW_SCORE >= MAX_EFFECTIVE_SCORE) {
+            effectiveScore = MAX_EFFECTIVE_SCORE;
+        } else if (RAW_SCORE > SOFTCAP_START) {
+            const excess = RAW_SCORE - SOFTCAP_START;
+            const maxExcess = Math.max(1, MAX_EFFECTIVE_SCORE - SOFTCAP_START);
+            const easedExcess = maxExcess * (1 - Math.exp(-excess / SOFTCAP_TAU));
+            effectiveScore = SOFTCAP_START + easedExcess;
+        }
+        effectiveScore = Math.min(MAX_EFFECTIVE_SCORE, Math.max(0, effectiveScore));
+
+        // Total score-based drop count is limited by the sum of rarity caps.
+        const MAX_SCORE_DROPS = Object.values(SCORE_DROP_CAPS).reduce((s, n) => s + (Number(n) || 0), 0);
+        const ratio = Math.min(1, effectiveScore / MAX_EFFECTIVE_SCORE);
+        // Concave curve: grows quickly early, slows at high score.
+        const rewardCount = Math.max(0, Math.floor(MAX_SCORE_DROPS * Math.pow(ratio, 0.65)));
+
+        console.log(`Distributing ${rewardCount} score-based rewards (effectiveScore=${Math.round(effectiveScore)}, rawScore=${RAW_SCORE})`);
 
         const pickWeighted = (items) => {
             const list = (items || []).filter(x => x && x.id && (Number(x.w) || 0) > 0);
@@ -3379,9 +3408,32 @@ class AlchemyBlaster {
             ...buildPoolFromIngredientCategories((cats) => cats.some(c => String(c).toLowerCase() === 'legendary')),
         ].filter(Boolean))).filter(id => id !== 'touch-of-love' && id !== 'dreamvapor' && id !== 'turbonado-sugar');
 
+        const uncommonSet = new Set(rarePool);
+        const rareSet = new Set(veryRarePool);
+        const legendarySet = new Set(ultraRarePool);
+
+        const rarityCounts = { common: 0, uncommon: 0, rare: 0, legendary: 0 };
+
+        const getRarityForId = (id) => {
+            if (!id) return 'common';
+            if (id === 'touch-of-love') return 'legendary';
+            if (legendarySet.has(id)) return 'legendary';
+            if (rareSet.has(id)) return 'rare';
+            if (uncommonSet.has(id)) return 'uncommon';
+            return 'common';
+        };
+
+        const tryAddRewardId = (id) => {
+            const rarity = getRarityForId(id);
+            if ((rarityCounts[rarity] || 0) >= (SCORE_DROP_CAPS[rarity] || 0)) return false;
+            rarityCounts[rarity] = (rarityCounts[rarity] || 0) + 1;
+            rewards.push(id);
+            return true;
+        };
+
         // Rarity shift after 1.5M score: every +500k adds
         // +3% rare, +2% very rare, +1% ultra-rare (capped at +9/+6/+3).
-        const score = Math.max(0, Number(scoreForRewards) || 0);
+        const score = Math.max(0, Number(effectiveScore) || 0);
         const steps = score > 1500000 ? Math.floor((score - 1500000) / 500000) : 0;
         const extraRare = Math.min(0.09, steps * 0.03);
         const extraVery = Math.min(0.06, steps * 0.02);
@@ -3397,29 +3449,50 @@ class AlchemyBlaster {
         const commonP = Math.max(0.10, 1 - rareP - veryP - ultraP);
 
         // Randomly select rewards from tiered pools.
-        for (let i = 0; i < rewardCount; i++) {
-            const tier = pickWeighted([
+        const tierOrder = ['legendary', 'rare', 'uncommon', 'common'];
+        const pickTierWithCaps = (preferred) => {
+            const pref = String(preferred || 'common');
+            // Try preferred first; if it's capped, fall back to the remaining tiers.
+            const sequence = [pref, ...tierOrder.filter(t => t !== pref)];
+            for (const t of sequence) {
+                if ((rarityCounts[t] || 0) < (SCORE_DROP_CAPS[t] || 0)) return t;
+            }
+            return null;
+        };
+
+        let added = 0;
+        let attempts = 0;
+        const maxAttempts = Math.max(50, rewardCount * 10);
+        while (added < rewardCount && attempts < maxAttempts) {
+            attempts++;
+            const preferred = pickWeighted([
                 { id: 'common', w: commonP },
-                { id: 'rare', w: rareP },
-                { id: 'very', w: veryP },
-                { id: 'ultra', w: ultraP }
-            ]);
+                { id: 'uncommon', w: rareP },
+                { id: 'rare', w: veryP },
+                { id: 'legendary', w: ultraP }
+            ]) || 'common';
+
+            const tier = pickTierWithCaps(preferred);
+            if (!tier) break;
 
             if (tier === 'common') {
                 const id = pickWeighted(commonWeights) || (commonPool.length ? commonPool[Math.floor(Math.random() * commonPool.length)] : null);
-                if (id) rewards.push(id);
+                if (id && tryAddRewardId(id)) added++;
                 continue;
             }
 
             let pool = commonPool;
-            if (tier === 'rare') pool = rarePool;
-            else if (tier === 'very') pool = veryRarePool;
-            else if (tier === 'ultra') pool = ultraRarePool;
+            if (tier === 'uncommon') pool = rarePool;
+            else if (tier === 'rare') pool = veryRarePool;
+            else if (tier === 'legendary') pool = ultraRarePool;
 
             if (Array.isArray(pool) && pool.length) {
-                rewards.push(pool[Math.floor(Math.random() * pool.length)]);
-            } else if (commonPool.length) {
-                rewards.push(commonPool[Math.floor(Math.random() * commonPool.length)]);
+                const id = pool[Math.floor(Math.random() * pool.length)];
+                if (id && tryAddRewardId(id)) added++;
+            } else {
+                // Pool missing: fall back to common
+                const id = pickWeighted(commonWeights) || (commonPool.length ? commonPool[Math.floor(Math.random() * commonPool.length)] : null);
+                if (id && tryAddRewardId(id)) added++;
             }
         }
 
@@ -3438,7 +3511,8 @@ class AlchemyBlaster {
                 const useLegendary = Math.random() < 0.10;
                 const pool = useLegendary ? legendaryPool : vrpPool;
                 if (Array.isArray(pool) && pool.length) {
-                    rewards.push(pool[Math.floor(Math.random() * pool.length)]);
+                    const id = pool[Math.floor(Math.random() * pool.length)];
+                    if (id) tryAddRewardId(id);
                 }
             }
         }
@@ -3446,7 +3520,9 @@ class AlchemyBlaster {
         // Guaranteed Touch of Love every 750,000 points (and again each additional 750,000).
         const touchMilestones = Math.floor(Math.max(0, Number(scoreForRewards) || 0) / 750000);
         if (touchMilestones > 0) {
-            for (let i = 0; i < touchMilestones; i++) rewards.push('touch-of-love');
+            for (let i = 0; i < touchMilestones; i++) {
+                if (!tryAddRewardId('touch-of-love')) break;
+            }
         }
         
         // (Legendary ingredients are handled as rare boss drops instead.)

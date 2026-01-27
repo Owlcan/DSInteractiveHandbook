@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SWaT System Tracker V6 (Final Comprehensive)</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Use lucide-react UMD so icons are valid React components -->
+    <script src="https://unpkg.com/lucide-react@latest/dist/umd/lucide-react.production.min.js"></script>
+    <style>
+        html {
+            font-size: 150%;
+        }
+        body {
+            background-color: #0c0806;
+            color: #fcd34d;
+            font-family: 'Lato', sans-serif;
+            overflow-x: hidden;
+        }
+        h1, h2, h3, h4, .cinzel {
+            font-family: 'Cinzel', serif;
+        }
+        .gold-gradient {
+            background: linear-gradient(135deg, #fef3c7 0%, #f59e0b 50%, #b45309 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .gold-ring {
+            box-shadow: 0 0 25px #78350f, inset 0 0 15px #451a03;
+            border: 4px solid #b45309;
+        }
+        .scrollbar-custom::-webkit-scrollbar {
+            width: 6px;
+        }
+        .scrollbar-custom::-webkit-scrollbar-track {
+            background: #1a120f; 
+        }
+        .scrollbar-custom::-webkit-scrollbar-thumb {
+            background: #b45309; 
+            border-radius: 3px;
+        }
+        .glass-panel {
+            background: rgba(20, 14, 12, 0.95);
+            border: 1px solid #78350f;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
+        }
+        .tab-active {
+            background-color: #b45309;
+            color: #fffbeb;
+            border-bottom: 2px solid #fcd34d;
+        }
+        .tab-inactive {
+            background-color: #2a1d19;
+            color: #d97706;
+            border-bottom: 2px solid #451a03;
+        }
+        .tab-inactive:hover {
+            color: #fbbf24;
+            background-color: #451a03;
+        }
+
+        .gold-circle-btn {
+            background: radial-gradient(circle at 30% 30%, #fef3c7 0%, #f59e0b 55%, #b45309 100%);
+            border: 2px solid #fcd34d;
+            box-shadow: 0 0 18px rgba(245, 158, 11, 0.25), inset 0 0 10px rgba(69, 26, 3, 0.55);
+            color: #0c0806;
+        }
+        .gold-circle-btn:hover {
+            filter: brightness(1.08);
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useMemo } = React;
+
+        // --- Icon setup ---
+        // lucide-react UMD exposes a global `lucideReact` (and sometimes `LucideReact`).
+        // If icons fail to load, fall back to stub components so the UI still renders.
+        const IconLib = window.lucideReact || window.LucideReact || {};
+        const makeStubIcon = (name) => ({ size = 14, className = "", ...props }) => (
+            <span
+                title={name}
+                className={className}
+                style={{ display: 'inline-block', width: size, height: size, opacity: 0.6 }}
+                {...props}
+            />
+        );
+        const icon = (name) => IconLib[name] || IconLib[`${name}Icon`] || makeStubIcon(name);
+
+        const PlusIcon = ({ size = 18, className = "", ...props }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true" {...props}>
+                <path d="M12 5v14" />
+                <path d="M5 12h14" />
+            </svg>
+        );
+        const MinusIcon = ({ size = 18, className = "", ...props }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true" {...props}>
+                <path d="M5 12h14" />
+            </svg>
+        );
+
+        const Shield = icon('Shield');
+        const AlertTriangle = icon('AlertTriangle');
+        const Skull = icon('Skull');
+        const Zap = icon('Zap');
+        const Droplet = icon('Droplet');
+        const Ghost = icon('Ghost');
+        const AlertCircle = icon('AlertCircle');
+        const RotateCcw = icon('RotateCcw');
+        const Plus = PlusIcon;
+        const Minus = MinusIcon;
+        const Heart = icon('Heart');
+        const Baby = icon('Baby');
+        const CloudFog = icon('CloudFog');
+        const Trash2 = icon('Trash2');
+        const Gavel = icon('Gavel');
+        const Sparkles = icon('Sparkles');
+        const Anchor = icon('Anchor');
+        const Eye = icon('Eye');
+        const Clock = icon('Clock');
+        const Thermometer = icon('Thermometer');
+        const Bed = icon('Bed');
+        const Utensils = icon('Utensils');
+        const Flame = icon('Flame');
+        const UserX = icon('UserX');
+
+        // Helpful on-page error banner instead of a blank screen
+        window.addEventListener('error', (e) => {
+            try {
+                const rootEl = document.getElementById('root');
+                if (!rootEl) return;
+                if (rootEl.dataset.hasErrorBanner) return;
+                rootEl.dataset.hasErrorBanner = '1';
+                const msg = (e && e.message) ? e.message : 'Unknown error';
+                rootEl.innerHTML = `
+                    <div style="padding:16px; margin:16px; border:2px solid #b45309; background:#0c0806; color:#fcd34d; font-family:Lato,sans-serif;">
+                        <div style="font-weight:800; color:#f59e0b;">SWaT System failed to render</div>
+                        <div style="margin-top:6px; color:#fed7aa; font-size:12px;">${String(msg).replace(/</g,'&lt;')}</div>
+                        <div style="margin-top:10px; color:#a16207; font-size:11px;">Open DevTools Console for details.</div>
+                    </div>
+                `;
+            } catch (_) {}
+        });
+
+        // --- FULL DATA SETS ---
+
+        const MATURITY_TIERS = [
+            {
+                range: [25, 25],
+                label: "Overcharged",
+                effects: [
+                    "Immunity: Immune to 1 instance of Exhaustion (next 12 hrs).",
+                    "Expertise: Advantage on Expertise/Proficient Tool checks (non-combat).",
+                    "Combat: +1 to Hit and Damage.",
+                ],
+                color: "text-blue-300",
+            },
+            {
+                range: [24, 24],
+                label: "Radiant",
+                effects: ["Vitality: +1 Hit Die recovered per Long Rest (usable for skills/healing)."],
+                color: "text-blue-200",
+            },
+            {
+                range: [23, 23],
+                label: "Confident",
+                effects: ["Control: Advantage on all forced Potty Checks."],
+                color: "text-green-400",
+            },
+            {
+                range: [22, 22],
+                label: "Bolstered",
+                effects: ["Combat: +1 to Hit and Damage."],
+                color: "text-green-300",
+            },
+            {
+                range: [21, 21],
+                label: "Secure",
+                effects: ["Control: +1 to all Potty Checks."],
+                color: "text-green-200",
+            },
+            {
+                range: [20, 20],
+                label: "Baseline",
+                effects: ["Standard Operating Condition. No bonuses or penalties."],
+                color: "text-amber-400",
+            },
+            {
+                range: [18, 19],
+                label: "Fraying",
+                effects: ["Uncertainty: -2 to all Potty Checks."],
+                color: "text-yellow-400",
+            },
+            {
+                range: [16, 17],
+                label: "Shaken",
+                effects: ["Jitters: -1 to Hit."],
+                color: "text-orange-400",
+            },
+            {
+                range: [14, 15],
+                label: "Worn Down",
+                effects: [
+                    "Fatigue: +1 Level of True Exhaustion (Cannot be removed by magic/alchemy).",
+                    "Sluggish: -5 ft Movement Speed.",
+                    "Clumsy: -2 to Hit (Total: -3).",
+                ],
+                color: "text-orange-500",
+            },
+            {
+                range: [12, 13],
+                label: "Regressing",
+                effects: [
+                    "Stumbling: -5 ft Movement Speed (Total: -10 ft).",
+                    "Fumbling: -2 to Hit (Total: -5).",
+                ],
+                color: "text-orange-600",
+            },
+            {
+                range: [10, 11],
+                label: "Toddling",
+                effects: [
+                    "Weakness: -2 to Damage.",
+                    "Crawling: -5 ft Movement Speed (Total: -15 ft).",
+                ],
+                color: "text-red-400",
+            },
+            {
+                range: [8, 9],
+                label: "Messy",
+                effects: [
+                    "Total Loss: Immediate Failure of all Potty Checks (Diaper becomes Messy/Saturated instantly).",
+                    "Feeble: -3 to Damage (Total: -5).",
+                    "Immobile: -5 ft Movement Speed (Total: -20 ft).",
+                ],
+                color: "text-red-500",
+            },
+            {
+                range: [6, 7],
+                label: "Fussy",
+                effects: [
+                    "Brain Fog: -2 to All Ability Scores (Stats).",
+                    "Tantrum: Spells/Abilities have a 50% Chance to Fizzle (Action wasted).",
+                ],
+                color: "text-red-600",
+            },
+            {
+                range: [4, 5],
+                label: "Cranky",
+                effects: [
+                    "Deep Fatigue: +1 Level of True Exhaustion (Total: Level 2).",
+                    "Regression: -2 to All Ability Scores (Total: -4).",
+                ],
+                color: "text-red-700",
+            },
+            {
+                range: [2, 3],
+                label: "Weepy",
+                effects: [
+                    "Incompetent: Disadvantage on all Skill Checks (unless using Expertise or Aided by another).",
+                    "Fragile: -2 to Constitution (Total: -6 Stats).",
+                ],
+                color: "text-red-800",
+            },
+            {
+                range: [1, 1],
+                label: "Infantile",
+                effects: [
+                    "Helpless: Cannot walk; must crawl (5 ft speed).",
+                    "Bratty: Spells/Abilities have a 90% Chance to Fizzle.",
+                    "Collapse: +1 Level of True Exhaustion (Total: Level 3).",
+                ],
+                color: "text-red-900",
+            },
+            {
+                range: [0, 0],
+                label: "Incapacitated",
+                effects: [
+                    "Naptime: Unconscious.",
+                    "Requires medical intervention.",
+                    "If not rescued in 1d6 turns, teleported to Infirmary/Nursery via Emergency Translocation.",
+                ],
+                color: "text-gray-500",
+            },
+        ];
+
+        const WINDOWS_OF_OPPORTUNITY = [
+            { name: "Hunger Pangs", time: "1 Hour", action: "Eat Meal", failEffect: -1, desc: "Consume meal. Slow burn.", icon: <Utensils size={14} /> },
+            { name: "Thirst", time: "30 Mins", action: "Drink", failEffect: -1, desc: "Dry mouth hinders verbal components.", icon: <Droplet size={14} /> },
+            { name: "Diaper (Wet)", time: "30 Mins", action: "Change", failEffect: -1, desc: "Cold/Clammy degrades resolve.", icon: <Droplet size={14} /> },
+            { name: "Diaper (Messy)", time: "10 Mins", action: "Change ASAP", failEffect: -2, desc: "High Urgency. Smell overwhelms.", icon: <Skull size={14} /> },
+            { name: "Chill / Shivers", time: "10 Mins", action: "Warm Up", failEffect: -1, desc: "Stabilize body temp. Somatic difficulty.", icon: <Thermometer size={14} /> },
+            { name: "Overheating", time: "10 Mins", action: "Cool Down", failEffect: -1, desc: "Heat exhaustion sets in fast.", icon: <Flame size={14} /> },
+            { name: "Shame", time: "1 Min", action: "Hide/Affirm", failEffect: -1, desc: "Spotlight Effect. Trauma solidifies.", icon: <UserX size={14} /> },
+            { name: "Grossed Out", time: "1 Min", action: "Clean/Move", failEffect: -2, desc: "Nausea affects combat.", icon: <Skull size={14} /> },
+            { name: "Crying / Tantrum", time: "1 Min", action: "Soothe", failEffect: -1, desc: "De-escalate or melt down.", icon: <Baby size={14} /> },
+        ];
+
+        const GLOSSARY_DB = [
+            // --- TIER I: NURSERY NUKES ---
+            { category: "Spells I", name: "Forced 2nd Childhood", value: -10, dc: "None", desc: "Sets Mental Stats to 6. Instantly diapered. Total loss of adulthood.", icon: <Baby size={14} /> },
+            { category: "Spells I", name: "Regression Field", value: -8, dc: "Area", desc: "Physical age reduction. If < Maturity -> Babybrain.", icon: <RotateCcw size={14} /> },
+            { category: "Spells I", name: "Big Babification", value: -5, dc: "Trans", desc: "Gear -> Baby clothes/toys. Locked diaper + Pacifier + Mittens.", icon: <Baby size={14} /> },
+            { category: "Spells I", name: "Babybrain", value: -5, dc: "Int", desc: "Int -> 4. Lose class features. Clumsy attacks only.", icon: <CloudFog size={14} /> },
+            { category: "Spells I", name: "Personal Littlespace", value: -5, dc: "Aura", desc: "Turns entrants into baby versions (Stats -10).", icon: <Ghost size={14} /> },
+            { category: "Spells I", name: "Rewind to Rompers", value: -4, dc: "Save", desc: "Reaction spell. Regress caster to toddler state for 1d4 rounds.", icon: <RotateCcw size={14} /> },
+            { category: "Spells I", name: "Mass Uncontrollable Fantasy", value: -4, dc: "Wis", desc: "Euphoric playtime hallucination. Cannot attack.", icon: <Sparkles size={14} /> },
+            
+            // --- TIER II: BROWN NOTE ---
+            { category: "Spells II", name: "Umber Symphony", value: -6, dc: "7th", desc: "Ultimate Indignity. Violent Accident + Stun + Poison.", icon: <Skull size={14} /> },
+            { category: "Spells II", name: "Greater Brown Note", value: -4, dc: "3rd", desc: "Hypermess. Instant capacity/destruction. Poisoned.", icon: <Skull size={14} /> },
+            { category: "Spells II", name: "Mass Brown Note", value: -4, dc: "5th", desc: "AoE Collective Mess. Disadvantage on all checks.", icon: <Skull size={14} /> },
+            { category: "Spells II", name: "Unstoppable Leak", value: -3, dc: "Evoc", desc: "Corrosive filth torrent. Sodden status + Shame.", icon: <Droplet size={14} /> },
+            { category: "Spells II", name: "Brown Note", value: -2, dc: "1st", desc: "Vibrates digestion. Major Potty Check failure.", icon: <Zap size={14} /> },
+            { category: "Spells II", name: "Forced Incontinence", value: -2, dc: "P/Turn", desc: "Auto-fail diaper checks at start of turn.", icon: <Droplet size={14} /> },
+            { category: "Spells II", name: "Spontaneous Accident", value: -2, dc: "Ench", desc: "Compels immediate soiling. Loss of autonomy.", icon: <Skull size={14} /> },
+            { category: "Spells II", name: "Diaper Detonation", value: -2, dc: "Expl", desc: "Physical damage + Embarrassing Stink.", icon: <AlertTriangle size={14} /> },
+
+            // --- TIER III: DISCIPLINARY ---
+            { category: "Spells III", name: "Pacification", value: -3, dc: "Conj", desc: "Unremovable pacifier. No verbal components.", icon: <Baby size={14} /> },
+            { category: "Spells III", name: "Time-Out Corner", value: -3, dc: "Banish", desc: "Banished to featureless room with stool. Incapacitated.", icon: <Gavel size={14} /> },
+            { category: "Spells III", name: "Scion's Servitude", value: -3, dc: "Charm", desc: "Turns humanoid into construct-type minion/doll.", icon: <Baby size={14} /> },
+            { category: "Spells III", name: "Detention Field", value: -2, dc: "Cube", desc: "Enforces rules. Violation = Punishment.", icon: <Gavel size={14} /> },
+            { category: "Spells III", name: "Dunce Cap", value: -2, dc: "Item", desc: "Disadvantage Int/Wis saves. Profound foolishness.", icon: <Ghost size={14} /> },
+            { category: "Spells III", name: "Examination Dread", value: -2, dc: "Illu", desc: "Must spend actions answering spectral test paper.", icon: <Gavel size={14} /> },
+            { category: "Spells III", name: "Spank!", value: -1, dc: "Strike", desc: "1 Dmg, Speed 0. Disciplinary strike.", icon: <Zap size={14} /> },
+
+            // --- TIER IV: HUMILIATION ---
+            { category: "Spells IV", name: "Imprint", value: -3, dc: "Trans", desc: "Traps foe as decoration on caster's diaper.", icon: <Anchor size={14} /> },
+            { category: "Spells IV", name: "Tearful Tantrum", value: -3, dc: "Ench", desc: "Relive trauma (Cry). Fail save = Accident.", icon: <Baby size={14} /> },
+            { category: "Spells IV", name: "Embarrassment", value: -2, dc: "Palad", desc: "Too flustered to act (Disadv). Fail = Potty Check.", icon: <Ghost size={14} /> },
+            { category: "Spells IV", name: "Grossed Out!", value: -2, dc: "Illu", desc: "Incapacitated with revulsion.", icon: <Skull size={14} /> },
+            { category: "Spells IV", name: "Magic Messle", value: -1, dc: "Auto", desc: "Arcane Embarrassment Dmg. Ego hit.", icon: <Sparkles size={14} /> },
+            { category: "Spells IV", name: "Aliza's Electricky Paw", value: -1, dc: "Touch", desc: "Lightning dmg + Wetting (Loss of Reaction).", icon: <Zap size={14} /> },
+            { category: "Spells IV", name: "Sudden Outfit", value: -1, dc: "Illu", desc: "Ridiculous outfit over gear.", icon: <Baby size={14} /> },
+            { category: "Spells IV", name: "Uncrinkling Catastrophe", value: -1, dc: "Trans", desc: "Force potty check or Disadv on Cha.", icon: <RotateCcw size={14} /> },
+            { category: "Spells IV", name: "Magehand Warm Water", value: -1, dc: "Trans", desc: "Touches target to force potty check.", icon: <Droplet size={14} /> },
+            { category: "Spells IV", name: "Crinkly Invitation", value: -1, dc: "Ench", desc: "Compels movement via diaper sound.", icon: <Ghost size={14} /> },
+
+            // --- TIER V: ENVIRONMENTAL ---
+            { category: "Spells V", name: "Soothing Pollen", value: -2, dc: "Sleep", desc: "Sleep + Potty Check. Waking up messy.", icon: <CloudFog size={14} /> },
+            { category: "Spells V", name: "Gluttonberries", value: -2, dc: "Eat", desc: "Forces violent digestive relaxation (Hypermess).", icon: <Utensils size={14} /> },
+            { category: "Spells V", name: "Warding Glyphs", value: -1, dc: "Trap", desc: "Bucket Spill (Prone/Wet) or Fear.", icon: <AlertTriangle size={14} /> },
+            { category: "Spells V", name: "Echo Blooms", value: -1, dc: "Aura", desc: "Projects nostalgia/melancholy.", icon: <Ghost size={14} /> },
+
+            // --- BOSS & MONSTER ABILITIES ---
+            { category: "Monsters", name: "Chap'Hell (Fail)", value: -5, dc: "DC 16 Wis", desc: "Pants-Crapping Fear. Frightened + Hypermess. Ultimate Indignity.", icon: <Skull size={14} /> },
+            { category: "Monsters", name: "Regression Fog", value: -5, dc: "DC 16 Wis", desc: "Mind-Clouding Aura. Babybrain (Int 4).", icon: <CloudFog size={14} /> },
+            { category: "Monsters", name: "Sentient Crib", value: -4, dc: "Trap", desc: "Enclose/Rock to Sleep. Traps behind bars -> Infant.", icon: <Bed size={14} /> },
+            { category: "Monsters", name: "Sire Reaver", value: -4, dc: "DC 17 Wis", desc: "Nightmare Presence. Paralyzing fear of authority.", icon: <Gavel size={14} /> },
+            { category: "Monsters", name: "Nightsipper Screech", value: -4, dc: "Con/Wis", desc: "Brown-Note Screech. Combo Attack (Mess + Fear).", icon: <Zap size={14} /> },
+            { category: "Monsters", name: "Terrorizer Hologram", value: -4, dc: "DC 15 Cha", desc: "Reckless flight + involuntary mess/wet.", icon: <Ghost size={14} /> },
+            
+            { category: "Monsters", name: "Changebot", value: -3, dc: "Grapple", desc: "Forced Change. Total violation of autonomy.", icon: <Anchor size={14} /> },
+            { category: "Monsters", name: "Pacifier Golem", value: -3, dc: "Grapple", desc: "Smother/Pacify. Silences target.", icon: <Baby size={14} /> },
+            { category: "Monsters", name: "Titan-Snapper", value: -3, dc: "DC 15 Wis", desc: "Roar. 18 Psychic Dmg + Fear.", icon: <AlertTriangle size={14} /> },
+            { category: "Monsters", name: "Disciplinary Dean", value: -3, dc: "DC 16 Wis", desc: "Terrifying Presence. Reverts to guilty child mindset.", icon: <Gavel size={14} /> },
+            { category: "Monsters", name: "Shadow Slimepress", value: -3, dc: "DC 17 Wis", desc: "Imperious Aura. Cower before royalty.", icon: <Ghost size={14} /> },
+            { category: "Monsters", name: "Abyssal Leviathan", value: -3, dc: "DC 16 Wis", desc: "Frightful Presence. Being hunted triggers 'smallness'.", icon: <Anchor size={14} /> },
+            { category: "Monsters", name: "Darkforme-Shark", value: -3, dc: "DC 14 Con", desc: "Unsettling Presence. Brown Note Incident.", icon: <Skull size={14} /> },
+            { category: "Monsters", name: "Weirdling-Paralurker", value: -3, dc: "DC 14 Con", desc: "Unsettling Reconfiguration. Visual horror loosens bowels.", icon: <Eye size={14} /> },
+
+            { category: "Monsters", name: "Punishment Maid", value: -2, dc: "Paralyze", desc: "Time-Out. Frozen for 'naughty behavior'.", icon: <Gavel size={14} /> },
+            { category: "Monsters", name: "Bratnapper", value: -2, dc: "Paralyze", desc: "Temporal Timeout (1 round).", icon: <Clock size={14} /> },
+            { category: "Monsters", name: "Shadow Babysitter", value: -2, dc: "Restrain", desc: "Chains of Shadow. Leash/Harness.", icon: <Anchor size={14} /> },
+            { category: "Monsters", name: "Darkling Yowler", value: -2, dc: "DC 11 Con", desc: "Ordure/Brown-Note Wail. Bowel accident.", icon: <Zap size={14} /> },
+            { category: "Monsters", name: "Slimepress (Minor)", value: -2, dc: "Command", desc: "Demanding Decree. Compels 'Grovel' or 'Sit'.", icon: <Gavel size={14} /> },
+            { category: "Monsters", name: "Teddy Fright", value: -2, dc: "DC 13 Wis", desc: "Frightful Presence. Corrupts memory of safety.", icon: <Ghost size={14} /> },
+            { category: "Monsters", name: "Auditor", value: -2, dc: "DC 15 Wis", desc: "Formation/Audit. Forces Potty Check (Surprise Inspection).", icon: <Gavel size={14} /> },
+            { category: "Monsters", name: "Voravenor", value: -2, dc: "DC 13 Wis", desc: "Aura of Dread. Proximity drains will.", icon: <Ghost size={14} /> },
+            { category: "Monsters", name: "Grief-Stone", value: -2, dc: "Aura", desc: "Saps will (Half Speed). Amplifies Fear.", icon: <Anchor size={14} /> },
+
+            { category: "Monsters", name: "Bellowbelly", value: -1, dc: "Chirp", desc: "Irresistibly Chirpy. Attracts monsters + Stress.", icon: <Zap size={14} /> },
+            { category: "Monsters", name: "Teddy Aura", value: -1, dc: "DC 13 Wis", desc: "Pathetic Aura. PC too childish to hurt a 'toy'.", icon: <Baby size={14} /> },
+
+            // --- HAZARDS ---
+            { category: "Hazards", name: "Regression Mine", value: -5, dc: "Trap", desc: "Physically regresses to ~2 yrs old (Stats 8).", icon: <AlertTriangle size={14} /> },
+            { category: "Hazards", name: "Unexploded Bomb", value: -5, dc: "Trap", desc: "Triggered by dmg/heat. Regresses to ~2 yrs.", icon: <AlertTriangle size={14} /> },
+            { category: "Hazards", name: "Brown Tincture", value: -3, dc: "Ingest", desc: "Complete bowel incontinence.", icon: <Droplet size={14} /> },
+            { category: "Hazards", name: "Diaper (Leaking)", value: -3, dc: "Status", desc: "Exceeding capacity. Visible failure.", icon: <Droplet size={14} /> },
+            { category: "Hazards", name: "Diaper (Messy)", value: -2, dc: "Status", desc: "Sensory overwhelm/Smell.", icon: <Skull size={14} /> },
+            { category: "Hazards", name: "Merry-Go-Round", value: -1, dc: "DC 13 Wis", desc: "Charmed Ride. Compelled to ride.", icon: <RotateCcw size={14} /> },
+            { category: "Hazards", name: "Chafing / Rash", value: -1, dc: "Status", desc: "Constant irritation (-1 Conc).", icon: <AlertCircle size={14} /> },
+
+            // --- RESTORATION ---
+            { category: "Restoration", name: "Cleansing Change", value: 2, dc: "Spell", desc: "Instantly cleans target. Removes condition.", icon: <Sparkles size={14} /> },
+            { category: "Restoration", name: "Cradle of Comfort", value: 2, dc: "Spell", desc: "Protects against Fear (Maturity drain).", icon: <Shield size={14} /> },
+            { category: "Restoration", name: "Sleepy Time Tea", value: 2, dc: "Spell", desc: "Deep restorative nap (10 mins).", icon: <Bed size={14} /> },
+            { category: "Restoration", name: "Blessed Baby Lotion", value: 1, dc: "Spell", desc: "Soothes rash. Removes 'Cranky'.", icon: <Heart size={14} /> },
+            { category: "Restoration", name: "Golden Graceberry", value: 1, dc: "Item", desc: "Divine relief (Risk incontinence).", icon: <Plus size={14} /> },
+            { category: "Restoration", name: "Soothing Snuggle", value: 1, dc: "Spell", desc: "Heals HP + removes Fear via hug.", icon: <Heart size={14} /> },
+            { category: "Restoration", name: "Warm Milk", value: 1, dc: "Spell", desc: "Heals and soothes.", icon: <Utensils size={14} /> },
+        ];
+
+        // --- COMPONENTS ---
+
+        const WindowItem = ({ item, onFail }) => {
+            const [active, setActive] = useState(false);
+            
+            return (
+                <div className={`p-2 rounded border transition-all ${active ? 'bg-amber-900/30 border-amber-500' : 'bg-black/40 border-amber-900/30'}`}>
+                    <div className="flex justify-between items-center">
+                        <div className="flex items-center gap-2">
+                            <span className="text-amber-600">{item.icon}</span>
+                            <span className="font-bold text-sm text-amber-200">{item.name}</span>
+                        </div>
+                        <span className="text-xs font-mono text-amber-500">{item.time}</span>
+                    </div>
+                    <div className="text-[13px] text-amber-400/70 truncate" title={item.desc}>{item.desc}</div>
+                    
+                    {!active ? (
+                        <button onClick={() => setActive(true)} className="w-full mt-2 py-1 bg-amber-900/50 hover:bg-amber-800 text-amber-200 text-xs rounded uppercase tracking-wider">
+                            Start Timer
+                        </button>
+                    ) : (
+                        <div className="flex gap-2 mt-2">
+                            <button onClick={() => setActive(false)} className="flex-1 py-1 bg-green-900/50 hover:bg-green-800 text-green-200 text-xs rounded border border-green-800">
+                                Resolved
+                            </button>
+                            <button onClick={() => { setActive(false); onFail(item); }} className="flex-1 py-1 bg-red-900/50 hover:bg-red-800 text-red-200 text-xs rounded border border-red-800">
+                                Failed
+                            </button>
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        const TrackerGauge = ({ value, label, statusColor, trueExhaustion }) => (
+            <div className="relative w-56 h-56 md:w-72 md:h-72 mx-auto group">
+                <div className={`absolute inset-0 rounded-full blur-xl opacity-20 ${statusColor.replace('text', 'bg')}`}></div>
+                <div className="absolute inset-0 rounded-full border-[10px] border-[#2a1d19] shadow-2xl gold-ring"></div>
+                <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
+                    <span className="cinzel text-lg text-[#b45309] uppercase tracking-widest font-bold mb-1">Maturity</span>
+                    <span className="cinzel text-7xl md:text-8xl font-bold gold-gradient drop-shadow-lg">{value}</span>
+                    <span className={`px-3 py-1 rounded-full bg-black/60 border border-[#b45309]/30 text-base uppercase tracking-widest font-bold ${statusColor} mb-1`}>
+                        {label}
+                    </span>
+                    {trueExhaustion > 0 && (
+                        <div className="flex items-center gap-1 text-red-500 font-bold bg-black/80 px-2 py-0.5 rounded border border-red-900 animate-pulse">
+                            <Skull size={12} /> True Exh: {trueExhaustion}
+                        </div>
+                    )}
+                </div>
+                {[...Array(25)].map((_, i) => (
+                     <div key={i} className="absolute inset-0" style={{ transform: `rotate(${i * (360/25)}deg)` }}>
+                        <div className="h-1.5 w-0.5 bg-[#503a2a] mx-auto mt-1"></div>
+                    </div>
+                ))}
+            </div>
+        );
+
+        const App = () => {
+            const [baseMaturity, setBaseMaturity] = useState(20);
+            const [modifiers, setModifiers] = useState([]);
+            const [activeTab, setActiveTab] = useState("Monsters");
+            const [trueExhaustion, setTrueExhaustion] = useState(0);
+            const [showRestMenu, setShowRestMenu] = useState(false);
+            const [libraryOpen, setLibraryOpen] = useState(true);
+
+            const totalMaturity = useMemo(() => {
+                const modSum = modifiers.reduce((acc, curr) => acc + curr.value, 0);
+                let total = baseMaturity + modSum;
+                if (total > 25) total = 25;
+                if (total < 0) total = 0;
+                return total;
+            }, [baseMaturity, modifiers]);
+
+            const currentStatus = useMemo(() => {
+                return MATURITY_TIERS.find(t => totalMaturity >= t.range[0] && totalMaturity <= t.range[1]) || MATURITY_TIERS.find(t => t.label === "Baseline");
+            }, [totalMaturity]);
+
+            const activeEffects = useMemo(() => {
+                let effectsList = [];
+                // True Exhaustion Note
+                if (trueExhaustion > 0) {
+                    effectsList.push({ text: "Deep Strain on Adult Persona. Cannot be removed by Greater Restoration.", source: "True Exhaustion" });
+                }
+                
+                if (totalMaturity > 20) {
+                     MATURITY_TIERS.forEach(tier => {
+                        if (tier.range[0] > 20 && totalMaturity >= tier.range[0]) {
+                            tier.effects.forEach(e => effectsList.push({ text: e, source: tier.label }));
+                        }
+                    });
+                }
+                if (totalMaturity < 20) {
+                     MATURITY_TIERS.forEach(tier => {
+                        if (tier.range[1] < 20 && tier.range[1] >= totalMaturity) {
+                             tier.effects.forEach(e => effectsList.push({ text: e, source: tier.label }));
+                        }
+                    });
+                }
+                return effectsList;
+            }, [totalMaturity, trueExhaustion]);
+
+            const addModifier = (item) => {
+                const newMod = { ...item, id: Date.now() + Math.random() };
+                setModifiers(prev => [newMod, ...prev]);
+            };
+
+            const handleWindowFail = (windowItem) => {
+                addModifier({ 
+                    name: `Failed: ${windowItem.name}`, 
+                    value: windowItem.failEffect, 
+                    desc: "Window expired. Penalty applied.", 
+                    category: "Needs",
+                    icon: <Clock size={14}/>
+                });
+            };
+
+            const performRest = (type) => {
+                let gain = 0;
+                let overcharge = 0;
+                let removeExh = false;
+
+                switch(type) {
+                    case 'floor': gain = Math.floor(Math.random() * 4) + 1; break;
+                    case 'dorm': gain = Math.floor(Math.random() * 8) + 1; break;
+                    case 'magical': gain = 25; overcharge = 25; break; // Full
+                    case 'camper': gain = 25; overcharge = 27; break; // Full + 2
+                    case 'cottage': gain = 25; overcharge = 25; break; // + Immunity (Manual)
+                    case 'crib': gain = 25; overcharge = 25; removeExh = true; break;
+                }
+
+                // Reset mods first for full rests
+                if (gain >= 25) setModifiers([]);
+                
+                setBaseMaturity(prev => {
+                    if (gain >= 25) return 20; // Base resets to 20
+                    return Math.min(25, prev + gain);
+                });
+
+                if (overcharge > 25) {
+                    addModifier({ name: "Camper Overcharge", value: 2, desc: "Woke up in Glamorous Nursery", category: "Rest" });
+                }
+
+                if (removeExh && trueExhaustion > 0) setTrueExhaustion(t => t - 1);
+                
+                setShowRestMenu(false);
+            };
+
+            const filteredGlossary = GLOSSARY_DB.filter(item => item.category === activeTab);
+            const categories = [...new Set(GLOSSARY_DB.map(i => i.category))];
+
+            const CATEGORY_LABELS = {
+                'Spells I': 'Nursery Nukes',
+                'Spells II': 'Brown Note',
+                'Spells III': 'Disciplinary',
+                'Spells IV': 'Humiliation',
+                'Spells V': 'Environmental',
+            };
+            const categoryLabel = (cat) => CATEGORY_LABELS[cat] || cat;
+
+            return (
+                <div className="flex flex-col md:flex-row h-screen max-h-screen overflow-hidden bg-[#1a120f] font-sans text-amber-100">
+                    
+                    {/* LEFT: DASHBOARD */}
+                    <div className="flex-1 flex flex-col p-4 overflow-y-auto scrollbar-custom relative">
+                        <header className="flex justify-between items-center mb-4">
+                            <div>
+                                <h1 className="cinzel text-2xl text-[#f59e0b] font-bold">SWaT System</h1>
+                                <p className="text-[#92400e] text-[15px] uppercase tracking-[0.3em]">Student Welfare & Tracking</p>
+                            </div>
+                            <button onClick={() => setShowRestMenu(!showRestMenu)} className="flex items-center gap-2 bg-[#b45309] hover:bg-[#d97706] text-black font-bold px-4 py-2 rounded shadow-lg border border-[#fcd34d]">
+                                <Bed size={16} /> Take Rest
+                            </button>
+                        </header>
+
+                        {showRestMenu && (
+                            <div className="mb-4 bg-[#0c0806] border border-[#b45309] rounded p-4 grid grid-cols-2 md:grid-cols-3 gap-2 relative z-50 shadow-2xl">
+                                <button onClick={() => performRest('floor')} className="p-2 border border-[#451a03] hover:bg-[#2a1d19] text-left">
+                                    <div className="font-bold text-amber-500">Standard Bedroll</div>
+                                    <div className="text-xs text-amber-700">+1d4 Maturity</div>
+                                </button>
+                                <button onClick={() => performRest('dorm')} className="p-2 border border-[#451a03] hover:bg-[#2a1d19] text-left">
+                                    <div className="font-bold text-amber-500">Dorm Bed</div>
+                                    <div className="text-xs text-amber-700">+1d8 Maturity</div>
+                                </button>
+                                <button onClick={() => performRest('magical')} className="p-2 border border-[#451a03] hover:bg-[#2a1d19] text-left">
+                                    <div className="font-bold text-blue-400">Magical Nursery</div>
+                                    <div className="text-xs text-blue-700">Full Restore</div>
+                                </button>
+                                <button onClick={() => performRest('camper')} className="p-2 border border-[#451a03] hover:bg-[#2a1d19] text-left">
+                                    <div className="font-bold text-purple-400">Glamorous Camper</div>
+                                    <div className="text-xs text-purple-700">Full + 2 Overcharge</div>
+                                </button>
+                                <button onClick={() => performRest('cottage')} className="p-2 border border-[#451a03] hover:bg-[#2a1d19] text-left">
+                                    <div className="font-bold text-green-400">Cozy Cottage</div>
+                                    <div className="text-xs text-green-700">Full + Immunity</div>
+                                </button>
+                                <button onClick={() => performRest('crib')} className="p-2 border border-[#451a03] hover:bg-[#2a1d19] text-left">
+                                    <div className="font-bold text-pink-400">Sentient Crib</div>
+                                    <div className="text-xs text-pink-700">Full + Remove Exh.</div>
+                                </button>
+                            </div>
+                        )}
+
+                        <div className="flex flex-col md:flex-row gap-6">
+                            {/* Gauge Section */}
+                            <div className="flex-shrink-0 text-center relative">
+                                <TrackerGauge value={totalMaturity} label={currentStatus.label} statusColor={currentStatus.color} trueExhaustion={trueExhaustion} />
+                                <div className="flex justify-center gap-10 -mt-6 relative z-10">
+                                    <button onClick={() => setBaseMaturity(b => Math.max(0, b-1))} className="gold-circle-btn w-12 h-12 rounded-full flex items-center justify-center"><Minus size={18} /></button>
+                                    <button onClick={() => setBaseMaturity(b => Math.min(25, b+1))} className="gold-circle-btn w-12 h-12 rounded-full flex items-center justify-center"><Plus size={18} /></button>
+                                </div>
+                                
+                                {/* True Exhaustion Toggle */}
+                                <div className="mt-4 flex items-center justify-center gap-2">
+                                    <span className="text-sm text-amber-700 uppercase font-bold">True Exhaustion</span>
+                                    <button onClick={() => setTrueExhaustion(Math.max(0, trueExhaustion - 1))} className="gold-circle-btn w-9 h-9 rounded-full flex items-center justify-center"><Minus size={14} /></button>
+                                    <span className="text-xl font-bold text-red-400 w-6 text-center">{trueExhaustion}</span>
+                                    <button onClick={() => setTrueExhaustion(trueExhaustion + 1)} className="gold-circle-btn w-9 h-9 rounded-full flex items-center justify-center"><Plus size={14} /></button>
+                                </div>
+                            </div>
+
+                            {/* Right of gauge: Event Log + Current Effects */}
+                            <div className="flex-1 grid grid-cols-1 gap-4">
+                                <div className="glass-panel p-3 rounded h-72 flex flex-col">
+                                    <div className="flex justify-between items-center border-b border-[#78350f] pb-2 mb-2">
+                                        <h3 className="cinzel text-[#fcd34d] text-sm">Event Log</h3>
+                                        <button onClick={() => {setBaseMaturity(20); setModifiers([]);}} className="text-[15px] text-red-300 border border-red-700 px-2 rounded hover:bg-red-900/30">RESET ALL</button>
+                                    </div>
+                                    <div className="overflow-y-auto scrollbar-custom flex-1 space-y-1 pr-1">
+                                        {modifiers.map(mod => (
+                                            <div key={mod.id} className="flex justify-between items-center bg-black/30 p-2 rounded border border-[#451a03]">
+                                                <div className="overflow-hidden">
+                                                    <div className="text-xs font-bold text-[#fbbf24] truncate">{mod.name}</div>
+                                                    <div className="text-[13px] text-[#a16207] truncate">{mod.desc}</div>
+                                                </div>
+                                                <div className="flex items-center gap-2 pl-2 shrink-0">
+                                                    <span className={`font-mono text-xs font-bold ${mod.value > 0 ? 'text-green-500' : 'text-red-500'}`}>
+                                                        {mod.value > 0 ? '+' : ''}{mod.value}
+                                                    </span>
+                                                    <button onClick={() => setModifiers(prev => prev.filter(m => m.id !== mod.id))} className="text-[#78350f] hover:text-red-500"><Trash2 size={12}/></button>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="glass-panel p-3 rounded h-72 flex flex-col">
+                                    <h3 className="cinzel text-[#fcd34d] text-sm border-b border-[#78350f] pb-2 mb-2">Current Effects</h3>
+                                    <div className="overflow-y-auto scrollbar-custom flex-1 pr-1">
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                            {activeEffects.map((effect, idx) => (
+                                                <div key={idx} className="flex items-start gap-2 p-2 rounded bg-[#0f0907] border border-[#451a03]">
+                                                    <AlertCircle size={12} className="text-[#b45309] mt-0.5 shrink-0" />
+                                                    <div className="min-w-0">
+                                                        <div className="text-[13px] font-bold text-[#d97706] uppercase">{effect.source}</div>
+                                                        <div className="text-[15px] text-[#fed7aa] break-words">{effect.text}</div>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Windows of Opportunity (moved below Effects; taller) */}
+                        <div className="glass-panel p-3 rounded mt-6">
+                            <h3 className="cinzel text-[#fcd34d] text-sm mb-2 border-b border-[#78350f] pb-1 flex items-center gap-2">
+                                <Clock size={14} /> Windows of Opportunity
+                            </h3>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-2 h-96 overflow-y-auto scrollbar-custom">
+                                {WINDOWS_OF_OPPORTUNITY.map((win, idx) => (
+                                    <WindowItem key={idx} item={win} onFail={handleWindowFail} />
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* RIGHT: LIBRARY */}
+                    <div className={`${libraryOpen ? 'w-full md:w-[520px]' : 'w-[56px]'} bg-[#150f0d] border-l border-[#78350f] flex flex-col h-full relative shadow-2xl z-20 transition-all duration-200`}
+                         style={!libraryOpen ? { minWidth: 56 } : undefined}>
+                        <div className="p-3 bg-[#1a120f] border-b border-[#78350f]">
+                            <div className="flex items-center justify-between">
+                                <h2 className="cinzel text-lg text-[#fcd34d]">{libraryOpen ? 'Library' : 'L'}</h2>
+                                <button
+                                    onClick={() => setLibraryOpen(o => !o)}
+                                    className="gold-circle-btn w-9 h-9 rounded-full flex items-center justify-center"
+                                    title={libraryOpen ? 'Collapse Library' : 'Expand Library'}>
+                                    {libraryOpen ? <Minus size={14} /> : <Plus size={14} />}
+                                </button>
+                            </div>
+                            {libraryOpen && <p className="text-[#92400e] text-[13px]">Monsters, Spells & Hazards</p>}
+                        </div>
+
+                        {libraryOpen && (
+                            <>
+                                <div className="flex flex-wrap bg-[#0f0907]">
+                                    {categories.map(cat => (
+                                        <button key={cat} onClick={() => setActiveTab(cat)} className={`flex-1 min-w-[25%] py-2 text-[13px] font-bold uppercase tracking-wider ${activeTab === cat ? 'tab-active' : 'tab-inactive'}`}>
+                                            {categoryLabel(cat)}
+                                        </button>
+                                    ))}
+                                </div>
+
+                                <div className="flex-1 overflow-y-auto scrollbar-custom p-2 space-y-2 bg-[#0c0806]">
+                                    {filteredGlossary.map((item, idx) => (
+                                        <button key={idx} onClick={() => addModifier(item)} className="w-full text-left group glass-panel p-2 rounded hover:bg-[#2a1d19] hover:border-[#b45309] transition-all relative">
+                                            <div className={`absolute left-0 top-0 bottom-0 w-1 ${item.value > 0 ? 'bg-green-600' : 'bg-red-700'}`}></div>
+                                            <div className="flex justify-between items-start pl-2">
+                                                <div className="flex items-center gap-2">
+                                                    <span className="text-[#b45309]">{item.icon}</span>
+                                                    <span className="font-bold text-[#fcd34d] text-xs">{item.name}</span>
+                                                </div>
+                                                <span className={`text-[15px] font-mono px-1.5 rounded border ${item.value > 0 ? 'bg-green-900 text-green-300 border-green-500' : 'bg-fuchsia-950 text-fuchsia-300 border-fuchsia-400'}`}>{item.value}</span>
+                                            </div>
+                                            {item.dc && <div className="pl-2 mt-0.5"><span className="text-[13px] font-bold bg-[#b45309]/20 text-[#f59e0b] px-1 rounded">{item.dc}</span></div>}
+                                            <p className="text-[15px] text-[#a16207] pl-2 mt-1 leading-tight">{item.desc}</p>
+                                        </button>
+                                    ))}
+                                </div>
+                            </>
+                        )}
+                    </div>
+
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>

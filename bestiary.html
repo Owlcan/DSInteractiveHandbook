@@ -218,6 +218,7 @@
         min-height: 550px; /* Set minimum height for consistency */
         display: flex;
         flex-direction: column;
+        position: relative;
     }
     
     .monster-header {
@@ -237,6 +238,63 @@
     
     .monster-cr {
         font-style: italic;
+    }
+
+    .monster-xp {
+        font-style: italic;
+        color: #c7a81d;
+    }
+
+    .cr-badge {
+        position: absolute;
+        top: 14px;
+        right: 14px;
+        width: 62px;
+        height: 62px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 30% 30%, #fae791, #daac17 55%, #97740a);
+        border: 2px solid #fae791;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.45);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: #1E1C12;
+        -webkit-user-select: none;
+        user-select: none;
+        pointer-events: none;
+    }
+
+    .cr-badge .cr-label {
+        font-size: 0.75em;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        line-height: 1;
+        opacity: 0.9;
+    }
+
+    .cr-badge .cr-value {
+        font-size: 1.2em;
+        font-weight: 900;
+        line-height: 1;
+        margin-top: 2px;
+    }
+
+    .basic-stats {
+        margin-top: 8px;
+        padding: 10px;
+        background-color: #1E1C12;
+        border-radius: 5px;
+        border: 1px solid #8f770d;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .basic-stat-row {
+        display: flex;
+        gap: 8px;
+        align-items: baseline;
     }
     
     .ability-scores {
@@ -332,6 +390,79 @@
         background-color: #2C2614;
         border-radius: 3px;
         border-left: 3px solid #daac17;
+    }
+
+    .extra-stats {
+        margin-top: 8px;
+        padding: 8px 10px;
+        background-color: #1E1C12;
+        border-radius: 5px;
+        border: 1px solid #8f770d;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .size-row {
+        display: flex;
+        gap: 8px;
+        align-items: baseline;
+    }
+
+    .size-value {
+        font-weight: 900;
+        color: #fae791;
+    }
+
+    .traits-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 12px;
+    }
+
+    .trait-block {
+        background-color: #2C2614;
+        border: 1px solid #8f770d;
+        border-radius: 5px;
+        padding: 8px 10px;
+    }
+
+    .trait-title {
+        font-weight: 800;
+        color: #daac17;
+        margin-bottom: 6px;
+    }
+
+    .trait-empty {
+        opacity: 0.9;
+        color: #c7a81d;
+    }
+
+    .trait-list {
+        margin: 0;
+        padding-left: 18px;
+    }
+
+    .trait-list li {
+        margin: 2px 0;
+    }
+
+    .trait-columns {
+        display: flex;
+        flex-direction: row;
+        gap: 18px;
+        align-items: flex-start;
+        justify-content: flex-start;
+    }
+
+    .trait-col {
+        margin: 0;
+        padding-left: 18px;
+    }
+
+    .bestiary-num {
+        font-weight: 800;
+        color: #fae791;
     }
     
     .abilities-section, .actions-section {
@@ -13123,6 +13254,62 @@
 
         function setBestiaryHtml(el, html) {
             el.innerHTML = sanitizeBestiaryHtml(html);
+            emphasizeBestiaryNumbers(el);
+        }
+
+        function isWithinAnyTag(textNode, tagNames) {
+            let el = textNode && textNode.parentElement;
+            while (el) {
+                if (tagNames.has(el.tagName)) return true;
+                el = el.parentElement;
+            }
+            return false;
+        }
+
+        function replaceTextNodeWithBoldNumbers(textNode) {
+            const text = textNode.nodeValue;
+            if (!text || !/\d/.test(text)) return;
+
+            // Prefer matching dice/fractions first so we don't split them into separate numbers.
+            const re = /([+\-]?\d+d\d+|\b\d+\/\d+\b|[+\-]?\d+)/gi;
+            let match;
+            let lastIndex = 0;
+            const frag = document.createDocumentFragment();
+
+            while ((match = re.exec(text)) !== null) {
+                const token = match[1];
+                if (match.index > lastIndex) {
+                    frag.appendChild(document.createTextNode(text.slice(lastIndex, match.index)));
+                }
+                const strong = document.createElement('strong');
+                strong.className = 'bestiary-num';
+                strong.textContent = token;
+                frag.appendChild(strong);
+                lastIndex = match.index + token.length;
+            }
+            if (lastIndex === 0) return;
+            if (lastIndex < text.length) {
+                frag.appendChild(document.createTextNode(text.slice(lastIndex)));
+            }
+
+            textNode.parentNode.replaceChild(frag, textNode);
+        }
+
+        function emphasizeBestiaryNumbers(rootEl) {
+            if (!rootEl) return;
+            const walker = document.createTreeWalker(rootEl, NodeFilter.SHOW_TEXT, null);
+            const textNodes = [];
+            let node;
+            while ((node = walker.nextNode())) {
+                textNodes.push(node);
+            }
+
+            const skipTags = new Set(['SCRIPT', 'STYLE', 'CODE', 'A', 'STRONG', 'B']);
+            for (const textNode of textNodes) {
+                if (!textNode.nodeValue || !/\d/.test(textNode.nodeValue)) continue;
+                if (isWithinAnyTag(textNode, skipTags)) continue;
+                replaceTextNodeWithBoldNumbers(textNode);
+            }
         }
 
         function escapeHtml(text) {
@@ -13231,11 +13418,55 @@
             return { hp: null, formula: '' };
         }
 
+        function normalizeStringList(value) {
+            if (!value) return [];
+            if (Array.isArray(value)) {
+                return value
+                    .map(v => {
+                        if (typeof v === 'string') return v;
+                        if (v && typeof v === 'object') {
+                            if (typeof v.name === 'string') return v.name;
+                            if (typeof v.type === 'string') return v.type;
+                            if (typeof v.value === 'string') return v.value;
+                        }
+                        return '';
+                    })
+                    .map(s => String(s || '').trim())
+                    .filter(Boolean);
+            }
+            if (typeof value === 'string') return [value.trim()].filter(Boolean);
+            return [];
+        }
+
+        function formatTraitList(value) {
+            const list = normalizeStringList(value);
+            return list.length ? escapeHtml(list.join(', ')) : '—';
+        }
+
+        function isNonRollableAction(action) {
+            const name = String(action?.name || '').trim();
+            if (!name) return false;
+            return /^multi\s*attack$/i.test(name) || /^multi-?attack$/i.test(name);
+        }
+
         // Create a monster card
         function createMonsterCard(monster) {
             const card = document.createElement('div');
             card.className = 'monster-card';
             card.id = `monster-${monster._id}`;
+
+            // CR badge (top-right). XP stays in the header.
+            const crBadge = document.createElement('div');
+            crBadge.className = 'cr-badge';
+            const crLabel = document.createElement('div');
+            crLabel.className = 'cr-label';
+            crLabel.textContent = 'CR';
+            const crValue = document.createElement('div');
+            crValue.className = 'cr-value';
+            crValue.textContent = String(monster.stats.challengeRatingStr ?? monster.stats.challengeRating ?? '—');
+            crBadge.appendChild(crLabel);
+            crBadge.appendChild(crValue);
+            card.appendChild(crBadge);
             
             // Add monster image if available
             const imageContainer = document.createElement('div');
@@ -13262,8 +13493,8 @@
             name.textContent = monster.name;
             
             const cr = document.createElement('div');
-            cr.className = 'monster-cr';
-            cr.textContent = `CR ${monster.stats.challengeRatingStr} (${monster.stats.experiencePoints} XP)`;
+            cr.className = 'monster-xp';
+            cr.textContent = `${monster.stats.experiencePoints} XP`;
             
             header.appendChild(name);
             header.appendChild(cr);
@@ -13283,7 +13514,11 @@
                 ? `${hpInfo.hp}${hpInfo.formula ? ` (${escapeHtml(hpInfo.formula)})` : ''}`
                 : escapeHtml(monster.stats.hitPointsStr || '—');
 
-            basicStats.innerHTML = `<strong>HP:</strong> ${hpText} | <strong>AC:</strong> ${armorClass} ${armorType ? `(${armorType})` : ""} | <strong>Speed:</strong> ${speedStr}`;
+            basicStats.innerHTML = `
+                <div class="basic-stat-row"><strong>HP:</strong> <span>${hpText}</span></div>
+                <div class="basic-stat-row"><strong>AC:</strong> <span>${armorClass} ${armorType ? `(${escapeHtml(armorType)})` : ""}</span></div>
+                <div class="basic-stat-row"><strong>Speed:</strong> <span>${speedStr}</span></div>
+            `;
             card.appendChild(basicStats);
             
             // Ability scores
@@ -13337,6 +13572,74 @@
             });
             
             card.appendChild(abilityScores);
+
+            // Size and damage traits (vuln/resist/immune)
+            const extraStats = document.createElement('div');
+            extraStats.className = 'extra-stats';
+            const size = String(monster.stats.size || '—');
+            const vulnsList = normalizeStringList(monster.stats.damageVulnerabilities);
+            const resistsList = normalizeStringList(monster.stats.damageResistances);
+            const dmgImmunes = normalizeStringList(monster.stats.damageImmunities);
+            const condImmunes = normalizeStringList(monster.stats.conditionImmunities);
+            const allImmunes = [...new Set([...dmgImmunes, ...condImmunes])];
+
+            const sizeRow = document.createElement('div');
+            sizeRow.className = 'size-row';
+            sizeRow.innerHTML = `<strong>Size:</strong> <span class="size-value">${escapeHtml(size)}</span>`;
+            extraStats.appendChild(sizeRow);
+
+            const chunksOf = (arr, n) => {
+                const out = [];
+                for (let i = 0; i < arr.length; i += n) out.push(arr.slice(i, i + n));
+                return out;
+            };
+
+            const renderColumnedList = (items) => {
+                const container = document.createElement('div');
+                container.className = 'trait-columns';
+                // New columns appear to the LEFT at 6+ entries.
+                const chunks = chunksOf(items, 5).reverse();
+                for (const colItems of chunks) {
+                    const ul = document.createElement('ul');
+                    ul.className = 'trait-col';
+                    for (const item of colItems) {
+                        const li = document.createElement('li');
+                        li.textContent = item;
+                        ul.appendChild(li);
+                    }
+                    container.appendChild(ul);
+                }
+                return container;
+            };
+
+            const makeTraitBlock = (title, items) => {
+                if (!items || !items.length) return null;
+                const block = document.createElement('div');
+                block.className = 'trait-block';
+
+                const t = document.createElement('div');
+                t.className = 'trait-title';
+                t.textContent = title;
+                block.appendChild(t);
+                block.appendChild(renderColumnedList(items));
+                return block;
+            };
+
+            const traitBlocks = [
+                makeTraitBlock('Vulnerabilities', vulnsList),
+                makeTraitBlock('Resistances', resistsList),
+                makeTraitBlock('Immunities', allImmunes),
+            ].filter(Boolean);
+
+            // If there are no traits, only show Size.
+            if (traitBlocks.length) {
+                const traitsRow = document.createElement('div');
+                traitsRow.className = 'traits-row';
+                traitBlocks.forEach(b => traitsRow.appendChild(b));
+                extraStats.appendChild(traitsRow);
+            }
+
+            card.appendChild(extraStats);
             
             // Special abilities
             if (monster.stats.additionalAbilities && monster.stats.additionalAbilities.length > 0) {
@@ -13388,14 +13691,17 @@
                     const attackName = document.createElement('div');
                     attackName.className = 'attack-name';
                     attackName.textContent = action.name;
-                    
-                    const rollButton = document.createElement('button');
-                    rollButton.className = 'roll-button';
-                    rollButton.textContent = 'Roll Attack';
-                    rollButton.onclick = function() { rollAttack(action, attackItem); };
-                    
+
                     attackHeader.appendChild(attackName);
-                    attackHeader.appendChild(rollButton);
+
+                    const nonRollable = isNonRollableAction(action);
+                    if (!nonRollable) {
+                        const rollButton = document.createElement('button');
+                        rollButton.className = 'roll-button';
+                        rollButton.textContent = 'Roll Attack';
+                        rollButton.onclick = function() { rollAttack(action, attackItem); };
+                        attackHeader.appendChild(rollButton);
+                    }
                     
                     const attackDescription = document.createElement('div');
                     attackDescription.className = 'attack-description';

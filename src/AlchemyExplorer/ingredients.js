@@ -79,7 +79,7 @@ const ingredients = [
         name: 'Flavor Matrix',
         description: 'Made from the distillation of Candy Elemental, this crystallized flavor matrix can radically expand the flavor profile of many food items- and even unlock the hidden potential of some ingredients.',
         category: ['legendary'],
-        image: 'assets/images/flavor matrix.webp',
+        image: 'assets/images/Flavor Matrix.webp',
         color: '#7986cb'
     },
     {

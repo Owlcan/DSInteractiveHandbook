@@ -248,6 +248,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const importSaveBtn = document.getElementById('import-save-btn');
     const uploadBundleBtn = document.getElementById('upload-bundle-btn');
 
+    // Inventory Tools dropdown
+    const inventoryToolsBtn = document.getElementById('inventory-tools-btn');
+    const inventoryToolsMenu = document.getElementById('inventory-tools-menu');
+    const inventoryCopyPlainBtn = document.getElementById('inventory-copy-plain-btn');
+    const inventoryExportMdBtn = document.getElementById('inventory-export-md-btn');
+
     // Use-crafted-item modal elements
     const useCraftedModal = document.getElementById('use-crafted-modal');
     const useCraftedImg = document.getElementById('use-crafted-image');
@@ -258,6 +264,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const useCraftedAmount = document.getElementById('use-crafted-amount');
     const useCraftedConfirm = document.getElementById('use-crafted-confirm');
     const useCraftedCancel = document.getElementById('use-crafted-cancel');
+
+    // Inventory remove/consume modal elements
+    const inventoryRemoveModal = document.getElementById('inventory-remove-modal');
+    const inventoryRemoveName = document.getElementById('inventory-remove-name');
+    const inventoryRemoveAvailable = document.getElementById('inventory-remove-available');
+    const inventoryRemoveAmount = document.getElementById('inventory-remove-amount');
+    const inventoryRemoveConfirm = document.getElementById('inventory-remove-confirm');
+    const inventoryRemoveCancel = document.getElementById('inventory-remove-cancel');
+    let inventoryRemoveTargetId = null;
     
     // Initialize sound elements - update paths
     const sounds = {
@@ -344,6 +359,164 @@ document.addEventListener('DOMContentLoaded', function() {
             if (craftedItemsContainer) {
                 craftedItemsContainer.classList.toggle('collapsed');
             }
+        });
+    }
+
+    function setDropdownOpen(dropdownEl, isOpen) {
+        if (!dropdownEl) return;
+        if (isOpen) dropdownEl.classList.add('is-open');
+        else dropdownEl.classList.remove('is-open');
+        const toggle = dropdownEl.querySelector('.dropdown-toggle');
+        if (toggle) toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    }
+
+    function closestDropdown(el) {
+        if (!el) return null;
+        return el.closest ? el.closest('.dropdown') : null;
+    }
+
+    async function copyToClipboard(text) {
+        try {
+            if (navigator && navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+                await navigator.clipboard.writeText(text);
+                return true;
+            }
+        } catch (_) {
+            // fallback below
+        }
+
+        try {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.left = '-9999px';
+            ta.style.top = '0';
+            document.body.appendChild(ta);
+            ta.focus();
+            ta.select();
+            const ok = document.execCommand('copy');
+            document.body.removeChild(ta);
+            return !!ok;
+        } catch (_) {
+            return false;
+        }
+    }
+
+    function downloadTextFile(filename, content, mime = 'text/plain;charset=utf-8') {
+        const blob = new Blob([content], { type: mime });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 250);
+    }
+
+    function getInventoryNameForId(itemId) {
+        try {
+            const ing = (typeof getIngredientById === 'function') ? getIngredientById(itemId) : null;
+            if (ing && ing.name) return ing.name;
+        } catch (_) {
+            // ignore
+        }
+        try {
+            const recipe = (typeof recipes !== 'undefined' && Array.isArray(recipes))
+                ? recipes.find(r => r && r.id === itemId)
+                : null;
+            if (recipe && recipe.result && recipe.result.name) return recipe.result.name;
+        } catch (_) {
+            // ignore
+        }
+        return itemId;
+    }
+
+    function buildInventoryLines({ format = 'plain' } = {}) {
+        const inv = (playerInventory && typeof playerInventory === 'object') ? playerInventory : {};
+        const entries = Object.entries(inv)
+            .map(([id, qty]) => ({
+                id,
+                qty: Math.floor(Number(qty) || 0),
+                name: getInventoryNameForId(id)
+            }))
+            .filter(x => x.id && x.qty > 0)
+            .sort((a, b) => a.name.localeCompare(b.name));
+
+        // plain
+        return entries.map(e => `${e.name} x${e.qty} (${e.id})`);
+    }
+
+    function buildInventoryPlainText() {
+        return buildInventoryLines({ format: 'plain' }).join('\n');
+    }
+
+    function buildInventoryMarkdown() {
+        const inv = (playerInventory && typeof playerInventory === 'object') ? playerInventory : {};
+        const entries = Object.entries(inv)
+            .map(([id, qty]) => ({
+                id,
+                qty: Math.floor(Number(qty) || 0),
+                name: getInventoryNameForId(id)
+            }))
+            .filter(x => x.id && x.qty > 0)
+            .sort((a, b) => a.name.localeCompare(b.name));
+
+        const escapeCell = (v) => String(v ?? '').replaceAll('|', '\\|').replaceAll('\n', ' ');
+        const header = `# Inventory\n\nExported: ${new Date().toLocaleString()}\n\n`;
+        const tableHeader = '| Item | item-id | amount |\n|---|---|---|\n';
+
+        if (!entries.length) {
+            return header + tableHeader + '| _(empty)_ |  |  |\n';
+        }
+
+        const rows = entries
+            .map(e => `| ${escapeCell(e.name)} | ${escapeCell(e.id)} | ${escapeCell(e.qty)} |`)
+            .join('\n');
+        return header + tableHeader + rows + '\n';
+    }
+
+    // Wire Inventory Tools dropdown
+    if (inventoryToolsBtn) {
+        const dropdown = closestDropdown(inventoryToolsBtn);
+        inventoryToolsBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const isOpen = dropdown && dropdown.classList.contains('is-open');
+            setDropdownOpen(dropdown, !isOpen);
+        });
+    }
+
+    document.addEventListener('click', (evt) => {
+        const t = evt.target;
+        document.querySelectorAll('.dropdown.is-open').forEach(dd => {
+            if (!dd.contains(t)) setDropdownOpen(dd, false);
+        });
+    });
+
+    document.addEventListener('keydown', (evt) => {
+        if (evt.key !== 'Escape') return;
+        document.querySelectorAll('.dropdown.is-open').forEach(dd => setDropdownOpen(dd, false));
+    });
+
+    if (inventoryCopyPlainBtn) {
+        inventoryCopyPlainBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const text = buildInventoryPlainText();
+            const ok = await copyToClipboard(text);
+            if (!ok) alert('Copy failed. Your browser may block clipboard access.');
+            const dd = closestDropdown(inventoryCopyPlainBtn);
+            setDropdownOpen(dd, false);
+        });
+    }
+
+    if (inventoryExportMdBtn) {
+        inventoryExportMdBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const md = buildInventoryMarkdown();
+            const stamp = new Date().toISOString().slice(0, 10);
+            downloadTextFile(`alchemy-inventory-${stamp}.md`, md, 'text/markdown;charset=utf-8');
+            const dd = closestDropdown(inventoryExportMdBtn);
+            setDropdownOpen(dd, false);
         });
     }
 
@@ -2630,6 +2803,108 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    function getInventoryDisplayName(itemId) {
+        try {
+            const ingredient = (typeof getIngredientById === 'function') ? getIngredientById(itemId) : null;
+            if (ingredient && ingredient.name) return ingredient.name;
+        } catch (_) {
+            // ignore
+        }
+        try {
+            const recipe = (typeof recipes !== 'undefined' && Array.isArray(recipes))
+                ? recipes.find(r => r && r.id === itemId)
+                : null;
+            if (recipe && recipe.result && recipe.result.name) return recipe.result.name;
+        } catch (_) {
+            // ignore
+        }
+        return itemId;
+    }
+
+    function openInventoryRemoveModal(itemId) {
+        if (!inventoryRemoveModal || !inventoryRemoveAmount || !inventoryRemoveAvailable || !inventoryRemoveName) return;
+        const have = (playerInventory && typeof playerInventory[itemId] === 'number') ? (playerInventory[itemId] | 0) : 0;
+        if (have <= 0) return;
+
+        inventoryRemoveTargetId = itemId;
+        inventoryRemoveName.textContent = getInventoryDisplayName(itemId);
+        inventoryRemoveAvailable.textContent = String(have);
+        inventoryRemoveAmount.min = '1';
+        inventoryRemoveAmount.max = String(have);
+        inventoryRemoveAmount.value = '1';
+        inventoryRemoveModal.style.display = 'block';
+    }
+
+    function closeInventoryRemoveModal() {
+        if (!inventoryRemoveModal) return;
+        inventoryRemoveModal.style.display = 'none';
+        inventoryRemoveTargetId = null;
+    }
+
+    function inventoryRemoveConfirmAction() {
+        if (!inventoryRemoveModal || !inventoryRemoveTargetId || !inventoryRemoveAmount) return;
+        const itemId = inventoryRemoveTargetId;
+        const have = (playerInventory && typeof playerInventory[itemId] === 'number') ? (playerInventory[itemId] | 0) : 0;
+        if (have <= 0) {
+            closeInventoryRemoveModal();
+            return;
+        }
+
+        let qty = Math.floor(Number(inventoryRemoveAmount.value));
+        if (!Number.isFinite(qty) || qty <= 0) {
+            alert('Enter a valid amount.');
+            return;
+        }
+        if (qty > have) qty = have;
+
+        // Remove from playerInventory (single source of truth)
+        playerInventory[itemId] = have - qty;
+        if (playerInventory[itemId] <= 0) delete playerInventory[itemId];
+
+        // Adjust playerCraftedItems count if present (display consistency)
+        if (playerCraftedItems && typeof playerCraftedItems[itemId] === 'number') {
+            const c = (playerCraftedItems[itemId] | 0);
+            playerCraftedItems[itemId] = Math.max(0, c - qty);
+            if (playerCraftedItems[itemId] === 0) delete playerCraftedItems[itemId];
+        }
+
+        // Persist
+        localStorage.setItem('craftedInventory', JSON.stringify({}));
+        localStorage.setItem('playerInventory', JSON.stringify(playerInventory));
+        localStorage.setItem('playerCraftedItems', JSON.stringify(playerCraftedItems));
+
+        // Log removal to Logbook
+        try {
+            if (window.Logbook && typeof window.Logbook.addEntry === 'function') {
+                window.Logbook.addEntry({
+                    type: 'inventory',
+                    title: `Removed ${getInventoryDisplayName(itemId)} x${qty}`,
+                    data: { itemId, amount: qty }
+                });
+            }
+        } catch (e) {
+            console.warn('Failed to log item removal', e);
+        }
+
+        // Refresh UI
+        closeInventoryRemoveModal();
+        updateCraftedItemsDisplay();
+        const activeCategory = document.querySelector('.category-btn.active')?.dataset?.category || 'all';
+        loadIngredients(activeCategory);
+        checkBrewButton();
+    }
+
+    // Wire inventory remove modal controls
+    if (inventoryRemoveCancel) inventoryRemoveCancel.addEventListener('click', closeInventoryRemoveModal);
+    if (inventoryRemoveConfirm) inventoryRemoveConfirm.addEventListener('click', inventoryRemoveConfirmAction);
+    if (inventoryRemoveModal) {
+        const closer = inventoryRemoveModal.querySelector('.close');
+        if (closer) closer.addEventListener('click', closeInventoryRemoveModal);
+        inventoryRemoveModal.addEventListener('click', (evt) => {
+            if (evt.target === inventoryRemoveModal) closeInventoryRemoveModal();
+        });
+    }
+
     // Add the tooltip container to the DOM
     function createTooltipContainer() {
         // Check if tooltip container already exists
@@ -2924,7 +3199,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function addTooltipListeners() {
         // For ingredients in the drawer
         document.querySelectorAll('.ingredient-item').forEach(item => {
-            // Right click = quick add; Shift+Right click = tooltip.
+            // Right click = remove/consume; Ctrl+Right click = quick add; Shift+Right click = tooltip.
             item.oncontextmenu = function(e) {
                 e.preventDefault();
                 const ingredientId = this.dataset.id;
@@ -2936,11 +3211,16 @@ document.addEventListener('DOMContentLoaded', function() {
                     return;
                 }
 
-                const placed = quickAddIngredientToNextOpenSlot(ingredientId);
-                if (!placed) {
-                    const ingredient = getIngredientById(ingredientId);
-                    if (ingredient) showItemTooltip(ingredient, e);
+                if (e.ctrlKey) {
+                    const placed = quickAddIngredientToNextOpenSlot(ingredientId);
+                    if (!placed) {
+                        const ingredient = getIngredientById(ingredientId);
+                        if (ingredient) showItemTooltip(ingredient, e);
+                    }
+                    return;
                 }
+
+                openInventoryRemoveModal(ingredientId);
             };
         });
         
@@ -2963,12 +3243,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log('Right-clicked crafted item with recipeId:', recipeId);
                 
                 if (recipeId) {
-                    const recipe = recipes.find(r => r.id === recipeId);
-                    if (recipe && recipe.result) {
-                        showItemTooltip(recipe.result, e);
-                    } else {
-                        console.warn('Could not find recipe with id:', recipeId);
+                    if (e.shiftKey) {
+                        const recipe = recipes.find(r => r.id === recipeId);
+                        if (recipe && recipe.result) {
+                            showItemTooltip(recipe.result, e);
+                        } else {
+                            console.warn('Could not find recipe with id:', recipeId);
+                        }
+                        return;
                     }
+                    openInventoryRemoveModal(recipeId);
                 }
             });
         });
@@ -2999,12 +3283,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 clone.addEventListener('contextmenu', function(e) {
                     e.preventDefault();
                     const recipeId = this.dataset.id;
-                    console.log('Showing tooltip for crafted item:', recipeId);
-                    
-                    const recipe = recipes.find(r => r.id === recipeId);
-                    if (recipe && recipe.result) {
-                        showItemTooltip(recipe.result, e);
+
+                    if (e.shiftKey) {
+                        console.log('Showing tooltip for crafted item:', recipeId);
+                        const recipe = recipes.find(r => r.id === recipeId);
+                        if (recipe && recipe.result) {
+                            showItemTooltip(recipe.result, e);
+                        }
+                        return;
                     }
+
+                    openInventoryRemoveModal(recipeId);
                 });
             });
             

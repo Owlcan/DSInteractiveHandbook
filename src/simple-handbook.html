@@ -473,6 +473,7 @@
     #crafting-iframe-container,
     #races-iframe-container,
     #spellbook-iframe-container,
+    #tracker-iframe-container,
     #potty-checker-iframe-container,
     #pamperlogue-iframe-container {
       height: 90vh; 
@@ -500,6 +501,7 @@
     #trinket-generator-iframe,
     #auto-dm-iframe,
     #spellbook-iframe,
+    #tracker-iframe,
     #potty-checker-iframe, 
     #pamperlogue-iframe,
     #crafting-iframe,
@@ -852,6 +854,7 @@
   <button id="btn-games" class="nav-button">Games</button>
       <button id="btn-pamperlogue" class="nav-button">Pamperlogue</button>
       <button id="btn-potty-checker" class="nav-button">Potty Checker</button>
+  <button id="btn-tracker" class="nav-button">Tracker</button>
       <button id="btn-book-reader" class="nav-button">Library</button>
       <button id="btn-achievement-tracker" class="nav-button">Achievements</button>
       <button id="btn-races" class="nav-button">Races</button>
@@ -1987,6 +1990,15 @@
       <div id="potty-checker-iframe-container" class="iframe-container">
         </div>
     </div>
+
+      <div id="tracker-section" class="content-section" data-prefer-hide-tabs="true" data-prefer-wide-layout="true" data-prefer-full-frame="true">
+        <div class="section-header-row">
+          <h2>Tracker</h2>
+          <button type="button" class="popout-btn" onclick="window.popOutTool && window.popOutTool('tracker')">Pop out</button>
+        </div>
+        <div id="tracker-iframe-container" class="iframe-container"></div>
+      </div>
+
  <div id="book-reader-section" class="content-section">
       <div class="section-header-row">
         <h2>Book Reader</h2>
@@ -2789,6 +2801,7 @@
         { containerId: 'items-iframe-container', iframeId: 'items-iframe', type: 'dynamic' },
         { containerId: 'crafting-iframe-container', iframeId: 'crafting-iframe', type: 'dynamic' },
         { containerId: 'spellbook-iframe-container', iframeId: 'spellbook-iframe', type: 'dynamic' },
+        { containerId: 'tracker-iframe-container', iframeId: 'tracker-iframe', type: 'dynamic' },
         { containerId: 'book-reader-iframe-container', iframeId: 'book-reader-iframe', type: 'dynamic' },
         { containerId: 'potty-checker-iframe-container', iframeId: 'potty-checker-iframe', type: 'dynamic' },
         { containerId: 'achievement-tracker-iframe-container', iframeId: 'achievement-tracker-iframe', type: 'dynamic' },
@@ -2945,6 +2958,9 @@
         case 'crafting':
           popOutByIframeId('crafting-iframe', 'AlchemyExplorer/index.html', 'Crafting');
           break;
+        case 'tracker':
+          popOutByIframeId('tracker-iframe', '../SWATsystem.html', 'Tracker');
+          break;
         case 'races':
           popOutByIframeId('races-iframe', 'races.html', 'Academy Races');
           break;
@@ -3043,6 +3059,13 @@
           iframeId: 'spellbook-iframe',
           baseSrc: '../spellbook.html',
           title: 'Spellbook'
+        },
+        tracker: {
+          buttonId: 'btn-tracker',
+          containerId: 'tracker-iframe-container',
+          iframeId: 'tracker-iframe',
+          baseSrc: '../SWATsystem.html',
+          title: 'Tracker'
         },
         races: {
           buttonId: 'btn-races',
@@ -3284,6 +3307,7 @@
         entry('Bestiary', Dest.tool('bestiary'), { aliases: ['monsters', 'creatures'], description: 'Browse creatures and search by name.' }),
         entry('Items', Dest.tool('items'), { aliases: ['gear', 'equipment', 'loot'], description: 'Search the item compendium.' }),
         entry('Spellbook', Dest.tool('spellbook'), { aliases: ['spells', 'magic'], description: 'Browse and filter spells.' }),
+        entry('Tracker', Dest.tool('tracker'), { aliases: ['swat', 'maturity meter', 'maturity'], description: 'Open the SWaT System Tracker.' }),
         entry('Races', Dest.tool('races'), { aliases: ['species', 'ancestry'], description: 'Browse races and jump by name.' }),
         entry('Library', Dest.tool('library'), { aliases: ['books', 'documents', 'pdf', 'tomes'], description: 'Open the Library and select a document.' }),
         ...pinnedLibraryDocs,
@@ -3916,6 +3940,12 @@
           section.classList.add('active');
           applySectionUiPreferences(section);
             createOrRefreshIframe('spellbook-iframe-container', 'spellbook-iframe', '../spellbook.html', 'Spellbook');
+        },
+        'btn-tracker': () => {
+          const section = document.getElementById('tracker-section');
+          section.classList.add('active');
+          applySectionUiPreferences(section);
+          createOrRefreshIframe('tracker-iframe-container', 'tracker-iframe', '../SWATsystem.html', 'Tracker');
         },
     'btn-games': () => {
         const section = document.getElementById('games-section');

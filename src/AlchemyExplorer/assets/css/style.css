@@ -148,6 +148,48 @@ h1 {
     gap: 10px;
 }
 
+/* Dropdown (Inventory Tools) */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    min-width: 320px;
+    background: rgba(18, 18, 18, 0.95);
+    border: 1px solid rgba(212, 175, 55, 0.45);
+    border-radius: 10px;
+    padding: 6px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+    z-index: 1100;
+    display: none;
+}
+
+.dropdown.is-open .dropdown-menu {
+    display: block;
+}
+
+.dropdown-item {
+    width: 100%;
+    text-align: left;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text-color);
+    border-radius: 8px;
+    padding: 10px 10px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.95rem;
+}
+
+.dropdown-item:hover {
+    background: rgba(212, 175, 55, 0.16);
+    border-color: rgba(212, 175, 55, 0.55);
+}
+
 .fancy-button, .nav-btn {
     background-color: var(--button-bg);
     color: #fff;
@@ -987,6 +1029,15 @@ body.layout-tuner-active .brew-button-container:active {
     background-color: var(--workspace-bg);
     border: 1px solid var(--workspace-trim);
     border-radius: 8px;
+}
+
+.modal-content.modal-sm {
+    width: min(92%, 520px);
+    max-width: 520px;
+}
+
+.inventory-remove-text {
+    width: 100%;
 }
 
 .close {
