@@ -3372,12 +3372,18 @@ document.addEventListener('DOMContentLoaded', function() {
         // `distributeRewards()` returns aggregated objects: [{ id, amount }]
         if (!rewards || !Array.isArray(rewards)) return;
 
-        rewards.forEach(rewardId => {
-            if (typeof rewardId === 'string' && rewardId.length > 0) {
-                playerInventory[rewardId] = (playerInventory[rewardId] || 0) + 1;
-            } else if (rewardId && rewardId.id && rewardId.amount) {
-                // Backwards compatible if we ever return objects
-                playerInventory[rewardId.id] = (playerInventory[rewardId.id] || 0) + rewardId.amount;
+        rewards.forEach(reward => {
+            if (typeof reward === 'string' && reward.length > 0) {
+                const cur = Math.floor(Number(playerInventory[reward]) || 0);
+                playerInventory[reward] = cur + 1;
+                return;
+            }
+
+            if (reward && reward.id) {
+                const add = Math.floor(Number(reward.amount) || 0);
+                if (add <= 0) return;
+                const cur = Math.floor(Number(playerInventory[reward.id]) || 0);
+                playerInventory[reward.id] = cur + add;
             }
         });
 

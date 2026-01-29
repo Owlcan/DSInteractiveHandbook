@@ -166,9 +166,11 @@
                     if (rewards && Array.isArray(rewards)) {
                         const inv = loadInventory();
                         rewards.forEach(reward => {
-                            if (reward && reward.id && reward.amount) {
-                                inv[reward.id] = (inv[reward.id] || 0) + reward.amount;
-                            }
+                            if (!reward || !reward.id) return;
+                            const add = Math.floor(Number(reward.amount) || 0);
+                            if (add <= 0) return;
+                            const cur = Math.floor(Number(inv[reward.id]) || 0);
+                            inv[reward.id] = cur + add;
                         });
                         saveInventory(inv);
                         showToast('Rewards saved to your inventory!');

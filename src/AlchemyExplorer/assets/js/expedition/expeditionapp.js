@@ -73,6 +73,10 @@ class AlchemyBlaster {
         // Extra item drops earned during a run (queued and awarded only at end screen).
         this._queuedEndRewards = [];
 
+        // Prevent end-of-run rewards from being applied multiple times.
+        this._rewardsGranted = false;
+        this._lastDistributedRewards = null;
+
         // Combo system: increases drop score by +0.01% per combo point.
         // Combo breaks if any drop that entered the playfield falls off uncollected.
         this.comboCount = 0;
@@ -3498,8 +3502,17 @@ class AlchemyBlaster {
 
         // Milestone guarantee: for every 50,000 points, guarantee at least one "100vrp" item.
         // (10% chance the guaranteed milestone item is legendary.)
-        const milestones = Math.floor(Math.max(0, Number(scoreForRewards) || 0) / 50000);
-        if (milestones > 0) {
+        // Use the *effective* score so this respects the drop-rate plateau.
+        const milestonesRaw = Math.floor(score / 50000);
+        const milestones = Math.min(milestonesRaw, MAX_SCORE_DROPS);
+        const allScoreCapsFilled = () => {
+            for (const [rarity, cap] of Object.entries(SCORE_DROP_CAPS)) {
+                if ((rarityCounts[rarity] || 0) < (Number(cap) || 0)) return false;
+            }
+            return true;
+        };
+
+        if (milestones > 0 && !allScoreCapsFilled()) {
             const vrpPool = this.getVrp100RewardIds();
             const legendaryPool = this.getLegendaryRewardIds();
             const isIn = (id, pool) => Array.isArray(pool) && pool.includes(id);
@@ -3508,6 +3521,7 @@ class AlchemyBlaster {
             const need = Math.max(0, milestones - alreadyCount);
 
             for (let i = 0; i < need; i++) {
+                if (allScoreCapsFilled()) break;
                 const useLegendary = Math.random() < 0.10;
                 const pool = useLegendary ? legendaryPool : vrpPool;
                 if (Array.isArray(pool) && pool.length) {
@@ -3518,7 +3532,12 @@ class AlchemyBlaster {
         }
         
         // Guaranteed Touch of Love every 750,000 points (and again each additional 750,000).
-        const touchMilestones = Math.floor(Math.max(0, Number(scoreForRewards) || 0) / 750000);
+        // Use the *effective* score so this respects the drop-rate plateau,
+        // and hard-cap by rarity so very high scores can't overrun the end-of-run caps.
+        const touchMilestones = Math.min(
+            Number(SCORE_DROP_CAPS.legendary) || 0,
+            Math.floor(score / 750000)
+        );
         if (touchMilestones > 0) {
             for (let i = 0; i < touchMilestones; i++) {
                 if (!tryAddRewardId('touch-of-love')) break;
@@ -3548,8 +3567,11 @@ class AlchemyBlaster {
             .map(([id, amount]) => ({ id, amount }))
             .sort((a, b) => String(a.id).localeCompare(String(b.id)));
         
-        // Call callback with rewards if it exists
-        if (callCallback && this.onRewardsCollected) {
+        this._lastDistributedRewards = aggregatedRewards;
+
+        // Call callback with rewards if it exists (but only once per run).
+        if (callCallback && this.onRewardsCollected && !this._rewardsGranted) {
+            this._rewardsGranted = true;
             this.onRewardsCollected(aggregatedRewards);
         }
         
@@ -3739,6 +3761,8 @@ class AlchemyBlaster {
         this.powerups = [];
         this.loot = [];
         this._queuedEndRewards = [];
+        this._rewardsGranted = false;
+        this._lastDistributedRewards = null;
         if (this.enemyProjectiles) {
             this.enemyProjectiles = [];
         }
