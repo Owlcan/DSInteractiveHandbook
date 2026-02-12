@@ -1,0 +1,1664 @@
+{
+  "races": {
+    "Kittenfolk": {
+      "name": "Kittenfolk",
+      "id": "kittenfolk",
+      "traits": [
+        "Ability Score Increase. Your Dexterity score increases by 2, and your Charisma score increases by 1.",
+        "Size. Kittenfolk are Small.",
+        "Speed. Your base walking speed is 35 feet.",
+        "Low-Light Vision. You have superior vision in dim light. You can see in dim light within 60 feet of you as if it were bright light.",
+        "Feline Agility. You gain proficiency in the Stealth skill. Additionally, you have advantage on ability checks made to jump or climb.",
+        "Natural Paws. Your unarmed strikes with your paws count as natural weapons. Due to your small size, these strikes deal 2 bludgeoning damage instead of the usual 1d4.",
+        "Aquatic Ineptitude. You have disadvantage on Athletics checks made to swim.",
+        "Languages. You can speak, read, and write Common and one language of your choice."
+      ],
+      "subraces": {
+        "Tawny": {
+          "name": "Tawny Folk",
+          "description": "Tawny Folk are the fiery and bold orange-furred Kittenfolk, brimming with charm and a knack for trade.",
+          "traits": [
+            "Ability Score Increase. Your Charisma score increases by 2, but your Intelligence score decreases by 1.",
+            "Trade Expertise. You gain proficiency with one artisan's tool of your choice.",
+            "Local Knowledge. You are proficient in the History skill. When making checks related to local folklore, customs, or geography, you have advantage."
+          ]
+        },
+        "Umbral": {
+          "name": "Umbral Tribe",
+          "description": "Umbral Tribe Kittenfolk are arcane masters, often associated with mysticism and nocturnal rituals.",
+          "traits": [
+            "Ability Score Increase. Your Intelligence score increases by 2.",
+            "Mystic Cantrip. You know one cantrip of your choice from the wizard, bard, or sorcerer spell list. Intelligence is your spellcasting ability for this cantrip.",
+            "Herbalist Proficiency. You are proficient with the herbalist's kit.",
+            "Catnip Tincture (Consumable): When consumed, the user's base speed increases by 10 feet for 3 rounds, but they take a -1 penalty to attack rolls during this time.",
+            "Catnip Tincture. Using an herbalist's kit, you can create a Catnip Tincture:"
+          ]
+        },
+        "Purekin": {
+          "name": "Purekin",
+          "description": "Purekin are the refined, white-furred Kittenfolk, renowned for their resilience and grace.",
+          "traits": [
+            "Ability Score Increase. Your Wisdom score increases by 2.",
+            "Divine Cantrip. You know one cantrip of your choice from the cleric or bard spell list. Wisdom is your spellcasting ability for this cantrip.",
+            "Resilient Physique. You have advantage on saving throws against disease and poison, including magical diseases and poisons.",
+            "Artisan Proficiency. You are proficient with one of the following: calligrapher's supplies, cartographer's tools, or engraver's tools."
+          ]
+        },
+        "Megafaunal": {
+          "name": "Megafaunal Kittenkin",
+          "description": "Megafaunal Kittenkin are larger, long-legged Kittenfolk with imposing physical prowess. While less clever, their strength and endurance make them ideal for survival.",
+          "traits": [
+            "Ability Score Increase. Your Strength or Dexterity score increases by 2, but your Intelligence and Wisdom scores each decrease by 1.",
+            "Size. You are Medium instead of Small.",
+            "Speed. Your base walking speed increases to 40 feet.",
+            "Survivor's Instinct. You gain proficiency in the Survival skill.",
+            "Combat Proficiency. You have proficiency with all simple weapons."
+          ]
+        }
+      }
+    },
+    "Pupperlings": {
+      "name": "Pupperlings",
+      "id": "pupperlings",
+      "traits": [
+        "Ability Score Increase. Your Charisma, Constitution, and Strength scores each increase by 1.",
+        "Size. Pupperlings are Small.",
+        "Speed. Your base walking speed is 35 feet.",
+        "Loyal Might. You have an innate carrying capacity bonus. Your carrying capacity increases by +5 for every point of Strength over 10.",
+        "Strong Paws. Your unarmed strikes with your paws count as natural weapons. These strikes deal 1d4 bludgeoning damage. Additionally, with a craftsman's or rogue's knowledge, your claws may be used as improvised tools. This allows you to perform actions like picking locks, carving wood, or repairing gear. However, using your claws this way imposes a -2 penalty to the roll (instead of disadvantage), as they are not perfect substitutes for proper tools.",
+        "Boundless Energy. You gain proficiency in the Athletics skill.",
+        "Languages. You can speak, read, and write Common and one additional language of your choice."
+      ],
+      "subraces": {
+        "Watchkin": {
+          "name": "Watchkin",
+          "description": "Watchkin are the guardians of the Pupperling world, bred for vigilance and loyalty. They have a sharp eye and an instinctive need to protect.",
+          "traits": [
+            "Ability Score Increase. Your Wisdom score increases by 2.",
+            "Ability Score Negative. Your Dexterity score decreases by 1.",
+            "Ever Watchful. You have advantage on Wisdom (Perception) checks to detect hidden creatures or objects.",
+            "Proficiency. You gain proficiency in the Insight skill and smith's tools.",
+            "Additional Fluff: Watchkin are natural protectors and often serve as peacekeepers, guards, or steadfast companions in dangerous territories."
+          ]
+        },
+        "Huntkin": {
+          "name": "Huntkin",
+          "description": "Huntkin are relentless trackers and hunters, combining instinct and skill to find their prey and thrive in the wild.",
+          "traits": [
+            "Ability Score Increase. Your Dexterity score increases by 2.",
+            "Ability Score Negative. Your Charisma score decreases by 1.",
+            "Hunter's Instinct. When tracking a creature, you have advantage on Wisdom (Survival) checks to follow its trail. Additionally, you can move stealthily at a normal pace while traveling alone or with one other creature.",
+            "Proficiency. You gain proficiency with the Survival skill and bowyer's tools.",
+            "Additional Fluff: Huntkin excel at tasks requiring precision, often acting as scouts, rangers, or sharpshooters."
+          ]
+        },
+        "Corgites": {
+          "name": "Corgites",
+          "description": "Corgites are sturdy and reliable, with a playful charm and strong sense of loyalty. They are known for their unyielding determination despite their diminutive stature.",
+          "traits": [
+            "Ability Score Increase. Your Constitution score increases by 2.",
+            "Ability Score Negative. Your Strength score decreases by 1.",
+            "Stubborn Resilience. When you fail a saving throw against being knocked prone or moved, you can roll again and must use the second result. You can use this feature once per short or long rest.",
+            "Proficiency. You gain proficiency in the Persuasion skill and mason's tools.",
+            "Additional Fluff: Corgites' cheerful demeanor and unshakable resolve make them indispensable allies both in battle and in peacetime."
+          ]
+        },
+        "Wolfbreed": {
+          "name": "Wolfbreed",
+          "description": "Wolfbreed Pupperlings are larger and more primal, channeling the strength and ferocity of their wild ancestors. Their imposing presence makes them natural leaders or fearsome combatants.",
+          "traits": [
+            "Ability Score Increase. Your Strength score increases by 2.",
+            "Ability Score Negative. Your Intelligence score decreases by 1.",
+            "Size. You are Medium instead of Small.",
+            "Speed. Your base walking speed increases to 40 feet.",
+            "Alpha's Command. As a bonus action, you can bolster an ally within 10 feet. They gain advantage on their next attack roll or saving throw. You can use this feature once per long rest.",
+            "Proficiency. You gain proficiency with the Intimidation skill and carpenter's tools.",
+            "Additional Fluff: Wolfbreed Pupperlings exude an aura of authority and power, inspiring both awe and fear."
+          ]
+        },
+        "Magipup": {
+          "name": "Magipup",
+          "description": "Magipups are small-sized Pupperlings with an innate knack for magic. Their curious minds and natural affinity for arcane arts make them fascinating companions.",
+          "traits": [
+            "Ability Score Increase. Your Intelligence score increases by 2.",
+            "Ability Score Negative. Your Strength score decreases by 1.",
+            "Size. Magipups are Small.",
+            "Arcane Cantrip. You know one cantrip of your choice from the wizard spell list. Intelligence is your spellcasting ability for this cantrip.",
+            "Mystic Insight. You have advantage on Arcana checks related to magical devices or symbols.",
+            "Proficiency. You gain proficiency with the Arcana skill and alchemist's supplies.",
+            "Additional Fluff: Magipups' curious nature and magical talents make them excellent scholars and adventuring companions with a knack for uncovering hidden secrets."
+          ]
+        }
+      }
+    },
+    "Bunbunkin": {
+      "name": "Bunbunkin",
+      "id": "bunbunkin",
+      "traits": [
+        "Ability Score Increase. Your Dexterity and Strength scores each increase by 2, but your Wisdom and Constitution scores each decrease by 1.",
+        "Size. Bunbunkin are Small.",
+        "Speed. Your base walking speed is 35 feet.",
+        "Darkvision. You can see in darkness within 30 feet as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "Low-Light Vision. You can see in dim light within 60 feet as if it were bright light.",
+        "Burrower's Paws. Your unarmed strikes with your paws count as natural weapons. These strikes deal 1d4 bludgeoning damage. Additionally, you have a burrowing speed of 5 feet, allowing you to dig through loose earth or soft material.",
+        "You can never become lost or disoriented within underground passageways, including natural caves, artificial tunnels, and dungeons. This ability does not function in areas affected by magical sound dampening or spatial distortions.",
+        "Tunnelborn Navigation. You gain proficiency in Nature and Dungeoneering.",
+        "Sharp Hearing. You have advantage on Perception checks that rely on hearing.",
+        "Languages. You can speak, read, and write Common and one other language of your choice."
+      ],
+      "subraces": {
+        "Fleetfeets": {
+          "name": "Fleetfeets",
+          "description": "Fleetfeets are the swiftest of the Bunbunkin, darting across the world with incredible speed and agility. They are ideal couriers, messengers, and explorers.",
+          "traits": [
+            "Ability Score Increase. Your Dexterity score increases by an additional 2, but your Wisdom score decreases by an additional 1.",
+            "Enhanced Speed. Your walking speed increases to 45 feet.",
+            "Bonus Dash. You can take the Dash action as a bonus action. If you already have the ability to Dash as a bonus action, your movement speed increases by an additional 10 feet during that Dash.",
+            "Climbing Adaptation. You lose your burrowing speed, but you gain a climbing speed of 15 feet on unobstructed surfaces less than 65 degrees steep.",
+            "Proficiency. You gain proficiency in the Survival skill.",
+            "Additional Fluff: Fleetfeets are nimble adventurers, thriving in roles that require speed and precision, such as scouts and couriers."
+          ]
+        },
+        "Bigpaws": {
+          "name": "Bigpaws",
+          "description": "Bigpaws are sturdier and stronger than their Bunbunkin kin, embracing their physical power and robust nature.",
+          "traits": [
+            "Ability Score Increase. Your Strength score increases by an additional 1, and your Constitution score increases by 1.",
+            "Large Build. You have all the benefits of being Medium sized while retaining the advantages of being Small, and you suffer none of the usual disadvantages of being Small sized.",
+            "Enhanced Burrowing. Your burrowing speed increases to 10 feet.",
+            "Proficiency. You gain proficiency in the Athletics skill.",
+            "Additional Fluff: Bigpaws are dependable laborers and resilient fighters, often found doing the heavy lifting in Bunbunkin communities."
+          ]
+        },
+        "Sparkly-Ears": {
+          "name": "Sparkly-Ears",
+          "description": "Sparkly-Ears are masters of magic, blending their connection to the arcane and divine with unparalleled insight and intellect.",
+          "traits": [
+            "Ability Score Increase. Your Intelligence and Wisdom scores each increase by 2, but your Strength and Dexterity scores each decrease by 1.",
+            "Arcane and Divine Cantrips. You know one cantrip of your choice from the wizard spell list and one cantrip of your choice from the cleric spell list. Intelligence is your spellcasting ability for the wizard cantrip, and Wisdom is your spellcasting ability for the cleric cantrip.",
+            "Pandimensional Navigation. Your ability to avoid becoming lost underground now applies to any plane cosmologically below the Material Plane, and it functions even in areas affected by magical sound dampening or spatial distortions.",
+            "Proficiency. You gain proficiency with either two magical artisan's tools or one magical tool and one language of your choice.",
+            "Additional Fluff: Sparkly-Ears are curious and studious, delving into the mysteries of the cosmos with wonder and determination."
+          ]
+        }
+      }
+    },
+    "Skunkiddo": {
+      "name": "Skunkiddo",
+      "id": "skunkiddo",
+      "traits": [
+        "Ability Score Increase. Your Dexterity score increases by 2, and your Constitution score increases by 1.",
+        "Size. Skunkiddos are naturally Small creatures, though some may border on small-medium.",
+        "Speed. Your base walking speed is 25 feet.",
+        "Stink Spray. As an action, you can exhale a repulsive cloud of odor in a 15-foot cone. Each creature in that area must succeed on a Constitution saving throw (DC = 8 + your proficiency bonus + your Dexterity modifier) or be poisoned and sickened until the end of your next turn. Once you use this trait, you cannot use it again until you finish a short or long rest.",
+        "Diapered Instinct. Having eschewed potty training on the DS Plane, you are naturally incontinent at creation. Because of this inherent flaw, you are eligible to select the Diaper-Mastery feat at character creation in lieu of meeting its usual prerequisites.",
+        "Keen Senses. You have advantage on Wisdom (Perception) checks that rely on your sense of smell.",
+        "Mischievous Nature. Your wily personality grants you proficiency in the Stealth skill.",
+        "Languages. You can speak, read, and write Common and Skunkiddo—a guttural, expressive language mixed with chirps, barks, and the occasional odoriferous exclamation.",
+        "Dig Speed: You have a burrow (dig) speed of 5 feet, allowing you to tunnel through loose earth or sand.",
+        "Climb Speed: You have a climb speed of 10 feet."
+      ],
+      "subraces": {
+        "Fragrance": {
+          "name": "Fragrance Furs",
+          "description": "",
+          "traits": [
+            "Ability Score Increase. Your Intelligence score increases by 1.",
+            "Enemies become dazzled—taking disadvantage on their next attack roll or ability check before the start of your next turn.",
+            "Allies in the area feel inspired, gaining temporary morale (choose a benefit such as advantage on a single ability check or saving throw until the start of your next turn).",
+            "Perfume Poof. You replace the standard Skunkiddo Stink Spray with a burst of heady, magical fragrance. As an action, you can exude a pleasant perfume in a 15‑foot cone. Each creature in the area must succeed on a Wisdom saving throw (DC = 8 + your proficiency bonus + your Intelligence modifier) or be overwhelmed:\n\nYou can use Perfume Poof a number of times per day equal to your proficiency bonus, and you regain all expended uses after a long rest.",
+            "Fragrant Magic. Your innate magical flair allows you to learn one arcane cantrip of your choice. Intelligence is your spellcasting ability for this cantrip."
+          ]
+        },
+        "Malodorans": {
+          "name": "Malodorans",
+          "description": "",
+          "traits": [
+            "Ability Score Increase. Your Strength score increases by 1.",
+            "Enhanced Stink Spray. True to your aggressive nature, your natural stink spray is particularly potent. When you use your Stink Spray (as provided in the base race), affected creatures on a failed Constitution saving throw (DC = 8 + your proficiency bonus + your Dexterity modifier) suffer the usual poisoned condition until the end of your next turn and become frightened of you for 1 round. On a successful save, a creature takes half the duration effect (they are only poisoned).",
+            "Unbridled Momentum. Your raw aggression and determination drive you forward. Your walking speed increases by 5 feet.",
+            "Battle-Hardened Aroma. While your aroma might repel most, it fuels your fierce spirit. You gain proficiency in the Intimidation skill if you do not already have it.",
+            "Brutal Presence. Your imposing, malodorous aura makes your foes think twice before engaging you, perfectly accentuating the wild and unrefined nature of your kind."
+          ]
+        }
+      }
+    },
+    "Darklings": {
+      "name": "Darklings",
+      "id": "darklings",
+      "traits": [
+        "Scent. You can track creatures around you by scent within a defined radius, treated as blindsense.",
+        "Tendril Lash. Your natural shadow-lash weapon can strike foes with concentrated shadow energy. This attack deals 1d4 damage instead of the standard unarmed strike damage of 1.",
+        "Umbral Jaunt. You can use shadowed ethereal movement to teleport to any unoccupied space within 20 feet. If you are assuming a small size, you may end your teleport in the same square as another creature.",
+        "Shadow Regeneration. When not wounded in battle, you can heal yourself over time. If unwounded for 1 round, you begin to coalesce your being back together. Every round after the first round you are not wounded, you restore 1d6 HP provided you do not move more than 10 ft in that turn. Umbral Jaunt does not count as movement for the purposes of this feature.",
+        "Nightling Mind and Body.",
+        "Body of Vapor. As an action up to 3 times per day, you can compress or expand your body to have either the Giant Might or Shadow's Child effects for 1 minute. You must complete a short rest between uses.",
+        "Giant Might: You magically gain the following benefits: If you are smaller than Large, you become Large, along with anything you are wearing. If you lack the room to become Large, your size doesn't change. You have advantage on Strength checks and Strength saving throws. Your weapon attacks deal an extra 1d6 damage.",
+        "Shadow's Child: You become Small sized until you take a short rest and decide to end the effect: You can occupy the same square as a Medium or Large-sized creature. You can pass through spaces that would require a Medium or larger creature to pass a Dexterity check. You are harder to hit but easier to grab once hit—gain a +1 AC bonus but have disadvantage on checks to break a pin or grapple.",
+        "Speed. Your base walking speed is 30 feet.",
+        "Darkvision. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "Aggressive. As a bonus action, you can move up to your speed toward an enemy of your choice that you can see or hear. You must end this move closer to the enemy than you started.",
+        "Languages. You can speak, read, and write Common, and understand Undercommon.",
+        "You take double damage from sources of radiant damage due to the fact that light energy disrupts your shadow form.",
+        "You don't sleep; instead you lurk—similar to elven meditation—for 4–6 hours.",
+        "You cannot be frightened.",
+        "If you are smaller than Large, you become Large, along with anything you are wearing. If you lack the room to become Large, your size doesn't change.",
+        "You have advantage on Strength checks and Strength saving throws.",
+        "Your weapon attacks deal an extra 1d6 damage.",
+        "You can occupy the same square as a Medium or Large-sized creature.",
+        "You can pass through spaces that would require a Medium or larger creature to pass a Dexterity check.",
+        "You are harder to hit but easier to grab once hit—gain a +1 AC bonus but have disadvantage on checks to break a pin or grapple."
+      ],
+      "subraces": {
+        "Ossuite": {
+          "name": "Ossuite",
+          "description": "",
+          "traits": [
+            "Range: 30 ft.",
+            "Damage: 1d4 piercing damage (instead of the standard unarmed strike damage of 1).",
+            "After making a Bone Toss attack, you must collect the thrown bone before making another Bone Toss attack.",
+            "Bones used in combat can be forged into a Bonded Weapon by fighter-type characters, enhancing its power and compatibility with martial techniques.",
+            "Bone Toss. You replace the standard Tendril Lash with Bone Toss, a ranged attack utilizing your own skeletal fragments as weapons. These bones are empowered by shadow energy and must be retrieved after use to be thrown again.",
+            "Divine Insight. You have an innate connection to divine magic, which manifests as the ability to learn one divine cantrip of your choosing from the Cleric spell list. This cantrip is considered a racial feature and does not consume spell slots.",
+            "Wisdom Bonus. Your skeletal structure resonates with ancient wisdom from the shadows beyond, granting you a +1 bonus to Wisdom."
+          ]
+        },
+        "Dark-kin": {
+          "name": "Dark-kin",
+          "description": "",
+          "traits": [
+            "You gain resistance to nonmagical bludgeoning, piercing, and slashing damage.",
+            "You can move through spaces as narrow as 1 inch wide without squeezing.",
+            "You cannot take reactions during this time.",
+            "Blend with Shadows: Once per short rest, you may take on a translucent, shadowy form for 1 minute. While in this form:",
+            "Enhanced Transmorphic Abilities. You excel in reshaping your shadowy form to adapt to various situations. You can use Body of Vapor an additional time per day and gain new transmorphic traits:",
+            "You gain advantage on Stealth checks while in this form.",
+            "You can pass through spaces occupied by any creature without provoking attacks of opportunity.",
+            "Your movement speed becomes 40 ft., but you cannot make weapon attacks while in this form.",
+            "Diminutive Shadowform: In addition to the Shadow's Child feature, you can reshape into a diminutive, wispy shadow entity:",
+            "Your size becomes Huge, provided you have enough space to expand.",
+            "You gain a +2 bonus to Strength-based attack and damage rolls for the duration.",
+            "Your reach extends by 5 ft., allowing you to target creatures farther away.",
+            "Colossal Shadowform: Building on the Giant Might feature, you amplify your colossal shadow presence:",
+            "Transmorphic Evolution. You have honed your ability to shift your form into distinct versions:",
+            "Shadowmeld Reflex. When you use Umbral Jaunt, you can temporarily meld into an ally's shadow. Choose a willing creature within 20 feet and teleport to their location. You then occupy the same space as the creature for 1 round or until you take another action.",
+            "Expanded Movement: You gain a climb speed of 30 ft. for the duration.",
+            "Shadow Reach: Your attacks ignore cover provided by obstacles smaller than 5 ft. tall.",
+            "Transmorphic Affinity. Your attunement to shadowy transformation grants you an additional use of Body of Vapor per long rest. Additionally, when using Body of Vapor, you can choose one of the following additional benefits:"
+          ]
+        }
+      }
+    },
+    "Seimei": {
+      "name": "Seimei",
+      "id": "seimei",
+      "traits": [
+        "Ability Score Increase. Your Constitution score increases by 2.",
+        "Photosynthetic Sustenance. You do not require traditional food as long as you receive 4–6 hours of direct sunlight (or broad-spectrum UV) daily.",
+        "Solar Slumber. With 8+ hours of sunlight every day, you need not sleep. Otherwise, you must enter a 4‑hour dormancy cycle (similar to elves).",
+        "Demi-Incontinence. Overindulgence in human foods causes you to suffer disadvantage on any effects or rolls related to bowel/brown-note influences.",
+        "Legacy Bearer. When you wield a legacy weapon, it gains an extra feature-attunement slot. This benefit applies to up to two legacy weapons at one time.",
+        "Weapon Proficiency. You are proficient with rapiers, katanas, fullblades, and all forms of daggers. Any dagger-like weapon lacking a throwing range gains one (10 feet).",
+        "Tool Proficiency. Choose one: thieves' tools, calligrapher's tools, or cartographer's tools.",
+        "Ageless. Seimei age extremely slowly, often living for thousands of years unless fate intervenes."
+      ],
+      "subraces": {
+        "Treebearers": {
+          "name": "Treebearers",
+          "description": "Treebearers are the stalwart branch of the Seimei—embodying the strength and stature of ancient oaks.",
+          "traits": [
+            "+2 Strength",
+            "+2 Dexterity",
+            "+1 Wisdom",
+            "+1 Intelligence",
+            "Ability Score Increase. Your Ability scores increase as follows:",
+            "Large Build. You can stand as tall as 6'8\", channeling a wiry yet imposing physicality into combat prowess.",
+            "Base Speed. Your walking speed is 35 feet.",
+            "Thornstorm Tradition. When wielding a katana, rapier, or fullblade, you may make one additional weapon attack once per short or long rest, provided you are not suffering from Separation Sickness.",
+            "Separation Sickness. If you are not in the company of another Seimei or within an area populated by your kin, you suffer a –1 penalty on all rolls. Extended isolation (one month or longer) causes a level‑0 minor exhaustion that can quickly escalate."
+          ]
+        },
+        "Floralfolk": {
+          "name": "Floralfolk",
+          "description": "Floralfolk are renowned for their nimbleness and enchanting charm. They compensate for a lack of physical brawn with swift movements and social grace.",
+          "traits": [
+            "+2 Dexterity",
+            "+2 Charisma",
+            "Ability Score Increase. Your Ability scores increase as follows:",
+            "Base Speed. Your walking speed is 40 feet.",
+            "Size. Medium or Small (your choice).",
+            "Squeeze. You can navigate spaces that would normally require a check for medium or larger creatures, provided you are not encumbered by bulky armor or equipment.",
+            "Aromatism. You can cause flowers in your hair to exude either a sweet, inviting aroma or a vile, noxious vapor. This effect can be used for social influence or to deter foes (DM may offer mechanical benefits or flavor cues as appropriate).",
+            "Onerous Affection-Seeking. When not within close proximity to at least one other Seimei for at least one hour during your day, you suffer a –1 penalty on all Charisma-based skills, saving throws, and checks until you engage with a companion or form a new friendship."
+          ]
+        }
+      }
+    },
+    "Ghost": {
+      "name": "Ghost",
+      "id": "ghost",
+      "traits": [
+        "Racial Features:",
+        "Ability Score Increase. Your Wisdom score increases by 1, and your Intelligence score increases by 1.",
+        "Size. Ghosts retain the size of their original race (e.g., Small or Medium).",
+        "Speed. Your base walking speed is 30 feet, unless your original race grants a higher walking speed.",
+        "Sleepless Spectre. You do not need to sleep. Instead, you enter a semi-dormant state for 4 hours, akin to elven meditation. During this time, you are fully aware of your surroundings. You are also immune to charm effects that rely on sleep.",
+        "Darkvision. You can see in darkness within 60 feet as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "Formless Passage. Twice per long rest, you can assume an incorporeal form for up to 10 minutes. While incorporeal, you can move through non-magical objects, doors, or walls as if they were difficult terrain. You cannot end your turn inside a solid object. This ability does not work on magically locked or sealed areas.",
+        "Spectral Manipulation. You can cast the mage hand cantrip a number of times per day equal to your Constitution modifier (minimum of once). Intelligence is your spellcasting ability for this cantrip.",
+        "Wail of the Lost. As an action, you can release an otherworldly wail. Each creature within 10 feet that can hear you must succeed on a Wisdom saving throw (DC = 8 + your proficiency bonus + your Charisma modifier) or be frightened of you for 1 minute. Creatures can repeat the saving throw at the end of each of their turns. You can use this ability once per long rest.",
+        "Ethereal Insight. Gain proficiency in Arcana and Religion.",
+        "Languages. You can speak, read, and write Common and one additional language of your choice."
+      ],
+      "subraces": {}
+    },
+    "Morphian Changeling": {
+      "name": "Morphian Changeling",
+      "id": "morphian-changeling",
+      "traits": [
+        "Ability Score Increase. Your Charisma score increases by 2, and one other ability score of your choice increases by 1.",
+        "Age. Morphians mature at the same rate as changelings and live to be around 120 years old.",
+        "Alignment. Morphians, like changelings, tend toward chaotic alignments due to their adaptable nature.",
+        "Size. Morphians are Medium, though they may transform into Small creatures when mimicking other races.",
+        "Speed. Your base walking speed is 30 feet.",
+        "Robust Transformation. As a Morphian, you can transform into any Medium or Small-sized race you have previously touched with bare skin. This transformation requires a 12-hour biological process that functions as a trance-like sleep, during which you alter your racial phylogeny. Once this process is complete, you gain all of the racial traits, abilities, and proficiencies of the chosen race as if applying a subrace to your character. Note that the base Morphian traits are considered the \"subrace\" for this purpose.",
+        "Form Limitations. While temporarily disguising yourself using your standard changeling transformation ability, you can only mimic races you have touched but do not gain the racial abilities or powers of a race other than your current chosen form. This makes your disguise purely aesthetic in nature unless it matches your active \"subrace.\"",
+        "Temporary Transformation. As an action, you can temporarily transform to take on the physical appearance of a race you have touched. This transformation lasts up to 1 hour or until you revert to your original form (no action required). You cannot gain the racial traits, powers, or abilities of a race different from your current chosen form.",
+        "Languages. You can speak, read, and write Common, two other languages of your choice, and any racial language you acquire through a chosen form.",
+        "Subrace Selection. Your subrace is determined by the race you last transformed into using your Robust Transformation ability. You must complete the 12-hour transformation process to change subraces."
+      ],
+      "subraces": {}
+    },
+    "Tanukijin": {
+      "name": "Tanukijin",
+      "id": "tanukijin-tanuki-people",
+      "traits": [
+        "Ability Score Increase. Your Dexterity score increases by 2, and your Charisma score increases by 1.",
+        "Size. Tanukijin are Small.",
+        "Speed. Your base walking speed is 35 feet.",
+        "Trickster's Grace. You gain proficiency in the Stealth and Sleight of Hand skills, reflecting your nimble fingers and quick footsteps.",
+        "Mischievous Luck. Once per short rest, if you fail a Dexterity saving throw, you can reroll the check and use the new result.",
+        "Illusory Shift. As a bonus action once per long rest, you can briefly alter your appearance to gain advantage on a Charisma (Deception) or Dexterity (Acrobatics) check.",
+        "Languages. You can speak, read, and write Common and one additional language of your choice."
+      ],
+      "subraces": {
+        "Mystic": {
+          "name": "Mystic Tanuki",
+          "description": "",
+          "traits": [
+            "Ability Score Increase. Your Intelligence score increases by 1.",
+            "Arcane Trickery. You know one cantrip of your choice from the bard or sorcerer spell list. Charisma is your spellcasting ability for this cantrip.",
+            "Minor Illusionist. You have advantage on Intelligence (Investigation) checks when searching for magical effects or hidden enchantments."
+          ]
+        },
+        "Wandering": {
+          "name": "Wandering Tanuki",
+          "description": "",
+          "traits": [
+            "Ability Score Increase. Your Wisdom score increases by 1.",
+            "Pathfinder's Instinct. You gain proficiency in the Survival skill and have advantage on Wisdom (Perception) checks when navigating natural environments.",
+            "Fleet Footed. Your base walking speed increases to 40 feet when traveling in expansive or rugged terrain."
+          ]
+        },
+        "Gleaming": {
+          "name": "Gleaming Tanuki",
+          "description": "",
+          "traits": [
+            "Ability Score Increase. Your Charisma score increases by an additional 1.",
+            "Sparkling Focus. You have a keen eye for all things glimmering. You gain a +2 bonus on Investigation checks related to appraising or locating valuable or magical items.",
+            "Treasure's Allure. Once per short rest, you can use a bonus action to gain advantage on an Investigation check specifically aimed at detecting hidden treasures, secret compartments, or enchanted artifacts."
+          ]
+        }
+      }
+    },
+    "Foxfolk": {
+      "name": "Foxfolk",
+      "id": "foxfolk-vulpine-kin",
+      "traits": [
+        "Ability Score Increase. Your Dexterity score increases by 2, and your Charisma score increases by 1.",
+        "Size. Foxfolk are Small.",
+        "Speed. Your base walking speed is 35 feet.",
+        "Keen Senses. You gain proficiency in the Perception and Stealth skills.",
+        "Natural Camouflage. When in natural environments, you have advantage on Dexterity (Stealth) checks to hide amidst foliage, rain, snow, or other natural phenomena.",
+        "Languages. You can speak, read, and write Common and one additional language of your choice."
+      ],
+      "subraces": {
+        "Emberclaw": {
+          "name": "Emberclaw Fox",
+          "description": "Emberclaw Foxes are blooded warriors who meld their lithe martial skills with a surge of arcane ferocity, igniting their strikes with mystical flame.",
+          "traits": [
+            "Ability Score Increase. Your Constitution score increases by 1.",
+            "Arcane Strike. Once per short rest, when you take the Attack action, you can channel mystical energy into a melee weapon attack. On a hit, add an extra 1d6 fire or radiant damage (your choice). Additionally, the target must succeed on a Constitution saving throw (DC = 8 + your proficiency bonus + your Charisma modifier) or be stunned until the end of your next turn.",
+            "Blazing Aura. When you are in dim light or darkness, your very presence burns with latent magical energy, granting you resistance to fire damage."
+          ]
+        },
+        "Arcane": {
+          "name": "Arcane Fox",
+          "description": "Arcane Foxes are the scholars and spellcasters of the Foxfolk, harnessing raw magic to explore ancient lore and reshape the battlefield with the sheer force of their intellect.",
+          "traits": [
+            "Ability Score Increase. Your Intelligence score increases by 1.",
+            "Innate Spellcasting. You know one cantrip of your choice from the wizard spell list. Intelligence is your spellcasting ability for this cantrip.",
+            "Spell Scholar. You gain proficiency in the Arcana skill. When making Intelligence (Arcana) checks related to magical lore, you add double your proficiency bonus instead of any normal proficiency bonus.",
+            "Focused Mind. You have advantage on saving throws against spells or effects that would charm or frighten you."
+          ]
+        },
+        "Moonshadow": {
+          "name": "Moonshadow Fox",
+          "description": "Moonshadow Foxes embody the playful, elusive spirit of their kin. Masters of misdirection and guile, they excel at bending perceptions and keeping foes off-balance both on and off the battlefield.",
+          "traits": [
+            "Ability Score Increase. Your Charisma score increases by 1.",
+            "Shifting Shadows. As a bonus action, you can dissolve into a swirl of shadows. Until the start of your next turn, you gain advantage on Dexterity (Stealth) checks and creatures have disadvantage on Wisdom (Perception) checks to detect you. You can use this feature once per short rest.",
+            "Quick Wit. You gain proficiency in the Deception and Insight skills.",
+            "Trickster's Prank. When you successfully use a Charisma (Deception) check to misdirect or confuse a hostile creature in combat, you can grant one ally a +2 bonus on attack rolls against that creature until the start of your next turn. You can use this effect once per combat."
+          ]
+        }
+      }
+    },
+    "Demi-Gorgons": {
+      "name": "Demi-Gorgons",
+      "id": "demi-gorgons-not-quite-big-kids-yet",
+      "traits": [
+        "Ability Score Increase. Your Constitution score increases by 1.",
+        "Age. Demi-Gorgons grow up at about the same pace as humans, but their mythic mojo means they can stick around for a couple of centuries. How old they *look* can be a whole other story, especially for certain... types.",
+        "Alignment. Like any kiddo, Demi-Gorgons can be sweet as pie or a total handful. They lean towards the alignment of whatever mythic being gave them their spark, but the Academy (and maybe a few too many sugar rushes) can steer them any which way. Usually, they're too busy causing adorable chaos to be truly Evil.",
+        "Size. Demi-Gorgons are Medium.",
+        "Speed. Your base walking speed is 30 feet.",
+        "Darkvision. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can’t discern color in darkness, only shades of gray.",
+        "Monstrous Nature. You have advantage on saving throws against being frightened.",
+        "Languages. You can speak, read, and write Common and one additional language that makes sense for your mythic background (e.g., Primordial, Celestial, Abyssal – discuss with your DM)."
+      ],
+      "subraces": {
+        "Medusii": {
+          "name": "Medusii",
+          "description": "Snaked-haired little brats whose snake hair has unique abilities that make up for their natural lack of charm (and maybe their tendency to accidentally trip people with their head-squiggles).",
+          "traits": [
+            "Ability Score Increase. Your Dexterity score increases by 2, but your Charisma score decreases by 1.",
+            "Venomous Hiss (Recharge 5-6). As an action, command your snakes to hiss menacingly at one creature you can see within 30 feet. The target must make a Wisdom saving throw (DC = 8 + your proficiency bonus + your Constitution modifier). On a failed save, the creature is frightened of you for 1 minute. The frightened creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.",
+            "Constricting Coils. You can use your bonus action to attempt to grapple a creature within 5 feet of you with your hair-snakes. You are proficient with this grapple attempt. You can only have one creature grappled in this way at a time.",
+            "Serpent's Sense. You have advantage on Wisdom (Perception) checks that rely on sight or detecting vibrations.",
+            "Serpentine Locks. Your snake-like hair grants unique abilities:",
+            "Petrifying Pout (1/Long Rest). As an action, you can glare with mythic intensity at one creature you can see within 30 feet that can also see you. The target must make a Constitution saving throw (DC = 8 + your proficiency bonus + your Constitution modifier). On a failed save, the creature begins to stiffen and is restrained. It must repeat the saving throw at the end of its next turn. On a success, the effect ends. On a failure, the creature is petrified for 10 minutes or until freed by magic."
+          ]
+        },
+        "Chronoling": {
+          "name": "Chronoling",
+          "description": "Primordial kiddos with power over their own aging (mostly making themselves look older to reach the cookie jar) and limited influence over time (like making playtime last juuuust a little bit longer).",
+          "traits": [
+            "Ability Score Increase. Your Intelligence score increases by 2.",
+            "Temporal Tantrum. You have a funny way of dealing with age. You can choose to appear as any age from a toddler to a venerable elder, though this doesn't change your actual game stats. You can change this look after a long rest.",
+            "\"Not It!\" Reflexes. As a reaction when you or another little buddy you can see within 30 feet is about to get bonked by an attack, you can briefly rewind their immediate personal timeline. You impose disadvantage on that attack roll. You can use this trait a number of times equal to your proficiency bonus, and you get all your uses back after a long rest.",
+            "Fast Forward. You can add your Intelligence modifier (minimum +1) to your initiative rolls.",
+            "Time-Out Stutter (1/Short or Long Rest). As a bonus action, you can make yourself a bit... temporally slippery. Until the end of your next turn, attack rolls against you have disadvantage."
+          ]
+        },
+        "Totan": {
+          "name": "Totan",
+          "description": "Buff and powerful demi-gods who still have some growing up to do, a LOT of growing up. They're the ones who break all the toys by accident and give \"hugs\" that might crack a rib or two.",
+          "traits": [
+            "Ability Score Increase. Your Strength score increases by 2.",
+            "Mighty Mite. You count as one size larger when determining your carrying capacity and the weight you can push, drag, or lift.",
+            "Divine \"Owie\" Resistance. When you take damage, you can use your reaction to roll a d6. Add your Constitution modifier to the number rolled, and reduce the damage by that total. You can do this a number of times equal to your proficiency bonus, and you get them all back after a long rest.",
+            "Stompy Stomp (1/Short or Long Rest). When you hit with a melee weapon attack, you can choose to also stomp your foot with mythic force. All other creatures on the ground within 5 feet of your target must succeed on a Strength saving throw (DC = 8 + your proficiency bonus + your Strength modifier) or be knocked prone.",
+            "Latent Power Whine. You learn one cantrip of your choice from the Cleric spell list. Constitution is your spellcasting ability for this cantrip."
+          ]
+        },
+        "Anubite": {
+          "name": "Anubite Pup",
+          "description": "Little guardians of the nap-time mat, these pups are often seen with a serious expression, meticulously arranging their plushies as if preparing them for a grand journey to the snack table. They might wear floppy, jackal-eared hats and clutch a toy ankh like it's the key to the cookie jar.",
+          "traits": [
+            "Ability Score Increase. Your Wisdom score increases by 2, and your Strength score increases by 1.",
+            "Guardian's Stance. When a creature you can see attacks a target other than you that is within 5 feet of you, you can use your reaction to impose disadvantage on the attack roll. You must be wielding a toy, a shield, or nothing in your hands.",
+            "Weighing of the Cookies (1/Long Rest). You have proficiency in the Insight skill. When a creature you can see within 30 feet tells an obvious fib (DM's discretion), you can use your reaction to give them a disappointed puppy-dog stare. The creature must make a Charisma saving throw (DC = 8 + your proficiency bonus + your Wisdom modifier). On a failed save, they feel a pang of guilt and have disadvantage on Charisma (Deception) checks for the next 10 minutes.",
+            "Bandage Brigade. You know the mending cantrip. Your repairs on non-magical objects last for 1 hour."
+          ]
+        },
+        "Deva": {
+          "name": "Deva Spark",
+          "description": "These little cherubs seem to shimmer with an inner light, often humming happily or creating tiny, harmless sparkles just for fun. They adore bright colors, shiny ribbons, and might try to \"bless\" their friends with a sprinkle of glitter or a hastily picked dandelion. Their extra (purely decorative) arms often get tangled in their clothes or each other.",
+          "traits": [
+            "Ability Score Increase. Your Charisma score increases by 2, and your Dexterity score increases by 1.",
+            "Little Light Show. You know the prestidigitation cantrip. Charisma is your spellcasting ability for it.",
+            "Many Paws Make Light Play (Cosmetic). You have an additional pair of smaller, purely cosmetic arms. Once per short rest, you can use these extra hands to gain advantage on one Dexterity (Sleight of Hand) check or one ability check made to perform a very simple, non-strenuous task.",
+            "Aura of Giggles (1/Long Rest). As a bonus action, you can radiate a palpable aura of cheerfulness for 1 minute. Friendly creatures (including yourself) within 10 feet of you who can see or hear your joyful display have advantage on saving throws against being frightened or charmed while your aura is active."
+          ]
+        },
+        "Kaitiaki": {
+          "name": "Kaitiaki Sprout",
+          "description": "These little guardians are fiercely protective of their playmates and their favorite chew toys. They might have a slightly tougher hide that feels like smooth river stones, make rumbling tummy noises when content (or when someone eyes their building blocks), and always seem to know the best spots for digging in the sandbox or splashing in puddles.",
+          "traits": [
+            "Ability Score Increase. Your Strength score increases by 2, and your Wisdom score increases by 1.",
+            "Kaitiaki's Roar (1/Short or Long Rest). As an action, you can puff out your chest and unleash a surprisingly mighty roar. Each hostile creature within 10 feet of you that can hear you must make a Wisdom saving throw (DC = 8 + your proficiency bonus + your Strength modifier) or become frightened of you until the end of your next turn.",
+            "Guardian of the Den. You are proficient in the Athletics skill. Additionally, when an ally within 5 feet of you is hit by an attack, you can use your reaction to bravely interpose yourself, becoming the target of that attack instead, provided you can see the attacker.",
+            "Earthly Connection. You know the mold earth cantrip. Wisdom is your spellcasting ability for it."
+          ]
+        },
+        "Qilin": {
+          "name": "Qilin Calf",
+          "description": "These serene little ones seem to carry an aura of good fortune and gentle mischief, like they've always got a pocketful of lucky charms (or maybe just lint and a half-eaten cracker). They might have a coat that shimmers with hints of rainbow colors when the light hits it just right, tiny velvet nubs on their heads where magnificent antlers will one day sprout, and a tendency to leave trails of glitter (or perhaps just cookie crumbs) wherever they prance.",
+          "traits": [
+            "Ability Score Increase. Your Charisma score increases by 2, and your Wisdom score increases by 1.",
+            "Auspicious Prance. Your base walking speed increases by 5 feet. When you use the Dash action, difficult terrain doesn't cost you extra movement on that turn.",
+            "Serene Blessing (1/Long Rest). As a bonus action, you can choose one friendly creature (can be yourself) you can see within 30 feet. The chosen creature gains temporary hit points equal to your Charisma modifier + your proficiency bonus.",
+            "Fortunate Find. You know the guidance cantrip. Additionally, whenever you make an ability check or saving throw and roll a 1 on the d20, you can choose to reroll the die and must use the new roll. You can use this part of the feature once per long rest."
+          ]
+        },
+        "Frosty": {
+          "name": "Frosty Tot",
+          "description": "These little ones always seem to have a chill about them, even in summer. They love icy treats, might accidentally freeze their juice box solid, and are surprisingly good at making impressive (if temporary) snow forts, even out of pillows. They're sturdy little tykes, though sometimes their frosty touch is a bit much for delicate toys.",
+          "traits": [
+            "Ability Score Increase. Your Strength score increases by 2, and your Constitution score increases by an additional 1.",
+            "Cold Comfort. You have resistance to cold damage.",
+            "Icy Puff (1/Short or Long Rest). As an action, you can exhale a puff of frosty air in a 15-foot cone. Each creature in that area must make a Constitution saving throw (DC = 8 + your proficiency bonus + your Constitution modifier). On a failed save, a creature takes 2d6 cold damage and its speed is reduced by 10 feet until the start of your next turn. On a successful save, the creature takes half as much damage and its speed is not reduced.",
+            "Snowball Scrapper. You are proficient with improvised weapons made of ice or snow. You also count as one size larger when determining your carrying capacity and the weight you can push, drag, or lift."
+          ]
+        },
+        "Valiant": {
+          "name": "Valiant Sprout",
+          "description": "These little heroes-in-training are always ready for an adventure, even if it's just a quest to the snack cupboard. They hum battle tunes, wear pots on their heads like helmets, and are the first to \"rescue\" a fallen plushie. Their bravery sometimes outweighs their common sense, but their hearts are always in the right place.",
+          "traits": [
+            "Ability Score Increase. Your Strength score increases by 1, and your Charisma score increases by 2.",
+            "Little Hero's Heart. You have advantage on saving throws against being frightened. You also gain proficiency with one simple melee weapon of your choice.",
+            "\"I'll Help!\" (1/Short or Long Rest). When an ally you can see within 30 feet makes an attack roll or a saving throw, you can use your reaction to shout encouragement and grant them advantage on that roll.",
+            "Toy Box Arsenal. You are proficient with shields."
+          ]
+        },
+        "Kiddie": {
+          "name": "Kiddie Kraken",
+          "description": "These little ones are obsessed with connection – sometimes a bit too much! They give surprisingly strong hugs with their \"invisible extra arms,\" offer \"gifts\" like shiny pebbles or slightly damp leaves, and whisper \"secrets of the deep (sandbox)\" to their toys. Their big, innocent eyes hide an unnerving intensity, and their desire to \"care\" for everyone can be... a lot.",
+          "traits": [
+            "Ability Score Increase. Your Charisma score increases by 2, and your Wisdom score increases by 1.",
+            "Unsettling Sweetness. You gain proficiency in the Persuasion skill.",
+            "Tentacle Helper. You know the mage hand cantrip. The hand appears as a small, translucent, spectral tentacle.",
+            "\"Let's Be Friends... Forever\" (1/Short or Long Rest). As an action, you can focus your overwhelming affection on one creature you can see within 15 feet. The target must make a Wisdom saving throw (DC = 8 + your proficiency bonus + your Charisma modifier). On a failed save, it is charmed by you for 10 minutes. While charmed, it regards you with immense fondness and is highly suggestible to your (non-harmful) requests to stay close and \"be best friends.\"",
+            "Gift from the Murky Depths. Once per day, you can \"find\" a small, mundane but somehow significant-seeming trinket to offer as a token of your profound friendship."
+          ]
+        },
+        "Clay": {
+          "name": "Clay Kid",
+          "description": "These sturdy little ones seem to be made of tougher stuff, always covered in a fine layer of dust or mud from their latest \"construction project.\" They're not the fastest, but they're incredibly determined and can take a tumble without much fuss. They love building things, even if their creations are a bit lopsided, and are very particular about their \"special rocks.\"",
+          "traits": [
+            "Ability Score Increase. Your Constitution score increases by an additional 2, but your Dexterity score decreases by 1.",
+            "Made of Mud (and Magic). Your hit point maximum increases by 1, and it increases by 1 every time you gain a level. You also have advantage on saving throws against poison, and you only need to eat and drink half as much as normal.",
+            "Patch Up (1/Short or Long Rest). As an action, you can magically draw upon earthy energies to mend your form. You regain hit points equal to 1d8 + your Constitution modifier.",
+            "Little Shaper. You know the mold earth cantrip."
+          ]
+        },
+        "Feathered": {
+          "name": "Feathered Fledgling",
+          "description": "These little cherubs always seem to have a few extra, fluffy wings sprouting in unexpected places, often getting tangled or knocking things over. They are fascinated by bright lights, sing off-key \"holy\" songs, and try to \"bless\" their friends with glitter or a gentle pat from a downy wing. They mean well, even if they're a bit clumsy with their celestial radiance.",
+          "traits": [
+            "Ability Score Increase. Your Charisma score increases by 2, and your Wisdom score increases by 1.",
+            "Many-Winged Wonder (Cosmetic). You have an additional pair (or two, DM's discretion) of small, purely cosmetic wings.",
+            "Little Light. You know the light cantrip.",
+            "Gentle Touch (1/Short or Long Rest). As an action, you can touch a willing creature and bestow a tiny spark of celestial energy. The creature regains hit points equal to 1d4 + your Charisma modifier.",
+            "Heavenly Hum. You have advantage on Performance checks made to sing or hum soothing melodies."
+          ]
+        },
+        "Whisper": {
+          "name": "Whisper Wisp",
+          "description": "These little tricksters are masters of minor mischief, always seeming to be where they shouldn't, with an innocent look on their face. They might smell faintly of cinnamon or exotic spices, and their \"imaginary friends\" give surprisingly good (and sneaky) advice. They love riddles, games of hide-and-seek, and \"helping\" by rearranging things in slightly confusing ways.",
+          "traits": [
+            "Ability Score Increase. Your Dexterity score increases by 2, and your Intelligence score increases by 1.",
+            "Now You See Me... You gain proficiency in the Stealth skill.",
+            "Minor Mirage. You know the minor illusion cantrip. Intelligence is your spellcasting ability for it.",
+            "Whispered Suggestion (1/Short or Long Rest). As an action, you can whisper a subtle suggestion to a creature within 10 feet that can hear you. The target must make a Wisdom saving throw (DC = 8 + your proficiency bonus + your Intelligence modifier). On a failed save, it pursues one course of action (limited to a sentence or two) that you describe during its next turn, provided the action isn't obviously harmful to itself.",
+            "Pocket Full of Puzzles. You have advantage on Intelligence (Investigation) checks made to solve puzzles or figure out how small mechanisms work."
+          ]
+        },
+        "Oasis": {
+          "name": "Oasis Sprite",
+          "description": "These little ones always seem to carry a faint scent of dates and desert blooms. They love playing hide-and-seek in sandpits, whisper secrets to the wind, and might try to \"conjure\" a tiny oasis in their juice cup. They are surprisingly good at disappearing when it's chore time.",
+          "traits": [
+            "Ability Score Increase. Your Dexterity score increases by 2, and your Intelligence score increases by 1.",
+            "Desert Mirage. You know the minor illusion cantrip. Intelligence is your spellcasting ability for it.",
+            "Sand Step (1/Short or Long Rest). As a bonus action, you can briefly dissolve into a swirl of sand and teleport up to 15 feet to an unoccupied space you can see. You must be standing on sand, dirt, or loose earth to use this feature.",
+            "Whisper of the Djinn. You have advantage on Wisdom (Perception) checks that rely on hearing."
+          ]
+        },
+        "Jungle": {
+          "name": "Jungle Tot",
+          "description": "These little ones are always trying to climb the curtains or \"talk\" to the class pets. They love making leaf crowns, are surprisingly good at mimicking animal sounds, and might try to build a \"nest\" under their desk for naptime. They have an untamed energy and a deep connection to the wild.",
+          "traits": [
+            "Ability Score Increase. Your Dexterity score increases by 1, and your Wisdom score increases by 2.",
+            "Child of the Canopy. You have a climbing speed of 20 feet.",
+            "Animal Whisperer. You can communicate simple ideas with beasts of Small size or smaller.",
+            "Spirit Drum (1/Short or Long Rest). As an action, you can tap out a rhythmic beat on any surface. Choose one friendly creature within 30 feet (can be yourself). That creature gains temporary hit points equal to 1d6 + your Wisdom modifier."
+          ]
+        },
+        "Dawncub": {
+          "name": "Dawncub of Buluku",
+          "description": "Radiant with the energy of creation and renewal, these young ones embody the warmth of the rising sun and the gentle wisdom of the supreme mother. They scamper under golden skies, their laughter echoing like the first breath of dawn. Agile and clever, they weave stories as effortlessly as they dance across the veldt, their spirit forever guided by the mother of all things.",
+          "traits": [
+            "Ability Score Increase. Your Wisdom score increases by 2, and your Strength score increases by 1.",
+            "Steps of Light. Your base walking speed increases by 5 feet.",
+            "Joyful Echo (1/Short or Long Rest). When a creature you can see within 30 feet makes an attack roll against you, you can use your reaction to let out a sacred, melodic laugh, disrupting their intent. The attacker must make a Wisdom saving throw (DC = 8 + your proficiency bonus + your Wisdom modifier). On a failed save, the attack roll has disadvantage, and the attacker cannot take reactions until the start of their next turn.",
+            "Voice of the First Dawn. You know the word of radiance cantrip. Wisdom is your spellcasting ability for it."
+          ]
+        },
+        "Esus'": {
+          "name": "Esus' Fledgling",
+          "description": "These little ones are often found silently stalking squirrels in the schoolyard or meticulously whittling sticks with surprising focus. They love stories of deep forests and cunning hunts, and might try to set \"traps\" for misplaced toys (usually just a pile of leaves). They possess a primal connection to the wild and an unnerving intensity for their age.",
+          "traits": [
+            "Ability Score Increase. Your Strength score increases by 2, and your Wisdom score increases by 1.",
+            "Forest Acumen. You gain proficiency in the Survival skill.",
+            "Woodsman's Chop (1/Short or Long Rest). When you hit a creature with a melee weapon attack, you can channel the focused might of Esus. The target takes an extra 1d6 damage of the weapon's type, and it has disadvantage on its next attack roll before the end of its next turn.",
+            "Primal Whisper. You know the shillelagh cantrip. Wisdom is your spellcasting ability for it."
+          ]
+        },
+        "Lava": {
+          "name": "Lava Tot",
+          "description": "These warm-hearted (sometimes literally!) little ones are full of boundless energy and a fiery spirit. They love stories of powerful volcanoes and brave navigators, might try to \"create\" a mini volcano in the sandbox, and are surprisingly good at making very enthusiastic (if slightly off-key) welcoming chants. They have a natural warmth that draws others in.",
+          "traits": [
+            "Ability Score Increase. Your Strength score increases by 1, and your Charisma score increases by 2.",
+            "Warm Glow. You know the produce flame cantrip. Charisma is your spellcasting ability for it.",
+            "Little Volcano (1/Short or Long Rest). As an action, you can stomp your foot and cause a small, harmless tremor and a puff of warm, sparkly \"ash\". Each creature within 5 feet of you must make a Dexterity saving throw (DC = 8 + your proficiency bonus + your Charisma modifier) or be pushed back 5 feet.",
+            "Island Resilience. You have advantage on saving throws against being frightened by loud noises or sudden movements."
+          ]
+        },
+        "Little": {
+          "name": "Little Nanook",
+          "description": "These tots always seem to have a bit of frost on their eyelashes and an uncanny ability to find the coldest spot in the room for their nap. They love stories about great white bears and shimmering sky-lights, and might try to share their fishy crackers with imaginary seal friends. They're surprisingly resilient to the cold, often forgetting their mittens without a fuss.",
+          "traits": [
+            "Ability Score Increase. Your Constitution score increases by an additional 1, and your Wisdom score increases by 1.",
+            "Arctic Resilience. You have resistance to cold damage. You also have advantage on saving throws against exhaustion due to cold weather.",
+            "Spirit Helper (1/Short or Long Rest). You can call upon a friendly, minor spirit of the north. As an action, this spirit helper appears in an unoccupied space within 5 feet of you. It is intangible, cannot attack, but can provide the Help action to you or an ally on one ability check, attack roll, or saving throw within the next minute before disappearing.",
+            "Snowdrift Sense. You have advantage on Wisdom (Survival) checks made to navigate snowy or icy terrain, and you can't get lost in a blizzard."
+          ]
+        },
+        "Canyon": {
+          "name": "Canyon Sprout",
+          "description": "These little ones love playing in the dirt, making intricate patterns with pebbles, and basking in the warmest sunbeam they can find. They might hum little tunes that sound like the wind whistling through mesas and are surprisingly good at finding hidden things in the sandbox. They have a natural affinity for the earth and the warmth of the sun.",
+          "traits": [
+            "Ability Score Increase. Your Dexterity score increases by 1, and your Wisdom score increases by 2.",
+            "Desert Hardy. You have advantage on saving throws against exhaustion due to hot weather, and you require only half as much water per day as normal.",
+            "Earth Child. You know the mold earth cantrip.",
+            "Spirit of the Corn (1/Short or Long Rest). As a bonus action, you can call upon the nurturing spirit of the corn. You or one ally you touch regains hit points equal to 1d6 + your Wisdom modifier."
+          ]
+        },
+        "Prairie": {
+          "name": "Prairie Pup",
+          "description": "Full of boundless energy, these little ones are always on the move, darting across the playground like tumbleweeds. They love stories of great bison herds and heroic riders, and might try to \"tame\" the class pet (with varying success). They have a strong connection to the open spaces and the creatures that roam them.",
+          "traits": [
+            "Ability Score Increase. Your Dexterity score increases by 2, and your Strength score increases by 1.",
+            "Fleet Foot. Your base walking speed increases by 5 feet.",
+            "Spirit of the Bison (1/Short or Long Rest). As a bonus action, you can briefly embody the spirit of a young bison. For the next minute, you have advantage on Strength checks and Strength saving throws, and your carrying capacity is doubled.",
+            "Wind's Companion. You have advantage on Dexterity (Acrobatics) checks."
+          ]
+        },
+        "River": {
+          "name": "River Otterling",
+          "description": "Playful and curious, these little ones are drawn to water like ducks to a puddle. They love splashing, collecting smooth river stones, and telling imaginative stories about the creatures that live in the woods and streams. They're surprisingly good at making friends, even with the grumpy kid in the corner.",
+          "traits": [
+            "Ability Score Increase. Your Charisma score increases by 2, and your Dexterity score increases by 1.",
+            "Water Baby. You have a swimming speed of 25 feet, and you can hold your breath for up to 5 minutes.",
+            "Forest Friend. You know the druidcraft cantrip.",
+            "Otter's Charm (1/Short or Long Rest). As an action, you can put on your most endearing otter-like expression. One creature you can see within 30 feet that can see you must make a Wisdom saving throw (DC = 8 + your proficiency bonus + your Charisma modifier). On a failed save, the creature is charmed by you for 1 minute or until you or your companions do anything harmful to it."
+          ]
+        },
+        "Sunstone": {
+          "name": "Sunstone Spark",
+          "description": "These little ones are bright and energetic, often adorned with colorful beads or feathers they've \"found.\" They love stories of feathered serpents and jaguar warriors, and might try to \"sacrifice\" their unwanted broccoli to the \"playground gods.\" They have a fiery spirit and a surprising amount of determination.",
+          "traits": [
+            "Ability Score Increase. Your Strength score increases by 1, and your Charisma score increases by 2.",
+            "Obsidian Edge (Toy Version). You are proficient with daggers and shortswords. Once on each of your turns when you hit a creature with an attack using one of these weapons, you can cause the attack to deal an extra 1d4 slashing damage.",
+            "Little Sunbeam (1/Short or Long Rest). As a bonus action, you can cause yourself to glow with a faint, warm light for 1 minute. During this time, you shed dim light in a 5-foot radius, and the first time you hit a creature with a melee attack, it takes an extra 1d4 radiant damage.",
+            "Jaguar's Pounce. Your base walking speed increases by 5 feet."
+          ]
+        },
+        "Mountain": {
+          "name": "Mountain Kip",
+          "description": "These sturdy little ones are surprisingly good climbers, always trying to scale the tallest bookshelf or playground structure. They love collecting colorful strings and shiny rocks, and might try to \"organize\" their toys into neat little piles. They are resilient and have a quiet determination, like the enduring mountains themselves.",
+          "traits": [
+            "Ability Score Increase. Your Constitution score increases by an additional 1, and your Strength score increases by 1.",
+            "Sure-Footed. You have advantage on saving throws against being knocked prone.",
+            "Llama's Burden. You count as one size larger when determining your carrying capacity.",
+            "Quipu Knots (1/Short or Long Rest). You can spend 1 minute tying intricate knots into a piece of string or cord. For the next hour, any creature holding this \"quipu\" can add a d4 to one ability check, attack roll, or saving throw it makes."
+          ]
+        }
+      }
+    },
+    "Semi-Gorgons": {
+      "name": "Semi-Gorgons",
+      "id": "semi-gorgons",
+      "traits": [
+        "Ability Score Increase. Your Constitution score increases by 1.",
+        "Age. Semi-Gorgons mature at the same rate as humans but carry themselves with an air of someone who's *at least* a year older than they actually are. Lifespan remains impressively long.",
+        "Alignment. They're starting to understand concepts like \"responsibility\" and \"not eating all the cookies before anyone else gets one,\" but old habits die hard. Still any alignment, but perhaps with more pronounced leanings.",
+        "Size. Semi-Gorgons are Medium.",
+        "Speed. Your base walking speed is 30 feet.",
+        "Darkvision. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light.",
+        "Practiced Poise. You have advantage on Charisma (Deception) checks when trying to act more mature, knowledgeable, or in control than you actually feel. You also gain proficiency in one Charisma-based skill of your choice.",
+        "Monstrous Nature. You have advantage on saving throws against being frightened.",
+        "Languages. You can speak, read, and write Common and one other language."
+      ],
+      "subraces": {
+        "Serpent": {
+          "name": "Serpent Scion",
+          "description": "These Semi-Gorgons have a bit more control over their serpentine locks, maybe even attempting to style them (with mixed, often spiky, results). They're less \"bratty\" and more \"moody teenager,\" convinced of their own profound coolness.",
+          "traits": [
+            "Ability Score Increase. Your Dexterity score increases by 2, but your Charisma score decreases by 1.",
+            "Chilling Hiss (Recharge Short/Long Rest). As an action, direct your snakes to unleash a sibilant hiss and a piercing glare at one creature you can see within 30 feet. The target must make a Wisdom saving throw (DC = 8 + your proficiency bonus + your Constitution modifier). On a failed save, the creature is frightened of you for 1 minute and has disadvantage on attack rolls against you while frightened in this way. The creature can repeat the saving throw at the end of each of its turns.",
+            "Grasping Vipers. Your bonus action grapple with your hair is still effective.",
+            "Keen-Eyed Serpents. You retain advantage on Wisdom (Perception) checks relying on sight or vibrations.",
+            "Viperine Locks. Your snakes are a bit more disciplined.",
+            "Stony Gaze (1/Long Rest). Your petrifying ability is more focused. As an action, target one creature you can see within 30 feet that can also see you. The target must make a Constitution saving throw (DC = 8 + your proficiency bonus + your Constitution modifier). On a failed save, the creature is restrained. At the end of its next turn, it must repeat the saving throw. On a success, the effect ends. On a failure, the creature is petrified for 1 hour or until freed by magic. You can also choose to end the petrification prematurely as a bonus action."
+          ]
+        },
+        "Time": {
+          "name": "Time Skipper",
+          "description": "More aware of their temporal abilities, these Semi-Gorgons might use their powers for \"important research\" (like finding out what snacks are served next week) or to get a few extra minutes before curfew. They carry an air of someone who knows a secret or two about how things *really* work.",
+          "traits": [
+            "Ability Score Increase. Your Intelligence score increases by 2.",
+            "Shifting Age. You can still alter your apparent age.",
+            "Temporal Dodge. As a reaction when you or another creature you can see within 30 feet is hit by an attack, you can impose disadvantage on the roll. You can use this trait a number of times equal to your proficiency bonus, regaining uses on a long rest.",
+            "Precocious Planning. Your Intelligence modifier still boosts your initiative.",
+            "Phase Step (1/Short or Long Rest). As a bonus action, you can briefly shimmer out of sync with time. Until the end of your next turn, attack rolls against you have disadvantage, and you can move up to 10 feet to an unoccupied space you can see. This movement does not provoke opportunity attacks."
+          ]
+        },
+        "Junior": {
+          "name": "Junior Titan",
+          "description": "Still incredibly strong, Junior Titans are now trying to channel their might with a bit more finesse (key word: *trying*). They might be the self-appointed \"protector\" of their group, always ready to flex or show off their \"gains\" from all that playground activity.",
+          "traits": [
+            "Ability Score Increase. Your Strength score increases by 2.",
+            "Growing Might. You still count as one size larger for carrying capacity.",
+            "Titan's Fortitude. When you take damage, you can use your reaction to roll a d8. Add your Constitution modifier, and reduce the damage by that total. You can use this a number of times equal to your proficiency bonus per long rest.",
+            "Quake Slam (1/Short or Long Rest). When you hit with a melee weapon attack, you can channel your inner titan to slam the ground. All other creatures on the ground within 10 feet of your target must make a Strength saving throw (DC = 8 + your proficiency bonus + your Strength modifier) or be knocked prone.",
+            "Budding Divinity. You learn one cantrip of your choice from the Cleric or Paladin spell list. Constitution is your spellcasting ability."
+          ]
+        },
+        "Anubite": {
+          "name": "Anubite Acolyte",
+          "description": "Taking their role as guardians even more seriously, Anubite Acolytes might be found \"cataloging\" the library's picture books or ensuring the \"sacred nap-time silence\" is observed. They've probably upgraded their toy ankh to a slightly larger, more official-looking one.",
+          "traits": [
+            "Ability Score Increase. Your Wisdom score increases by 2, and your Strength score increases by 1.",
+            "Protector's Vigil. Your Guardian's Stance remains: when a creature attacks an ally near you, use your reaction to impose disadvantage.",
+            "Judgment of Conduct (1/Long Rest). You retain proficiency in Insight. When a creature you can see within 30 feet tells a fib you recognize, you can use your reaction to fix them with a stare of profound disappointment. The creature makes a Charisma saving throw (DC = 8 + your proficiency bonus + your Wisdom modifier). On a failed save, they have disadvantage on all Charisma checks for the next hour.",
+            "Rite of Mending. You still know the mending cantrip. You can now also use it on a construct or object to grant it 1d4 temporary hit points once per short rest."
+          ]
+        },
+        "Deva": {
+          "name": "Deva Gleam",
+          "description": "Their inner light shines a bit brighter, and they're more adept at using their charm and minor divine tricks to get what they want (usually more glitter or the best seat). Their extra arms are less clumsy and more expressive, used for dramatic gestures or holding multiple art supplies.",
+          "traits": [
+            "Ability Score Increase. Your Charisma score increases by 2, and your Dexterity score increases by 1.",
+            "Radiant Display. You still know prestidigitation, and your displays are more dazzling. Charisma is your spellcasting ability.",
+            "Coordinated Grace (Cosmetic). Your extra pair of smaller arms are more adept. They still can't perform complex combat actions, but you can use them to gain advantage on any Dexterity-based ability check (not saving throws) once per short rest.",
+            "Aura of Joy (1/Long Rest). As a bonus action, you can radiate an enhanced aura of joy for 1 minute. Friendly creatures (including yourself) within 15 feet of you have advantage on saving throws against being frightened or charmed and gain a +1 bonus to attack rolls while your aura is active."
+          ]
+        },
+        "Kaitiaki": {
+          "name": "Kaitiaki Guardian",
+          "description": "More confident and territorial, these Semi-Gorgons see themselves as the true protectors of their \"patch\" – be it the best corner of the common room or their group of friends. Their hide might be a bit thicker, and their rumbling growls a bit more convincing.",
+          "traits": [
+            "Ability Score Increase. Your Strength score increases by 2, and your Wisdom score increases by 1.",
+            "Guardian's Challenge (1/Short or Long Rest). As an action, your roar is more potent. Hostile creatures within 15 feet of you that can hear you must make a Wisdom saving throw (DC = 8 + your proficiency bonus + your Strength modifier). On a failed save, they are frightened of you until the end of your next turn. If a creature fails its save by 5 or more, it is also stunned until the start of your next turn.",
+            "Steadfast Protector. You retain proficiency in Athletics. When an ally within 5 feet of you is hit by an attack, you can still use your reaction to become the target. If you do so, you gain resistance to the damage from that one attack.",
+            "Stone Shaper. You still know the mold earth cantrip (Wisdom spellcasting ability)."
+          ]
+        },
+        "Crinqilin": {
+          "name": "Crinqilin",
+          "description": "These Qilin yearlings have fully embraced their connection to the whimsical magic of the Diaper School. Their auspicious nature now manifests in charmingly clumsy ways and unexpected bursts of minor enchantments, often centered around their ever-present, perfectly puffed padding. They exude an air of innocent dependence that belies a surprising resilience and a unique, if somewhat messy, magical talent. Their shimmering coats are often adorned with colorful safety pins or cute magical charms, and their tiny horn-nubs are more for gentle nuzzling than any real defense.",
+          "traits": [
+            "Ability Score Increase. Your Charisma score increases by 2, and your Wisdom score increases by 1.",
+            "Naturally Padded. Crinqilins are inherently tied to the comforts and necessities of a well-padded existence. They are always considered to be wearing a diaper, which magically adapts to their needs and form. This state is natural to them and cannot be changed by conventional means. Attempts to remove their padding or potty-train them invariably meet with whimsical magical mishaps, often resulting in the padding reappearing cleaner and fluffier than before. You have advantage on saving throws against being frightened, as you are comforted by your perpetual padding.",
+            "Cushioned Charm (Diaper-Allure Power). Your undeniably innocent and comfortably padded appearance can be quite disarming. As an action, you can attempt to charm one humanoid you can see within 30 feet. The target must make a Wisdom saving throw (DC = 8 + your proficiency bonus + your Charisma modifier). On a failed save, the creature is charmed by you for 1 minute or until it takes damage. While charmed in this way, the creature regards you as a harmless, endearing being and is unwilling to attack you. You can use this feature a number of times equal to your proficiency bonus, regaining all expended uses on a long rest.",
+            "Auspicious Accidents & Miracles. You have an innate connection to playful and protective magic. You know the Spontaneous Accident and Little Miracle cantrips. Additionally, you can cast the Magic Messle spell. You can cast Magic Messle a number of times equal to your Charisma modifier (minimum of once), and you regain all expended uses when you finish a long rest. Charisma is your spellcasting ability for these spells.",
+            "Blessed Bounce. Your padded nature makes you surprisingly resilient to falls and tumbles. You have resistance to falling damage, and you can use your reaction when you fall to reduce any falling damage you take by an amount equal to five times your character level. Additionally, when you are knocked prone, you can use your reaction to immediately stand up without expending any movement."
+          ]
+        },
+        "Jotun": {
+          "name": "Jotun Rimeblood",
+          "description": "Carrying themselves with a cool (sometimes literally) detachment, Jotun Rimebloods have a better handle on their icy powers. They might seem aloof, but they're fiercely protective of their \"territory\" – be it their favorite spot in the common room or their circle of friends. They've learned that a little frost can be very persuasive.",
+          "traits": [
+            "Ability Score Increase. Your Strength score increases by 2, and your Constitution score increases by an additional 1.",
+            "Winter's Resilience. You have resistance to cold damage.",
+            "Armor of Hoarfrost (1/Long Rest). As a bonus action, you can sheathe yourself in a crackling layer of magical frost. You gain temporary hit points equal to your character level + your Constitution modifier. This icy armor lasts for 10 minutes or until the temporary hit points are depleted.",
+            "Glacial Slam. When you hit a creature with a melee weapon attack, you can choose to imbue your strike with biting cold. The target takes an extra 1d6 cold damage, and must succeed on a Strength saving throw (DC = 8 + your proficiency bonus + your Strength modifier) or have its speed reduced to 0 until the start of your next turn. You can use this feature a number of times equal to your proficiency bonus, regaining all expended uses on a long rest.",
+            "Rime-Forged Might. You have advantage on Strength (Athletics) checks made to break objects or shove creatures."
+          ]
+        },
+        "Einherjar": {
+          "name": "Einherjar Aspirant",
+          "description": "More disciplined and focused, Einherjar Aspirants take their \"heroic duties\" very seriously. They might try to organize their friends into \"shield walls\" during games and speak with a dramatic flair about honor and glory (usually in relation to who gets the last cookie).",
+          "traits": [
+            "Ability Score Increase. Your Strength score increases by 1, and your Charisma score increases by 2.",
+            "Warrior's Spirit. You gain proficiency with martial weapons and shields.",
+            "Rallying Valor (1/Short or Long Rest). As a bonus action, you can let out an inspiring cry. You and up to three friendly creatures of your choice within 30 feet of you that can hear you gain temporary hit points equal to your Charisma modifier + your proficiency bonus.",
+            "Chooser of the Brave (1/Long Rest). When an ally within 30 feet of you drops to 0 hit points but is not killed outright, you can use your reaction to inspire them. That ally can immediately use their reaction to make one weapon attack. If the attack hits, they regain hit points equal to the damage dealt.",
+            "Fearless Charge. When you use your action to Dash, you can make one melee weapon attack as a bonus action."
+          ]
+        },
+        "Depth": {
+          "name": "Depth Devotee",
+          "description": "Their \"caring\" nature has intensified, often leading them to form very tight-knit, almost cult-like friendships. They offer \"wisdom\" that sounds profound but is subtly unsettling, and their sweetness has an undeniable edge of the uncanny. They *really* want what's best for you... according to them.",
+          "traits": [
+            "Ability Score Increase. Your Charisma score increases by 2, and your Wisdom score increases by 1.",
+            "All-Knowing Empathy. You gain proficiency in both Insight and Persuasion.",
+            "Grasping Tendrils. You can cast mage hand at will (spectral tentacle). Additionally, as a bonus action, you can manifest a larger spectral tentacle from your being for 1 minute. This tentacle has a reach of 10 feet. Once on each of your turns, you can use the tentacle to make a melee spell attack (using Charisma). On a hit, the target takes 1d8 psychic damage, and if the target is Large or smaller, you can pull it up to 10 feet closer to you. You can use this attack feature a number of times equal to your proficiency bonus, regaining all uses on a long rest.",
+            "Whispers of the Collective Comfort (1/Long Rest). As an action, you can speak words of deep, resonant comfort. Choose up to three creatures (can include yourself) within 30 feet that can hear you. Each target gains temporary hit points equal to your character level, and for the next minute, whenever a target makes an attack roll, an ability check, or a saving throw, the target can roll a d4 and add the number rolled to the attack roll, ability check, or saving throw.",
+            "\"We Share Everything.\" When an ally you can see within 30 feet is about to make an attack roll, ability check, or saving throw with disadvantage, you can use your reaction to negate that disadvantage. You can use this feature a number of times equal to your Wisdom modifier (minimum 1), regaining expended uses on a long rest."
+          ]
+        },
+        "Earthen": {
+          "name": "Earthen Construct",
+          "description": "More solid and deliberate in their movements, Earthen Constructs carry an air of quiet strength and unyielding resolve. They might see themselves as guardians or builders, taking pride in their resilience and their ability to withstand whatever the school day throws at them. They're not easily swayed and have a very literal way of looking at things.",
+          "traits": [
+            "Ability Score Increase. Your Constitution score increases by an additional 2, but your Dexterity score decreases by 1.",
+            "Constructed Resilience. Your hit point maximum increases by 1 per level. You have advantage on saving throws against poison and resistance to poison damage. You are also immune to disease.",
+            "Stone's Endurance (1/Long Rest). When you take damage, you can use your reaction to reduce that damage by an amount equal to 1d10 + your Constitution modifier.",
+            "Earth Glide (Limited) (1/Long Rest). As an action, you can magically meld with an area of unworked earth or stone large enough to accommodate your form. While melded, you can move through the earth or stone at a speed of 10 feet. You cannot end your turn inside the earth or stone; if you do, you are shunted to the nearest unoccupied space and take 1d6 bludgeoning damage for every 5 feet shunted. You can remain melded for up to 1 minute.",
+            "Unwavering Stance. You have advantage on saving throws against being knocked prone."
+          ]
+        },
+        "Seraphic": {
+          "name": "Seraphic Scion",
+          "description": "Their wings are more developed, perhaps even allowing short bursts of clumsy flight or impressive gliding. They carry themselves with a serene (or sometimes smugly superior) grace, and their pronouncements often have an unintentionally preachy tone. They are drawn to acts of kindness and justice, though their interpretation of \"justice\" might be a bit skewed by playground politics.",
+          "traits": [
+            "Ability Score Increase. Your Charisma score increases by 2, and your Wisdom score increases by 1.",
+            "Developing Wings. You have a flying speed of 20 feet. You must not be overburdened or wearing heavy armor to use this speed. If you end your turn in the air and nothing else is holding you aloft, you fall unless you can land.",
+            "Radiant Burst (1/Long Rest). As an action, you can unleash a burst of soft, divine light. Each hostile creature within 10 feet of you must make a Constitution saving throw (DC = 8 + your proficiency bonus + your Charisma modifier). On a failed save, a creature takes 2d6 radiant damage and is blinded until the end of your next turn. On a successful save, it takes half damage and is not blinded.",
+            "Protective Aura. Friendly creatures within 10 feet of you (including yourself) have advantage on saving throws against being charmed or frightened, provided you are conscious.",
+            "Sacred Flame. You know the sacred flame cantrip. Charisma is your spellcasting ability for it."
+          ]
+        },
+        "Shaitan": {
+          "name": "Shaitan Schemer",
+          "description": "More adept at weaving intricate plans (usually involving elaborate pranks or acquiring forbidden snacks), Shaitan Schemers are charismatic and cunning. They might speak in riddles, offer \"deals\" that sound too good to be true, and always seem to know more than they let on. They view rules as \"suggestions\" and enjoy outsmarting others, but usually for fun rather than malice.",
+          "traits": [
+            "Ability Score Increase. Your Dexterity score increases by 2, and your Intelligence score increases by 1.",
+            "Master of Misdirection. You gain proficiency in the Deception and Sleight of Hand skills.",
+            "Smoky Escape (1/Long Rest). When you are hit by an attack or targeted by a spell that requires a saving throw, you can use your reaction to briefly dissolve into a puff of harmless, sweet-smelling smoke. You take half damage from the attack or spell, and you can immediately move up to 10 feet to an unoccupied space without provoking opportunity attacks.",
+            "Clever Bargain (1/Long Rest). You can cast the suggestion spell once using this trait. Intelligence is your spellcasting ability for this spell.",
+            "Hidden Paths. You have advantage on Wisdom (Survival) checks to navigate urban environments or find hidden routes."
+          ]
+        },
+        "Siwa": {
+          "name": "Siwa Scion",
+          "description": "Carrying an air of enigmatic wisdom, these Semi-Gorgons often speak in riddles or offer cryptic advice gleaned from the \"desert winds.\" They are adept at navigating social complexities and have a knack for uncovering hidden truths (or at least hidden snacks).",
+          "traits": [
+            "Ability Score Increase. Your Dexterity score increases by 2, and your Intelligence score increases by 1.",
+            "Veil of the Sands (1/Long Rest). You can cast blur once using this trait. Intelligence is your spellcasting ability for this spell.",
+            "Nomad's Resilience. You have advantage on saving throws against exhaustion from heat and travel. You also require only half the normal amount of water per day.",
+            "Secrets of the Oasis (1/Long Rest). As an action, you can touch a willing creature (including yourself) and grant them insight. For the next 10 minutes, the target has advantage on Intelligence (Investigation) and Wisdom (Insight) checks."
+          ]
+        },
+        "Basin": {
+          "name": "Basin Spirit-Caller",
+          "description": "These Semi-Gorgons carry an aura of primal power and ancient knowledge. They might decorate themselves with natural pigments or intricate patterns, and their movements are often fluid and graceful, like a jungle cat. They are deeply connected to the ancestral spirits and the potent magic of the rainforest.",
+          "traits": [
+            "Ability Score Increase. Your Dexterity score increases by 1, and your Wisdom score increases by 2.",
+            "Shadow of the Forest. You have advantage on Dexterity (Stealth) checks when in areas of dim light or darkness, or when lightly obscured by foliage.",
+            "Ancestor's Guidance (1/Long Rest). When you make an attack roll, ability check, or saving throw, you can choose to gain advantage on the roll.",
+            "Mokèlé's Form (1/Long Rest). As a bonus action, you can briefly channel the spirit of a mighty river guardian. For 1 minute, your skin takes on a tough, scaly texture, granting you a +1 bonus to AC, and your unarmed strikes deal 1d6 bludgeoning damage."
+          ]
+        },
+        "Daughter": {
+          "name": "Daughter of the Eternal Weaver",
+          "description": "Touched by Nana Buluku’s boundless wisdom, these souls walk the path of creation and healing, weaving reality with insight and grace. They interpret omens with the wisdom of the first mother, guiding others through hardship and joy alike. Their voices carry the weight of eternity, and their dance calls upon the spirits of the land to nurture, protect, and reveal hidden truths.",
+          "traits": [
+            "Ability Score Increase. Your Wisdom score increases by 2, and your Charisma score increases by 1.",
+            "Dance of the Weaver. Your base walking speed increases by 5 feet. Additionally, when you use the Dash action, you can move an additional 10 feet, moving as though carried by the divine winds of creation.",
+            "Boon of Endurance: You gain temporary hit points equal to twice your proficiency bonus for 10 minutes.",
+            "Boon of Insight: You have advantage on all Wisdom (Insight) and Intelligence (Arcana) checks for the next hour.",
+            "Boon of Purification: You can end one condition affecting yourself or an ally within 10 feet (poisoned, blinded, frightened, or charmed).",
+            "Blessing of the First Mother (1/Long Rest). As an action, you can invoke Nana Buluku’s blessing, choosing one of the following effects:",
+            "Light of the Weaver. You know the sacred flame cantrip. Wisdom is your spellcasting ability for it."
+          ]
+        },
+        "Sucellus's": {
+          "name": "Sucellus's Demigod",
+          "description": "Carrying an aura of profound earthy power and benevolent (yet firm) authority, these Semi-Gorgons are seen as mighty protectors and generous providers. They might be found \"judging\" disputes over shared snacks with the gravity of a high chieftain or \"blessing\" the classroom's wilting plant with a touch. They are pillars of strength and reliability, often wielding a favored (perhaps comically large for school) toy hammer with surprising skill, and their connection to the earth and its bounty is palpable.",
+          "traits": [
+            "Ability Score Increase. Your Strength score increases by 2, and your Wisdom score increases by 1.",
+            "Master of the Mallet. You gain proficiency with all weapons that have \"hammer\" in their name (light hammer, warhammer, maul), as well as with greatclubs.",
+            "Earthshaker's Judgment (1/Short or Long Rest). When you hit a creature with a melee weapon attack, especially with a hammer or greatclub, you can invoke Sucellus's might. The target takes an extra 1d8 thunder damage, and all other creatures on the ground within 10 feet of your target must succeed on a Strength saving throw (DC = 8 + your proficiency bonus + your Strength modifier) or be knocked prone and have their speed halved until the end of their next turn.",
+            "Bountiful Blessing (1/Long Rest). You can cast the goodberry spell once using this trait, requiring no material components. When you cast it this way, the berries also grant temporary hit points equal to your Wisdom modifier (minimum 1) to any creature that consumes one, in addition to their normal nourishment. Wisdom is your spellcasting ability for this spell.",
+            "Guardian of the Grove. You have advantage on saving throws against being poisoned, and you have resistance to poison damage. Additionally, you have advantage on Wisdom (Nature) checks related to identifying plants, animals, or natural hazards within forests and other wooded terrains."
+          ]
+        },
+        "Pele's": {
+          "name": "Pele's Scion",
+          "description": "These Semi-Gorgons possess a passionate and sometimes volatile temperament, their emotions running as hot as molten rock. They are fiercely protective of their 'ohana (friends and family) and have a deep connection to the primal forces of creation and destruction. They are natural leaders, inspiring both awe and a healthy respect.",
+          "traits": [
+            "Ability Score Increase. Your Strength score increases by 1, and your Charisma score increases by 2.",
+            "Fire Dancer's Grace. You have resistance to fire damage. You also gain proficiency in the Performance skill, especially for dances that tell stories of fire and creation.",
+            "Wrath of the Volcano (1/Long Rest). As an action, you can channel the fiery heart of a volcano. Choose a point you can see within 60 feet. Each creature in a 10-foot-radius sphere centered on that point must make a Dexterity saving throw (DC = 8 + your proficiency bonus + your Charisma modifier). A target takes 3d6 fire damage on a failed save, or half as much damage on a successful one. The ground in the area becomes difficult terrain until the start of your next turn.",
+            "Navigator's Guidance. You have an uncanny sense of direction and have advantage on Wisdom (Survival) checks when navigating by the stars or over open water."
+          ]
+        },
+        "Aurora": {
+          "name": "Aurora Caller",
+          "description": "Carrying an air of quiet contemplation, these Semi-Gorgons seem to hear whispers on the wind and see patterns in the falling snow. They might try to interpret the \"messages\" in the flickering classroom lights and are known for their calm demeanor, even when the juice boxes run out. Their connection to the spirits of the north has deepened, granting them a measure of control over its elements.",
+          "traits": [
+            "Ability Score Increase. Your Constitution score increases by an additional 1, and your Wisdom score increases by 1.",
+            "Northern Endurance. You have resistance to cold damage. You also have advantage on saving throws against exhaustion from cold.",
+            "Guiding Light: One creature you touch (can be yourself) has advantage on Wisdom (Perception) and Wisdom (Survival) checks for the next hour.",
+            "Chilling Touch: Make a melee spell attack against one creature within your reach. On a hit, the target takes 2d8 cold damage, and its speed is halved until the end of its next turn. Wisdom is your spellcasting ability for this attack.",
+            "Whispers of the Aurora (1/Long Rest). As an action, you can call upon the guiding lights of the aurora. Choose one of the following effects:",
+            "Voice of the Elders. You gain proficiency in the History or Nature skill (your choice)."
+          ]
+        },
+        "Sunstone": {
+          "name": "Sunstone Guardian",
+          "description": "These Semi-Gorgons carry themselves with a quiet dignity, their movements precise and deliberate. They might be found meticulously arranging objects or offering surprisingly wise (if brief) advice. They feel a strong connection to the enduring stone and the life-giving sun, and see themselves as protectors of their little community.",
+          "traits": [
+            "Ability Score Increase. Your Dexterity score increases by 1, and your Wisdom score increases by 2.",
+            "Resilient as Stone. You have advantage on saving throws against being poisoned, and you have resistance to poison damage.",
+            "Sun's Embrace (1/Long Rest). As an action, you can channel the sun's energy. You and friendly creatures within 10 feet of you gain temporary hit points equal to your Wisdom modifier + your proficiency bonus. Additionally, for the next minute, any creature that starts its turn in this aura and is hostile to you takes 1d4 radiant damage.",
+            "Kachina's Whisper (1/Long Rest). You gain proficiency in the Performance skill. You can also cast the sanctuary spell once using this trait, requiring no material components. Wisdom is your spellcasting ability for this spell."
+          ]
+        },
+        "Wind": {
+          "name": "Wind Rider",
+          "description": "These Semi-Gorgons are natural leaders, quick-witted and decisive. They possess a restless spirit and a deep understanding of the natural world. They might be the ones organizing the playground games or leading \"expeditions\" to the far corners of the schoolyard.",
+          "traits": [
+            "Ability Score Increase. Your Dexterity score increases by 2, and your Strength score increases by 1.",
+            "Plains Runner. Your base walking speed increases by 10 feet. You can also use the Dash action as a bonus action a number of times equal to your proficiency bonus, regaining all uses on a long rest.",
+            "Call the Stampede (1/Long Rest). As an action, you can let out a mighty call. Hostile creatures within a 20-foot cone originating from you must make a Strength saving throw (DC = 8 + your proficiency bonus + your Strength modifier). On a failed save, a creature is pushed 10 feet away from you and knocked prone. On a successful save, it is pushed 5 feet away and not knocked prone.",
+            "Skywatcher's Wisdom. You gain proficiency in the Survival skill."
+          ]
+        },
+        "Forest": {
+          "name": "Forest Keeper",
+          "description": "These Semi-Gorgons are wise beyond their years, with a deep connection to the ancient rhythms of the forest. They might be found quietly observing nature, offering surprisingly insightful advice, or mediating disputes between classmates with a calm authority. They are protectors of the natural order, even if that \"natural order\" is just the playground's ecosystem.",
+          "traits": [
+            "Ability Score Increase. Your Charisma score increases by 2, and your Wisdom score increases by 1.",
+            "Woodland Stride. Moving through nonmagical difficult terrain costs you no extra movement if it's composed of natural elements like plants, undergrowth, mud, or snow. You also have advantage on Dexterity (Stealth) checks made to hide in forested areas.",
+            "Voice of the Council. You gain proficiency in the Persuasion or Insight skill (your choice).",
+            "Spirit of the Ancient Tree (1/Long Rest). As an action, you can touch a willing creature (can be yourself) and imbue them with the resilience of an ancient tree. The target gains temporary hit points equal to your character level + your Wisdom modifier, and for the next minute, they have advantage on saving throws against being frightened or charmed."
+          ]
+        },
+        "Obsidian": {
+          "name": "Obsidian Jaguar",
+          "description": "Fierce and agile, these Semi-Gorgons carry themselves with the predatory grace of a jungle cat. They are natural leaders and warriors, often taking charge in games and displaying impressive tactical thinking (for a kid). They are drawn to displays of strength and skill, and have a deep respect for courage.",
+          "traits": [
+            "Ability Score Increase. Your Strength score increases by 1, and your Charisma score increases by 2.",
+            "Warrior's Heart. You gain proficiency in Athletics and Intimidation.",
+            "Serpent's Cunning: You gain advantage on all Intelligence, Wisdom, and Charisma saving throws for the next 10 minutes.",
+            "Sun's Fury: For the next minute, when you hit a creature with a weapon attack, it takes an extra 1d6 fire or radiant damage (your choice).",
+            "Feathered Serpent's Blessing (1/Long Rest). As an action, you can call upon the blessing of the feathered serpent. Choose one of the following effects:",
+            "Eagle Knight's Gaze. You have advantage on Wisdom (Perception) checks that rely on sight."
+          ]
+        },
+        "Golden": {
+          "name": "Golden Condor",
+          "description": "With an air of quiet authority, these Semi-Gorgons often take a \"higher view\" of playground politics. They are natural planners and organizers, and their pronouncements carry a surprising weight. They feel a connection to the soaring peaks and the life-giving sun, and strive to bring order and prosperity (or at least a fair distribution of juice boxes) to their group.",
+          "traits": [
+            "Ability Score Increase. Your Constitution score increases by an additional 1, and your Strength score increases by 1.",
+            "High Altitude Acclimation. You are naturally adapted to high altitudes, including elevations above 10,000 feet. You also have advantage on saving throws against exhaustion from forced marches or strenuous activity.",
+            "Inti's Radiance (1/Long Rest). As an action, you can channel the sun's golden light. Choose one creature you can see within 30 feet (can be yourself). The target is blessed, regaining 2d8 hit points. Additionally, for the next minute, the target sheds bright light in a 10-foot radius and dim light for an additional 10 feet.",
+            "Master Stoneworker. You gain proficiency with mason's tools. You have an intuitive understanding of how stones fit together, and your block towers are legendary for their stability and grandeur. When you use your action to make an ability check with mason's tools, you can add double your proficiency bonus to the check."
+          ]
+        }
+      }
+    },
+    "Gemini Celestian": {
+      "name": "Gemini Celestian",
+      "id": "gemini-celestian",
+      "traits": [
+        "Proficiencies:",
+        "For Casting Classes That Prepare Spells:",
+        "Speed: 35 ft.",
+        "Hit Die: d4 (shared between both twins)",
+        "One simple weapon of choice per twin.",
+        "One chosen skill and save per twin.",
+        "Level 1: +2 Wisdom, +2 Intelligence",
+        "Level 2: An additional +2 Wisdom, +2 Intelligence",
+        "Level 1: You know Common Sign Language.",
+        "Level 2: Through your Dualtongue ability, you gain the capacity to speak Common (Dualtongue), enabling seamless integration of verbal spellcasting, singing, or oration with maintained concentration.",
+        "Dualtongue: Beginning at level 1, you may perform vocal actions—such as casting spells, singing, or giving oration—with a unified dual voice. This allows you to maintain the concentration required for a performance while simultaneously activating another verbal spell component.",
+        "Dualmind: At level 2, you gain the extraordinary ability to concentrate on two spells that require concentration concurrently. Both spells function independently; maintaining one does not affect the other. Should your concentration break on one, the other remains intact.",
+        "Shared Form: Any buff or debuff affecting one twin immediately affects the other. Your twin bond means that magical and nonmagical effects alike are shared.",
+        "Shared HP Pool: Your hit points are pooled into one shared resource, divided evenly between your two bodies. Instead of a twin falling unconscious when reduced to 0 HP, your HP is rebalanced (rounding up) between you whenever one twin would drop to 0. If equalizing would leave one twin with only 1 HP or if both halves fall to 0, you are considered unconscious and begin the death count.",
+        "Enhanced Action Economy: You possess 2 Reactions, and 2 Bonus Actions per round. However, you receive only 1 Movement Action and Spell Action per round, which may be split between your twin bodies as you choose.",
+        "Natural Dual-Wielding: When wielding two light and finesse weapons—or when one or both weapons are magically conjured—you may make one additional free (non-proficient) attack once per turn when you take the Attack action.",
+        "Doubleteaming (Level 2): Once you reach level 2 with this template, you can roll a skill check, attack roll, or saving throw at advantage a number of times per day equal to your class level (minimum 2 times). This ability can only be used when you and your twin are within visual range of one another.",
+        "Shared Thoughts: Your twin is cognitively linked with you. You share thoughts telepathically at all times, regardless of distance.",
+        "Twin’s Bearing: You always know the cardinal direction of your twin, even across different planes. Should your twin leave the local plane, you immediately sense their absence.",
+        "Bonus Proficiency (Level 2): At level 2 you choose one extra proficiency from among crafts, tools, or games.",
+        "Level 1: You learn one Wizard cantrip of your choice.",
+        "Level 2: You learn one Divine cantrip of your choice.",
+        "Arcane Endowment:",
+        "Celestians receive 1.5 times the prepared spell pool for their class.",
+        "Time to prepare spells is reduced by 1/2."
+      ],
+      "subraces": {}
+    },
+    "Celestian Archist": {
+      "name": "Celestian Archist",
+      "id": "celestian-archist",
+      "traits": [
+        "Usage Guidelines:",
+        "Spell Empowerment. When you cast a spell, roll a d4. A result of 1 (25% chance) means your spell is randomly empowered—its damage dice increase by +1. If this empowered spell is a cantrip and you have not taken a bonus action attack or spell that round, you may immediately make one weapon attack or cast a leveled spell.",
+        "Adaptive Physiology. Your body adapts on the fly. As a bonus action, choose STR, DEX, or CON to receive a +2 temporary bonus until the end of your next turn. Use this ability a number of times per long rest equal to your proficiency bonus.",
+        "Limited Prophecy. Your connection to the flow of time allows you brief glimpses into what might be. As a bonus action (usable once per long rest), roll a d20 and store that result. Later, you may replace any d20 roll (attack, damage, saving throw, ability check, etc.) with your stored roll for yourself or any ally.",
+        "Legendary Comprehension. Your vast intelligence and battle-hardened insight allow you to strike with uncanny precision. When taking the Attack action, you gain one extra melee weapon attack. This bonus attack stacks with any other extra attacks you might have from class features.",
+        "Celestial Conduit. Elemental magic flows through your being. When you cast a spell that deals elemental damage, you may channel that energy to heal yourself. You gain temporary hit points equal to your proficiency bonus.",
+        "Augmented Vitality. Your internal energies can stave off death. When you would drop to 0 HP, you can instead remain at 1 HP and immediately attempt a concentration check (DC = half your maximum HP, rounded up). On success, you stabilize; on failure, you fall unconscious. This can be used once per long rest.",
+        "Foresight of Battle. Your prophetic instincts extend to the very moment before conflict. At level 4, you gain advantage on initiative rolls. Additionally, you may store a second prophecy roll (identical to Limited Prophecy) once per long rest.",
+        "Ethereal Shell. When danger looms, you can momentarily shed your mortal bonds. As a reaction, you may become partly ethereal until the beginning of your next turn. During this time, you gain resistance to all nonmagical damage. This ability can be used once per long rest.",
+        "Enhanced Manifestation. Your mastery over energy lets you briefly reclaim spent power. Whenever you cast a spell expending a spell slot, you may immediately cast one of your cantrips without consuming any resources. This effect can be used once per short rest.",
+        "Omniversal Understanding. Your keen insight into the forces that govern both magic and matter has broadened your skillset. At level 4, choose one tool or musical instrument with which you gain proficiency if you do not already have it.",
+        "Fate’s Intervention. When the fates seem unkind, you may nudge destiny in your favor. Once per long rest, you can re-roll any attack roll, ability check, or saving throw. You must accept the new roll.",
+        "The selected ability must be one normally available as the initial subclass feature at 3rd level from any class.",
+        "If the ability’s effects are scaled by class level or proficiency bonus, substitute your Archist racial level in lieu of class level.",
+        "Should the chosen feature overlap with any later class feature, consult your DM to determine which effect prevails or if they stack.",
+        "This selection is permanent, symbolizing the deep fusion of energy and the ancient, diverse wisdom of mortal paths."
+      ],
+      "subraces": {}
+    },
+    "Pampire": {
+      "name": "Pampire",
+      "id": "pampire",
+      "traits": [
+        "Creature Type. You are a Humanoid.",
+        "Ability Score Increase. Your Strength score increases by 2, and your Constitution score increases by 1.",
+        "Age. Pampires reach physical maturity at a rate similar to humans but can live for several centuries, often maintaining a youthful appearance as long as they are regularly fed.",
+        "Alignment. Pampires can be of any alignment. Their inherent needs might push them towards pragmatic or selfish choices, but individuals vary greatly. Those raised in structured environments like the Diaper School might adopt the alignments prevalent there.",
+        "Size. Pampires are typically Medium, though some can be Small. You choose the size when you select this race.",
+        "Speed. Your base walking speed is 30 feet.",
+        "Darkvision. Accustomed to the night, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "Padded Existence. Your vampiric nature has been uniquely altered. Pampires are physiologically and magically incontinent, requiring the use of diapers. You cannot be potty-trained by normal or magical means. Due to this, you qualify to take the Diaper Mastery feat at character creation (if available in your campaign) as you are considered Incontinent.",
+        "Blood Thirst. You must consume at least one ration of fresh blood or a suitable blood allegory (such as those provided by the Diaper School, or equivalent amounts of very rare raw meat like steak tartare) every 24 hours to avoid suffering ill effects. If you go 24 hours without feeding, you gain one level of the Unfed condition. Successfully feeding removes all current levels of the Unfed condition and any associated penalties.",
+        "Unliving Fortitude (When Fed). As long as you are not suffering from any levels of the Unfed condition, you do not need to sleep and are unaffected by magical sleep. Instead of sleeping, you can spend 4 hours in a state of inactive, conscious reverie to gain the benefits of a long rest. While in this state, you remain aware of your surroundings. Additionally, while fed, you do not need to breathe.",
+        "Bat Form. Once per long rest, you can use your action to polymorph into a Tiny bat. This transformation lasts for 1 hour, or until you use a bonus action to revert to your true form, or until you drop to 0 hit points or die. While in bat form, your game statistics, including your mental ability scores, are replaced by the statistics of a standard bat, though you retain your alignment, personality, Hit Points, and current hit point total. You also retain your Padded Existence trait (your padding magically resizes with you for safety and comfort). You gain a flying speed of 30 feet. You cannot speak in bat form.",
+        "Languages. You can speak, read, and write Common and one other language of your choice (often Undercommon or a language fitting your background)."
+      ],
+      "subraces": {
+        "Dampire": {
+          "name": "Dampire",
+          "description": "Dampires are the most adaptable of their kind, often able to blend more seamlessly into mortal societies. They possess a diluted form of the vampiric curse, granting them resilience without some of the more debilitating weaknesses.",
+          "traits": [
+            "Ability Score Increase. Your Charisma score increases by 1, and one other ability score of your choice increases by 1.",
+            "Daywalker. You suffer no ill effects from direct sunlight.",
+            "Resilient Undeath. You have advantage on saving throws against effects that specifically target or detect living creatures (such as a Detect Evil and Good spell used to find undead, or effects that state \"a living creature must...\"). You still count as a Humanoid for all other purposes. You retain the \"Unliving Fortitude (When Fed)\" trait benefits."
+          ]
+        },
+        "Crinkle": {
+          "name": "Crinkle Count/Countess",
+          "description": "These Pampires embody the classic, aristocratic vampire archetype, albeit with the unique Pampire twist. They are powerful and charismatic but bear the traditional vampiric aversion to sunlight and radiant energy.",
+          "traits": [
+            "Ability Score Increase. Your Strength score increases by an additional 1 (for a total of +3 from the base race), and your Charisma score increases by 2.",
+            "Increased Speed. Your base walking speed increases to 35 feet.",
+            "Sunlight Hypersensitivity. You have disadvantage on attack rolls and Wisdom (Perception) checks that rely on sight when you, the target of your attack, or whatever you are trying to perceive is in direct sunlight. If you start your turn in direct sunlight, you take 1d4 radiant damage. This damage ignores resistance and immunity.",
+            "Radiant Vulnerability. You have vulnerability to radiant damage.",
+            "Sunlight Mitigation. The damage from Sunlight Hypersensitivity can be prevented by taking extensive precautions. This might include wearing thick, completely obscuring clothing, using a specially treated, expensive parasol (costing at least 50 gp), or regular application of a potent, magically infused sunscreen (costing 10 gp per application, lasting 1 hour, often referred to as SPF 200). However, your Radiant Vulnerability cannot be negated by such mundane or low-level magical means.",
+            "Nocturne Magic. You know two cantrips of your choice from the wizard spell list. Additionally, you can cast one 1st-level spell of your choice from the wizard spell list once with this trait and regain the ability to do so when you finish a long rest. Neither the cantrips nor the 1st-level spell can produce effects that create sunlight (like the Daylight spell) or primarily deal radiant damage. Charisma is your spellcasting ability for these spells.",
+            "Satiated Power. If you consume a ration of blood or blood allegory when you are not suffering from any levels of the Unfed condition, you can choose to become Satiated. For the next hour, you gain a +2 bonus to your attack and damage rolls. You can only benefit from being Satiated once per long rest."
+          ]
+        },
+        "Pampire-Bat": {
+          "name": "Pampire-Bat",
+          "description": "Pampire-Bats have a deeper connection to the transformative aspects of vampirism, focusing their abilities on shapeshifting and stealth.",
+          "traits": [
+            "Ability Score Increase. Your Charisma score increases by 2. Choose either your Dexterity or Strength score to increase by 2.",
+            "Master of Forms. Your Bat Form trait improves. You can use it a number of times equal to your proficiency bonus per long rest. Additionally, when you use your Bat Form, you can choose to transform into any Small or Medium humanoid creature you have seen before, instead of a bat. Your game statistics, including mental ability scores, are replaced by the statistics of the chosen humanoid, but you retain your alignment, personality, Hit Points, and current hit point total. You also retain your Padded Existence trait (your padding magically resizes). You do not gain any class features or special abilities of the form you take. Your equipment does not merge into your new form; it either falls to the ground in your space, is worn by it if the new form can wear it, or is carried by it if the new form can carry it. While in humanoid form, you can feed via a bite if the target is willing, grappled, incapacitated, or restrained, similar to your bat form's feeding. This transformation also lasts for 1 hour or until you use a bonus action to revert, drop to 0 HP, or die."
+          ]
+        }
+      }
+    },
+    "Possumfolk": {
+      "name": "Possumfolk",
+      "id": "possumfolk",
+      "traits": [
+        "Ability Score Increase. Your Dexterity score increases by 2.",
+        "Size. Possumfolk are typically Small or Medium. Your size is Small or Medium (your choice).",
+        "Speed. Your base walking speed is 30 feet. You also have a climbing speed of 20 feet.",
+        "Darkvision. Accustomed to twilight and night, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light.",
+        "Keen Smell. You have advantage on Wisdom (Perception) checks that rely on smell.",
+        "Prehensile Tail. You can use your tail to carry objects weighing no more than 10 pounds. You cannot wield weapons or shields with your tail.",
+        "Feigned Death. As a reaction when you take damage, you can fall prone and appear dead. Until the start of your next turn, any creature that can see you must make a Wisdom (Insight) check against a DC of 8 + your proficiency bonus + your Charisma modifier to discern that you are alive. While feigning death, you have advantage on saving throws against effects that would frighten you. You can use this trait once per short or long rest.",
+        "Languages. You can speak, read, and write Common and one other language of your choice."
+      ],
+      "subraces": {
+        "Cosmopolitans": {
+          "name": "Cosmopolitans",
+          "description": "City-dwelling Possumfolk who have adapted to the intricacies of urban life. They are often sophisticated, street-smart, and skilled at navigating complex social and physical environments.",
+          "traits": [
+            "Ability Score Increase. Your Charisma score increases by 1.",
+            "Urban Acclimation. You have proficiency in the Stealth and Deception skills.",
+            "Street Savvy. You have advantage on Wisdom (Insight) checks made to discern the true intentions of creatures within urban environments. You also have advantage on checks to navigate or find hidden paths within cities."
+          ]
+        },
+        "Wilders": {
+          "name": "Wilders",
+          "description": "Wilders retain a stronger connection to their feral roots, often living on the outskirts of civilization or in reclaimed natural spaces within urban areas. They are adept survivors and possess a primal cunning.",
+          "traits": [
+            "Ability Score Increase. Your Wisdom score increases by 1.",
+            "Natural Instincts. You have proficiency in the Survival and Nature skills.",
+            "Tenacious Resilience. When you are reduced to 0 hit points but not killed outright, you can drop to 1 hit point instead. You can’t use this feature again until you finish a long rest."
+          ]
+        },
+        "Scavanchists": {
+          "name": "Scavanchists",
+          "description": "Masters of repurposing and ingenuity, Scavanchists see potential where others see refuse. They are resourceful tinkerers and often have a surprisingly deep understanding of how things work, or how they *can* work with a bit of effort.",
+          "traits": [
+            "Ability Score Increase. Your Intelligence score increases by 1.",
+            "Resourceful Expertise. You gain proficiency with tinker's tools. You can also use your tinker's tools to grant yourself or an ally advantage on one ability check or saving throw made to interact with a mechanical trap or device. Once you use this feature, you must finish a short or long rest before you can use it again.",
+            "Jury-Rig. You can spend 10 minutes to temporarily repair a broken mundane object or create a small, temporary mundane item from scraps you find. This item functions for 1 hour before falling apart."
+          ]
+        }
+      }
+    },
+    "Living Dolls": {
+      "name": "Living Dolls",
+      "id": "living-dolls",
+      "traits": [
+        "Ability Score Increase. Your Constitution score increases by 1.",
+        "Age. As constructs, Living Dolls do not age. You are immune to magical aging effects.",
+        "Alignment. Living Dolls tend toward the alignment of their creators or the community they imprint upon, though many drift toward neutral.",
+        "Size. Your size is determined by your subrace.",
+        "Speed. Your base walking speed is 30 feet.",
+        "Superior Constructed Nature. You are a construct. You are immune to poison, disease, and the poisoned condition. You do not need to eat, drink, or breathe.",
+        "Sleepless Sentinel. Instead of sleeping, you enter an inactive state for 4 hours each day. You do not dream in this state; you are fully aware of your surroundings and notice approaching dangers and other events as normal. You are immune to magic that would put you to sleep.",
+        "Mental Resilience. Your artificial mind is difficult to disturb. You have resistance to psychic damage.",
+        "Living Construct. Even though you were constructed, you are a living creature. You are affected by spells and abilities as a humanoid. You can be healed by spells that restore hit points.",
+        "Languages. You can speak, read, and write Common and the language of your creator (if applicable, DM’s discretion)."
+      ],
+      "subraces": {
+        "Big": {
+          "name": "Big Baby Doll",
+          "description": "These dolls are often larger than expected, with an unsettlingly innocent or childlike appearance that can be disarming or outright creepy. They may possess surprising durability or an uncanny ability to evoke strong emotional responses.",
+          "traits": [
+            "Ability Score Increase. Your Strength score increases by 2, and your Charisma score increases by 1.",
+            "Size. Medium (often on the larger side).",
+            "Unsettling Innocence. You gain proficiency in the Intimidation skill. Additionally, you can use your action to adopt a particularly unnerving facade. One creature of your choice within 30 feet that can see you must make a Wisdom saving throw (DC = 8 + your proficiency bonus + your Charisma modifier). On a failed save, the creature is frightened of you for 1 minute. The creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. You can use this trait a number of times equal to your proficiency bonus per long rest.",
+            "Sturdy Construction. Your hit point maximum increases by 1, and it increases by 1 every time you gain a level.",
+            "Heavyweight Tantrum. When you hit a creature with a melee weapon attack, you can use a bonus action to attempt to shove the target prone. You have advantage on the Strength (Athletics) check for this shove."
+          ]
+        },
+        "Guardian": {
+          "name": "Guardian Doll",
+          "description": "Built for protection, Guardian Dolls are often more robustly constructed, with features that hint at their defensive purpose. They are unwavering in their loyalty and designed to withstand harm.",
+          "traits": [
+            "Ability Score Increase. Your Constitution score increases by an additional 1, your Wisdom score increases by 1, and your Strength score increases by 1.",
+            "Size. Medium.",
+            "Protective Instinct. As a reaction when an ally within 5 feet of you is hit by an attack, you can grant that ally a +2 bonus to their AC against that attack, potentially causing it to miss. You can use this trait a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest.",
+            "Shielding Frame. Your reinforced form grants you resistance to non-magical bludgeoning, piercing, and slashing damage."
+          ]
+        },
+        "Porcelain": {
+          "name": "Porcelain Doll",
+          "description": "Exquisitely crafted and often delicate in appearance, Porcelain Dolls are infused with potent magical energies. Their fragility can be deceiving, as they are capable of wielding significant arcane power.",
+          "traits": [
+            "Ability Score Increase. Your Intelligence or Charisma score increases by 2 (your choice), and your Dexterity score increases by 1.",
+            "Size. Small or Medium.",
+            "Innate Spellcasting. You know one cantrip of your choice from the Sorcerer spell list. Your spellcasting ability for this cantrip is the ability score you increased with this subrace (Intelligence or Charisma).",
+            "Arcane Resilience. You have advantage on saving throws against spells and other magical effects.",
+            "Fragile Beauty. While you are a potent magic user, your physical form is more delicate. You have vulnerability to bludgeoning damage.",
+            "Shatter-Step. Once per short rest, if you take damage that would reduce you to 0 hit points, you can use your reaction to magically shatter into spectral shards and reform in an unoccupied space within 30 feet, taking 0 damage instead. You return with 1 hit point."
+          ]
+        },
+        "Diaperson": {
+          "name": "Diaperson",
+          "description": "A unique construct composed of hyper-absorbent synthetic fluff and soft, enchanted fabrics. Often mistaken for animate plushies, they are master absorbers of magic and fluids alike.",
+          "traits": [
+            "Ability Score Increase. Your Constitution, Wisdom, Intelligence, and Charisma scores each increase by 2, but your Strength score decreases by 2.",
+            "Size. Small or Medium.",
+            "Fluffinity. You are considered to have the Diaper Mastery feat by birth. You are not \"incontinent\" in the traditional sense, but you can experience \"fluff accidents\" (harmless expulsions of magical lint or soft static) which do not expend diaper charges.",
+            "Magical Absorption. When you put on a magical diaper, it is temporarily incorporated into your being. You gain its effects (AC bonuses, magical resistances, etc.) until one of the following occurs: you have taken cumulative damage equal to half your total Hit Dice; you have completed two Long Rests; or you choose to change into a new magical diaper. When the effect ends, the magical diaper's enchantment is consumed by your physiology. It reverts to a mundane, high-quality diaper with 6 Use Charges.",
+            "Body of Synthetic Fluff. Your body is light, airy, and incredibly resilient.",
+            "Immunities. You are immune to bludgeoning damage, force damage, poison damage, and disease.",
+            "Resistance. You are resistant to piercing damage.",
+            "Featherweight. You weigh significantly less than other races of your size. You take half damage from falling and ignore falling damage entirely on falls of 20 feet or less.",
+            "Elemental Weakness (Water & Fire). Your absorbent nature is a double-edged sword: Sodden Vulnerability—You take double damage from any water-based spell or effect (such as Tidal Wave or a Water Elemental's slam). Flammable—You suffer disadvantage on saving throws and ability checks to avoid sources of fire damage."
+          ]
+        }
+      }
+    },
+    "Crinklehearts": {
+      "name": "Crinklehearts",
+      "id": "crinkleheart",
+      "traits": [
+        "Ability Score Increase. Your Charisma score increases by 4. In addition, Wisdom or Intelligence (player choice) increases by 2.",
+        "Age. Crinklehearts reach physical maturity at a similar rate to humans but can live for centuries, often maintaining a deceptively youthful and cute appearance indefinitely if they so choose.",
+        "Alignment. Often chaotic, rarely truly evil.",
+        "Size. Crinklehearts are typically Small or Medium, adding to their disarming cuteness. Your size is Small or Medium (your choice).",
+        "Speed. Your base walking speed is 30 feet.",
+        "Darkvision. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can’t discern color in darkness, only shades of gray.",
+        "Crinkly Tradition. Your ancestral lineage within the Diaper School demesne has indelibly altered your once‑fearsome infernal bloodlines—Crinklehearts need to wear diapers, as their bodies have adapted to physiologically and magically resist any attempts to potty‑train. Because of this, all Crinklehearts qualify to take the Diaper Mastery feature at character creation as they are considered Incontinent as per the flaw.",
+        "Fiendish Resistance. You have resistance to fire damage.",
+        "Crinkle Charm. Once per long rest, as an action, you can target one humanoid you can see within 30 feet. The target must succeed on a Wisdom saving throw (DC = 8 + your proficiency bonus + your Charisma modifier) or be charmed by you for 1 hour, as charm person.",
+        "Disarming Cuteness. You gain proficiency in the Persuasion skill. Additionally, when a creature makes an attack roll against you, you can use your reaction to impose disadvantage on that roll, as your overwhelming cuteness makes them hesitate or second‑guess their aggression. You can use this reaction a number of times equal to your Charisma modifier (minimum of once), and you regain all expended uses when you finish a long rest.",
+        "Soft Landing. Your ever‑present padding offers protection from falls. When you fall, you can use your reaction to reduce any falling damage you take by an amount equal to five times your character level.",
+        "Vestigial Wings. You have small, often plush, leathery, or feathery wings. They are not strong enough for true flight but might allow you to flutter briefly or slow your descent slightly. With DM permission, they might grant advantage on checks to prevent being knocked prone or allow you to ignore the first 10 feet of a fall when calculating falling damage (stacking with Soft Landing for greater effect).",
+        "Languages. You can speak, read, and write Common and Abyssal or Infernal (your choice).",
+        "Heart's Desire. Your fiendish nature craves a specific form of emotional sustenance. Choose a Source of Joy at character creation. The DM typically tracks this in 7-day periods (or an equivalent number of long rests).",
+        "Heart's Desire (Success). If you attain your Source of Joy within the current period, you gain Inspiration and immediately remove any negative effects from Heart's Desire (including restoring any reduced Charisma).",
+        "Heart's Desire (Failure). If you do not attain your Source of Joy, penalties escalate (cumulative): End of 1st period—Charisma -1 and disadvantage on Persuasion checks vs. non-friendly creatures; End of 2nd consecutive period—an additional Charisma -1 (total -2) and disadvantage on all Charisma ability checks; End of 3rd consecutive period—an additional Charisma -2 (total -4), you cannot use Crinkle Charm or Disarming Cuteness, and your speed is reduced by 5 feet; End of 4th consecutive period—an additional Charisma -2 (total -6) and you gain 1 level of exhaustion that cannot be removed until you attain your Source of Joy. Charisma cannot be reduced below 1 by this trait.",
+        "Kiss of the Succubrat. Once per long rest, as an action, you can use either Adoring Embrace or Draining Kiss on a creature within 5 feet (choose when you use it).",
+        "Adoring Embrace — Healing Kiss. Willing target: regains hit points equal to 1d6 + your Charisma modifier. Unwilling target: Wisdom save (DC = 8 + your proficiency bonus + your Charisma modifier) or be charmed until the end of its next turn; while charmed, it has disadvantage on attack rolls against you.",
+        "Adoring Embrace — Shielding Hug. Willing target: gains temporary hit points equal to (your proficiency bonus + your Charisma modifier) and a +2 bonus to AC until the start of its next turn. Unwilling target: Wisdom save (same DC) or its next attack roll is made with disadvantage.",
+        "Draining Kiss — Energy Drain. Willing target: regains hit points equal to 1d6 + your Charisma modifier and you gain temporary hit points equal to half the amount restored. Unwilling target: Constitution save (DC = 8 + your proficiency bonus + your Charisma modifier) or take 1d6 necrotic damage; you gain temporary hit points equal to the damage dealt.",
+        "Draining Kiss — Fatigue Whisper. Willing target: gains advantage on its next saving throw against exhaustion or any effect that would induce unnatural fatigue. Unwilling target: Constitution save (same DC) or suffer disadvantage on its next attack roll as a wave of sluggishness overtakes it."
+      ],
+      "subraces": {
+        "Impish": {
+          "name": "Impish Heart",
+          "description": "These Crinklehearts lean into the more mischievous side of their fiendish heritage, delighting in playful pranks and using their charm to sow delightful confusion. Their cuteness is a weapon of delightful chaos.",
+          "traits": [
+            "Ability Score Increase. Your Intelligence score increases by 1.",
+            "Master of Mischief. You gain proficiency in the Deception or Sleight of Hand skill (your choice).",
+            "Playful Hex. You know the minor illusion cantrip. Charisma is your spellcasting ability for it. When you reach 3rd level, you can cast the hideous laughter spell once with this trait and regain the ability to do so when you finish a long rest. Charisma is your spellcasting ability for this spell.",
+            "Oopsie Daisy. When a creature you can see within 30 feet fails a Dexterity (Acrobatics) check to maintain balance or a Dexterity saving throw to avoid falling prone, you can use your reaction to make their tumble slightly more spectacular and distracting. That creature has disadvantage on its next Wisdom (Perception) check made before the end of its next turn."
+          ]
+        },
+        "Cherished": {
+          "name": "Cherished Heart",
+          "description": "Cherished Hearts exude an almost irresistible aura of sweetness and vulnerability. Their charm inspires fierce loyalty and a powerful desire in others to protect and pamper them. They are experts at tugging heartstrings and making even the toughest individuals melt.",
+          "traits": [
+            "Ability Score Increase. Your Wisdom score increases by 1.",
+            "Aura of Adorableness. You learn the friends cantrip. When the spell ends, the target doesn't automatically become hostile to you; instead, they must succeed on a Wisdom saving throw against your spell save DC or feel a lingering fondness for you for 1 minute, though they are no longer charmed.",
+            "Protective Pout (1/Short or Long Rest). When an ally you can see within 30 feet is hit by an attack, you can use your reaction to let out a heart-wrenching whimper or pout. The attacker must make a Wisdom saving throw (DC = 8 + your proficiency bonus + your Charisma modifier). On a failed save, the attacker feels a pang of guilt and the damage dealt by the attack is halved.",
+            "Comforting Presence. When you use the Help action to aid an ally in an ability check, the creature you help gains temporary hit points equal to your Charisma modifier (minimum of 1), which last for 1 minute."
+          ]
+        },
+        "Feral": {
+          "name": "Feral Heart",
+          "description": "Feral Hearts embrace a more primal, instinctual aspect of their fiendish nature, yet they retain an undeniable, almost wild-child cuteness. They are more attuned to the raw, untamed energies of their lineage, often appearing a bit scruffier, with perhaps more pronounced (though still adorable) fiendish features like slightly longer claws or a more expressive, twitchy tail. Their charm is less about refined manipulation and more about an irresistible, untamed allure mixed with a hint of playful danger.",
+          "traits": [
+            "Ability Score Increase. Your Wisdom score increases by 1.",
+            "Primal Instincts. You gain proficiency in the Survival skill. Your connection to your more 'native' fiendish senses gives you an edge when tracking, foraging, or navigating harsh or unfamiliar environments.",
+            "Wildheart Allure. You know the animal friendship cantrip. Charisma is your spellcasting ability for it. You can only target Small or Tiny beasts with this version of the spell, and the friendship manifested is often more of a boisterous, playful bond.\n\nWhen you reach 3rd level, you can cast the entangle spell once using this trait, envisioning the restraints as grasping, playful shadowy vines or fiendishly cute, thorny brambles. You regain the ability to cast entangle this way when you finish a long rest. Charisma is your spellcasting ability for this spell.",
+            "Sudden Pounce. If you move at least 15 feet straight toward a creature and then hit it with a melee weapon attack on the same turn, you can use your bonus action to attempt a playful, surprising shove. The target must succeed on a Strength saving throw (DC = 8 + your proficiency bonus + your Strength or Dexterity modifier, your choice) or be pushed 5 feet away from you. This shove does not knock the target prone."
+          ]
+        },
+        "Devil": {
+          "name": "Devil Heart",
+          "description": "Devil Hearts manifest the rigid, orderly, and physically imposing traits of Infernal bloodlines. They value strength of character, discipline, and union.",
+          "traits": [
+            "Ability Score Increase. Your Strength score increases by 2.",
+            "Wingless Order. You do not possess the Vestigial Wings trait.",
+            "Infernal Tail. You have a prehensile tail you can use to manipulate an object (similar to mage hand), with a reach of 5 feet. It cannot wield weapons, use shields, or perform somatic components of spells.",
+            "Iron Will (Heart's Desire Modification). The time interval for Heart's Desire is doubled (typically 14 days instead of 7). Removing penalties requires dedicating at least one full evening of downtime during a Long Rest solely to your Source of Joy.",
+            "Streamlined Discipline. When wearing diapers classified as Low or Minimal bulk, you gain a +2 bonus to all Potty Checks. If you have the Diaper Mastery feat, you halve the time required to don or doff these thinner diapers."
+          ]
+        }
+      }
+    },
+    "Crinkly-Crawlies": {
+      "name": "Crinkly-Crawlies",
+      "id": "crinkly-crawlies",
+      "traits": [
+        "Creature Type. You are a Monstrosity.",
+        "Ability Score Increase. Your Constitution score increases by 2.",
+        "Age. Crinkly-Crawlies mature quickly, reaching adulthood within a decade. Their lifespans vary by subrace but are often shorter than humans, ranging from 50 to 100 years.",
+        "Alignment. Crinkly-Crawlie societies can range from rigidly lawful (like Ants) to fiercely independent (like Wasps), but as individuals, they span the full spectrum of alignments.",
+        "Size. Your size is Medium or Small. You choose the size when you select this race.",
+        "Speed. Your base walking speed is 30 feet.",
+        "Chitinous Plating. When you aren't wearing armor, your AC is 13 + your Dexterity modifier. You can use a shield and still gain this benefit.",
+        "Extra Appendages. You have a secondary pair of smaller arms below your main ones. These arms can hold objects and perform simple tasks, but they cannot wield weapons, use shields, or perform complex somatic spell components. You can use these extra appendages to interact with one additional object or feature of the environment for free during your turn.",
+        "Superior Darkvision. You can see in dim light and darkness within 120 feet as if it were bright light. You do not perceive color in a humanoid sense.",
+        "Insectoid Senses. You have advantage on Wisdom (Perception) checks.",
+        "Insecontinence. Your unique physiology makes you naturally incontinent. You qualify for the Diaper Mastery feat at character creation, and you begin play with the Diaper-Trained trait.",
+        "Languages. You can speak, read, and write Common and one other language of your choice."
+      ],
+      "subraces": {
+        "Ant": {
+          "name": "Ant",
+          "description": "A paragon of strength, discipline, and community.",
+          "traits": [
+            "Ability Score Increase. Your Strength score increases by 2.",
+            "Burrowing Mandibles. You have a burrowing speed of 15 feet and can tunnel through non-magical, unworked earth and stone.",
+            "Colony Tactics. When a friendly creature you can see hits a target with an attack roll, you can use your reaction to grant advantage on the next attack roll you make against that same target before the end of your next turn.",
+            "Powerful Build. You count as one size larger when determining your carrying capacity and the weight you can push, drag, or lift.",
+            "Formic Resilience. You have resistance to poison damage and have advantage on saving throws against being poisoned."
+          ]
+        },
+        "Beetle": {
+          "name": "Beetle",
+          "description": "A bastion of strength and endurance, encased in a hardened chitinous exoskeleton.",
+          "traits": [
+            "Ability Score Increase. Your Strength score increases by 2.",
+            "Hardened Carapace. While you are not wearing any armor, your Armor Class equals 14 + your Dexterity modifier. You can use a shield and still gain this benefit.",
+            "Powerful Wings. You have a flying speed of 30 feet. You cannot hover and must end your flight on a solid surface or fall at the end of your turn.",
+            "Beetle's Might. You have advantage on Strength checks and Strength saving throws.",
+            "Shell Up. When you are hit by an attack, you can use your reaction to gain a +2 bonus to AC until the start of your next turn (including against the triggering attack). You can use this trait a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest."
+          ]
+        },
+        "Mantis": {
+          "name": "Mantis",
+          "description": "A swift and patient hunter, a master of ambush and deadly precision.",
+          "traits": [
+            "Ability Score Increase. Your Dexterity score increases by 2.",
+            "Hand-Scythes. Your forelimbs are natural weapons. On a hit, you deal slashing damage equal to 1d6 + your Strength or Dexterity modifier. These weapons have the Light and Finesse properties.",
+            "Paralyzing Strike. When you hit a creature with your Hand-Scythes, the target must succeed on a Constitution saving throw (DC = 8 + your proficiency bonus + your Dexterity modifier) or be paralyzed until the end of your next turn. You can use this feature a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest.",
+            "Predator's Wings. You have a flying speed of 30 feet. To use this speed, you cannot be wearing medium or heavy armor.",
+            "Stalker's Speed. Your base walking speed increases to 35 feet."
+          ]
+        },
+        "Bee": {
+          "name": "Bee",
+          "description": "A diligent and intelligent member of a complex airborne society.",
+          "traits": [
+            "Ability Score Increase. Your Intelligence score increases by 2.",
+            "Superior Flight. You have a flying speed of 35 feet. To use this speed, you can’t be wearing medium or heavy armor.",
+            "Hive Mind. You can communicate simple ideas telepathically with any willing creature within 30 feet of you.",
+            "Hive-Mind Coordination. You can use the Help action as a bonus action. When you use Help to aid an ally in attacking a creature, the target of that attack can be within 30 feet of you, rather than within 5 feet of you, if the target can see or hear you.",
+            "Artisan Honey. You can spend 1 hour pollinating flowers to produce 10 servings of magical honey. Choose a type: Sunpetal Honey—each serving functions as one goodberry; Ironbark Honey—consuming a serving grants 2d4 temporary hit points for 1 hour; Giggle-Pollen Nectar—consuming restores 1d4 hit points but the creature must succeed on a DC 13 Constitution saving throw or fail a potty check at disadvantage; Quick-Step Nectar—after consuming, walking speed increases by 10 feet for 10 minutes."
+          ]
+        },
+        "Wasp": {
+          "name": "Wasp",
+          "description": "A formidable and fiercely independent aerial combatant.",
+          "traits": [
+            "Ability Score Increase. Your Dexterity score increases by 2.",
+            "Superior Flight. You have a flying speed of 35 feet. To use this speed, you can’t be wearing medium or heavy armor.",
+            "Aerial Fury. Immediately after you take the Attack action on your turn, you can use a bonus action to take the Disengage action and fly up to half your flying speed.",
+            "Venomous Sting. You can make a special unarmed strike with your stinger. On a hit, you deal piercing damage equal to 1d6 + your Dexterity modifier, and the target must make a Constitution saving throw (DC = 8 + your Constitution modifier + your proficiency bonus). On a failed save, the target takes an additional 2d8 poison damage. You can use this sting a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest."
+          ]
+        },
+        "Firefly": {
+          "name": "Firefly",
+          "description": "An innately magical Crinkly-Crawlie with a captivating inner light.",
+          "traits": [
+            "Ability Score Increase. Your Charisma score increases by 2.",
+            "Superior Wings of Light. You have a flying speed of 35 feet. To use this speed, you cannot be wearing medium or heavy armor.",
+            "Innate Spellcasting. You know the Light cantrip. Once you reach 3rd level, you can cast Faerie Fire once per day without a material component. Charisma is your spellcasting ability for these spells.",
+            "Bioluminescence. As a bonus action, you can cause your abdomen to glow, shedding bright light in a 15-foot radius and dim light for an additional 15 feet. You can extinguish the light as a bonus action.",
+            "Dazzling Flash. As an action, each creature within 10 feet of you must succeed on a Constitution saving throw (DC = 8 + your proficiency bonus + your Charisma modifier) or be blinded until the end of your next turn. You can use this feature a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest."
+          ]
+        },
+        "Moth": {
+          "name": "Moth",
+          "description": "A twilight weaver drawn to gentle light, possessing quiet wisdom and remarkable silkcraft.",
+          "traits": [
+            "Ability Score Increase. Your Wisdom score increases by 2.",
+            "Slow Flight. You have a flying speed of 25 feet. To use this speed, you cannot be wearing medium or heavy armor.",
+            "Master Weaver. You are proficient with Weaver's Tools. You have a pool of Silk Points equal to your proficiency bonus, which you regain after a long rest. You can spend Silk Points to create effects: Sticky Thread (1 point)—ranged attack within 30 feet; on a hit the target is restrained (escape with a Strength (Athletics) check DC = 8 + your Constitution modifier + your proficiency bonus); Silk Line (1 point)—produce up to 60 feet of silk line that functions as rope; Woven Shield (2 points)—weave a hardened silk shield granting +2 AC for 1 hour before dissolving."
+          ]
+        }
+      }
+    },
+    "Cowbuddies": {
+      "name": "Cowbuddies",
+      "id": "cowbuddies",
+      "traits": [
+        "Ability Score Increase. Your Constitution score increases by 1.",
+        "Age. Bovibuddies mature at a similar rate to humans, though their robust nature means they often enjoy vitality well into their later years (up to 120).",
+        "Alignment. Most Cowbuddies are community-focused and kindhearted. However, some—especially those following the Bull Buddy path—lean toward a fiercely independent or even chaotic alignment.",
+        "Size. You can be Small or Medium. Dairy Friends tend to be medium in stature, while Bull Buddies may be either, with a compact build that belies their formidable strength.",
+        "Speed. Your base walking speed is 35 feet, a bit faster than most.",
+        "Natural Hooved Feet. Your hoof-like nails let you make unarmed strikes that deal 1d4 bludgeoning damage using your Strength modifier. Despite this armored foot, you still have the gait and step of a humanoid.",
+        "Rapid Digestion. Due to their numerous bellies and oversized liver, Cowbuddies have resistance to all ingested poisons, and all non-magical poisons. They have immunity to all common-rarity poisons. However, the speed of their metabolism and caloric needs mean that a Cowbuddy must roll potty-checks twice as often as other characters, and rolls a CON-based potty-check after any strenuous action.",
+        "Naturally Unpottytrained. Out in the fields there wasn't ever much need to do more than void whenever one needed- and Cowbuddies haven't really grown up past that time-honored tradition. Due to their nature, Cowbuddies are Incontinent as per the Flaw, and as such immediately qualify for the Diaper Mastery feat at creation.",
+        "Horned Charge. Once per short rest, when you move 15 feet in a straight line toward a creature, you can use a bonus action to make a melee attack with your horns. On a hit, the target takes 1d6 piercing damage plus your Strength modifier. If the target is knocked prone, you may move an additional 5 feet as part of the bonus action.",
+        "Bovine Fortitude. You have proficiency in Constitution saving throws.",
+        "Languages. You can speak, read, and write Common and one additional language of your choice."
+      ],
+      "subraces": {
+        "Dairy": {
+          "name": "Dairy Friends",
+          "description": "The Dairy Friends are the gentle artisans, beloved for their warmth and dedication to honest labor, craft, and the arts.",
+          "traits": [
+            "Ability Score Increase. Your Constitution score increases by an additional 1, and your Charisma score increases by 2.",
+            "Artisan's Touch. You gain proficiency with one type of artisan's tool of your choice (such as pottery, painting, or leatherworking).",
+            "Produce Milk. Starting at 1st level, your bovine nature imbues you with a uniquely nurturing magic.\n\nAs an action, you can magically produce 24 fluid ounces of fresh, magical milk from your body—much like the Produce Water spell. This milk is fully nutritious, qualifies as any dairy product in recipes or rations, and serves to bolster vitality. Any creature that consumes this milk immediately regains 1d4 hit points. You can use this ability a number of times equal to your proficiency bonus per long rest, so long as you have had at least two full meals and 6 hours rest.",
+            "Soothing Presence. When you cast a healing spell or use a healing ability, you can grant yourself or one creature within 10 feet temporary hit points equal to your Charisma modifier (minimum 1). You can use this ability once per short rest."
+          ]
+        },
+        "Bull": {
+          "name": "Bull Buddies",
+          "description": "The Bull Buddies are fierce solo fighters who carve their own path. Brimming with strength and independent spirit, they stand out on the battlefield—and ensure nothing is left standing to protect their herd.",
+          "traits": [
+            "Ability Score Increase. Your Constitution score increases by an additional 1, and your Strength score increases by 2.",
+            "Lone Charge. You gain proficiency in Athletics. Additionally, when you are not adjacent to any allies, you have advantage on Strength (Athletics) checks and Strength saving throws.",
+            "Unyielding Might. Once per short rest, when you roll a Strength check or saving throw, you can add a bonus equal to your Strength modifier (minimum +1), tapping into an inner reserve of raw power."
+          ]
+        }
+      }
+    },
+    "Carcharodonian": {
+      "name": "Carcharodonian",
+      "id": "carcharodonian",
+      "traits": [
+        "Creature Type. You are a Humanoid.",
+        "Ability Score Increase. Your Constitution score increases by 2. In addition, either your Strength or your Dexterity score increases by 3 (your choice).",
+        "Age. Carcharodonians mature quickly, reaching adulthood around age 15. They can live up to 120 years.",
+        "Alignment. Carcharodonians possess a predatory nature and a strong sense of self-preservation, often leading them towards neutral or chaotic alignments. However, societal influences and individual choices can lead them to any alignment.",
+        "Size. Carcharodonians are typically powerfully built and stand between 5 and 7 feet tall. Your size is Medium.",
+        "Speed. Your base walking speed is 30 feet.",
+        "Swim Speed. You have a swim speed equal to your walking speed.",
+        "Darkvision. Accustomed to the gloomy depths, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "Amphibious. You can breathe air and water.",
+        "Underwater Agility. When you are underwater, you can take the Dash action as a bonus action.",
+        "Aquatic Aggression. If you move at least 10 feet through water in a straight line towards a creature and then hit it with a melee weapon attack on the same turn, that attack deals an extra 1d6 damage of the weapon's type.",
+        "Land-Incontinence. The immense pressure of the deep waters is integral to a Carcharodonian's bodily regulation. When they spend extended periods above water, this natural support is lost, leading to a physiological need for absorbent padding, much like many residents of Diaper School. While submerged, Carcharodonians who possessed bladder control retain it, though they might opt for a swim diaper for convenience if they anticipate returning to the surface soon. This trait means you are considered Incontinent for the purposes of qualifying for feats like Diaper Mastery, if available in your campaign.",
+        "Sharkfolk Weapon Training. You have proficiency with spears, nets, and tridents.",
+        "Armored Swimmer. Your natural affinity for water allows you to move more easily in armor than most. You do not suffer disadvantage on Strength (Athletics) checks made to swim when wearing any armor other than full plate. Additionally, wearing armor you are proficient with does not reduce your swim speed unless it is full plate.",
+        "Languages. You can speak, read, and write Common and Aquan."
+      ],
+      "subraces": {
+        "Benthic": {
+          "name": "Benthic Folk",
+          "description": "Inspired by the mighty great white sharks, Benthic Folk are powerful, deep-dwelling Carcharodonians, known for their sheer strength and resilience. They are often solitary or live in small, formidable family units in the darkest trenches.",
+          "traits": [
+            "Ability Score Increase. Your Strength score increases by an additional 1 (for a total of +4 if you chose Strength for your primary increase, or +1 Strength and +3 Dexterity if you chose Dexterity), and your Wisdom score increases by 2.",
+            "Powerful Build. You count as one size larger when determining your carrying capacity and the weight you can push, drag, or lift.",
+            "Deep Dweller's Resilience. You have advantage on saving throws against being frightened."
+          ]
+        },
+        "Shoal": {
+          "name": "Shoal Folk",
+          "description": "More nimble and often found in larger, more social groups in shallower waters or near reefs, Shoal Folk are intelligent hunters who rely on cunning and teamwork. They can vary more in size than their larger cousins.",
+          "traits": [
+            "Ability Score Increase. Your Dexterity score increases by an additional 1 (for a total of +4 if you chose Dexterity for your primary increase, or +1 Dexterity and +3 Strength if you chose Strength), and your Intelligence score increases by 2.",
+            "Size. Your size can be Small or Medium (your choice at character creation).",
+            "Shark's Grace. You have advantage on Dexterity (Acrobatics) checks made while in water.",
+            "Reef Strider. You have advantage on Dexterity (Stealth) checks made to hide in watery environments with ample cover, such as reefs, kelp forests, or shipwrecks."
+          ]
+        },
+        "Waves": {
+          "name": "Waves Folk",
+          "description": "Nomadic and adaptable, Waves Folk roam the open oceans and coastal areas. They are known for their speed and versatility, comfortable in various marine environments and often the first to interact with surface dwellers.",
+          "traits": [
+            "Ability Score Increase. Either your Strength or Dexterity score increases by an additional 1 (your choice), and either your Intelligence or Wisdom score increases by 1 (your choice).",
+            "Increased Speed. Your base walking speed and swim speed increase to 35 feet.",
+            "Size. Your size can be Small or Medium (your choice at character creation).",
+            "Ocean's Grace. You have advantage on Dexterity saving throws made to avoid being knocked prone while in water.",
+            "Nomad's Acclimation. You have advantage on saving throws against exhaustion due to forced marches or prolonged swimming."
+          ]
+        }
+      }
+    },
+    "Waddlehooves": {
+      "name": "Waddlehooves",
+      "id": "waddlehooves",
+      "traits": [
+        "Creature Type: You are a Monstrosity (Centaur).",
+        "Ability Score Increase: Your Strength score increases by 4, and your Constitution score increases by 2.",
+        "Age: Waddlehooves mature at a rate similar to humans but are considered adults around 16. They live robust lives, often reaching 300 to 320 years. Their playful spirit, however, remains ageless.",
+        "Alignment: With their roaming nature and inherent curiosity, Waddlehooves lean towards chaotic or neutral alignments. Their strong community bonds and loyalty can also lead them towards good.",
+        "Size: Waddlehooves stand between 6 and 8 feet tall from hoof to head, with their equine bodies being proportionally large. Your size is Large.",
+        "Speed: Your base walking speed is 60 feet. You may choose to slow down and trot at the speed of your adventurers without exerting yourself.",
+        "Swift Strider: You can take the Dash action as a bonus action on your turn.",
+        "Powerful Charge: Your hooves are natural melee weapons, which you can use for unarmed strikes. When you hit with a hoof attack, it deals bludgeoning damage equal to 1d8 + your Strength modifier. Additionally, if you move at least 30 feet straight toward a target and then hit it with a melee weapon attack on the same turn, you can use your bonus action to make one hoof attack against the same target.",
+        "Waddlehoof Kick: As an action, you can deliver a powerful kick with your hooves. Make a melee attack roll using Strength against one creature within 5 feet of you. On a hit, the target takes 1d8 bludgeoning damage, and you can choose to push the target up to 10 feet away from you.",
+        "Equine Build: You count as one size larger when determining your carrying capacity and the weight you can push, drag, or lift. In addition, any climb that requires hands and feet is especially difficult for you because of your equine legs. When you make such a climb, each foot of movement costs you 4 extra feet, instead of the normal 1 extra foot.",
+        "Natural Incontinence: Like many of the Scholia Diaspros's denizens, and true to their equine nature, Waddlehooves are naturally incontinent. Their bodies are simply not designed for prolonged control outside of their most primal needs. They are, however, remarkably adaptable and easily accustomed to the use of diapers, often seeing them as a practical part of life. This trait means you are considered Incontinent for the purposes of qualifying for feats like Diaper Mastery, if available in your campaign.",
+        "Languages: You can speak, read, and write Common and Sylvan. You also understand the specific Centaur dialect of Sylvan, which incorporates more whinnies, snorts, and hoof-stamping emphasis.",
+        "Hoof-Bound Weapon Training: You have proficiency with lances, shortbows, longbows, and armor crafted primarily from wood, vines, and other plant materials (such as Oaken Scale Mail or Vine Weave Armor, if available).",
+        "Unbridled Gait: Your four-legged form is built for efficient, sustained movement across vast distances. You have advantage on saving throws against exhaustion caused by a forced march. Additionally, when traveling for an hour or more, your speed increases, allowing you to cover more ground. If you are carrying no more than a medium load, your overland travel pace is increased as shown in the Waddlehoof Overland Travel table."
+      ],
+      "subraces": {
+        "Speedkindred": {
+          "name": "Speedkindred",
+          "description": "Leaner and swifter than their kin, the Speedkindred are the scouts, messengers, and fleet-footed explorers of the Waddlehooves. Their energy is channeled into incredible bursts of speed and keen awareness.",
+          "traits": [
+            "Ability Score Adjustment: Your Dexterity score increases by 2, and your Strength score decreases by 2 (resulting in a net +2 Strength from the base race).",
+            "Fleet of Hoof: Your base walking speed increases to 65 feet.",
+            "Alert: You gain proficiency in the Perception skill. Additionally, you have advantage on initiative rolls as long as you aren't surprised."
+          ]
+        },
+        "Burdenbearers": {
+          "name": "Burdenbearers",
+          "description": "The sturdy and steadfast Burdenbearers are the backbone of Waddlehooves communities, known for their incredible endurance and practical skills. They are the builders, crafters, and long-haul travelers.",
+          "traits": [
+            "Ability Score Adjustment: Your Constitution score increases by an additional 2 (for a total of +4 Constitution from the base race), and your Wisdom score decreases by 2.",
+            "Unyielding Endurance: You have advantage on saving throws against exhaustion. Additionally, when you would gain a level of exhaustion from travel or physical exertion (but not from other sources like lack of food, water, or magical effects that directly cause exhaustion levels), you can choose to ignore it. Once you use this trait, you can't use it again until you finish a long rest. (This trait supersedes the forced march advantage from Unbridled Gait).",
+            "Artisan's Knack: You gain proficiency with one type of artisan's tools of your choice and proficiency in the Survival skill.",
+            "Natural Diaper Mastery: Burdenbearers are so accustomed to managing their bodily functions during their arduous labors that they have an innate understanding of their padding. You gain the Diaper Mastery feat (as described in the Diaper School Regulation Handbook, if available) at 1st level.",
+            "Earthshaker Kick: Your Waddlehoof Kick is especially forceful. When you hit a creature with your Waddlehoof Kick, the damage increases to 1d10 bludgeoning damage, and instead of pushing the target, you can choose to knock it prone."
+          ]
+        },
+        "Warbred": {
+          "name": "Warbred",
+          "description": "Hailing from clangroups with long martial traditions, the Warbred are the protectors and warriors among the Waddlehooves. They are trained for battle from a young age, their powerful forms clad in armor, ready to defend their kin.",
+          "traits": [
+            "Ability Score Increase: Your Constitution score increases by an additional 2 (for a total of +4 Constitution from the base race).",
+            "Aggressive: As a bonus action on your turn, you can move up to your speed toward an enemy of your choice that you can see or hear. You must end this move closer to the enemy than you started.",
+            "War-Clad Training: You gain proficiency with all types of armor and shields.",
+            "Clan Weaponry: You gain proficiency with one martial weapon type of your choice, reflecting the traditional weaponry of your War Clan.",
+            "Impact Kick: Your Waddlehoof Kick can shatter defenses. When you hit a creature with your Waddlehoof Kick, the damage increases to 1d10 bludgeoning damage. The target is pushed 10 feet directly away from you. If the pushed target collides with another creature or a solid object like a wall, the target takes an additional 1d6 bludgeoning damage."
+          ]
+        },
+        "Grovehoof": {
+          "name": "Grovehoof",
+          "description": "Deeply connected to the ancient forests and wild magic of the plane, Grovehooves are the mystics, lorekeepers, and nature-wardens of their people. They possess an innate understanding of the land and its creatures.",
+          "traits": [
+            "Ability Score Adjustment: Your Intelligence score increases by 2, your Constitution score increases by an additional 2 (for a total of +4 Constitution from the base race), and your Strength score decreases by 2 (resulting in a net +2 Strength from the base race).",
+            "Druidic Initiate: You know one cantrip of your choice from the druid spell list. When you reach 3rd level, you can cast one 1st-level spell of your choice from the druid spell list once with this trait, and you regain the ability to do so when you finish a long rest. Wisdom is your spellcasting ability for these spells.",
+            "Sylvan Knowledge: You gain proficiency in the Nature skill. You also choose one from the following: proficiency in the Survival skill or proficiency with an herbalism kit. You have advantage on Intelligence (Nature) checks related to identifying flora, fauna, and natural phenomena within your home plane.",
+            "Pathfinder: You can always find your way within any forest located on your home plane, even if you have never been there before, as long as the forest is not magically manipulated to prevent navigation. You can also communicate simple ideas with beasts and plants within such forests. They understand the meaning of your words, though you have no special ability to understand them in return. You have advantage on all Charisma checks you make to influence them.",
+            "Animal Affinity: Wild animals and non-predatory mundane beasts are naturally calm in your presence and will not attack you unless provoked or magically compelled. They may even show curiosity or approach you without fear."
+          ]
+        }
+      }
+    },
+    "Scampersaurian": {
+      "name": "Scampersaurian",
+      "id": "scampersaurians",
+      "traits": [
+        "Creature Type: You are a Monstrosity.",
+        "Ability Score Increase: Your Constitution score increases by 2.",
+        "Age: Scampersaurians mature quickly, reaching young adulthood by age 10, but can live for several hundred years.",
+        "Alignment: Their primal instincts and simple desires lean them towards neutral or chaotic alignments.",
+        "Size: You are Medium. Specific subraces will alter this.",
+        "Speed: Your base walking speed is 30 feet.",
+        "Natural Armor: Your hide is thick and scaly, granting you a base Armor Class of 13 + your Dexterity modifier. You can use this natural armor calculation instead of any armor you wear. A shield's benefits apply as normal.",
+        "Primal Savagery: Your fangs and claws are natural weapons, which you can use to make unarmed strikes. If you hit with them, you deal piercing or slashing damage (your choice) equal to 1d6 + your Strength modifier, instead of the bludgeoning damage normal for an unarmed strike.",
+        "Primal Incontinence: Having been thrust into the modern era from a time before toilets were even a concept, your Scampersaurian has no instinct for potty training. You are considered Incontinent for the purpose of qualifying for the Diaper Mastery feat at character creation."
+      ],
+      "subraces": {
+        "Tyrannobabu": {
+          "name": "Tyrannobabu Wrecks (Theropod Type)",
+          "description": "Big, loud, and perpetually hungry, the Tyrannobabu Wrecks are the playground tyrants of the Scampersaurians. Their tiny arms are deceptively strong, but their real power is in their mighty jaws and earth-shaking tantrums.",
+          "traits": [
+            "Ability Score Increase: Your Strength score increases by 2.",
+            "Size: Your size is Large.",
+            "Powerful Bite: Your bite is a formidable weapon. The damage for your Primal Savagery bite attack increases to 1d10.",
+            "Fearsome Roar: As an action, you can unleash a terrifying roar. Each creature of your choice within 20 feet of you that can hear you must succeed on a Wisdom saving throw (DC = 8 + your proficiency bonus + your Constitution modifier) or become frightened of you for 1 minute. A frightened creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. Once you use this trait, you can't use it again until you finish a long rest."
+          ]
+        },
+        "Bronto-Bottoms": {
+          "name": "Bronto-Bottoms (Brachiosaur Type)",
+          "description": "Gentle giants with hearts as big as their bodies, the Bronto-Bottoms are the calm, steady members of the Scampersaurians. Their immense size and long necks give them a unique perspective on the world, though they are prone to accidentally knocking things over with their weighty rears.",
+          "traits": [
+            "Ability Score Increase: Your Strength score increases by 2, and your Constitution score increases by an additional 1.",
+            "Size: Your size is Large.",
+            "Long Neck: You have a reach of 10 feet for your melee attacks.",
+            "Stomp: As a bonus action, you can make a special melee attack against one creature within 5 feet of you. On a hit, the target takes bludgeoning damage equal to 1d4 + your Strength modifier and must succeed on a Strength saving throw (DC = 8 + your proficiency bonus + your Strength modifier) or be knocked prone.",
+            "Massive Build: You count as one size larger when determining your carrying capacity and the weight you can push, drag, or lift."
+          ]
+        },
+        "Pterodac-Tots": {
+          "name": "Pterodac-Tots (Pterosaur Type)",
+          "description": "Light, agile, and masters of the sky, the Pterodac-Tots are the scouts and daredevils of the Scampersaurians. They love soaring through the Academy's high halls and open fields, often with a screech of delight that can be heard from a mile away.",
+          "traits": [
+            "Ability Score Increase: Your Dexterity score increases by 2.",
+            "Flight: You have a flying speed of 30 feet. To use this speed, you can't be wearing medium or heavy armor.",
+            "Screeching Dive: If you fly at least 20 feet straight toward a target and then hit it with a melee weapon attack on the same turn, the target takes an extra 1d6 damage of the weapon's type.",
+            "Hollow Bones: You are built for flight, not for brawling. You have vulnerability to bludgeoning damage."
+          ]
+        },
+        "Veloci-Rascals": {
+          "name": "Veloci-Rascals (Raptor Type)",
+          "description": "Fast, intelligent, and working with terrifying pack coordination, the Veloci-Rascals are the strategists and tricksters of the Scampersaurians. They communicate with a series of clicks and whistles, setting up elaborate pranks and tactical ambushes with equal glee.",
+          "traits": [
+            "Ability Score Increase: Your Dexterity score increases by 2, and your Intelligence score increases by 1.",
+            "Speed: Your base walking speed increases to 40 feet.",
+            "Pack Tactics: You have advantage on an attack roll against a creature if at least one of your allies is within 5 feet of the creature and the ally isn't incapacitated.",
+            "Sickle Claw: As a bonus action, after you've moved at least 20 feet, you can make one attack with your Primal Savagery claw. If the attack hits, the target must succeed on a Strength saving throw (DC = 8 + your proficiency bonus + your Dexterity modifier) or be knocked prone."
+          ]
+        },
+        "Armored": {
+          "name": "Armored Titans (Thyreophora/Ceratopsian Type)",
+          "description": "These Scamps are the living fortresses of the playground, combining the stubborn defense of an Ankylosaur with the charging might of a Triceratops. They are walking bulwarks, possessing bony frills, thick plating, and a stubborn refusal to be moved. When creating an Armored Titan, choose one of the following builds:",
+          "traits": [
+            "Ability Score Increase: Your Constitution score increases by an additional 2 (for a total of +4).",
+            "Size: Your size is Large.",
+            "Defensive Plating: Your Natural Armor is enhanced. Your base AC is 15 + your Dexterity modifier.",
+            "Tail Club: You can use your action to swing your heavy, clubbed tail. Make a melee weapon attack against one creature within 5 feet of you. On a hit, the target takes 2d6 + your Strength modifier bludgeoning damage and must succeed on a Strength saving throw (DC = 8 + your proficiency bonus + your Strength modifier) or be stunned until the start of your next turn.",
+            "Light Charge: When you move at least 15 feet in a straight line toward a target and then hit it with a melee attack on the same turn, you can use your bonus action to shove the creature. If it fails a Strength saving throw (DC = 8 + your proficiency bonus + your Strength modifier), you can push it up to 10 feet away from you.",
+            "Ability Score Increase: Your Strength score increases by 2.",
+            "Light Plating: Your Natural Armor is enhanced. Your base AC is 14 + your Dexterity modifier.",
+            "Goring Horns: Your head is adorned with powerful horns. You can use your action to make a special attack with your horns. If you move at least 20 feet in a straight line toward a target right before making this attack, it deals 2d8 + your Strength modifier piercing damage. On a successful hit, you can also use a bonus action to attempt to shove the target prone.",
+            "Powerful Charge: If you move at least 20 feet straight toward a target and then hit it with your Goring Horns attack on the same turn, the target takes an extra 1d8 piercing damage."
+          ]
+        }
+      }
+    },
+    "Diaparachnid": {
+      "name": "Diaparachnid",
+      "id": "diaparachnid",
+      "traits": [
+        "Creature Type: You are a Monstrosity.",
+        "Ability Score Adjustments: Your Diaparachnid character begins with the following base ability score adjustments before applying subrace modifications: Strength +2, Dexterity +2, Your choice of Intelligence or Constitution +2, Charisma -1.",
+        "Age: Diaparachnids mature at the same rate as humans but can live for several centuries.",
+        "Alignment: Diaparachnids' societies are built on order and tradition, leading them towards lawful alignments. However, their individual pursuits can lead them anywhere on the spectrum.",
+        "Size: Your size is determined by your subrace.",
+        "Speed: Your base walking speed is 35 feet. You have a climb speed of 35 feet on walls and vertical surfaces that are not slippery or magically slick.",
+        "Arachnovision: You have a superior, multi-faceted perception of the world. You have Blindsight to a range of 30 feet, Darkvision to a range of 120 feet, and lowlight vision to 300ft.",
+        "Spiderwalking: All Diaparachnids can climb up vertical surfaces, but only those with a robust spider morphology or small size can walk upon the ceilings of rooms and surfaces. Slick or slippery surfaces pose the same challenge to walk upon, but result in falling and possible damage if a spiderling loses their footing on these surfaces. A spiderling does not suffer these disadvantages inside the vicinity of their webbing, no matter their size.",
+        "Many-Armed: You have six arms. You can use your extra arms to interact with objects, provide the Help action to up to three persons within five feet of them at one time, or perform other tasks, but you cannot use them to wield additional weapons or shields in combat. You can prepare spells or perform manual crafting tasks in half the time.",
+        "Webspinning: All Diaparachnids can perform some manner of web-spinning, creating various useful structures. With 1 hour of work and adequate nutrition, you can create any of the following:",
+        "Arachnincontinence: Ages living in the Diaper School realm and producing magical and mundane diapers have led all but the rarest of Diaparachnids to be lifelong diaper-wearers. At creation Diaparachnids are considered Incontinent as per the trait for the purpose of qualifying for taking the diaper-mastery feat if offered. Diaparachnids must ensure they have diapers suited for their morphology- be that a prominent spinneret or a full spider-like lower-half.",
+        "Languages: You can speak, read, and write Common and Undercommon."
+      ],
+      "subraces": {
+        "Padded": {
+          "name": "Padded Pouncers",
+          "description": "Inspired by the vibrant and agile jumping spiders, these are the artists, diplomats, and dancers of Diaparachnid society. Their surprisingly endearing, multi-eyed faces make them the most approachable of their kind.",
+          "traits": [
+            "Ability Score Adjustments: +2 Dexterity, +1 Charisma.",
+            "Size: Small.",
+            "Speed: Your base walking speed is 40 feet.",
+            "Acrobatic Prowess: You gain proficiency in the Acrobatics skill.",
+            "Ceiling Walker: You can walk on ceilings at half movement speed."
+          ]
+        },
+        "Silkswaddlers": {
+          "name": "Silkswaddlers",
+          "description": "Drawing their lineage from massive, powerful tarantulas, Silkswaddlers are the builders and laborers of the Diaparachnids. They are immensely strong, capable of producing thick, incredibly durable silk used for construction and clothing.",
+          "traits": [
+            "Ability Score Adjustments: +2 Strength, -1 Dexterity, -1 Charisma.",
+            "Size: Large.",
+            "Dig Speed: You have a burrowing speed of 15 feet through dirt, sand, and loose rock.",
+            "Fortress Weaving: Your webs are twice the size of other Diaparachnids' and are harder to break (double HP).",
+            "Artisan Weaver: You can produce clothing from your silk and use purchased or created components to turn them into permanent clothing items."
+          ]
+        },
+        "Nursery": {
+          "name": "Nursery Nightweavers",
+          "description": "Embodying the lethal patience and terrifying speed of huntsman spiders, these Diaparachnids are the preeminent scouts and assassins of their people. They move with a chilling silence and are masters of the ambush.",
+          "traits": [
+            "Ceiling Prowler: You can walk on ceilings at half movement speed.",
+            "Natural Stealth: You have proficiency in the Stealth skill.",
+            "Technical Webbing: Your webbing can be spun into intricate tripwires and other simple mechanical traps."
+          ]
+        },
+        "Pokeypadbutthoids": {
+          "name": "Pokeypadbutthoids (Scorpionfolk)",
+          "description": "A rare and hardy offshoot, these Diaparachnids are believed to be the result of a magical catastrophe that merged Diaparachnid and scorpion bloodlines. They are ferocious survivalists who have traded prolific silk-weaving for potent venom.",
+          "traits": [
+            "Speed: Your base walking speed is 40 feet.",
+            "Stinging Tail: You have a natural tail weapon that deals decent damage and is a finesse weapon.",
+            "Envenom: You can envenomate your tail a number of times per day equal to your Constitution bonus plus proficiency. Poison damage can be enhanced by assassin-subclass skills if available.",
+            "Antivenom Synthesis: You can expend 2 uses of your venom to produce an antivenin that will work on any poison crafted by a brewer of equal or lower level than you."
+          ]
+        }
+      }
+    }
+  }
+}

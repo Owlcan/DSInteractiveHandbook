@@ -1,0 +1,759 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-02-12T01:53:22.007Z",
+  "sources": {
+    "backgroundsHtml": "backgrounds.html",
+    "originFeatsHtml": "originfeats.html"
+  },
+  "counts": {
+    "backgrounds": 27,
+    "originFeats": 22
+  },
+  "backgrounds": [
+    {
+      "id": "budding-caregiver",
+      "name": "Budding Caregiver",
+      "url": "backgrounds.html?id=budding-caregiver",
+      "image": "src/assets/images/backgrounds/buddingcaregiver.webp",
+      "description": "You’ve always been the steady pair of hands in the chaos—whether you grew up raising your younger siblings or became the de facto caretaker for the littlest in a band of street urchins. You know how to calm tears, coax smiles, and keep a household (or hideout) running on a shoestring. At the Scholia Diaspros, that instinct turns into something greater: practical kindness, protective grit, and a touch of nurturing magic.",
+      "traits": {
+        "asi": "+2 to one ability score and +1 to another, OR +1 to three different ability scores.",
+        "skills": "Insight, Medicine.",
+        "tools": "Cook's utensils, and one tool of your choice.",
+        "languages": "One language of your choice.",
+        "originFeat": "",
+        "spellsFeatures": "You learn the cantrips Spank!, Diapering, and Little Miracle. Your spellcasting ability for these and for the feature below is Intelligence or Wisdom (your choice when you create your character).\nIn addition, choose one 1st-level spell from the Diaper School spell list at character creation. You can cast that spell a number of times per long rest equal to your proficiency bonus. Whenever you gain a level (or at the DM’s discretion), you can replace this chosen spell with a different 1st-level spell from the same Diaper School list."
+      }
+    },
+    {
+      "id": "orphan-from-afar",
+      "name": "Orphan from Afar",
+      "url": "backgrounds.html?id=orphan-from-afar",
+      "image": "src/assets/images/backgrounds/orphan_from_afar.png",
+      "description": "You arrived at the Scholia Diaspros not by choice, but by circumstance. Whether your home was lost to the annals of time like Tabitha Caelestis's, or you were simply left on the academy's doorstep, you are a child without a past, seeking a future within these hallowed, and often padded, halls. The academy is your only home, its students and faculty the only family you've ever known.",
+      "traits": {
+        "asi": "+2 to one ability score and +1 to another, OR +1 to three different ability scores.",
+        "skills": "Insight, Survival",
+        "tools": "One type of artisan's tools or a musical instrument.",
+        "languages": "",
+        "originFeat": "Choose one from Magic Initiate (Arcane or Divine), Skilled, or Tough. Or a Diaper School Origin Feat",
+        "spellsFeatures": ""
+      }
+    },
+    {
+      "id": "disciplinary-exile",
+      "name": "Disciplinary Exile",
+      "url": "backgrounds.html?id=disciplinary-exile",
+      "image": "src/assets/images/backgrounds/disciplinary_exile.png",
+      "description": "You weren't sent to the Scholia Diaspros for your academic prowess, but for your... behavioral quirks. Whether you were a noble scion with a penchant for pranks, a magical prodigy with a disregard for safety protocols, or simply a troublemaker who pushed your previous guardians too far, you've been exiled to the one place that can handle you. Your time here is a punishment, but it might also be your chance at redemption... or at least, learning how to be a more effective brat.",
+      "traits": {
+        "asi": "+2 to one ability score and +1 to another, OR +1 to three different ability scores.",
+        "skills": "Deception, Sleight of Hand",
+        "tools": "Forgery kit or thieves' tools.",
+        "languages": "",
+        "originFeat": "Choose one from Alert, Mobile, or Magic Initiate (Arcane or Divine). Or a Diaper School Origin Feat",
+        "spellsFeatures": ""
+      }
+    },
+    {
+      "id": "brat-prince-princess",
+      "name": "Brat Prince/Princess",
+      "url": "backgrounds.html?id=brat-prince-princess",
+      "image": "src/assets/images/backgrounds/brat_princess.png",
+      "description": "You are royalty, and you've never let anyone forget it. Pampered, doted upon, and always given your way, you've arrived at the Scholia Diaspros with a sense of entitlement that could rival a dragon's hoard. You're used to the finest things in life, and the academy's strict rules and... *rustic* punishments are a rude awakening. But you are determined to not only survive but to rule this new, strange kingdom.",
+      "traits": {
+        "asi": "+2 to one ability score and +1 to another, OR +1 to three different ability scores.",
+        "skills": "Persuasion, Performance",
+        "tools": "One musical instrument of your choice.",
+        "languages": "",
+        "originFeat": "Choose one from Actor, Fey Touched, or Magic Initiate (Arcane or Divine). Or a Diaper School Origin Feat",
+        "spellsFeatures": ""
+      }
+    },
+    {
+      "id": "child-of-alumni",
+      "name": "Child of an Alumni",
+      "url": "backgrounds.html?id=child-of-alumni",
+      "image": "src/assets/images/backgrounds/alumnikid.png",
+      "description": "The Scholia Diaspros is in your blood. One or both of your parents attended this esteemed (and often embarrassing) institution, and their stories have filled your childhood. You've grown up with tales of heroic deeds, magical mishaps, and, of course, the ever-present threat of diaperings. You've come to the academy to follow in their footsteps, to make a name for yourself, and perhaps, to finally understand all those inside jokes.",
+      "traits": {
+        "asi": "+2 to one ability score and +1 to another, OR +1 to three different ability scores.",
+        "skills": "History, Investigation",
+        "tools": "Calligrapher's supplies or cartographer's tools.",
+        "languages": "",
+        "originFeat": "Choose one from Magic Initiate (Arcane or Divine), Skilled, or a feat related to your parent's class (at DM's discretion). Or a Diaper School Origin Feat",
+        "spellsFeatures": ""
+      }
+    },
+    {
+      "id": "hero-in-training",
+      "name": "Hero-in-Training",
+      "url": "backgrounds.html?id=hero-in-training",
+      "image": "src/assets/images/backgrounds/training_hero.png",
+      "description": "You're not like the others. You've managed to avoid the all-but-inescapable reality of diapers, a feat that has earned you a mixture of awe and suspicion from your peers. You are a hero in training, determined to prove that true strength doesn't come from padding, but from skill, courage, and a well-fitting pair of training pants. You are a beacon of hope for the potty-trained, a symbol of defiance in a world of crinkly plastic.",
+      "traits": {
+        "asi": "+2 to one ability score and +1 to another, OR +1 to three different ability scores.",
+        "skills": "Athletics, Acrobatics",
+        "tools": "One type of artisan's tools or a musical instrument.",
+        "languages": "",
+        "originFeat": "Choose one from Martial Initiate, Charger, or Sentinel. Or a Diaper School Origin Feat",
+        "spellsFeatures": ""
+      }
+    },
+    {
+      "id": "darkling-sympathizer",
+      "name": "Darkling Sympathizer",
+      "url": "backgrounds.html?id=darkling-sympathizer",
+      "image": "src/assets/images/backgrounds/darkling_sympathiser.png",
+      "description": "While others see the Darklings as monsters, you see something more. Perhaps you've studied them, finding a strange beauty in their shadowy forms, or maybe you've had a personal encounter that has led you to believe they are not the mindless beasts everyone thinks they are. You walk a dangerous path, your sympathies putting you at odds with the academy's teachings and the prejudices of your peers.",
+      "traits": {
+        "asi": "+2 to one ability score and +1 to another, OR +1 to three different ability scores.",
+        "skills": "Nature, Stealth",
+        "tools": "Herbalism kit.",
+        "languages": "",
+        "originFeat": "Choose one from Shadow Touched, Aberrant Dragonmark, or Magic Initiate (Arcane). Or a Diaper School Origin Feat",
+        "spellsFeatures": ""
+      }
+    },
+    {
+      "id": "well-of-souls-survivor",
+      "name": "Well of Souls Survivor",
+      "url": "backgrounds.html?id=well-of-souls-survivor",
+      "image": "src/assets/images/backgrounds/well_of_souls_survivor.png",
+      "description": "Your past is a mystery, even to you. You have fragmented memories of a time before the academy, a time filled with a strange, humming energy and the whispers of lost souls. You may have been a direct victim of Tabitha's terrible machine, or perhaps you are a descendant of one of the souls she trapped. Whatever the case, you are a survivor, and you've come to the Scholia Diaspros to find answers about your past and the strange power that courses through you.",
+      "traits": {
+        "asi": "+2 to one ability score and +1 to another, OR +1 to three different ability scores.",
+        "skills": "Arcana, History",
+        "tools": "One type of artisan's tools.",
+        "languages": "",
+        "originFeat": "Choose one from Magic Initiate (Sorcerer), Born Psion, or Resilient. Or a Diaper School Origin Feat",
+        "spellsFeatures": ""
+      }
+    },
+    {
+      "id": "chronal-anomaly",
+      "name": "Chronal Anomaly",
+      "url": "backgrounds.html?id=chronal-anomaly",
+      "image": "src/assets/images/backgrounds/chronal_anomaly.png",
+      "description": "Time doesn't seem to work the same way for you as it does for others. You might experience moments of deja vu, have flashes of the future, or even find yourself unstuck in time, repeating moments or skipping them entirely. This has made your life... complicated, to say the least. You've come to the Scholia Diaspros in the hopes of understanding and controlling your strange abilities, and perhaps, to find out why you are a walking, talking temporal paradox.",
+      "traits": {
+        "asi": "+2 to one ability score and +1 to another, OR +1 to three different ability scores.",
+        "skills": "Investigation, Perception",
+        "tools": "Tinker's tools.",
+        "languages": "",
+        "originFeat": "Choose one from Alert, Lucky, or Magic Initiate (Wizard). Or a Diaper School Origin Feat",
+        "spellsFeatures": ""
+      }
+    },
+    {
+      "id": "former-hall-monitor",
+      "name": "Former Hall Monitor",
+      "url": "backgrounds.html?id=former-hall-monitor",
+      "image": "src/assets/images/backgrounds/former_hall_monitor.png",
+      "description": "You once walked the halls as a symbol of order, a bastion of the rules, a proud Hall Monitor. But something changed. Perhaps you grew disillusioned with the system, or maybe you committed an infraction so great that you were stripped of your authority. Now, you find yourself on the other side of the law, a rebel with an intimate knowledge of the very rules you once enforced.",
+      "traits": {
+        "asi": "+2 to one ability score and +1 to another, OR +1 to three different ability scores.",
+        "skills": "Intimidation, Investigation",
+        "tools": "Thieves' tools.",
+        "languages": "",
+        "originFeat": "Choose one from Alert, Mobile, or Skulker. Or a Diaper School Origin Feat",
+        "spellsFeatures": ""
+      }
+    },
+    {
+      "id": "creature-of-the-forbidden-woods",
+      "name": "Creature of the Forbidden Woods",
+      "url": "backgrounds.html?id=creature-of-the-forbidden-woods",
+      "image": "src/assets/images/backgrounds/wilds_child.png",
+      "description": "You are not from any known town or kingdom. Your home is the Forbidden Wood that borders the academy. Raised by beasts, fey, or simply the ancient magic of the forest itself, you are a child of the wild. Your ways are not the ways of civilized folk, and the rules of the academy are a strange and confusing puzzle. You were either found and brought to the Scholia Diaspros for your own safety, or you wandered in, drawn by a curiosity that outweighed your caution.",
+      "traits": {
+        "asi": "+2 to one ability score and +1 to another, OR +1 to three different ability scores.",
+        "skills": "Nature, Survival",
+        "tools": "Herbalism kit.",
+        "languages": "",
+        "originFeat": "Choose one from Magic Initiate (Druid), Fey Touched, or Tough. Or a Diaper School Origin Feat",
+        "spellsFeatures": ""
+      }
+    },
+    {
+      "id": "padded-pop-idol",
+      "name": "Padded Pop Idol",
+      "url": "backgrounds.html?id=padded-pop-idol",
+      "image": "src/assets/images/backgrounds/padded_pop_idol.png",
+      "description": "You live for the spotlight, the roar of the crowd, and the perfectly choreographed dance number. You're a pop sensation, but you have a secret that makes you all the more endearing to your fans: you're incontinent. Far from being a hindrance, you've embraced this, making your designer diapers a key, crinkly part of your iconic stage persona. Your music is catchy, your charm is infectious, and your dedication to your padded brand is absolute.",
+      "traits": {
+        "asi": "+2 to Charisma and +1 to Dexterity.",
+        "skills": "Performance, Persuasion.",
+        "tools": "One musical instrument of your choice.",
+        "languages": "",
+        "originFeat": "Choose one from Actor, Magic Initiate (Bard), or Diaper-Mastery. Or a Diaper School Origin Feat",
+        "spellsFeatures": ""
+      }
+    },
+    {
+      "id": "punk-rocker",
+      "name": "Punk Rocker",
+      "url": "backgrounds.html?id=punk-rocker",
+      "image": "src/assets/images/backgrounds/punk_rocker.png",
+      "description": "Forget pop charts and mainstream appeal; your stage is the underground club, your music a blast of raw, rebellious energy. You live by a code of anti-authoritarianism, and your look—be it ripped clothes, liberty spikes, or heavy boots—is a statement. For you, even something as mundane as a diaper can be a symbol of defiance, a way to reject convention and embrace comfort on your own terms.",
+      "traits": {
+        "asi": "+2 to one ability score and +1 to another, OR +1 to three different ability scores.",
+        "skills": "Performance, Intimidation.",
+        "tools": "One musical instrument (Electric Guitar is a classic choice) or Thieves' Tools.",
+        "languages": "",
+        "originFeat": "Choose one from Actor, Martial Initiate, or Tough. Or a Diaper School Origin Feat",
+        "spellsFeatures": ""
+      }
+    },
+    {
+      "id": "desert-bloom-entertainer",
+      "name": "Desert Bloom Entertainer",
+      "url": "backgrounds.html?id=desert-bloom-entertainer",
+      "image": "src/assets/images/backgrounds/desert_bloom.png",
+      "description": "You are a child of the arid wastes and sun-scorched cities, a member of a wandering troupe that brings color and life to the desert. Your art is one of captivating stories, mesmerizing dances, and songs that speak of djinn, oases, and stars. You know how to read a crowd as well as you can read shifting sands, and your performances are a welcome respite from the harsh desert sun.",
+      "traits": {
+        "asi": "+2 to one ability score and +1 to another, OR +1 to three different ability scores.",
+        "skills": "Insight, Perception.",
+        "tools": "Disguise Kit or one type of musical instrument.",
+        "languages": "",
+        "originFeat": "Choose one from Actor, Fey Touched, or Magic Initiate (Bard). Or a Diaper School Origin Feat",
+        "spellsFeatures": ""
+      }
+    },
+    {
+      "id": "big-lil-bully",
+      "name": "Big Lil Bully",
+      "url": "backgrounds.html?id=big-lil-bully",
+      "image": "src/assets/images/backgrounds/big_lil_bully.png",
+      "description": "You were the terror of the playground, the one who made others cry with a well-timed wedgie or stolen lunch money. But here at the Academy, surrounded by grown-ups who still wear diapers by choice, your tough-guy act feels... different. Maybe it's the way everyone just accepts their vulnerabilities, or how your \"victims\" giggle instead of cry when you give them a gentle push. You're still learning that being big doesn't always mean being mean, and that sometimes the strongest thing you can do is ask for help with your own buckles.",
+      "traits": {
+        "asi": "+2 to one ability score and +1 to another, OR +1 to three different ability scores.",
+        "skills": "Intimidation, Athletics",
+        "tools": "One type of gaming set (your choice).",
+        "languages": "",
+        "originFeat": "Choose one from Tough, Martial Initiate, or Alert. Or a Diaper School Origin Feat",
+        "spellsFeatures": ""
+      }
+    },
+    {
+      "id": "exchange-student-crystal-archipelago",
+      "name": "Exchange Student (Crystal Archipelago)",
+      "url": "backgrounds.html?id=exchange-student-crystal-archipelago",
+      "image": "src/assets/images/backgrounds/exchangestudent.webp",
+      "description": "You crossed seas and wards to study at the Academy. The customs here are baffling, the magic is different, and you love every second of it. Your letters of introduction open doors—slowly—but your charm does the rest.",
+      "traits": {
+        "asi": "+2 to one ability score and +1 to another, OR +1 to three different ability scores.",
+        "skills": "Insight, Persuasion",
+        "tools": "Navigator's tools or one musical instrument (your choice).",
+        "languages": "One language of your choice.",
+        "originFeat": "Choose one from Inspiring Leader, Skilled, or Keen Mind. Or a Diaper School Origin Feat",
+        "spellsFeatures": ""
+      }
+    },
+    {
+      "id": "library-whisperer",
+      "name": "Library Whisperer",
+      "url": "backgrounds.html?id=library-whisperer",
+      "image": "src/assets/images/backgrounds/librarywhisperer.webp",
+      "description": "The Stacks seem to guide you. Indexes open under your fingers, marginalia points to secrets, and the night librarian nods when you pass. You don’t just find books—you find what people need.",
+      "traits": {
+        "asi": "+2 to one ability score and +1 to another, OR +1 to three different ability scores.",
+        "skills": "Investigation, History",
+        "tools": "Calligrapher's supplies.",
+        "languages": "One language of your choice.",
+        "originFeat": "Choose one from Keen Mind, Observant, or Magic Initiate (Wizard). Or a Diaper School Origin Feat",
+        "spellsFeatures": ""
+      }
+    },
+    {
+      "id": "mender-of-broken-wands",
+      "name": "Mender of Broken Wands",
+      "url": "backgrounds.html?id=mender-of-broken-wands",
+      "image": "src/assets/images/backgrounds/menderofwands.webp",
+      "description": "You fix what others snap—wand cores, cracked focuses, and fragile egos. Your hands are steady, your mind is quick, and your pockets jingle with salvaged bits that \"might be useful later.\"",
+      "traits": {
+        "asi": "+2 to one ability score and +1 to another, OR +1 to three different ability scores.",
+        "skills": "Arcana, Sleight of Hand",
+        "tools": "Tinker's tools.",
+        "languages": "One language of your choice.",
+        "originFeat": "Choose one from Artificer Initiate, Magic Initiate (Wizard), or Skill Expert. Or a Diaper School Origin Feat",
+        "spellsFeatures": ""
+      }
+    },
+    {
+      "id": "groundskeepers-ward",
+      "name": "Groundskeeper's Ward",
+      "url": "backgrounds.html?id=groundskeepers-ward",
+      "image": "src/assets/images/backgrounds/groundskeeperward.webp",
+      "description": "You grew up among greenhouses and groaning statues, learning which paths are safe and which hedges bite back. The campus is a living thing—and it likes you.",
+      "traits": {
+        "asi": "+2 to one ability score and +1 to another, OR +1 to three different ability scores.",
+        "skills": "Nature, Perception",
+        "tools": "Herbalism kit.",
+        "languages": "One language of your choice.",
+        "originFeat": "Choose one from Tough, Observant, or Magic Initiate (Druid). Or a Diaper School Origin Feat",
+        "spellsFeatures": ""
+      }
+    },
+    {
+      "id": "counselors-aide",
+      "name": "Counselor's Aide",
+      "url": "backgrounds.html?id=counselors-aide",
+      "image": "src/assets/images/backgrounds/counselorsaide.webp",
+      "description": "You've seen students at their worst—and helped them find better. A steady voice and a stocked kit turn panic into progress more often than not.",
+      "traits": {
+        "asi": "+2 to one ability score and +1 to another, OR +1 to three different ability scores.",
+        "skills": "Insight, Medicine",
+        "tools": "Calligrapher's supplies or Herbalism kit (your choice).",
+        "languages": "One language of your choice.",
+        "originFeat": "Choose one from Healer, Inspiring Leader, or Skilled. Or a Diaper School Origin Feat",
+        "spellsFeatures": ""
+      }
+    },
+    {
+      "id": "dueling-club-regular",
+      "name": "Dueling Club Regular",
+      "url": "backgrounds.html?id=dueling-club-regular",
+      "image": "src/assets/images/backgrounds/duelingclubregular.webp",
+      "description": "You’re not the top seed, but you’re scrappy and cool under pressure. You know the rules by heart—and how to win within them.",
+      "traits": {
+        "asi": "+2 to one ability score and +1 to another, OR +1 to three different ability scores.",
+        "skills": "Intimidation, and either Athletics or Acrobatics (your choice)",
+        "tools": "One type of gaming set (your choice).",
+        "languages": "One language of your choice.",
+        "originFeat": "Choose one from Martial Initiate, Alert, or Athlete. Or a Diaper School Origin Feat",
+        "spellsFeatures": ""
+      }
+    },
+    {
+      "id": "festival-caravan-kid",
+      "name": "Festival Caravan Kid",
+      "url": "backgrounds.html?id=festival-caravan-kid",
+      "image": "src/assets/images/backgrounds/festivalkid.webp",
+      "description": "You grew up moving from town to town—pitching tents, telling tales, and striking deals. A grin and a good story can get you fed almost anywhere.",
+      "traits": {
+        "asi": "+2 to one ability score and +1 to another, OR +1 to three different ability scores.",
+        "skills": "Performance, Deception",
+        "tools": "Disguise kit or one musical instrument (your choice).",
+        "languages": "One language of your choice.",
+        "originFeat": "Choose one from Actor, Skilled, or Mobile. Or a Diaper School Origin Feat",
+        "spellsFeatures": ""
+      }
+    },
+    {
+      "id": "clocktower-timekeeper",
+      "name": "Clocktower Timekeeper",
+      "url": "backgrounds.html?id=clocktower-timekeeper",
+      "image": "src/assets/images/backgrounds/clocktowertimekeeper.webp",
+      "description": "Maintaining the ancient Academy clock taught you patience and patterns. Schedules unfold like music; you’re rarely surprised by a bell—or a guard shift.",
+      "traits": {
+        "asi": "+2 to one ability score and +1 to another, OR +1 to three different ability scores.",
+        "skills": "Investigation, Perception",
+        "tools": "Tinker's tools.",
+        "languages": "One language of your choice.",
+        "originFeat": "Choose one from Alert, Observant, or Keen Mind. Or a Diaper School Origin Feat",
+        "spellsFeatures": ""
+      }
+    },
+    {
+      "id": "arcane-archivists-runner",
+      "name": "Arcane Archivist's Runner",
+      "url": "backgrounds.html?id=arcane-archivists-runner",
+      "image": "src/assets/images/backgrounds/arcanearchivistrunner.webp",
+      "description": "You ferry sealed documents between faculty who barely speak—except through you. Knowing which door to knock on (and when) is your real magic.",
+      "traits": {
+        "asi": "+2 to one ability score and +1 to another, OR +1 to three different ability scores.",
+        "skills": "Stealth, Persuasion",
+        "tools": "Forgery kit or calligrapher's supplies (your choice).",
+        "languages": "One language of your choice.",
+        "originFeat": "Choose one from Skulker, Skilled, or Magic Initiate (Wizard). Or a Diaper School Origin Feat",
+        "spellsFeatures": ""
+      }
+    },
+    {
+      "id": "kitchen-alchemist",
+      "name": "Kitchen Alchemist",
+      "url": "backgrounds.html?id=kitchen-alchemist",
+      "image": "src/assets/images/backgrounds/kitchenalchemist.webp",
+      "description": "You learned precision by measuring spices and stabilizing sauces. Now your mixtures rarely curdle—and sometimes help more than a meal should.",
+      "traits": {
+        "asi": "+2 to one ability score and +1 to another, OR +1 to three different ability scores.",
+        "skills": "Survival, and either Medicine or Nature (your choice)",
+        "tools": "Cook's utensils or alchemist's supplies (your choice).",
+        "languages": "One language of your choice.",
+        "originFeat": "Choose one from Chef, Tough, or Healer. Or a Diaper School Origin Feat",
+        "spellsFeatures": ""
+      }
+    },
+    {
+      "id": "weatherwatch-initiate",
+      "name": "Weatherwatch Initiate",
+      "url": "backgrounds.html?id=weatherwatch-initiate",
+      "image": "src/assets/images/backgrounds/weatherwatcher.webp",
+      "description": "From rooftops and ridgelines you chart winds and read storms with uncanny accuracy. Friends ask you if it’s a coat day—you are rarely wrong.",
+      "traits": {
+        "asi": "+2 to one ability score and +1 to another, OR +1 to three different ability scores.",
+        "skills": "Nature, Survival",
+        "tools": "Cartographer's tools.",
+        "languages": "One language of your choice.",
+        "originFeat": "Choose one from Observant, Mobile, or Magic Initiate (Druid). Or a Diaper School Origin Feat",
+        "spellsFeatures": ""
+      }
+    },
+    {
+      "id": "custodian-of-oddities",
+      "name": "Custodian of Oddities",
+      "url": "backgrounds.html?id=custodian-of-oddities",
+      "image": "src/assets/images/backgrounds/custodianofoddities.webp",
+      "description": "You inventory the \"please don't touch\" closet. You know which items sing, which sulk, and which explode if you glare at them wrong.",
+      "traits": {
+        "asi": "+2 to one ability score and +1 to another, OR +1 to three different ability scores.",
+        "skills": "Arcana, Investigation",
+        "tools": "Thieves' tools or tinker's tools (your choice).",
+        "languages": "One language of your choice.",
+        "originFeat": "Choose one from Resilient (Con), Alert, or Magic Initiate (Wizard). Or a Diaper School Origin Feat",
+        "spellsFeatures": ""
+      }
+    }
+  ],
+  "originFeats": [
+    {
+      "id": "feat-forever-small",
+      "name": "Forever Small",
+      "url": "originfeats.html?q=Forever%20Small",
+      "image1": "src/assets/images/originfeats/foreversmall1.jpg",
+      "image2": "src/assets/images/originfeats/foreversmall2.jpg",
+      "description": "",
+      "bullets": [
+        "Your size is Small, regardless of your race's normal size.",
+        "You gain a +1 bonus to your Armor Class.",
+        "You have advantage on Dexterity (Stealth) checks.",
+        "You can move through the space of any creature that is of a size larger than yours.",
+        "You have disadvantage on Strength (Athletics) checks made to shove or grapple creatures larger than you.",
+        "Any weapon with the \"heavy\" property is wielded with disadvantage.",
+        "You gain the Incontinent trait. This condition can be overcome with dedicated potty-training efforts during downtime."
+      ],
+      "asiText": ""
+    },
+    {
+      "id": "feat-padding-tsundere",
+      "name": "Padding Tsundere",
+      "url": "originfeats.html?q=Padding%20Tsundere",
+      "image1": "src/assets/images/originfeats/tsundere1.jpg",
+      "image2": "src/assets/images/originfeats/tsundere2.jpg",
+      "description": "You have a complicated relationship with diapers. Your effectiveness is tied to this internal conflict, swinging between frustrated embarrassment and secret, confident enjoyment.",
+      "bullets": [
+        "When your diaper is clean, you gain all the benefits of the Diaper-Mastery feat.",
+        "When your diaper is soiled, you lose the benefits of the Diaper-Mastery feat and suffer a -1 penalty to all attack rolls, ability checks, and saving throws.",
+        "While your diaper is soiled, you can use a bonus action to find a moment of private enjoyment. Make a Charisma (Deception) or Dexterity (Sleight of Hand) check contested by the passive Wisdom (Perception) of any onlookers. On a success, the penalty is replaced with a +2 bonus to all rolls until your next change, and you regain the Diaper-Mastery benefits. On a failure, the penalty remains."
+      ],
+      "asiText": ""
+    },
+    {
+      "id": "feat-padded-professor-in-training",
+      "name": "Padded Professor in Training",
+      "url": "originfeats.html?q=Padded%20Professor%20in%20Training",
+      "image1": "src/assets/images/originfeats/trainingprofessor1.jpg",
+      "image2": "src/assets/images/originfeats/trainingprofessor2.jpg",
+      "description": "You've always been a bookworm, more interested in the theory of magical diapers than their practical application. You're a fountain of knowledge on everything from proper folding techniques to the arcane principles of absorbency.",
+      "bullets": [
+        "Increase your Intelligence or Wisdom score by 1, to a maximum of 20.",
+        "You gain proficiency in two of the following skills: Arcana, History, Investigation, or Medicine.",
+        "You have advantage on any ability check made to recall lore about the Academy's history, its staff, or the properties of various types of mundane or magical diapers.",
+        "You learn the Little Miracle cantrip and one other cantrip of your choice from the wizard or cleric spell list."
+      ],
+      "asiText": "Increase your Intelligence or Wisdom score by 1, to a maximum of 20."
+    },
+    {
+      "id": "feat-born-brat",
+      "name": "Born Brat",
+      "url": "originfeats.html?q=Born%20Brat",
+      "image1": "src/assets/images/originfeats/brat1.jpg",
+      "image2": "src/assets/images/originfeats/brat2.jpg",
+      "description": "Rules were made to be bent, broken, or blamed on someone else. You've been getting your way since you were in pull-ups, and you've elevated whining and manipulation to a high art form.",
+      "bullets": [
+        "Increase your Charisma score by 1, to a maximum of 20.",
+        "You gain proficiency in the Deception and Persuasion skills.",
+        "You have advantage on Charisma (Persuasion) checks made to get out of trouble or punishments, and on Charisma (Deception) checks made to shift blame for your misdeeds onto another creature.",
+        "When a creature attempts to punish you, you can use your reaction to make a contested Charisma (Persuasion) check against their Wisdom (Insight). On a success, the severity of your punishment is halved. You can't use this feature again until you finish a long rest."
+      ],
+      "asiText": "Increase your Charisma score by 1, to a maximum of 20."
+    },
+    {
+      "id": "feat-bratty-brawler",
+      "name": "Bratty Brawler",
+      "url": "originfeats.html?q=Bratty%20Brawler",
+      "image1": "src/assets/images/originfeats/brattybrawler (1).webp",
+      "image2": "src/assets/images/originfeats/brattybrawler (2).webp",
+      "description": "",
+      "bullets": [
+        "Increase your Strength score by 1, to a maximum of 20.",
+        "You gain expertise in the Athletics skill (doubling your proficiency bonus).",
+        "You have advantage on checks to resist being moved or knocked prone.",
+        "You learn the Primal Savagery cantrip (Constitution is your spellcasting ability for it)."
+      ],
+      "asiText": "Increase your Strength score by 1, to a maximum of 20."
+    },
+    {
+      "id": "feat-darkling-whisperer",
+      "name": "Darkling Whisperer",
+      "url": "originfeats.html?q=Darkling%20Whisperer",
+      "image1": "src/assets/images/originfeats/darklinglover1.jpg",
+      "image2": "src/assets/images/originfeats/darklinglover2.jpg",
+      "description": "You see a strange sort of logic in the shadows, a hidden beauty in the darklings that others dismiss as monsters. This connection grants you a unique, if unsettling, edge.",
+      "bullets": [
+        "Increase your Wisdom or Charisma score by 1, to a maximum of 20.",
+        "You have advantage on Wisdom (Animal Handling) and Wisdom (Insight) checks when interacting with monstrosities and aberrations, including Darklings.",
+        "You can communicate simple ideas to Darklings through non-verbal cues and guttural sounds.",
+        "You can cast Animal Friendship at will, but only on beasts and monstrosities with an Intelligence score of 5 or lower."
+      ],
+      "asiText": "Increase your Wisdom or Charisma score by 1, to a maximum of 20."
+    },
+    {
+      "id": "feat-chronal-hiccup",
+      "name": "Chronal Hiccup",
+      "url": "originfeats.html?q=Chronal%20Hiccup",
+      "image1": "src/assets/images/originfeats/anomaly1.jpg",
+      "image2": "src/assets/images/originfeats/anomaly2.jpg",
+      "description": "Time is more of a suggestion for you. This temporal instability is confusing, but it sometimes works in your favor, letting you rewind a clumsy moment or get a brief glimpse of what's next.",
+      "bullets": [
+        "Increase your Dexterity or Intelligence score by 1, to a maximum of 20.",
+        "You gain a +5 bonus to your initiative rolls.",
+        "When you or a creature you can see within 30 feet of you makes an attack roll, an ability check, or a saving throw, you can use your reaction to give that roll advantage or disadvantage. You can't use this feature again until you finish a short or long rest."
+      ],
+      "asiText": "Increase your Dexterity or Intelligence score by 1, to a maximum of 20."
+    },
+    {
+      "id": "feat-potty-trained-paragon",
+      "name": "Potty-Trained Paragon",
+      "url": "originfeats.html?q=Potty-Trained%20Paragon",
+      "image1": "src/assets/images/originfeats/pottytrained1.jpg",
+      "image2": "src/assets/images/originfeats/pottytrained2.jpg",
+      "description": "You stand as a bastion of bladder control in a world awash with accidents. Your discipline and training have given you a resilience that the padded populace can only dream of.",
+      "bullets": [
+        "You are considered Potty-Trained and have advantage against effects that would magically inflict the Incontinent trait.",
+        "You have advantage on Continence Checks made under duress (such as from extreme stress or magical compulsion).",
+        "Once per long rest, when you fail a saving throw against an effect that would cause you to have an \"accident\", you can choose to succeed instead."
+      ],
+      "asiText": ""
+    },
+    {
+      "id": "feat-wellspring-resilience",
+      "name": "Wellspring Resilience",
+      "url": "originfeats.html?q=Wellspring%20Resilience",
+      "image1": "src/assets/images/originfeats/wellspring1.jpg",
+      "image2": "src/assets/images/originfeats/wellspring2.jpg",
+      "description": "You survived the energies of the Well of Souls, and its humming, spectral power has left a permanent mark on you, making you unnervingly resilient to forces that affect the mind and spirit.",
+      "bullets": [
+        "Increase your Constitution or Charisma score by 1, to a maximum of 20.",
+        "You have advantage on saving throws against being charmed or frightened, and you have resistance to psychic damage.",
+        "You learn one cantrip of your choice from the Sorcerer or Warlock spell list. Your spellcasting ability for this cantrip is Charisma."
+      ],
+      "asiText": "Increase your Constitution or Charisma score by 1, to a maximum of 20."
+    },
+    {
+      "id": "feat-rulebender",
+      "name": "Rulebender",
+      "url": "originfeats.html?q=Rulebender",
+      "image1": "src/assets/images/originfeats/rulebender1.jpg",
+      "image2": "src/assets/images/originfeats/rulebender2.jpg",
+      "description": "You used to be the law. Now you're the loophole. Your intimate knowledge of the academy's regulations and physical layout makes you exceptionally good at navigating both.",
+      "bullets": [
+        "Increase your Intelligence or Dexterity score by 1, to a maximum of 20.",
+        "You gain proficiency in the Investigation and Stealth skills.",
+        "You have advantage on checks made to find secret passages, hidden compartments, or notice unusual details within the academy's campus.",
+        "Once per long rest, you can automatically succeed on one Dexterity (Stealth) check made to hide from or move silently past academy staff or monitors."
+      ],
+      "asiText": "Increase your Intelligence or Dexterity score by 1, to a maximum of 20."
+    },
+    {
+      "id": "feat-cultural-liaison",
+      "name": "Cultural Liaison",
+      "url": "originfeats.html?q=Cultural%20Liaison",
+      "image1": "src/assets/images/originfeats/culturalliaison 1.webp",
+      "image2": "src/assets/images/originfeats/culturalliaison 2.webp",
+      "description": "Your travels and embassy ties taught you how to smooth introductions and navigate unfamiliar customs without giving offense.",
+      "bullets": [
+        "Increase your Charisma or Intelligence score by 1, to a maximum of 20.",
+        "You gain proficiency in Persuasion and learn one additional language of your choice.",
+        "You can speak two extra languages of your choice.",
+        "You have advantage on Charisma (Persuasion) checks made to request modest hospitality, referrals, or introductions from cultural clubs, diplomats, or visiting scholars.",
+        "Once per long rest, when you fail a Charisma (Persuasion) check, you can reroll it."
+      ],
+      "asiText": "Increase your Charisma or Intelligence score by 1, to a maximum of 20."
+    },
+    {
+      "id": "feat-stacks-savant",
+      "name": "Stacks Savant",
+      "url": "originfeats.html?q=Stacks%20Savant",
+      "image1": "src/assets/images/originfeats/stacks_savant 1.webp",
+      "image2": "src/assets/images/originfeats/stacks_savant 2.webp",
+      "description": "The library breathes around you; indices, marginalia, and cross-references reveal what others miss.",
+      "bullets": [
+        "Increase your Intelligence score by 1, to a maximum of 20.",
+        "You gain proficiency in Investigation. If you already have it, you instead gain expertise in Investigation (double your proficiency bonus).",
+        "You can speak two extra languages of your choice.",
+        "When researching, you complete tasks in half the usual time and have advantage on checks to locate obscure references within large collections.",
+        "You learn the Guidance cantrip (Intelligence is your spellcasting ability for it)."
+      ],
+      "asiText": "Increase your Intelligence score by 1, to a maximum of 20."
+    },
+    {
+      "id": "feat-wandwrights-touch",
+      "name": "Wandwright's Touch",
+      "url": "originfeats.html?q=Wandwright's%20Touch",
+      "image1": "src/assets/images/originfeats/wandwright.webp",
+      "image2": "src/assets/images/originfeats/wandwright2.webp",
+      "description": "You can coax one more spark from cracked foci and cobbled cores, buying precious time when it matters.",
+      "bullets": [
+        "Increase your Intelligence or Dexterity score by 1, to a maximum of 20.",
+        "You gain proficiency with Tinker's tools.",
+        "You can speak one extra language of your choice.",
+        "During a short rest, you can improvise a simple arcane focus for one creature. For the next 8 hours, that focus functions normally unless it requires costly materials.",
+        "Once per long rest, when a creature within 5 feet would fail a spellcasting ability check to stabilize or maintain a tenuous magical effect, you can grant them a +2 bonus to that check."
+      ],
+      "asiText": "Increase your Intelligence or Dexterity score by 1, to a maximum of 20."
+    },
+    {
+      "id": "feat-hedgewalker",
+      "name": "Hedgewalker",
+      "url": "originfeats.html?q=Hedgewalker",
+      "image1": "src/assets/images/originfeats/hedgewalker (1).webp",
+      "image2": "src/assets/images/originfeats/hedgewalker (2).webp",
+      "description": "You know the campus’s living paths—where thorns ease aside and mossy stones don’t slip.",
+      "bullets": [
+        "Increase your Wisdom or Constitution score by 1, to a maximum of 20.",
+        "You gain proficiency in Nature or Survival (your choice).",
+        "You can speak one extra language of your choice.",
+        "Nonmagical plants and natural clutter don’t count as difficult terrain for you, and you have advantage on checks to navigate gardens, greenhouses, and overgrown spaces.",
+        "You gain advantage on Wisdom (Perception) checks to notice natural hazards."
+      ],
+      "asiText": "Increase your Wisdom or Constitution score by 1, to a maximum of 20."
+    },
+    {
+      "id": "feat-voice-of-reason",
+      "name": "Voice of Reason",
+      "url": "originfeats.html?q=Voice%20of%20Reason",
+      "image1": "src/assets/images/originfeats/voiceofreason (1).webp",
+      "image2": "src/assets/images/originfeats/voiceofreason (2).webp",
+      "description": "You’ve practiced de-escalation and crisis care; your calm steadies shaking hands and hot tempers.",
+      "bullets": [
+        "Increase your Wisdom or Charisma score by 1, to a maximum of 20.",
+        "You gain proficiency in Insight or Medicine (your choice).",
+        "You can speak two extra languages of your choice.",
+        "As an action, you can grant up to two creatures within 30 feet advantage on the next saving throw they make against being charmed or frightened (usable proficiency bonus times per long rest).",
+        "When you use Help on a creature to calm or counsel, the target also gains temporary hit points equal to your proficiency bonus."
+      ],
+      "asiText": "Increase your Wisdom or Charisma score by 1, to a maximum of 20."
+    },
+    {
+      "id": "feat-fencers-footwork",
+      "name": "Fencer's Footwork",
+      "url": "originfeats.html?q=Fencer's%20Footwork",
+      "image1": "src/assets/images/originfeats/fencer1.jpg",
+      "image2": "src/assets/images/originfeats/fencer2.jpg",
+      "description": "Your balance and timing make even practice bouts feel like performances.",
+      "bullets": [
+        "Increase your Dexterity or Constitution score by 1, to a maximum of 20.",
+        "You gain proficiency in Acrobatics or Athletics (your choice).",
+        "When you roll initiative, you can move up to 10 feet without provoking opportunity attacks (once per short or long rest).",
+        "When you take the Dodge action, you gain a +1 bonus to AC until the start of your next turn."
+      ],
+      "asiText": "Increase your Dexterity or Constitution score by 1, to a maximum of 20."
+    },
+    {
+      "id": "feat-clockwise-mind",
+      "name": "Clockwise Mind",
+      "url": "originfeats.html?q=Clockwise%20Mind",
+      "image1": "src/assets/images/originfeats/clockwise1.webp",
+      "image2": "src/assets/images/originfeats/clockwise2.webp",
+      "description": "You feel the rhythm of schedules and the heartbeat between bell chimes.",
+      "bullets": [
+        "Increase your Intelligence or Wisdom score by 1, to a maximum of 20.",
+        "You gain proficiency in Perception or Investigation (your choice).",
+        "Once per long rest, you can gain advantage on an Initiative roll you make.",
+        "You always know the exact time and can estimate durations and travel times with uncanny accuracy."
+      ],
+      "asiText": "Increase your Intelligence or Wisdom score by 1, to a maximum of 20."
+    },
+    {
+      "id": "feat-sealed-courier",
+      "name": "Sealed Courier",
+      "url": "originfeats.html?q=Sealed%20Courier",
+      "image1": "src/assets/images/originfeats/sealedcourier1.webp",
+      "image2": "src/assets/images/originfeats/sealedcourier2.webp",
+      "description": "Trusted hands, quiet footsteps, and a perfect memory for who wants what—and when.",
+      "bullets": [
+        "Increase your Dexterity or Charisma score by 1, to a maximum of 20.",
+        "You gain proficiency in Stealth or Sleight of Hand (your choice).",
+        "You can take the Hide action as a bonus action once per short or long rest.",
+        "You can perfectly recall the wording of any short message (up to 25 words) that you’ve read or heard within the last 24 hours."
+      ],
+      "asiText": "Increase your Dexterity or Charisma score by 1, to a maximum of 20."
+    },
+    {
+      "id": "feat-kitchen-brewer",
+      "name": "Kitchen Brewer",
+      "url": "originfeats.html?q=Kitchen%20Brewer",
+      "image1": "src/assets/images/originfeats/kitchenbrewer1.webp",
+      "image2": "src/assets/images/originfeats/kitchenbrewer2.webp",
+      "description": "Careful timing and steady simmering produce comfort that bolsters body and spirit.",
+      "bullets": [
+        "Increase your Constitution or Wisdom score by 1, to a maximum of 20.",
+        "You gain proficiency with Cook's utensils. If you already have it, add double your proficiency bonus to checks you make with them.",
+        "During a short rest, you can prepare hearty snacks for up to six creatures; each gains temporary hit points equal to your proficiency bonus.",
+        "Once per long rest, a creature that eats your snack also gains advantage on one saving throw against exhaustion or disease made within the next hour."
+      ],
+      "asiText": "Increase your Constitution or Wisdom score by 1, to a maximum of 20."
+    },
+    {
+      "id": "feat-weatherwise",
+      "name": "Weatherwise",
+      "url": "originfeats.html?q=Weatherwise",
+      "image1": "src/assets/images/originfeats/weatherwise1.webp",
+      "image2": "src/assets/images/originfeats/weatherwise2.webp",
+      "description": "You read clouds and currents like a textbook, finding safe routes while storms grumble.",
+      "bullets": [
+        "Increase your Wisdom or Dexterity score by 1, to a maximum of 20.",
+        "You gain proficiency in Survival. If you already have it, add double your proficiency bonus to Survival checks made to navigate or forecast weather.",
+        "You have advantage on checks to avoid becoming lost outdoors and on saves against strong winds or extreme precipitation effects.",
+        "Once per long rest, you can accurately predict the local weather for the next 24 hours."
+      ],
+      "asiText": "Increase your Wisdom or Dexterity score by 1, to a maximum of 20."
+    },
+    {
+      "id": "feat-handler-of-oddities",
+      "name": "Handler of Oddities",
+      "url": "originfeats.html?q=Handler%20of%20Oddities",
+      "image1": "src/assets/images/originfeats/oddityhandler1.webp",
+      "image2": "src/assets/images/originfeats/oddityhandler2.webp",
+      "description": "Labels, padding, and a sixth sense for “don’t touch that” keep the weird stuff safely quiet.",
+      "bullets": [
+        "Increase your Intelligence or Constitution score by 1, to a maximum of 20.",
+        "You gain proficiency in Arcana or with Thieves' tools (your choice).",
+        "You have advantage on checks to identify, secure, or safely transport unusual magical items or minor cursed curios.",
+        "Once per long rest, when you or a creature you can touch would suffer a detrimental effect from handling a magic item, you can grant advantage on the saving throw against that effect."
+      ],
+      "asiText": "Increase your Intelligence or Constitution score by 1, to a maximum of 20."
+    },
+    {
+      "id": "feat-accident-alchemy-initiate",
+      "name": "Accident-Alchemy Initiate",
+      "url": "originfeats.html?q=Accident-Alchemy%20Initiate",
+      "image1": "src/assets/images/originfeats/accident_alchemist1.jpg",
+      "image2": "src/assets/images/originfeats/accident_alchemist2.jpg",
+      "description": "You have a chaotic, intuitive talent for brewing strange potions. Sometimes they even do what you want them to.",
+      "bullets": [
+        "Increase your Intelligence score by 1, to a maximum of 20.",
+        "You gain proficiency with Alchemist's Supplies.",
+        "During a short rest, you can create one \"Unstable Concoction\". When a creature interacts with it, roll a d6 to determine the effect:\nThe target regains 2d4 + your Intelligence modifier hit points.",
+        "The target gains advantage on Strength checks for 10 minutes.",
+        "The target can cast Jump at will for 1 minute.",
+        "The target's skin turns a shimmering color for 1 hour.",
+        "The target is overcome with uncontrollable giggles for 1 minute (incapacitated).",
+        "The target's diaper is instantly filled, bypassing any saves."
+      ],
+      "asiText": "Increase your Intelligence score by 1, to a maximum of 20."
+    }
+  ]
+}

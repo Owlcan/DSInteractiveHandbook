@@ -1,0 +1,155 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-02-12T17:43:49.534Z",
+  "source": "regalia maker.html",
+  "count": 21,
+  "armors": [
+    {
+      "name": "Absorbency-Enhanced Jumpsuit",
+      "ac": 12,
+      "notes": "",
+      "gp": 45,
+      "source": "Regalia"
+    },
+    {
+      "name": "Breastplate",
+      "ac": 14,
+      "notes": "",
+      "gp": 400,
+      "source": "Regalia"
+    },
+    {
+      "name": "Buckler Shield",
+      "ac": 1,
+      "notes": "Grants +1 AC when wielded; does not impose disadvantage on Dexterity (Stealth) checks.",
+      "gp": 5,
+      "source": "Regalia"
+    },
+    {
+      "name": "Chain Mail",
+      "ac": 16,
+      "notes": "Stealth Disadvantage, Str 13 req.",
+      "gp": 75,
+      "source": "Regalia"
+    },
+    {
+      "name": "Chain Shirt",
+      "ac": 13,
+      "notes": "",
+      "gp": 50,
+      "source": "Regalia"
+    },
+    {
+      "name": "Hide Armor",
+      "ac": 12,
+      "notes": "",
+      "gp": 10,
+      "source": "Regalia"
+    },
+    {
+      "name": "Leather Armor",
+      "ac": 11,
+      "notes": "",
+      "gp": 10,
+      "source": "Regalia"
+    },
+    {
+      "name": "Little Knight's Armored Bloomers",
+      "ac": 14,
+      "notes": "Stealth Disadvantage",
+      "gp": 50,
+      "source": "Regalia"
+    },
+    {
+      "name": "Padded Armor",
+      "ac": 11,
+      "notes": "Stealth Disadvantage",
+      "gp": 5,
+      "source": "Regalia"
+    },
+    {
+      "name": "Padded Training Pants",
+      "ac": 11,
+      "notes": "Stealth Disadvantage",
+      "gp": 5,
+      "source": "Regalia"
+    },
+    {
+      "name": "Princess's Protective Pettipants",
+      "ac": 13,
+      "notes": "It's a diaper cover- missy, you can call it pettipants all day, but it goes over what? Your DIAPER!~ <3",
+      "gp": 50,
+      "source": "Regalia"
+    },
+    {
+      "name": "Reinforced Footie Pajamas",
+      "ac": 12,
+      "notes": "",
+      "gp": 45,
+      "source": "Regalia"
+    },
+    {
+      "name": "Ring Mail",
+      "ac": 14,
+      "notes": "Stealth Disadvantage",
+      "gp": 30,
+      "source": "Regalia"
+    },
+    {
+      "name": "Scale Mail",
+      "ac": 14,
+      "notes": "Stealth Disadvantage",
+      "gp": 50,
+      "source": "Regalia"
+    },
+    {
+      "name": "Scholarly Robes with Padded Lining",
+      "ac": 11,
+      "notes": "",
+      "gp": 5,
+      "source": "Regalia"
+    },
+    {
+      "name": "Shield",
+      "ac": 2,
+      "notes": "Grants +2 AC when wielded.",
+      "gp": 10,
+      "source": "Regalia"
+    },
+    {
+      "name": "Splint Armor",
+      "ac": 17,
+      "notes": "Stealth Disadvantage, Str 15 req.",
+      "gp": 200,
+      "source": "Regalia"
+    },
+    {
+      "name": "Standard Issue Onesie",
+      "ac": 11,
+      "notes": "",
+      "gp": 5,
+      "source": "Regalia"
+    },
+    {
+      "name": "Starlight Dreamer Sleepsuit",
+      "ac": 11,
+      "notes": "",
+      "gp": 5,
+      "source": "Regalia"
+    },
+    {
+      "name": "Studded Leather Armor",
+      "ac": 12,
+      "notes": "",
+      "gp": 45,
+      "source": "Regalia"
+    },
+    {
+      "name": "Tactical Diaper Coveralls",
+      "ac": 13,
+      "notes": "",
+      "gp": 50,
+      "source": "Regalia"
+    }
+  ]
+}

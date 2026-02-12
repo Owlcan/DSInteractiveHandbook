@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-02-12T17:43:51.061Z",
+  "source": "SRD (armor table)",
+  "count": 13,
+  "armors": [
+    {
+      "name": "Breastplate",
+      "type": "Medium",
+      "gp": 400,
+      "acText": "14 + Dex (max 2)",
+      "stealthDisadvantage": false,
+      "strengthReq": 0,
+      "notes": ""
+    },
+    {
+      "name": "Chain Mail",
+      "type": "Heavy",
+      "gp": 75,
+      "acText": "16",
+      "stealthDisadvantage": true,
+      "strengthReq": 13,
+      "notes": "Stealth Disadvantage; Str 13 req."
+    },
+    {
+      "name": "Chain Shirt",
+      "type": "Medium",
+      "gp": 50,
+      "acText": "13 + Dex (max 2)",
+      "stealthDisadvantage": false,
+      "strengthReq": 0,
+      "notes": ""
+    },
+    {
+      "name": "Half Plate Armor",
+      "type": "Medium",
+      "gp": 750,
+      "acText": "15 + Dex (max 2)",
+      "stealthDisadvantage": true,
+      "strengthReq": 0,
+      "notes": "Stealth Disadvantage"
+    },
+    {
+      "name": "Hide Armor",
+      "type": "Medium",
+      "gp": 10,
+      "acText": "12 + Dex (max 2)",
+      "stealthDisadvantage": false,
+      "strengthReq": 0,
+      "notes": ""
+    },
+    {
+      "name": "Leather Armor",
+      "type": "Light",
+      "gp": 10,
+      "acText": "11 + Dex",
+      "stealthDisadvantage": false,
+      "strengthReq": 0,
+      "notes": ""
+    },
+    {
+      "name": "Padded Armor",
+      "type": "Light",
+      "gp": 5,
+      "acText": "11 + Dex",
+      "stealthDisadvantage": true,
+      "strengthReq": 0,
+      "notes": "Stealth Disadvantage"
+    },
+    {
+      "name": "Plate Armor",
+      "type": "Heavy",
+      "gp": 1500,
+      "acText": "18",
+      "stealthDisadvantage": true,
+      "strengthReq": 15,
+      "notes": "Stealth Disadvantage; Str 15 req."
+    },
+    {
+      "name": "Ring Mail",
+      "type": "Heavy",
+      "gp": 30,
+      "acText": "14",
+      "stealthDisadvantage": true,
+      "strengthReq": 0,
+      "notes": "Stealth Disadvantage"
+    },
+    {
+      "name": "Scale Mail",
+      "type": "Medium",
+      "gp": 50,
+      "acText": "14 + Dex (max 2)",
+      "stealthDisadvantage": true,
+      "strengthReq": 0,
+      "notes": "Stealth Disadvantage"
+    },
+    {
+      "name": "Shield",
+      "type": "Shield",
+      "gp": 10,
+      "acText": "+2 AC",
+      "stealthDisadvantage": false,
+      "strengthReq": 0,
+      "notes": ""
+    },
+    {
+      "name": "Splint Armor",
+      "type": "Heavy",
+      "gp": 200,
+      "acText": "17",
+      "stealthDisadvantage": true,
+      "strengthReq": 15,
+      "notes": "Stealth Disadvantage; Str 15 req."
+    },
+    {
+      "name": "Studded Leather Armor",
+      "type": "Light",
+      "gp": 45,
+      "acText": "12 + Dex",
+      "stealthDisadvantage": false,
+      "strengthReq": 0,
+      "notes": ""
+    }
+  ]
+}

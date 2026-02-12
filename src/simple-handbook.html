@@ -137,6 +137,11 @@
       gap: 15px;
       margin: 20px 0;
     }
+
+    /* Make the main page tabs ~20% smaller (keep font size as-is) */
+    nav > button {
+      padding: 10px 20px;
+    }
     
     button {
       padding: 12px 25px;
@@ -471,6 +476,7 @@
     #bestiary-iframe-container,
     #items-iframe-container,
     #crafting-iframe-container,
+    #sheet-helper-iframe-container,
     #races-iframe-container,
     #spellbook-iframe-container,
     #tracker-iframe-container,
@@ -847,6 +853,7 @@
       <button id="btn-items">Items</button> 
       <button id="btn-crafting" class="nav-button">Crafting</button>
       <button id="btn-tips" class="nav-button">How to Play</button>
+      <button id="btn-sheet-helper" class="nav-button">Sheet Helper</button>
       <button id="btn-legacy-Weapons">Legacy Weapons</button>
       <button id="btn-regalia" class="section-button">Regalia Creator</button>
       <button id="btn-lore">Lore</button>
@@ -1123,7 +1130,7 @@
       	 </ul>
     	 </div>
   	 </div>
-  	 <p style="margin-top: 2rem; text-align: center;">Remember, little heroes, the most important rule is to have FUN and be kind to your fellow adventurers! Now go forth and have some amazing Diaper School adventures!</p>
+	 	 <p style="margin-top: 2rem; text-align: center;">Remember, little heroes, the most important rule is to have FUN and be kind to your fellow adventurers! Now go forth and have some amazing Diaper School adventures!</p>
 
     <h2 id="tips-downloads" style="margin-top: 3rem; text-align: center;">Downloads</h2>
     <p style="text-align: center; margin-bottom: 2rem;">Grab offline tools and mini-apps here:</p>
@@ -1707,7 +1714,15 @@
       </div>
 
       <p style="margin-top: 2rem; text-align: center;">Remember, little heroes, the most important rule is to have FUN and be kind to your fellow adventurers! Now go forth and have some amazing Diaper School adventures!</p>
-    </div> 
+    </div>
+
+    <div id="sheet-helper-section" class="content-section" data-prefer-hide-tabs="true" data-prefer-wide-layout="true" data-prefer-full-frame="true">
+      <div class="section-header-row">
+        <h2>Sheet Helper</h2>
+        <button type="button" class="popout-btn" onclick="window.popOutTool && window.popOutTool('sheethelper')">Pop out</button>
+      </div>
+      <div id="sheet-helper-iframe-container" class="iframe-container"></div>
+    </div>
     
     <div id="code-of-conduct-section" class="content-section">
       <h2>Student Code of Conduct</h2>
@@ -2800,6 +2815,7 @@
         { containerId: 'bestiary-iframe-container', iframeId: 'bestiary-iframe', type: 'dynamic' },
         { containerId: 'items-iframe-container', iframeId: 'items-iframe', type: 'dynamic' },
         { containerId: 'crafting-iframe-container', iframeId: 'crafting-iframe', type: 'dynamic' },
+        { containerId: 'sheet-helper-iframe-container', iframeId: 'sheet-helper-iframe', type: 'dynamic' },
         { containerId: 'spellbook-iframe-container', iframeId: 'spellbook-iframe', type: 'dynamic' },
         { containerId: 'tracker-iframe-container', iframeId: 'tracker-iframe', type: 'dynamic' },
         { containerId: 'book-reader-iframe-container', iframeId: 'book-reader-iframe', type: 'dynamic' },
@@ -2957,6 +2973,9 @@
           break;
         case 'crafting':
           popOutByIframeId('crafting-iframe', 'AlchemyExplorer/index.html', 'Crafting');
+          break;
+        case 'sheethelper':
+          popOutByIframeId('sheet-helper-iframe', '../MyFirstGSheetMaker.html', 'Sheet Helper');
           break;
         case 'tracker':
           popOutByIframeId('tracker-iframe', '../SWATsystem.html', 'Tracker');
@@ -3911,6 +3930,12 @@
           section.classList.add('active');
           applySectionUiPreferences(section);
             initializeAccordions(document.getElementById('tips-section'));
+        },
+        'btn-sheet-helper': () => {
+          const section = document.getElementById('sheet-helper-section');
+          section.classList.add('active');
+          applySectionUiPreferences(section);
+          createOrRefreshIframe('sheet-helper-iframe-container', 'sheet-helper-iframe', '../MyFirstGSheetMaker.html', 'Sheet Helper');
         },
         'btn-legacy-Weapons': () => {
           const section = document.getElementById('legacy-Weapons');

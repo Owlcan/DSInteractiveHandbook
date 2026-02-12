@@ -1,0 +1,496 @@
+{
+  "meta": {
+    "source": "src/legacyweapon.html",
+    "generatedAt": "2026-02-12T03:01:50.235Z",
+    "maxBaseCostGp": 500,
+    "count": 54
+  },
+  "weapons": [
+    {
+      "name": "Arquebus",
+      "group": "Renaissance Firearms",
+      "category": "renaissance ranged",
+      "damage_dice": "1d12",
+      "damage_type": "piercing",
+      "properties": "Ammunition (range 50/150), loading, two-handed, firearm",
+      "base_cost": 450
+    },
+    {
+      "name": "Battleaxe",
+      "group": "Melee",
+      "category": "martial melee",
+      "damage_dice": "1d8",
+      "damage_type": "slashing",
+      "properties": "Versatile (1d10)",
+      "base_cost": 10
+    },
+    {
+      "name": "Blunderbuss",
+      "group": "Renaissance Firearms",
+      "category": "renaissance ranged",
+      "damage_dice": "2d8",
+      "damage_type": "piercing",
+      "properties": "Ammunition (range 15/30), loading, two-handed, firearm, scatter",
+      "base_cost": 300
+    },
+    {
+      "name": "Boomerang",
+      "group": "Simple Ranged",
+      "category": "simple ranged",
+      "damage_dice": "1d4",
+      "damage_type": "bludgeoning",
+      "properties": "Light, Finesse, Thrown (range 30/120), returns to wielder's hand on a miss",
+      "base_cost": 25
+    },
+    {
+      "name": "Cestus",
+      "group": "Melee",
+      "category": "martial melee",
+      "damage_dice": "1d6",
+      "damage_type": "bludgeoning",
+      "properties": "Light, Light, counts as unarmed strike",
+      "base_cost": 5
+    },
+    {
+      "name": "Chakram",
+      "group": "Melee",
+      "category": "martial melee",
+      "damage_dice": "1d6",
+      "damage_type": "slashing",
+      "properties": "Light, Finesse, Thrown (range 30/120), returns to wielder's hand on a successful hit",
+      "base_cost": 30
+    },
+    {
+      "name": "Club",
+      "group": "Simple",
+      "category": "simple melee",
+      "damage_dice": "1d4",
+      "damage_type": "bludgeoning",
+      "properties": "Light",
+      "base_cost": 0.01
+    },
+    {
+      "name": "Dagger",
+      "group": "Simple",
+      "category": "simple melee",
+      "damage_dice": "1d4",
+      "damage_type": "piercing",
+      "properties": "Light, Finesse, Thrown (range 20/60)",
+      "base_cost": 5
+    },
+    {
+      "name": "Dart",
+      "group": "Simple Ranged",
+      "category": "simple ranged",
+      "damage_dice": "1d4",
+      "damage_type": "piercing",
+      "properties": "Finesse, Thrown (range 20/60)",
+      "base_cost": 5
+    },
+    {
+      "name": "Exploding Bolts Crossbow",
+      "group": "Melee Ranged",
+      "category": "martial ranged",
+      "damage_dice": "2d8",
+      "damage_type": "piercing",
+      "properties": "Ammunition (range 60/240), reload (3), two-handed, explosive",
+      "base_cost": 200
+    },
+    {
+      "name": "Fine Dueling Pistol",
+      "group": "Renaissance Firearms",
+      "category": "renaissance ranged",
+      "damage_dice": "1d8",
+      "damage_type": "piercing",
+      "properties": "Light, Finesse, Ammunition (range 30/90), loading, firearm; designed for quick-draw and trick shots, counts as a finesse pistol",
+      "base_cost": 350
+    },
+    {
+      "name": "Flail",
+      "group": "Melee",
+      "category": "martial melee",
+      "damage_dice": "1d8",
+      "damage_type": "bludgeoning",
+      "properties": "",
+      "base_cost": 10
+    },
+    {
+      "name": "Glaive",
+      "group": "Melee",
+      "category": "martial melee",
+      "damage_dice": "1d10",
+      "damage_type": "slashing",
+      "properties": "Heavy, reach, two-handed",
+      "base_cost": 20
+    },
+    {
+      "name": "Greataxe",
+      "group": "Melee",
+      "category": "martial melee",
+      "damage_dice": "1d12",
+      "damage_type": "slashing",
+      "properties": "Heavy, two-handed",
+      "base_cost": 30
+    },
+    {
+      "name": "Greatclub",
+      "group": "Simple",
+      "category": "simple melee",
+      "damage_dice": "1d8",
+      "damage_type": "bludgeoning",
+      "properties": "Two-handed",
+      "base_cost": 20
+    },
+    {
+      "name": "Greatsword",
+      "group": "Melee",
+      "category": "martial melee",
+      "damage_dice": "2d6",
+      "damage_type": "slashing",
+      "properties": "Heavy, two-handed",
+      "base_cost": 50
+    },
+    {
+      "name": "Halberd",
+      "group": "Melee",
+      "category": "martial melee",
+      "damage_dice": "1d10",
+      "damage_type": "slashing",
+      "properties": "Heavy, reach, two-handed",
+      "base_cost": 20
+    },
+    {
+      "name": "Hand Crossbow",
+      "group": "Melee Ranged",
+      "category": "martial ranged",
+      "damage_dice": "1d6",
+      "damage_type": "piercing",
+      "properties": "Light, Ammunition (range 30/120), light, loading",
+      "base_cost": 75
+    },
+    {
+      "name": "Handaxe",
+      "group": "Simple",
+      "category": "simple melee",
+      "damage_dice": "1d6",
+      "damage_type": "slashing",
+      "properties": "Light, Thrown (range 20/60)",
+      "base_cost": 50
+    },
+    {
+      "name": "Harpoon Gun",
+      "group": "Melee Ranged",
+      "category": "martial ranged",
+      "damage_dice": "1d10",
+      "damage_type": "piercing",
+      "properties": "Ammunition (range 30/120), reload (1), two-handed, tether",
+      "base_cost": 150
+    },
+    {
+      "name": "Heavy Crossbow",
+      "group": "Melee Ranged",
+      "category": "martial ranged",
+      "damage_dice": "1d10",
+      "damage_type": "piercing",
+      "properties": "Ammunition (range 100/400), heavy, loading, two-handed",
+      "base_cost": 50
+    },
+    {
+      "name": "Heavy Repeating Crossbow",
+      "group": "Melee Ranged",
+      "category": "martial ranged",
+      "damage_dice": "1d10",
+      "damage_type": "piercing",
+      "properties": "Ammunition (range 100/400), reload (3), heavy, two-handed",
+      "base_cost": 250
+    },
+    {
+      "name": "Javelin",
+      "group": "Simple",
+      "category": "simple melee",
+      "damage_dice": "1d6",
+      "damage_type": "piercing",
+      "properties": "Thrown (range 30/120)",
+      "base_cost": 50
+    },
+    {
+      "name": "Katana",
+      "group": "Melee",
+      "category": "martial melee",
+      "damage_dice": "1d8",
+      "damage_type": "slashing",
+      "properties": "Finesse, Versatile (1d10)",
+      "base_cost": 50
+    },
+    {
+      "name": "Kunai",
+      "group": "Simple",
+      "category": "simple melee",
+      "damage_dice": "1d4",
+      "damage_type": "piercing",
+      "properties": "Light, Finesse, Thrown (range 20/60), can be used as a climbing tool",
+      "base_cost": 25
+    },
+    {
+      "name": "Lance",
+      "group": "Melee",
+      "category": "martial melee",
+      "damage_dice": "1d12",
+      "damage_type": "piercing",
+      "properties": "Reach, special (disadvantage when attacking within 5 feet)",
+      "base_cost": 10
+    },
+    {
+      "name": "Light Crossbow",
+      "group": "Simple Ranged",
+      "category": "simple ranged",
+      "damage_dice": "1d8",
+      "damage_type": "piercing",
+      "properties": "Ammunition (range 80/320), loading, two-handed",
+      "base_cost": 25
+    },
+    {
+      "name": "Light Hammer",
+      "group": "Simple",
+      "category": "simple melee",
+      "damage_dice": "1d4",
+      "damage_type": "bludgeoning",
+      "properties": "Light, Thrown (range 20/60)",
+      "base_cost": 20
+    },
+    {
+      "name": "Longbow",
+      "group": "Melee Ranged",
+      "category": "martial ranged",
+      "damage_dice": "1d8",
+      "damage_type": "piercing",
+      "properties": "Ammunition (range 150/600), heavy, two-handed",
+      "base_cost": 50
+    },
+    {
+      "name": "Longsword",
+      "group": "Melee",
+      "category": "martial melee",
+      "damage_dice": "1d8",
+      "damage_type": "slashing",
+      "properties": "Versatile (1d10)",
+      "base_cost": 15
+    },
+    {
+      "name": "Mace",
+      "group": "Simple",
+      "category": "simple melee",
+      "damage_dice": "1d6",
+      "damage_type": "bludgeoning",
+      "properties": "",
+      "base_cost": 50
+    },
+    {
+      "name": "Maul",
+      "group": "Melee",
+      "category": "martial melee",
+      "damage_dice": "2d6",
+      "damage_type": "bludgeoning",
+      "properties": "Heavy, two-handed",
+      "base_cost": 10
+    },
+    {
+      "name": "Morningstar",
+      "group": "Melee",
+      "category": "martial melee",
+      "damage_dice": "1d8",
+      "damage_type": "piercing",
+      "properties": "",
+      "base_cost": 15
+    },
+    {
+      "name": "Musket",
+      "group": "Renaissance Firearms",
+      "category": "renaissance ranged",
+      "damage_dice": "1d12",
+      "damage_type": "piercing",
+      "properties": "Ammunition (range 40/120), loading, two-handed, firearm",
+      "base_cost": 500
+    },
+    {
+      "name": "Net",
+      "group": "Melee Ranged",
+      "category": "martial ranged",
+      "damage_dice": "0",
+      "damage_type": "none",
+      "properties": "Special (restrain, one target), thrown (range 5/15)",
+      "base_cost": 2
+    },
+    {
+      "name": "Pepperbox",
+      "group": "Renaissance Firearms",
+      "category": "renaissance ranged",
+      "damage_dice": "1d8",
+      "damage_type": "piercing",
+      "properties": "Light, Ammunition (range 30/90), firearm, reload (6)",
+      "base_cost": 400
+    },
+    {
+      "name": "Pike",
+      "group": "Melee",
+      "category": "martial melee",
+      "damage_dice": "1d10",
+      "damage_type": "piercing",
+      "properties": "Heavy, reach, two-handed",
+      "base_cost": 5
+    },
+    {
+      "name": "Pistol",
+      "group": "Renaissance Firearms",
+      "category": "renaissance ranged",
+      "damage_dice": "1d10",
+      "damage_type": "piercing",
+      "properties": "Ammunition (range 30/90), loading, firearm",
+      "base_cost": 250
+    },
+    {
+      "name": "Quarterstaff",
+      "group": "Simple",
+      "category": "simple melee",
+      "damage_dice": "1d6",
+      "damage_type": "bludgeoning",
+      "properties": "Versatile (1d8)",
+      "base_cost": 20
+    },
+    {
+      "name": "Rapier",
+      "group": "Melee",
+      "category": "martial melee",
+      "damage_dice": "1d8",
+      "damage_type": "piercing",
+      "properties": "Finesse",
+      "base_cost": 25
+    },
+    {
+      "name": "Repeating Crossbow",
+      "group": "Melee Ranged",
+      "category": "martial ranged",
+      "damage_dice": "1d8",
+      "damage_type": "piercing",
+      "properties": "Ammunition (range 80/320), reload (5), two-handed",
+      "base_cost": 100
+    },
+    {
+      "name": "Sai",
+      "group": "Melee",
+      "category": "martial melee",
+      "damage_dice": "1d4",
+      "damage_type": "piercing",
+      "properties": "Light, Finesse, Light, special (can attempt to disarm as bonus action)",
+      "base_cost": 5
+    },
+    {
+      "name": "Scimitar",
+      "group": "Melee",
+      "category": "martial melee",
+      "damage_dice": "1d6",
+      "damage_type": "slashing",
+      "properties": "Light, Finesse",
+      "base_cost": 25
+    },
+    {
+      "name": "Scythe",
+      "group": "Melee",
+      "category": "martial melee",
+      "damage_dice": "1d10",
+      "damage_type": "slashing",
+      "properties": "Two-handed, reach",
+      "base_cost": 20
+    },
+    {
+      "name": "Shortbow",
+      "group": "Simple Ranged",
+      "category": "simple ranged",
+      "damage_dice": "1d6",
+      "damage_type": "piercing",
+      "properties": "Ammunition (range 80/320), two-handed",
+      "base_cost": 25
+    },
+    {
+      "name": "Shortsword",
+      "group": "Melee",
+      "category": "martial melee",
+      "damage_dice": "1d6",
+      "damage_type": "piercing",
+      "properties": "Light, Finesse",
+      "base_cost": 10
+    },
+    {
+      "name": "Sickle",
+      "group": "Simple",
+      "category": "simple melee",
+      "damage_dice": "1d4",
+      "damage_type": "slashing",
+      "properties": "Light",
+      "base_cost": 1
+    },
+    {
+      "name": "Sling",
+      "group": "Simple Ranged",
+      "category": "simple ranged",
+      "damage_dice": "1d4",
+      "damage_type": "bludgeoning",
+      "properties": "Ammunition (range 30/120)",
+      "base_cost": 10
+    },
+    {
+      "name": "Spear",
+      "group": "Simple",
+      "category": "simple melee",
+      "damage_dice": "1d6",
+      "damage_type": "piercing",
+      "properties": "Thrown (range 20/60), versatile (1d8)",
+      "base_cost": 1
+    },
+    {
+      "name": "Trident",
+      "group": "Melee",
+      "category": "martial melee",
+      "damage_dice": "1d6",
+      "damage_type": "piercing",
+      "properties": "Thrown (range 20/60), versatile (1d8)",
+      "base_cost": 5
+    },
+    {
+      "name": "War Pick",
+      "group": "Melee",
+      "category": "martial melee",
+      "damage_dice": "1d8",
+      "damage_type": "piercing",
+      "properties": "",
+      "base_cost": 5
+    },
+    {
+      "name": "Warhammer",
+      "group": "Melee",
+      "category": "martial melee",
+      "damage_dice": "1d8",
+      "damage_type": "bludgeoning",
+      "properties": "Versatile (1d10)",
+      "base_cost": 15
+    },
+    {
+      "name": "Whip",
+      "group": "Melee",
+      "category": "martial melee",
+      "damage_dice": "1d4",
+      "damage_type": "slashing",
+      "properties": "Finesse, Reach",
+      "base_cost": 2
+    },
+    {
+      "name": "Wrist Blades",
+      "group": "Melee",
+      "category": "martial melee",
+      "damage_dice": "1d8",
+      "damage_type": "slashing",
+      "properties": "Light, Finesse, Light, can be concealed, counts as unarmed strike",
+      "base_cost": 100
+    }
+  ]
+}

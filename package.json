@@ -11,6 +11,14 @@
 	"scripts": {
 		"start": "node server.js",
 		"build:tailwind": "tailwindcss -i ./styles/tailwind-input.css -o ./styles/tailwind.css --minify",
-		"watch:tailwind": "tailwindcss -i ./styles/tailwind-input.css -o ./styles/tailwind.css --watch"
+		"watch:tailwind": "tailwindcss -i ./styles/tailwind-input.css -o ./styles/tailwind.css --watch",
+		"build:rulesgvar": "node tools/build_rules_lookup_gvar_from_simple_handbook.js",
+		"split:rulesgvar": "node tools/split_rules_lookup_gvar_for_avrae.js --limit=80000",
+		"build:srdspells": "node tools/build_srd_spells_index.js",
+		"build:handbookspells": "node tools/build_handbook_spells_index.js",
+		"build:legacyweapons": "node tools/build_legacy_weapons_index.js",
+		"build:regaliaarmor": "node tools/build_regalia_armor_index.js",
+		"build:srdarmor": "node tools/build_srd_armor_index.js",
+		"build:all": "npm run build:srdspells && npm run build:handbookspells && npm run build:legacyweapons && npm run build:regaliaarmor && npm run build:srdarmor"
 	}
 }

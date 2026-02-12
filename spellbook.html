@@ -152,6 +152,11 @@ button:hover {
   font-size: 1.5rem;
 }
 
+/* Existing (custom) spellbook spells: pink titles to show origin */
+.card.origin-handbook h3 {
+	color: #ff4fbf;
+}
+
 .card p {
   color: var(--ink);
 }
@@ -393,14 +398,14 @@ button:hover {
     	"level": 0,
     	"school": "Evocation",
     	"casttime": "1 action",
-    	"range": "Touch",
+    	"range": "Touch (20 feet with spectral reach)",
     	"components": {
         	"verbal": true,
         	"somatic": true,
         	"material": "None"
     	},
     	"duration": "Instantaneous",
-    	"description": "You channel a jolt of electricity through your hand to deliver an embarrassing shock. Make a melee spell attack against a creature you can reach. On a hit, the target takes 1d8 lightning damage and must make a Constitution saving throw. On a failed save, the creature loses control and wets their pants, causing both humiliation and inconvenience.\n\nIf the target wets their pants, they cannot take reactions until the start of their next turn. Creatures wearing impermeable or magically resistant clothing may gain advantage on this saving throw, at the DM's discretion.\n\nThe spell’s damage increases when you reach higher levels:\n• At 5th level, the damage increases to 2d8.\n• At 11th level, the damage increases to 3d8.\n• At 17th level, the damage increases to 4d8.",
+    	"description": "You channel a jolt of electricity through your hand and even through the air to deliver an embarrassing shock. Make a ranged-touch spell attack against a creature you can reach. On a hit, the target takes 1d8 lightning damage and must make a Constitution saving throw. On a failed save, the creature loses control and wets their pants, causing both humiliation and inconvenience.\n\nIf the target wets their pants, they cannot take reactions until the start of their next turn. Creatures wearing impermeable or magically resistant clothing may gain advantage on this saving throw, at the DM's discretion.\n\nThe spell’s damage increases when you reach higher levels:\n• At 5th level, the damage increases to 2d8.\n• At 11th level, the damage increases to 3d8.\n• At 17th level, the damage increases to 4d8.",
 	},
 	{
     	"name": "Spank!",
@@ -1218,7 +1223,7 @@ button:hover {
     	"school": "Conjuration",
     	"classes": "Wizard, Sorcerer, Bard, Cleric",
     	"casttime": "1 action",
-    	"range": "Self (10-foot circle)",
+    	"range": "Self (100-foot sight)",
     	"components": {
         	"verbal": true,
         	"somatic": true,
@@ -1226,7 +1231,7 @@ button:hover {
     	},
     	"duration": "Concentration, up to 1 minute",
     	"ritual": false,
-    	"description": "You open a swirling, lavatorial gateway that manifests as a 10-foot circle of shimmering, playful energy. The area transforms into a miniature enchanted changing room, with soft giggles and a hint of baby powder in the air. While the portal remains open, you and one willing creature of your choice may step inside and be instantly transported to any location you have previously seen. The portal vanishes at the start of your next turn or if your concentration is broken. If any lingering magical or embarrassing effects level 3 or below cling to those who travel through, the transit washes them clean of such afflictions."
+    	"description": "You open a swirling, lavatorial gateway that manifests within your own diaper and connects it to the underpants of another person- a target you can see within 100ft. Upon casting the spell, designate a target, they must make a CON saving throw against your spell save DC, or be linked by the Potty Portal.. For the duration of the spell, any potty check you fail will manifest itself in the diaper of a target you can see within 100ft. If the target is undiapered, they will instead soil their small-clothes."
 	},
 	{
     	"name": "Messy Misdirection",
@@ -2504,6 +2509,49 @@ button:hover {
 	}
 ];
 
+	// Merge SRD spells + existing spellbook spells at runtime.
+	let allSpellsData = [];
+	let __allSpellsLoadPromise = null;
+
+	function withOrigin(spell, origin) {
+		return { ...spell, __origin: origin };
+	}
+
+	function sortSpellsForDisplay(arr) {
+		return [...arr].sort((a, b) => {
+			const la = Number(a.level);
+			const lb = Number(b.level);
+			if (la !== lb) return la - lb;
+			return String(a.name || '').localeCompare(String(b.name || ''));
+		});
+	}
+
+	async function ensureAllSpellsLoaded() {
+		if (__allSpellsLoadPromise) return __allSpellsLoadPromise;
+		__allSpellsLoadPromise = (async () => {
+			const handbook = Array.isArray(spellsData)
+				? spellsData.map(s => withOrigin(s, 'handbook'))
+				: [];
+
+			let srd = [];
+			try {
+				const res = await fetch('src/srd_spells_index.json', { cache: 'no-store' });
+				if (res.ok) {
+					const json = await res.json();
+					if (json && Array.isArray(json.spells)) {
+						srd = json.spells.map(s => withOrigin(s, 'srd'));
+					}
+				}
+			} catch (e) {
+				// If SRD fetch fails, we still show custom spells.
+			}
+
+			allSpellsData = sortSpellsForDisplay([...srd, ...handbook]);
+			return allSpellsData;
+		})();
+		return __allSpellsLoadPromise;
+	}
+
   let isCondensedView = false;
 
 	function escapeHtml(text) {
@@ -2681,6 +2729,7 @@ button:hover {
 				n: 'necromancy', necromancy: 'necromancy',
 				d: 'divination', divination: 'divination',
 				t: 'transmutation', transmutation: 'transmutation',
+				e: 'enchantment', enchantment: 'enchantment',
 				// pass-through for custom schools like 'luminancy' or 'divine'
 				luminancy: 'luminancy', divine: 'divine'
 			};
@@ -2692,8 +2741,17 @@ button:hover {
 			return norm.charAt(0).toUpperCase() + norm.slice(1);
 		};
     
-    // Create a filtered array of spells
-    let filteredSpells = [...spellsData];
+		// Create a filtered array of spells
+		let filteredSpells = [...allSpellsData];
+		if (filteredSpells.length === 0) {
+			const loadingMsg = document.createElement('div');
+			loadingMsg.className = 'card';
+			loadingMsg.innerHTML = '<p>Loading spells…</p>';
+			spellsContainer.appendChild(loadingMsg);
+			// Kick off async loading if it hasn't started yet.
+			ensureAllSpellsLoaded().then(loadSpells);
+			return;
+		}
     
     // Apply level filter
 		if (levelValue !== 'all') {
@@ -2730,6 +2788,7 @@ button:hover {
 		filteredSpells.forEach((spell, index) => {
 			const card = document.createElement('div');
 			card.className = isCondensedView ? 'card condensed' : 'card';
+			if (spell.__origin === 'handbook') card.classList.add('origin-handbook');
 			card.dataset.spellIndex = index;
 
 			if (isCondensedView) {
@@ -2795,7 +2854,8 @@ button:hover {
 		}
     
     // Switch to full view for this card
-    card.className = 'card';
+	card.className = 'card';
+	if (spell.__origin === 'handbook') card.classList.add('origin-handbook');
 		if (containsMarkdownTable(spell.description || '')) {
 			card.classList.add('has-md-table');
 		}
@@ -2828,7 +2888,8 @@ button:hover {
     const collapseBtn = card.querySelector('.collapse-btn');
     collapseBtn.addEventListener('click', (e) => {
       e.stopPropagation();
-      card.className = 'card condensed';
+		card.className = 'card condensed';
+		if (spell.__origin === 'handbook') card.classList.add('origin-handbook');
       card.innerHTML = `
         <h3>${spell.name}</h3>
 				<span class="spell-meta">${getOrdinal(Number(spell.level))}-level ${schoolText}</span>
@@ -2898,7 +2959,7 @@ button:hover {
 			const q = new URLSearchParams(window.location.search || '').get('q');
 			if (q && nameFilterEl) nameFilterEl.value = q;
 		} catch (e) {}
-    loadSpells();
+			ensureAllSpellsLoaded().finally(loadSpells);
   }
   
   // Use a more robust method to ensure the content is loaded
