@@ -7,7 +7,7 @@
   },
   "counts": {
     "backgrounds": 27,
-    "originFeats": 22
+    "originFeats": 23
   },
   "backgrounds": [
     {
@@ -434,6 +434,23 @@
         "You gain the Incontinent trait. This condition can be overcome with dedicated potty-training efforts during downtime."
       ],
       "asiText": ""
+    },
+    {
+      "id": "feat-diaper-mastery",
+      "name": "Diaper-Mastery",
+      "url": "originfeats.html?q=Diaper-Mastery",
+      "image1": "src/assets/images/diapermastery.webp",
+      "image2": "src/assets/images/diapermastery.webp",
+      "description": "Prerequisite: Possession of the Incontinent trait.",
+      "bullets": [
+        "Increase your Constitution score by 2, to a maximum of 20.",
+        "When you roll a 1 on a Continence Check or successfully fill your diaper without leaking, you gain a +1 Relief Bonus to all rolls for the next 1 minute (10 rounds).",
+        "You gain advantage on Insight and Investigation checks that relate to diaper conditions.",
+        "You may track any diapered creature via your Survival skill, even without traditional training in it.",
+        "In combat, aside from suffering the effects of a Leaking Diaper, you are no longer penalized by a full or messy diaper.",
+        "When your diaper is in a messy state, you gain advantage on Persuasion checks—but only if these checks are not used to mask the true state of your maturity or odor."
+      ],
+      "asiText": "Increase your Constitution score by 2, to a maximum of 20."
     },
     {
       "id": "feat-padding-tsundere",

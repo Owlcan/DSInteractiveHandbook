@@ -95,6 +95,11 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
         }
+
+        /* When embedded in an iframe, hide the bottom disclaimer to avoid doubling with the parent page. */
+        html.embedded #srd-disclaimer {
+            display: none;
+        }
         
         .input-dark {
             background-color: #0f172a;
@@ -187,7 +192,7 @@
             <!-- STEP 1: PAPERWORK -->
             <div id="step-1" class="step-content flex-col h-full p-6 md:p-8 overflow-hidden">
                 <div class="mb-4 border-b border-darkblue-700 pb-2 flex-shrink-0">
-                    <span class="text-xs font-bold text-academy-blue uppercase tracking-wider">Step 1 of 10</span>
+                    <span class="text-xs font-bold text-academy-blue uppercase tracking-wider">Step 1 of 11</span>
                     <h2 class="text-2xl font-bold text-white mt-1">The Essential Paperwork</h2>
                 </div>
                 
@@ -222,7 +227,7 @@
             <!-- STEP 2: RACE -->
             <div id="step-2" class="step-content flex-col h-full p-6 md:p-8 overflow-y-auto relative">
                 <div class="mb-4 border-b border-darkblue-700 pb-2">
-                    <span class="text-xs font-bold text-academy-blue uppercase tracking-wider">Step 2 of 10</span>
+                    <span class="text-xs font-bold text-academy-blue uppercase tracking-wider">Step 2 of 11</span>
                     <h2 class="text-2xl font-bold text-white mt-1">Choose Your Species</h2>
                 </div>
                 
@@ -296,6 +301,37 @@
                                     <div><label class="text-[10px] text-silver-500 block">CHA</label><input type="number" id="race-cha" class="input-dark px-1" value="0" onchange="calcStats()"></div>
                                 </div>
                                 <div id="race-asi-choice-container" class="hidden mt-2 p-2 bg-darkblue-900 rounded border border-darkblue-800"></div>
+
+                                <div id="human-variant-container" class="hidden mt-3 p-3 bg-darkblue-900 rounded border border-blue-900/40">
+                                    <div class="flex items-center justify-between gap-3">
+                                        <div class="text-xs font-bold text-blue-300 uppercase tracking-wider">Human Options</div>
+                                        <div id="human-variant-note" class="text-[11px] text-silver-500"></div>
+                                    </div>
+                                    <label class="mt-2 flex items-center gap-2 text-sm text-silver-300 cursor-pointer select-none">
+                                        <input type="checkbox" id="human-variant-check" class="w-4 h-4 rounded border-gray-600 bg-gray-700 text-academy-blue focus:ring-academy-blue" onchange="onHumanVariantToggle()">
+                                        Use Variant Human (choose a feat at creation)
+                                    </label>
+
+                                    <div id="human-creationfeat-block" class="mt-3 opacity-50 pointer-events-none">
+                                        <label class="block text-xs font-bold text-silver-500 uppercase mb-1">Creation Feat</label>
+                                        <select id="human-creationfeat-select" class="input-dark" onchange="onHumanCreationFeatChanged()" disabled>
+                                            <option value="" selected>Loading feats…</option>
+                                        </select>
+                                        <div id="human-creationfeat-asi-choice-container" class="hidden mt-2 p-2 bg-darkblue-950 rounded border border-darkblue-800"></div>
+                                        <div id="human-creationfeat-details" class="mt-2 text-sm text-silver-300">
+                                            <div class="text-silver-500 italic">Pick a creation feat to see details here.</div>
+                                        </div>
+
+                                        <input type="hidden" id="vhfeat-str" value="0">
+                                        <input type="hidden" id="vhfeat-dex" value="0">
+                                        <input type="hidden" id="vhfeat-con" value="0">
+                                        <input type="hidden" id="vhfeat-int" value="0">
+                                        <input type="hidden" id="vhfeat-wis" value="0">
+                                        <input type="hidden" id="vhfeat-cha" value="0">
+                                        <input type="hidden" id="vhfeat-asi-choice-key" value="">
+                                    </div>
+                                </div>
+
                                 <p class="text-xs text-silver-600 mt-2 italic">Enter the bonuses (e.g. 2, 1) in the boxes.</p>
                             </div>
                         </div>
@@ -310,7 +346,7 @@
             <!-- STEP 3: BACKGROUND -->
             <div id="step-3" class="step-content flex-col h-full p-6 md:p-8 overflow-y-auto relative">
                 <div class="mb-4 border-b border-darkblue-700 pb-2">
-                    <span class="text-xs font-bold text-academy-blue uppercase tracking-wider">Step 3 of 10</span>
+                    <span class="text-xs font-bold text-academy-blue uppercase tracking-wider">Step 3 of 11</span>
                     <h2 class="text-2xl font-bold text-white mt-1">Background & Feat</h2>
                 </div>
 
@@ -454,7 +490,7 @@
             <!-- STEP 4: CLASS -->
             <div id="step-4" class="step-content flex-col h-full p-6 md:p-8 overflow-y-auto">
                 <div class="mb-4 border-b border-darkblue-700 pb-2">
-                    <span class="text-xs font-bold text-academy-blue uppercase tracking-wider">Step 4 of 10</span>
+                    <span class="text-xs font-bold text-academy-blue uppercase tracking-wider">Step 4 of 11</span>
                     <h2 class="text-2xl font-bold text-white mt-1">Choose Your Class</h2>
                 </div>
                 
@@ -554,7 +590,7 @@
             <!-- STEP 5: STATS -->
             <div id="step-5" class="step-content flex-col h-full p-6 md:p-8 overflow-y-auto relative">
                 <div class="mb-4 border-b border-darkblue-700 pb-2">
-                    <span class="text-xs font-bold text-academy-blue uppercase tracking-wider">Step 5 of 10</span>
+                    <span class="text-xs font-bold text-academy-blue uppercase tracking-wider">Step 5 of 11</span>
                     <h2 class="text-2xl font-bold text-white mt-1">Ability Scores</h2>
                 </div>
                 
@@ -625,10 +661,118 @@
                 </div>
             </div>
 
-            <!-- STEP 6: HEALTH -->
-            <div id="step-6" class="step-content flex-col h-full p-6 md:p-8 overflow-y-auto">
+            <!-- STEP 6: LEVEL 4 ASI / FEAT -->
+            <div id="step-6" class="step-content flex-col h-full p-6 md:p-8 overflow-y-auto relative">
                 <div class="mb-4 border-b border-darkblue-700 pb-2">
-                    <span class="text-xs font-bold text-academy-blue uppercase tracking-wider">Step 6 of 10</span>
+                    <span class="text-xs font-bold text-academy-blue uppercase tracking-wider">Step 6 of 11</span>
+                    <h2 class="text-2xl font-bold text-white mt-1">Level 4: ASI / Feat Choice</h2>
+                </div>
+
+                <div class="bg-darkblue-900 border border-darkblue-700 rounded-xl p-4 mb-6">
+                    <div class="text-silver-300 text-sm">
+                        At level 4, you can either take an <strong>Ability Score Improvement</strong> (+2 or +1/+1) or take a <strong>feat</strong>.
+                    </div>
+
+                    <div class="mt-4 grid md:grid-cols-2 gap-4">
+                        <label class="flex items-center gap-2 bg-darkblue-950 border border-darkblue-800 rounded-lg p-3 cursor-pointer">
+                            <input type="radio" name="lvl4-mode-radio" id="lvl4-mode-asi" value="asi" onchange="onLevel4ModeChanged()">
+                            <div>
+                                <div class="text-white font-bold">Ability Score Improvement</div>
+                                <div class="text-xs text-silver-500">Pick +2 to one ability, or +1/+1 to two abilities.</div>
+                            </div>
+                        </label>
+                        <label class="flex items-center gap-2 bg-darkblue-950 border border-darkblue-800 rounded-lg p-3 cursor-pointer">
+                            <input type="radio" name="lvl4-mode-radio" id="lvl4-mode-feat" value="feat" onchange="onLevel4ModeChanged()">
+                            <div>
+                                <div class="text-white font-bold">Feat</div>
+                                <div class="text-xs text-silver-500">Choose one feat (one selection).</div>
+                            </div>
+                        </label>
+                    </div>
+                    <input type="hidden" id="lvl4-mode" value="">
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div id="lvl4-asi-block" class="opacity-50 pointer-events-none">
+                        <div class="bg-darkblue-950 border border-darkblue-700 rounded-xl p-4">
+                            <div class="flex items-center justify-between gap-3">
+                                <div class="text-white font-bold">ASI Tools</div>
+                                <div id="lvl4-asi-note" class="text-[11px] text-silver-500"></div>
+                            </div>
+
+                            <div class="mt-3 space-y-3">
+                                <label class="flex items-center gap-2 text-sm text-silver-300 cursor-pointer">
+                                    <input type="radio" name="lvl4-asi-style" id="lvl4-asi-style-plus2" value="plus2" onchange="onLevel4AsiStyleChanged()">
+                                    +2 to one ability
+                                </label>
+                                <div id="lvl4-asi-plus2" class="ml-6">
+                                    <label class="block text-xs font-bold text-silver-500 uppercase mb-1">Ability</label>
+                                    <select id="lvl4-asi-plus2-ability" class="input-dark" onchange="applyLevel4AsiMods()"></select>
+                                </div>
+
+                                <label class="flex items-center gap-2 text-sm text-silver-300 cursor-pointer mt-2">
+                                    <input type="radio" name="lvl4-asi-style" id="lvl4-asi-style-plus1" value="plus1" onchange="onLevel4AsiStyleChanged()">
+                                    +1 to two different abilities
+                                </label>
+                                <div id="lvl4-asi-plus1" class="ml-6 grid grid-cols-1 gap-2">
+                                    <div>
+                                        <label class="block text-xs font-bold text-silver-500 uppercase mb-1">Ability #1</label>
+                                        <select id="lvl4-asi-plus1-a" class="input-dark" onchange="applyLevel4AsiMods()"></select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-silver-500 uppercase mb-1">Ability #2</label>
+                                        <select id="lvl4-asi-plus1-b" class="input-dark" onchange="applyLevel4AsiMods()"></select>
+                                    </div>
+                                    <div class="text-[11px] text-silver-500 italic">(The two abilities must be different.)</div>
+                                </div>
+                            </div>
+
+                            <input type="hidden" id="lvl4asi-str" value="0">
+                            <input type="hidden" id="lvl4asi-dex" value="0">
+                            <input type="hidden" id="lvl4asi-con" value="0">
+                            <input type="hidden" id="lvl4asi-int" value="0">
+                            <input type="hidden" id="lvl4asi-wis" value="0">
+                            <input type="hidden" id="lvl4asi-cha" value="0">
+                        </div>
+                    </div>
+
+                    <div id="lvl4-feat-block" class="opacity-50 pointer-events-none">
+                        <div class="bg-darkblue-950 border border-darkblue-700 rounded-xl p-4">
+                            <div class="flex items-center justify-between gap-3">
+                                <div class="text-white font-bold">Feat Picker</div>
+                                <div id="lvl4-feat-status" class="text-[11px] text-silver-500">Loading feats…</div>
+                            </div>
+                            <div class="mt-3">
+                                <label class="block text-xs font-bold text-silver-500 uppercase mb-1">Level 4 Feat</label>
+                                <select id="lvl4-feat-select" class="input-dark" onchange="onLevel4FeatChanged()" disabled>
+                                    <option value="" selected>Loading…</option>
+                                </select>
+                            </div>
+                            <div id="lvl4-feat-asi-choice-container" class="hidden mt-2 p-2 bg-darkblue-900 rounded border border-darkblue-800"></div>
+                            <div id="lvl4-feat-details" class="mt-3 text-sm text-silver-300">
+                                <div class="text-silver-500 italic">Pick a feat to see details here.</div>
+                            </div>
+
+                            <input type="hidden" id="lvl4feat-str" value="0">
+                            <input type="hidden" id="lvl4feat-dex" value="0">
+                            <input type="hidden" id="lvl4feat-con" value="0">
+                            <input type="hidden" id="lvl4feat-int" value="0">
+                            <input type="hidden" id="lvl4feat-wis" value="0">
+                            <input type="hidden" id="lvl4feat-cha" value="0">
+                            <input type="hidden" id="lvl4feat-asi-choice-key" value="">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 text-xs text-silver-500 italic">
+                    Tip: If you’re taking a feat, choose it here so its text prints in the final summary.
+                </div>
+            </div>
+
+            <!-- STEP 7: HEALTH -->
+            <div id="step-7" class="step-content flex-col h-full p-6 md:p-8 overflow-y-auto">
+                <div class="mb-4 border-b border-darkblue-700 pb-2">
+                    <span class="text-xs font-bold text-academy-blue uppercase tracking-wider">Step 7 of 11</span>
                     <h2 class="text-2xl font-bold text-white mt-1">Maximized Health</h2>
                 </div>
                 
@@ -660,10 +804,10 @@
                 </div>
             </div>
 
-            <!-- STEP 7: GEAR -->
-            <div id="step-7" class="step-content flex-col h-full p-6 md:p-8 overflow-y-auto">
+            <!-- STEP 8: GEAR -->
+            <div id="step-8" class="step-content flex-col h-full p-6 md:p-8 overflow-y-auto">
                 <div class="mb-4 border-b border-darkblue-700 pb-2">
-                    <span class="text-xs font-bold text-academy-blue uppercase tracking-wider">Step 7 of 10</span>
+                    <span class="text-xs font-bold text-academy-blue uppercase tracking-wider">Step 8 of 11</span>
                     <h2 class="text-2xl font-bold text-white mt-1">Equipment & Inventory</h2>
                 </div>
                 
@@ -782,10 +926,10 @@
                 </div>
             </div>
 
-            <!-- STEP 8: SPELLS -->
-            <div id="step-8" class="step-content flex-col h-full p-6 md:p-8 overflow-y-auto relative">
+            <!-- STEP 9: SPELLS -->
+            <div id="step-9" class="step-content flex-col h-full p-6 md:p-8 overflow-y-auto relative">
                 <div class="mb-4 border-b border-darkblue-700 pb-2">
-                    <span class="text-xs font-bold text-academy-blue uppercase tracking-wider">Step 8 of 10</span>
+                    <span class="text-xs font-bold text-academy-blue uppercase tracking-wider">Step 9 of 11</span>
                     <h2 class="text-2xl font-bold text-white mt-1">Spellbook</h2>
                 </div>
 
@@ -832,10 +976,10 @@
                 </div>
             </div>
 
-            <!-- STEP 9: MECHANICS -->
-            <div id="step-9" class="step-content flex-col h-full p-6 md:p-8 overflow-y-auto relative">
+            <!-- STEP 10: MECHANICS -->
+            <div id="step-10" class="step-content flex-col h-full p-6 md:p-8 overflow-y-auto relative">
                 <div class="mb-4 border-b border-darkblue-700 pb-2">
-                    <span class="text-xs font-bold text-academy-blue uppercase tracking-wider">Step 9 of 10</span>
+                    <span class="text-xs font-bold text-academy-blue uppercase tracking-wider">Step 10 of 11</span>
                     <h2 class="text-2xl font-bold text-white mt-1">Survival Mechanics</h2>
                 </div>
                 
@@ -870,11 +1014,11 @@
                 </div>
             </div>
 
-            <!-- STEP 10: SUMMARY -->
-            <div id="step-10" class="step-content flex-col h-full p-6 md:p-8 overflow-y-auto">
+            <!-- STEP 11: SUMMARY -->
+            <div id="step-11" class="step-content flex-col h-full p-6 md:p-8 overflow-y-auto">
                 <div class="mb-4 border-b border-darkblue-700 pb-2 flex justify-between items-center">
                     <div>
-                        <span class="text-xs font-bold text-academy-blue uppercase tracking-wider">Final Step</span>
+                        <span class="text-xs font-bold text-academy-blue uppercase tracking-wider">Step 11 of 11</span>
                         <h2 class="text-2xl font-bold text-white mt-1">Character Summary</h2>
                     </div>
                     <button onclick="copySummary()" class="bg-darkblue-700 hover:bg-academy-blue text-white px-3 py-1 rounded text-sm transition">
@@ -1001,7 +1145,7 @@
                             <div>
                                 <div class="flex items-center justify-between">
                                     <label class="block text-[10px] font-bold text-silver-500 uppercase mb-1">Spell Slots (Level 5)</label>
-                                    <button type="button" onclick="goToStep(8)" class="text-[11px] text-silver-400 hover:text-silver-200 underline">Go to Spells Step</button>
+                                    <button type="button" onclick="goToStep(9)" class="text-[11px] text-silver-400 hover:text-silver-200 underline">Go to Spells Step</button>
                                 </div>
                                 <div class="grid grid-cols-4 gap-2">
                                     <input type="number" id="overview-slot-0" class="input-dark text-center" placeholder="Cantrips">
@@ -1019,7 +1163,7 @@
                             <div>
                                 <label class="block text-[10px] font-bold text-silver-500 uppercase mb-1">Inventory (one per line: name | stat | desc)</label>
                                 <textarea id="overview-inventory" class="input-dark text-sm h-24" placeholder="Longsword | 1d8 slashing | SRD | 15 gp\nPadded Armor | 11 + Dex | SRD | Stealth Disadvantage"></textarea>
-                                <button type="button" onclick="goToStep(7)" class="mt-1 text-[11px] text-silver-400 hover:text-silver-200 underline">Go to Gear Step</button>
+                                <button type="button" onclick="goToStep(8)" class="mt-1 text-[11px] text-silver-400 hover:text-silver-200 underline">Go to Gear Step</button>
                             </div>
 
                             <div class="pt-2 border-t border-darkblue-800">
@@ -1116,6 +1260,17 @@
                 </a>
             </div>
 
+            <div class="pt-3 border-t border-darkblue-700 mt-3">
+                <p class="text-[10px] text-silver-500 uppercase font-bold mb-2">SRD / License Notice</p>
+                <div class="text-[10px] leading-snug text-silver-500">
+                    Portions of this tool may include text from the D&amp;D 5.1 System Reference Document (SRD 5.1) by Wizards of the Coast LLC, available under the
+                    <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer" class="text-silver-300 underline hover:text-white">Creative Commons Attribution 4.0 International License (CC BY 4.0)</a>.
+                    SRD text is reproduced as-is.
+                    Dungeons &amp; Dragons and Wizards of the Coast are trademarks of Wizards of the Coast LLC (a subsidiary of Hasbro, Inc.).
+                    This project is fan-made and not affiliated with or endorsed by Wizards of the Coast or Hasbro.
+                </div>
+            </div>
+
             <!-- Image: Tech Support -->
             <div class="mt-4 flex justify-center">
                  <img src="https://ik.imagekit.io/owlcan/README/techsupport.png" class="w-32 opacity-50" alt="Tech support illustration">
@@ -1123,9 +1278,24 @@
         </div>
     </div>
 
+    <footer id="srd-disclaimer" class="max-w-5xl mx-auto mt-6 mb-3 text-center text-[11px] leading-snug text-silver-500 opacity-90 px-4">
+        Portions of this tool may include text from the D&amp;D 5.1 System Reference Document (SRD 5.1) by Wizards of the Coast LLC, available under the
+        <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer" class="text-silver-300 underline hover:text-white">Creative Commons Attribution 4.0 International License (CC BY 4.0)</a>.
+        SRD text is reproduced as-is.
+        Dungeons &amp; Dragons and Wizards of the Coast are trademarks of Wizards of the Coast LLC (a subsidiary of Hasbro, Inc.).
+        This project is fan-made and not affiliated with or endorsed by Wizards of the Coast or Hasbro.
+    </footer>
+
     <script>
+        // If we're inside an iframe (like the handbook), opt into embedded mode styling.
+        try {
+            if (window.self !== window.top) {
+                document.documentElement.classList.add('embedded');
+            }
+        } catch (e) {}
+
         let currentStep = 0;
-        const totalSteps = 10;
+        const totalSteps = 11;
         const spellList = [];
         const inventoryList = [];
         const skillsList = [
@@ -1668,6 +1838,7 @@
         // --- Spell effect indexes (SRD + handbook) ---
         let srdSpellsByName = null;
         let handbookSpellsByName = null;
+        let customSpellsByName = null;
         let spellIndexLoadPromise = null;
 
         function normalizeSpellName(name) {
@@ -1683,16 +1854,19 @@
 
         async function loadSpellEffectIndexes(forceReload = false) {
             const fetchOpts = forceReload ? { cache: 'no-store' } : {};
-            const [srdRes, hbRes] = await Promise.all([
+            const [srdRes, hbRes, customRes] = await Promise.all([
                 fetch('src/srd_spells_index.json', fetchOpts).catch(() => null),
-                fetch('src/handbook_spells_index.json', fetchOpts).catch(() => null)
+                fetch('src/handbook_spells_index.json', fetchOpts).catch(() => null),
+                fetch('src/custom_spells_index.json', fetchOpts).catch(() => null)
             ]);
 
             const srdJson = srdRes && srdRes.ok ? await srdRes.json() : null;
             const hbJson = hbRes && hbRes.ok ? await hbRes.json() : null;
+            const customJson = customRes && customRes.ok ? await customRes.json() : null;
 
             const srdArr = srdJson && Array.isArray(srdJson.spells) ? srdJson.spells : [];
             const hbArr = hbJson && Array.isArray(hbJson.spells) ? hbJson.spells : [];
+            const customArr = customJson && Array.isArray(customJson.spells) ? customJson.spells : [];
 
             const srdMap = new Map();
             for (const s of srdArr) {
@@ -1708,8 +1882,16 @@
                 hbMap.set(key, { ...s, __source: 'Handbook' });
             }
 
+            const customMap = new Map();
+            for (const s of customArr) {
+                const key = normalizeSpellName(s?.name);
+                if (!key) continue;
+                customMap.set(key, { ...s, __source: 'CustomScholia' });
+            }
+
             srdSpellsByName = srdMap;
             handbookSpellsByName = hbMap;
+            customSpellsByName = customMap;
         }
 
         function ensureSpellEffectIndexesLoaded() {
@@ -1717,7 +1899,7 @@
             spellIndexLoadPromise = loadSpellEffectIndexes(false)
                 .catch(() => {})
                 .finally(() => {
-                    if (currentStep === 10) {
+                    if (currentStep === 11) {
                         try { generateSummary(); } catch (e) {}
                     }
                 });
@@ -1727,10 +1909,267 @@
         function getSpellEffectByName(name) {
             const key = normalizeSpellName(name);
             if (!key) return null;
+            const custom = customSpellsByName && customSpellsByName.get(key);
+            if (custom) return custom;
             const hb = handbookSpellsByName && handbookSpellsByName.get(key);
             if (hb) return hb;
             const srd = srdSpellsByName && srdSpellsByName.get(key);
             return srd || null;
+        }
+
+        // --- SRD rules text (classes/subclasses/features) ---
+        let srdRulesText = '';
+        let srdRulesLines = null;
+        let srdRulesLoadPromise = null;
+
+        const SRD_BASE_CLASSES = [
+            'Barbarian', 'Bard', 'Cleric', 'Druid', 'Fighter', 'Monk',
+            'Paladin', 'Ranger', 'Rogue', 'Sorcerer', 'Warlock', 'Wizard'
+        ];
+
+        const SRD_SUBCLASS_CATEGORY_BY_CLASS = {
+            Barbarian: 'Barbarian Paths',
+            Bard: 'Bard Colleges',
+            Cleric: 'Domains',
+            Druid: 'Druid Circles',
+            Fighter: 'Martial Archetypes',
+            Monk: 'Monastic Traditions',
+            Paladin: 'Sacred Oaths',
+            Ranger: 'Ranger Archetypes',
+            Rogue: 'Roguish Archetypes',
+            Sorcerer: 'Sorcerous Origins',
+            Warlock: 'Otherworldly Patrons',
+            Wizard: 'Arcane Traditions'
+        };
+
+        function normalizeHeadingLine(s) {
+            return String(s || '').replace(/\u00a0/g, ' ').trim();
+        }
+
+        async function loadSrdRulesText(forceReload = false) {
+            const fetchOpts = forceReload ? { cache: 'no-store' } : {};
+            const res = await fetch('src/data/SRD%20Data.md', fetchOpts).catch(() => null);
+            if (!res || !res.ok) throw new Error('Failed to load SRD Data.md');
+            const text = await res.text();
+            srdRulesText = String(text || '');
+            srdRulesLines = srdRulesText.replace(/\r\n/g, '\n').split('\n');
+        }
+
+        function ensureSrdRulesTextLoaded() {
+            if (srdRulesLoadPromise) return srdRulesLoadPromise;
+            srdRulesLoadPromise = loadSrdRulesText(false)
+                .catch(() => {})
+                .finally(() => {
+                    if (currentStep === 11) {
+                        try { generateSummary(); } catch (e) {}
+                    }
+                });
+            return srdRulesLoadPromise;
+        }
+
+        function findHeadingIndexInLines(lines, heading) {
+            const h = normalizeHeadingLine(heading);
+            if (!h || !Array.isArray(lines)) return -1;
+            for (let i = 0; i < lines.length; i++) {
+                if (normalizeHeadingLine(lines[i]) === h) return i;
+            }
+            return -1;
+        }
+
+        function extractBlockByHeadings(lines, startHeading, stopHeadings) {
+            if (!Array.isArray(lines)) return '';
+            const start = findHeadingIndexInLines(lines, startHeading);
+            if (start < 0) return '';
+
+            const stopSet = stopHeadings instanceof Set
+                ? stopHeadings
+                : new Set((Array.isArray(stopHeadings) ? stopHeadings : []).map(normalizeHeadingLine));
+
+            let end = lines.length;
+            for (let i = start + 1; i < lines.length; i++) {
+                const ln = normalizeHeadingLine(lines[i]);
+                if (!ln) continue;
+                if (stopSet.has(ln)) {
+                    end = i;
+                    break;
+                }
+            }
+            return compactText(lines.slice(start, end).join('\n'));
+        }
+
+        function getSrdClassBaseFeatureText(className) {
+            const cls = String(className || '').trim();
+            if (!cls || !srdRulesLines) return '';
+
+            const stop = new Set(SRD_BASE_CLASSES);
+            const subclassHeader = SRD_SUBCLASS_CATEGORY_BY_CLASS[cls];
+            if (subclassHeader) stop.add(subclassHeader);
+
+            return extractBlockByHeadings(srdRulesLines, cls, stop);
+        }
+
+        function getSrdSubclassFeatureText(subclassName) {
+            const sub = String(subclassName || '').trim();
+            if (!sub || !srdRulesLines) return '';
+
+            const stop = new Set([
+                ...SRD_BASE_CLASSES,
+                ...Object.values(SRD_SUBCLASS_CATEGORY_BY_CLASS),
+                ...Object.values(SRD_SUBCLASSES_BY_CLASS).flat()
+            ].map(normalizeHeadingLine));
+
+            return extractBlockByHeadings(srdRulesLines, sub, stop);
+        }
+
+        // --- Custom subclass text (realm homebrew) ---
+        let customSubclassIndex = null;
+        let customSubclassLoadPromise = null;
+
+        function normalizeSubclassKey(s) {
+            return String(s || '').toLowerCase().replace(/\s+/g, ' ').trim();
+        }
+
+        function guessBaseClassFromSubclassName(subclassName) {
+            const s = String(subclassName || '').trim();
+            if (!s) return '';
+            if (/^oath\s+of\b/i.test(s)) return 'Paladin';
+            if (/\boath\b/i.test(s) && /oath$/i.test(s)) return 'Paladin';
+            if (/^pact\s+of\b/i.test(s)) return 'Warlock';
+            if (/^circle\s+of\b/i.test(s)) return 'Druid';
+            if (/^college\s+of\b/i.test(s)) return 'Bard';
+            if (/\bdomain\b/i.test(s)) return 'Cleric';
+            if (/^way\s+of\b/i.test(s)) return 'Monk';
+            if (/^school\s+of\b/i.test(s) || /\barcane\s+tradition\b/i.test(s)) return 'Wizard';
+            if (/\broguish\b/i.test(s) || /\bthief\b/i.test(s) || /\bassassin\b/i.test(s)) return 'Rogue';
+            if (/\bhunter\b/i.test(s) || /\branger\b/i.test(s)) return 'Ranger';
+            if (/\bdraconic\b/i.test(s)) return 'Sorcerer';
+            return '';
+        }
+
+        function parseCustomSubclassesText(rawText) {
+            const text = String(rawText || '').replace(/\r\n/g, '\n');
+            const lines = text.split('\n');
+
+            const entries = [];
+            let current = null;
+            let currentSource = '';
+
+            const isMarkerLine = (t) => /^<\/?[^>]+>$/.test(t);
+
+            const isSubclassTitle = (t) => {
+                if (!t) return false;
+                if (/^oath\s+of\s+/i.test(t)) return true;
+                // e.g., "Rulebreaker's Oath"
+                if (/\boath\b/i.test(t) && /oath$/i.test(t) && /^[A-Za-z0-9'\-\s]+$/.test(t) && t.length <= 64) return true;
+                if (/^pact\s+of\s+/i.test(t)) return true;
+                if (/^circle\s+of\s+/i.test(t)) return true;
+                if (/^college\s+of\s+/i.test(t)) return true;
+                if (/\bdomain\b/i.test(t) && /domain$/i.test(t)) return true;
+                if (/^way\s+of\s+/i.test(t)) return true;
+                if (/^school\s+of\s+/i.test(t)) return true;
+                return false;
+            };
+
+            for (const line of lines) {
+                const t = String(line || '').trim();
+                if (isMarkerLine(t)) {
+                    currentSource = t.replace(/[<>]/g, '').trim();
+                    continue;
+                }
+
+                if (isSubclassTitle(t)) {
+                    if (current) {
+                        entries.push(current);
+                    }
+                    current = {
+                        name: t,
+                        className: guessBaseClassFromSubclassName(t),
+                        source: currentSource,
+                        lines: [t]
+                    };
+                    continue;
+                }
+
+                if (current) {
+                    current.lines.push(line);
+                }
+            }
+
+            if (current) entries.push(current);
+
+            const byName = {};
+            for (const e of entries) {
+                const key = normalizeSubclassKey(e.name);
+                if (!key) continue;
+                if (!byName[key]) byName[key] = [];
+                byName[key].push({
+                    name: e.name,
+                    className: e.className,
+                    source: e.source,
+                    text: compactText(e.lines.join('\n'))
+                });
+            }
+
+            return { byName };
+        }
+
+        async function loadCustomSubclassIndex(forceReload = false) {
+            const fetchOpts = forceReload ? { cache: 'no-store' } : {};
+            // Prefer the build artifact (more deterministic than heuristic parsing).
+            try {
+                const jsonRes = await fetch('src/custom_subclasses_index.json', fetchOpts).catch(() => null);
+                if (jsonRes && jsonRes.ok) {
+                    const json = await jsonRes.json();
+                    const arr = json && Array.isArray(json.subclasses) ? json.subclasses : [];
+                    if (arr.length) {
+                        const byName = {};
+                        for (const e of arr) {
+                            const key = normalizeSubclassKey(e && e.name);
+                            if (!key) continue;
+                            if (!byName[key]) byName[key] = [];
+                            byName[key].push({
+                                name: String(e.name || ''),
+                                className: String(e.className || ''),
+                                source: String(e.sourceDoc || e.source || ''),
+                                text: String(e.text || ''),
+                                spellRefs: Array.isArray(e.spellRefs) ? e.spellRefs : []
+                            });
+                        }
+                        customSubclassIndex = { byName };
+                        return;
+                    }
+                }
+            } catch (e) {
+                // Fall back to raw parsing.
+            }
+
+            const res = await fetch('referencedata/scholia%20subclasses.txt', fetchOpts).catch(() => null);
+            if (!res || !res.ok) throw new Error('Failed to load scholia subclasses');
+            const txt = await res.text();
+            customSubclassIndex = parseCustomSubclassesText(txt);
+        }
+
+        function ensureCustomSubclassIndexLoaded() {
+            if (customSubclassLoadPromise) return customSubclassLoadPromise;
+            customSubclassLoadPromise = loadCustomSubclassIndex(false)
+                .catch(() => {})
+                .finally(() => {
+                    if (currentStep === 11) {
+                        try { generateSummary(); } catch (e) {}
+                    }
+                });
+            return customSubclassLoadPromise;
+        }
+
+        function getCustomSubclassFeatureText(baseClass, subclassName) {
+            const key = normalizeSubclassKey(subclassName);
+            if (!key || !customSubclassIndex || !customSubclassIndex.byName) return '';
+            const matches = customSubclassIndex.byName[key];
+            if (!Array.isArray(matches) || matches.length === 0) return '';
+            const cls = String(baseClass || '').trim();
+            if (!cls) return matches[0].text || '';
+            const exact = matches.find(m => String(m.className || '').toLowerCase() === cls.toLowerCase());
+            return (exact ? exact.text : matches[0].text) || '';
         }
 
         // --- Race picker (loads from src/races_gvar.json, falls back to split parts) ---
@@ -1739,6 +2178,8 @@
 
         async function loadRacesIndex(forceReload = false) {
             const fetchOpts = forceReload ? { cache: 'no-store' } : {};
+            const merged = {};
+            const sources = [];
 
             // Prefer the full combined file when present. The split parts in this repo can be outdated.
             try {
@@ -1747,38 +2188,59 @@
                     const json = await res.json();
                     const racesObj = json && typeof json === 'object' ? json.races : null;
                     if (racesObj && typeof racesObj === 'object' && Object.keys(racesObj).length) {
-                        racesIndexSource = 'src/races_gvar.json';
-                        return racesObj;
+                        Object.assign(merged, racesObj);
+                        sources.push('src/races_gvar.json');
                     }
                 }
             } catch (e) {
                 // Ignore and fall back to parts
             }
 
-            const partPaths = [
-                'src/races_gvar_1.json',
-                'src/races_gvar_2.json',
-                'src/races_gvar_3.json'
-            ];
+            if (Object.keys(merged).length === 0) {
+                const partPaths = [
+                    'src/races_gvar_1.json',
+                    'src/races_gvar_2.json',
+                    'src/races_gvar_3.json'
+                ];
 
-            const responses = await Promise.all(partPaths.map(p => fetch(p, fetchOpts)));
+                const responses = await Promise.all(partPaths.map(p => fetch(p, fetchOpts)));
 
-            for (const res of responses) {
-                if (!res.ok) {
-                    throw new Error(`Failed to load ${res.url} (${res.status})`);
+                for (const res of responses) {
+                    if (!res.ok) {
+                        throw new Error(`Failed to load ${res.url} (${res.status})`);
+                    }
+                }
+
+                const jsonParts = await Promise.all(responses.map(r => r.json()));
+                for (const part of jsonParts) {
+                    const racesObj = part && typeof part === 'object' ? part.races : null;
+                    if (!racesObj || typeof racesObj !== 'object') continue;
+                    Object.assign(merged, racesObj);
+                }
+
+                if (Object.keys(merged).length) {
+                    sources.push('src/races_gvar_*.json');
                 }
             }
 
-            const jsonParts = await Promise.all(responses.map(r => r.json()));
-            const merged = {};
-
-            for (const part of jsonParts) {
-                const racesObj = part && typeof part === 'object' ? part.races : null;
-                if (!racesObj || typeof racesObj !== 'object') continue;
-                Object.assign(merged, racesObj);
+            // Merge in SRD races (from src/data/SRD Data.md), without overwriting custom races.
+            try {
+                const res = await fetch('src/srd_races_index.json', fetchOpts);
+                if (res.ok) {
+                    const json = await res.json();
+                    const racesObj = json && typeof json === 'object' ? json.races : null;
+                    if (racesObj && typeof racesObj === 'object' && Object.keys(racesObj).length) {
+                        for (const [k, v] of Object.entries(racesObj)) {
+                            if (!merged[k]) merged[k] = v;
+                        }
+                        sources.push('src/srd_races_index.json');
+                    }
+                }
+            } catch (e) {
+                // Optional data file.
             }
 
-            racesIndexSource = 'src/races_gvar_*.json';
+            racesIndexSource = sources.length ? sources.join(' + ') : '';
             return merged;
         }
 
@@ -2267,6 +2729,8 @@
             const { raceKey, subraceKey, race, subrace } = getSelectedRaceAndSubrace();
             renderRaceDetailsPanel(raceKey, subraceKey, race, subrace);
 
+            updateHumanVariantVisibility(raceKey, race);
+
             if (!race) {
                 renderAsiChoiceUI([]);
                 return;
@@ -2390,10 +2854,10 @@
 
             // Recalc stats on step 5 view
             if(currentStep === 5) calcStats();
-            // Recalc HP on step 6 view
-            if(currentStep === 6) calcHP();
+            // Recalc HP on step 7 view
+            if(currentStep === 7) calcHP();
             // Generate Summary if last step
-            if(currentStep === 10) {
+            if(currentStep === 11) {
                 refreshFinalOverviewFromInputs();
                 generateSummary();
             }
@@ -3054,6 +3518,347 @@
             applyOriginFeatToForm(ft);
         }
 
+        function clearHiddenMods(prefix) {
+            ['str', 'dex', 'con', 'int', 'wis', 'cha'].forEach(k => {
+                const el = document.getElementById(`${prefix}-${k}`);
+                if (el) el.value = '0';
+            });
+        }
+
+        function renderFeatAsiChoiceUIInto(containerId, parsed, currentKey, onKeyChanged) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            if (!parsed || !Array.isArray(parsed.options) || parsed.options.length <= 1) {
+                container.classList.add('hidden');
+                container.innerHTML = '';
+                return;
+            }
+
+            const abilityLabels = { str: 'STR', dex: 'DEX', con: 'CON', int: 'INT', wis: 'WIS', cha: 'CHA' };
+            const value = parsed.value || 0;
+            const sign = value > 0 ? '+' : '';
+            const current = currentKey && parsed.options.includes(currentKey)
+                ? currentKey
+                : (parsed.options[0] || '');
+
+            const optionsHtml = parsed.options
+                .map(k => `<option value="${k}" ${k === current ? 'selected' : ''}>${abilityLabels[k] || k}</option>`)
+                .join('');
+
+            container.classList.remove('hidden');
+            container.innerHTML = `
+                <div class="flex items-center justify-between gap-3">
+                    <div class="text-xs text-silver-300">Choose feat ASI: ${sign}${value}</div>
+                    <select class="input-dark text-sm" data-feat-asi-choice="1">${optionsHtml}</select>
+                </div>
+            `;
+
+            const sel = container.querySelector('select[data-feat-asi-choice]');
+            if (sel) {
+                sel.addEventListener('change', () => {
+                    if (typeof onKeyChanged === 'function') onKeyChanged(sel.value);
+                });
+            }
+        }
+
+        function populateExtraFeatSelects() {
+            const feats = bgFeatIndex && Array.isArray(bgFeatIndex.originFeats) ? bgFeatIndex.originFeats : [];
+            const sorted = [...feats].sort((a, b) => String(a?.name || '').localeCompare(String(b?.name || ''), undefined, { sensitivity: 'base' }));
+
+            const humanSel = document.getElementById('human-creationfeat-select');
+            const lvl4Sel = document.getElementById('lvl4-feat-select');
+
+            const fill = (sel) => {
+                if (!sel) return;
+                const current = String(sel.value || '');
+                sel.innerHTML = '';
+                sel.appendChild(new Option('Select a Feat…', ''));
+                sorted.forEach(ft => {
+                    if (!ft) return;
+                    const id = String(ft.id || '');
+                    const name = String(ft.name || id);
+                    if (!id) return;
+                    sel.appendChild(new Option(name, id));
+                });
+                if (current) sel.value = current;
+            };
+
+            fill(humanSel);
+            fill(lvl4Sel);
+
+            const lvl4Status = document.getElementById('lvl4-feat-status');
+            if (lvl4Status) lvl4Status.textContent = feats.length ? `Loaded ${feats.length} feats` : 'No feats loaded';
+        }
+
+        function isHumanSelected(raceKey, raceObj) {
+            const name = String(raceObj?.name || raceKey || document.getElementById('input-race')?.value || '').trim();
+            if (!name) return false;
+            return /^human(\b|\s|\()/i.test(name);
+        }
+
+        function updateHumanVariantVisibility(raceKey, raceObj) {
+            const container = document.getElementById('human-variant-container');
+            if (!container) return;
+            const isHuman = isHumanSelected(raceKey, raceObj);
+            if (!isHuman) {
+                container.classList.add('hidden');
+                const chk = document.getElementById('human-variant-check');
+                if (chk) chk.checked = false;
+                onHumanVariantToggle(false);
+                return;
+            }
+            container.classList.remove('hidden');
+        }
+
+        function setBlockEnabled(blockId, enabled) {
+            const el = document.getElementById(blockId);
+            if (!el) return;
+            el.classList.toggle('opacity-50', !enabled);
+            el.classList.toggle('pointer-events-none', !enabled);
+        }
+
+        function renderFeatDetailsInto(detailsId, ft) {
+            const el = document.getElementById(detailsId);
+            if (!el) return;
+            if (!ft) {
+                el.innerHTML = '<div class="text-silver-500 italic">Pick a feat to see details here.</div>';
+                return;
+            }
+            const bullets = Array.isArray(ft.bullets) ? ft.bullets.filter(Boolean) : [];
+            el.innerHTML = `
+                <div class="text-white font-bold">${escapeHtml(ft.name || '')}</div>
+                ${ft.description ? `<div class="mt-2 text-silver-300">${escapeHtml(compactText(ft.description))}</div>` : ''}
+                ${bullets.length ? `<div class="mt-2 text-silver-300"><div class="text-xs font-bold text-silver-400 uppercase tracking-wider mb-1">Effects</div><ul class="list-disc pl-5">${bullets.map(b => `<li class="mb-1">${escapeHtml(compactText(b))}</li>`).join('')}</ul></div>` : ''}
+                ${ft.asiText ? `<div class="mt-2 text-[11px] text-silver-500 italic">${escapeHtml(compactText(ft.asiText))}</div>` : ''}
+            `;
+        }
+
+        function applyFeatAsiModsToHidden(prefix, parsed, choiceKey, choiceKeyInputId) {
+            clearHiddenMods(prefix);
+            const keyEl = document.getElementById(choiceKeyInputId);
+
+            if (!parsed) {
+                if (keyEl) keyEl.value = '';
+                return;
+            }
+
+            const options = Array.isArray(parsed.options) ? parsed.options : [];
+            if (!options.length) {
+                if (keyEl) keyEl.value = '';
+                return;
+            }
+
+            let selected = '';
+            if (options.length === 1) selected = options[0];
+            else if (choiceKey && options.includes(choiceKey)) selected = choiceKey;
+            else selected = options[0];
+
+            if (keyEl) keyEl.value = selected;
+
+            const amount = parsed.value || 0;
+            const target = document.getElementById(`${prefix}-${selected}`);
+            if (target) target.value = String(amount);
+        }
+
+        function onHumanVariantToggle(recalc = true) {
+            const chk = document.getElementById('human-variant-check');
+            const enabled = !!chk?.checked;
+
+            setBlockEnabled('human-creationfeat-block', enabled);
+            const sel = document.getElementById('human-creationfeat-select');
+            if (sel) sel.disabled = !enabled;
+
+            if (!enabled) {
+                if (sel) sel.value = '';
+                const key = document.getElementById('vhfeat-asi-choice-key');
+                if (key) key.value = '';
+                clearHiddenMods('vhfeat');
+                const asi = document.getElementById('human-creationfeat-asi-choice-container');
+                if (asi) {
+                    asi.classList.add('hidden');
+                    asi.innerHTML = '';
+                }
+                renderFeatDetailsInto('human-creationfeat-details', null);
+                if (recalc) calcStats();
+                return;
+            }
+
+            populateExtraFeatSelects();
+            onHumanCreationFeatChanged(recalc);
+        }
+
+        function onHumanCreationFeatChanged(recalc = true) {
+            const chk = document.getElementById('human-variant-check');
+            if (!chk?.checked) {
+                clearHiddenMods('vhfeat');
+                const key = document.getElementById('vhfeat-asi-choice-key');
+                if (key) key.value = '';
+                if (recalc) calcStats();
+                return;
+            }
+
+            const sel = document.getElementById('human-creationfeat-select');
+            const id = String(sel?.value || '').trim();
+            const ft = id ? findOriginFeatById(id) : null;
+            renderFeatDetailsInto('human-creationfeat-details', ft);
+
+            const parsed = ft ? parseFeatAsiText(ft.asiText) : null;
+            const keyEl = document.getElementById('vhfeat-asi-choice-key');
+            const currentKey = String(keyEl?.value || '').trim();
+
+            renderFeatAsiChoiceUIInto('human-creationfeat-asi-choice-container', parsed, currentKey, (newKey) => {
+                if (keyEl) keyEl.value = newKey;
+                onHumanCreationFeatChanged(true);
+            });
+
+            applyFeatAsiModsToHidden('vhfeat', parsed, currentKey, 'vhfeat-asi-choice-key');
+            if (recalc) calcStats();
+        }
+
+        function populateAbilitySelect(selectId) {
+            const sel = document.getElementById(selectId);
+            if (!sel) return;
+            const current = String(sel.value || '');
+            const options = [
+                ['', 'Select…'],
+                ['str', 'STR'],
+                ['dex', 'DEX'],
+                ['con', 'CON'],
+                ['int', 'INT'],
+                ['wis', 'WIS'],
+                ['cha', 'CHA']
+            ];
+            sel.innerHTML = '';
+            options.forEach(([v, label]) => sel.appendChild(new Option(label, v)));
+            if (current) sel.value = current;
+        }
+
+        function initLevel4AbilitySelects() {
+            populateAbilitySelect('lvl4-asi-plus2-ability');
+            populateAbilitySelect('lvl4-asi-plus1-a');
+            populateAbilitySelect('lvl4-asi-plus1-b');
+        }
+
+        function onLevel4ModeChanged(recalc = true) {
+            const modeAsi = !!document.getElementById('lvl4-mode-asi')?.checked;
+            const modeFeat = !!document.getElementById('lvl4-mode-feat')?.checked;
+            const modeHidden = document.getElementById('lvl4-mode');
+            if (modeHidden) modeHidden.value = modeAsi ? 'asi' : (modeFeat ? 'feat' : '');
+
+            setBlockEnabled('lvl4-asi-block', modeAsi);
+            setBlockEnabled('lvl4-feat-block', modeFeat);
+
+            const lvl4FeatSel = document.getElementById('lvl4-feat-select');
+            if (lvl4FeatSel) lvl4FeatSel.disabled = !modeFeat;
+
+            if (modeAsi) {
+                // Clear feat mode mods
+                clearHiddenMods('lvl4feat');
+                const key = document.getElementById('lvl4feat-asi-choice-key');
+                if (key) key.value = '';
+                if (lvl4FeatSel) lvl4FeatSel.value = '';
+                renderFeatDetailsInto('lvl4-feat-details', null);
+                const asi = document.getElementById('lvl4-feat-asi-choice-container');
+                if (asi) {
+                    asi.classList.add('hidden');
+                    asi.innerHTML = '';
+                }
+                applyLevel4AsiMods(false);
+            }
+
+            if (modeFeat) {
+                // Clear ASI mode mods
+                clearHiddenMods('lvl4asi');
+                populateExtraFeatSelects();
+                onLevel4FeatChanged(false);
+            }
+
+            if (!modeAsi && !modeFeat) {
+                clearHiddenMods('lvl4asi');
+                clearHiddenMods('lvl4feat');
+            }
+
+            if (recalc) calcStats();
+        }
+
+        function onLevel4AsiStyleChanged(recalc = true) {
+            const plus2 = !!document.getElementById('lvl4-asi-style-plus2')?.checked;
+            const plus1 = !!document.getElementById('lvl4-asi-style-plus1')?.checked;
+            const c2 = document.getElementById('lvl4-asi-plus2');
+            const c1 = document.getElementById('lvl4-asi-plus1');
+            if (c2) c2.classList.toggle('hidden', !plus2);
+            if (c1) c1.classList.toggle('hidden', !plus1);
+            applyLevel4AsiMods(recalc);
+        }
+
+        function applyLevel4AsiMods(recalc = true) {
+            clearHiddenMods('lvl4asi');
+            const note = document.getElementById('lvl4-asi-note');
+            if (note) note.textContent = '';
+
+            if (!document.getElementById('lvl4-mode-asi')?.checked) {
+                if (recalc) calcStats();
+                return;
+            }
+
+            const plus2 = !!document.getElementById('lvl4-asi-style-plus2')?.checked;
+            const plus1 = !!document.getElementById('lvl4-asi-style-plus1')?.checked;
+
+            if (plus2) {
+                const a = String(document.getElementById('lvl4-asi-plus2-ability')?.value || '').trim();
+                if (a) {
+                    const el = document.getElementById(`lvl4asi-${a}`);
+                    if (el) el.value = '2';
+                }
+            }
+
+            if (plus1) {
+                const a = String(document.getElementById('lvl4-asi-plus1-a')?.value || '').trim();
+                const b = String(document.getElementById('lvl4-asi-plus1-b')?.value || '').trim();
+                if (a) {
+                    const el = document.getElementById(`lvl4asi-${a}`);
+                    if (el) el.value = '1';
+                }
+                if (b && b !== a) {
+                    const el = document.getElementById(`lvl4asi-${b}`);
+                    if (el) el.value = '1';
+                }
+                if (a && b && a === b && note) {
+                    note.textContent = 'Pick two different abilities.';
+                }
+            }
+
+            if (recalc) calcStats();
+        }
+
+        function onLevel4FeatChanged(recalc = true) {
+            if (!document.getElementById('lvl4-mode-feat')?.checked) {
+                clearHiddenMods('lvl4feat');
+                const key = document.getElementById('lvl4feat-asi-choice-key');
+                if (key) key.value = '';
+                if (recalc) calcStats();
+                return;
+            }
+
+            const sel = document.getElementById('lvl4-feat-select');
+            const id = String(sel?.value || '').trim();
+            const ft = id ? findOriginFeatById(id) : null;
+            renderFeatDetailsInto('lvl4-feat-details', ft);
+
+            const parsed = ft ? parseFeatAsiText(ft.asiText) : null;
+            const keyEl = document.getElementById('lvl4feat-asi-choice-key');
+            const currentKey = String(keyEl?.value || '').trim();
+
+            renderFeatAsiChoiceUIInto('lvl4-feat-asi-choice-container', parsed, currentKey, (newKey) => {
+                if (keyEl) keyEl.value = newKey;
+                onLevel4FeatChanged(true);
+            });
+
+            applyFeatAsiModsToHidden('lvl4feat', parsed, currentKey, 'lvl4feat-asi-choice-key');
+            if (recalc) calcStats();
+        }
+
         async function initBackgroundFeatPicker(forceReload = false) {
             const bgSelect = document.getElementById('bg-select');
             const featSelect = document.getElementById('originfeat-select');
@@ -3082,6 +3887,14 @@
                 // Refresh the left-side panels for the current selections.
                 onBackgroundChanged();
                 onOriginFeatChanged();
+
+                // Extra feat pickers (Variant Human + Level 4)
+                populateExtraFeatSelects();
+                onHumanVariantToggle(false);
+                onHumanCreationFeatChanged(false);
+                onLevel4ModeChanged(false);
+                onLevel4AsiStyleChanged(false);
+                onLevel4FeatChanged(false);
             } catch (err) {
                 console.error('BG/Feat picker init failed:', err);
                 setBgFeatStatus('Could not load background/feat list. Manual entry still works.', true);
@@ -3141,12 +3954,42 @@
                 };
             }
 
+            // 5. Variant Human creation feat ASI (optional)
+            const vhFeat = {
+                str: parseInt(document.getElementById('vhfeat-str')?.value) || 0,
+                dex: parseInt(document.getElementById('vhfeat-dex')?.value) || 0,
+                con: parseInt(document.getElementById('vhfeat-con')?.value) || 0,
+                int: parseInt(document.getElementById('vhfeat-int')?.value) || 0,
+                wis: parseInt(document.getElementById('vhfeat-wis')?.value) || 0,
+                cha: parseInt(document.getElementById('vhfeat-cha')?.value) || 0
+            };
+
+            // 6. Level 4 ASI / Feat (optional)
+            const lvl4Asi = {
+                str: parseInt(document.getElementById('lvl4asi-str')?.value) || 0,
+                dex: parseInt(document.getElementById('lvl4asi-dex')?.value) || 0,
+                con: parseInt(document.getElementById('lvl4asi-con')?.value) || 0,
+                int: parseInt(document.getElementById('lvl4asi-int')?.value) || 0,
+                wis: parseInt(document.getElementById('lvl4asi-wis')?.value) || 0,
+                cha: parseInt(document.getElementById('lvl4asi-cha')?.value) || 0
+            };
+            const lvl4Feat = {
+                str: parseInt(document.getElementById('lvl4feat-str')?.value) || 0,
+                dex: parseInt(document.getElementById('lvl4feat-dex')?.value) || 0,
+                con: parseInt(document.getElementById('lvl4feat-con')?.value) || 0,
+                int: parseInt(document.getElementById('lvl4feat-int')?.value) || 0,
+                wis: parseInt(document.getElementById('lvl4feat-wis')?.value) || 0,
+                cha: parseInt(document.getElementById('lvl4feat-cha')?.value) || 0
+            };
+            const lvl4ModeFeat = !!document.getElementById('lvl4-mode-feat')?.checked;
+            const lvl4 = lvl4ModeFeat ? lvl4Feat : lvl4Asi;
+
             // Sum
             const keys = ['str', 'dex', 'con', 'int', 'wis', 'cha'];
             let html = '';
             
             keys.forEach(k => {
-                const total = base[k] + race[k] + bg[k] + feat[k];
+                const total = base[k] + race[k] + bg[k] + feat[k] + vhFeat[k] + lvl4[k];
                 const mod = Math.floor((total - 10) / 2);
                 const modStr = mod >= 0 ? `+${mod}` : mod;
                 stats[k] = total; // Store global
@@ -3234,6 +4077,16 @@
                     alert("Please enter your chosen Race.");
                     return false;
                 }
+
+                const isVh = !!document.getElementById('human-variant-check')?.checked;
+                const containerHidden = document.getElementById('human-variant-container')?.classList.contains('hidden');
+                if (!containerHidden && isVh) {
+                    const ft = String(document.getElementById('human-creationfeat-select')?.value || '').trim();
+                    if (!ft) {
+                        alert("Variant Human selected — please choose a creation feat.");
+                        return false;
+                    }
+                }
             }
             // Step 3: Background
             if (currentStep === 3) {
@@ -3253,8 +4106,55 @@
                     return false;
                 }
             }
-            // Step 8: Spells (If slots > 0, need spells)
-            if (currentStep === 8) {
+
+            // Step 6: Level 4 ASI/Feat
+            if (currentStep === 6) {
+                const modeAsi = !!document.getElementById('lvl4-mode-asi')?.checked;
+                const modeFeat = !!document.getElementById('lvl4-mode-feat')?.checked;
+                if (!modeAsi && !modeFeat) {
+                    alert('Please pick Level 4 ASI or Feat.');
+                    return false;
+                }
+
+                if (modeAsi) {
+                    const plus2 = !!document.getElementById('lvl4-asi-style-plus2')?.checked;
+                    const plus1 = !!document.getElementById('lvl4-asi-style-plus1')?.checked;
+                    if (!plus2 && !plus1) {
+                        alert('Please choose +2 or +1/+1 for your ASI.');
+                        return false;
+                    }
+                    if (plus2) {
+                        const a = String(document.getElementById('lvl4-asi-plus2-ability')?.value || '');
+                        if (!a) {
+                            alert('Please choose the ability for your +2 ASI.');
+                            return false;
+                        }
+                    }
+                    if (plus1) {
+                        const a = String(document.getElementById('lvl4-asi-plus1-a')?.value || '');
+                        const b = String(document.getElementById('lvl4-asi-plus1-b')?.value || '');
+                        if (!a || !b) {
+                            alert('Please choose both abilities for your +1/+1 ASI.');
+                            return false;
+                        }
+                        if (a === b) {
+                            alert('For +1/+1, the two abilities must be different.');
+                            return false;
+                        }
+                    }
+                }
+
+                if (modeFeat) {
+                    const ft = String(document.getElementById('lvl4-feat-select')?.value || '').trim();
+                    if (!ft) {
+                        alert('Please choose a feat for Level 4.');
+                        return false;
+                    }
+                }
+            }
+
+            // Step 9: Spells (If slots > 0, need spells)
+            if (currentStep === 9) {
                 let totalSlots = 0;
                 for(let i=0; i<=3; i++) totalSlots += parseInt(document.getElementById(`slot-${i}`).value || 0);
                 if (totalSlots > 0 && spellList.length === 0) {
@@ -3262,8 +4162,8 @@
                     return false;
                 }
             }
-            // Step 9: Mechanics
-            if (currentStep === 9) {
+            // Step 10: Mechanics
+            if (currentStep === 10) {
                 if (!document.getElementById('mechanics-check').checked) {
                     alert("Please acknowledge the survival mechanics.");
                     return false;
@@ -3519,12 +4419,26 @@
             const ids = [
                 'input-race',
                 'race-select', 'subrace-select',
+                'human-variant-check',
+                'human-creationfeat-select',
+                'vhfeat-asi-choice-key',
+                'vhfeat-str','vhfeat-dex','vhfeat-con','vhfeat-int','vhfeat-wis','vhfeat-cha',
                 'bg-select', 'originfeat-select',
                 'input-bg-name', 'input-feat',
                 'bg-tools', 'bg-languages',
                 'class-select', 'input-subclass',
                 'class-profs',
                 'feat-asi-check',
+                // level 4 step
+                'lvl4-mode-asi','lvl4-mode-feat',
+                'lvl4-mode',
+                'lvl4-asi-style-plus2','lvl4-asi-style-plus1',
+                'lvl4-asi-plus2-ability',
+                'lvl4-asi-plus1-a','lvl4-asi-plus1-b',
+                'lvl4-feat-select',
+                'lvl4feat-asi-choice-key',
+                'lvl4asi-str','lvl4asi-dex','lvl4asi-con','lvl4asi-int','lvl4asi-wis','lvl4asi-cha',
+                'lvl4feat-str','lvl4feat-dex','lvl4feat-con','lvl4feat-int','lvl4feat-wis','lvl4feat-cha',
                 // ability score inputs
                 'base-str','base-dex','base-con','base-int','base-wis','base-cha',
                 'race-str','race-dex','race-con','race-int','race-wis','race-cha',
@@ -3541,7 +4455,7 @@
             ids.forEach(id => {
                 const el = document.getElementById(id);
                 if (!el) return;
-                if (el.type === 'checkbox') inputs[id] = !!el.checked;
+                if (el.type === 'checkbox' || el.type === 'radio') inputs[id] = !!el.checked;
                 else inputs[id] = String(el.value ?? '');
             });
 
@@ -3568,7 +4482,7 @@
             Object.keys(inputs).forEach(id => {
                 const el = document.getElementById(id);
                 if (!el) return;
-                if (el.type === 'checkbox') el.checked = !!inputs[id];
+                if (el.type === 'checkbox' || el.type === 'radio') el.checked = !!inputs[id];
                 else el.value = inputs[id] ?? '';
             });
 
@@ -3598,6 +4512,12 @@
             handleClassChanged();
             onBackgroundChanged();
             onOriginFeatChanged();
+            updateRaceDetailsAndASI();
+            onHumanVariantToggle(false);
+            onHumanCreationFeatChanged(false);
+            onLevel4ModeChanged(false);
+            onLevel4AsiStyleChanged(false);
+            onLevel4FeatChanged(false);
             calcStats();
             calcHP();
 
@@ -3790,9 +4710,89 @@
                     featObj.asiText ? `\nASI Text: ${compactText(featObj.asiText)}` : ''
                 ].filter(Boolean).join('\n')
                 : '';
+
+            // Race traits
+            const { raceKey, subraceKey, race, subrace } = getSelectedRaceAndSubrace();
+            const raceName = race ? (race.name || raceKey || getVal('input-race')) : getVal('input-race');
+            const subraceName = subrace ? (subrace.name || subraceKey || '') : '';
+            const fullRaceHeader = subraceName ? `${raceName} (${subraceName})` : raceName;
+            const raceTraits = race && Array.isArray(race.traits) ? race.traits : [];
+            const subraceTraits = subrace && Array.isArray(subrace.traits) ? subrace.traits : [];
+            const raceDesc = race && race.description ? String(race.description) : '';
+            const subraceDesc = subrace && subrace.description ? String(subrace.description) : '';
+            const raceTraitsText = [
+                `Name: ${fullRaceHeader}`,
+                raceDesc ? `\nDescription:\n${compactText(raceDesc)}` : '',
+                raceTraits.length ? `\nTraits:\n${raceTraits.map(t => `- ${compactText(t)}`).join('\n')}` : '',
+                subraceDesc ? `\nSubrace Description:\n${compactText(subraceDesc)}` : '',
+                subraceTraits.length ? `\nSubrace Traits:\n${subraceTraits.map(t => `- ${compactText(t)}`).join('\n')}` : ''
+            ].filter(Boolean).join('\n');
+
+            // Class + subclass features text (SRD + custom)
+            const baseClassName = String(document.getElementById('class-select')?.value || '').trim();
+            const pickedSubclass = getSelectedSubclassName();
+            const srdClassText = getSrdClassBaseFeatureText(baseClassName);
+            const customSubclassText = getCustomSubclassFeatureText(baseClassName, pickedSubclass);
+            const srdSubclassText = !customSubclassText ? getSrdSubclassFeatureText(pickedSubclass) : '';
+            const subclassFeaturesText = customSubclassText || srdSubclassText;
+            const rulesNotLoadedNote = (!srdRulesLines)
+                ? '\n\n(SRD rules text not loaded yet — run the local server so the wizard can fetch src/data/SRD Data.md.)'
+                : '';
+            const customNotLoadedNote = (!customSubclassIndex)
+                ? '\n\n(Custom subclass text not loaded yet — run the local server so the wizard can fetch referencedata/scholia subclasses.txt.)'
+                : '';
+
+            // Variant Human feat
+            const isVh = !!document.getElementById('human-variant-check')?.checked;
+            const vhFeatId = String(document.getElementById('human-creationfeat-select')?.value || '').trim();
+            const vhFeatObj = (isVh && vhFeatId) ? findOriginFeatById(vhFeatId) : null;
+            const vhFeatText = vhFeatObj
+                ? [
+                    `Name: ${vhFeatObj.name || ''}`,
+                    vhFeatObj.description ? `\n${compactText(vhFeatObj.description)}` : '',
+                    Array.isArray(vhFeatObj.bullets) && vhFeatObj.bullets.length
+                        ? `\nEffects:\n${vhFeatObj.bullets.map(b => `- ${compactText(b)}`).join('\n')}`
+                        : '',
+                    vhFeatObj.asiText ? `\nASI Text: ${compactText(vhFeatObj.asiText)}` : ''
+                ].filter(Boolean).join('\n')
+                : '';
+
+            // Level 4 advancement
+            const lvl4ModeAsi = !!document.getElementById('lvl4-mode-asi')?.checked;
+            const lvl4ModeFeat = !!document.getElementById('lvl4-mode-feat')?.checked;
+            const lvl4FeatId = String(document.getElementById('lvl4-feat-select')?.value || '').trim();
+            const lvl4FeatObj = (lvl4ModeFeat && lvl4FeatId) ? findOriginFeatById(lvl4FeatId) : null;
+            const lvl4FeatText = lvl4FeatObj
+                ? [
+                    `Name: ${lvl4FeatObj.name || ''}`,
+                    lvl4FeatObj.description ? `\n${compactText(lvl4FeatObj.description)}` : '',
+                    Array.isArray(lvl4FeatObj.bullets) && lvl4FeatObj.bullets.length
+                        ? `\nEffects:\n${lvl4FeatObj.bullets.map(b => `- ${compactText(b)}`).join('\n')}`
+                        : '',
+                    lvl4FeatObj.asiText ? `\nASI Text: ${compactText(lvl4FeatObj.asiText)}` : ''
+                ].filter(Boolean).join('\n')
+                : '';
+
+            const lvl4AsiSummary = (() => {
+                if (!lvl4ModeAsi) return '';
+                const plus2 = !!document.getElementById('lvl4-asi-style-plus2')?.checked;
+                const plus1 = !!document.getElementById('lvl4-asi-style-plus1')?.checked;
+                const labels = { str: 'STR', dex: 'DEX', con: 'CON', int: 'INT', wis: 'WIS', cha: 'CHA' };
+                if (plus2) {
+                    const a = String(document.getElementById('lvl4-asi-plus2-ability')?.value || '').trim();
+                    return a ? `+2 ${labels[a] || a}` : '';
+                }
+                if (plus1) {
+                    const a = String(document.getElementById('lvl4-asi-plus1-a')?.value || '').trim();
+                    const b = String(document.getElementById('lvl4-asi-plus1-b')?.value || '').trim();
+                    if (a && b) return `+1 ${labels[a] || a}, +1 ${labels[b] || b}`;
+                }
+                return '';
+            })();
             
             // Gather Skills
             let proficiencies = [];
+            const classSkillsPicked = [];
             // Background Skills
             const bgContainer = document.getElementById('bg-skill-container');
             bgContainer.querySelectorAll('input:checked').forEach(cb => {
@@ -3802,6 +4802,7 @@
             const classContainer = document.getElementById('class-skill-container');
             classContainer.querySelectorAll('input:checked').forEach(cb => {
                 proficiencies.push(`${cb.value} (Class)`);
+                classSkillsPicked.push(String(cb.value || ''));
             });
 
             // Gather Tools/Langs/Weapons
@@ -3813,62 +4814,101 @@
             const invText = inventoryList.map(i => `- ${i.name} [${i.stat}] (${i.desc})`).join('\n');
 
             const spellEffectsAvailable = !!(srdSpellsByName || handbookSpellsByName);
+
+            const formatSpellLine = (s, fallbackName) => {
+                const name = s?.name || fallbackName;
+                const source = s && s.__source ? String(s.__source) : '';
+                const level = (s && typeof s.level === 'number' && isFinite(s.level)) ? s.level : null;
+                const school = s && s.school ? String(s.school) : '';
+                const headerBits = [
+                    source ? source : '',
+                    level === 0 ? 'cantrip' : (level != null ? `level ${level}` : ''),
+                    school ? school : ''
+                ].filter(Boolean);
+
+                const cast = s?.casttime || s?.castingTime || '';
+                const range = s?.range || '';
+                const duration = s?.duration || '';
+                let comps = '';
+                if (s?.components && typeof s.components === 'object') {
+                    const c = s.components;
+                    const parts = [];
+                    if (c.verbal) parts.push('V');
+                    if (c.somatic) parts.push('S');
+                    if (c.material) parts.push(`M (${c.material})`);
+                    comps = parts.join(', ');
+                } else if (s?.components) {
+                    comps = String(s.components);
+                }
+
+                const metaLine = [
+                    cast ? `Cast: ${cast}` : '',
+                    range ? `Range: ${range}` : '',
+                    comps ? `Components: ${comps}` : '',
+                    duration ? `Duration: ${duration}` : ''
+                ].filter(Boolean).join(' | ');
+
+                const desc = compactText(s?.description || '');
+                const higher = compactText(s?.higherlevels || s?.higherLevels || '');
+                const lines = [
+                    `- ${name}${headerBits.length ? ` (${headerBits.join(', ')})` : ''}`,
+                    metaLine ? `  ${metaLine}` : '',
+                    desc ? `  Effect: ${desc}` : '',
+                    higher ? `  At Higher Levels: ${higher}` : ''
+                ].filter(Boolean);
+                return lines.join('\n');
+            };
+
             const spellsText = spellList.length
-                ? spellList.map(rawName => {
-                    const name = String(rawName || '').trim();
-                    if (!name) return '';
-                    const s = getSpellEffectByName(name);
-                    if (!s) return `- ${name}`;
+                ? (() => {
+                    const byLevel = new Map();
+                    const unknown = [];
 
-                    const source = s.__source ? String(s.__source) : '';
-                    const level = (typeof s.level === 'number' && isFinite(s.level)) ? s.level : null;
-                    const school = s.school ? String(s.school) : '';
-                    const headerBits = [
-                        source ? source : '',
-                        level === 0 ? 'cantrip' : (level != null ? `level ${level}` : ''),
-                        school ? school : ''
-                    ].filter(Boolean);
-
-                    // SRD index uses casttime/range/duration/components object.
-                    const cast = s.casttime || s.castingTime || '';
-                    const range = s.range || '';
-                    const duration = s.duration || '';
-                    let comps = '';
-                    if (s.components && typeof s.components === 'object') {
-                        const c = s.components;
-                        const parts = [];
-                        if (c.verbal) parts.push('V');
-                        if (c.somatic) parts.push('S');
-                        if (c.material) parts.push(`M (${c.material})`);
-                        comps = parts.join(', ');
-                    } else if (s.components) {
-                        comps = String(s.components);
+                    for (const rawName of spellList) {
+                        const name = String(rawName || '').trim();
+                        if (!name) continue;
+                        const s = getSpellEffectByName(name);
+                        const lvl = (s && typeof s.level === 'number' && isFinite(s.level)) ? s.level : null;
+                        if (lvl === null) {
+                            unknown.push({ name, s });
+                            continue;
+                        }
+                        if (!byLevel.has(lvl)) byLevel.set(lvl, []);
+                        byLevel.get(lvl).push({ name, s });
                     }
 
-                    const metaLine = [
-                        cast ? `Cast: ${cast}` : '',
-                        range ? `Range: ${range}` : '',
-                        comps ? `Components: ${comps}` : '',
-                        duration ? `Duration: ${duration}` : ''
-                    ].filter(Boolean).join(' | ');
+                    const levels = Array.from(byLevel.keys()).sort((a, b) => a - b);
+                    const blocks = [];
+                    for (const lvl of levels) {
+                        const title = (lvl === 0) ? 'Cantrips' : `Level ${lvl} Spells`;
+                        blocks.push(`${title}\n${'-'.repeat(title.length)}`);
+                        const items = byLevel.get(lvl) || [];
+                        for (const it of items) {
+                            if (!it.s) blocks.push(`- ${it.name}`);
+                            else blocks.push(formatSpellLine(it.s, it.name));
+                        }
+                        blocks.push('');
+                    }
 
-                    const desc = compactText(s.description || '');
-                    const higher = compactText(s.higherlevels || s.higherLevels || '');
-                    const lines = [
-                        `- ${s.name || name}${headerBits.length ? ` (${headerBits.join(', ')})` : ''}`,
-                        metaLine ? `  ${metaLine}` : '',
-                        desc ? `  Effect: ${desc}` : '',
-                        higher ? `  At Higher Levels: ${higher}` : ''
-                    ].filter(Boolean);
-                    return lines.join('\n');
-                }).filter(Boolean).join('\n')
+                    if (unknown.length) {
+                        const title = 'Unknown Level Spells';
+                        blocks.push(`${title}\n${'-'.repeat(title.length)}`);
+                        for (const it of unknown) {
+                            if (!it.s) blocks.push(`- ${it.name}`);
+                            else blocks.push(formatSpellLine(it.s, it.name));
+                        }
+                        blocks.push('');
+                    }
+
+                    return blocks.join('\n').trim();
+                })()
                 : 'None';
 
             const summary = `
 Scholia Diaspros Character Profile
 ----------------------------------
 RACE: ${getVal('input-race')}
-CLASS: ${getVal('class-select')} ${getVal('input-subclass')} (Level 5)
+CLASS: ${getVal('class-select')} ${pickedSubclass || getVal('input-subclass')} (Level 5)
 BACKGROUND: ${getVal('input-bg-name')}
 
 GSHEET FILLING INSTRUCTIONS
@@ -3903,6 +4943,32 @@ Max HP: ${document.getElementById('hp-total-display').innerText}
 
 FEATURES
 ----------------------------------
+RACE (Traits + Racial Feats)
+----------------------------------
+${raceTraitsText || getVal('input-race')}
+
+CLASS (Skills & Abilities)
+----------------------------------
+Class Skills: ${classSkillsPicked.join(', ') || 'None Selected'}
+Class Proficiencies (Armor/Weapons/Saves/etc):
+${classGear || 'None'}
+
+CLASS FEATURES / ABILITIES (SRD Full Text)
+----------------------------------
+${srdClassText || '(No SRD class feature text found for this class.)'}${srdClassText ? '' : rulesNotLoadedNote}
+
+SUBCLASS FEATURES (SRD / Realm Homebrew)
+----------------------------------
+${pickedSubclass ? (subclassFeaturesText || '(No subclass feature text found for this subclass.)') : 'None Selected'}${pickedSubclass && !subclassFeaturesText ? (rulesNotLoadedNote + customNotLoadedNote) : ''}
+
+VARIANT HUMAN CREATION FEAT
+----------------------------------
+${isVh ? (vhFeatText || '(No feat details found)') : 'Not Variant Human'}
+
+LEVEL 4 ADVANCEMENT
+----------------------------------
+${lvl4ModeAsi ? `ASI: ${lvl4AsiSummary || '(not set)'}` : (lvl4ModeFeat ? `Feat:\n${lvl4FeatText || '(No feat details found)'}` : 'Not selected')}
+
 BACKGROUND (Full Text)
 ----------------------------------
 ${bgText || getVal('input-bg-name')}
@@ -3960,8 +5026,17 @@ ${invText || "None entered"}
         initFinalOverview();
         setupAutosave();
 
+        initLevel4AbilitySelects();
+        onLevel4ModeChanged(false);
+        onLevel4AsiStyleChanged(false);
+        onHumanVariantToggle(false);
+
         // Start loading spell effect indexes (SRD + handbook) for summary printing.
         ensureSpellEffectIndexesLoaded();
+
+        // Start loading SRD rules text and custom subclass text for summary printing.
+        ensureSrdRulesTextLoaded();
+        ensureCustomSubclassIndexLoaded();
 
         // SRD subclass dropdown copies into the manual subclass field.
         const srdSubclassSelect = document.getElementById('srd-subclass-select');
@@ -4005,6 +5080,14 @@ ${invText || "None entered"}
 
         // Ensure UI matches the initial class value.
         handleClassChanged();
+
+        // Manual race typing should still enable/disable Variant Human options.
+        const manualRaceInput = document.getElementById('input-race');
+        if (manualRaceInput) {
+            manualRaceInput.addEventListener('input', () => {
+                updateHumanVariantVisibility('', { name: String(manualRaceInput.value || '') });
+            });
+        }
         updateUI();
     </script>
 </body>
