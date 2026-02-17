@@ -332,6 +332,90 @@
                                     </div>
                                 </div>
 
+                                <div id="archist-feature-container" class="hidden mt-3 p-3 bg-darkblue-900 rounded border border-purple-900/40">
+                                    <div class="text-xs font-bold text-purple-300 uppercase tracking-wider">Celestian Archist — Level 3 Feature Choice</div>
+                                    <p class="text-[11px] text-silver-500 mt-1">Celestian Archists permanently select one feature that is normally a subclass’s initial feature at 3rd level (from any class). Record it here so it prints in your summary.</p>
+                                    <div class="grid grid-cols-1 gap-3 mt-3">
+                                        <div>
+                                            <label class="block text-xs font-bold text-silver-500 uppercase mb-1">Subclass (Source)</label>
+                                            <input type="text" id="archist-subclass" class="input-dark" list="archist-subclass-datalist" placeholder="e.g., Thief / Oath of Devotion / Circle of the Land">
+                                            <datalist id="archist-subclass-datalist"></datalist>
+                                            <div id="archist-subclass-status" class="text-[11px] text-silver-600 mt-1"></div>
+                                        </div>
+                                        <div>
+                                            <label class="block text-xs font-bold text-silver-500 uppercase mb-1">Chosen Feature Name</label>
+                                            <input type="text" id="archist-feature" class="input-dark" placeholder="e.g., Fast Hands">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="gemini-celestian-container" class="hidden mt-3 p-3 bg-darkblue-900 rounded border border-purple-900/40">
+                                    <div class="text-xs font-bold text-purple-300 uppercase tracking-wider">Gemini Celestian — Twin Options</div>
+                                    <p class="text-[11px] text-silver-500 mt-1">Gemini Celestians have per-twin choices. These fields don’t change your ability scores automatically — they’re here to keep the choices visible in the final summary.</p>
+
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
+                                        <div>
+                                            <label class="block text-xs font-bold text-silver-500 uppercase mb-1">Twin 1 — Simple Weapon</label>
+                                            <input type="text" id="gemini-weapon-1" class="input-dark" placeholder="e.g., Dagger">
+                                        </div>
+                                        <div>
+                                            <label class="block text-xs font-bold text-silver-500 uppercase mb-1">Twin 2 — Simple Weapon</label>
+                                            <input type="text" id="gemini-weapon-2" class="input-dark" placeholder="e.g., Staff">
+                                        </div>
+
+                                        <div>
+                                            <label class="block text-xs font-bold text-silver-500 uppercase mb-1">Twin 1 — Skill Choice</label>
+                                            <input type="text" id="gemini-skill-1" class="input-dark" placeholder="e.g., Arcana">
+                                        </div>
+                                        <div>
+                                            <label class="block text-xs font-bold text-silver-500 uppercase mb-1">Twin 2 — Skill Choice</label>
+                                            <input type="text" id="gemini-skill-2" class="input-dark" placeholder="e.g., Insight">
+                                        </div>
+
+                                        <div>
+                                            <label class="block text-xs font-bold text-silver-500 uppercase mb-1">Twin 1 — Save Choice</label>
+                                            <select id="gemini-save-1" class="input-dark">
+                                                <option value="" selected>(not set)</option>
+                                                <option value="STR">STR</option>
+                                                <option value="DEX">DEX</option>
+                                                <option value="CON">CON</option>
+                                                <option value="INT">INT</option>
+                                                <option value="WIS">WIS</option>
+                                                <option value="CHA">CHA</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="block text-xs font-bold text-silver-500 uppercase mb-1">Twin 2 — Save Choice</label>
+                                            <select id="gemini-save-2" class="input-dark">
+                                                <option value="" selected>(not set)</option>
+                                                <option value="STR">STR</option>
+                                                <option value="DEX">DEX</option>
+                                                <option value="CON">CON</option>
+                                                <option value="INT">INT</option>
+                                                <option value="WIS">WIS</option>
+                                                <option value="CHA">CHA</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="grid grid-cols-1 gap-3 mt-3">
+                                        <div>
+                                            <label class="block text-xs font-bold text-silver-500 uppercase mb-1">Level 2 — Bonus Proficiency (craft/tool/game)</label>
+                                            <input type="text" id="gemini-bonus-prof" class="input-dark" placeholder="e.g., Calligrapher’s Supplies">
+                                        </div>
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                            <div>
+                                                <label class="block text-xs font-bold text-silver-500 uppercase mb-1">Level 1 — Wizard Cantrip</label>
+                                                <input type="text" id="gemini-wizard-cantrip" class="input-dark" placeholder="e.g., Mage Hand">
+                                            </div>
+                                            <div>
+                                                <label class="block text-xs font-bold text-silver-500 uppercase mb-1">Level 2 — Divine Cantrip</label>
+                                                <input type="text" id="gemini-divine-cantrip" class="input-dark" placeholder="e.g., Guidance">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <p class="text-xs text-silver-600 mt-2 italic">Enter the bonuses (e.g. 2, 1) in the boxes.</p>
                             </div>
                         </div>
@@ -2730,6 +2814,7 @@
             renderRaceDetailsPanel(raceKey, subraceKey, race, subrace);
 
             updateHumanVariantVisibility(raceKey, race);
+            updateRaceSpecialOptionsVisibility(raceKey, race);
 
             if (!race) {
                 renderAsiChoiceUI([]);
@@ -2751,6 +2836,100 @@
                 }
             }
             applyRacialASIInputs(finalMods);
+        }
+
+        function normalizeRaceNameForChecks(s) {
+            return String(s || '')
+                .replace(/\u00a0/g, ' ')
+                .replace(/\s+/g, ' ')
+                .trim()
+                .toLowerCase();
+        }
+
+        function getActiveRaceNameForChecks(raceKey, raceObj) {
+            const manual = document.getElementById('input-race')?.value || '';
+            return String(raceObj?.name || raceKey || manual || '').trim();
+        }
+
+        function isCelestianArchistRace(raceKey, raceObj) {
+            const n = normalizeRaceNameForChecks(getActiveRaceNameForChecks(raceKey, raceObj));
+            return n.startsWith('celestian archist');
+        }
+
+        function isGeminiCelestianRace(raceKey, raceObj) {
+            const n = normalizeRaceNameForChecks(getActiveRaceNameForChecks(raceKey, raceObj));
+            return n.startsWith('gemini celestian') || n.startsWith('celestian gemini');
+        }
+
+        let archistSubclassDatalistHydrated = false;
+
+        function getAllKnownSubclassNamesForArchist() {
+            const out = new Set();
+            // SRD predefined list used for the subclass dropdown.
+            try {
+                Object.values(SRD_SUBCLASSES_BY_CLASS || {}).flat().forEach(n => {
+                    const s = String(n || '').trim();
+                    if (s) out.add(s);
+                });
+            } catch (e) {}
+
+            // Custom subclasses index.
+            try {
+                const byName = customSubclassIndex && customSubclassIndex.byName ? customSubclassIndex.byName : null;
+                if (byName && typeof byName === 'object') {
+                    for (const arr of Object.values(byName)) {
+                        if (!Array.isArray(arr)) continue;
+                        for (const entry of arr) {
+                            const s = String(entry?.name || '').trim();
+                            if (s) out.add(s);
+                        }
+                    }
+                }
+            } catch (e) {}
+
+            return Array.from(out).sort((a, b) => a.localeCompare(b));
+        }
+
+        async function hydrateArchistSubclassDatalist() {
+            const datalist = document.getElementById('archist-subclass-datalist');
+            const status = document.getElementById('archist-subclass-status');
+            if (!datalist) return;
+
+            // If indexes aren't available yet, kick off loads and show a note.
+            if (!customSubclassIndex) ensureCustomSubclassIndexLoaded();
+
+            const names = getAllKnownSubclassNamesForArchist();
+            if (!names.length) {
+                if (status) status.textContent = 'Subclass suggestions will appear after indexes finish loading.';
+                return;
+            }
+
+            if (archistSubclassDatalistHydrated) {
+                if (status) status.textContent = `Suggestions loaded (${names.length}).`;
+                return;
+            }
+
+            datalist.innerHTML = names.map(n => `<option value="${escapeHtml(n)}"></option>`).join('');
+            archistSubclassDatalistHydrated = true;
+            if (status) status.textContent = `Suggestions loaded (${names.length}).`;
+        }
+
+        function updateRaceSpecialOptionsVisibility(raceKey, raceObj) {
+            const archistWrap = document.getElementById('archist-feature-container');
+            const geminiWrap = document.getElementById('gemini-celestian-container');
+            if (!archistWrap && !geminiWrap) return;
+
+            const isArchist = isCelestianArchistRace(raceKey, raceObj);
+            const isGemini = isGeminiCelestianRace(raceKey, raceObj);
+
+            if (archistWrap) archistWrap.classList.toggle('hidden', !isArchist);
+            if (geminiWrap) geminiWrap.classList.toggle('hidden', !isGemini);
+
+            if (isArchist) {
+                // Custom subclass index helps suggestions; SRD rules are optional.
+                ensureCustomSubclassIndexLoaded();
+                hydrateArchistSubclassDatalist();
+            }
         }
 
         function onRaceChanged() {
@@ -4423,6 +4602,13 @@
                 'human-creationfeat-select',
                 'vhfeat-asi-choice-key',
                 'vhfeat-str','vhfeat-dex','vhfeat-con','vhfeat-int','vhfeat-wis','vhfeat-cha',
+                // Celestian / Gemini race extras
+                'archist-subclass', 'archist-feature',
+                'gemini-weapon-1','gemini-weapon-2',
+                'gemini-skill-1','gemini-skill-2',
+                'gemini-save-1','gemini-save-2',
+                'gemini-bonus-prof',
+                'gemini-wizard-cantrip','gemini-divine-cantrip',
                 'bg-select', 'originfeat-select',
                 'input-bg-name', 'input-feat',
                 'bg-tools', 'bg-languages',
@@ -4728,6 +4914,50 @@
                 subraceTraits.length ? `\nSubrace Traits:\n${subraceTraits.map(t => `- ${compactText(t)}`).join('\n')}` : ''
             ].filter(Boolean).join('\n');
 
+            const raceSpecialNotes = (() => {
+                const notes = [];
+                const isArchist = isCelestianArchistRace(raceKey, race);
+                const isGemini = isGeminiCelestianRace(raceKey, race);
+
+                if (isArchist) {
+                    const sub = String(document.getElementById('archist-subclass')?.value || '').trim();
+                    const feat = String(document.getElementById('archist-feature')?.value || '').trim();
+                    if (sub || feat) {
+                        notes.push('Celestian Archist Selection:');
+                        notes.push(`- Subclass: ${sub || '(not set)'}`);
+                        notes.push(`- Chosen 3rd-level feature: ${feat || '(not set)'}`);
+                    }
+                }
+
+                if (isGemini) {
+                    const w1 = String(document.getElementById('gemini-weapon-1')?.value || '').trim();
+                    const w2 = String(document.getElementById('gemini-weapon-2')?.value || '').trim();
+                    const sk1 = String(document.getElementById('gemini-skill-1')?.value || '').trim();
+                    const sk2 = String(document.getElementById('gemini-skill-2')?.value || '').trim();
+                    const sv1 = String(document.getElementById('gemini-save-1')?.value || '').trim();
+                    const sv2 = String(document.getElementById('gemini-save-2')?.value || '').trim();
+                    const bp = String(document.getElementById('gemini-bonus-prof')?.value || '').trim();
+                    const wc = String(document.getElementById('gemini-wizard-cantrip')?.value || '').trim();
+                    const dc = String(document.getElementById('gemini-divine-cantrip')?.value || '').trim();
+
+                    const any = w1 || w2 || sk1 || sk2 || sv1 || sv2 || bp || wc || dc;
+                    if (any) {
+                        notes.push('Gemini Celestian Selections:');
+                        notes.push(`- Twin 1 weapon: ${w1 || '(not set)'}`);
+                        notes.push(`- Twin 2 weapon: ${w2 || '(not set)'}`);
+                        notes.push(`- Twin 1 skill: ${sk1 || '(not set)'}`);
+                        notes.push(`- Twin 2 skill: ${sk2 || '(not set)'}`);
+                        notes.push(`- Twin 1 save: ${sv1 || '(not set)'}`);
+                        notes.push(`- Twin 2 save: ${sv2 || '(not set)'}`);
+                        if (bp) notes.push(`- Bonus proficiency (lvl 2): ${bp}`);
+                        if (wc) notes.push(`- Wizard cantrip (lvl 1): ${wc}`);
+                        if (dc) notes.push(`- Divine cantrip (lvl 2): ${dc}`);
+                    }
+                }
+
+                return notes.length ? `\n\nSelections:\n${notes.join('\n')}` : '';
+            })();
+
             // Class + subclass features text (SRD + custom)
             const baseClassName = String(document.getElementById('class-select')?.value || '').trim();
             const pickedSubclass = getSelectedSubclassName();
@@ -4945,7 +5175,7 @@ FEATURES
 ----------------------------------
 RACE (Traits + Racial Feats)
 ----------------------------------
-${raceTraitsText || getVal('input-race')}
+${(raceTraitsText || getVal('input-race')) + (raceSpecialNotes || '')}
 
 CLASS (Skills & Abilities)
 ----------------------------------
@@ -5086,6 +5316,7 @@ ${invText || "None entered"}
         if (manualRaceInput) {
             manualRaceInput.addEventListener('input', () => {
                 updateHumanVariantVisibility('', { name: String(manualRaceInput.value || '') });
+                updateRaceSpecialOptionsVisibility('', { name: String(manualRaceInput.value || '') });
             });
         }
         updateUI();

@@ -63,3 +63,5 @@ tools/truncate_duplicate_json.js
 tools/avrae/rules_lookup_server_alias.dashboard.drac2
 tools/avrae/rules_lookup_server_alias.drac2.txt
 LIVE_PAGES.txt
+tools/stop_all_servers.ps1
+stop_all_servers.bat
