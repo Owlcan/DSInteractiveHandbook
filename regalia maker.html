@@ -270,6 +270,11 @@
         <div id="selectionWarning" style="display: none; background-color: #ffeb3b; color: #8c693a; padding: 10px; border-radius: 5px; margin: 10px 0; text-align: center; border: 1px solid #ffc107; font-weight: bold;">
           ⚠️ Please select only one item type (either Clothing/Armor OR Accessories) to proceed.
         </div>
+
+        <div style="margin-top: 15px; text-align: center;">
+          <button id="loadSavedRegaliaBtn" type="button" style="background: linear-gradient(to bottom, #4a4a4a, #2a2a2a); color: #f0e6d6; border: none; border-radius: 4px; padding: 10px 18px; font-weight: bold; cursor: pointer; font-family: 'Cinzel', serif; transition: all 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.3);">Load Saved Regalia</button>
+          <input id="savedRegaliaFileInput" type="file" accept="application/json" style="display:none;" />
+        </div>
         
         <div id="slotSelectionCtn" style="margin-top: 20px; display: none; animation: fadeIn 0.5s ease;">
           <h2 style="color: #8c693a; border-bottom: 1px solid #b08d57; padding-bottom: 10px; text-align: center;">Select Enhancement & Upgrade Slots</h2>
@@ -372,6 +377,14 @@
               <div>
                 <label for="regaliaImageInput" style="display: block; margin-bottom: 5px; color: #8c693a;">Regalia Image URL (optional):</label>
                 <input type="text" id="regaliaImageInput" placeholder="Enter an image URL..." style="width: 100%; padding: 12px; background-color: #e0c8a0; color: #4a3b2a; border: 1px solid #b08d57; border-radius: 4px; font-family: 'Cinzel', serif;">
+              </div>
+
+              <div>
+                <label for="regaliaImageFileInput" style="display: block; margin-bottom: 5px; color: #8c693a;">Or Upload Image From Your Device:</label>
+                <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                  <input type="file" id="regaliaImageFileInput" accept="image/*" style="flex: 1 1 240px; padding: 10px; background-color: #e0c8a0; color: #4a3b2a; border: 1px solid #b08d57; border-radius: 4px; font-family: 'Cinzel', serif;">
+                  <button id="clearRegaliaImageBtn" type="button" style="background: linear-gradient(to bottom, #d4b78c, #a88665); color: #4a3b2a; border: none; border-radius: 4px; padding: 10px 16px; font-weight: bold; cursor: pointer; font-family: 'Cinzel', serif; transition: all 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">Clear Image</button>
+                </div>
               </div>
               
               <div id="imagePreviewCtn" style="display: none; margin: 15px auto; max-width: 300px; border: 1px solid #b08d57; padding: 5px; background-color: #e0c8a0;">
@@ -931,6 +944,7 @@ const regaliaUpgrades = [
     usedSlots: [], 
     regaliaName: "",
     regaliaImageUrl: "",
+    regaliaImageObjectUrl: "",
     totalCost: 0, // Track total enhancement cost
     baseCost: 0, // Track base regalia cost
     slotCost: 0 // Track slot installation cost
@@ -955,11 +969,15 @@ const regaliaUpgrades = [
   const regaliaCustomizationCtn = document.getElementById("regaliaCustomizationCtn");
   const regaliaNameInput = document.getElementById("regaliaNameInput");
   const regaliaImageInput = document.getElementById("regaliaImageInput");
+  const regaliaImageFileInputEl = document.getElementById("regaliaImageFileInput");
+  const clearRegaliaImageBtnEl = document.getElementById("clearRegaliaImageBtn");
   const imagePreviewCtn = document.getElementById("imagePreviewCtn");
   const imagePreviewEl = document.getElementById("imagePreviewEl");
   const regaliaSummaryCtn = document.getElementById("regaliaSummaryCtn");
   const regaliaSummaryContent = document.getElementById("regaliaSummaryContent");
   const slotIndicatorsCtn = document.getElementById("slotIndicatorsCtn");
+  const loadSavedRegaliaBtn = document.getElementById("loadSavedRegaliaBtn");
+  const savedRegaliaFileInput = document.getElementById("savedRegaliaFileInput");
 
 
   // Initialize
@@ -994,7 +1012,204 @@ const regaliaUpgrades = [
     if (regaliaNameInput) {
       regaliaNameInput.addEventListener("input", updateRegaliaName);
     }
+
+    // Local image upload (kept in-memory; nothing is stored or uploaded)
+    if (regaliaImageFileInputEl) {
+      regaliaImageFileInputEl.addEventListener("change", onRegaliaImageFileSelected);
+    }
+    if (clearRegaliaImageBtnEl) {
+      clearRegaliaImageBtnEl.addEventListener("click", clearRegaliaImage);
+    }
+
+    // Load saved regalia (Tier 1) from a local JSON file
+    if (loadSavedRegaliaBtn && savedRegaliaFileInput) {
+      loadSavedRegaliaBtn.addEventListener("click", () => {
+        savedRegaliaFileInput.value = "";
+        savedRegaliaFileInput.click();
+      });
+      savedRegaliaFileInput.addEventListener("change", onSavedRegaliaFileSelected);
+    }
   });
+
+  function buildRegaliaSaveData() {
+    const regaliaName = String(state.regaliaName || regaliaNameInput?.value || '').trim() || (state.selectedRegaliaBase ? state.selectedRegaliaBase.name : 'regalia');
+    const selectedBase = String(state.selectedRegaliaBase?.name || '').trim();
+    const regaliaImageUrl = String(state.regaliaImageUrl || regaliaImageInput?.value || '').trim();
+
+    return {
+      type: 'regalia',
+      version: 1,
+      savedAt: new Date().toISOString(),
+      data: {
+        currentTier: 1,
+        selectedBase,
+        selectedEnhancement: String(selectedEnhancement || ''),
+        totalSlots: Math.max(1, Number(state.totalSlots) || 1),
+        selectedUpgrades: Array.isArray(state.selectedUpgrades) ? state.selectedUpgrades.map(u => String(u?.name || '')).filter(Boolean) : [],
+        regaliaName,
+        regaliaImageUrl
+      }
+    };
+  }
+
+  function safeFilename(name) {
+    const base = String(name || '').trim() || 'regalia';
+    return base
+      .replace(/[^a-z0-9\-_. ]/gi, '')
+      .replace(/\s+/g, ' ')
+      .trim()
+      .slice(0, 80)
+      .replace(/\s/g, '_');
+  }
+
+  function downloadJsonFile(filename, obj) {
+    const json = JSON.stringify(obj, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    try { URL.revokeObjectURL(url); } catch (_) {}
+  }
+
+  function saveRegaliaToFile() {
+    const payload = buildRegaliaSaveData();
+    const name = payload?.data?.regaliaName || payload?.data?.selectedBase || 'regalia';
+    const filename = `${safeFilename(name)}_tier1.json`;
+    downloadJsonFile(filename, payload);
+  }
+
+  function restoreRegaliaFromSaveData(payload) {
+    if (!payload || typeof payload !== 'object') throw new Error('Invalid save data.');
+    if (payload.type !== 'regalia') throw new Error('This file is not a regalia save.');
+    if (Number(payload.version) !== 1) throw new Error('Unsupported save version.');
+    const data = payload.data || {};
+
+    const selectedBase = String(data.selectedBase || '').trim();
+    if (!selectedBase) throw new Error('Save file is missing selectedBase.');
+    const baseDetails = regaliaTypes.find(r => r.name === selectedBase);
+    if (!baseDetails) throw new Error(`Saved regalia base not found in this version: ${selectedBase}`);
+
+    const totalSlots = Math.max(1, Math.min(10, Number(data.totalSlots) || 1));
+    const desiredEnhancement = String(data.selectedEnhancement || '').trim();
+    const isArmorClothing = clothingArmorCategories.includes(selectedBase);
+    const enhancementToApply = (isArmorClothing && (desiredEnhancement === '' || Object.prototype.hasOwnProperty.call(enhancementPricing, desiredEnhancement)))
+      ? desiredEnhancement
+      : "";
+
+    const savedUpgradeNames = Array.isArray(data.selectedUpgrades) ? data.selectedUpgrades.map(n => String(n || '').trim()).filter(Boolean) : [];
+    const uniqueUpgradeNames = Array.from(new Set(savedUpgradeNames));
+    const upgradeObjects = uniqueUpgradeNames.map(name => regaliaUpgrades.find(u => u.name === name)).filter(Boolean);
+    const missingUpgrades = uniqueUpgradeNames.filter(name => !regaliaUpgrades.some(u => u.name === name));
+    if (missingUpgrades.length) {
+      throw new Error(`Saved upgrade(s) not found in this version: ${missingUpgrades.join(', ')}`);
+    }
+
+    // Reset UI selections
+    selectionWarning.style.display = "none";
+    clothingArmorSelect.value = "";
+    accessoriesSelect.value = "";
+    slotSelectionCtn.style.display = "none";
+    upgradeSelectionCtn.style.display = "none";
+    regaliaSummaryCtn.style.display = "none";
+    regaliaCustomizationCtn.style.display = "none";
+
+    // Choose correct dropdown and reuse existing flow
+    if (isArmorClothing) {
+      clothingArmorSelect.value = selectedBase;
+      onRegaliaSelected({ target: clothingArmorSelect });
+    } else {
+      accessoriesSelect.value = selectedBase;
+      onRegaliaSelected({ target: accessoriesSelect });
+    }
+
+    // Apply enhancement + slot count
+    selectEnhancement(enhancementToApply);
+    state.totalSlots = totalSlots;
+    updateSlotDisplay();
+    slotCountDisplay.textContent = state.totalSlots;
+
+    // Move to upgrades stage
+    confirmSlots();
+
+    // Apply upgrades using the normal selection logic (keeps usedSlots/remainingSlots consistent)
+    state.selectedUpgrades = [];
+    state.usedSlots = [];
+    state.remainingSlots = state.totalSlots + (selectedEnhancement ? enhancementPricing[selectedEnhancement].slots : 0);
+    remainingSlotsDisplay.textContent = state.remainingSlots;
+
+    const slotsNeeded = upgradeObjects.reduce((sum, u) => sum + Math.max(0, Number(u?.cost) || 0), 0);
+    if (slotsNeeded > state.remainingSlots) {
+      throw new Error('Saved regalia uses more slots than are available with the saved slot/enhancement settings.');
+    }
+
+    for (const upg of upgradeObjects) {
+      selectUpgrade(upg);
+    }
+
+    // Restore name + image
+    state.regaliaName = String(data.regaliaName || '').trim();
+    state.regaliaImageUrl = String(data.regaliaImageUrl || '').trim();
+    if (regaliaNameInput) regaliaNameInput.value = state.regaliaName;
+    if (regaliaImageInput) regaliaImageInput.value = state.regaliaImageUrl;
+    updateRegaliaName();
+    updateImagePreview();
+
+    // After restore, keep the user on the editable Tier 1 upgrades stage
+    // so they can add/remove upgrades/enchantments before viewing summary.
+    showLoadedRegaliaForTier1Continuation();
+  }
+
+  function showLoadedRegaliaForTier1Continuation() {
+    slotSelectionCtn.style.display = "none";
+    upgradeSelectionCtn.style.display = "block";
+    regaliaSummaryCtn.style.display = "none";
+    state.currentStage = 3;
+    updateProgress();
+
+    slotCountDisplay.textContent = state.totalSlots;
+    remainingSlotsDisplay.textContent = state.remainingSlots;
+
+    if (regaliaNameInput) regaliaNameInput.value = state.regaliaName || "";
+    if (regaliaImageInput) {
+      regaliaImageInput.value = state.regaliaImageUrl && !state.regaliaImageUrl.startsWith('data:') ? state.regaliaImageUrl : "";
+    }
+
+    if (state.regaliaImageUrl) {
+      imagePreviewEl.src = state.regaliaImageUrl;
+      imagePreviewCtn.style.display = "block";
+    } else {
+      imagePreviewEl.src = "";
+      imagePreviewCtn.style.display = "none";
+    }
+
+    renderSlotIndicators();
+    updateSelectedUpgradesList();
+    renderUpgradeOptions();
+    updateCostDisplay();
+  }
+
+  function onSavedRegaliaFileSelected(e) {
+    const input = e.currentTarget;
+    const file = input && input.files ? input.files[0] : null;
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const payload = JSON.parse(String(reader.result || ''));
+        restoreRegaliaFromSaveData(payload);
+      } catch (err) {
+        alert(err && err.message ? err.message : 'Failed to load regalia save file.');
+      }
+    };
+    reader.onerror = () => {
+      alert('Failed to read the save file.');
+    };
+    reader.readAsText(file);
+  }
 
   function updateProgress() {
     const stageNames = [
@@ -1340,6 +1555,62 @@ const regaliaUpgrades = [
     }
   }
 
+  function onRegaliaImageFileSelected(e) {
+    const input = e.currentTarget;
+    const file = input && input.files ? input.files[0] : null;
+    if (!file) return;
+    if (!file.type || !file.type.startsWith("image/")) {
+      alert("Please choose an image file.");
+      input.value = "";
+      return;
+    }
+
+    // If the user previously used an object URL, revoke it.
+    if (state.regaliaImageObjectUrl) {
+      try { URL.revokeObjectURL(state.regaliaImageObjectUrl); } catch (_) {}
+      state.regaliaImageObjectUrl = "";
+    }
+
+    // Read as a data URL so the summary image continues to work in-page.
+    const reader = new FileReader();
+    reader.onload = () => {
+      const dataUrl = String(reader.result || "");
+      if (!dataUrl.startsWith("data:image/")) {
+        alert("Failed to load image.");
+        input.value = "";
+        return;
+      }
+      state.regaliaImageUrl = dataUrl;
+      if (regaliaImageInput) regaliaImageInput.value = "";
+
+      imagePreviewEl.src = dataUrl;
+      imagePreviewCtn.style.display = "block";
+
+      imagePreviewEl.onerror = () => {
+        imagePreviewCtn.style.display = "none";
+        state.regaliaImageUrl = "";
+      };
+    };
+    reader.onerror = () => {
+      alert("Failed to read the image file.");
+      input.value = "";
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function clearRegaliaImage() {
+    state.regaliaImageUrl = "";
+    if (state.regaliaImageObjectUrl) {
+      try { URL.revokeObjectURL(state.regaliaImageObjectUrl); } catch (_) {}
+      state.regaliaImageObjectUrl = "";
+    }
+
+    if (regaliaImageInput) regaliaImageInput.value = "";
+    if (regaliaImageFileInputEl) regaliaImageFileInputEl.value = "";
+    if (imagePreviewEl) imagePreviewEl.src = "";
+    if (imagePreviewCtn) imagePreviewCtn.style.display = "none";
+  }
+
   function updateRegaliaName() {
     state.regaliaName = regaliaNameInput.value.trim();
   }
@@ -1438,7 +1709,11 @@ const regaliaUpgrades = [
   
   function showRegaliaSummary() {
     state.regaliaName = regaliaNameInput.value.trim() || (state.selectedRegaliaBase ? state.selectedRegaliaBase.name : "My Custom Regalia");
-    state.regaliaImageUrl = regaliaImageInput.value.trim();
+    // Preserve any locally-uploaded (data URL) image. Only replace if a URL was explicitly provided.
+    const urlFromInput = regaliaImageInput.value.trim();
+    if (urlFromInput) {
+      state.regaliaImageUrl = urlFromInput;
+    }
     
     upgradeSelectionCtn.style.display = "none";
     regaliaSummaryCtn.style.display = "block";
@@ -1536,7 +1811,7 @@ const regaliaUpgrades = [
             <span style="color: #5c4d3e; font-size: 1.0em;">Enhancement Cost:</span>
             <span style="color: #8c693a; font-weight: bold;">${state.totalCost.toLocaleString()} GP</span>
           </div>
-          
+
           <hr style="border: none; border-top: 2px solid #b08d57; margin: 12px 0;">
           
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
@@ -1552,12 +1827,24 @@ const regaliaUpgrades = [
           <div style="font-size: 0.85em; color: #5c4d3e; margin-top: 10px; font-style: italic; text-align: center;">*Complete regalia creation cost including base regalia, slot installation, and enhancements</div>
         </div>
       </div>
-      <div style="margin-top: 30px; text-align: center;">
+      <div style="margin-top: 30px; text-align: center; display: flex; justify-content: center; flex-wrap: wrap; gap: 10px;">
+        <button id="saveRegaliaBtnSummary" type="button" style="background: linear-gradient(to bottom, #2e7d32, #1b5e20); color: #f0e6d6; border: none; border-radius: 4px; padding: 12px 18px; font-weight: bold; cursor: pointer; font-family: 'Cinzel', serif; transition: all 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.3);">Save Regalia</button>
+        <button id="loadSavedRegaliaBtnSummary" type="button" style="background: linear-gradient(to bottom, #4a4a4a, #2a2a2a); color: #f0e6d6; border: none; border-radius: 4px; padding: 12px 18px; font-weight: bold; cursor: pointer; font-family: 'Cinzel', serif; transition: all 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.3);">Load Saved Regalia</button>
         <button onclick="location.reload()" style="background: linear-gradient(to bottom, #d4b78c, #a88665); color: #4a3b2a; border: none; border-radius: 4px; padding: 12px 24px; font-weight: bold; cursor: pointer; font-family: 'Cinzel', serif; transition: all 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">Create Another Regalia</button>
       </div>
     `;
     
     regaliaSummaryContent.innerHTML = summaryHTML;
+
+    const saveBtn = document.getElementById('saveRegaliaBtnSummary');
+    if (saveBtn) saveBtn.addEventListener('click', saveRegaliaToFile);
+    const loadBtn = document.getElementById('loadSavedRegaliaBtnSummary');
+    if (loadBtn && savedRegaliaFileInput) {
+      loadBtn.addEventListener('click', () => {
+        savedRegaliaFileInput.value = "";
+        savedRegaliaFileInput.click();
+      });
+    }
   }
   
   function getUpgradeTypeColor(type) {

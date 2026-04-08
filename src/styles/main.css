@@ -10,6 +10,31 @@
   --shadow: rgba(0, 0, 0, 0.5);
 }
 
+/* Opt-in theme override (used by worldmap). */
+:root[data-theme='dark'] {
+  /* Use the app's existing dark browns; keep gold borders. */
+  --parchment: #3b3024;
+  --parchment-dark: #2c2219;
+  /* Dark-mode text should read as gold on brown (not white-on-gold). */
+  --ink: var(--gold);
+  --shadow: rgba(0, 0, 0, 0.7);
+}
+
+/* Gold-gradient buttons: keep readable text across themes. */
+.wm-gold-btn {
+  color: var(--ink);
+}
+
+:root[data-theme='dark'] .wm-gold-btn {
+  /* Dark text on gold gradient. */
+  color: var(--parchment);
+}
+
+/* Worldmap HUD buttons use gold gradients; ensure readable text in dark mode. */
+:root[data-theme='dark'] #hud button {
+  color: var(--parchment);
+}
+
 body {
   font-family: 'Cormorant Garamond', serif;
   margin: 0;

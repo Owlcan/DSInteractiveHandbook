@@ -1,0 +1,1894 @@
+{
+  "type": "attunement-reference-data",
+  "version": 1,
+  "builtAt": "2026-03-22T17:13:25.587Z",
+  "weaponsData": {
+    "Simple": [
+      {
+        "name": "Club",
+        "damage_dice": "1d4",
+        "damage_type": "bludgeoning",
+        "light": true,
+        "finesse": false,
+        "special": null,
+        "category": "simple melee",
+        "base_cost": 0.01
+      },
+      {
+        "name": "Dagger",
+        "damage_dice": "1d4",
+        "damage_type": "piercing",
+        "light": true,
+        "finesse": true,
+        "special": "Thrown (range 20/60)",
+        "category": "simple melee",
+        "base_cost": 5
+      },
+      {
+        "name": "Greatclub",
+        "damage_dice": "1d8",
+        "damage_type": "bludgeoning",
+        "light": false,
+        "finesse": false,
+        "special": "Two-handed",
+        "category": "simple melee",
+        "base_cost": 20
+      },
+      {
+        "name": "Handaxe",
+        "damage_dice": "1d6",
+        "damage_type": "slashing",
+        "light": true,
+        "finesse": false,
+        "special": "Thrown (range 20/60)",
+        "category": "simple melee",
+        "base_cost": 50
+      },
+      {
+        "name": "Javelin",
+        "damage_dice": "1d6",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": "Thrown (range 30/120)",
+        "category": "simple melee",
+        "base_cost": 50
+      },
+      {
+        "name": "Light Hammer",
+        "damage_dice": "1d4",
+        "damage_type": "bludgeoning",
+        "light": true,
+        "finesse": false,
+        "special": "Thrown (range 20/60)",
+        "category": "simple melee",
+        "base_cost": 20
+      },
+      {
+        "name": "Mace",
+        "damage_dice": "1d6",
+        "damage_type": "bludgeoning",
+        "light": false,
+        "finesse": false,
+        "special": null,
+        "category": "simple melee",
+        "base_cost": 50
+      },
+      {
+        "name": "Quarterstaff",
+        "damage_dice": "1d6",
+        "damage_type": "bludgeoning",
+        "light": false,
+        "finesse": false,
+        "special": "Versatile (1d8)",
+        "category": "simple melee",
+        "base_cost": 20
+      },
+      {
+        "name": "Sickle",
+        "damage_dice": "1d4",
+        "damage_type": "slashing",
+        "light": true,
+        "finesse": false,
+        "special": null,
+        "category": "simple melee",
+        "base_cost": 1
+      },
+      {
+        "name": "Spear",
+        "damage_dice": "1d6",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": "Thrown (range 20/60), versatile (1d8)",
+        "category": "simple melee",
+        "base_cost": 1
+      },
+      {
+        "name": "Kunai",
+        "damage_dice": "1d4",
+        "damage_type": "piercing",
+        "light": true,
+        "finesse": true,
+        "special": "Thrown (range 20/60), can be used as a climbing tool",
+        "category": "simple melee",
+        "base_cost": 25
+      }
+    ],
+    "Melee": [
+      {
+        "name": "Battleaxe",
+        "damage_dice": "1d8",
+        "damage_type": "slashing",
+        "light": false,
+        "finesse": false,
+        "special": "Versatile (1d10)",
+        "category": "martial melee",
+        "base_cost": 10
+      },
+      {
+        "name": "Flail",
+        "damage_dice": "1d8",
+        "damage_type": "bludgeoning",
+        "light": false,
+        "finesse": false,
+        "special": null,
+        "category": "martial melee",
+        "base_cost": 10
+      },
+      {
+        "name": "Glaive",
+        "damage_dice": "1d10",
+        "damage_type": "slashing",
+        "light": false,
+        "finesse": false,
+        "special": "Heavy, reach, two-handed",
+        "category": "martial melee",
+        "base_cost": 20
+      },
+      {
+        "name": "Greataxe",
+        "damage_dice": "1d12",
+        "damage_type": "slashing",
+        "light": false,
+        "finesse": false,
+        "special": "Heavy, two-handed",
+        "category": "martial melee",
+        "base_cost": 30
+      },
+      {
+        "name": "Greatsword",
+        "damage_dice": "2d6",
+        "damage_type": "slashing",
+        "light": false,
+        "finesse": false,
+        "special": "Heavy, two-handed",
+        "category": "martial melee",
+        "base_cost": 50
+      },
+      {
+        "name": "Halberd",
+        "damage_dice": "1d10",
+        "damage_type": "slashing",
+        "light": false,
+        "finesse": false,
+        "special": "Heavy, reach, two-handed",
+        "category": "martial melee",
+        "base_cost": 20
+      },
+      {
+        "name": "Lance",
+        "damage_dice": "1d12",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": "Reach, special (disadvantage when attacking within 5 feet)",
+        "category": "martial melee",
+        "base_cost": 10
+      },
+      {
+        "name": "Longsword",
+        "damage_dice": "1d8",
+        "damage_type": "slashing",
+        "light": false,
+        "finesse": false,
+        "special": "Versatile (1d10)",
+        "category": "martial melee",
+        "base_cost": 15
+      },
+      {
+        "name": "Maul",
+        "damage_dice": "2d6",
+        "damage_type": "bludgeoning",
+        "light": false,
+        "finesse": false,
+        "special": "Heavy, two-handed",
+        "category": "martial melee",
+        "base_cost": 10
+      },
+      {
+        "name": "Morningstar",
+        "damage_dice": "1d8",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": null,
+        "category": "martial melee",
+        "base_cost": 15
+      },
+      {
+        "name": "Pike",
+        "damage_dice": "1d10",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": "Heavy, reach, two-handed",
+        "category": "martial melee",
+        "base_cost": 5
+      },
+      {
+        "name": "Rapier",
+        "damage_dice": "1d8",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": true,
+        "special": null,
+        "category": "martial melee",
+        "base_cost": 25
+      },
+      {
+        "name": "Scimitar",
+        "damage_dice": "1d6",
+        "damage_type": "slashing",
+        "light": true,
+        "finesse": true,
+        "special": null,
+        "category": "martial melee",
+        "base_cost": 25
+      },
+      {
+        "name": "Shortsword",
+        "damage_dice": "1d6",
+        "damage_type": "piercing",
+        "light": true,
+        "finesse": true,
+        "special": null,
+        "category": "martial melee",
+        "base_cost": 10
+      },
+      {
+        "name": "Trident",
+        "damage_dice": "1d6",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": "Thrown (range 20/60), versatile (1d8)",
+        "category": "martial melee",
+        "base_cost": 5
+      },
+      {
+        "name": "War Pick",
+        "damage_dice": "1d8",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": null,
+        "category": "martial melee",
+        "base_cost": 5
+      },
+      {
+        "name": "Warhammer",
+        "damage_dice": "1d8",
+        "damage_type": "bludgeoning",
+        "light": false,
+        "finesse": false,
+        "special": "Versatile (1d10)",
+        "category": "martial melee",
+        "base_cost": 15
+      },
+      {
+        "name": "Whip",
+        "damage_dice": "1d4",
+        "damage_type": "slashing",
+        "light": false,
+        "finesse": true,
+        "special": "Reach",
+        "category": "martial melee",
+        "base_cost": 2
+      },
+      {
+        "name": "Wrist Blades",
+        "damage_dice": "1d8",
+        "damage_type": "slashing",
+        "light": true,
+        "finesse": true,
+        "special": "Light, can be concealed, counts as unarmed strike",
+        "category": "martial melee",
+        "base_cost": 100
+      },
+      {
+        "name": "Chakram",
+        "damage_dice": "1d6",
+        "damage_type": "slashing",
+        "light": true,
+        "finesse": true,
+        "special": "Thrown (range 30/120), returns to wielder's hand on a successful hit",
+        "category": "martial melee",
+        "base_cost": 30
+      },
+      {
+        "name": "Cestus",
+        "damage_dice": "1d6",
+        "damage_type": "bludgeoning",
+        "light": true,
+        "finesse": false,
+        "special": "Light, counts as unarmed strike",
+        "category": "martial melee",
+        "base_cost": 5
+      },
+      {
+        "name": "Scythe",
+        "damage_dice": "1d10",
+        "damage_type": "slashing",
+        "light": false,
+        "finesse": false,
+        "special": "Two-handed, reach",
+        "category": "martial melee",
+        "base_cost": 20
+      },
+      {
+        "name": "Katana",
+        "damage_dice": "1d8",
+        "damage_type": "slashing",
+        "light": false,
+        "finesse": true,
+        "special": "Versatile (1d10)",
+        "category": "martial melee",
+        "base_cost": 50
+      },
+      {
+        "name": "Sai",
+        "damage_dice": "1d4",
+        "damage_type": "piercing",
+        "light": true,
+        "finesse": true,
+        "special": "Light, special (can attempt to disarm as bonus action)",
+        "category": "martial melee",
+        "base_cost": 5
+      }
+    ],
+    "Simple Ranged": [
+      {
+        "name": "Light Crossbow",
+        "damage_dice": "1d8",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": "Ammunition (range 80/320), loading, two-handed",
+        "category": "simple ranged",
+        "base_cost": 25
+      },
+      {
+        "name": "Dart",
+        "damage_dice": "1d4",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": true,
+        "special": "Thrown (range 20/60)",
+        "category": "simple ranged",
+        "base_cost": 5
+      },
+      {
+        "name": "Shortbow",
+        "damage_dice": "1d6",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": "Ammunition (range 80/320), two-handed",
+        "category": "simple ranged",
+        "base_cost": 25
+      },
+      {
+        "name": "Sling",
+        "damage_dice": "1d4",
+        "damage_type": "bludgeoning",
+        "light": false,
+        "finesse": false,
+        "special": "Ammunition (range 30/120)",
+        "category": "simple ranged",
+        "base_cost": 10
+      },
+      {
+        "name": "Boomerang",
+        "damage_dice": "1d4",
+        "damage_type": "bludgeoning",
+        "light": true,
+        "finesse": true,
+        "special": "Thrown (range 30/120), returns to wielder's hand on a miss",
+        "category": "simple ranged",
+        "base_cost": 25
+      }
+    ],
+    "Melee Ranged": [
+      {
+        "name": "Hand Crossbow",
+        "damage_dice": "1d6",
+        "damage_type": "piercing",
+        "light": true,
+        "finesse": false,
+        "special": "Ammunition (range 30/120), light, loading",
+        "category": "martial ranged",
+        "base_cost": 75
+      },
+      {
+        "name": "Heavy Crossbow",
+        "damage_dice": "1d10",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": "Ammunition (range 100/400), heavy, loading, two-handed",
+        "category": "martial ranged",
+        "base_cost": 50
+      },
+      {
+        "name": "Longbow",
+        "damage_dice": "1d8",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": "Ammunition (range 150/600), heavy, two-handed",
+        "category": "martial ranged",
+        "base_cost": 50
+      },
+      {
+        "name": "Net",
+        "damage_dice": "0",
+        "damage_type": "none",
+        "light": false,
+        "finesse": false,
+        "special": "Special (restrain, one target), thrown (range 5/15)",
+        "category": "martial ranged",
+        "base_cost": 2
+      },
+      {
+        "name": "Repeating Crossbow",
+        "damage_dice": "1d8",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": "Ammunition (range 80/320), reload (5), two-handed",
+        "category": "martial ranged",
+        "base_cost": 100
+      },
+      {
+        "name": "Exploding Bolts Crossbow",
+        "damage_dice": "2d8",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": "Ammunition (range 60/240), reload (3), two-handed, explosive",
+        "category": "martial ranged",
+        "base_cost": 200
+      },
+      {
+        "name": "Harpoon Gun",
+        "damage_dice": "1d10",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": "Ammunition (range 30/120), reload (1), two-handed, tether",
+        "category": "martial ranged",
+        "base_cost": 150
+      },
+      {
+        "name": "Heavy Repeating Crossbow",
+        "damage_dice": "1d10",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": "Ammunition (range 100/400), reload (3), heavy, two-handed",
+        "category": "martial ranged",
+        "base_cost": 250
+      }
+    ],
+    "Renaissance Firearms": [
+      {
+        "name": "Pistol",
+        "damage_dice": "1d10",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": "Ammunition (range 30/90), loading, firearm",
+        "category": "renaissance ranged",
+        "base_cost": 250
+      },
+      {
+        "name": "Fine Dueling Pistol",
+        "damage_dice": "1d8",
+        "damage_type": "piercing",
+        "light": true,
+        "finesse": true,
+        "special": "Ammunition (range 30/90), loading, firearm; designed for quick-draw and trick shots, counts as a finesse pistol",
+        "category": "renaissance ranged",
+        "base_cost": 350
+      },
+      {
+        "name": "Musket",
+        "damage_dice": "1d12",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": "Ammunition (range 40/120), loading, two-handed, firearm",
+        "category": "renaissance ranged",
+        "base_cost": 500
+      },
+      {
+        "name": "Blunderbuss",
+        "damage_dice": "2d8",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": "Ammunition (range 15/30), loading, two-handed, firearm, scatter",
+        "category": "renaissance ranged",
+        "base_cost": 300
+      },
+      {
+        "name": "Pepperbox",
+        "damage_dice": "1d8",
+        "damage_type": "piercing",
+        "light": true,
+        "finesse": false,
+        "special": "Ammunition (range 30/90), firearm, reload (6)",
+        "category": "renaissance ranged",
+        "base_cost": 400
+      },
+      {
+        "name": "Arquebus",
+        "damage_dice": "1d12",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": "Ammunition (range 50/150), loading, two-handed, firearm",
+        "category": "renaissance ranged",
+        "base_cost": 450
+      },
+      {
+        "name": "Hand Mortar",
+        "damage_dice": "2d8",
+        "damage_type": "bludgeoning",
+        "light": false,
+        "finesse": false,
+        "special": "Ammunition (range 30/90), explosive, reload (1), firearm",
+        "category": "renaissance ranged",
+        "base_cost": 7500
+      },
+      {
+        "name": "Hand Cannon",
+        "damage_dice": "2d10",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": "Ammunition (range 20/60), reload (1), heavy, firearm",
+        "category": "renaissance ranged",
+        "base_cost": 6000
+      }
+    ],
+    "Modern Firearms": [
+      {
+        "name": "Revolver",
+        "damage_dice": "1d10",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": "Ammunition (range 40/120), firearm, reload (6)",
+        "category": "modern ranged",
+        "base_cost": 1500
+      },
+      {
+        "name": "Quickdraw Pistol",
+        "damage_dice": "1d8",
+        "damage_type": "piercing",
+        "light": true,
+        "finesse": true,
+        "special": "Ammunition (range 40/120), firearm, reload (10); compact frame and tuned grip make this a finesse pistol for rapid hip shots and trick shooting",
+        "category": "modern ranged",
+        "base_cost": 2000
+      },
+      {
+        "name": "Shotgun",
+        "damage_dice": "2d10",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": "Ammunition (range 20/60), reload (2), two-handed, firearm, scatter",
+        "category": "modern ranged",
+        "base_cost": 2000
+      },
+      {
+        "name": "Double-Barrel Shotgun",
+        "damage_dice": "2d10",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": "Ammunition (range 20/60), reload (2), two-handed, firearm, scatter",
+        "category": "modern ranged",
+        "base_cost": 1800
+      },
+      {
+        "name": "Hunting Rifle",
+        "damage_dice": "2d10",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": "Ammunition (range 80/240), reload (5), two-handed, firearm",
+        "category": "modern ranged",
+        "base_cost": 3000
+      },
+      {
+        "name": "Automatic Rifle",
+        "damage_dice": "2d8",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": "Ammunition (range 80/240), reload (30), two-handed, firearm, burst fire",
+        "category": "modern ranged",
+        "base_cost": 8000
+      },
+      {
+        "name": "Sniper Rifle",
+        "damage_dice": "2d12",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": "Ammunition (range 150/600), reload (4), two-handed, firearm",
+        "category": "modern ranged",
+        "base_cost": 5000
+      },
+      {
+        "name": "Grenade Launcher",
+        "damage_dice": "3d10",
+        "damage_type": "bludgeoning",
+        "light": false,
+        "finesse": false,
+        "special": "Ammunition (range 60/180), reload (1), two-handed, firearm, explosive",
+        "category": "modern ranged",
+        "base_cost": 10000
+      },
+      {
+        "name": "Flamethrower",
+        "damage_dice": "3d6",
+        "damage_type": "fire",
+        "light": false,
+        "finesse": false,
+        "special": "Ammunition (range 15/30), energy, reload (5), two-handed, scatter, explosive",
+        "category": "modern ranged",
+        "base_cost": 7500
+      }
+    ],
+    "Magic": [
+      {
+        "name": "Eldritch Staff",
+        "damage_dice": "1d8",
+        "damage_type": "bludgeoning",
+        "light": false,
+        "finesse": false,
+        "special": "Versatile (1d10), magic (can also cast 3 cantrips)",
+        "category": "magical melee",
+        "base_cost": 2500
+      },
+      {
+        "name": "Crystal Focus Staff",
+        "damage_dice": "2d6",
+        "damage_type": "force",
+        "light": false,
+        "finesse": false,
+        "special": "Magic, versatile (2d8)",
+        "category": "magical melee",
+        "base_cost": 3500
+      },
+      {
+        "name": "Energy Whip",
+        "damage_dice": "2d6",
+        "damage_type": "force",
+        "light": true,
+        "finesse": true,
+        "special": "Reach, energy",
+        "category": "magical melee",
+        "base_cost": 4000
+      },
+      {
+        "name": "Plasma Blade",
+        "damage_dice": "2d8",
+        "damage_type": "fire",
+        "light": true,
+        "finesse": true,
+        "special": "Energy",
+        "category": "futuristic melee",
+        "base_cost": 5000
+      },
+      {
+        "name": "Vibro Sword",
+        "damage_dice": "3d6",
+        "damage_type": "slashing",
+        "light": false,
+        "finesse": true,
+        "special": "Energy, versatile (3d8)",
+        "category": "futuristic melee",
+        "base_cost": 8000
+      },
+      {
+        "name": "Gravity Hammer",
+        "damage_dice": "3d10",
+        "damage_type": "bludgeoning",
+        "light": false,
+        "finesse": false,
+        "special": "Heavy, two-handed, energy, concussive (targets within 10 feet must make a Strength save or be knocked prone)",
+        "category": "futuristic melee",
+        "base_cost": 12000
+      },
+      {
+        "name": "Photon Glaive",
+        "damage_dice": "2d10",
+        "damage_type": "radiant",
+        "light": false,
+        "finesse": false,
+        "special": "Reach, heavy, two-handed, energy",
+        "category": "futuristic melee",
+        "base_cost": 6500
+      },
+      {
+        "name": "Thermal Blade",
+        "damage_dice": "1d8",
+        "damage_type": "slashing",
+        "light": true,
+        "finesse": true,
+        "special": "Light, deals additional 1d6 fire damage",
+        "category": "futuristic melee",
+        "base_cost": 3000
+      },
+      {
+        "name": "Quantum Dagger",
+        "damage_dice": "1d4",
+        "damage_type": "piercing",
+        "light": true,
+        "finesse": true,
+        "special": "Thrown (range 20/60), returns to wielder's hand after being thrown, energy, deals additional 1d6 force damage",
+        "category": "futuristic melee",
+        "base_cost": 2000
+      },
+      {
+        "name": "Phasebow",
+        "damage_dice": "2d4",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": "Ammunition (range 150/600), two-handed, magic. This bow's arrows can harmlessly pass through solid objects and barriers of nearly any mundane material; if the attacker knows the target's exact position, they can target a creature on the far side of such cover. When an attack from this bow passes through an object or barrier before striking a target, it deals an additional 1d4 force damage. Some extremely robust or exotic magical materials may block this effect at the DM's discretion.",
+        "category": "magical ranged",
+        "base_cost": 9000
+      },
+      {
+        "name": "Photonic Phasebow",
+        "damage_dice": "2d4",
+        "damage_type": "radiant",
+        "light": false,
+        "finesse": false,
+        "special": "Ammunition (range 150/600), two-handed, energy. When fired without special ammunition, this bow's photonic bolts behave like a Phasebow's shots: they can pass harmlessly through solid objects to strike a target the wielder can precisely locate, and if they pass through cover before hitting a foe the attack deals an extra 1d4 force damage. When using psicrystal bolts worth 5 gp each as ammunition, the base damage increases to 2d10 radiant and the bonus force damage on a shot that passes through cover increases to 1d10.",
+        "category": "futuristic ranged",
+        "base_cost": 14000
+      }
+    ],
+    "Futuristic Firearms": [
+      {
+        "name": "Radiant Pistol",
+        "damage_dice": "3d6",
+        "damage_type": "radiant",
+        "light": true,
+        "finesse": false,
+        "special": "(range 40/120), energy, reload (20)",
+        "category": "futuristic ranged",
+        "base_cost": 7500
+      },
+      {
+        "name": "Lighter Pistol",
+        "damage_dice": "3d4",
+        "damage_type": "radiant",
+        "light": true,
+        "finesse": true,
+        "special": "(range 40/120), energy, reload (12); a sleek finesse sidearm. Its detachable barrel (included with the weapon) can be removed to hide the pistol as a holdout weapon, but while the barrel is off its range becomes 20/60 and attack rolls suffer a -1 penalty.",
+        "category": "futuristic ranged",
+        "base_cost": 7000
+      },
+      {
+        "name": "Phase-Crossbow",
+        "damage_dice": "2d10",
+        "damage_type": "piercing",
+        "light": false,
+        "finesse": false,
+        "special": "Ammunition (range 120/480), reload (3), two-handed, energy. This crossbow is designed to fire psicrystal bolts that cost 1 gp each. It can chamber up to three such bolts at a time. Its bolts may be loosed through solid obstacles toward a creature whose precise position the wielder knows; when a shot passes through cover in this way, it gains the usual bonus force damage granted by phase-weapon effects (such as Phasic Ammunition or a Phasebow).",
+        "category": "futuristic ranged",
+        "base_cost": 11000
+      },
+      {
+        "name": "Phase-Crossballista",
+        "damage_dice": "2d10",
+        "damage_type": "radiant",
+        "light": false,
+        "finesse": false,
+        "special": "Siege, heavy, two-handed, energy. While you are braced to fire this weapon, your speed is reduced to 15 feet. Without special ammunition it fires a single radiant bolt (range 200/800) that behaves as a phase shot, able to pass through solid cover to strike a creature whose location you know; if it passes through cover before hitting, it also deals the usual bonus force damage for a phase weapon. As an alternate fire mode, it can expend a psicrystal bolt-canister worth 10 gp as ammunition to fire an explosive canister shot. On a hit, the canister detonates even if it does not directly strike a creature, creating a blast: all enemies within 5 feet of the target point (10 feet if the attack roll was made with advantage) must make a Dexterity saving throw contested against the attack roll. On a failure they take 3d12 radiant damage; on a success they take half. If a creature of CR 4 or lower is critically hit by the canister shot, it must succeed on a DC 20 Constitution saving throw or be instantly slain by the blast; even on a success, it still suffers the critical hit damage as normal.",
+        "category": "futuristic ranged",
+        "base_cost": 18000
+      },
+      {
+        "name": "Radiant Rifle",
+        "damage_dice": "3d8",
+        "damage_type": "radiant",
+        "light": false,
+        "finesse": false,
+        "special": "(range 100/300), energy, reload (10), two-handed",
+        "category": "futuristic ranged",
+        "base_cost": 10000
+      },
+      {
+        "name": "Freeze Rifle",
+        "damage_dice": "3d8",
+        "damage_type": "cold",
+        "light": false,
+        "finesse": false,
+        "special": "(range 100/300), energy, reload (10), two-handed, on a hit the target must succeed on a DC 15 Constitution save or have its speed halved until the start of your next turn",
+        "category": "futuristic ranged",
+        "base_cost": 9000
+      },
+      {
+        "name": "Radiant Automatic Rifle",
+        "damage_dice": "6d4",
+        "damage_type": "radiant",
+        "light": false,
+        "finesse": false,
+        "special": "(range 80/240), energy, reload (30), two-handed, burst fire; when you take the Attack action with this weapon you can split the damage of a single attack between up to two creatures within 10 feet of each other that are both within range and line of sight",
+        "category": "futuristic ranged",
+        "base_cost": 12000
+      },
+      {
+        "name": "Gunblade",
+        "damage_dice": "2d6",
+        "damage_type": "slashing",
+        "light": false,
+        "finesse": true,
+        "special": "Hybrid melee firearm (range 30/90), ammunition, reload (6). On an attack roll of 18 or higher, the shot detonates on impact and the target takes an additional 1d10 radiant damage.",
+        "category": "futuristic melee",
+        "base_cost": 6000
+      }
+    ]
+  },
+  "regaliaTypes": [
+    {
+      "name": "Simple Cotton Top",
+      "ac": 10,
+      "notes": "Basic everyday wear",
+      "value": 2
+    },
+    {
+      "name": "Silk Blouse",
+      "ac": 10,
+      "notes": "Elegant and comfortable",
+      "value": 15
+    },
+    {
+      "name": "Wool Sweater",
+      "ac": 10,
+      "notes": "Warm and cozy",
+      "value": 8
+    },
+    {
+      "name": "Linen Pants",
+      "ac": 10,
+      "notes": "Breathable and light",
+      "value": 5
+    },
+    {
+      "name": "Cotton Trousers",
+      "ac": 10,
+      "notes": "Sturdy everyday bottoms",
+      "value": 3
+    },
+    {
+      "name": "Silk Shorts",
+      "ac": 10,
+      "notes": "Luxurious and smooth",
+      "value": 12
+    },
+    {
+      "name": "Standard Issue Onesie",
+      "ac": 11,
+      "notes": "",
+      "value": 5
+    },
+    {
+      "name": "Padded Training Pants",
+      "ac": 11,
+      "notes": "Stealth Disadvantage",
+      "value": 5
+    },
+    {
+      "name": "Reinforced Footie Pajamas",
+      "ac": 12,
+      "notes": "",
+      "value": 45
+    },
+    {
+      "name": "Absorbency-Enhanced Jumpsuit",
+      "ac": 12,
+      "notes": "",
+      "value": 45
+    },
+    {
+      "name": "Scholarly Robes with Padded Lining",
+      "ac": 11,
+      "notes": "",
+      "value": 5
+    },
+    {
+      "name": "Ceremonial Gown of the Graduate",
+      "ac": 10,
+      "notes": "",
+      "value": 1
+    },
+    {
+      "name": "Tactical Diaper Coveralls",
+      "ac": 13,
+      "notes": "",
+      "value": 50
+    },
+    {
+      "name": "Little Knight's Armored Bloomers",
+      "ac": 14,
+      "notes": "Stealth Disadvantage",
+      "value": 50
+    },
+    {
+      "name": "Princess's Protective Pettipants",
+      "ac": 13,
+      "notes": "It's a diaper cover- missy, you can call it pettipants all day, but it goes over what? Your DIAPER!~ <3",
+      "value": 50
+    },
+    {
+      "name": "Starlight Dreamer Sleepsuit",
+      "ac": 11,
+      "notes": "",
+      "value": 5
+    },
+    {
+      "name": "Moonlight Serenade Frilled Dress",
+      "ac": 12,
+      "notes": "Grants advantage on Charisma checks while worn",
+      "value": 1400
+    },
+    {
+      "name": "Cloudweave Hooded Onesie",
+      "ac": 11,
+      "notes": "Advantage on stealth checks in low-light areas",
+      "value": 1400
+    },
+    {
+      "name": "Battle-Knit Tutu",
+      "ac": 13,
+      "notes": "Grants +1 to AC against melee attacks due to agility",
+      "value": 1400
+    },
+    {
+      "name": "Darkenveil Latex Victorian Dress",
+      "ac": 12,
+      "notes": "Resistance to poison effects and sensory afflictions, disadvantage on stealth based sound checks against targets with hearing.",
+      "value": 2200
+    },
+    {
+      "name": "Arcane Scholar's Layered Dress",
+      "ac": 12,
+      "notes": "Grants advantage on Intelligence saves",
+      "value": 1400
+    },
+    {
+      "name": "Armored Nun’s Habit",
+      "ac": 13,
+      "notes": "Light armor; allows wearer to cast divine spells with +1 save DC",
+      "value": 2200
+    },
+    {
+      "name": "Restrictive Heavy Armored Nun’s Habit",
+      "ac": 16,
+      "notes": "Heavy armor; wearer gains advantage on all saves against fear effects",
+      "value": 1400
+    },
+    {
+      "name": "Sanctified Cleric Vestments",
+      "ac": 12,
+      "notes": "Grants resistance to necrotic damage",
+      "value": 2200
+    },
+    {
+      "name": "Oracle’s Blessed Mantle",
+      "ac": 12,
+      "notes": "Wearer has advantage on insight checks and saves against illusions",
+      "value": 1400
+    },
+    {
+      "name": "Traditional Witch’s Outfit",
+      "ac": 12,
+      "notes": "Standard dark robes infused with minor enchantments. Grants +1 to Arcana checks.",
+      "value": 1400
+    },
+    {
+      "name": "Widdle Witch Waddle Dress",
+      "ac": 12,
+      "notes": "A poofy, overly frilly dress perfect for waddling around. Allows wearer to cast Prestidigitation at will.",
+      "value": 1400
+    },
+    {
+      "name": "Shadowbound Witch Hat",
+      "ac": 11,
+      "notes": "A deep black, wide-brimmed hat that enhances the wearer’s magical senses. Grants advantage on Perception checks for detecting magic.",
+      "value": 1400
+    },
+    {
+      "name": "Frilly Arcane Witch Hat",
+      "ac": 11,
+      "notes": "A lace-adorned hat that boosts magical prowess. Wearer gains +1 bonus to spell attack rolls.",
+      "value": 2200
+    },
+    {
+      "name": "Padded Armor",
+      "ac": 11,
+      "notes": "Stealth Disadvantage",
+      "value": 5
+    },
+    {
+      "name": "Leather Armor",
+      "ac": 11,
+      "notes": "",
+      "value": 10
+    },
+    {
+      "name": "Studded Leather Armor",
+      "ac": 12,
+      "notes": "",
+      "value": 45
+    },
+    {
+      "name": "Hide Armor",
+      "ac": 12,
+      "notes": "",
+      "value": 10
+    },
+    {
+      "name": "Chain Shirt",
+      "ac": 13,
+      "notes": "",
+      "value": 50
+    },
+    {
+      "name": "Scale Mail",
+      "ac": 14,
+      "notes": "Stealth Disadvantage",
+      "value": 50
+    },
+    {
+      "name": "Breastplate",
+      "ac": 14,
+      "notes": "",
+      "value": 400
+    },
+    {
+      "name": "Half Plate Armor",
+      "ac": 15,
+      "notes": "Stealth Disadvantage",
+      "value": 750
+    },
+    {
+      "name": "Ring Mail",
+      "ac": 14,
+      "notes": "Stealth Disadvantage",
+      "value": 30
+    },
+    {
+      "name": "Chain Mail",
+      "ac": 16,
+      "notes": "Stealth Disadvantage, Str 13 req.",
+      "value": 75
+    },
+    {
+      "name": "Splint Armor",
+      "ac": 17,
+      "notes": "Stealth Disadvantage, Str 15 req.",
+      "value": 200
+    },
+    {
+      "name": "Plate Armor",
+      "ac": 18,
+      "notes": "Stealth Disadvantage, Str 15 req.",
+      "value": 1500
+    },
+    {
+      "name": "Mithril Chain Shirt",
+      "ac": 13,
+      "notes": "No Stealth Disadvantage",
+      "value": 1250
+    },
+    {
+      "name": "Mithril Scale Mail",
+      "ac": 14,
+      "notes": "No Stealth Disadvantage",
+      "value": 1250
+    },
+    {
+      "name": "Mithril Breastplate",
+      "ac": 14,
+      "notes": "No Stealth Disadvantage",
+      "value": 1600
+    },
+    {
+      "name": "Mithril Half Plate Armor",
+      "ac": 15,
+      "notes": "No Stealth Disadvantage",
+      "value": 1950
+    },
+    {
+      "name": "Mithril Chain Mail",
+      "ac": 16,
+      "notes": "No Stealth Disadvantage, Str 13 req.",
+      "value": 1275
+    },
+    {
+      "name": "Mithril Splint Armor",
+      "ac": 17,
+      "notes": "No Stealth Disadvantage, Str 15 req.",
+      "value": 1400
+    },
+    {
+      "name": "Mithril Plate Armor",
+      "ac": 18,
+      "notes": "No Stealth Disadvantage, Str 15 req.",
+      "value": 2700
+    },
+    {
+      "name": "Adamantine Chain Shirt",
+      "ac": 13,
+      "notes": "Critical hits become normal hits",
+      "value": 2050
+    },
+    {
+      "name": "Adamantine Scale Mail",
+      "ac": 14,
+      "notes": "Stealth Disadvantage, Critical hits become normal hits",
+      "value": 2050
+    },
+    {
+      "name": "Adamantine Breastplate",
+      "ac": 14,
+      "notes": "Critical hits become normal hits",
+      "value": 2400
+    },
+    {
+      "name": "Adamantine Half Plate Armor",
+      "ac": 15,
+      "notes": "Stealth Disadvantage, Critical hits become normal hits",
+      "value": 2750
+    },
+    {
+      "name": "Adamantine Chain Mail",
+      "ac": 16,
+      "notes": "Stealth Disadvantage, Str 13 req., Critical hits become normal hits",
+      "value": 2075
+    },
+    {
+      "name": "Adamantine Splint Armor",
+      "ac": 17,
+      "notes": "Stealth Disadvantage, Str 15 req., Critical hits become normal hits",
+      "value": 2200
+    },
+    {
+      "name": "Adamantine Plate Armor",
+      "ac": 18,
+      "notes": "Stealth Disadvantage, Str 15 req., Critical hits become normal hits",
+      "value": 3500
+    },
+    {
+      "name": "Frilly Arcane Witch Hat",
+      "ac": 1,
+      "notes": "A lace-adorned hat that boosts magical prowess. Wearer gains +1 bonus to spell attack rolls.",
+      "value": 2200
+    },
+    {
+      "name": "Gold/Silver Ring",
+      "ac": 1,
+      "notes": "A simple ring that grants a +1 bonus to AC and requires attunement, a basic regalia base.",
+      "value": 1400
+    },
+    {
+      "name": "Gold/Silver Necklace",
+      "ac": 1,
+      "notes": "A simple necklace that grants a +1 bonus to AC and requires attunement, a basic regalia base.",
+      "value": 1400
+    },
+    {
+      "name": "Gold/Silver Bracelet",
+      "ac": 1,
+      "notes": "A simple bracelet that grants a +1 bonus to AC and requires attunement, a basic regalia base.",
+      "value": 1400
+    },
+    {
+      "name": "Gold/Silver Circlet",
+      "ac": 1,
+      "notes": "A simple circlet that grants a +1 bonus to AC and requires attunement, a basic regalia base.",
+      "value": 1400
+    },
+    {
+      "name": "Enchanted Pacifier",
+      "ac": 1,
+      "notes": "A simple pacifier that grants a +1 bonus to AC and requires attunement, a basic regalia base.",
+      "value": 1400
+    },
+    {
+      "name": "Enchanted Diaper Pin",
+      "ac": 1,
+      "notes": "Grants +1 AC and allows wearer to cast Mage Armor once per long rest",
+      "value": 1400
+    },
+    {
+      "name": "Mystic Brooch",
+      "ac": 1,
+      "notes": "Grants +1 AC and allows wearer to cast Protection from Evil and Good once per long rest",
+      "value": 1400
+    },
+    {
+      "name": "RuneShield Ring",
+      "ac": 1,
+      "notes": "Grants +1 AC and allows wearer to cast Shield of Faith once per long rest",
+      "value": 1400
+    },
+    {
+      "name": "ArcaneWard Pendant",
+      "ac": 1,
+      "notes": "Grants +1 AC and allows wearer to cast Mage Armor once per long rest",
+      "value": 1400
+    },
+    {
+      "name": "Celestial Amulet",
+      "ac": 1,
+      "notes": "Grants +1 AC and allows wearer to cast Bless once per long rest",
+      "value": 1400
+    },
+    {
+      "name": "Diaper Cover of the Arcane Guardian",
+      "ac": 2,
+      "notes": "Grants +2 AC and allows wearer to cast Shield spell once per long rest",
+      "value": 2200
+    },
+    {
+      "name": "Steel-Reinforced Pauldrons",
+      "ac": 1,
+      "notes": "Stackable with other armor; grants resistance to bludgeoning damage from above attacks",
+      "value": 2200
+    },
+    {
+      "name": "Shield",
+      "ac": 2,
+      "notes": "Grants +2 AC when wielded.",
+      "value": 10
+    },
+    {
+      "name": "+1 Shield",
+      "ac": 3,
+      "notes": "Grants +3 AC when wielded.",
+      "value": 1400
+    },
+    {
+      "name": "Buckler Shield",
+      "ac": 1,
+      "notes": "Grants +1 AC when wielded; does not impose disadvantage on Dexterity (Stealth) checks.",
+      "value": 5
+    },
+    {
+      "name": "Enchanted Bracers",
+      "ac": 1,
+      "notes": "Grants +1 AC and allows wearer to cast Shield spell once per long rest",
+      "value": 1400
+    },
+    {
+      "name": "Mystic Cloak",
+      "ac": 1,
+      "notes": "Grants advantage on Dexterity (Stealth) checks and resistance to fire damage",
+      "value": 2200
+    },
+    {
+      "name": "Runed Gauntlets",
+      "ac": 1,
+      "notes": "Adds +1 to unarmed strikes and allows wearer to punch ghosts",
+      "value": 1400
+    },
+    {
+      "name": "Boots of the Warden",
+      "ac": 1,
+      "notes": "Grants advantage on Dexterity (Stealth) checks in dim light or darkness",
+      "value": 1400
+    },
+    {
+      "name": "Greaves of the Titan",
+      "ac": 1,
+      "notes": "Wearer cannot be knocked prone by non-magical effects",
+      "value": 1400
+    },
+    {
+      "name": "Ceremonial Cloak of the Gilded",
+      "ac": 1,
+      "notes": "Grants +1 to Charisma-based skill checks and resistance to radiant damage",
+      "value": 2200
+    },
+    {
+      "name": "Adamantine Plated Gloves",
+      "ac": 1,
+      "notes": "Wearer negates one critical hit per long rest",
+      "value": 2200
+    },
+    {
+      "name": "Stormbound Warboots",
+      "ac": 1,
+      "notes": "Wearer gains resistance to lightning damage",
+      "value": 2200
+    },
+    {
+      "name": "Enchanted Warden’s Hood",
+      "ac": 1,
+      "notes": "Grants advantage on saving throws against mind-affecting spells",
+      "value": 2200
+    },
+    {
+      "name": "Frozen Guard Bracers",
+      "ac": 1,
+      "notes": "Grants resistance to cold damage",
+      "value": 2200
+    },
+    {
+      "name": "Runed Battlemage Cloak",
+      "ac": 1,
+      "notes": "Allows wearer to ignore the verbal component of one spell per long rest",
+      "value": 1400
+    },
+    {
+      "name": "Dragonhide Bracers",
+      "ac": 1,
+      "notes": "Grants resistance to fire damage",
+      "value": 2200
+    },
+    {
+      "name": "Mithral Gauntlets",
+      "ac": 1,
+      "notes": "Adds +1 to unarmed strikes and allows wearer to punch ghosts",
+      "value": 1400
+    },
+    {
+      "name": "Shadowstep Boots",
+      "ac": 1,
+      "notes": "Grants advantage on Dexterity (Stealth) checks in dim light or darkness",
+      "value": 1400
+    },
+    {
+      "name": "Titan’s Greaves",
+      "ac": 1,
+      "notes": "Wearer cannot be knocked prone by non-magical effects",
+      "value": 1400
+    },
+    {
+      "name": "Gilded Ceremonial Cloak",
+      "ac": 1,
+      "notes": "Grants +1 to Charisma-based skill checks and resistance to radiant damage",
+      "value": 2200
+    },
+    {
+      "name": "Adamantine Plated Gloves",
+      "ac": 1,
+      "notes": "Wearer negates one critical hit per long rest",
+      "value": 2200
+    },
+    {
+      "name": "Stormbound Warboots",
+      "ac": 1,
+      "notes": "Wearer gains resistance to lightning damage",
+      "value": 2200
+    },
+    {
+      "name": "Enchanted Warden’s Hood",
+      "ac": 1,
+      "notes": "Grants advantage on saving throws against mind-affecting spells",
+      "value": 2200
+    },
+    {
+      "name": "Frozen Guard Bracers",
+      "ac": 1,
+      "notes": "Grants resistance to cold damage",
+      "value": 2200
+    },
+    {
+      "name": "Runed Battlemage Cloak",
+      "ac": 1,
+      "notes": "Allows wearer to ignore the verbal component of one spell per long rest",
+      "value": 1400
+    },
+    {
+      "name": "Titansteel Helm",
+      "ac": 2,
+      "notes": "Wearer cannot be stunned or blinded by non-magical effects",
+      "value": 2200
+    },
+    {
+      "name": "Dwarven Warbelt",
+      "ac": 1,
+      "notes": "Adds +1 AC when combined with heavy armor and grants advantage on Constitution saves",
+      "value": 2200
+    },
+    {
+      "name": "Elven Silksash",
+      "ac": 1,
+      "notes": "Adds +1 AC when combined with light armor and grants resistance to psychic damage",
+      "value": 2200
+    },
+    {
+      "name": "Voidbound Mask",
+      "ac": 1,
+      "notes": "Wearer cannot be tracked by non-magical means",
+      "value": 1400
+    },
+    {
+      "name": "Bloodforged Gauntlets",
+      "ac": 1,
+      "notes": "When wearer reduces an enemy to 0 HP, they gain temporary HP equal to their proficiency bonus",
+      "value": 1400
+    },
+    {
+      "name": "Spectacles of Insight",
+      "ac": 10,
+      "notes": "These finely crafted glasses grant the wearer advantage on Perception and Investigation checks when searching for hidden details.",
+      "value": 1400
+    },
+    {
+      "name": "Mystic Monocle",
+      "ac": 10,
+      "notes": "A single enchanted lens that, once per encounter, provides a +2 bonus on Intelligence checks (Investigation, Arcana, or History) when examining intricate details.",
+      "value": 1400
+    },
+    {
+      "name": "Tech-Enhanced Visor",
+      "ac": 10,
+      "notes": "A futuristic visor with augmented-reality overlays. Grants the wearer a +2 bonus on Arcana checks related to technology and reveals hidden digital or magical auras within 30 feet.",
+      "value": 2200
+    },
+    {
+      "name": "Dashing Musketeer Hat",
+      "ac": 10,
+      "notes": "A flamboyant hat that exudes style. The wearer gains advantage on Persuasion checks and a +1 bonus to initiative rolls, inspiring both allies and intimidating foes.",
+      "value": 1400
+    }
+  ],
+  "clothingArmorCategories": [
+    "Simple Cotton Top",
+    "Silk Blouse",
+    "Wool Sweater",
+    "Linen Pants",
+    "Cotton Trousers",
+    "Silk Shorts",
+    "Standard Issue Onesie",
+    "Padded Training Pants",
+    "Reinforced Footie Pajamas",
+    "Absorbency-Enhanced Jumpsuit",
+    "Scholarly Robes with Padded Lining",
+    "Ceremonial Gown of the Graduate",
+    "Tactical Diaper Coveralls",
+    "Little Knight's Armored Bloomers",
+    "Princess's Protective Pettipants",
+    "Starlight Dreamer Sleepsuit",
+    "Moonlight Serenade Frilled Dress",
+    "Cloudweave Hooded Onesie",
+    "Battle-Knit Tutu",
+    "Darkenveil Latex Victorian Dress",
+    "Arcane Scholar's Layered Dress",
+    "Armored Nun's Habit",
+    "Restrictive Heavy Armored Nun's Habit",
+    "Sanctified Cleric Vestments",
+    "Oracle's Blessed Mantle",
+    "Traditional Witch's Outfit",
+    "Widdle Witch Waddle Dress",
+    "Padded Armor",
+    "Leather Armor",
+    "Studded Leather Armor",
+    "Hide Armor",
+    "Chain Shirt",
+    "Scale Mail",
+    "Breastplate",
+    "Half Plate Armor",
+    "Ring Mail",
+    "Chain Mail",
+    "Splint Armor",
+    "Plate Armor",
+    "Mystic Cloak",
+    "Ceremonial Cloak of the Gilded",
+    "Gilded Ceremonial Cloak",
+    "Runed Battlemage Cloak",
+    "Spectacles of Insight",
+    "Mystic Monocle",
+    "Tech-Enhanced Visor",
+    "Dashing Musketeer Hat",
+    "Mithril Chain Shirt",
+    "Mithril Scale Mail",
+    "Mithril Breastplate",
+    "Mithril Half Plate Armor",
+    "Mithril Chain Mail",
+    "Mithril Splint Armor",
+    "Mithril Plate Armor",
+    "Adamantine Chain Shirt",
+    "Adamantine Scale Mail",
+    "Adamantine Breastplate",
+    "Adamantine Half Plate Armor",
+    "Adamantine Chain Mail",
+    "Adamantine Splint Armor",
+    "Adamantine Plate Armor"
+  ],
+  "regaliaUpgrades": [
+    {
+      "name": "Extra Padding Layer",
+      "description": "Adds an additional layer of reinforced impact-absorbing material. Grants **+3 to the Regalia's base AC** and **resistance to all non-magical bludgeoning, piercing, and slashing damage**.",
+      "cost": 2,
+      "type": "Defense"
+    },
+    {
+      "name": "Reinforced Seams",
+      "description": "Fortified stitching prevents tears and grants **immunity to forced movement effects** (shoves, grapples, knockbacks). Additionally, once per long rest, wearer can **convert any critical fumble into a normal roll**.",
+      "cost": 1,
+      "type": "Defense"
+    },
+    {
+      "name": "Superior Leak-Guard Technology",
+      "description": "Advanced absorbent cores ensure **absolute containment**. Wearer gains **immunity to all contamination effects** (poison, disease, curses that spread by touch or proximity). Additionally, minor mess-based hazards automatically fail against the wearer.",
+      "cost": 2,
+      "type": "Defense"
+    },
+    {
+      "name": "Impact Dampening Gel Inserts",
+      "description": "Strategically placed gel packs absorb kinetic energy. Wearer gains **resistance to force and thunder damage**. Additionally, any single incoming hit **over 30 damage** is automatically reduced by **half** once per short rest.",
+      "cost": 2,
+      "type": "Defense"
+    },
+    {
+      "name": "Anti-Monster-Under-The-Bed Weave",
+      "description": "Enchanted fabric wards off childhood fears. Wearer gains **immunity to fear effects**. Once per long rest, they may **force an ally within 30 feet to ignore a fear effect**, even if they've already failed a saving throw.",
+      "cost": 1,
+      "type": "Defense"
+    },
+    {
+      "name": "Changing Grace",
+      "description": "Once per short rest, the wearer may instantly change their diaper with one in their inventory as a bonus action. This can also be used as a reaction when the wearer's diaper is rendered soiled or affected by magical status. Cannot be used to remove a cursed diaper of higher level than the wearer.",
+      "cost": 1,
+      "type": "Utility"
+    },
+    {
+      "name": "Quick-Release Fasteners",
+      "description": "Oversized snaps allow rapid changes. Wearer may **don or doff this regalia as a bonus action** and **gain advantage on checks to escape grapples and restraints**.",
+      "cost": 1,
+      "type": "Utility"
+    },
+    {
+      "name": "Emergency Snack Pouch",
+      "description": "Once per long rest, consuming a snack from this pouch grants the wearer **temporary HP equal to twice their level** and **removes one level of exhaustion**.",
+      "cost": 1,
+      "type": "Utility"
+    },
+    {
+      "name": "Odor-Neutralizing Charcoal Weave",
+      "description": "Fabric neutralizes odors entirely. Wearer gains **immunity to scent-based detection** (tracking, divination effects relying on smell). Additionally, they gain **advantage on all social skill checks (Persuasion, Deception, Intimidation) for 1 hour after using this feature**.",
+      "cost": 2,
+      "type": "Utility"
+    },
+    {
+      "name": "Comfort-Luxe Lining",
+      "description": "Ultra-soft lining enhances endurance. Wearer **has advantage on all Constitution saves against exhaustion** and recovers **an additional hit dice** during short rests. Additionally, poor conditions or lack of a bedroll do not prevent the wearer from gaining the benefits of a long rest.",
+      "cost": 1,
+      "type": "Utility"
+    },
+    {
+      "name": "Reflective Safety Patches",
+      "description": "Shiny patches increase visibility. Wearer **cannot be surprised** while awake and imposes **disadvantage** on attacks against them in dim light or darkness.",
+      "cost": 1,
+      "type": "Utility"
+    },
+    {
+      "name": "Feather-Light Weave",
+      "description": "Advanced tailoring removes burdens. Wearer **ignores movement restrictions from all armor and heavy clothing** and **gains +10 feet to movement speed**.",
+      "cost": 2,
+      "type": "Utility"
+    },
+    {
+      "name": "Instant Wardrobe Switch",
+      "description": "Magically enhances swift changes. Wearer may **swap regalia as a free action**, and their **previous armor bonus continues for one additional round**, even after switching to another outfit.",
+      "cost": 1,
+      "type": "Utility"
+    },
+    {
+      "name": "'Oopsie Absorption' Field",
+      "description": "Regalia **automatically negates any accidental contamination** (mess, poison, hazardous splash effects). Additionally, when negating an effect, the wearer **gains advantage on their next saving throw, attack, or skill check**.",
+      "cost": 2,
+      "type": "Special"
+    },
+    {
+      "name": "Cushioned Landing System",
+      "description": "Regalia **completely negates all fall damage** for the wearer and provides **resistance to forced knockdowns and prone conditions**.",
+      "cost": 1,
+      "type": "Special"
+    },
+    {
+      "name": "'Quiet Time' Aura Emitter",
+      "description": "Once per long rest, wearer emits a **10ft aura** that forces all creatures within range to **make a DC 18 Wisdom save** or become **unable to take aggressive actions for 1 minute**.",
+      "cost": 2,
+      "type": "Special"
+    },
+    {
+      "name": "Waddle-Dash Maneuver",
+      "description": "Wearer performs a **supernaturally fast waddle-dash** as a **bonus action**, increasing movement speed by **30 feet for one turn**.",
+      "cost": 1,
+      "type": "Special"
+    },
+    {
+      "name": "'Look At Me!' Distraction Charm",
+      "description": "Once per encounter, as a **reaction**, the regalia flashes with dazzling patterns, imposing **disadvantage on ALL attacks against the wearer for one full round**.",
+      "cost": 2,
+      "type": "Special"
+    },
+    {
+      "name": "Prefect's Badge of Authority",
+      "description": "An embroidered badge signifying status. Grants **+4 bonus** to Intimidation and Persuasion checks when interacting with lower-ranking individuals.",
+      "cost": 2,
+      "type": "Academy"
+    },
+    {
+      "name": "Secret Stash Pockets",
+      "description": "Extra hidden compartments allow concealed storage. Wearer gains **advantage on all Sleight of Hand checks** and may hide items within their regalia that **cannot be detected by mundane searches**.",
+      "cost": 1,
+      "type": "Academy"
+    },
+    {
+      "name": "Naptime Resilience Protocol",
+      "description": "Wearer gains **complete immunity to sleep effects** (magical or non-magical). Additionally, if stunned, they may **make an immediate saving throw with advantage** as a reaction.",
+      "cost": 2,
+      "type": "Academy"
+    },
+    {
+      "name": "Quick-React Reflexes",
+      "description": "Once per long rest, as a reaction, the wearer gains a +3 bonus to initiative and advantage on all Dexterity saving throws until the start of their next turn.",
+      "cost": 1,
+      "type": "Special"
+    },
+    {
+      "name": "Flawless Footwork",
+      "description": "Once per short rest, the wearer becomes immune to being knocked prone for 1 round and gains advantage on Acrobatics checks while moving.",
+      "cost": 1,
+      "type": "Special"
+    },
+    {
+      "name": "Minor Fortification",
+      "description": "As a reaction (once per short rest), the wearer gains a +3 bonus to AC against a single attack, potentially causing it to miss.",
+      "cost": 1,
+      "type": "Special"
+    },
+    {
+      "name": "Swift Recovery Glyph",
+      "description": "Once per short rest, when reduced below half their maximum HP, the wearer regains hit points equal to 1d6 + their level as an immediate burst of rejuvenation.",
+      "cost": 1,
+      "type": "Special"
+    },
+    {
+      "name": "Reactive Ward",
+      "description": "Once per long rest, when hit by an attack, the wearer can use their reaction to reduce the damage from that attack by an amount equal to their proficiency bonus × 2.",
+      "cost": 1,
+      "type": "Special"
+    },
+    {
+      "name": "Enhanced Barrier Weave",
+      "description": "Once per long rest, for 10 rounds the wearer gains a +2 bonus to AC and resistance to one damage type of their choice (physical or magical) for the duration of the effect.",
+      "cost": 2,
+      "type": "Special"
+    },
+    {
+      "name": "Mystic Reversal",
+      "description": "Once per short rest, when targeted by a spell, the wearer may force the caster to make a spellcasting ability check against the wearer's spell save DC. On a failure, the spell is reflected back at the caster.",
+      "cost": 2,
+      "type": "Special"
+    },
+    {
+      "name": "Empowered Concentration",
+      "description": "When activated (once per long rest), for 1 minute the wearer has advantage on concentration checks and adds a +2 bonus to all saving throws against spells.",
+      "cost": 2,
+      "type": "Special"
+    },
+    {
+      "name": "Titanic Core",
+      "description": "Once per long rest for 1 minute, the wearer's maximum HP increases by 20 and they gain regeneration, recovering 3 hit points at the start of each of their turns.",
+      "cost": 2,
+      "type": "Special"
+    },
+    {
+      "name": "Guardian's Accord",
+      "description": "Once per long rest, when an ally within 30 feet is hit by an attack, the wearer can redirect the attack to themselves, taking the damage instead but with resistance to it.",
+      "cost": 2,
+      "type": "Special"
+    },
+    {
+      "name": "Colossus Shield Matrix",
+      "description": "Once per long rest, as a bonus action, the wearer activates this upgrade to gain immunity to all non-magical physical damage (bludgeoning, piercing, and slashing) for 1 minute.",
+      "cost": 3,
+      "type": "Special"
+    },
+    {
+      "name": "Arcane Barrier Nexus",
+      "description": "Once per long rest, as an action, the wearer activates the nexus to gain resistance to all magical damage and advantage on saving throws against spells for 1 minute.",
+      "cost": 3,
+      "type": "Special"
+    },
+    {
+      "name": "Absolute Ward",
+      "description": "Once per long rest, as an action, the wearer creates a protective field that grants themselves and all allies within 10 feet immunity to all damage for 1 round.",
+      "cost": 3,
+      "type": "Special"
+    },
+    {
+      "name": "Legendary Resilience",
+      "description": "Once per long rest, the wearer gains immunity to all conditions (charmed, frightened, stunned, etc.) for 1 minute and can end one condition affecting them as a bonus action.",
+      "cost": 3,
+      "type": "Special"
+    },
+    {
+      "name": "Vortex of Defiance",
+      "description": "Once per long rest, as a reaction when taking damage, the wearer converts up to 30 points of that damage into healing for themselves and allies within 15 feet, split evenly among all targets.",
+      "cost": 3,
+      "type": "Special"
+    },
+    {
+      "name": "Omni-Defender Regalia",
+      "description": "Once per short rest, as an action, the wearer may choose to gain complete immunity to either physical or magical damage for 1 minute. During this time, all damage of the chosen type is completely negated.",
+      "cost": 4,
+      "type": "Special"
+    },
+    {
+      "name": "Aegis of the Gods",
+      "description": "Once per long rest, as an action, the wearer activates this upgrade to become immune to both physical and magical damage simultaneously for 1 round, then gains resistance to all damage for 1 minute afterward.",
+      "cost": 4,
+      "type": "Special"
+    },
+    {
+      "name": "Divine Bastion",
+      "description": "Once per long rest, as an action, the wearer creates an impenetrable barrier around themselves and allies within 15 feet that grants immunity to all damage and harmful effects for 1 round, then grants 30 temporary hit points to each protected creature.",
+      "cost": 4,
+      "type": "Special"
+    },
+    {
+      "name": "Celestial Ward of Perpetuity",
+      "description": "Once per long rest, the wearer may choose two damage types and gain immunity to them for 1 minute. Additionally, any healing the wearer receives during this time is increased by 50%.",
+      "cost": 4,
+      "type": "Special"
+    },
+    {
+      "name": "Absolute Omni-Shield",
+      "description": "Once per long rest, as a bonus action, for 1 minute the wearer gains immunity to the next instance of each damage type they would take, effectively negating one hit of each damage type in the game.",
+      "cost": 4,
+      "type": "Special"
+    },
+    {
+      "name": "Ascendant Regalia of Eternal Light",
+      "description": "Once per long rest, as an action, the wearer activates this 5-slot upgrade to become completely immune to all damage and conditions for 1 minute. In addition, allies within 30 feet gain temporary hit points equal to twice the wearer's level at the start of each of their turns and advantage on all saving throws.",
+      "cost": 5,
+      "type": "Special"
+    },
+    {
+      "name": "Diaper of Ultimate Cleanliness",
+      "description": "Once per long rest, as an action, the wearer activates this 5-slot upgrade. For 1 minute, they gain immunity to all damage and conditions. Additionally, at the start of each of the wearer's turns, all enemies within 30 feet must make a DC 17 Wisdom save or be charmed until the start of their next turn, finding the wearer simply too adorable to attack.",
+      "cost": 5,
+      "type": "Special"
+    },
+    {
+      "name": "Crawling Speed Enhancement",
+      "description": "Specially reinforced knees and elbows. Your **crawling movement doesn't count as difficult terrain**, and you can crawl at **half your walking speed** instead of one-third. Additionally, you have **advantage on Stealth checks** while crawling.",
+      "cost": 1,
+      "type": "Utility"
+    },
+    {
+      "name": "Emergency Phase Shift",
+      "description": "Distortion field creates momentary safety. Once per short rest, as a reaction when targeted by an attack, you can **teleport up to 30 feet** to an unoccupied space you can see, completely avoiding the attack.",
+      "cost": 2,
+      "type": "Special"
+    },
+    {
+      "name": "Tactical Opportunity Matrix",
+      "description": "Combat analysis systems enhance reactions. Once per combat, you can **take an additional reaction** during a round. Additionally, opportunity attacks against you have disadvantage.",
+      "cost": 2,
+      "type": "Special"
+    },
+    {
+      "name": "Harmonic Resonance Shield",
+      "description": "Vibrating defensive field. Once per long rest, as a bonus action, create a **10-foot radius aura** around yourself that grants allies within it **resistance to thunder and force damage** for 1 minute.",
+      "cost": 3,
+      "type": "Special"
+    },
+    {
+      "name": "Sudden Growth Spurt",
+      "description": "Magical regalia temporarily enhances size. Once per long rest, as a bonus action, you can **increase your size category by one** for 1 minute, gaining all benefits of the Enlarge spell without concentration.",
+      "cost": 2,
+      "type": "Special"
+    },
+    {
+      "name": "Playful Illusion Projector",
+      "description": "Creates distracting images of toys and childish things. Once per short rest, as an action, you can cast **Mirror Image** on yourself without requiring components or concentration.",
+      "cost": 2,
+      "type": "Special"
+    },
+    {
+      "name": "Timeout Corner Protocol",
+      "description": "Creates a disciplinary zone. Once per long rest, as an action, you create a **5-foot cube force field** within 30 feet. A creature inside must make a DC 15 Wisdom save or be unable to leave the zone for 1 minute or until it takes damage.",
+      "cost": 2,
+      "type": "Special"
+    },
+    {
+      "name": "Scholar's Perfect Recall",
+      "description": "Academic enhancement systems. Once per long rest, you can recall any information you've ever learned with perfect clarity, gaining advantage and double proficiency bonus on any Intelligence-based check for 10 minutes.",
+      "cost": 2,
+      "type": "Academy"
+    },
+    {
+      "name": "Faculty Override Authorization",
+      "description": "Special insignia of authority. You gain **advantage on Persuasion checks** when dealing with institutional authorities. Additionally, once per long rest, you can cast **Command** as a 2nd-level spell without components.",
+      "cost": 1,
+      "type": "Academy"
+    },
+    {
+      "name": "Research Assistant Protocol",
+      "description": "Enchantment aids in locating information. When searching for specific information in a library or archive, you locate it in half the normal time. You also gain a **+5 bonus to Investigation checks** when examining written materials.",
+      "cost": 1,
+      "type": "Academy"
+    },
+    {
+      "name": "Gold Star Achievement System",
+      "description": "Magical rewards for good behavior. Whenever you roll a natural 20 on an ability check, save, or attack roll, you gain a \"gold star\" that you can spend to gain advantage on any single roll. You can store up to 3 gold stars at once.",
+      "cost": 2,
+      "type": "Academy"
+    },
+    {
+      "name": "Nap Mat Deployment",
+      "description": "Emergency rest capabilities. Once per long rest, as an action, you can create a comfortable resting space that allows you to gain the benefits of a short rest in just 10 minutes instead of 1 hour.",
+      "cost": 1,
+      "type": "Academy"
+    },
+    {
+      "name": "Recess Energy Reserves",
+      "description": "Stored playful energy enhances performance. Once per short rest, as a bonus action, you can expend one hit die to gain **advantage on all Strength, Dexterity, and Constitution checks** for 1 minute.",
+      "cost": 1,
+      "type": "Academy"
+    }
+  ],
+  "enhancementPricing": {
+    "+1": {
+      "cost": 1000,
+      "slots": 1
+    },
+    "+2": {
+      "cost": 4000,
+      "slots": 2
+    },
+    "+3": {
+      "cost": 16000,
+      "slots": 3
+    },
+    "+4": {
+      "cost": 48000,
+      "slots": 4
+    },
+    "+5": {
+      "cost": 125000,
+      "slots": 5
+    }
+  }
+}

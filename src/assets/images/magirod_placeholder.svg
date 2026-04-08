@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Magirod placeholder">
+  <rect width="128" height="128" rx="18" fill="#f5ecfb"/>
+  <rect x="4" y="4" width="120" height="120" rx="14" fill="none" stroke="#6b4a88" stroke-width="4"/>
+  <path d="M30 97 C51 76 61 54 67 20" fill="none" stroke="#603c84" stroke-width="6" stroke-linecap="round"/>
+  <path d="M67 20 C86 24 99 34 109 50" fill="none" stroke="#c68dff" stroke-width="5" stroke-linecap="round"/>
+  <path d="M67 20 C78 48 86 73 91 99" fill="none" stroke="#95c8ff" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="88" cy="43" r="5" fill="#fff5a8"/>
+  <path d="M88 31 L90 38 L97 40 L90 42 L88 49 L86 42 L79 40 L86 38 Z" fill="#fff5a8"/>
+  <path d="M100 58 L101.5 63 L107 64.5 L101.5 66 L100 71 L98.5 66 L93 64.5 L98.5 63 Z" fill="#fff5a8"/>
+  <path d="M76 55 L77.2 59 L81.5 60.2 L77.2 61.4 L76 65.5 L74.8 61.4 L70.5 60.2 L74.8 59 Z" fill="#fff5a8"/>
+  <path d="M25 101 L38 101" stroke="#603c84" stroke-width="6" stroke-linecap="round"/>
+</svg>

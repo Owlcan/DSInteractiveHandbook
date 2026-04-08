@@ -287,6 +287,10 @@
       <button id="openWeaponCatalogueBtn" type="button" title="Browse all weapons" style="white-space: nowrap; margin-bottom: 20px;">
         View Weapon Catalogue
       </button>
+      <button id="loadSavedWeaponBtn" type="button" title="Load a saved legacy weapon file" style="white-space: nowrap; margin-bottom: 20px;">
+        Load Saved Weapon
+      </button>
+      <input id="savedWeaponFileInput" type="file" accept="application/json" style="display:none" />
     </div>
 
     <!-- Quick Weapon Catalogue Modal -->
@@ -1675,6 +1679,17 @@
       weaponNameInput.addEventListener("input", updateWeaponName);
     }
 
+    // Load saved weapon (Tier 1) from a local JSON file
+    const loadSavedWeaponBtn = document.getElementById("loadSavedWeaponBtn");
+    const savedWeaponFileInput = document.getElementById("savedWeaponFileInput");
+    if (loadSavedWeaponBtn && savedWeaponFileInput) {
+      loadSavedWeaponBtn.addEventListener("click", () => {
+        savedWeaponFileInput.value = "";
+        savedWeaponFileInput.click();
+      });
+      savedWeaponFileInput.addEventListener("change", onSavedWeaponFileSelected);
+    }
+
     // Local image upload (kept in-memory; nothing is stored or uploaded)
     const weaponImageFileInputEl = document.getElementById("weaponImageFileInput");
     if (weaponImageFileInputEl) {
@@ -1685,6 +1700,163 @@
       clearWeaponImageBtnEl.addEventListener("click", clearWeaponImage);
     }
   });
+
+  function buildLegacyWeaponSaveData() {
+    const weaponName = String(state.weaponName || state.selectedWeapon || '').trim();
+    const selectedWeapon = String(state.selectedWeapon || '').trim();
+
+    return {
+      type: 'legacy-weapon',
+      version: 1,
+      savedAt: new Date().toISOString(),
+      data: {
+        currentTier: Number(state.currentTier) || 1,
+        selectedWeapon,
+        totalSlots: Number(state.totalSlots) || 1,
+        weaponName,
+        weaponImageUrl: String(state.weaponImageUrl || '').trim(),
+        selectedUpgrades: Array.isArray(state.selectedUpgrades) ? state.selectedUpgrades.map(u => ({
+          instanceId: Number(u?.instanceId) || 0,
+          baseName: String(u?.baseName || ''),
+          name: String(u?.name || ''),
+          cost: Number(u?.cost) || 0,
+          type: String(u?.type || ''),
+          description: String(u?.description || ''),
+          chosenValue: u?.chosenValue == null ? null : String(u?.chosenValue)
+        })) : [],
+        usedSlots: Array.isArray(state.usedSlots) ? state.usedSlots.map(s => ({
+          index: Number(s?.index) || 0,
+          type: String(s?.type || ''),
+          name: String(s?.name || ''),
+          instanceId: Number(s?.instanceId) || 0
+        })) : []
+      }
+    };
+  }
+
+  function safeFilename(name) {
+    const base = String(name || '').trim() || 'legacy-weapon';
+    return base
+      .replace(/[^a-z0-9\-_. ]/gi, '')
+      .replace(/\s+/g, ' ')
+      .trim()
+      .slice(0, 80)
+      .replace(/\s/g, '_');
+  }
+
+  function downloadJsonFile(filename, obj) {
+    const json = JSON.stringify(obj, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    try { URL.revokeObjectURL(url); } catch (_) {}
+  }
+
+  function saveLegacyWeaponToFile() {
+    const payload = buildLegacyWeaponSaveData();
+    const weaponName = payload?.data?.weaponName || payload?.data?.selectedWeapon || 'legacy-weapon';
+    const filename = `${safeFilename(weaponName)}_tier${payload?.data?.currentTier || 1}.json`;
+    downloadJsonFile(filename, payload);
+  }
+
+  function restoreLegacyWeaponFromSaveData(payload) {
+    if (!payload || typeof payload !== 'object') throw new Error('Invalid save data.');
+    if (payload.type !== 'legacy-weapon') throw new Error('This file is not a legacy weapon save.');
+    if (Number(payload.version) !== 1) throw new Error('Unsupported save version.');
+    const data = payload.data || {};
+
+    const selectedWeapon = String(data.selectedWeapon || '').trim();
+    if (!selectedWeapon) throw new Error('Save file is missing selectedWeapon.');
+
+    const weaponDetails = getWeaponDetails(selectedWeapon);
+    if (!weaponDetails) {
+      throw new Error(`Saved weapon type not found in this version: ${selectedWeapon}`);
+    }
+
+    state.currentTier = Math.max(1, Number(data.currentTier) || 1);
+    state.selectedWeapon = selectedWeapon;
+    state.totalSlots = Math.max(1, Number(data.totalSlots) || 1);
+    state.weaponName = String(data.weaponName || '').trim();
+    state.weaponImageUrl = String(data.weaponImageUrl || '').trim();
+    state.weaponImageObjectUrl = "";
+
+    state.selectedUpgrades = Array.isArray(data.selectedUpgrades) ? data.selectedUpgrades.map(u => ({
+      instanceId: Number(u?.instanceId) || 0,
+      baseName: String(u?.baseName || ''),
+      name: String(u?.name || ''),
+      cost: Number(u?.cost) || 0,
+      type: String(u?.type || ''),
+      description: String(u?.description || ''),
+      chosenValue: u?.chosenValue == null ? null : String(u?.chosenValue)
+    })) : [];
+
+    state.usedSlots = Array.isArray(data.usedSlots) ? data.usedSlots.map(s => ({
+      index: Number(s?.index) || 0,
+      type: String(s?.type || ''),
+      name: String(s?.name || ''),
+      instanceId: Number(s?.instanceId) || 0
+    })) : [];
+
+    const usedIdx = new Set(state.usedSlots.map(s => s.index));
+    state.remainingSlots = Math.max(0, state.totalSlots - usedIdx.size);
+
+    const maxId = Math.max(0, ...state.selectedUpgrades.map(u => Number(u?.instanceId) || 0));
+    nextUpgradeInstanceId = Math.max(1, maxId + 1);
+
+    calculateTotalCost();
+  }
+
+  function showLoadedWeaponForTier1Continuation() {
+    weaponTypeSelect.value = state.selectedWeapon;
+    slotCountDisplay.textContent = state.totalSlots;
+    remainingSlotsDisplay.textContent = state.remainingSlots;
+
+    weaponSelectionCtn.style.display = "block";
+    slotSelectionCtn.style.display = "none";
+    upgradeSelectionCtn.style.display = "block";
+    weaponSummaryCtn.style.display = "none";
+
+    if (weaponNameInput) weaponNameInput.value = state.weaponName || "";
+    if (weaponImageInput) weaponImageInput.value = state.weaponImageUrl && !state.weaponImageUrl.startsWith('data:') ? state.weaponImageUrl : "";
+
+    if (state.weaponImageUrl) {
+      imagePreviewEl.src = state.weaponImageUrl;
+      imagePreviewCtn.style.display = "block";
+    } else {
+      imagePreviewEl.src = "";
+      imagePreviewCtn.style.display = "none";
+    }
+
+    renderSlotIndicators();
+    updateSelectedUpgradesList();
+    renderUpgradeOptions();
+    updateCostDisplay();
+  }
+
+  function onSavedWeaponFileSelected(e) {
+    const input = e.currentTarget;
+    const file = input && input.files ? input.files[0] : null;
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const payload = JSON.parse(String(reader.result || ''));
+        restoreLegacyWeaponFromSaveData(payload);
+        showLoadedWeaponForTier1Continuation();
+      } catch (err) {
+        alert(err && err.message ? err.message : 'Failed to load weapon save file.');
+      }
+    };
+    reader.onerror = () => {
+      alert('Failed to read the save file.');
+    };
+    reader.readAsText(file);
+  }
 
   function onWeaponImageFileSelected(e) {
     const input = e.currentTarget;
@@ -2400,12 +2572,30 @@
           <div style="font-size: 0.85em; color: #e0d2b4; margin-top: 10px; font-style: italic; text-align: center;">*Complete weapon creation cost including base weapon, slot installation, and enchantments</div>
         </div>
       </div>
+      <div style="margin-top: 18px; text-align: center; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+        <button id="saveWeaponBtn" type="button" style="background: linear-gradient(to bottom, #2e7d32, #1b5e20); color: #e0d2b4; border: none; border-radius: 4px; padding: 12px 18px; font-weight: bold; cursor: pointer; font-family: 'Cinzel', serif; transition: all 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.3);">Save Weapon</button>
+        <button id="loadSavedWeaponBtnSummary" type="button" style="background: linear-gradient(to bottom, #4a4a4a, #2a2a2a); color: #e0d2b4; border: none; border-radius: 4px; padding: 12px 18px; font-weight: bold; cursor: pointer; font-family: 'Cinzel', serif; transition: all 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.3);">Load Saved Weapon</button>
+      </div>
       <div style="margin-top: 30px; text-align: center;">
         <button onclick="location.reload()" style="background: linear-gradient(to bottom, #c0a060, #8a7040); color: #1a1a1a; border: none; border-radius: 4px; padding: 12px 24px; font-weight: bold; cursor: pointer; font-family: 'Cinzel', serif; transition: all 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.3);">Create Another Weapon</button>
       </div>
     `;
     
     weaponSummaryContent.innerHTML = summaryHTML;
+
+    // Wire up summary-only controls
+    const saveBtn = document.getElementById('saveWeaponBtn');
+    if (saveBtn) {
+      saveBtn.addEventListener('click', saveLegacyWeaponToFile);
+    }
+    const loadBtn = document.getElementById('loadSavedWeaponBtnSummary');
+    const fileInput = document.getElementById('savedWeaponFileInput');
+    if (loadBtn && fileInput) {
+      loadBtn.addEventListener('click', () => {
+        fileInput.value = "";
+        fileInput.click();
+      });
+    }
   }
   
   // Helper function to get the color based on upgrade type

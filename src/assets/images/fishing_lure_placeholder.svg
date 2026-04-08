@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Fishing lure placeholder">
+  <rect width="128" height="128" rx="18" fill="#eef4f6"/>
+  <rect x="4" y="4" width="120" height="120" rx="14" fill="none" stroke="#4b5e67" stroke-width="4"/>
+  <path d="M32 32 C56 12 84 14 98 34 C105 44 104 58 95 66 C84 76 69 76 57 70" fill="none" stroke="#d55c54" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="43" cy="41" r="4" fill="#f8f4ea"/>
+  <path d="M57 70 C49 86 59 104 78 104" fill="none" stroke="#d55c54" stroke-width="7" stroke-linecap="round"/>
+  <path d="M78 104 C69 102 64 94 66 87" fill="none" stroke="#3b4348" stroke-width="4" stroke-linecap="round"/>
+  <path d="M98 34 C109 31 116 37 117 46" fill="none" stroke="#7ca9c2" stroke-width="3" stroke-linecap="round"/>
+  <path d="M117 46 C114 64 109 81 104 98" fill="none" stroke="#7ca9c2" stroke-width="3" stroke-linecap="round"/>
+</svg>

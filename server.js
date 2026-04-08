@@ -6,8 +6,221 @@ const WebSocket = require('ws');
 const PORT = process.env.PORT || 4242;
 const PUBLIC_DIR = __dirname; // serves from current folder
 
+const WORLDMAP_ZONES_PATH = path.join(PUBLIC_DIR, 'src', 'data', 'worldmap-zones.json');
+const WORLDMAP_FOREST_EVENT_HEXES_PATH = path.join(PUBLIC_DIR, 'src', 'data', 'worldmap-forest-event-hexes.json');
+
+function sendJson(res, statusCode, obj) {
+  const body = JSON.stringify(obj);
+  res.writeHead(statusCode, {
+    'Content-Type': 'application/json; charset=utf-8',
+    'Cache-Control': 'no-store',
+  });
+  res.end(body);
+}
+
+function getDefaultWorldmapZonesPayload() {
+  return {
+    version: 1,
+    origin: { q: 378, r: 363 },
+    tokens: [],
+    zones: [],
+    quickZones: {
+      version: 1,
+      elevationClimbCheck: '',
+      resources: [],
+      terrain: [],
+      info: [],
+      resourceMeta: [],
+    },
+  };
+}
+
+function getDefaultForestEventHexesPayload() {
+  return {
+    version: 1,
+    records: [],
+  };
+}
+
+function readWorldmapZonesFile() {
+  try {
+    const base = getDefaultWorldmapZonesPayload();
+    if (!fs.existsSync(WORLDMAP_ZONES_PATH)) return base;
+
+    const raw = fs.readFileSync(WORLDMAP_ZONES_PATH, 'utf8');
+    const obj = JSON.parse(raw);
+    if (!obj || typeof obj !== 'object') return base;
+
+    // Normalize/merge so partially-edited files don't break clients.
+    if (Number.isFinite(obj.version)) base.version = obj.version;
+    if (obj.origin && typeof obj.origin === 'object') {
+      const q = Number(obj.origin.q);
+      const r = Number(obj.origin.r);
+      if (Number.isFinite(q) && Number.isFinite(r)) base.origin = { q, r };
+    }
+
+    if (Array.isArray(obj.zones)) base.zones = obj.zones;
+
+    if (Array.isArray(obj.tokens)) base.tokens = obj.tokens;
+
+    if (obj.quickZones && typeof obj.quickZones === 'object') {
+      base.quickZones = obj.quickZones;
+      // Ensure required quickZones keys exist.
+      if (!Number.isFinite(base.quickZones.version)) base.quickZones.version = 1;
+      if (typeof base.quickZones.elevationClimbCheck !== 'string') base.quickZones.elevationClimbCheck = '';
+      if (!Array.isArray(base.quickZones.resources)) base.quickZones.resources = [];
+      if (!Array.isArray(base.quickZones.terrain)) base.quickZones.terrain = [];
+      if (!Array.isArray(base.quickZones.info)) base.quickZones.info = [];
+      if (!Array.isArray(base.quickZones.resourceMeta)) base.quickZones.resourceMeta = [];
+    }
+
+    return base;
+  } catch (e) {
+    return getDefaultWorldmapZonesPayload();
+  }
+}
+
+function validateWorldmapZonesPayload(payload) {
+  if (!payload || typeof payload !== 'object') return { ok: false, error: 'payload_not_object' };
+  if (!Array.isArray(payload.zones)) return { ok: false, error: 'zones_missing_or_not_array' };
+  if (payload.tokens != null && !Array.isArray(payload.tokens)) return { ok: false, error: 'tokens_not_array' };
+  // quickZones is optional but should be an object if present.
+  if (payload.quickZones != null && typeof payload.quickZones !== 'object') return { ok: false, error: 'quickZones_not_object' };
+  return { ok: true };
+}
+
+function readForestEventHexesFile() {
+  try {
+    const base = getDefaultForestEventHexesPayload();
+    if (!fs.existsSync(WORLDMAP_FOREST_EVENT_HEXES_PATH)) return base;
+
+    const raw = fs.readFileSync(WORLDMAP_FOREST_EVENT_HEXES_PATH, 'utf8');
+    const obj = JSON.parse(raw);
+    if (!obj || typeof obj !== 'object') return base;
+    if (Number.isFinite(obj.version)) base.version = obj.version;
+    if (Array.isArray(obj.records)) base.records = obj.records;
+    return base;
+  } catch (e) {
+    return getDefaultForestEventHexesPayload();
+  }
+}
+
+function validateForestEventHexesPayload(payload) {
+  if (!payload || typeof payload !== 'object') return { ok: false, error: 'payload_not_object' };
+  if (!Array.isArray(payload.records)) return { ok: false, error: 'records_missing_or_not_array' };
+  return { ok: true };
+}
+
+function handleWorldmapZonesApi(req, res) {
+  if (req.method === 'GET') {
+    const payload = readWorldmapZonesFile();
+    sendJson(res, 200, payload);
+    return;
+  }
+
+  if (req.method === 'POST') {
+    let body = '';
+    const MAX = 5 * 1024 * 1024; // 5MB safety limit
+
+    req.on('data', (chunk) => {
+      body += chunk;
+      if (body.length > MAX) {
+        res.writeHead(413, { 'Content-Type': 'text/plain; charset=utf-8' });
+        res.end('Payload too large');
+        try { req.destroy(); } catch (e) {}
+      }
+    });
+
+    req.on('end', () => {
+      let obj;
+      try {
+        obj = JSON.parse(body || '{}');
+      } catch (e) {
+        sendJson(res, 400, { ok: false, error: 'invalid_json' });
+        return;
+      }
+
+      const v = validateWorldmapZonesPayload(obj);
+      if (!v.ok) {
+        sendJson(res, 400, { ok: false, error: v.error });
+        return;
+      }
+
+      try {
+        fs.mkdirSync(path.dirname(WORLDMAP_ZONES_PATH), { recursive: true });
+        fs.writeFileSync(WORLDMAP_ZONES_PATH, JSON.stringify(obj, null, 2), 'utf8');
+        sendJson(res, 200, { ok: true });
+      } catch (e) {
+        sendJson(res, 500, { ok: false, error: 'write_failed' });
+      }
+    });
+    return;
+  }
+
+  res.writeHead(405, { 'Content-Type': 'text/plain; charset=utf-8' });
+  res.end('Method not allowed');
+}
+
+function handleWorldmapForestEventHexesApi(req, res) {
+  if (req.method === 'GET') {
+    sendJson(res, 200, readForestEventHexesFile());
+    return;
+  }
+
+  if (req.method === 'POST') {
+    let body = '';
+    const MAX = 2 * 1024 * 1024;
+
+    req.on('data', (chunk) => {
+      body += chunk;
+      if (body.length > MAX) {
+        res.writeHead(413, { 'Content-Type': 'text/plain; charset=utf-8' });
+        res.end('Payload too large');
+        try { req.destroy(); } catch (e) {}
+      }
+    });
+
+    req.on('end', () => {
+      let obj;
+      try {
+        obj = JSON.parse(body || '{}');
+      } catch (e) {
+        sendJson(res, 400, { ok: false, error: 'invalid_json' });
+        return;
+      }
+
+      const v = validateForestEventHexesPayload(obj);
+      if (!v.ok) {
+        sendJson(res, 400, { ok: false, error: v.error });
+        return;
+      }
+
+      try {
+        fs.mkdirSync(path.dirname(WORLDMAP_FOREST_EVENT_HEXES_PATH), { recursive: true });
+        fs.writeFileSync(WORLDMAP_FOREST_EVENT_HEXES_PATH, JSON.stringify(obj, null, 2), 'utf8');
+        sendJson(res, 200, { ok: true });
+      } catch (e) {
+        sendJson(res, 500, { ok: false, error: 'write_failed' });
+      }
+    });
+    return;
+  }
+
+  res.writeHead(405, { 'Content-Type': 'text/plain; charset=utf-8' });
+  res.end('Method not allowed');
+}
+
 // Simple static file server
 const server = http.createServer((req, res) => {
+  if (req.url && req.url.split('?')[0] === '/api/worldmap/zones') {
+    handleWorldmapZonesApi(req, res);
+    return;
+  }
+  if (req.url && req.url.split('?')[0] === '/api/worldmap/forest-event-hexes') {
+    handleWorldmapForestEventHexesApi(req, res);
+    return;
+  }
+
   let urlPath = req.url === '/' ? '/Arenabol.html' : req.url;
   const filePath = path.join(PUBLIC_DIR, decodeURIComponent(urlPath.split('?')[0]));
 
@@ -28,8 +241,13 @@ const server = http.createServer((req, res) => {
     else if (filePath.endsWith('.gif')) contentType = 'image/gif';
     else if (filePath.endsWith('.svg')) contentType = 'image/svg+xml';
     else if (filePath.endsWith('.ico')) contentType = 'image/x-icon';
+    else if (filePath.endsWith('.mp3')) contentType = 'audio/mpeg';
 
-    res.writeHead(200, { 'Content-Type': contentType });
+    // Avoid stale-cache issues during local development/play.
+    res.writeHead(200, {
+      'Content-Type': contentType,
+      'Cache-Control': 'no-store',
+    });
     fs.createReadStream(filePath).pipe(res);
   });
 });

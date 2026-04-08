@@ -1,0 +1,2917 @@
+[
+  {
+    "flavor": {
+      "faction": "",
+      "environment": "",
+      "description": "",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": ""
+    },
+    "stats": {
+      "size": "Small",
+      "race": "",
+      "alignment": "chaotic evil",
+      "armorType": "uncanny agility",
+      "armorClass": 20,
+      "numHitDie": 20,
+      "speed": "60 ft.",
+      "abilityScores": {
+        "strength": 6,
+        "dexterity": 24,
+        "constitution": 16,
+        "intelligence": 10,
+        "wisdom": 14,
+        "charisma": 18
+      },
+      "proficiencyBonus": 0,
+      "damageVulnerabilities": [],
+      "damageResistances": [],
+      "damageImmunities": [],
+      "conditionImmunities": [],
+      "senses": [],
+      "languages": [],
+      "challengeRating": 10,
+      "experiencePoints": 5900,
+      "legendaryActionsPerRound": 3,
+      "legendaryActionsDescription": "",
+      "savingThrows": [],
+      "skills": [],
+      "additionalAbilities": [],
+      "actions": [
+        {
+          "name": "Multiattack",
+          "description": "Blanz-Coh makes three Bite attacks.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:1340"
+        },
+        {
+          "name": "Bite",
+          "description": "Melee Weapon Attack: +11 to hit, reach 5 ft. Hit: 10 (1d6 + 7) piercing plus 21 (6d6) slashing damage.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:1341"
+        },
+        {
+          "name": "Red Streak (Recharge 5–6)",
+          "description": "Moves full speed through creature spaces. DC 19 Dexterity save or take 35 (10d6) slashing damage.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:1342"
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [],
+      "hitDieSize": 6,
+      "armorTypeStr": "(uncanny agility)",
+      "abilityScoreModifiers": {
+        "strength": -2,
+        "dexterity": 7,
+        "constitution": 3,
+        "intelligence": 0,
+        "wisdom": 2,
+        "charisma": 4
+      },
+      "abilityScoreStrs": {
+        "strength": "6 (–2)",
+        "dexterity": "24 (+7)",
+        "constitution": "16 (+3)",
+        "intelligence": "10 (+0)",
+        "wisdom": "14 (+2)",
+        "charisma": "18 (+4)"
+      },
+      "extraHealthFromConstitution": 60,
+      "hitPoints": 130,
+      "hitPointsStr": "130 (20d6 + 60)",
+      "passivePerception": 12,
+      "challengeRatingStr": "10"
+    },
+    "sharing": {
+      "linkSharingEnabled": false
+    },
+    "_id": "69b4e7fe15443bd5efc561f3",
+    "name": "Blanz-Coh the Tiny Terror",
+    "bestiaryId": "6870862c97a02efde25f91ce",
+    "__v": 0
+  },
+  {
+    "flavor": {
+      "faction": "Caelistian Remnant",
+      "environment": "Academy Ruins, The Greensea Expanse",
+      "description": "Medium humanoid (any race), lawful evil",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": {}
+    },
+    "stats": {
+      "size": "Medium",
+      "race": "humanoid (any race)",
+      "alignment": "lawful evil",
+      "armorType": "Studded Leather",
+      "armorClass": 15,
+      "numHitDie": 8,
+      "speed": "30 ft.",
+      "abilityScores": {
+        "strength": 11,
+        "dexterity": 16,
+        "constitution": 14,
+        "intelligence": 14,
+        "wisdom": 14,
+        "charisma": 10
+      },
+      "proficiencyBonus": 2,
+      "damageVulnerabilities": [],
+      "damageResistances": [],
+      "damageImmunities": [],
+      "conditionImmunities": [],
+      "senses": [
+        "passive Perception 14"
+      ],
+      "languages": [
+        "Common"
+      ],
+      "challengeRating": 3,
+      "experiencePoints": 700,
+      "legendaryActionsPerRound": 0,
+      "legendaryActionsDescription": "",
+      "savingThrows": [],
+      "skills": [
+        {
+          "name": "Perception",
+          "proficient": true,
+          "modifier": 4,
+          "modifierStr": "Perception +4",
+          "$$hashKey": "object:17805"
+        },
+        {
+          "name": "Survival",
+          "proficient": true,
+          "modifier": 4,
+          "modifierStr": "Survival +4",
+          "$$hashKey": "object:17806"
+        }
+      ],
+      "additionalAbilities": [
+        {
+          "name": "Sniper's Roost",
+          "description": "If the Gunner hasn't moved this turn, its ranged weapon attacks score a critical hit on a roll of 19 or 20.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:17763"
+        }
+      ],
+      "actions": [
+        {
+          "name": "Multiattack",
+          "description": "The Gunner makes two attacks with its Magitek Rifle.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:17768"
+        },
+        {
+          "name": "Magitek Rifle",
+          "description": "Ranged Weapon Attack: +5 to hit, range 80/240 ft., one target. Hit: 8 (1d10 + 3) piercing damage plus 2 (1d4) force damage.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:17769"
+        },
+        {
+          "name": "Overcharge Blast (Recharge 5-6)",
+          "description": "The Gunner overcharges its rifle and fires a burst of raw mana. Each creature in a 15-foot cone must make a DC 13 Dexterity saving throw, taking 14 (4d6) force damage on a failed save, or half as much on a successful one.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:17770"
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [],
+      "hitDieSize": 8,
+      "armorTypeStr": "(Studded Leather)",
+      "abilityScoreModifiers": {
+        "strength": 0,
+        "dexterity": 3,
+        "constitution": 2,
+        "intelligence": 2,
+        "wisdom": 2,
+        "charisma": 0
+      },
+      "abilityScoreStrs": {
+        "strength": "11 (+0)",
+        "dexterity": "16 (+3)",
+        "constitution": "14 (+2)",
+        "intelligence": "14 (+2)",
+        "wisdom": "14 (+2)",
+        "charisma": "10 (+0)"
+      },
+      "extraHealthFromConstitution": 16,
+      "hitPoints": 52,
+      "hitPointsStr": "52 (8d8 + 16)",
+      "passivePerception": 14,
+      "challengeRatingStr": "3"
+    },
+    "sharing": {
+      "linkSharingEnabled": false
+    },
+    "_id": "69bcac3e15443bd5efc5b780",
+    "name": "Caelistian Gunner",
+    "bestiaryId": "6870862c97a02efde25f91ce",
+    "__v": 0
+  },
+  {
+    "flavor": {
+      "faction": "Caelistian Remnant",
+      "environment": "Academy Ruins, The Greensea Expanse",
+      "description": "Medium humanoid (any race), lawful evil",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": {}
+    },
+    "stats": {
+      "size": "Medium",
+      "race": "humanoid (any race)",
+      "alignment": "lawful evil",
+      "armorType": "Leather Armor",
+      "armorClass": 14,
+      "numHitDie": 8,
+      "speed": "35 ft.",
+      "abilityScores": {
+        "strength": 10,
+        "dexterity": 17,
+        "constitution": 12,
+        "intelligence": 13,
+        "wisdom": 12,
+        "charisma": 14
+      },
+      "proficiencyBonus": 2,
+      "damageVulnerabilities": [],
+      "damageResistances": [],
+      "damageImmunities": [],
+      "conditionImmunities": [],
+      "senses": [
+        "passive Perception 13"
+      ],
+      "languages": [
+        "Common"
+      ],
+      "challengeRating": 3,
+      "experiencePoints": 700,
+      "legendaryActionsPerRound": 0,
+      "legendaryActionsDescription": "",
+      "savingThrows": [],
+      "skills": [
+        {
+          "name": "Stealth",
+          "proficient": true,
+          "modifier": 5,
+          "modifierStr": "Stealth +5",
+          "$$hashKey": "object:17888"
+        },
+        {
+          "name": "Acrobatics",
+          "proficient": true,
+          "modifier": 5,
+          "modifierStr": "Acrobatics +5",
+          "$$hashKey": "object:17889"
+        },
+        {
+          "name": "Perception",
+          "proficient": true,
+          "modifier": 3,
+          "modifierStr": "Perception +3",
+          "$$hashKey": "object:17890"
+        }
+      ],
+      "additionalAbilities": [
+        {
+          "name": "Sneak Attack (1/Turn)",
+          "description": "The Infiltrator deals an extra 10 (3d6) damage when it hits a target with a weapon attack and has advantage on the attack roll, or when the target is within 5 feet of an ally of the Infiltrator that isn't incapacitated and the Infiltrator doesn't have disadvantage.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:17841"
+        },
+        {
+          "name": "StealthWear Panty-Cut Advantage",
+          "description": "Wearing magically discreet protection, the Infiltrator has a permanent +5 bonus to Stealth checks (factored into its skills) and advantage on Dexterity (Stealth) checks made to avoid being seen.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:17842"
+        }
+      ],
+      "actions": [
+        {
+          "name": "Multiattack",
+          "description": "The Infiltrator makes two attacks with its Phase Daggers.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:17849"
+        },
+        {
+          "name": "Phase Dagger",
+          "description": "Melee or Ranged Weapon Attack: +5 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 5 (1d4 + 3) piercing damage plus 3 (1d6) psychic damage.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:17850"
+        }
+      ],
+      "reactions": [
+        {
+          "name": "Smoke Evasion",
+          "description": "When the Infiltrator takes damage, it can use its reaction to drop a magitek smoke bomb. A 10-foot-radius sphere of smoke appears centered on the Infiltrator, heavily obscuring the area until the end of its next turn. The Infiltrator can immediately move up to half its speed without provoking opportunity attacks.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:17857"
+        }
+      ],
+      "legendaryActions": [],
+      "hitDieSize": 8,
+      "armorTypeStr": "(Leather Armor)",
+      "abilityScoreModifiers": {
+        "strength": 0,
+        "dexterity": 3,
+        "constitution": 1,
+        "intelligence": 1,
+        "wisdom": 1,
+        "charisma": 2
+      },
+      "abilityScoreStrs": {
+        "strength": "10 (+0)",
+        "dexterity": "17 (+3)",
+        "constitution": "12 (+1)",
+        "intelligence": "13 (+1)",
+        "wisdom": "12 (+1)",
+        "charisma": "14 (+2)"
+      },
+      "extraHealthFromConstitution": 8,
+      "hitPoints": 44,
+      "hitPointsStr": "44 (8d8 + 8)",
+      "passivePerception": 13,
+      "challengeRatingStr": "3"
+    },
+    "sharing": {
+      "linkSharingEnabled": false
+    },
+    "_id": "69bcac3e15443bd5efc5b782",
+    "name": "Caelistian Infiltrator",
+    "bestiaryId": "6870862c97a02efde25f91ce",
+    "__v": 0
+  },
+  {
+    "flavor": {
+      "faction": "Caelistian Remnant",
+      "environment": "Academy Ruins, The Greensea Expanse",
+      "description": "Medium humanoid (any race), lawful evil",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": {}
+    },
+    "stats": {
+      "size": "Medium",
+      "race": "humanoid (any race)",
+      "alignment": "lawful evil",
+      "armorType": "Half Plate, Shield",
+      "armorClass": 17,
+      "numHitDie": 10,
+      "speed": "30 ft.",
+      "abilityScores": {
+        "strength": 16,
+        "dexterity": 13,
+        "constitution": 14,
+        "intelligence": 10,
+        "wisdom": 12,
+        "charisma": 10
+      },
+      "proficiencyBonus": 2,
+      "damageVulnerabilities": [],
+      "damageResistances": [],
+      "damageImmunities": [],
+      "conditionImmunities": [],
+      "senses": [
+        "passive Perception 11"
+      ],
+      "languages": [
+        "Common"
+      ],
+      "challengeRating": 3,
+      "experiencePoints": 700,
+      "legendaryActionsPerRound": 0,
+      "legendaryActionsDescription": "",
+      "savingThrows": [
+        {
+          "ability": "strength",
+          "proficient": true,
+          "modifier": 5,
+          "modifierStr": "Str +5",
+          "$$hashKey": "object:17976"
+        },
+        {
+          "ability": "constitution",
+          "proficient": true,
+          "modifier": 4,
+          "modifierStr": "Con +4",
+          "$$hashKey": "object:17977"
+        }
+      ],
+      "skills": [
+        {
+          "name": "Athletics",
+          "proficient": true,
+          "modifier": 5,
+          "modifierStr": "Athletics +5",
+          "$$hashKey": "object:17985"
+        },
+        {
+          "name": "Intimidation",
+          "proficient": true,
+          "modifier": 2,
+          "modifierStr": "Intimidation +2",
+          "$$hashKey": "object:17986"
+        }
+      ],
+      "additionalAbilities": [
+        {
+          "name": "Phalanx Formation",
+          "description": "The Vanguard has advantage on attack rolls and Dexterity saving throws if at least one Caelistian ally is within 5 feet of it and isn't incapacitated.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:17931"
+        },
+        {
+          "name": "TactiTush Elite Padding",
+          "description": "The Vanguard wears military-grade padded protection under its armor, granting it advantage on saving throws against being knocked prone.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:17932"
+        }
+      ],
+      "actions": [
+        {
+          "name": "Multiattack",
+          "description": "The Vanguard makes two attacks with its Magitek Broadsword.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:17939"
+        },
+        {
+          "name": "Magitek Broadsword",
+          "description": "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 7 (1d8 + 3) slashing damage plus 3 (1d6) force damage.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:17940"
+        },
+        {
+          "name": "Shield Bash",
+          "description": "Melee Weapon Attack: +5 to hit, reach 5 ft., one creature. Hit: 5 (1d4 + 3) bludgeoning damage. If the target is a Medium or smaller creature, it must succeed on a DC 13 Strength saving throw or be knocked prone.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:17941"
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [],
+      "hitDieSize": 8,
+      "armorTypeStr": "(Half Plate, Shield)",
+      "abilityScoreModifiers": {
+        "strength": 3,
+        "dexterity": 1,
+        "constitution": 2,
+        "intelligence": 0,
+        "wisdom": 1,
+        "charisma": 0
+      },
+      "abilityScoreStrs": {
+        "strength": "16 (+3)",
+        "dexterity": "13 (+1)",
+        "constitution": "14 (+2)",
+        "intelligence": "10 (+0)",
+        "wisdom": "12 (+1)",
+        "charisma": "10 (+0)"
+      },
+      "extraHealthFromConstitution": 20,
+      "hitPoints": 65,
+      "hitPointsStr": "65 (10d8 + 20)",
+      "passivePerception": 11,
+      "challengeRatingStr": "3"
+    },
+    "sharing": {
+      "linkSharingEnabled": false
+    },
+    "_id": "69bcac3e15443bd5efc5b77f",
+    "name": "Caelistian Vanguard",
+    "bestiaryId": "6870862c97a02efde25f91ce",
+    "__v": 0
+  },
+  {
+    "flavor": {
+      "faction": "Caelistian Remnant",
+      "environment": "Academy Ruins, The Greensea Expanse",
+      "description": "Medium humanoid (any race), lawful evil",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": {}
+    },
+    "stats": {
+      "size": "Medium",
+      "race": "humanoid (any race)",
+      "alignment": "lawful evil",
+      "armorType": "Breastplate",
+      "armorClass": 15,
+      "numHitDie": 12,
+      "speed": "30 ft.",
+      "abilityScores": {
+        "strength": 12,
+        "dexterity": 10,
+        "constitution": 12,
+        "intelligence": 12,
+        "wisdom": 16,
+        "charisma": 14
+      },
+      "proficiencyBonus": 2,
+      "damageVulnerabilities": [],
+      "damageResistances": [],
+      "damageImmunities": [],
+      "conditionImmunities": [],
+      "senses": [
+        "passive Perception 13"
+      ],
+      "languages": [
+        "Common"
+      ],
+      "challengeRating": 3,
+      "experiencePoints": 700,
+      "legendaryActionsPerRound": 0,
+      "legendaryActionsDescription": "",
+      "savingThrows": [
+        {
+          "ability": "wisdom",
+          "proficient": true,
+          "modifier": 5,
+          "modifierStr": "Wis +5",
+          "$$hashKey": "object:18062"
+        },
+        {
+          "ability": "charisma",
+          "proficient": true,
+          "modifier": 4,
+          "modifierStr": "Cha +4",
+          "$$hashKey": "object:18063"
+        }
+      ],
+      "skills": [
+        {
+          "name": "Religion",
+          "proficient": true,
+          "modifier": 3,
+          "modifierStr": "Religion +3",
+          "$$hashKey": "object:18071"
+        },
+        {
+          "name": "Medicine",
+          "proficient": true,
+          "modifier": 5,
+          "modifierStr": "Medicine +5",
+          "$$hashKey": "object:18072"
+        }
+      ],
+      "additionalAbilities": [
+        {
+          "name": "Spellcasting",
+          "description": "The Zealot is a 5th-level spellcaster. Its spellcasting ability is Wisdom (spell save DC 13, +5 to hit with spell attacks). It has the following spells prepared:\n\nCantrip (at will): <i>guidance</i>, <i>radiant lance</i>, <i>diapering</i>\n1st level (4 slots): <i>healing word</i>, <i>sanctuary</i>, <i>bane</i>\n2nd level (3 slots): <i>hold person</i>, <i>spiritual weapon</i>\n3rd level (2 slots): <i>mass pacification</i>, <i>dispel magic</i>",
+          "descriptionHtml": {},
+          "$$hashKey": "object:18023"
+        }
+      ],
+      "actions": [
+        {
+          "name": "Multiattack",
+          "description": "The Zealot casts Radiant Lance and makes one melee attack.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:18028"
+        },
+        {
+          "name": "Ceremonial Mace",
+          "description": "Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 4 (1d6 + 1) bludgeoning damage.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:18029"
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [],
+      "hitDieSize": 8,
+      "armorTypeStr": "(Breastplate)",
+      "abilityScoreModifiers": {
+        "strength": 1,
+        "dexterity": 0,
+        "constitution": 1,
+        "intelligence": 1,
+        "wisdom": 3,
+        "charisma": 2
+      },
+      "abilityScoreStrs": {
+        "strength": "12 (+1)",
+        "dexterity": "10 (+0)",
+        "constitution": "12 (+1)",
+        "intelligence": "12 (+1)",
+        "wisdom": "16 (+3)",
+        "charisma": "14 (+2)"
+      },
+      "extraHealthFromConstitution": 12,
+      "hitPoints": 66,
+      "hitPointsStr": "66 (12d8 + 12)",
+      "passivePerception": 13,
+      "challengeRatingStr": "3"
+    },
+    "sharing": {
+      "linkSharingEnabled": false
+    },
+    "_id": "69bcac3e15443bd5efc5b781",
+    "name": "Caelistian Zealot",
+    "bestiaryId": "6870862c97a02efde25f91ce",
+    "__v": 0
+  },
+  {
+    "flavor": {
+      "faction": "",
+      "environment": "",
+      "description": "Huge monstrosity (darkforme), neutral evil",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": {}
+    },
+    "stats": {
+      "size": "Huge",
+      "race": "monstrosity (darkforme)",
+      "alignment": "neutral evil",
+      "armorType": "Natural Armor",
+      "armorClass": 14,
+      "numHitDie": 10,
+      "speed": "40 ft.",
+      "abilityScores": {
+        "strength": 21,
+        "dexterity": 10,
+        "constitution": 16,
+        "intelligence": 4,
+        "wisdom": 12,
+        "charisma": 6
+      },
+      "proficiencyBonus": 2,
+      "damageVulnerabilities": [],
+      "damageResistances": [],
+      "damageImmunities": [],
+      "conditionImmunities": [],
+      "senses": [
+        "darkvision 60 ft.",
+        "passive Perception 13"
+      ],
+      "languages": [],
+      "challengeRating": 4,
+      "experiencePoints": 1100,
+      "legendaryActionsPerRound": 0,
+      "legendaryActionsDescription": "",
+      "savingThrows": [],
+      "skills": [
+        {
+          "name": "Perception",
+          "proficient": true,
+          "modifier": 3,
+          "modifierStr": "Perception +3",
+          "$$hashKey": "object:3639"
+        }
+      ],
+      "additionalAbilities": [
+        {
+          "name": "Keen Smell",
+          "description": "The Gutroar has advantage on Wisdom (Perception) checks that rely on smell. It can smell food (or a poorly secured campsite) from up to 3 miles away.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:3591"
+        },
+        {
+          "name": "Mammoth Bulk",
+          "description": "The Gutroar counts as one size larger when determining its carrying capacity and the weight it can push, drag, or lift. It also has advantage on Strength saving throws against being knocked prone.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:3592"
+        }
+      ],
+      "actions": [
+        {
+          "name": "Multiattack",
+          "description": "The Gutroar makes two attacks: one with its Bite and one with its Claws.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:3599"
+        },
+        {
+          "name": "Bite",
+          "description": "Melee Weapon Attack: +7 to hit, reach 5 ft. Hit: 14 (2d8 + 5) piercing damage.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:3600"
+        },
+        {
+          "name": "Claws",
+          "description": "Melee Weapon Attack: +7 to hit, reach 10 ft. Hit: 19 (4d6 + 5) slashing damage.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:3601"
+        },
+        {
+          "name": "Terrifying Roar (Recharge 5-6)",
+          "description": "The Gutroar lets out a deafening, unnatural bellow. Each creature within 30 feet that can hear it must succeed on a DC 13 Wisdom saving throw or be Frightened until the end of the Gutroar's next turn. If a creature fails the save by 5 or more, they must also immediately make a DC 10 Potty Check.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:3602"
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [],
+      "hitDieSize": 12,
+      "armorTypeStr": "(Natural Armor)",
+      "abilityScoreModifiers": {
+        "strength": 5,
+        "dexterity": 0,
+        "constitution": 3,
+        "intelligence": -3,
+        "wisdom": 1,
+        "charisma": -2
+      },
+      "abilityScoreStrs": {
+        "strength": "21 (+5)",
+        "dexterity": "10 (+0)",
+        "constitution": "16 (+3)",
+        "intelligence": "4 (–3)",
+        "wisdom": "12 (+1)",
+        "charisma": "6 (–2)"
+      },
+      "extraHealthFromConstitution": 30,
+      "hitPoints": 95,
+      "hitPointsStr": "95 (10d12 + 30)",
+      "passivePerception": 13,
+      "challengeRatingStr": "4"
+    },
+    "sharing": {
+      "linkSharingEnabled": false
+    },
+    "_id": "69b90ae715443bd5efc59737",
+    "name": "Darkforme Gutroar",
+    "bestiaryId": "6870862c97a02efde25f91ce",
+    "__v": 0
+  },
+  {
+    "flavor": {
+      "faction": "",
+      "environment": "",
+      "description": "Medium undead (darkforme), neutral evil",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": {}
+    },
+    "stats": {
+      "size": "Medium",
+      "race": "undead (darkforme)",
+      "alignment": "neutral evil",
+      "armorType": "",
+      "armorClass": 14,
+      "numHitDie": 8,
+      "speed": "0 ft., fly 40 ft. (hover)",
+      "abilityScores": {
+        "strength": 8,
+        "dexterity": 18,
+        "constitution": 14,
+        "intelligence": 12,
+        "wisdom": 10,
+        "charisma": 14
+      },
+      "proficiencyBonus": 2,
+      "damageVulnerabilities": [],
+      "damageResistances": [
+        "acid",
+        "cold",
+        "fire",
+        "lightning",
+        "thunder",
+        "bludgeoning, piercing, and slashing from nonmagical attacks"
+      ],
+      "damageImmunities": [
+        "necrotic",
+        "poison"
+      ],
+      "conditionImmunities": [
+        "charmed",
+        "exhaustion",
+        "grappled",
+        "paralyzed",
+        "petrified",
+        "poisoned",
+        "prone",
+        "restrained"
+      ],
+      "senses": [
+        "passive Perception 10"
+      ],
+      "languages": [],
+      "challengeRating": 3,
+      "experiencePoints": 700,
+      "legendaryActionsPerRound": 0,
+      "legendaryActionsDescription": "",
+      "savingThrows": [],
+      "skills": [
+        {
+          "name": "Stealth",
+          "proficient": true,
+          "modifier": 6,
+          "modifierStr": "Stealth +6",
+          "$$hashKey": "object:4303"
+        }
+      ],
+      "additionalAbilities": [
+        {
+          "name": "Incorporeal Movement",
+          "description": "The Pseudomaiden can move through other creatures and objects as if they were difficult terrain. It takes 5 (1d10) force damage if it ends its turn inside an object.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:4261"
+        },
+        {
+          "name": "Sneak Attack (1/Turn)",
+          "description": "The Pseudomaiden deals an extra 10 (3d6) necrotic damage when it hits a target with a weapon attack and has advantage on the attack roll, or when the target is within 5 feet of an ally that isn't incapacitated and the Pseudomaiden doesn't have disadvantage.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:4262"
+        }
+      ],
+      "actions": [
+        {
+          "name": "Inky Hair Lash",
+          "description": "Melee Spell Attack: +6 to hit, reach 10 ft., one target. Hit: 11 (2d6 + 4) necrotic damage.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:4269"
+        },
+        {
+          "name": "Traumatizing Visage",
+          "description": "Each non-undead creature within 30 ft. that can see the Pseudomaiden's dripping, hollow eyes must succeed on a DC 12 Wisdom saving throw or be frightened for 1 minute.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:4270"
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [],
+      "hitDieSize": 8,
+      "abilityScoreModifiers": {
+        "strength": -1,
+        "dexterity": 4,
+        "constitution": 2,
+        "intelligence": 1,
+        "wisdom": 0,
+        "charisma": 2
+      },
+      "abilityScoreStrs": {
+        "strength": "8 (–1)",
+        "dexterity": "18 (+4)",
+        "constitution": "14 (+2)",
+        "intelligence": "12 (+1)",
+        "wisdom": "10 (+0)",
+        "charisma": "14 (+2)"
+      },
+      "extraHealthFromConstitution": 16,
+      "hitPoints": 52,
+      "hitPointsStr": "52 (8d8 + 16)",
+      "passivePerception": 10,
+      "challengeRatingStr": "3"
+    },
+    "sharing": {
+      "linkSharingEnabled": false
+    },
+    "_id": "69ba35d815443bd5efc59fff",
+    "name": "Darkforme Pseudomaiden",
+    "bestiaryId": "6870862c97a02efde25f91ce",
+    "__v": 0
+  },
+  {
+    "flavor": {
+      "faction": "",
+      "environment": "",
+      "description": "Medium monstrosity (darkforme), chaotic evil",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": {}
+    },
+    "stats": {
+      "size": "Medium",
+      "race": "monstrosity (darkforme)",
+      "alignment": "chaotic evil",
+      "armorType": "Natural Armor",
+      "armorClass": 14,
+      "numHitDie": 6,
+      "speed": "30 ft., climb 30 ft.",
+      "abilityScores": {
+        "strength": 14,
+        "dexterity": 16,
+        "constitution": 16,
+        "intelligence": 6,
+        "wisdom": 10,
+        "charisma": 8
+      },
+      "proficiencyBonus": 2,
+      "damageVulnerabilities": [],
+      "damageResistances": [],
+      "damageImmunities": [],
+      "conditionImmunities": [],
+      "senses": [
+        "passive Perception 10"
+      ],
+      "languages": [],
+      "challengeRating": 2,
+      "experiencePoints": 450,
+      "legendaryActionsPerRound": 0,
+      "legendaryActionsDescription": "",
+      "savingThrows": [],
+      "skills": [
+        {
+          "name": "Athletics",
+          "proficient": true,
+          "modifier": 4,
+          "modifierStr": "Athletics +4",
+          "$$hashKey": "object:4645"
+        },
+        {
+          "name": "Stealth",
+          "proficient": true,
+          "modifier": 5,
+          "modifierStr": "Stealth +5",
+          "$$hashKey": "object:4646"
+        }
+      ],
+      "additionalAbilities": [
+        {
+          "name": "Spider Climb",
+          "description": "The tickle monster can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:4603"
+        }
+      ],
+      "actions": [
+        {
+          "name": "Multiattack",
+          "description": "The tickle monster makes two attacks: one with its Mean Hook and one with its Tickling Fingers.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:4608"
+        },
+        {
+          "name": "Mean Hook",
+          "description": "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) bludgeoning damage.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:4609"
+        },
+        {
+          "name": "Tickling Fingers",
+          "description": "Melee Weapon Attack: +5 to hit, reach 5 ft., one creature. Hit: The target takes 4 (1d4 + 2) psychic damage and must succeed on a DC 13 Wisdom saving throw or fall prone in fits of laughter, becoming Incapacitated until the end of its next turn. If the target fails the saving throw by 5 or more, they must immediately make a DC 10 Potty Check.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:4610"
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [],
+      "hitDieSize": 8,
+      "armorTypeStr": "(Natural Armor)",
+      "abilityScoreModifiers": {
+        "strength": 2,
+        "dexterity": 3,
+        "constitution": 3,
+        "intelligence": -2,
+        "wisdom": 0,
+        "charisma": -1
+      },
+      "abilityScoreStrs": {
+        "strength": "14 (+2)",
+        "dexterity": "16 (+3)",
+        "constitution": "16 (+3)",
+        "intelligence": "6 (–2)",
+        "wisdom": "10 (+0)",
+        "charisma": "8 (–1)"
+      },
+      "extraHealthFromConstitution": 18,
+      "hitPoints": 45,
+      "hitPointsStr": "45 (6d8 + 18)",
+      "passivePerception": 10,
+      "challengeRatingStr": "2"
+    },
+    "sharing": {
+      "linkSharingEnabled": false
+    },
+    "_id": "69ba35d815443bd5efc5a000",
+    "name": "Darkforme Tickle Monster",
+    "bestiaryId": "6870862c97a02efde25f91ce",
+    "__v": 0
+  },
+  {
+    "flavor": {
+      "faction": "",
+      "environment": "",
+      "description": "Small undead (darkling), chaotic evil",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": {}
+    },
+    "stats": {
+      "size": "Small",
+      "race": "undead (darkling)",
+      "alignment": "chaotic evil",
+      "armorType": "",
+      "armorClass": 13,
+      "numHitDie": 8,
+      "speed": "0 ft., fly 30 ft. (hover)",
+      "abilityScores": {
+        "strength": 6,
+        "dexterity": 16,
+        "constitution": 12,
+        "intelligence": 10,
+        "wisdom": 12,
+        "charisma": 14
+      },
+      "proficiencyBonus": 2,
+      "damageVulnerabilities": [],
+      "damageResistances": [
+        "acid",
+        "cold",
+        "fire",
+        "lightning",
+        "thunder",
+        "bludgeoning, piercing, and slashing from nonmagical attacks"
+      ],
+      "damageImmunities": [
+        "necrotic",
+        "poison"
+      ],
+      "conditionImmunities": [
+        "charmed",
+        "exhaustion",
+        "grappled",
+        "paralyzed",
+        "petrified",
+        "poisoned",
+        "prone",
+        "restrained"
+      ],
+      "senses": [
+        "passive Perception 11"
+      ],
+      "languages": [],
+      "challengeRating": 3,
+      "experiencePoints": 700,
+      "legendaryActionsPerRound": 0,
+      "legendaryActionsDescription": "",
+      "savingThrows": [],
+      "skills": [
+        {
+          "name": "Stealth",
+          "proficient": true,
+          "modifier": 5,
+          "modifierStr": "Stealth +5",
+          "$$hashKey": "object:4858"
+        }
+      ],
+      "additionalAbilities": [
+        {
+          "name": "Spectral Prankster",
+          "description": "As a bonus action, the Toddlegeist can magically turn Invisible and Incorporeal (able to move through objects and creatures as difficult terrain) simultaneously. It takes 5 (1d10) force damage if it ends its turn inside an object. The Toddlegeist loses both of these states instantly if any creature takes damage from its attacks or pranks, causing it to burst into uncontrollable peels of laughter.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:4819"
+        },
+        {
+          "name": "Mirthful Summoning",
+          "description": "When the Toddlegeist becomes visible due to a creature taking damage from its prank, its echoing laughter alters reality. Roll a d6. On a 5 or 6, it summons 1d3 Lost Plushies or 1 Ghostiby to unoccupied spaces within 30 feet.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:4820"
+        }
+      ],
+      "actions": [
+        {
+          "name": "Hazardous Prank",
+          "description": "The Toddlegeist targets one creature it can see within 30 feet, causing a poltergeist-style prank (shoving down stairs, dropping a heavy rock). The target must make a DC 13 Dexterity saving throw. On a failure, the target takes 14 (4d6) bludgeoning damage and is knocked prone. On a success, the target takes half damage and isn't knocked prone.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:4827"
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [],
+      "hitDieSize": 6,
+      "abilityScoreModifiers": {
+        "strength": -2,
+        "dexterity": 3,
+        "constitution": 1,
+        "intelligence": 0,
+        "wisdom": 1,
+        "charisma": 2
+      },
+      "abilityScoreStrs": {
+        "strength": "6 (–2)",
+        "dexterity": "16 (+3)",
+        "constitution": "12 (+1)",
+        "intelligence": "10 (+0)",
+        "wisdom": "12 (+1)",
+        "charisma": "14 (+2)"
+      },
+      "extraHealthFromConstitution": 8,
+      "hitPoints": 36,
+      "hitPointsStr": "36 (8d6 + 8)",
+      "passivePerception": 11,
+      "challengeRatingStr": "3"
+    },
+    "sharing": {
+      "linkSharingEnabled": false
+    },
+    "_id": "69ba35d815443bd5efc5a002",
+    "name": "Darkforme Toddlegeist",
+    "bestiaryId": "6870862c97a02efde25f91ce",
+    "__v": 0
+  },
+  {
+    "flavor": {
+      "faction": "",
+      "environment": "",
+      "description": "",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": ""
+    },
+    "stats": {
+      "size": "Medium",
+      "race": "Humanoid (Darkforme)",
+      "alignment": "Lawful Evil",
+      "armorType": "Studded Leather",
+      "armorClass": 15,
+      "numHitDie": 3,
+      "speed": "30 ft.",
+      "abilityScores": {
+        "strength": 12,
+        "dexterity": 18,
+        "constitution": 14,
+        "intelligence": 11,
+        "wisdom": 14,
+        "charisma": 9
+      },
+      "proficiencyBonus": 0,
+      "damageVulnerabilities": [
+        "Radiant"
+      ],
+      "damageResistances": [],
+      "damageImmunities": [],
+      "conditionImmunities": [],
+      "senses": [
+        "Darkvision 120 ft.",
+        "Passive Perception 12"
+      ],
+      "languages": [],
+      "challengeRating": 3,
+      "experiencePoints": 700,
+      "legendaryActionsPerRound": 3,
+      "legendaryActionsDescription": "",
+      "savingThrows": [],
+      "skills": [],
+      "additionalAbilities": [
+        {
+          "name": "Darkforme Essence",
+          "description": "Vulnerable to Radiant damage.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:4950"
+        },
+        {
+          "name": "Steady Aim",
+          "description": "As a bonus action, the Ballisteer can plant its feet. Until the end of its turn, its speed is 0, but it has advantage on ranged attack rolls and ignores half and three-quarters cover.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:4951"
+        },
+        {
+          "name": "Sniper's Nest",
+          "description": "If the Ballisteer is at least 20 feet above its target, it deals an extra 3 (1d6) piercing damage on a hit.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:4952"
+        }
+      ],
+      "actions": [
+        {
+          "name": "Heavy Siege Arbalest",
+          "description": "Ranged Weapon Attack: +6 to hit, range 150/600 ft., one target. Hit: 13 (2d8 + 4) piercing damage.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:4961"
+        },
+        {
+          "name": "Pinning Bolt (Recharge 5-6)",
+          "description": "The Ballisteer fires a specialized heavy bolt. Ranged Weapon Attack: +6 to hit, range 150/600 ft., one target. Hit: 13 (2d8 + 4) piercing damage. If the target is Large or smaller, it is restrained (escape DC 14) as the bolt pins it to the ground or a nearby wall.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:4962"
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [],
+      "hitDieSize": 8,
+      "armorTypeStr": "(Studded Leather)",
+      "abilityScoreModifiers": {
+        "strength": 1,
+        "dexterity": 4,
+        "constitution": 2,
+        "intelligence": 0,
+        "wisdom": 2,
+        "charisma": -1
+      },
+      "abilityScoreStrs": {
+        "strength": "12 (+1)",
+        "dexterity": "18 (+4)",
+        "constitution": "14 (+2)",
+        "intelligence": "11 (+0)",
+        "wisdom": "14 (+2)",
+        "charisma": "9 (–1)"
+      },
+      "extraHealthFromConstitution": 6,
+      "hitPoints": 19,
+      "hitPointsStr": "19 (3d8 + 6)",
+      "passivePerception": 12,
+      "challengeRatingStr": "3"
+    },
+    "sharing": {
+      "linkSharingEnabled": false
+    },
+    "_id": "69aabe7e15443bd5efc4e5ba",
+    "name": "Darkforme-Ballisteer",
+    "bestiaryId": "6870862c97a02efde25f91ce",
+    "__v": 0
+  },
+  {
+    "flavor": {
+      "faction": "",
+      "environment": "",
+      "description": "",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": ""
+    },
+    "stats": {
+      "size": "Medium",
+      "race": "Humanoid (Darkforme-Construct)",
+      "alignment": "Lawful Evil",
+      "armorType": "Plate Armor, Shield",
+      "armorClass": 19,
+      "numHitDie": 6,
+      "speed": "25 ft.",
+      "abilityScores": {
+        "strength": 17,
+        "dexterity": 10,
+        "constitution": 15,
+        "intelligence": 10,
+        "wisdom": 12,
+        "charisma": 10
+      },
+      "proficiencyBonus": 0,
+      "damageVulnerabilities": [
+        "Radiant"
+      ],
+      "damageResistances": [
+        "Lightning",
+        "Thunder",
+        "Bludgeoning, Piercing, and Slashing from Nonmagical Attacks"
+      ],
+      "damageImmunities": [],
+      "conditionImmunities": [],
+      "senses": [
+        "Darkvision 60 ft.",
+        "Passive Perception 11"
+      ],
+      "languages": [],
+      "challengeRating": 4,
+      "experiencePoints": 1100,
+      "legendaryActionsPerRound": 3,
+      "legendaryActionsDescription": "",
+      "savingThrows": [],
+      "skills": [],
+      "additionalAbilities": [
+        {
+          "name": "Darkforme Essence",
+          "description": "The Enforcer is vulnerable to Radiant damage. If it takes Radiant damage, its Kinetic Charge is immediately dissipated.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:6209"
+        },
+        {
+          "name": "Shield Wall",
+          "description": "The Enforcer provides half-cover (+2 AC) to any Darkforme ally within 5 feet of it. If two Enforcers are adjacent, they both have three-quarters cover (+5 AC) against ranged attacks.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:6210"
+        },
+        {
+          "name": "Kinetic Charge",
+          "description": "Whenever the Enforcer is hit by a melee attack, its shield absorbs the energy and begins to hum with blue light. The next time the Enforcer hits with a Shield Bash, it deals an additional 7 (2d6) force damage and the target must succeed on a DC 14 Strength save or be knocked prone.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:6211"
+        }
+      ],
+      "actions": [
+        {
+          "name": "Multiattack",
+          "description": "The Enforcer makes one Shock-Mace attack and one Shield Bash.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:6220"
+        },
+        {
+          "name": "Shock-Mace",
+          "description": "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 7 (1d8 + 3) bludgeoning damage plus 4 (1d8) lightning damage.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:6221"
+        },
+        {
+          "name": "Shield Bash",
+          "description": "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 5 (1d4 + 3) bludgeoning damage. (See Kinetic Charge for bonus damage/prone effect).",
+          "descriptionHtml": {},
+          "$$hashKey": "object:6222"
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [],
+      "hitDieSize": 8,
+      "armorTypeStr": "(Plate Armor, Shield)",
+      "abilityScoreModifiers": {
+        "strength": 3,
+        "dexterity": 0,
+        "constitution": 2,
+        "intelligence": 0,
+        "wisdom": 1,
+        "charisma": 0
+      },
+      "abilityScoreStrs": {
+        "strength": "17 (+3)",
+        "dexterity": "10 (+0)",
+        "constitution": "15 (+2)",
+        "intelligence": "10 (+0)",
+        "wisdom": "12 (+1)",
+        "charisma": "10 (+0)"
+      },
+      "extraHealthFromConstitution": 12,
+      "hitPoints": 39,
+      "hitPointsStr": "39 (6d8 + 12)",
+      "passivePerception": 11,
+      "challengeRatingStr": "4"
+    },
+    "sharing": {
+      "linkSharingEnabled": false
+    },
+    "_id": "69aabe7e15443bd5efc4e5b7",
+    "name": "Darkforme-Shieldguard",
+    "bestiaryId": "6870862c97a02efde25f91ce",
+    "__v": 0
+  },
+  {
+    "flavor": {
+      "faction": "",
+      "environment": "",
+      "description": "Small monstrosity (darkling), chaotic evil",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": {}
+    },
+    "stats": {
+      "size": "Small",
+      "race": "monstrosity (darkling)",
+      "alignment": "chaotic evil",
+      "armorType": "Natural Armor",
+      "armorClass": 13,
+      "numHitDie": 4,
+      "speed": "30 ft.",
+      "abilityScores": {
+        "strength": 16,
+        "dexterity": 12,
+        "constitution": 14,
+        "intelligence": 5,
+        "wisdom": 8,
+        "charisma": 8
+      },
+      "proficiencyBonus": 2,
+      "damageVulnerabilities": [],
+      "damageResistances": [],
+      "damageImmunities": [],
+      "conditionImmunities": [],
+      "senses": [
+        "darkvision 60 ft.",
+        "passive Perception 9"
+      ],
+      "languages": [],
+      "challengeRating": 0.5,
+      "experiencePoints": 100,
+      "legendaryActionsPerRound": 0,
+      "legendaryActionsDescription": "",
+      "savingThrows": [],
+      "skills": [
+        {
+          "name": "Athletics",
+          "proficient": true,
+          "modifier": 5,
+          "modifierStr": "Athletics +5",
+          "$$hashKey": "object:7072"
+        }
+      ],
+      "additionalAbilities": [
+        {
+          "name": "Follower of the Swoley Bible",
+          "description": "The Suppsipper believes it is incredibly muscular. It has advantage on Strength (Athletics) checks made to grapple, even against targets larger than itself. It constantly huffs and grunts as a free action.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:7030"
+        },
+        {
+          "name": "Gainz-Bro Cry",
+          "description": "When the Suppsipper scores a critical hit, reduces an enemy to 0 HP, or sees an enemy use the Dash action to move away from it, it lets out a triumphant, flexing roar. Roll a d4. On a 4, 1d3 standard Darkling Cublings arrive at the edge of the battlefield at the start of the next round, drawn by the call of 'the pump'.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:7031"
+        }
+      ],
+      "actions": [
+        {
+          "name": "Protein Punch",
+          "description": "Melee Weapon Attack: +5 to hit, reach 5 ft. Hit: 5 (1d4 + 3) bludgeoning damage. (The Suppsipper flexes excessively after each strike).",
+          "descriptionHtml": {},
+          "$$hashKey": "object:7038"
+        },
+        {
+          "name": "Form-Check Shove",
+          "description": "The Suppsipper targets one creature it can see within 5 feet. The target must succeed on a DC 13 Strength saving throw or be pushed 10 feet away and knocked prone as the Suppsipper aggressively critiques their stance.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:7039"
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [],
+      "hitDieSize": 6,
+      "armorTypeStr": "(Natural Armor)",
+      "abilityScoreModifiers": {
+        "strength": 3,
+        "dexterity": 1,
+        "constitution": 2,
+        "intelligence": -3,
+        "wisdom": -1,
+        "charisma": -1
+      },
+      "abilityScoreStrs": {
+        "strength": "16 (+3)",
+        "dexterity": "12 (+1)",
+        "constitution": "14 (+2)",
+        "intelligence": "5 (–3)",
+        "wisdom": "8 (–1)",
+        "charisma": "8 (–1)"
+      },
+      "extraHealthFromConstitution": 8,
+      "hitPoints": 22,
+      "hitPointsStr": "22 (4d6 + 8)",
+      "passivePerception": 9,
+      "challengeRatingStr": "1/2"
+    },
+    "sharing": {
+      "linkSharingEnabled": false
+    },
+    "_id": "69b90ae715443bd5efc59738",
+    "name": "Darkling Cubling Suppsipper",
+    "bestiaryId": "6870862c97a02efde25f91ce",
+    "__v": 0
+  },
+  {
+    "flavor": {
+      "faction": "",
+      "environment": "",
+      "description": "Gargantuan monstrosity (darkforme, legendary), chaotic evil",
+      "nameIsProper": true,
+      "imageUrl": "",
+      "descriptionHtml": {}
+    },
+    "stats": {
+      "size": "Gargantuan",
+      "race": "monstrosity (darkforme, legendary)",
+      "alignment": "chaotic evil",
+      "armorType": "Natural Armor",
+      "armorClass": 16,
+      "numHitDie": 13,
+      "speed": "40 ft.",
+      "abilityScores": {
+        "strength": 24,
+        "dexterity": 10,
+        "constitution": 20,
+        "intelligence": 6,
+        "wisdom": 14,
+        "charisma": 8
+      },
+      "proficiencyBonus": 3,
+      "damageVulnerabilities": [],
+      "damageResistances": [
+        "bludgeoning, piercing, and slashing from nonmagical attacks"
+      ],
+      "damageImmunities": [],
+      "conditionImmunities": [
+        "frightened"
+      ],
+      "senses": [
+        "blindsight 30 ft.",
+        "darkvision 120 ft.",
+        "passive Perception 15"
+      ],
+      "languages": [],
+      "challengeRating": 8,
+      "experiencePoints": 3900,
+      "legendaryActionsPerRound": 3,
+      "legendaryActionsDescription": "Grizzwauler can take 3 legendary actions, choosing from the options below. Only one legendary action option can be used at a time and only at the end of another creature's turn. Grizzwauler regains spent legendary actions at the start of its turn.",
+      "savingThrows": [
+        {
+          "ability": "strength",
+          "proficient": true,
+          "modifier": 10,
+          "modifierStr": "Str +10",
+          "$$hashKey": "object:10162"
+        },
+        {
+          "ability": "constitution",
+          "proficient": true,
+          "modifier": 8,
+          "modifierStr": "Con +8",
+          "$$hashKey": "object:10163"
+        }
+      ],
+      "skills": [
+        {
+          "name": "Perception",
+          "proficient": true,
+          "modifier": 5,
+          "modifierStr": "Perception +5",
+          "$$hashKey": "object:10171"
+        }
+      ],
+      "additionalAbilities": [
+        {
+          "name": "Legendary Resistance (2/Day)",
+          "description": "If Grizzwauler fails a saving throw, it can choose to succeed instead.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:10095"
+        },
+        {
+          "name": "Soot-Sense (Tri-Maw Belch)",
+          "description": "The two extra mouths on Grizzwauler's torso constantly belch thick, black magical soot. The area within 15 feet of Grizzwauler is lightly obscured. Grizzwauler can perfectly sense any creature within this soot (granting it Blindsight 30 ft.), even if they are invisible.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:10096"
+        },
+        {
+          "name": "Bad News Bears",
+          "description": "As a bonus action, Grizzwauler lets out a resonant, low-frequency roar. It summons 1d4 Darkling Cubling Suppsippers, which appear in unoccupied spaces within 30 feet of Grizzwauler. It can use this ability once per day.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:10097"
+        },
+        {
+          "name": "Protein Harvest",
+          "description": "If a Darkling Cubling Suppsipper is within 5 feet of Grizzwauler, Grizzwauler can use a bonus action to instantly consume it. Grizzwauler regains 1d6+1 hit points, and the Suppsipper is destroyed.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:10098"
+        }
+      ],
+      "actions": [
+        {
+          "name": "Multiattack",
+          "description": "Grizzwauler makes three attacks: one with its primary Bite, and two with its Claws.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:10109"
+        },
+        {
+          "name": "Primary Bite",
+          "description": "Melee Weapon Attack: +10 to hit, reach 10 ft. Hit: 18 (2d10 + 7) piercing damage.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:10110"
+        },
+        {
+          "name": "Claws",
+          "description": "Melee Weapon Attack: +10 to hit, reach 15 ft. Hit: 16 (2d8 + 7) slashing damage. If the target is a creature, it is Grappled (escape DC 18).",
+          "descriptionHtml": {},
+          "$$hashKey": "object:10111"
+        },
+        {
+          "name": "Torso Maws (Recharge 5-6)",
+          "description": "Grizzwauler forces a creature Grappled by it into its twin torso mouths. The creature must make a DC 18 Dexterity saving throw. On a failure, the creature takes 33 (6d10) piercing damage and 14 (4d6) necrotic damage from the soot. On a success, the creature takes half damage and escapes the grapple.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:10112"
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [
+        {
+          "name": "Resistive Hide (1 Action)",
+          "description": "Grizzwauler flexes its massive, swollen hide. Until the start of its next turn, it gains resistance to one damage type of its choice (e.g., Fire, Cold, Lightning).",
+          "descriptionHtml": {},
+          "$$hashKey": "object:10125"
+        },
+        {
+          "name": "Soot Cloud (2 Actions)",
+          "description": "Grizzwauler violently expels soot from its torso maws. Every creature within 20 feet must succeed on a DC 16 Constitution saving throw or be Blinded until the end of their next turn.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:10126"
+        },
+        {
+          "name": "Snack Time (1 Action)",
+          "description": "Grizzwauler uses its Protein Harvest ability on a nearby Suppsipper.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:10127"
+        }
+      ],
+      "hitDieSize": 20,
+      "armorTypeStr": "(Natural Armor)",
+      "abilityScoreModifiers": {
+        "strength": 7,
+        "dexterity": 0,
+        "constitution": 5,
+        "intelligence": -2,
+        "wisdom": 2,
+        "charisma": -1
+      },
+      "abilityScoreStrs": {
+        "strength": "24 (+7)",
+        "dexterity": "10 (+0)",
+        "constitution": "20 (+5)",
+        "intelligence": "6 (–2)",
+        "wisdom": "14 (+2)",
+        "charisma": "8 (–1)"
+      },
+      "extraHealthFromConstitution": 65,
+      "hitPoints": 201,
+      "hitPointsStr": "201 (13d20 + 65)",
+      "legendaryActionsDescriptionHtml": {},
+      "passivePerception": 15,
+      "challengeRatingStr": "8"
+    },
+    "sharing": {
+      "linkSharingEnabled": false
+    },
+    "_id": "69b90ae715443bd5efc59739",
+    "name": "Grizzwauler, the Gargant",
+    "bestiaryId": "6870862c97a02efde25f91ce",
+    "__v": 0
+  },
+  {
+    "flavor": {
+      "faction": "",
+      "environment": "",
+      "description": "",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": ""
+    },
+    "stats": {
+      "size": "Huge",
+      "race": "",
+      "alignment": "unaligned",
+      "armorType": "natural armor/bark-like moss",
+      "armorClass": 16,
+      "numHitDie": 16,
+      "speed": "60 ft.",
+      "abilityScores": {
+        "strength": 24,
+        "dexterity": 18,
+        "constitution": 18,
+        "intelligence": 6,
+        "wisdom": 16,
+        "charisma": 12
+      },
+      "proficiencyBonus": 0,
+      "damageVulnerabilities": [],
+      "damageResistances": [],
+      "damageImmunities": [],
+      "conditionImmunities": [],
+      "senses": [
+        "passive Perception 13"
+      ],
+      "languages": [],
+      "challengeRating": 8,
+      "experiencePoints": 3900,
+      "legendaryActionsPerRound": 3,
+      "legendaryActionsDescription": "",
+      "savingThrows": [],
+      "skills": [],
+      "additionalAbilities": [],
+      "actions": [
+        {
+          "name": "Multiattack",
+          "description": "Hactor makes two Kick attacks.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:10210"
+        },
+        {
+          "name": "Kick",
+          "description": "Melee Weapon Attack: +10 to hit, reach 10 ft. Hit: 20 (3d8 + 7) bludgeoning damage. DC 18 Strength save or pushed 15 feet.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:10211"
+        },
+        {
+          "name": "Thundering Thump (Recharge 5–6)",
+          "description": "Ground pound. 20-ft radius. DC 17 Constitution save or take 27 (6d8) thunder damage and be Stunned.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:10212"
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [],
+      "hitDieSize": 12,
+      "armorTypeStr": "(natural armor/bark-like moss)",
+      "abilityScoreModifiers": {
+        "strength": 7,
+        "dexterity": 4,
+        "constitution": 4,
+        "intelligence": -2,
+        "wisdom": 3,
+        "charisma": 1
+      },
+      "abilityScoreStrs": {
+        "strength": "24 (+7)",
+        "dexterity": "18 (+4)",
+        "constitution": "18 (+4)",
+        "intelligence": "6 (–2)",
+        "wisdom": "16 (+3)",
+        "charisma": "12 (+1)"
+      },
+      "extraHealthFromConstitution": 64,
+      "hitPoints": 168,
+      "hitPointsStr": "168 (16d12 + 64)",
+      "passivePerception": 13,
+      "challengeRatingStr": "8"
+    },
+    "sharing": {
+      "linkSharingEnabled": false
+    },
+    "_id": "69b4e3b315443bd5efc561b2",
+    "name": "Hactor the Everhopping",
+    "bestiaryId": "6870862c97a02efde25f91ce",
+    "__v": 0
+  },
+  {
+    "flavor": {
+      "faction": "",
+      "environment": "",
+      "description": "",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": ""
+    },
+    "stats": {
+      "size": "Gargantuan",
+      "race": "",
+      "alignment": "lawful neutral",
+      "armorType": "natural armor/extreme bulk",
+      "armorClass": 18,
+      "numHitDie": 20,
+      "speed": "40 ft. (80 ft. jump)",
+      "abilityScores": {
+        "strength": 26,
+        "dexterity": 10,
+        "constitution": 24,
+        "intelligence": 10,
+        "wisdom": 18,
+        "charisma": 22
+      },
+      "proficiencyBonus": 0,
+      "damageVulnerabilities": [],
+      "damageResistances": [],
+      "damageImmunities": [],
+      "conditionImmunities": [],
+      "senses": [],
+      "languages": [],
+      "challengeRating": 15,
+      "experiencePoints": 13000,
+      "legendaryActionsPerRound": 3,
+      "legendaryActionsDescription": "",
+      "savingThrows": [],
+      "skills": [],
+      "additionalAbilities": [],
+      "actions": [
+        {
+          "name": "Imperial Squish",
+          "description": "Leap up to 60 feet. Every creature in the landing space must make a DC 21 Dexterity saving throw. On failure: 45 (6d12 + 6) bludgeoning and Restrained. On success: half damage and pushed aside.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:10528"
+        },
+        {
+          "name": "Sleepy Exhalation (Recharge 5–6)",
+          "description": "60-foot cone. DC 18 Wisdom saving throw or fall unconscious for 1 minute.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:10529"
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [
+        {
+          "name": "Bunnarch’s Twitch",
+          "description": "One creature within 30 feet must succeed on a DC 19 Charisma saving throw or be charmed by his cuteness until the end of its next turn.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:10538"
+        },
+        {
+          "name": "Dreaming Kick (2 Actions)",
+          "description": "Melee Weapon Attack: +13 to hit, reach 15 ft. Hit: 34 (4d12 + 8) bludgeoning damage and knocked back 30 feet.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:10539"
+        }
+      ],
+      "hitDieSize": 20,
+      "armorTypeStr": "(natural armor/extreme bulk)",
+      "abilityScoreModifiers": {
+        "strength": 8,
+        "dexterity": 0,
+        "constitution": 7,
+        "intelligence": 0,
+        "wisdom": 4,
+        "charisma": 6
+      },
+      "abilityScoreStrs": {
+        "strength": "26 (+8)",
+        "dexterity": "10 (+0)",
+        "constitution": "24 (+7)",
+        "intelligence": "10 (+0)",
+        "wisdom": "18 (+4)",
+        "charisma": "22 (+6)"
+      },
+      "extraHealthFromConstitution": 140,
+      "hitPoints": 350,
+      "hitPointsStr": "350 (20d20 + 140)",
+      "passivePerception": 14,
+      "challengeRatingStr": "15"
+    },
+    "sharing": {
+      "linkSharingEnabled": false
+    },
+    "_id": "69b4e7bc15443bd5efc561f2",
+    "name": "Lord Furuzzle: Bunnarch of All Bunkind",
+    "bestiaryId": "6870862c97a02efde25f91ce",
+    "__v": 0
+  },
+  {
+    "flavor": {
+      "faction": "",
+      "environment": "",
+      "description": "Large monstrosity (darkforme, legendary), chaotic evil",
+      "nameIsProper": true,
+      "imageUrl": "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2026/03/a_gigantic_horrific_202603180119_inspyrenet-3.png",
+      "descriptionHtml": {}
+    },
+    "stats": {
+      "size": "Large",
+      "race": "monstrosity (darkforme, legendary)",
+      "alignment": "chaotic evil",
+      "armorType": "Natural Armor",
+      "armorClass": 16,
+      "numHitDie": 16,
+      "speed": "0 ft., fly 40 ft. (hover)",
+      "abilityScores": {
+        "strength": 20,
+        "dexterity": 14,
+        "constitution": 18,
+        "intelligence": 12,
+        "wisdom": 14,
+        "charisma": 16
+      },
+      "proficiencyBonus": 3,
+      "damageVulnerabilities": [],
+      "damageResistances": [],
+      "damageImmunities": [],
+      "conditionImmunities": [],
+      "senses": [
+        "passive Perception 12"
+      ],
+      "languages": [],
+      "challengeRating": 8,
+      "experiencePoints": 3900,
+      "legendaryActionsPerRound": 0,
+      "legendaryActionsDescription": "",
+      "savingThrows": [
+        {
+          "ability": "strength",
+          "proficient": true,
+          "modifier": 8,
+          "modifierStr": "Str +8",
+          "$$hashKey": "object:13209"
+        },
+        {
+          "ability": "constitution",
+          "proficient": true,
+          "modifier": 7,
+          "modifierStr": "Con +7",
+          "$$hashKey": "object:13210"
+        },
+        {
+          "ability": "charisma",
+          "proficient": true,
+          "modifier": 6,
+          "modifierStr": "Cha +6",
+          "$$hashKey": "object:13211"
+        }
+      ],
+      "skills": [],
+      "additionalAbilities": [
+        {
+          "name": "Targetable Digits",
+          "description": "Tittalus is a massive, floating hand with 5 distinct digits. Attackers can explicitly target a specific finger (AC 16). Each finger has exactly 30 Hit Points. Damage dealt to a finger damages Tittalus's total HP pool. When a finger drops to 0 HP, it is destroyed, and its associated ability is lost. If Tittalus reaches 0 HP, all remaining fingers are destroyed.\n• Thumb: Enables Crushing Grip.\n• Index: Enables Arcane Pointer (Spellcasting).\n• Middle: Enables Worse Flick.\n• Ring: Enables Heavy Punch.\n• Pinky: Enables Tickle Wave.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:13158"
+        },
+        {
+          "name": "Innate Spellcasting (Index Finger)",
+          "description": "Tittalus can cast Mage Hand and Minor Illusion at will, and Hold Person and Magic Missile (3rd level) 3/day each.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:13159"
+        }
+      ],
+      "actions": [
+        {
+          "name": "Multiattack",
+          "description": "Tittalus uses three available attacks/actions depending on its remaining intact fingers.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:13166"
+        },
+        {
+          "name": "Heavy Punch (Requires Ring Finger)",
+          "description": "Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 18 (3d8 + 5) bludgeoning damage.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:13167"
+        },
+        {
+          "name": "Worse Flick (Requires Middle Finger)",
+          "description": "Melee Weapon Attack: +8 to hit, reach 10 ft., one target. Hit: 14 (2d8 + 5) bludgeoning damage. The target must make a DC 16 Strength saving throw. On a failure, they are pushed 15 feet away and knocked prone. If pushed into a solid object or another creature, both take an extra 9 (2d8) bludgeoning damage.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:13168"
+        },
+        {
+          "name": "Tickle Wave (Requires Pinky Finger)",
+          "description": "Each creature in a 15-foot cone must make a DC 15 Dexterity saving throw. On a failure, they are incapacitated with laughter until the end of their next turn and must immediately make a DC 15 Potty Check.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:13169"
+        },
+        {
+          "name": "Crushing Grip (Requires Thumb)",
+          "description": "Bonus Action: Tittalus attempts to grapple a target within 5 feet.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:13170"
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [],
+      "hitDieSize": 10,
+      "armorTypeStr": "(Natural Armor)",
+      "abilityScoreModifiers": {
+        "strength": 5,
+        "dexterity": 2,
+        "constitution": 4,
+        "intelligence": 1,
+        "wisdom": 2,
+        "charisma": 3
+      },
+      "abilityScoreStrs": {
+        "strength": "20 (+5)",
+        "dexterity": "14 (+2)",
+        "constitution": "18 (+4)",
+        "intelligence": "12 (+1)",
+        "wisdom": "14 (+2)",
+        "charisma": "16 (+3)"
+      },
+      "extraHealthFromConstitution": 64,
+      "hitPoints": 152,
+      "hitPointsStr": "152 (16d10 + 64)",
+      "passivePerception": 12,
+      "challengeRatingStr": "8"
+    },
+    "sharing": {
+      "linkSharingEnabled": false
+    },
+    "_id": "69ba35d815443bd5efc5a001",
+    "name": "Tittalus Manus, The Bad Toucher",
+    "bestiaryId": "6870862c97a02efde25f91ce",
+    "__v": 0
+  },
+  {
+    "flavor": {
+      "faction": "Caelistian Remnant",
+      "environment": "Academy Ruins, The Greensea Expanse",
+      "description": "Medium humanoid (any race), lawful evil",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": {}
+    },
+    "stats": {
+      "size": "Medium",
+      "race": "humanoid (any race)",
+      "alignment": "lawful evil",
+      "armorType": "Plate Armor",
+      "armorClass": 18,
+      "numHitDie": 12,
+      "speed": "30 ft.",
+      "abilityScores": {
+        "strength": 16,
+        "dexterity": 14,
+        "constitution": 16,
+        "intelligence": 12,
+        "wisdom": 14,
+        "charisma": 16
+      },
+      "proficiencyBonus": 3,
+      "damageVulnerabilities": [],
+      "damageResistances": [],
+      "damageImmunities": [],
+      "conditionImmunities": [],
+      "senses": [
+        "passive Perception 15"
+      ],
+      "languages": [
+        "Common"
+      ],
+      "challengeRating": 5,
+      "experiencePoints": 1800,
+      "legendaryActionsPerRound": 0,
+      "legendaryActionsDescription": "",
+      "savingThrows": [
+        {
+          "ability": "strength",
+          "proficient": true,
+          "modifier": 6,
+          "modifierStr": "Str +6",
+          "$$hashKey": "object:4001"
+        },
+        {
+          "ability": "charisma",
+          "proficient": true,
+          "modifier": 6,
+          "modifierStr": "Cha +6",
+          "$$hashKey": "object:4002"
+        }
+      ],
+      "skills": [
+        {
+          "name": "Athletics",
+          "proficient": true,
+          "modifier": 6,
+          "modifierStr": "Athletics +6",
+          "$$hashKey": "object:4003"
+        },
+        {
+          "name": "Intimidation",
+          "proficient": true,
+          "modifier": 6,
+          "modifierStr": "Intimidation +6",
+          "$$hashKey": "object:4004"
+        },
+        {
+          "name": "Perception",
+          "proficient": true,
+          "modifier": 5,
+          "modifierStr": "Perception +5",
+          "$$hashKey": "object:4005"
+        }
+      ],
+      "additionalAbilities": [
+        {
+          "name": "Aura of Command",
+          "description": "Allies within 30 feet of the Commander have advantage on saving throws against being charmed or frightened, provided the Commander isn't incapacitated.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:4006"
+        },
+        {
+          "name": "TactiTush Elite Padding",
+          "description": "The Commander wears military-grade padded protection under its armor, granting it advantage on saving throws against being knocked prone.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:4007"
+        },
+        {
+          "name": "Spellcasting",
+          "description": "The Commander is a 5th-level spellcaster. Its spellcasting ability is Charisma (spell save DC 14, +6 to hit with spell attacks). It has the following spells prepared:\nCantrips (at will): Radiant Lance (2d8), Guidance\n1st level (4 slots): Command, Shield of Faith\n2nd level (3 slots): Hold Person, Spiritual Weapon",
+          "descriptionHtml": {},
+          "$$hashKey": "object:4008"
+        }
+      ],
+      "actions": [
+        {
+          "name": "Multiattack",
+          "description": "The Commander makes two weapon attacks. It can cast a spell in place of one of these attacks.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:4009"
+        },
+        {
+          "name": "Magitek Halberd",
+          "description": "Melee Weapon Attack: +6 to hit, reach 10 ft., one target. Hit: 8 (1d10 + 3) slashing damage plus 3 (1d6) force damage.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:4010"
+        },
+        {
+          "name": "Heavy Magitek Pistol",
+          "description": "Ranged Weapon Attack: +5 to hit, range 40/120 ft., one target. Hit: 7 (1d10 + 2) piercing damage plus 3 (1d6) force damage.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:4011"
+        }
+      ],
+      "reactions": [
+        {
+          "name": "Parry",
+          "description": "The Commander adds 2 to its AC against one melee attack that would hit it. To do so, the Commander must see the attacker and be wielding a melee weapon.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:4012"
+        }
+      ],
+      "legendaryActions": [],
+      "hitDieSize": 8,
+      "armorTypeStr": "(Plate Armor)",
+      "abilityScoreModifiers": {
+        "strength": 3,
+        "dexterity": 2,
+        "constitution": 3,
+        "intelligence": 1,
+        "wisdom": 2,
+        "charisma": 3
+      },
+      "abilityScoreStrs": {
+        "strength": "16 (+3)",
+        "dexterity": "14 (+2)",
+        "constitution": "16 (+3)",
+        "intelligence": "12 (+1)",
+        "wisdom": "14 (+2)",
+        "charisma": "16 (+3)"
+      },
+      "extraHealthFromConstitution": 36,
+      "hitPoints": 90,
+      "hitPointsStr": "90 (12d8 + 36)",
+      "legendaryActionsDescriptionHtml": {},
+      "passivePerception": 15,
+      "challengeRatingStr": "5"
+    },
+    "sharing": {
+      "linkSharingEnabled": false
+    },
+    "_id": "687390c297a02efde25fb59a",
+    "name": "Caelistian Regiment Commander",
+    "bestiaryId": "6870862c97a02efde25f91ce",
+    "__v": 0
+  },
+  {
+    "flavor": {
+      "faction": "Caelistian Remnant",
+      "environment": "Academy Ruins, The Greensea Expanse",
+      "description": "Medium humanoid (any race, cybernetic), lawful evil",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": {}
+    },
+    "stats": {
+      "size": "Medium",
+      "race": "humanoid (any race, cybernetic)",
+      "alignment": "lawful evil",
+      "armorType": "Half Plate, Cybernetics",
+      "armorClass": 17,
+      "numHitDie": 14,
+      "speed": "30 ft., fly 30 ft. (hover)",
+      "abilityScores": {
+        "strength": 18,
+        "dexterity": 16,
+        "constitution": 18,
+        "intelligence": 18,
+        "wisdom": 14,
+        "charisma": 12
+      },
+      "proficiencyBonus": 3,
+      "damageVulnerabilities": [],
+      "damageResistances": [
+        "psychic",
+        "bludgeoning, piercing, and slashing from nonmagical attacks"
+      ],
+      "damageImmunities": [],
+      "conditionImmunities": [
+        "charmed",
+        "exhaustion",
+        "paralyzed",
+        "poisoned",
+        "stunned"
+      ],
+      "senses": [
+        "darkvision 60 ft.",
+        "passive Perception 15"
+      ],
+      "languages": [
+        "Common",
+        "Telepathy 120 ft."
+      ],
+      "challengeRating": 7,
+      "experiencePoints": 2900,
+      "legendaryActionsPerRound": 0,
+      "legendaryActionsDescription": "",
+      "savingThrows": [
+        {
+          "ability": "constitution",
+          "proficient": true,
+          "modifier": 7,
+          "modifierStr": "Con +7",
+          "$$hashKey": "object:4013"
+        },
+        {
+          "ability": "intelligence",
+          "proficient": true,
+          "modifier": 7,
+          "modifierStr": "Int +7",
+          "$$hashKey": "object:4014"
+        },
+        {
+          "ability": "wisdom",
+          "proficient": true,
+          "modifier": 5,
+          "modifierStr": "Wis +5",
+          "$$hashKey": "object:4015"
+        }
+      ],
+      "skills": [
+        {
+          "name": "Arcana",
+          "proficient": true,
+          "modifier": 7,
+          "modifierStr": "Arcana +7",
+          "$$hashKey": "object:4016"
+        },
+        {
+          "name": "Insight",
+          "proficient": true,
+          "modifier": 5,
+          "modifierStr": "Insight +5",
+          "$$hashKey": "object:4017"
+        },
+        {
+          "name": "Perception",
+          "proficient": true,
+          "modifier": 5,
+          "modifierStr": "Perception +5",
+          "$$hashKey": "object:4018"
+        }
+      ],
+      "additionalAbilities": [
+        {
+          "name": "Darkforged Cybernetics",
+          "description": "The Psycommander's body is heavily augmented with darkforged magitek. This grants them their condition immunities and allows them to hover above the ground.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:4019"
+        },
+        {
+          "name": "Innate Psionics",
+          "description": "The Psycommander's spellcasting ability is Intelligence (spell save DC 15). It can innately cast the following spells, requiring no components:\n3/day each: Shield, Misty Step\n1/day each: Telekinesis, Wall of Force",
+          "descriptionHtml": {},
+          "$$hashKey": "object:4020"
+        }
+      ],
+      "actions": [
+        {
+          "name": "Multiattack",
+          "description": "The Psycommander makes three attacks: two with its Psi-Blade and one with its Arm-Cannon.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:4021"
+        },
+        {
+          "name": "Psi-Blade",
+          "description": "Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 8 (1d8 + 4) slashing damage plus 7 (2d6) psychic damage.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:4022"
+        },
+        {
+          "name": "Cybernetic Arm-Cannon",
+          "description": "Ranged Weapon Attack: +6 to hit, range 60/180 ft., one target. Hit: 12 (2d8 + 3) force damage.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:4023"
+        },
+        {
+          "name": "Mind Fracture (Recharge 5-6)",
+          "description": "The Psycommander unleashes a blast of psionic energy in a 30-foot cone. Each creature in that area must make a DC 15 Intelligence saving throw. On a failed save, a creature takes 27 (6d8) psychic damage and is stunned until the end of its next turn. On a successful save, it takes half as much damage and isn't stunned.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:4024"
+        },
+        {
+          "name": "Telekinetic Thrust",
+          "description": "Bonus Action: The Psycommander targets one creature it can see within 30 feet. The target must succeed on a DC 15 Strength saving throw or be pushed up to 15 feet in any horizontal direction.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:4025"
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [],
+      "hitDieSize": 8,
+      "armorTypeStr": "(Half Plate, Cybernetics)",
+      "abilityScoreModifiers": {
+        "strength": 4,
+        "dexterity": 3,
+        "constitution": 4,
+        "intelligence": 4,
+        "wisdom": 2,
+        "charisma": 1
+      },
+      "abilityScoreStrs": {
+        "strength": "18 (+4)",
+        "dexterity": "16 (+3)",
+        "constitution": "18 (+4)",
+        "intelligence": "18 (+4)",
+        "wisdom": "14 (+2)",
+        "charisma": "12 (+1)"
+      },
+      "extraHealthFromConstitution": 56,
+      "hitPoints": 119,
+      "hitPointsStr": "119 (14d8 + 56)",
+      "legendaryActionsDescriptionHtml": {},
+      "passivePerception": 15,
+      "challengeRatingStr": "7"
+    },
+    "sharing": {
+      "linkSharingEnabled": false
+    },
+    "_id": "687390c297a02efde25fb59b",
+    "name": "Caelistian Regiment Psycommander",
+    "bestiaryId": "6870862c97a02efde25f91ce",
+    "__v": 0
+  },
+  {
+    "flavor": {
+      "faction": "",
+      "environment": "",
+      "description": "Small plant/monstrosity (darkling), chaotic evil",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": {}
+    },
+    "stats": {
+      "size": "Small",
+      "race": "plant/monstrosity (darkling)",
+      "alignment": "chaotic evil",
+      "armorType": "Natural Armor",
+      "armorClass": 12,
+      "numHitDie": 4,
+      "speed": "25 ft.",
+      "abilityScores": {
+        "strength": 10,
+        "dexterity": 14,
+        "constitution": 12,
+        "intelligence": 4,
+        "wisdom": 10,
+        "charisma": 6
+      },
+      "proficiencyBonus": 2,
+      "damageVulnerabilities": [],
+      "damageResistances": [],
+      "damageImmunities": [],
+      "conditionImmunities": [],
+      "senses": [
+        "passive Perception 10"
+      ],
+      "languages": [],
+      "challengeRating": 0.25,
+      "experiencePoints": 50,
+      "legendaryActionsPerRound": 0,
+      "legendaryActionsDescription": "",
+      "savingThrows": [],
+      "skills": [],
+      "additionalAbilities": [
+        {
+          "name": "Darkling Valence",
+          "description": "At the start of combat, the Funky Fungi gains 9 Temporary Hit Points. While it has any of these Temporary Hit Points, it is vulnerable to radiant damage. If the Funky Fungi starts its turn in dim light or darkness, it can use its action to remain completely motionless (taking no movement, bonus actions, or reactions until its next turn); if it does, it regains these Temporary Hit Points up to the maximum of 9.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:6001"
+        },
+        {
+          "name": "Annoying Presence",
+          "description": "Any creature that fails a saving throw against this creature's spores has disadvantage on Potty Checks for 1 minute.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:6002"
+        }
+      ],
+      "actions": [
+        {
+          "name": "Sludge Cap",
+          "description": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 4 (1d4 + 2) bludgeoning damage.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:6003"
+        },
+        {
+          "name": "Funky Spores",
+          "description": "The fungi releases a small puff of irritating black spores at one creature within 10 feet. The target must succeed on a DC 11 Constitution saving throw or have disadvantage on Potty Checks for 1 minute.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:6004"
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [],
+      "hitDieSize": 6,
+      "armorTypeStr": "(Natural Armor)",
+      "abilityScoreModifiers": {
+        "strength": 0,
+        "dexterity": 2,
+        "constitution": 1,
+        "intelligence": -3,
+        "wisdom": 0,
+        "charisma": -2
+      },
+      "abilityScoreStrs": {
+        "strength": "10 (+0)",
+        "dexterity": "14 (+2)",
+        "constitution": "12 (+1)",
+        "intelligence": "4 (-3)",
+        "wisdom": "10 (+0)",
+        "charisma": "6 (-2)"
+      },
+      "extraHealthFromConstitution": 4,
+      "hitPoints": 18,
+      "hitPointsStr": "18 (4d6 + 4)",
+      "legendaryActionsDescriptionHtml": {},
+      "passivePerception": 10,
+      "challengeRatingStr": "1/4"
+    },
+    "sharing": {
+      "linkSharingEnabled": false
+    },
+    "_id": "687390c297a02efde25fb51a",
+    "name": "Funky Fungi Darkling",
+    "bestiaryId": "6870862c97a02efde25f91ce",
+    "__v": 0
+  },
+  {
+    "flavor": {
+      "faction": "",
+      "environment": "",
+      "description": "Medium plant/monstrosity (darkling), unaligned",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": {}
+    },
+    "stats": {
+      "size": "Medium",
+      "race": "plant/monstrosity (darkling)",
+      "alignment": "unaligned",
+      "armorType": "Natural Armor",
+      "armorClass": 13,
+      "numHitDie": 4,
+      "speed": "30 ft.",
+      "abilityScores": {
+        "strength": 14,
+        "dexterity": 12,
+        "constitution": 16,
+        "intelligence": 4,
+        "wisdom": 12,
+        "charisma": 6
+      },
+      "proficiencyBonus": 2,
+      "damageVulnerabilities": [],
+      "damageResistances": [],
+      "damageImmunities": [],
+      "conditionImmunities": [],
+      "senses": [
+        "passive Perception 11"
+      ],
+      "languages": [],
+      "challengeRating": 1,
+      "experiencePoints": 200,
+      "legendaryActionsPerRound": 0,
+      "legendaryActionsDescription": "",
+      "savingThrows": [],
+      "skills": [],
+      "additionalAbilities": [
+        {
+          "name": "Darkling Valence",
+          "description": "At the start of combat, the Darkshade gains 15 Temporary Hit Points. While it has any of these Temporary Hit Points, it is vulnerable to radiant damage. It can regenerate them using an action to remain motionless in dim light or darkness, as per the Funky Fungi.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:6005"
+        },
+        {
+          "name": "Lone Fungal",
+          "description": "Unlike many darklings, the Darkshade is highly territorial and animalistic; it does not benefit from Pack Tactics.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:6006"
+        }
+      ],
+      "actions": [
+        {
+          "name": "Shadow-Stalk Spear",
+          "description": "Melee or Ranged Weapon Attack: +4 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 5 (1d6 + 2) piercing damage. This spear is a hardened stalk of fungal shadow that snaps off and regrows instantly.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:6007"
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [],
+      "hitDieSize": 8,
+      "armorTypeStr": "(Natural Armor)",
+      "abilityScoreModifiers": {
+        "strength": 2,
+        "dexterity": 1,
+        "constitution": 3,
+        "intelligence": -3,
+        "wisdom": 1,
+        "charisma": -2
+      },
+      "abilityScoreStrs": {
+        "strength": "14 (+2)",
+        "dexterity": "12 (+1)",
+        "constitution": "16 (+3)",
+        "intelligence": "4 (-3)",
+        "wisdom": "12 (+1)",
+        "charisma": "6 (-2)"
+      },
+      "extraHealthFromConstitution": 12,
+      "hitPoints": 30,
+      "hitPointsStr": "30 (4d8 + 12)",
+      "legendaryActionsDescriptionHtml": {},
+      "passivePerception": 11,
+      "challengeRatingStr": "1"
+    },
+    "sharing": {
+      "linkSharingEnabled": false
+    },
+    "_id": "687390c297a02efde25fb52a",
+    "name": "Darkshade Fungi Darkling",
+    "bestiaryId": "6870862c97a02efde25f91ce",
+    "__v": 0
+  },
+  {
+    "flavor": {
+      "faction": "",
+      "environment": "",
+      "description": "Medium plant/monstrosity (darkling), chaotic evil",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": {}
+    },
+    "stats": {
+      "size": "Medium",
+      "race": "plant/monstrosity (darkling)",
+      "alignment": "chaotic evil",
+      "armorType": "Natural Armor",
+      "armorClass": 14,
+      "numHitDie": 8,
+      "speed": "30 ft.",
+      "abilityScores": {
+        "strength": 12,
+        "dexterity": 16,
+        "constitution": 14,
+        "intelligence": 10,
+        "wisdom": 14,
+        "charisma": 10
+      },
+      "proficiencyBonus": 2,
+      "damageVulnerabilities": [],
+      "damageResistances": [],
+      "damageImmunities": [],
+      "conditionImmunities": [],
+      "senses": [
+        "passive Perception 12"
+      ],
+      "languages": [],
+      "challengeRating": 3,
+      "experiencePoints": 700,
+      "legendaryActionsPerRound": 0,
+      "legendaryActionsDescription": "",
+      "savingThrows": [],
+      "skills": [],
+      "additionalAbilities": [
+        {
+          "name": "Darkling Valence",
+          "description": "At the start of combat, the Spore Spreader gains 26 Temporary Hit Points. While it has any of these Temporary Hit Points, it is vulnerable to radiant damage. It can regenerate them using an action to remain motionless in dim light or darkness.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:6008"
+        },
+        {
+          "name": "Pheromone Commander",
+          "description": "The Spore Spreader constantly emits sub-audible chemical signals. Any allied fungal darklings within 30 feet of it gain the Pack Tactics trait (advantage on attack rolls if an ally is within 5 feet of the target).",
+          "descriptionHtml": {},
+          "$$hashKey": "object:6009"
+        }
+      ],
+      "actions": [
+        {
+          "name": "Multiattack",
+          "description": "The Spore Spreader makes two Slam attacks.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:6010"
+        },
+        {
+          "name": "Slam",
+          "description": "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) bludgeoning damage.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:6011"
+        },
+        {
+          "name": "Noxious Eruption (Recharge 5-6)",
+          "description": "The Spore Spreader violently vents a 15-foot radius cloud of black spores. Each creature in that area must make a DC 13 Constitution saving throw. On a failure, roll 1d4 to determine the chemical effect: 1 (Sleep for 1 min), 2 (Paralyzed for 1 round), 3 (Poisoned for 1 min), 4 (Speed reduced to 10 ft, disadv on Dex/Potty checks for 1 min).",
+          "descriptionHtml": {},
+          "$$hashKey": "object:6012"
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [],
+      "hitDieSize": 8,
+      "armorTypeStr": "(Natural Armor)",
+      "abilityScoreModifiers": {
+        "strength": 1,
+        "dexterity": 3,
+        "constitution": 2,
+        "intelligence": 0,
+        "wisdom": 2,
+        "charisma": 0
+      },
+      "abilityScoreStrs": {
+        "strength": "12 (+1)",
+        "dexterity": "16 (+3)",
+        "constitution": "14 (+2)",
+        "intelligence": "10 (+0)",
+        "wisdom": "14 (+2)",
+        "charisma": "10 (+0)"
+      },
+      "extraHealthFromConstitution": 16,
+      "hitPoints": 52,
+      "hitPointsStr": "52 (8d8 + 16)",
+      "legendaryActionsDescriptionHtml": {},
+      "passivePerception": 12,
+      "challengeRatingStr": "3"
+    },
+    "sharing": {
+      "linkSharingEnabled": false
+    },
+    "_id": "687390c297a02efde25fb53a",
+    "name": "Spore Spreader Darkling",
+    "bestiaryId": "6870862c97a02efde25f91ce",
+    "__v": 0
+  },
+  {
+    "flavor": {
+      "faction": "",
+      "environment": "",
+      "description": "Medium plant/monstrosity (darkforme), chaotic evil",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": {}
+    },
+    "stats": {
+      "size": "Medium",
+      "race": "plant/monstrosity (darkforme)",
+      "alignment": "chaotic evil",
+      "armorType": "Natural Armor",
+      "armorClass": 14,
+      "numHitDie": 6,
+      "speed": "30 ft.",
+      "abilityScores": {
+        "strength": 12,
+        "dexterity": 16,
+        "constitution": 16,
+        "intelligence": 8,
+        "wisdom": 12,
+        "charisma": 8
+      },
+      "proficiencyBonus": 2,
+      "damageVulnerabilities": [],
+      "damageResistances": [],
+      "damageImmunities": [],
+      "conditionImmunities": [],
+      "senses": [
+        "passive Perception 11"
+      ],
+      "languages": [],
+      "challengeRating": 2,
+      "experiencePoints": 450,
+      "legendaryActionsPerRound": 0,
+      "legendaryActionsDescription": "",
+      "savingThrows": [],
+      "skills": [],
+      "additionalAbilities": [
+        {
+          "name": "Darkling Valence",
+          "description": "At the start of combat, the Mycomugger gains 22 Temporary Hit Points. While it has any of these Temporary Hit Points, it is vulnerable to radiant damage. It can regenerate them using an action to remain motionless in dim light or darkness.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:6013"
+        },
+        {
+          "name": "Spore SOS",
+          "description": "When the Mycomugger takes a critical hit or is reduced to 0 HP, it violently bursts a distress spore sac. 1d3 Funky Fungi Darklings are summoned to the edges of the battlefield, arriving in 1d4 rounds to scavenge.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:6014"
+        }
+      ],
+      "actions": [
+        {
+          "name": "Filching Swipe",
+          "description": "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) slashing damage. If the target is carrying organic or edible items, the target must succeed on a DC 13 Dexterity saving throw or the Mycomugger steals one such item, absorbing it.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:6015"
+        },
+        {
+          "name": "Waddling Spores",
+          "description": "The Mycomugger blows spores at a target within 10 feet. The target must succeed on a DC 13 Constitution saving throw or have their speed halved and suffer disadvantage on Dexterity and Potty checks for 1 minute.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:6016"
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [],
+      "hitDieSize": 8,
+      "armorTypeStr": "(Natural Armor)",
+      "abilityScoreModifiers": {
+        "strength": 1,
+        "dexterity": 3,
+        "constitution": 3,
+        "intelligence": -1,
+        "wisdom": 1,
+        "charisma": -1
+      },
+      "abilityScoreStrs": {
+        "strength": "12 (+1)",
+        "dexterity": "16 (+3)",
+        "constitution": "16 (+3)",
+        "intelligence": "8 (-1)",
+        "wisdom": "12 (+1)",
+        "charisma": "8 (-1)"
+      },
+      "extraHealthFromConstitution": 18,
+      "hitPoints": 45,
+      "hitPointsStr": "45 (6d8 + 18)",
+      "legendaryActionsDescriptionHtml": {},
+      "passivePerception": 11,
+      "challengeRatingStr": "2"
+    },
+    "sharing": {
+      "linkSharingEnabled": false
+    },
+    "_id": "687390c297a02efde25fb54a",
+    "name": "Darkforme Mycomugger",
+    "bestiaryId": "6870862c97a02efde25f91ce",
+    "__v": 0
+  },
+  {
+    "flavor": {
+      "faction": "",
+      "environment": "",
+      "description": "Medium plant/monstrosity (darkforme), chaotic evil",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": {}
+    },
+    "stats": {
+      "size": "Medium",
+      "race": "plant/monstrosity (darkforme)",
+      "alignment": "chaotic evil",
+      "armorType": "",
+      "armorClass": 13,
+      "numHitDie": 8,
+      "speed": "30 ft.",
+      "abilityScores": {
+        "strength": 8,
+        "dexterity": 16,
+        "constitution": 10,
+        "intelligence": 12,
+        "wisdom": 16,
+        "charisma": 14
+      },
+      "proficiencyBonus": 2,
+      "damageVulnerabilities": [],
+      "damageResistances": [],
+      "damageImmunities": [],
+      "conditionImmunities": [],
+      "senses": [
+        "passive Perception 13"
+      ],
+      "languages": [],
+      "challengeRating": 2,
+      "experiencePoints": 450,
+      "legendaryActionsPerRound": 0,
+      "legendaryActionsDescription": "",
+      "savingThrows": [],
+      "skills": [],
+      "additionalAbilities": [
+        {
+          "name": "Darkling Valence",
+          "description": "At the start of combat, the Mycomystic gains 18 Temporary Hit Points. While it has any of these Temporary Hit Points, it is vulnerable to radiant damage. It can regenerate them using an action to remain motionless in dim light or darkness.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:6017"
+        },
+        {
+          "name": "Lost in the Sauce",
+          "description": "The Mycomystic is permanently hallucinating and completely immune to the Charmed condition and illusion spells.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:6018"
+        },
+        {
+          "name": "Innate Spellcasting",
+          "description": "The Mycomystic's spellcasting ability is Wisdom (spell save DC 13). It can innately cast the following spells, requiring no components:\nAt will: Minor Illusion\n2/day each: Blur, Phantasmal Force",
+          "descriptionHtml": {},
+          "$$hashKey": "object:6019"
+        }
+      ],
+      "actions": [
+        {
+          "name": "Hallucinogenic Slam",
+          "description": "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 5 (1d4 + 3) bludgeoning damage plus 3 (1d6) psychic damage.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:6020"
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [],
+      "hitDieSize": 8,
+      "armorTypeStr": "",
+      "abilityScoreModifiers": {
+        "strength": -1,
+        "dexterity": 3,
+        "constitution": 0,
+        "intelligence": 1,
+        "wisdom": 3,
+        "charisma": 2
+      },
+      "abilityScoreStrs": {
+        "strength": "8 (-1)",
+        "dexterity": "16 (+3)",
+        "constitution": "10 (+0)",
+        "intelligence": "12 (+1)",
+        "wisdom": "16 (+3)",
+        "charisma": "14 (+2)"
+      },
+      "extraHealthFromConstitution": 0,
+      "hitPoints": 36,
+      "hitPointsStr": "36 (8d8)",
+      "legendaryActionsDescriptionHtml": {},
+      "passivePerception": 13,
+      "challengeRatingStr": "2"
+    },
+    "sharing": {
+      "linkSharingEnabled": false
+    },
+    "_id": "687390c297a02efde25fb55a",
+    "name": "Darkforme Mycomystic",
+    "bestiaryId": "6870862c97a02efde25f91ce",
+    "__v": 0
+  },
+  {
+    "flavor": {
+      "faction": "",
+      "environment": "",
+      "description": "Large plant/monstrosity (darkforme), chaotic evil",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": {}
+    },
+    "stats": {
+      "size": "Large",
+      "race": "plant/monstrosity (darkforme)",
+      "alignment": "chaotic evil",
+      "armorType": "Natural Armor",
+      "armorClass": 15,
+      "numHitDie": 8,
+      "speed": "25 ft.",
+      "abilityScores": {
+        "strength": 18,
+        "dexterity": 10,
+        "constitution": 16,
+        "intelligence": 6,
+        "wisdom": 10,
+        "charisma": 6
+      },
+      "proficiencyBonus": 2,
+      "damageVulnerabilities": [],
+      "damageResistances": [],
+      "damageImmunities": [],
+      "conditionImmunities": [],
+      "senses": [
+        "passive Perception 10"
+      ],
+      "languages": [],
+      "challengeRating": 3,
+      "experiencePoints": 700,
+      "legendaryActionsPerRound": 0,
+      "legendaryActionsDescription": "",
+      "savingThrows": [],
+      "skills": [],
+      "additionalAbilities": [
+        {
+          "name": "Darkling Valence",
+          "description": "At the start of combat, the Rotter gains 34 Temporary Hit Points. While it has any of these Temporary Hit Points, it is vulnerable to radiant damage. It can regenerate them using an action to remain motionless in dim light or darkness.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:6021"
+        },
+        {
+          "name": "Fungal Colossus",
+          "description": "The Rotter is more fungus than shadow. It has advantage on saving throws against poison and being paralyzed.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:6022"
+        }
+      ],
+      "actions": [
+        {
+          "name": "Multiattack",
+          "description": "The Rotter makes two Rot Bashes.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:6023"
+        },
+        {
+          "name": "Rot Bash",
+          "description": "Melee Weapon Attack: +6 to hit, reach 10 ft., one target. Hit: 8 (1d8 + 4) bludgeoning damage plus 3 (1d6) necrotic damage.",
+          "descriptionHtml": {},
+          "$$hashKey": "object:6024"
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [],
+      "hitDieSize": 10,
+      "armorTypeStr": "(Natural Armor)",
+      "abilityScoreModifiers": {
+        "strength": 4,
+        "dexterity": 0,
+        "constitution": 3,
+        "intelligence": -2,
+        "wisdom": 0,
+        "charisma": -2
+      },
+      "abilityScoreStrs": {
+        "strength": "18 (+4)",
+        "dexterity": "10 (+0)",
+        "constitution": "16 (+3)",
+        "intelligence": "6 (-2)",
+        "wisdom": "10 (+0)",
+        "charisma": "6 (-2)"
+      },
+      "extraHealthFromConstitution": 24,
+      "hitPoints": 68,
+      "hitPointsStr": "68 (8d10 + 24)",
+      "legendaryActionsDescriptionHtml": {},
+      "passivePerception": 10,
+      "challengeRatingStr": "3"
+    },
+    "sharing": {
+      "linkSharingEnabled": false
+    },
+    "_id": "687390c297a02efde25fb56a",
+    "name": "Dark Mycoforme Rotter",
+    "bestiaryId": "6870862c97a02efde25f91ce",
+    "__v": 0
+  }
+]

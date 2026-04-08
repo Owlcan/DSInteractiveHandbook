@@ -6,19 +6,28 @@
 
 console.log("Accessing all data from allData.js for display");
 
-// Make sure the data is available globally for the browser
-window.itemsData = itemsData;
-window.monstersData = monstersData;
-window.monsterImages = monsterImages || {};
+// Make sure the data is available globally for the browser.
+// Guarded so a missing/failed allData.js load doesn't break the rest of the page.
+if (typeof itemsData !== 'undefined') window.itemsData = itemsData;
+if (typeof monstersData !== 'undefined') window.monstersData = monstersData;
+if (typeof monsterImages !== 'undefined') window.monsterImages = monsterImages || {};
 
 // Confirm data is accessible
-console.log(`CONFIRMED: Loaded ${itemsData.length} items and ${monstersData.length} monsters from allData.js`);
+if (Array.isArray(window.itemsData) && Array.isArray(window.monstersData)) {
+	console.log(`CONFIRMED: Loaded ${window.itemsData.length} items and ${window.monstersData.length} monsters from allData.js`);
+} else {
+	console.warn('browser-data.js: allData.js globals not found (itemsData/monstersData).');
+}
 
 // Log the first few items and monsters to verify content
-console.log("Sample items:", itemsData.slice(0, 3).map(item => item.name));
-console.log("Sample monsters:", monstersData.slice(0, 3).map(monster => monster.name));
+if (Array.isArray(window.itemsData)) {
+	console.log("Sample items:", window.itemsData.slice(0, 3).map((item) => item.name));
+}
+if (Array.isArray(window.monstersData)) {
+	console.log("Sample monsters:", window.monstersData.slice(0, 3).map((monster) => monster.name));
+}
 
 // Set up image cache
-window.monsterImages = monsterImages || {};
+if (typeof monsterImages !== 'undefined') window.monsterImages = monsterImages || {};
 
 console.log("Browser data initialization complete");

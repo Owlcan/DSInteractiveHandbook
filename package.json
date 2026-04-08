@@ -1,17 +1,22 @@
 {
 	"name": "interactive-handbook",
-	"version": "1.0.0",
+	"version": "1.6.5",
 	"private": true,
 	"dependencies": {
 		"ws": "^8.18.3"
 	},
 	"devDependencies": {
+		"sharp": "^0.34.5",
 		"tailwindcss": "^3.4.17"
 	},
 	"scripts": {
 		"start": "node server.js",
 		"build:tailwind": "tailwindcss -i ./styles/tailwind-input.css -o ./styles/tailwind.css --minify",
 		"watch:tailwind": "tailwindcss -i ./styles/tailwind-input.css -o ./styles/tailwind.css --watch",
+		"split:worldmapzones": "node tools/split_worldmap_zones_json.js --in worldmap-zones.json --outDir worldmap-zones.split",
+		"merge:worldmapzones": "node tools/split_worldmap_zones_json.js --merge --inDir worldmap-zones.split --out worldmap-zones.merged.json",
+		"build:bestiary:stopgap": "node tools/build_bestiary_stopgap_singlefile.js",
+		"build:bestiary:stopgap:allimages": "node tools/build_bestiary_stopgap_singlefile.js --bakeImages allFiles --allFilesWebpOnly",
 		"build:rulesgvar": "node tools/build_rules_lookup_gvar_from_simple_handbook.js",
 		"split:rulesgvar": "node tools/split_rules_lookup_gvar_for_avrae.js --limit=80000",
 		"build:srdraces": "node tools/build_srd_races_index.js",

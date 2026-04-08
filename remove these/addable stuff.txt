@@ -305,9 +305,83 @@ https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/08/bap.webp co
 https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/08/catnap.webp fades in from the center, pulses pink, then fades out
 https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2025/08/flashsale.webp comes up from the bottom, flashes gold pink gold and fades out
 
+================================================================================================
+[
+  {
+    name: "Tumble-Grain",
+    value: "5 GP",
+    type: "Ingredient (Botanical, Food)",
+    rarity: "Common",
+    description: "A hardy wild cereal native to the steppes and open plains. Tumble-Grain breaks free from its stalk when mature, rolling across the land with the wind to spread its seeds. Highly nutritious, though it requires significant milling and refining before use in most meals.",
+    image: "assets/images/tumble_grain.webp"
+  },
+  {
+    name: "Musk-Pod",
+    value: "40 GP",
+    type: "Ingredient (Material)",
+    rarity: "Rare",
+    description: "A potent pheromone extract found within insect mounds and ancient jungle fortifications of the Inner Jungle. Used by Scholarian trackers to attract specific wildlife or to mask the distinct humanoid scent during expeditions.",
+    image: "assets/images/musk_pod.webp"
+  },
+  {
+    name: "Congealed Silk",
+    value: "28 GP",
+    type: "Ingredient (Material)",
+    rarity: "Uncommon",
+    description: "A high-tensile natural thread harvested from arboreal weaver-spiders in dense jungle canopies. Congealed Silk serves as the base fiber for a wide range of Scholian magic-conductive textiles and enchanted fabrics.",
+    image: "assets/images/congealed_silk.webp"
+  },
+  {
+    name: "River-Glass",
+    value: "6 GP",
+    type: "Ingredient (Material)",
+    rarity: "Common",
+    description: "Naturally tumbled shards of obsidian and quartz found along riverbanks and lakebeds. River-Glass is commonly used in decorative prisms, simple lenses, and low-grade optical focusing components.",
+    image: "assets/images/river_glass.webp"
+  },
+  {
+    name: "Marsh-Mallow Root",
+    value: "8 GP",
+    type: "Ingredient (Botanical, Food)",
+    rarity: "Common",
+    description: "A spongy, mucilaginous tuber harvested from marshlands. Marsh-Mallow Root serves as the culinary base for Scholia-approved nursery treats and is widely used in the preparation of soothing medicinal lozenges.",
+    image: "assets/images/marsh_mallow_root.webp"
+  },
+  {
+    name: "Rain-Lily",
+    value: "20 GP",
+    type: "Ingredient (Botanical)",
+    rarity: "Uncommon",
+    description: "A beautiful rainforest flower that naturally collects pure, sweet liquid during heavy deluges. Rain-Lily acts as a magical stabilizer in liquid-based culinary and alchemical recipes, helping prevent spoilage or magical destabilization.",
+    image: "assets/images/rain_lily.webp"
+  },
+  {
+    name: "Serpent-Shed",
+    value: "30 GP",
+    type: "Ingredient (Material)",
+    rarity: "Uncommon",
+    description: "A flexible, waterproof dermal layer shed by arboreal reptiles in dense jungle regions. When properly cured, Serpent-Shed becomes a high-grade leather ideal for durable, non-absorbent garments and equipment.",
+    image: "assets/images/serpent_shed.webp"
+  }
+]
 
+Tumble-Grain:
+A hardy wild cereal native to the steppes and open plains. Tumble-Grain breaks free from its stalk when mature, rolling across the land with the wind to spread its seeds. Highly nutritious, though it requires significant milling and refining before use in most meals, but its packed with flavor and fiber!
 
+Musk-Pod:
+A potent pheromone extract found within insect mounds and ancient jungle fortifications of the Inner Jungle. Used by Scholarian trackers to attract specific wildlife or to mask the distinct humanoid scent during expeditions.
 
+Congealed Silk:
+A high-tensile natural thread harvested from arboreal weaver-spiders in dense jungle canopies. Congealed Silk serves as the base fiber for a wide range of Scholian magic-conductive textiles and enchanted fabrics.
 
+River-Glass:
+Naturally tumbled shards of obsidian and quartz found along riverbanks and lakebeds. River-Glass is commonly used in decorative prisms, simple lenses, and low-grade optical focusing components.
 
+Marsh-Mallow Root:
+A spongy, mucilaginous tuber harvested from marshlands. Marsh-Mallow Root serves as the culinary base for Scholia-approved nursery treats and is widely used in the preparation of soothing medicinal lozenges.
 
+Rain-Lily:
+A beautiful rainforest flower that naturally collects pure, sweet liquid during heavy deluges. Rain-Lily acts as a magical stabilizer in liquid-based culinary and alchemical recipes, helping prevent spoilage or magical destabilization.
+
+Serpent-Shed:
+A flexible, waterproof dermal layer shed by arboreal reptiles in dense jungle regions. When properly cured, Serpent-Shed becomes a high-grade leather ideal for durable, non-absorbent garments and equipment.

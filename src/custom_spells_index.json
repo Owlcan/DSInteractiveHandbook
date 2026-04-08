@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-02-13T05:34:34.757Z",
+  "generatedAt": "2026-03-07T11:42:13.360Z",
   "source": "referencedata/scholia subclasses.txt",
-  "count": 37,
+  "count": 16,
   "spells": [
     {
       "name": "Blessed Padding",
@@ -10,16 +10,16 @@
       "school": "abjuration",
       "classes": "Paladin",
       "subclasses": "",
-      "casttime": "1 bonus action",
-      "range": "Touch",
+      "casttime": "1 action",
+      "range": "30 feet",
       "components": {
         "verbal": true,
         "somatic": true,
         "material": false
       },
-      "duration": "1 hour",
+      "duration": "Instantaneous",
       "ritual": false,
-      "description": "You touch one willing creature wearing a diaper. For the duration, the diaper becomes suffused with holy energy, granting the wearer a +1 bonus to their Armor Class.",
+      "description": "You target one creature you can see within range, attempting to overwhelm them with a sudden, disruptive impulse. The target must succeed on a Wisdom saving throw or immediately use its reaction to perform one of the following harmless, chaotic acts (your choice):\n- Drop one item it is holding.\n- Fall prone.\n  - Use all of its remaining movement to run in a random direction.\n  - Use their diaper if wearing one, or soil their pants (need dependent).",
       "higherlevels": "",
       "concentration": false
     },
@@ -27,7 +27,7 @@
       "name": "Clutching Shadows",
       "level": 1,
       "school": "illusion",
-      "classes": "Cleric",
+      "classes": "",
       "subclasses": "",
       "casttime": "1 action",
       "range": "60 feet",
@@ -38,26 +38,7 @@
       },
       "duration": "Concentration, up to 1 minute",
       "ritual": false,
-      "description": "You cause the shadows around a creature to writhe and grasp. Choose one creature you can see within range. The target must succeed on a Strength saving throw or be restrained by the shadows for the duration. At the start of each of its turns, the target can repeat the saving throw, ending the effect on a success. While restrained, the creature perceives the shadows as monstrous, grasping claws and is considered frightened of you.",
-      "higherlevels": "",
-      "concentration": true
-    },
-    {
-      "name": "Monster in the Closet",
-      "level": 3,
-      "school": "conjuration",
-      "classes": "Cleric, Paladin, Warlock",
-      "subclasses": "",
-      "casttime": "1 action",
-      "range": "60 feet",
-      "components": {
-        "verbal": true,
-        "somatic": true,
-        "material": "a broken toy and a piece of black cloth"
-      },
-      "duration": "Concentration, up to 1 minute",
-      "ritual": false,
-      "description": "You summon a childhood terror from a dark space. Choose a dark or heavily obscured area within range that is at least 5 feet by 5 feet (such as a dark closet, a space under a bed, or a dark alley). A Shadow Mastiff emerges from the space and acts on your initiative. It is hostile to all creatures other than you and will attack the nearest non-allied creature. The monster disappears when it drops to 0 hit points or when the spell ends.",
+      "description": "You cause the shadows around a creature to writhe and grasp. Choose one creature you can see within range. The target must succeed on a Strength saving throw or be restrained by the shadows for the duration. At the start of each of its turns, the target can repeat the saving throw, ending the effect on a success. While restrained, the creature perceives the shadows as monstrous, grasping claws and is considered frightened of you.\nMonster in the Closet 3rd-level conjuration",
       "higherlevels": "",
       "concentration": true
     },
@@ -65,7 +46,7 @@
       "name": "Crinkly Invitation",
       "level": 1,
       "school": "enchantment",
-      "classes": "Cleric, Warlock",
+      "classes": "",
       "subclasses": "",
       "casttime": "1 action",
       "range": "60 feet",
@@ -76,26 +57,7 @@
       },
       "duration": "1 round",
       "ritual": false,
-      "description": "You create a subtle, magically enticing crinkling sound either by shaking your hips or rubbing your diapered butt- only one creature of your choice within range can hear this sound by these magical means. The target must succeed on a Wisdom saving throw or be captivated by the sound. On a failed save, the creature is compelled to use all of its available movement on its next turn to move closer to you by the safest route available. The creature does nothing on its turn except move.",
-      "higherlevels": "",
-      "concentration": false
-    },
-    {
-      "name": "Padding Perfection",
-      "level": 2,
-      "school": "transmutation",
-      "classes": "Cleric",
-      "subclasses": "",
-      "casttime": "1 action",
-      "range": "Touch",
-      "components": {
-        "verbal": true,
-        "somatic": true,
-        "material": "a drop of fragrant oil"
-      },
-      "duration": "1 hour",
-      "ritual": false,
-      "description": "You touch a diaper worn by a willing creature. For the duration, the diaper magically adjusts to a perfect, comfortable fit. It becomes pleasantly warm, emits a soft, clean scent (like baby powder or lavender), and feels incredibly soft. The wearer gains a +1 bonus to AC and has advantage on saving throws against being frightened. If the diaper was fresh or unused, it gains +3 Magical Booster Use Charges.",
+      "description": "You create a subtle, magically enticing crinkling sound either by shaking your hips or rubbing your diapered butt- only one creature of your choice within range can hear this sound by these magical means. The target must succeed on a Wisdom saving throw or be captivated by the sound. On a failed save, the creature is compelled to use all of its available movement on its next turn to move closer to you by the safest route available. The creature does nothing on its turn except move.\nPadding Perfection 2nd-level transmutation",
       "higherlevels": "",
       "concentration": false
     },
@@ -103,7 +65,7 @@
       "name": "Embarrassment",
       "level": 1,
       "school": "enchantment",
-      "classes": "Paladin",
+      "classes": "",
       "subclasses": "",
       "casttime": "1 action",
       "range": "30 feet",
@@ -122,7 +84,7 @@
       "name": "Forced Incontinence",
       "level": 4,
       "school": "transmutation",
-      "classes": "Paladin",
+      "classes": "",
       "subclasses": "",
       "casttime": "1 action",
       "range": "60 feet",
@@ -160,7 +122,7 @@
       "name": "Imprint",
       "level": 4,
       "school": "transmutation",
-      "classes": "Cleric",
+      "classes": "",
       "subclasses": "",
       "casttime": "1 action",
       "range": "60 feet",
@@ -171,53 +133,15 @@
       },
       "duration": "Concentration, up to 1 minute",
       "ritual": false,
-      "description": "You attempt to trap a foe as a harmless decoration on your own diaper. Choose one creature you can see within range. The target must succeed on a Charisma saving throw or be magically transformed into a two-dimensional image and imprinted onto the front- or butt-of the diaper you are currently wearing.\nWhile imprinted, the target is incapacitated and has total cover. The effect ends if your concentration is broken, if you or the target move more than 120 feet apart, or if you dismiss it (no action required).\nWhenever your diaper expends a use charge (due to a failed Continence Check or other effect), the imprinted creature takes 1d10 psychic damage at the end of that turn, as the magical filth seeps into their patterned form. If you purposefully fail a Continence Check while a creature is imprinted, this damage is doubled to 2d10.\nCreatures reduced to zero hit points in this fashion are permanently affixed to the diaper and cannot be resurrected except with the use of True Resurrection, Wish, or Miracle.",
+      "description": "You attempt to trap a foe as a harmless decoration on your own diaper. Choose one creature you can see within range. The target must succeed on a Charisma saving throw or be magically transformed into a two-dimensional image and imprinted onto the front- or butt-of the diaper you are currently wearing.\nWhile imprinted, the target is incapacitated and has total cover. The effect ends if your concentration is broken, if you or the target move more than 120 feet apart, or if you dismiss it (no action required).\nWhenever your diaper expends a use charge (due to a failed Continence Check or other effect), the imprinted creature takes 1d10 psychic damage at the end of that turn, as the magical filth seeps into their patterned form. If you purposefully fail a Continence Check while a creature is imprinted, this damage is doubled to 2d10.\nCreatures reduced to zero hit points in this fashion are permanently affixed to the diaper and cannot be resurrected except with the use of True Resurrection, Wish, or Miracle.\nMasterwork Diaper 5th-level conjuration",
       "higherlevels": "",
       "concentration": true
-    },
-    {
-      "name": "Masterwork Diaper",
-      "level": 5,
-      "school": "conjuration",
-      "classes": "Cleric",
-      "subclasses": "",
-      "casttime": "1 action",
-      "range": "Touch",
-      "components": {
-        "verbal": true,
-        "somatic": true,
-        "material": "a diamond-dust infused needle worth at least 250gp"
-      },
-      "duration": "8 hours",
-      "ritual": false,
-      "description": "You conjure a single, masterpiece diaper of exquisite design and powerful magic onto a willing creature you touch. Choose one of the following effects:\n\nThe Aegis of Comfort: The diaper has 20 use charges and grants the wearer a +3 bonus to AC.\nThe Tapestry of Holding: The diaper functions as a bag of holding, but can only hold items related to childcare (toys, bottles, changing supplies, etc.).\nThe Gilded Cage: The diaper is a locking diaper that requires a DC 25 Strength (Athletics) check or a 7th-level or higher dispel magic to remove. It grants the wearer resistance to one damage type of your choice.",
-      "higherlevels": "",
-      "concentration": false
     },
     {
       "name": "Padded Sanctuary",
       "level": 4,
       "school": "abjuration",
-      "classes": "Paladin",
-      "subclasses": "",
-      "casttime": "1 action",
-      "range": "Self (20-foot radius)",
-      "components": {
-        "verbal": true,
-        "somatic": true,
-        "material": "a piece of blessed cotton"
-      },
-      "duration": "Concentration, up to 1 minute",
-      "ritual": false,
-      "description": "You create a sanctuary of magical comfort around you. A 20-foot-radius sphere of soft, shimmering light appears, centered on you. The area within the sphere is difficult terrain for hostile creatures. Additionally, when you or a friendly creature starts its turn inside the sphere, they gain temporary hit points equal to your spellcasting ability modifier.",
-      "higherlevels": "",
-      "concentration": true
-    },
-    {
-      "name": "Regressive Field",
-      "level": 2,
-      "school": "enchantment",
-      "classes": "Paladin",
+      "classes": "",
       "subclasses": "",
       "casttime": "1 action",
       "range": "Self (20-foot radius)",
@@ -233,10 +157,29 @@
       "concentration": true
     },
     {
+      "name": "Regressive Field",
+      "level": 2,
+      "school": "enchantment",
+      "classes": "",
+      "subclasses": "",
+      "casttime": "1 minute",
+      "range": "Touch",
+      "components": {
+        "verbal": true,
+        "somatic": true,
+        "material": true
+      },
+      "duration": "Instantaneous",
+      "ritual": false,
+      "description": "25 gp)\n\n  You conjure a warm, soothing cup of magical tea. A creature that drinks the tea must make a Constitution saving throw. On a failed save, the creature falls unconscious for 10 minutes. The creature wakes up if it takes damage or if someone uses an action to shake or slap it awake. If the creature sleeps for the full duration, it awakens feeling refreshed and gains 2d8+5 temporary hit points.",
+      "higherlevels": "",
+      "concentration": false
+    },
+    {
       "name": "Shadows of Doubt",
       "level": 3,
       "school": "illusion",
-      "classes": "Paladin",
+      "classes": "",
       "subclasses": "",
       "casttime": "1 action",
       "range": "60 feet",
@@ -247,7 +190,7 @@
       },
       "duration": "Concentration, up to 1 minute",
       "ritual": false,
-      "description": "You cause shadows to writhe and twist around a creature you can see within range, whispering its deepest insecurities. The target must make a Wisdom saving throw. On a failed save, it takes 3d8 psychic damage and must use its action on its next turn to do nothing but question its own abilities. On a successful save, it takes half as much damage and its action is not affected. For the duration of the spell, as a bonus action on your turn, you can force the creature to take an additional 1d8 psychic damage as long as it is within 30 feet of a shadow. If damaged in this way, the creature\n\n(Spell text appears truncated in scholia source.)",
+      "description": "You cause shadows to writhe and twist around a creature you can see within range, whispering its deepest insecurities. The target must make a Wisdom saving throw. On a failed save, it takes 3d8 psychic damage and must use its action on its next turn to do nothing but question its own abilities. On a successful save, it takes half as much damage and its action is not affected. For the duration of the spell, as a bonus action on your turn, you can force the creature to take an additional 1d8 psychic damage as long as it is within 30 feet of a shadow. If damaged in this way, the creature",
       "higherlevels": "",
       "concentration": true
     },
@@ -255,18 +198,18 @@
       "name": "Sleepy Time Tea",
       "level": 3,
       "school": "conjuration",
-      "classes": "Paladin",
+      "classes": "",
       "subclasses": "",
-      "casttime": "1 minute",
-      "range": "Touch",
+      "casttime": "",
+      "range": "",
       "components": {
-        "verbal": true,
-        "somatic": true,
-        "material": "a teacup and rare herbs worth 25 gp"
+        "verbal": false,
+        "somatic": false,
+        "material": false
       },
-      "duration": "Instantaneous",
+      "duration": "",
       "ritual": false,
-      "description": "You conjure a warm, soothing cup of magical tea. A creature that drinks the tea must make a Constitution saving throw. On a failed save, the creature falls unconscious for 10 minutes. The creature wakes up if it takes damage or if someone uses an action to shake or slap it awake. If the creature sleeps for the full duration, it awakens feeling refreshed and gains 2d8+5 temporary hit points.",
+      "description": "",
       "higherlevels": "",
       "concentration": false
     },
@@ -274,7 +217,7 @@
       "name": "Study Hall",
       "level": 2,
       "school": "abjuration",
-      "classes": "Sorcerer",
+      "classes": "",
       "subclasses": "",
       "casttime": "1 action",
       "range": "Self (30-foot-radius sphere)",
@@ -285,148 +228,15 @@
       },
       "duration": "Concentration, up to 10 minutes",
       "ritual": true,
-      "description": "You create a zone of intense academic focus around you. A 30-foot-radius sphere, filled with the faint, spectral images of library shelves, extends from you. The area is under the effect of a silence spell.\nAdditionally, any friendly creature that spends its turn inside the sphere doing nothing but concentrating on a spell has advantage on Constitution saving throws to maintain concentration until the start of their next turn.",
-      "higherlevels": "",
+      "description": "You create a zone of intense academic focus around you. A 30-foot-radius sphere, filled with the faint, spectral images of library shelves, extends from you. The area is under the effect of a silence spell.\n  Additionally, any friendly creature that spends its turn inside the sphere doing nothing but concentrating on a spell has advantage on Constitution saving throws to maintain concentration until the start of their next turn.\n\nDetention Field\ndisciplinary energy. Choose a creature you can see within range. The target must make a Dexterity saving throw. On a failed save, the creature is restrained for the duration by shimmering, golden lines of magic that form a 5-foot cube around it.\n  As an action, the restrained creature can make a Strength saving throw against your spell save DC, breaking free on a success.",
+      "higherlevels": "When you cast this spell using a spell slot of 3rd level or higher, you can target one additional creature for each slot level above 2nd.\nEnforced Mandate\n\nNo Running in the Halls. An affected creature must succeed on a Wisdom saving throw or have its speed halved. If it attempts to use the Dash action, it immediately falls prone.\nRaise Your Hand to Speak. An affected creature must succeed on a Wisdom saving throw or be unable to speak or provide verbal spell components unless it first uses its bonus action to raise its hand. Keep Your Hands to Yourself. An affected creature must succeed on a Wisdom saving throw or become unable to make melee attacks against other creatures.\n  At the end of each of its turns, an affected creature can repeat its saving throw, ending the effect on itself on a success.\n\nSummon Proctor\n  You summon a spectral proctor from the Academy's spirit. The proctor appears in an unoccupied space you can see. It uses the veteran stat block, but it is a construct, its weapon attacks are magical, and they deal force damage.\n  The proctor is friendly to you and your companions and follows your verbal commands, acting on its own initiative. Its primary purpose is to enforce order and protect students. It will not cause lethal harm unless specifically commanded to against a clear, dangerous threat.\n  If you lose concentration, the proctor acts on its own to restore order for 1 minute before vanishing.\nPlagiarize\n  You attempt to magically copy knowledge from another spellcaster. Target a creature you can see within range that is capable of casting spells. The target must make an Intelligence saving throw.\n  On a failed save, you choose one spell of 3rd level or lower from the target's spell list. For the next 8 hours, you know this spell, and it counts as a sorcerer spell for you. You can cast it using your spell slots.\n  The target does not lose the spell, but is aware of the theft on a successful save.\nExamination Dread\n  You instill the paralyzing fear of a surprise final exam in a creature's mind. Target one creature you can see. The target must make a Wisdom saving throw.\n  On a failure, the creature becomes frightened of you. While frightened, at the start of each of its turns, the creature must use its action to frantically answer a spectral test paper that appears before it, preventing it from taking any other action.\n  At the end of each of its turns, the creature can repeat the saving throw, ending the effect on a success.\n\nManifest Curriculum\n  You pull the principles of an academic subject into reality, altering the area in a 30-foot cube centered on yourself. Choose one of the following subjects:\n\nGeometry. The ground becomes a confusing grid of shifting lines and angles, creating difficult terrain.\nAny creature ending its turn in the area must succeed on a Dexterity saving throw or take 4d6 force damage.\nAlchemy. Vials of volatile chemicals bubble up from the ground. Any creature that enters the area or starts its turn there must succeed on a Constitution saving throw or take 4d8 acid or fire damage (your choice).\nConjuration Theory. The area becomes a nexus of unstable portals. Any creature ending its turn in the area must succeed on a Charisma saving throw or be randomly teleported to an unoccupied space within 30 feet.\nExpel\n  You issue a magical decree of expulsion against one creature. The target must succeed on a Charisma saving throw or be banished to a harmless demiplane.\n  At the end of the target's next turn, it reappears in the space it left. However, the shame of its expulsion lingers. For the next minute, the target has disadvantage on all attack rolls and ability checks.\n\nSorcerous Origin: Entropic Pampath\n\not all magic comes from ancient bloodlines or pacts with powerful entities. Some sorcerers are simply born with a direct connection to the raw, untamed chaos of emotion itself. An Entropic Pampath's power is the arcane equivalent of a toddler's meltdown:\nexplosive, unpredictable, and capable of bending reality to their whims. These sorcerers don't study or bargain for their magic; they feel it, deeply and intensely.\nFrustration can cause toys to animate and attack, a stubbed toe can unleash a wave of debilitating despair, and a fit of giggles can fill the air with illusory butterflies. For an Entropic Pampath, magic isn't a tool\n-it's an outburst, a primal scream of emotion that the world has no choice but to obey.\nEntropic Pampath Spells\n\nSorcerer Level\nSpells\n1st\nTantrum Bolt, Glittergloom\n3rd\nAnimate Toy, Wail of Despair\n5th\nCrayon Reality, Stompy Foot\n7th\nEmotional Cascade, Imaginary Friend\n9th\nReality Meltdown, It's MINE!\nTantrum Magic\nStarting at 1st level, your spellcasting can unleash surges of untamed magic. Immediately after you cast a sorcerer spell of 1st level or higher, the DM can have you roll a d20. If you roll a 1, roll on the Wild Magic Tantrum Table to create a random magical effect.\n\nTemperamental Control\nAlso at 1st level, you can tap into your wild emotions to gain a momentary edge. You can gain advantage on one attack roll, ability check, or saving throw. You must finish a long rest before you can use this feature again.\n  Any time before you regain the use of this feature, the DM can have you roll on the Wild Magic Tantrum Table immediately after you cast a sorcerer spell of 1st level or higher. You then regain the use of this feature.\nLineage Spells\nYou learn additional spells when you reach certain levels in this class, as shown on the Entropic Pampath Spells table. Each of these spells counts as a sorcerer spell for you, but it doesn't count against the number of sorcerer spells you know. These spells can't be replaced when you gain a level in this class.\nBratty Interjection\nStarting at 6th level, you have the ability to weaponize your fickle mood swings to affect others. When another creature you can see makes an attack roll, an ability check, or a saving throw, you can use your reaction and spend 2 sorcery points to roll a d4 and apply the number rolled as a bonus or penalty (your choice) to the creature's roll. You can do so after the creature rolls but before any effects of the roll occur.\nUnleashed Tantrum\nStarting at 14th level, you can unleash a wave of overwhelming, chaotic emotion. As an action, you can expend 4 sorcery points to force each creature of your choice within 30 feet of you to make a Wisdom saving throw against your sorcerer spell save DC.\n  On a failed save, a creature is affected by the Confusion spell for 1 minute. This effect doesn't require your concentration. Additionally, any creature that fails its initial saving throw is overwhelmed by the emotional force and must immediately make a potty check. At the end of each of its turns, an affected creature can repeat the Wisdom saving throw, ending the effect on itself on a success.\nTemper Tantrum Incarnate\nAt 18th level, your emotional outbursts can temporarily unravel the laws of reality around you. As a bonus action, you can spend 6 sorcery points to become an avatar of chaos for 1 minute. For the duration, you roll on the Wild Magic Tantrum table at the start of each of your turns. Furthermore, whenever you roll on the Wild Magic Tantrum table, you can roll the d100 twice and use either number.\n\nEntropic Pampath Spell Descriptions\nTantrum Bolt\n  You unleash a bolt of raw, chaotic emotion at a creature you can see. Make a ranged spell attack. On a hit, the target takes 3d8 psychic damage. The chaotic nature of the bolt then causes a secondary effect. Roll a d4 to determine the effect:\n\n1. Anger. The target must succeed on a Wisdom saving throw or use its reaction to make one melee weapon attack against a creature of your choice within its reach.\n2. Sadness. The target is overcome with sorrow and has its speed halved until the end of its next turn.\n3. Fear. The target must succeed on a Wisdom saving throw or become frightened of you until the end of its next turn.\n4. Joy. The target is struck by a fit of giggles and must succeed on a Wisdom saving throw or fall prone.\nWhen you cast this spell using a spell slot of 2nd level or higher, the damage increases by 1d8 for each slot level above 1st.\nGlittergloom\n  You cause a 20-foot-radius sphere of swirling particles to appear, centered on a point you choose within range. You decide if it is glitter or gloom.\n\nGlitter. The sphere is filled with dazzling, distracting glitter. The area is heavily obscured. Any creature that ends its turn in the area must succeed on a Constitution saving throw or be blinded until the end of its next turn.\nGloom. The sphere is filled with shadowy, unsettling shapes. The area is filled with magical darkness. Any creature that ends its turn in the area must succeed on a Wisdom saving throw or be frightened of the darkness until the end of its next turn.\n\nAnimate Toy\n  Your magic infuses a toy with a semblance of life. The toy becomes a creature under your control and uses the Animated Toy stat block. It acts on its own initiative. As a bonus action, you can mentally command the toy if it is within 60 feet of you. If you issue no commands, it defends itself from hostile creatures but otherwise takes no actions.\nAnimated Toy\nTiny Construct, Unaligned Armor Class 14 (natural armor) Hit Points 15 (6d4)\nSpeed 30 ft.\n\nSTR\nDEX\nCON\nINT\nWIS\nCHA\n4 (-3)\n16 (+3)\n10 (+0)\n1 (-5)\n5 (-3)\n1 (-5)\n\n  Damage Immunities poison, psychic Condition Immunities charmed, exhaustion, frightened, paralyzed, petrified, poisoned Senses darkvision 60 ft., passive Perception 7 Languages -\n  Immutable Form. The toy is immune to any spell or effect that would alter its form.\nActions\nTiny Strike. Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) bludgeoning, piercing, or slashing damage (matching the nature of the toy).\nWail of Despair\n  You let out a magically potent wail of pure misery. Each creature in a 30-foot cone must make a Wisdom saving throw. A creature takes 3d8 psychic damage on a failed save, or half as much damage on a successful one.\n  A creature that fails its save is also overcome by despair and cannot take reactions until the start of its next turn.\nWhen you cast this spell using a spell slot of 3rd level or higher, the damage increases by 1d8 for each slot level above 2nd.\n\nCrayon Reality\n  You flourish a magical crayon and sketch a simple, two-dimensional object onto a solid surface. The drawing then springs into a three-dimensional, semi- real form. You can create one of the following effects:\n\nWall. You create a solid-looking crayon wall that is up to 30 feet long, 10 feet high, and 1 foot thick. The wall has an AC of 10 and 20 hit points. It provides total cover.\nGoo. You draw a puddle that becomes a 15-foot square of sticky goo on the ground. The area is difficult terrain, and any creature that starts its turn there must succeed on a Strength saving throw or have its speed reduced to 0 until the start of its next turn.\nBounce Pad. You draw a 10-foot square that becomes a bouncy surface. Any creature that enters the area can choose to be launched 20 feet into the air in a direction of their choice, landing safely.\nStompy Foot\n  You stomp your foot with magical force, creating a shockwave. Each creature on the ground within a 20- foot radius of you must make a Strength saving throw. On a failed save, a creature takes 4d10 bludgeoning damage and is knocked prone. On a successful save, the creature takes half as much damage and isn't knocked prone.\nEmotional Cascade\n  You flood a creature's mind with overwhelming emotion. The target must succeed on a Wisdom saving throw or be affected by the spell. Roll a d4 at the start of each of the affected creature's turns to determine its emotional state:\n1. Rage. The creature must use its action to make a melee attack against the nearest creature.\n2. \nDespair. The creature is incapacitated and must use its movement to crawl into the nearest unoccupied space that provides cover, if available.\n3. Hysteria. The creature is stunned by uncontrollable laughter or crying.\n4. Bliss. The creature is charmed by every other creature it can see.\n  At the end of each of its turns, the target can make another Wisdom saving throw. On a success, the spell ends.\nImaginary Friend\n  You summon a faintly shimmering, translucent guardian that looks like a fantastical creature from a child's imagination. It floats around you and provides protection.\n  For the duration, whenever a creature you can see attacks you, your imaginary friend can use its reaction to impose disadvantage on the attack roll.\nReality Meltdown\n  You unleash your emotions, causing reality itself to throw a tantrum in a 30-foot radius around you. The area becomes difficult terrain.\n  When a creature enters the spell's area for the first time on a turn or starts its turn there, it must succeed on a Dexterity saving throw or be subject to a random chaotic effect. Roll a d6:\n1. The creature takes 4d10 force damage.\n2. The creature is teleported to an unoccupied space of your choice within the area.\n3. The creature is restrained by sticky, colorful goo until the start of its next turn.\n4. The creature is polymorphed into a harmless plush toy (as the polymorph spell) until the start of its next turn.\n5. A shower of sparks erupts from the creature. It and each creature within 10 feet of it take 3d6 fire damage.\n6. The creature is launched 30 feet straight up into the air and lands prone, taking falling damage as normal.\n\nIt's MINE!\n  You fixate on an object or creature with possessive desire. Choose one creature or one object that is not being worn or carried within range.\n\nCreature. The target must succeed on a Wisdom saving throw or be charmed by you for the duration. While charmed, the creature sees you as its most treasured person and will use its turns to protect you from any perceived threat. It will not willingly move more than 30 feet away from you.\nObject. You gain telekinetic control over the object for the duration. As a bonus action on your turn, you can move the object up to 30 feet and make a single melee spell attack against a creature within 5 feet of it. On a hit, the target takes 4d12 force damage.\n  At the end of each of its turns, an affected creature can repeat its saving throw, ending the effect on itself on a success.\n\nd100 Effect\nd100 Effect\n01- Roll on this table at the start of each of your turns for the next\n51- A spectral diaper appears on you. You get +1 AC but the\n02 minute, ignoring this result on subsequent rolls.\n52 diaper does not come off until it is comically full.\n03- For the next minute, you can see any Invisible creature if you\n53- You fail all potty checks for 1d4 days, rolling a d2 to 04 have line of sight to it, and you can see everyone's diaper status\n54 decide if you wet or mess.\n(instead of underpants).\n05- A NANNYBOT chosen & controlled by the DM appears in an\n55- Your underpants change into a clean diaper rolled from 06 unoccupied space within 5 feet of you. It disappears 1 minute\n56 the Diaper Chart.\nlater.\n07- You cast Diaper Doom as a 3rd-level spell centered on yourself if  57- For the next minute, any person you touch will be\n08 you pass a disadvantage potty check.\n58  diapered or boostered if already diapered.\n09- You cast Magic Missile on your diaper, expending 3 diaper usage  59- You regain your lowest-level expended spell slot and a\n10 charges.\n60 spectral magic hand pats you on the booty.\n11- Roll a d10. Your continence bonus-if any-changes by that\n61- For the next minute, you must BABY TALK when you\n12 number for one day.\n62 speak.\n13- You cast Baby-Brain (Confusion) centered on yourself. All who fail 63- You cast Stank Cloud centered on yourself. As Fog Cloud\n14 must roll a continence check.\n64 except DC 12 CON / 15-ft square or be sickened.\n15- For 1 minute, you regain 5 HP at the start of each of your turns\n65- Up to 3 creatures you choose within 30 ft take 4d10\n16 and your diaper regains one use charge.\n66 lightning damage and must roll a potty check.\n17- You become a living plushie version of yourself until you fluff\n67- You are Frightened by the nearest creature until the end\n18 your diaper, reverting to a FULL diaper.\n68 of your next turn, and you wet your diaper.\n19- You cast Grease centered on your diaper. You can butt-slide up\n69- Each creature within 30 ft of you becomes incontinent for\n20 to 30 ft with a 5 ft running start and leave an oil slick.\n70 the next 1d4 days.\n21- Your diaper harmlessly doubles in size and hums lightly for 1\n71- You gain resistance to all damage for the next minute\n22 minute. All creatures within 10 ft have disadvantage on\n72 and your diaper doubles in thickness. Concentration checks.\n23- Your outfit shifts pastel and your skin glows a vibrant nursery\n73- A random creature within 60 ft becomes incontinent and\n24 hue (pink, blue, or lavender). A Remove Curse spell can end this\n74 poisoned for 1d4 hours. effect.\n25- A cutesified outfit based on your class appears on you for 1\n75- Maximize the damage of the next damaging spell you\n26 minute. You gain advantage on Charisma (Performance) checks.  76  cast within the next minute.\n27- For the next minute, all your spells with a Casting Time of 1\n77- You cast Polymorph on yourself. If you fail the save, you\n28 action have a Casting Time of 1 bonus action, but you must roll\n78 turn into a baby version of yourself for the spell's a potty check when casting.\nduration.\n29- You teleport up to 60 ft to an unoccupied space you can see,\n79- Illusory butterflies and flower petals flutter in the air\n30 and roll a potty check.\n80 within 10 ft of you for the next minute.\n31- You're transported to the Nursery until the end of your next turn, 81- You can take one additional action immediately, but you\n32 then return to your previous or nearest unoccupied space.\n82 must make a potty check at disadvantage.\n33- You glow like a nightlight in a 30-ft radius for the next minute.\n83- Each creature within 30 ft takes 1d10 necrotic damage.\n34 Any creature ending its turn within 5 ft must succeed on a CON\n84 DC 10 CON check or have an immediate accident and be save or be Blinded.\nincontinent for 1d4 weeks.\n35- Your age regresses by a percentage equal to 10 � (1d10) for one  85- You cast Mirror Image, but the mirror image is a brat.\n36 hour.\n86\n37- You fall flat on your face like a baby. Witnesses must pass your\n87- All worn/carried panties in a 1-mile radius become\n38 spell save (WIS) or laugh uncontrollably until their next turn.\n88 diapers that cannot be removed until used.\n39- You become incontinent, roll a potty check at disadvantage. If\n89- An AU twin of yourself, under your control, appears to\n40  already incontinent, your diaper doubles in thickness and uses.\n90  aid you for 2d4 turns, wearing only a cute onesie &\ndiaper.\n41- Balled-up diapers rain down in a 10-ft radius you choose.\n91- You feel your pants/pampers grow damp/full-you have\n42 Creatures inside take 3d4+3 magical bludgeoning damage.\n92 had an accident, no saves.\n43- An angel appears to put you in a magical holy diaper. If good or\n93- You cast Spank as an 11th-level caster on every hostile\n44 neutral, diaper gives +1 AC; if not, -1 AC.\n94 target in the vicinity.\n45- A devil appears to put you in an unholy diaper. If good or\n95- You are teleported to The Babrooms for 1d2 turns.\n46 chaotic, you are now incontinent; if neutral or otherwise, +1 AC.\n96\n47- All creatures in a 20-ft radius (including you) must make a WIS\n97- The next spell you attempt to cast becomes an animated,\n48 saving throw. On a failure, they curl up on the nearest soft\n98 crayon-drawn version of itself. It functions at half power, surface, blanket, or plushie and nap for 1 minute or until\nand the drawings linger and amuse viewers.\ndisturbed.\n49- Creatures in a 30-ft radius crave sweets, needing to eat candy\n99- All creatures within 60 ft (including you) are momentarily\n50 before taking reactions. If they have candy, they may consume it 100 transformed into toddlers or infants for 1 minute,\nas a reaction at the start of their next turn.\nretaining their abilities but speaking in baby gibberish.\n\nPadded Magic for All!\nStep into a world where the raw surge of sorcery is bound to the humbling cadence of padded dependency. Every tantrum, every surge of wild energy, risks not only reshaping the battle?eld but also unraveling your composure. To walk this path is to accept that immense magical potential comes hand-in-hand with regression, vulnerability, and the ever-present crinkle of fate. Your choices will determine whether you are remembered as a chaotic liability, a resilient innovator, or a legend who turned weakness into doctrine.\nWithin hidden nurseries and arcane halls, others\nlike you wrestle with their dual nature. Some embrace the chaos of plushie storms and baby-brained confusion, others codify their origins into strict doctrine, weaving resilience from regression. Institutions may seek to regulate your tantrums, allies may rally to your cause, and enemies may mock your dependency - but only you can decide how to wield this peculiar inheritance. The world awaits to see what kind of sorcerer you will become.\n\nFor use with any fantasy roleplaying ruleset. Play the best game of your life!\n\nMore From Lulu \nSee more of my D&D&D (bet you can guess what the third \"D\" stands for....) content, including the illustrious Diaper School handbook and materials!\nCrinkleheart\nPerfect, pretty, padded succubi and incubi with a charming demeanor and an enthralling kiss- but cursed with a constant hunger for affection and physiological compulsion to wear diapers.\nAegisknight\nA modular armor-based class that can replace almost all base and even hybrid D&D5e classes. Includes character creator and numerous helpful functions. Creates level 5 characters, which means you are pre-quali?ed to join DIAPER SCHOOL!\nCarcharodonians\n(Adult) Baby SHARKS! Nibbles and nips aren't reserved for Pampires alone!",
       "concentration": true
-    },
-    {
-      "name": "Detention Field",
-      "level": 2,
-      "school": "evocation",
-      "classes": "Sorcerer",
-      "subclasses": "",
-      "casttime": "1 action",
-      "range": "60 feet",
-      "components": {
-        "verbal": true,
-        "somatic": true,
-        "material": "a small wooden ruler"
-      },
-      "duration": "Concentration, up to 1 minute",
-      "ritual": false,
-      "description": "You attempt to trap a creature in a field of disciplinary energy. Choose a creature you can see within range. The target must make a Dexterity saving throw. On a failed save, the creature is restrained for the duration by shimmering, golden lines of magic that form a 5-foot cube around it.\nAs an action, the restrained creature can make a Strength saving throw against your spell save DC, breaking free on a success.",
-      "higherlevels": "When you cast this spell using a spell slot of 3rd level or higher, you can target one additional creature for each slot level above 2nd.",
-      "concentration": true
-    },
-    {
-      "name": "Enforced Mandate",
-      "level": 3,
-      "school": "enchantment",
-      "classes": "Sorcerer",
-      "subclasses": "",
-      "casttime": "1 action",
-      "range": "30 feet",
-      "components": {
-        "verbal": true,
-        "somatic": true,
-        "material": false
-      },
-      "duration": "1 minute",
-      "ritual": false,
-      "description": "You issue a simple, school-appropriate rule that magically binds creatures. Choose one of the following mandates to affect each creature of your choice within range:\n\nNo Running in the Halls. An affected creature must succeed on a Wisdom saving throw or have its speed halved. If it attempts to use the Dash action, it immediately falls prone.\nRaise Your Hand to Speak. An affected creature must succeed on a Wisdom saving throw or be unable to speak or provide verbal spell components unless it first uses its bonus action to raise its hand.\nKeep Your Hands to Yourself. An affected creature must succeed on a Wisdom saving throw or become unable to make melee attacks against other creatures.\n\nAt the end of each of its turns, an affected creature can repeat its saving throw, ending the effect on itself on a success.",
-      "higherlevels": "",
-      "concentration": false
-    },
-    {
-      "name": "Summon Proctor",
-      "level": 3,
-      "school": "conjuration",
-      "classes": "Sorcerer",
-      "subclasses": "",
-      "casttime": "1 minute",
-      "range": "30 feet",
-      "components": {
-        "verbal": true,
-        "somatic": true,
-        "material": "a silver whistle"
-      },
-      "duration": "Concentration, up to 1 hour",
-      "ritual": false,
-      "description": "You summon a spectral proctor from the Academy's spirit. The proctor appears in an unoccupied space you can see. It uses the veteran stat block, but it is a construct, its weapon attacks are magical, and they deal force damage.\nThe proctor is friendly to you and your companions and follows your verbal commands, acting on its own initiative. Its primary purpose is to enforce order and protect students. It will not cause lethal harm unless specifically commanded to against a clear, dangerous threat.\nIf you lose concentration, the proctor acts on its own to restore order for 1 minute before vanishing.",
-      "higherlevels": "",
-      "concentration": true
-    },
-    {
-      "name": "Plagiarize",
-      "level": 4,
-      "school": "divination",
-      "classes": "Sorcerer",
-      "subclasses": "",
-      "casttime": "1 action",
-      "range": "30 feet",
-      "components": {
-        "verbal": true,
-        "somatic": true,
-        "material": false
-      },
-      "duration": "Instantaneous",
-      "ritual": false,
-      "description": "You attempt to magically copy knowledge from another spellcaster. Target a creature you can see within range that is capable of casting spells. The target must make an Intelligence saving throw.\nOn a failed save, you choose one spell of 3rd level or lower from the target's spell list. For the next 8 hours, you know this spell, and it counts as a sorcerer spell for you. You can cast it using your spell slots.\nThe target does not lose the spell, but is aware of the theft on a successful save.",
-      "higherlevels": "",
-      "concentration": false
-    },
-    {
-      "name": "Examination Dread",
-      "level": 4,
-      "school": "illusion",
-      "classes": "Sorcerer",
-      "subclasses": "",
-      "casttime": "1 action",
-      "range": "60 feet",
-      "components": {
-        "verbal": true,
-        "somatic": true,
-        "material": "a blank test paper"
-      },
-      "duration": "Concentration, up to 1 minute",
-      "ritual": false,
-      "description": "You instill the paralyzing fear of a surprise final exam in a creature's mind. Target one creature you can see. The target must make a Wisdom saving throw.\nOn a failure, the creature becomes frightened of you. While frightened, at the start of each of its turns, the creature must use its action to frantically answer a spectral test paper that appears before it, preventing it from taking any other action.\nAt the end of each of its turns, the creature can repeat the saving throw, ending the effect on a success.",
-      "higherlevels": "",
-      "concentration": true
-    },
-    {
-      "name": "Manifest Curriculum",
-      "level": 5,
-      "school": "transmutation",
-      "classes": "Sorcerer",
-      "subclasses": "",
-      "casttime": "1 action",
-      "range": "Self (30-foot cube)",
-      "components": {
-        "verbal": true,
-        "somatic": true,
-        "material": false
-      },
-      "duration": "Concentration, up to 1 minute",
-      "ritual": false,
-      "description": "You pull the principles of an academic subject into reality, altering the area in a 30-foot cube centered on yourself. Choose one of the following subjects:\n\nGeometry. The ground becomes a confusing grid of shifting lines and angles, creating difficult terrain. Any creature ending its turn in the area must succeed on a Dexterity saving throw or take 4d6 force damage.\nAlchemy. Vials of volatile chemicals bubble up from the ground. Any creature that enters the area or starts its turn there must succeed on a Constitution saving throw or take 4d8 acid or fire damage (your choice).\nConjuration Theory. The area becomes a nexus of unstable portals. Any creature ending its turn in the area must succeed on a Charisma saving throw or be randomly teleported to an unoccupied space within 30 feet.",
-      "higherlevels": "",
-      "concentration": true
-    },
-    {
-      "name": "Expel",
-      "level": 5,
-      "school": "abjuration",
-      "classes": "Sorcerer",
-      "subclasses": "",
-      "casttime": "1 action",
-      "range": "60 feet",
-      "components": {
-        "verbal": true,
-        "somatic": true,
-        "material": "a signed writ of expulsion, which the spell consumes"
-      },
-      "duration": "Instantaneous",
-      "ritual": false,
-      "description": "You issue a magical decree of expulsion against one creature. The target must succeed on a Charisma saving throw or be banished to a harmless demiplane.\nAt the end of the target's next turn, it reappears in the space it left. However, the shame of its expulsion lingers. For the next minute, the target has disadvantage on all attack rolls and ability checks.",
-      "higherlevels": "",
-      "concentration": false
     },
     {
       "name": "Sudden Outfit",
       "level": 2,
       "school": "illusion",
-      "classes": "Cleric",
+      "classes": "",
       "subclasses": "",
       "casttime": "1 action",
       "range": "60 feet",
@@ -437,26 +247,7 @@
       },
       "duration": "Concentration, up to 10 minutes",
       "ritual": false,
-      "description": "You attempt to force a creature you can see within range to don a ridiculous outfit over their current clothing and armor. The target must make a Wisdom saving throw. On a failed save, it is instantly adorned in a frilly, brightly colored, and completely inappropriate outfit of your design for the duration. While the outfit is harmless, it is incredibly distracting and humiliating. The target has disadvantage on Charisma (Intimidation) and Charisma (Persuasion) checks for the duration. As a bonus action on your subsequent turns, you can change the outfit’s color or style.",
-      "higherlevels": "",
-      "concentration": true
-    },
-    {
-      "name": "Mundane Makeover",
-      "level": 3,
-      "school": "transmutation",
-      "classes": "Cleric, Warlock",
-      "subclasses": "",
-      "casttime": "1 action",
-      "range": "30 feet",
-      "components": {
-        "verbal": true,
-        "somatic": true,
-        "material": "a small, plain wooden block"
-      },
-      "duration": "Concentration, up to 1 minute",
-      "ritual": false,
-      "description": "Choose a nonmagical object that is not being worn or carried by a hostile creature. You transform the object into another nonmagical object of similar size and weight. For example, you could transform a sword into a pool noodle, a suit of plate armor into a set of bulky footie pajamas, or a locked treasure chest into a large, wobbly gelatin mold. The transformation lasts for the duration or until you use your action to dismiss it.",
+      "description": "You attempt to force a creature you can see within range to don a ridiculous outfit over their current clothing and armor. The target must make a Wisdom saving throw. On a failed save, it is instantly adorned in a frilly, brightly colored, and completely inappropriate outfit of your design for the duration. While the outfit is harmless, it is incredibly distracting and humiliating. The target has disadvantage on Charisma (Intimidation) and Charisma (Persuasion) checks for the duration. As a bonus action on your subsequent turns, you can change the outfit’s color or style.  \nMundane Makeover 3rd-level transmutation",
       "higherlevels": "",
       "concentration": true
     },
@@ -464,7 +255,7 @@
       "name": "Suggestion Box",
       "level": 2,
       "school": "divination",
-      "classes": "Paladin",
+      "classes": "",
       "subclasses": "",
       "casttime": "1 action",
       "range": "Touch",
@@ -483,7 +274,7 @@
       "name": "Time-Out Corner",
       "level": 4,
       "school": "conjuration",
-      "classes": "Paladin",
+      "classes": "",
       "subclasses": "",
       "casttime": "1 action",
       "range": "60 feet",
@@ -502,208 +293,18 @@
       "name": "Unruly Urge",
       "level": 1,
       "school": "enchantment",
-      "classes": "Paladin",
+      "classes": "",
       "subclasses": "",
-      "casttime": "1 action",
-      "range": "30 feet",
+      "casttime": "",
+      "range": "",
       "components": {
-        "verbal": true,
-        "somatic": true,
+        "verbal": false,
+        "somatic": false,
         "material": false
       },
-      "duration": "Instantaneous",
+      "duration": "",
       "ritual": false,
-      "description": "You target one creature you can see within range, attempting to overwhelm them with a sudden, disruptive impulse. The target must succeed on a Wisdom saving throw or immediately use its reaction to perform one of the following harmless, chaotic acts (your choice):\n- Drop one item it is holding.\n- Fall prone.\n- Use all of its remaining movement to run in a random direction.\n- Use their diaper if wearing one, or soil their pants (need dependent).",
-      "higherlevels": "",
-      "concentration": false
-    },
-    {
-      "name": "Conjure Graceberries",
-      "level": 1,
-      "school": "conjuration",
-      "classes": "Druid",
-      "subclasses": "",
-      "casttime": "1 action",
-      "range": "Touch",
-      "components": {
-        "verbal": true,
-        "somatic": true,
-        "material": "a sprig of mistletoe"
-      },
-      "duration": "Instantaneous",
-      "ritual": false,
-      "description": "You conjure 2d4 glowing, golden berries in your hand. These berries are suffused with a gentle, divine essence and lose their potency if not consumed within 24 hours. A creature can use its action to eat one berry.\n\nHealing. Eating a berry allows the consumer to immediately spend one of their available Hit Dice to regain hit points as if they had just finished a short rest.\n\nRadiance. For 1 hour after consuming one or more berries, the creature emits a soft golden aura, as if under the effect of the light cantrip.\n\nOverindulgence. A creature can safely consume up to three graceberries before finishing a short or long rest. If a creature consumes a fourth berry before resting, it must succeed on a DC 12 Constitution saving throw or suffer a hypermessy accident, automatically failing all of its remaining diaper checks at once. Regardless of the save’s outcome, the creature becomes magically incontinent for the next 1d4 days. After the accident occurs, the creature feels a moment of sudden relief and clarity, gaining a +1 bonus to all attack rolls, ability checks, and saving throws for the next hour.",
-      "higherlevels": "",
-      "concentration": false
-    },
-    {
-      "name": "Soothing Stones",
-      "level": 2,
-      "school": "abjuration",
-      "classes": "Druid",
-      "subclasses": "",
-      "casttime": "1 minute",
-      "range": "Touch",
-      "components": {
-        "verbal": true,
-        "somatic": true,
-        "material": "three small, smooth stones"
-      },
-      "duration": "8 hours",
-      "ritual": false,
-      "description": "You touch three small stones and imbue them with calming energy. A creature can hold one of these stones to gain advantage on saving throws against being frightened. The magic on a stone is expended after it successfully helps a creature succeed on a saving throw, or after 8 hours, whichever comes first.",
-      "higherlevels": "",
-      "concentration": false
-    },
-    {
-      "name": "Swaddling Vines",
-      "level": 2,
-      "school": "conjuration",
-      "classes": "Druid",
-      "subclasses": "",
-      "casttime": "1 reaction",
-      "range": "60 feet",
-      "components": {
-        "verbal": true,
-        "somatic": true,
-        "material": "a strip of soft cloth"
-      },
-      "duration": "Concentration, up to 1 minute",
-      "ritual": false,
-      "description": "You cause thick, soft vines to spring from the ground and attempt to swaddle a creature you can see within range. The target must succeed on a Strength saving throw or be restrained for the duration. A restrained creature can use its action to make a Strength check against your spell save DC, freeing itself on a success. While restrained by the vines, the creature is comfortably warm and has a faint, magical sense of security.",
-      "higherlevels": "",
-      "concentration": true
-    },
-    {
-      "name": "Warm Milk",
-      "level": 3,
-      "school": "conjuration",
-      "classes": "Druid",
-      "subclasses": "",
-      "casttime": "1 action",
-      "range": "30 feet",
-      "components": {
-        "verbal": true,
-        "somatic": true,
-        "material": "a drop of milk"
-      },
-      "duration": "Instantaneous",
-      "ritual": false,
-      "description": "You conjure a warm, nourishing drink for your allies. Choose up to three creatures you can see within range. Each target regains 3d8 + your spellcasting ability modifier hit points and has advantage on the next saving throw it makes against poison or disease within the next hour. The rich and nutrient-dense nature of the milk makes it a bit more intense on the digestive system than most food and drink. Those who consume the milk must make a potty-check upon completion of the drink.",
-      "higherlevels": "",
-      "concentration": false
-    },
-    {
-      "name": "Warding Glyphs of the Janitor",
-      "level": 3,
-      "school": "abjuration",
-      "classes": "Wizard, Cleric, Bard, Artificer",
-      "subclasses": "",
-      "casttime": "1 minute (10 minutes if cast as a ritual)",
-      "range": "Touch",
-      "components": {
-        "verbal": true,
-        "somatic": true,
-        "material": "a small, wet sponge"
-      },
-      "duration": "Until dispelled or triggered",
-      "ritual": true,
-      "description": "You inscribe a nearly invisible glyph on a floor or wall. You set a condition for the glyph to trigger, such as a creature stepping on it, opening a door, or tracking in mud. When triggered, the glyph activates one of the following janitorial effects of your choice:\n- Grease Trap. The glyph casts grease centered on itself. The area is also considered difficult terrain as the floor becomes magically slippery and wet.\n- Soap Spray. The glyph erupts in a burst of soapy bubbles. All creatures in a 10-foot radius must succeed on a Dexterity saving throw or be blinded until the end of their next turn. Surfaces are left squeaky clean.\n- Dust Cloud. The glyph releases a choking cloud of dust. All creatures in a 15-foot cube must succeed on a Constitution saving throw or begin coughing violently, becoming poisoned until the end of their next turn.\n- Mop Snare. Spectral mop-handles lash out. One creature within 10 feet must succeed on a Strength saving throw or be restrained until the end of its next turn.\n- Bucket Spill. A phantom bucket tips over, creating a 10-foot square of difficult terrain filled with illusory dirty water. Any creature that enters must succeed on a Dexterity saving throw or fall prone.\n- Caution Sign. A glowing yellow \"Caution: Wet Floor\" sign manifests. All hostile creatures within 20 feet must succeed on a Wisdom saving throw or be frightened until the end of their next turn. Allies are unaffected.\n\nRitual Use. When cast as a ritual, the glyphs last for 24 hours even if triggered, as the janitorial magic continually refreshes itself. However, only one ritual glyph may be active at a time per caster.",
-      "higherlevels": "When you cast this spell using a spell slot of 4th level or higher, you may inscribe one additional glyph for every slot level above 3rd. Each glyph must be placed within 30 feet of another.",
-      "concentration": false
-    },
-    {
-      "name": "Hall Pass",
-      "level": 4,
-      "school": "divination",
-      "classes": "Druid",
-      "subclasses": "",
-      "casttime": "1 action",
-      "range": "Touch",
-      "components": {
-        "verbal": true,
-        "somatic": true,
-        "material": "a signed piece of parchment"
-      },
-      "duration": "10 minutes",
-      "ritual": false,
-      "description": "You touch a willing creature. For the duration, the creature is considered to have permission to be wherever it is. Humanoid creatures with an Intelligence of 6 or higher must succeed on a Wisdom saving throw if they try to question the target’s presence; on a failed save, they accept that the target is allowed to be there and will not become hostile or raise an alarm unless the target takes a hostile action. The spell has no effect on creatures immune to being charmed.",
-      "higherlevels": "",
-      "concentration": false
-    },
-    {
-      "name": "Soothing Pollen",
-      "level": 4,
-      "school": "conjuration",
-      "classes": "Druid",
-      "subclasses": "",
-      "casttime": "1 action",
-      "range": "Self (30-foot cone)",
-      "components": {
-        "verbal": true,
-        "somatic": true,
-        "material": "a pinch of pollen from a dream lily"
-      },
-      "duration": "1 minute",
-      "ritual": false,
-      "description": "You release a cloud of shimmering pollen in a 30-foot cone. Each creature in that area must succeed on a Constitution saving throw or fall unconscious for the duration. This effect ends for a creature if it takes damage or someone uses an action to wake it. You may decide which creatures this effect targets when they enter the pollen field. Allies AND targets who enter the pollen field must make a potty check due to the stimulating nature of the pollen.",
-      "higherlevels": "",
-      "concentration": false
-    },
-    {
-      "name": "Mother’s Embrace",
-      "level": 5,
-      "school": "abjuration",
-      "classes": "Druid",
-      "subclasses": "",
-      "casttime": "1 action",
-      "range": "60 feet",
-      "components": {
-        "verbal": true,
-        "somatic": true,
-        "material": false
-      },
-      "duration": "Concentration, up to 1 minute",
-      "ritual": false,
-      "description": "You choose a willing creature you can see within range. A shimmering, spectral form of a nurturing figure envelops the target. For the duration, the target has immunity to all non-magical damage, non-magical disease, and poison, and resistance to all other forms of damage, and at the start of each of its turns, it regains 10 hit points. If it is under the effects of a spell that slows or negates its movement, or on terrain that would harm or stifle it, the spectral form carries it over it at its normal movement speed without penalty, including temporarily negating the effects of an overloaded or leaking diaper. The spell ends if the target takes any hostile action.",
-      "higherlevels": "",
-      "concentration": true
-    },
-    {
-      "name": "Spirit of the Campus",
-      "level": 5,
-      "school": "divination",
-      "classes": "Druid",
-      "subclasses": "",
-      "casttime": "10 minutes",
-      "range": "Self",
-      "components": {
-        "verbal": true,
-        "somatic": true,
-        "material": "incense and fresh flowers native to the academy grounds"
-      },
-      "duration": "Instantaneous",
-      "ritual": true,
-      "description": "You briefly attune your senses to the living spirit of the Scholia Diaspros. You can ask up to three questions about the campus, its inhabitants, or recent events that have occurred on its grounds. The spirit answers truthfully, but its knowledge is limited to what has happened within the Academy’s magical borders in the last week. The answers are often cryptic, phrased in metaphors of growth, decay, and academic life (e.g., \"A promising sapling was uprooted by a bitter frost,\" instead of \"A first-year student was bullied by a senior.\").",
-      "higherlevels": "",
-      "concentration": false
-    },
-    {
-      "name": "Coven’s Safe Haven",
-      "level": 5,
-      "school": "abjuration",
-      "classes": "Wizard",
-      "subclasses": "",
-      "casttime": "10 minutes",
-      "range": "30 feet",
-      "components": {
-        "verbal": true,
-        "somatic": true,
-        "material": "a small, hand-stitched doll, a warm blanket, and a cup of milk, which are consumed by the spell"
-      },
-      "duration": "8 hours",
-      "ritual": true,
-      "description": "You conjure a cozy, protected demiplane that manifests in a 30-foot cube originating from a point you can see within range. The space appears comfortably furnished with soft rugs, plush cushions, warm blankets, and a gentle, magical hearth that provides warmth but no smoke. The air smells faintly of fresh-baked cookies.\n\nYou can choose to make the entrance to this haven visible as a simple wooden door, or invisible to all but creatures you designate at the time of casting.\n\nThe following effects apply within the area:\n- The area is secured against magical intrusion. Sensors created by divination spells can’t appear inside the sphere, and creatures outside it can’t telepathically communicate with creatures inside it.\n- Any creature hostile to you that attempts to enter the area must first succeed on a Charisma saving throw against your spell save DC. On a failed save, the creature cannot enter the area and wastes its action.\n- Any friendly creature that takes a short or long rest within the area regains the maximum possible number of hit points from any Hit Dice they spend and has advantage on saving throws against disease and poison for the next 24 hours.",
+      "description": "perceives the shadows as monstrous, grasping claws and is considered frightened of you.",
       "higherlevels": "",
       "concentration": false
     }

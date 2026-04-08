@@ -1,0 +1,36 @@
+{
+  "Blanz-Coh the Tiny Terror": "src/assets/images/Monsters/blancoz.webp",
+
+  "Hactor the Everhopping": "src/assets/images/Monsters/hactor.webp",
+  "Lord Furuzzle: Bunnarch of All Bunkind": "src/assets/images/Monsters/furuzzle.webp",
+
+  "Caelistian Gunner": [
+    "src/assets/images/Monsters/caelistianremnantgunner1.webp",
+    "src/assets/images/Monsters/caelistianremnantgunner2.webp"
+  ],
+  "Caelistian Infiltrator": [
+    "src/assets/images/Monsters/caelistianremnantinfiltrator.webp",
+    "src/assets/images/Monsters/caelistianremnantinfiltrator (1).webp",
+    "src/assets/images/Monsters/caelistianremnantinfiltrator (2).webp",
+    "src/assets/images/Monsters/caelistianremnantinfiltrator (3).webp"
+  ],
+  "Caelistian Vanguard": [
+    "src/assets/images/Monsters/caelistianremnantvanguard.webp",
+    "src/assets/images/Monsters/caelistianremnantvanguard1.webp"
+  ],
+  "Caelistian Zealot": [
+    "src/assets/images/Monsters/caelistianremnantzealot.webp",
+    "src/assets/images/Monsters/caelistianremnantzealot2.webp"
+  ],
+
+  "Darkforme Pseudomaiden": [
+    "src/assets/images/Monsters/pseudomaiden.webp",
+    "src/assets/images/Monsters/pseudomaiden1.webp"
+  ],
+  "Darkforme Toddlegeist": "src/assets/images/Monsters/toddlegeist.webp",
+
+  "Darkling Cubling Suppsipper": "src/assets/images/Monsters/cublingsuppsipper.webp",
+
+  "Grizzwauler, the Gargant": "src/assets/images/Monsters/grizzwauler.webp",
+  "Tittalus Manus, The Bad Toucher": "src/assets/images/Monsters/tittalusmanus.webp"
+}

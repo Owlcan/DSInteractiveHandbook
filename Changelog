@@ -1,5 +1,10 @@
 # DS Interactive Handbook Changelog
-*Last Updated: August 18, 2025*
+*Last Updated: March 6, 2026*
+
+## v1.6.5
+- Worldmap: Added 4 new biome encounter libraries (Ossuite Tribal Lands, Perilous Ossuite Tribal Lands, Darkling Tribal Conflict Zones, Darkling Infantry HQ).
+- Worldmap: Conflict-zone presets include an "already fighting" note (uses preset encounters so the note is visible).
+- Data: Biome encounter tables validated against the V2 bestiary.
 
 ## Major Game Updates & New Features
 

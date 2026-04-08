@@ -71,11 +71,11 @@
 
     /* Iframe/embed mode: don't force standalone page padding/centering */
     body.embedded {
-      padding: 0;
-      background: transparent;
-      background-image: none;
+      padding: 10px;
+      background-color: #2c2619;
+      background-image: url('https://www.transparenttextures.com/patterns/dark-wood.png');
       display: block;
-      min-height: 0;
+      min-height: 100vh;
     }
 
    .tooltip-container {
@@ -843,6 +843,42 @@ try {
   document.body.classList.add('embedded');
 }
 
+const readEmbedConfig = () => {
+  const params = new URLSearchParams(window.location.search || '');
+  const readBool = (key) => {
+    const raw = String(params.get(key) || '').trim().toLowerCase();
+    return raw === '1' || raw === 'true' || raw === 'yes';
+  };
+  return {
+    enabled: readBool('embed') || readBool('worldmap'),
+    sessionId: String(params.get('sessionId') || '').trim(),
+    regionKey: String(params.get('regionKey') || '').trim().toLowerCase(),
+    rodName: String(params.get('rodName') || '').trim(),
+    lureName: String(params.get('lureName') || '').trim(),
+    playerBonus: String(params.get('playerBonus') || '').trim(),
+    lockRegion: readBool('lockRegion'),
+    lockGear: readBool('lockGear'),
+    lockPlayerBonus: readBool('lockPlayerBonus'),
+  };
+};
+
+const EMBED_CONFIG = readEmbedConfig();
+
+const postEmbedEvent = (type, payload = {}) => {
+  if (!EMBED_CONFIG.enabled) return;
+  if (!(window.parent && window.parent !== window)) return;
+  try {
+    window.parent.postMessage({
+      scope: 'worldmap-fishing',
+      type: String(type || '').trim(),
+      sessionId: EMBED_CONFIG.sessionId,
+      ...payload,
+    }, '*');
+  } catch {
+    // ignore
+  }
+};
+
 // Determine extreme rarity for gating
 function isExtremeRare(fish) {
   const named = new Set([
@@ -1110,6 +1146,39 @@ function initializeFishingMinigame() {
   const catalogueList = document.getElementById('catalogue-list');
    const playerBonusTooltip = document.getElementById('player-bonus-tooltip');
    const playerBonusLabel = document.getElementById('player-bonus-label');
+
+   const applySelectByLabelPrefix = (selectEl, label) => {
+     const wanted = String(label || '').trim().toLowerCase();
+     if (!selectEl || !wanted) return false;
+     const options = Array.from(selectEl.options || []);
+     const hit = options.find((opt) => String(opt.textContent || '').trim().toLowerCase().startsWith(wanted));
+     if (!hit) return false;
+     selectEl.value = hit.value;
+     return true;
+   };
+
+   const applyEmbedLoadout = () => {
+     if (!EMBED_CONFIG.enabled) return;
+     if (EMBED_CONFIG.regionKey === 'lake_river' && regionSelect) {
+       regionSelect.value = '0';
+       if (EMBED_CONFIG.lockRegion) regionSelect.disabled = true;
+     }
+     if (rodSelect) {
+       applySelectByLabelPrefix(rodSelect, EMBED_CONFIG.rodName);
+       if (EMBED_CONFIG.lockGear) rodSelect.disabled = true;
+     }
+     if (lureSelect) {
+       applySelectByLabelPrefix(lureSelect, EMBED_CONFIG.lureName);
+       if (EMBED_CONFIG.lockGear) lureSelect.disabled = true;
+     }
+     if (playerBonusInput && EMBED_CONFIG.playerBonus) {
+       playerBonusInput.value = EMBED_CONFIG.playerBonus;
+     }
+     if (playerBonusInput && EMBED_CONFIG.lockPlayerBonus) {
+       playerBonusInput.disabled = true;
+     }
+     updateRegionDescription();
+   };
 
    // --- Fish Data ---
      // Define fishing regions and their fish                                      
@@ -1684,6 +1753,15 @@ function selectRandomFish() {
         notes: 'Cast started'
       });
 
+      postEmbedEvent('cast-started', {
+        castId,
+        regionName: regionNameForHistory,
+        fish: { name: targetFish.name, dc: targetFish.dc },
+        rodName: rodNameForHistory,
+        lureName: lureNameForHistory,
+        playerBonus,
+      });
+
       fishingLog.innerHTML += `<p class="text-blue-600 font-semibold">You cast your line hoping to catch a ${targetFish.name} (DC: ${targetFish.dc})...</p>`; // text-blue-600 will use themed color
 
     let successfulRolls = 0;
@@ -1729,6 +1807,13 @@ function selectRandomFish() {
                    total: null,
                    outcome: 'FAIL',
                    notes: 'Fish got away (too many failed attempts)'
+                 });
+                 postEmbedEvent('cast-ended', {
+                   result: 'escaped',
+                   reason: 'too_many_failed_attempts',
+                   castId,
+                   regionName: regionNameForHistory,
+                   fish: { name: targetFish.name, dc: targetFish.dc, value: targetFish.value, properties: targetFish.properties || '', image: targetFish.image || '' },
                  });
                  break;
                }
@@ -1870,6 +1955,13 @@ function selectRandomFish() {
          outcome: 'FAIL',
          notes: 'Final reel tension failed (hook slipped)'
        });
+        postEmbedEvent('cast-ended', {
+          result: 'escaped',
+          reason: 'hook_slipped',
+          castId,
+          regionName: regionNameForHistory,
+          fish: { name: targetFish.name, dc: targetFish.dc, value: targetFish.value, properties: targetFish.properties || '', image: targetFish.image || '' },
+        });
         	 	 return;
         	 }
         	 fishingLog.innerHTML += `<p class=\"text-green-600 font-bold mt-1\">Landed the ${targetFish.name}!</p>`;
@@ -1919,6 +2011,20 @@ function selectRandomFish() {
         	 sessionCatchCount += 1;
         	 sessionTotalValue += Number(targetFish.value) || 0;
         	 updateSessionStats();
+       postEmbedEvent('caught', {
+         castId,
+         regionName,
+         fish: {
+           name: targetFish.name,
+           dc: targetFish.dc,
+           value: targetFish.value,
+           properties: targetFish.properties || '',
+           image: targetFish.image || '',
+         },
+         rodName: rodNameForHistory,
+         lureName: lureNameForHistory,
+         playerBonus,
+       });
     	 } else if (attempts < 3 && successfulRolls < 2 && (attempts - successfulRolls < 2 || attempts <2) ) {
         	 fishingLog.innerHTML += `<p class="text-red-600 font-bold mt-2">The fish got away...</p>`;
      pushHistory({
@@ -1933,6 +2039,13 @@ function selectRandomFish() {
        outcome: 'FAIL',
        notes: 'Fish got away'
      });
+      postEmbedEvent('cast-ended', {
+        result: 'escaped',
+        reason: 'fish_got_away',
+        castId,
+        regionName: regionNameForHistory,
+        fish: { name: targetFish.name, dc: targetFish.dc, value: targetFish.value, properties: targetFish.properties || '', image: targetFish.image || '' },
+      });
     	 }
    }
 
@@ -2125,7 +2238,14 @@ function selectRandomFish() {
 
    // --- Initialize UI ---
    populateDropdowns();
+   applyEmbedLoadout();
    switchTab('fishing');
+   postEmbedEvent('ready', {
+     regionName: regionSelect?.options?.[regionSelect.selectedIndex]?.text || '',
+     rodName: rodSelect?.options?.[rodSelect.selectedIndex]?.text || '',
+     lureName: lureSelect?.options?.[lureSelect.selectedIndex]?.text || '',
+     playerBonus: Number(playerBonusInput?.value || 0) || 0,
+   });
 }
 
 document.addEventListener('DOMContentLoaded', initializeFishingMinigame);
