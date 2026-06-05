@@ -1,0 +1,200 @@
+{
+  "runtimeCreatureCount": 207,
+  "embeddedCreatureCount": 140,
+  "imageFileCount": 246,
+  "matchedImageFileCount": 234,
+  "unmatchedImageFileCount": 12,
+  "unmatchedNonVariantImageFileCount": 1,
+  "uncoveredCreatureCount": 0,
+  "embeddedIntegrity": {
+    "embeddedMissingFromRuntime": 0,
+    "entriesWithAnyObjectChange": 0,
+    "entriesWithChangedDamageVulnerabilities": 0,
+    "entriesWithChangedDamageResistances": 0,
+    "entriesWithChangedDamageImmunities": 0,
+    "duplicateEmbeddedNameCount": 1,
+    "duplicateEmbeddedNames": [
+      {
+        "name": "darkforme-ossuarian",
+        "count": 2
+      }
+    ],
+    "changedEmbeddedEntries": [],
+    "changedStatArrayEntries": []
+  },
+  "darklingRadiantCoverage": {
+    "runtimeBeforePageFixup": {
+      "trackedCreatureCount": 139,
+      "missingRadiantCount": 30,
+      "missingRadiantCreatures": [
+        "Dark Mycoforme Rotter",
+        "Darkforme Benthic Leviathan",
+        "Darkforme Gutroar",
+        "Darkforme Mycomugger",
+        "Darkforme Mycomystic",
+        "Darkforme Pseudomaiden",
+        "Darkforme Punishment Maid",
+        "Darkforme Tickle Monster",
+        "Darkforme Toddlegeist",
+        "Darkforme-Chrono-Snare",
+        "Darkforme-Deluge",
+        "Darkforme-Mangrove-Matriarch",
+        "Darkforme-Nightpinyon",
+        "Darkforme-Ossuarian",
+        "Darkforme-Suffocator",
+        "Darkling Cubling Suppsipper",
+        "Darkling-Cactine",
+        "Darkling-Cactine-Biggo-Boy",
+        "Darkling-Ghostiby",
+        "Darkling-Hooter",
+        "Darkling-Hungerer",
+        "Darkling-Nightshade Elemental",
+        "Darkling-Shark",
+        "Darkling-Slitherscale",
+        "Darkling-Ticklefinger",
+        "Darkshade Fungi Darkling",
+        "Funky Fungi Darkling",
+        "Grizzwauler, the Gargant",
+        "Spore Spreader Darkling",
+        "Tittalus Manus, The Bad Toucher"
+      ]
+    },
+    "radiantFixupsApplied": 30,
+    "pageStateAfterFixup": {
+      "trackedCreatureCount": 139,
+      "missingRadiantCount": 0,
+      "missingRadiantCreatures": []
+    }
+  },
+  "unmatchedFiles": [
+    "bellyacher.webp",
+    "Dark Mycoforme Rotter1.webp",
+    "Darkforme Mycomugger1.webp",
+    "Darkshade Fungi Darkling (2).webp",
+    "Darkshade Fungi Darkling_ (2).webp",
+    "Darkshade Fungi Darkling_ (3).webp",
+    "Darkshade Fungi Darkling_ (4).webp",
+    "Darkshade Fungi Darkling_.webp",
+    "Funky Fungi Darkling1.webp",
+    "Funky Fungi Darkling2.webp",
+    "pseudomaiden1.webp",
+    "Spore Spreader Darkling1.webp"
+  ],
+  "unmatchedNonVariantFiles": [
+    "bellyacher.webp"
+  ],
+  "nearMatchSuggestions": [
+    {
+      "fileName": "bellyacher.webp",
+      "canonicalStem": "bellyacher",
+      "possibleExistingCreatures": []
+    }
+  ],
+  "uncoveredCreatures": [],
+  "uncoveredCreatureSuggestions": [],
+  "coveredByMultipleCreatures": [
+    {
+      "fileName": "Brackling.webp",
+      "creatureNames": [
+        "Darkling-Brackling",
+        "Darkling-Sea-Brackling"
+      ]
+    },
+    {
+      "fileName": "darkformeballisteer.webp",
+      "creatureNames": [
+        "Darkforme-Ballisteer",
+        "Darkforme-Ballisteer (Arbalest)"
+      ]
+    },
+    {
+      "fileName": "darkformeshieldguard.webp",
+      "creatureNames": [
+        "Darkforme-Enforcer (Storm-Shield)",
+        "Darkforme-Shieldguard"
+      ]
+    },
+    {
+      "fileName": "darklingslime.webp",
+      "creatureNames": [
+        "Darkling Angler-Lurk",
+        "Darkling Bellowbelly Cubling",
+        "Darkling Blood-Gorger",
+        "Darkling Cube Princess",
+        "Darkling Cubling Suppsipper",
+        "Darkling Detention Professor (Mage Specialist)",
+        "Darkling Detention Professor (Weapon Specialist)",
+        "Darkling Gloom-Newt",
+        "Darkling Gourdling",
+        "Darkling Hall Monitor",
+        "Darkling Liquid Legion",
+        "Darkling Murkfin Swarmer",
+        "Darkling Pond-Skulker",
+        "Darkling Rill-Skitter",
+        "Darkling River-Lurk",
+        "Darkling Slime Big Boi",
+        "Darkling Taxling",
+        "Darkling Weed-Tangler",
+        "Darkling-Bellowbelly",
+        "Darkling-Brackling",
+        "Darkling-Cactine",
+        "Darkling-Cactine-Biggo-Boy",
+        "Darkling-Caller",
+        "Darkling-Delta-Mimic",
+        "Darkling-Gale-Harrier",
+        "Darkling-Ghostiby",
+        "Darkling-Gilded-Husk",
+        "Darkling-Glamour-Mantle",
+        "Darkling-Grease-Mite",
+        "Darkling-Hoarfrost-Yowler",
+        "Darkling-Hooter",
+        "Darkling-Hungerer",
+        "Darkling-Loop-Stalker",
+        "Darkling-Lurker",
+        "Darkling-Nightshade Elemental",
+        "Darkling-Ossokin",
+        "Darkling-Ossokin-Proselyte",
+        "Darkling-Ossuite Charger",
+        "Darkling-Ossuite Charger Omega",
+        "Darkling-Paralurker",
+        "Darkling-Petro-Legion",
+        "Darkling-Porcelain-Thrall",
+        "Darkling-Rimecreep",
+        "Darkling-Scree-Roller",
+        "Darkling-Sea-Brackling",
+        "Darkling-Shark",
+        "Darkling-Shell-Skitterer",
+        "Darkling-Shiver",
+        "Darkling-Silt-Hound",
+        "Darkling-Slitherscale",
+        "Darkling-Slurper",
+        "Darkling-Slush-Slurper",
+        "Darkling-Sol-Shunner",
+        "Darkling-Spore-Symbiote",
+        "Darkling-Squallkin",
+        "Darkling-Ticklefinger",
+        "Darkling-Yowler",
+        "Darkshade Fungi Darkling",
+        "Funky Fungi Darkling",
+        "Small Cuboid Darkling Slime",
+        "Small Slime Darkling",
+        "Spore Spreader Darkling",
+        "Tiny Slime Darkling"
+      ]
+    },
+    {
+      "fileName": "enforcer.webp",
+      "creatureNames": [
+        "Darkform Enforcer",
+        "Darkforme-Enforcer (Storm-Shield)"
+      ]
+    },
+    {
+      "fileName": "smalldarklingslime.webp",
+      "creatureNames": [
+        "Small Cuboid Darkling Slime",
+        "Small Slime Darkling"
+      ]
+    }
+  ]
+}

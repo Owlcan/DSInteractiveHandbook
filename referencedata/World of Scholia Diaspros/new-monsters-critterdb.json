@@ -1,0 +1,3586 @@
+{
+  "sharing": {
+    "linkSharingEnabled": true
+  },
+  "_id": "6870862c97a02efde25f91ce",
+  "name": "Diaper School Full Bestiary",
+  "description": "",
+  "ownerId": "67db624c6e7abba7de467050",
+  "__v": 0,
+  "lastActive": "2026-03-20T02:08:45.914Z",
+  "owner": {
+    "_id": "67db624c6e7abba7de467050",
+    "username": "Combat-Academy"
+  },
+  "creaturesLoading": false,
+  "creatures": [
+  {
+    "flavor": {
+      "faction": "",
+      "environment": "The Bay of Blitz",
+      "description": "A wriggling, squid-like blob of translucent shadow-ooze that infests the flooded margins of the suburban coves. It loves nothing more than dragging its slippery, glistening body across pristine tile floors to surprise unwary travelers. Unlike common freshwater bracklings, this oceanic variant is highly adapted to the churning tidal salt-spray of the nameless coast.",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": {}
+    },
+    "stats": {
+      "size": "Small",
+      "race": "Abomination (Ooze)",
+      "alignment": "Brackish Evil",
+      "armorType": "Natural Armor",
+      "armorClass": 12,
+      "numHitDie": 4,
+      "speed": "15 ft., swim 30 ft., fly 15 ft. (clumsy)",
+      "abilityScores": {
+        "strength": 10,
+        "dexterity": 15,
+        "constitution": 14,
+        "intelligence": 5,
+        "wisdom": 10,
+        "charisma": 6
+      },
+      "proficiencyBonus": 2,
+      "damageVulnerabilities": [
+        "Radiant"
+      ],
+      "damageResistances": [],
+      "damageImmunities": [],
+      "conditionImmunities": [
+        "Blinded",
+        "Cursed",
+        "Prone"
+      ],
+      "senses": [
+        "Darkvision 60 ft.",
+        "Passive Perception 10"
+      ],
+      "languages": [],
+      "challengeRating": 1,
+      "experiencePoints": 200,
+      "legendaryActionsPerRound": 0,
+      "legendaryActionsDescription": "",
+      "savingThrows": [],
+      "skills": [],
+      "additionalAbilities": [
+        {
+          "name": "Amphibious",
+          "description": "The Sea-Brackling can breathe both air and water.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Ink Jet Dash",
+          "description": "While submerged or airborne, the Sea-Brackling can expel a pressurized jet of ink as a bonus action, allowing it to take the Dash action without provoking opportunity attacks.",
+          "descriptionHtml": {}
+        }
+      ],
+      "actions": [
+        {
+          "name": "Slippery Tentacle",
+          "description": "Melee Weapon Attack: +4 to hit, reach 10 ft., one target. Hit: 5 (1d6 + 2) bludgeoning damage plus 3 (1d6) necrotic damage.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Obscuring Ink Spray (Recharge 5-6)",
+          "description": "The Sea-Brackling ejects a 15-foot cone of dark, brackish ink. Each creature in that area must make a DC 12 Dexterity saving throw. On a failure, a creature is blinded until the end of its next turn. Additionally, any affected creature wearing a diaper or garment must immediately make a DC 12 Potty Check; on a failure, the garment loses 1 Use Charge.",
+          "descriptionHtml": {}
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [],
+      "hitDieSize": 6,
+      "armorTypeStr": "(Natural Armor)",
+      "abilityScoreModifiers": {
+        "strength": 0,
+        "dexterity": 2,
+        "constitution": 2,
+        "intelligence": -3,
+        "wisdom": 0,
+        "charisma": -2
+      },
+      "abilityScoreStrs": {
+        "strength": "10 (+0)",
+        "dexterity": "15 (+2)",
+        "constitution": "14 (+2)",
+        "intelligence": "5 (-3)",
+        "wisdom": "10 (+0)",
+        "charisma": "6 (-2)"
+      },
+      "extraHealthFromConstitution": 8,
+      "hitPoints": 32,
+      "hitPointsStr": "32 (4d6 + 8)",
+      "passivePerception": 10,
+      "challengeRatingStr": "1"
+    },
+    "name": "Darkling-Sea-Brackling"
+  },
+  {
+    "flavor": {
+      "faction": "",
+      "environment": "The Bay of Blitz",
+      "description": "These floating, huffing balls of pure electrical static and shadow cluster around lonely wizard towers. They love short-circuiting defensive wards and delivering annoying static shocks to passing apprentices.",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": {}
+    },
+    "stats": {
+      "size": "Small",
+      "race": "Abomination",
+      "alignment": "Static Evil",
+      "armorType": "",
+      "armorClass": 13,
+      "numHitDie": 4,
+      "speed": "0 ft., fly 30 ft. (hover)",
+      "abilityScores": {
+        "strength": 6,
+        "dexterity": 16,
+        "constitution": 12,
+        "intelligence": 6,
+        "wisdom": 11,
+        "charisma": 8
+      },
+      "proficiencyBonus": 2,
+      "damageVulnerabilities": [
+        "Radiant"
+      ],
+      "damageResistances": [],
+      "damageImmunities": [
+        "Lightning",
+        "Thunder"
+      ],
+      "conditionImmunities": [],
+      "senses": [
+        "Darkvision 60 ft.",
+        "Passive Perception 10"
+      ],
+      "languages": [],
+      "challengeRating": 0.5,
+      "experiencePoints": 100,
+      "legendaryActionsPerRound": 0,
+      "legendaryActionsDescription": "",
+      "savingThrows": [],
+      "skills": [],
+      "additionalAbilities": [
+        {
+          "name": "Static Disruption",
+          "description": "Any creature that hits the Squallkin with a melee attack while within 5 ft. of it takes 3 (1d6) lightning damage. Additionally, if the attacker is wearing a diaper or garment, the shocking jolt triggers an involuntary pelvic reflex, forcing the creature to make a DC 10 Potty Check; on a failure, they suffer a minor wetting accident, losing 1 Use Charge.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Sleepless",
+          "description": "The Squallkin does not need to sleep, and magic cannot put it to sleep.",
+          "descriptionHtml": {}
+        }
+      ],
+      "actions": [
+        {
+          "name": "Static Zap",
+          "description": "Ranged Spell Attack: +5 to hit, range 30 ft., one target. Hit: 6 (1d6 + 3) lightning damage, and the target cannot take reactions until the start of its next turn.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Disrupt Ward (Recharge 6)",
+          "description": "The Squallkin unleashes an EMP-like crackle targeting one spell effect of 1st level or lower within 15 ft. The Squallkin makes an Intelligence check (+0) against a DC of 10 + the spell's level. On a success, the spell effect ends immediately.",
+          "descriptionHtml": {}
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [],
+      "hitDieSize": 4,
+      "armorTypeStr": "",
+      "abilityScoreModifiers": {
+        "strength": -2,
+        "dexterity": 3,
+        "constitution": 1,
+        "intelligence": -2,
+        "wisdom": 0,
+        "charisma": -1
+      },
+      "abilityScoreStrs": {
+        "strength": "6 (-2)",
+        "dexterity": "16 (+3)",
+        "constitution": "12 (+1)",
+        "intelligence": "6 (-2)",
+        "wisdom": "11 (+0)",
+        "charisma": "8 (-1)"
+      },
+      "extraHealthFromConstitution": 4,
+      "hitPoints": 20,
+      "hitPointsStr": "20 (4d4 + 4)",
+      "passivePerception": 10,
+      "challengeRatingStr": "1/2"
+    },
+    "name": "Darkling-Squallkin"
+  },
+  {
+    "flavor": {
+      "faction": "",
+      "environment": "The Bay of Blitz",
+      "description": "A towering, amorphous mass of water-logged shadow-ooze that perfectly mimics the apocalyptic monsoons of the World-Seam. It stalks travelers through dry coves, attempting to envelop and drown them inside its own cold, necrotic body.",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": {}
+    },
+    "stats": {
+      "size": "Large",
+      "race": "Abomination",
+      "alignment": "Drowning Evil",
+      "armorType": "Natural Armor",
+      "armorClass": 14,
+      "numHitDie": 10,
+      "speed": "30 ft., swim 40 ft.",
+      "abilityScores": {
+        "strength": 20,
+        "dexterity": 12,
+        "constitution": 18,
+        "intelligence": 6,
+        "wisdom": 12,
+        "charisma": 8
+      },
+      "proficiencyBonus": 3,
+      "damageVulnerabilities": [],
+      "damageResistances": [
+        "Cold",
+        "Necrotic",
+        "Bludgeoning, Piercing, and Slashing from Nonmagical Attacks"
+      ],
+      "damageImmunities": [],
+      "conditionImmunities": [
+        "Grappled",
+        "Prone",
+        "Restrained"
+      ],
+      "senses": [
+        "Darkvision 60 ft.",
+        "Passive Perception 11"
+      ],
+      "languages": [],
+      "challengeRating": 5,
+      "experiencePoints": 1800,
+      "legendaryActionsPerRound": 0,
+      "legendaryActionsDescription": "",
+      "savingThrows": [],
+      "skills": [],
+      "additionalAbilities": [
+        {
+          "name": "Amorphous",
+          "description": "The Deluge can move through a space as narrow as 1 inch wide without squeezing.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Water-Logged Core",
+          "description": "If the Deluge takes cold damage, its speed is reduced by 10 ft. until the end of its next turn as its outer layers temporarily freeze.",
+          "descriptionHtml": {}
+        }
+      ],
+      "actions": [
+        {
+          "name": "Water-Logged Slam",
+          "description": "Melee Weapon Attack: +8 to hit, reach 10 ft., one target. Hit: 14 (2d8 + 5) bludgeoning damage plus 7 (2d6) necrotic damage.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Drowning Engulf (Recharge 5-6)",
+          "description": "The Deluge moves up to its speed. While doing so, it can enter Large or smaller creatures' spaces. Any creature whose space the Deluge enters must make a DC 15 Dexterity saving throw. On a success, the creature is pushed 5 ft. to the side. On a failure, the creature takes 14 (4d6) necrotic damage and is engulfed. An engulfed creature cannot breathe, is restrained, and takes 14 (4d6) necrotic damage at the start of each of the Deluge's turns. Additionally, due to the freezing and heavy hydrostatic pressure of the swampy ooze surrounding them, an engulfed creature wearing a diaper or garment must make a DC 15 Potty Check at the start of each of its turns. On a failure, the sheer pressure forces a wetting accident, losing 1 Use Charge of their garment. An engulfed creature can escape by spending an action to succeed on a DC 15 Strength check. The Deluge can engulf up to two Medium creatures or one Large creature at a time.",
+          "descriptionHtml": {}
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [],
+      "hitDieSize": 10,
+      "armorTypeStr": "(Natural Armor)",
+      "abilityScoreModifiers": {
+        "strength": 5,
+        "dexterity": 1,
+        "constitution": 4,
+        "intelligence": -2,
+        "wisdom": 1,
+        "charisma": -1
+      },
+      "abilityScoreStrs": {
+        "strength": "20 (+5)",
+        "dexterity": "12 (+1)",
+        "constitution": "18 (+4)",
+        "intelligence": "6 (-2)",
+        "wisdom": "12 (+1)",
+        "charisma": "8 (-1)"
+      },
+      "extraHealthFromConstitution": 40,
+      "hitPoints": 140,
+      "hitPointsStr": "140 (10d10 + 40)",
+      "passivePerception": 11,
+      "challengeRatingStr": "5"
+    },
+    "name": "Darkforme-Deluge"
+  },
+  {
+    "flavor": {
+      "faction": "",
+      "environment": "The Hinterlands (The Frost-March)",
+      "description": "A viscous, sludge-like darkling whose shadowy body has been permanently flash-frozen into sharp, scraping shards of black icicles. They crawl across the slick surface of the Rime-Glass Lake with a horrifying, metallic fingernail-on-chalkboard scraping sound, seeking warm travelers to latch onto.",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": {}
+    },
+    "stats": {
+      "size": "Small",
+      "race": "Abomination",
+      "alignment": "Freezing Evil",
+      "armorType": "Natural Armor",
+      "armorClass": 12,
+      "numHitDie": 3,
+      "speed": "20 ft., climb 20 ft. (slithers over ice)",
+      "abilityScores": {
+        "strength": 10,
+        "dexterity": 14,
+        "constitution": 12,
+        "intelligence": 4,
+        "wisdom": 10,
+        "charisma": 6
+      },
+      "proficiencyBonus": 2,
+      "damageVulnerabilities": [
+        "Fire",
+        "Radiant"
+      ],
+      "damageResistances": [
+        "Cold"
+      ],
+      "damageImmunities": [],
+      "conditionImmunities": [
+        "Blinded",
+        "Prone"
+      ],
+      "senses": [
+        "Darkvision 60 ft.",
+        "Passive Perception 10"
+      ],
+      "languages": [],
+      "challengeRating": 0.25,
+      "experiencePoints": 50,
+      "legendaryActionsPerRound": 0,
+      "legendaryActionsDescription": "",
+      "savingThrows": [
+        {
+          "ability": "dexterity",
+          "proficient": true,
+          "modifier": 4,
+          "modifierStr": "Dex +4"
+        }
+      ],
+      "skills": [],
+      "additionalAbilities": [
+        {
+          "name": "Ice Walk",
+          "description": "The Rimecreep can move across icy and snowy surfaces without needing to make ability checks. Difficult terrain composed of ice or snow does not cost it extra movement.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "False Appearance",
+          "description": "While the Rimecreep remains motionless, it is indistinguishable from a cluster of natural dark icicles.",
+          "descriptionHtml": {}
+        }
+      ],
+      "actions": [
+        {
+          "name": "Scraping Icicle Claw",
+          "description": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 4 (1d4 + 2) slashing damage plus 2 (1d4) cold damage. If the target is a Medium or smaller creature, it is grappled (escape DC 10).",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Freezing Contact",
+          "description": "The Rimecreep clamps its frozen mass onto a creature it is grappling, rapidly draining heat. At the start of each of the grappled target's turns, they take 4 (1d8) cold damage. Additionally, the biting chill flash-freezes the target's lower garments, forcing a DC 10 Potty Check; on a failure, the garment immediately enters the Frozen state (reducing speed by 10 ft. and imposing disadvantage on Stealth due to noisy, icy crinkling).",
+          "descriptionHtml": {}
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [],
+      "hitDieSize": 6,
+      "armorTypeStr": "(Natural Armor)",
+      "abilityScoreModifiers": {
+        "strength": 0,
+        "dexterity": 2,
+        "constitution": 1,
+        "intelligence": -3,
+        "wisdom": 0,
+        "charisma": -2
+      },
+      "abilityScoreStrs": {
+        "strength": "10 (+0)",
+        "dexterity": "14 (+2)",
+        "constitution": "12 (+1)",
+        "intelligence": "4 (-3)",
+        "wisdom": "10 (+0)",
+        "charisma": "6 (-2)"
+      },
+      "extraHealthFromConstitution": 3,
+      "hitPoints": 21,
+      "hitPointsStr": "21 (3d6 + 3)",
+      "passivePerception": 10,
+      "challengeRatingStr": "1/4"
+    },
+    "name": "Darkling-Rimecreep"
+  },
+  {
+    "flavor": {
+      "faction": "",
+      "environment": "The Hinterlands (The Frost-March)",
+      "description": "These fragile, quivering balls of dark mist hide within the silent, snow-packed evergreen forests of the Hinterlands. They do not attack with physical force, but instead emit a highly localized, supernatural draft of sub-zero wind that actively dampens fire, saps energy, and bypasses the warming enchantments of travelers.",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": {}
+    },
+    "stats": {
+      "size": "Small",
+      "race": "Abomination",
+      "alignment": "Trembling Evil",
+      "armorType": "",
+      "armorClass": 13,
+      "numHitDie": 4,
+      "speed": "30 ft.",
+      "abilityScores": {
+        "strength": 6,
+        "dexterity": 16,
+        "constitution": 12,
+        "intelligence": 6,
+        "wisdom": 12,
+        "charisma": 8
+      },
+      "proficiencyBonus": 2,
+      "damageVulnerabilities": [
+        "Fire",
+        "Radiant"
+      ],
+      "damageResistances": [
+        "Cold",
+        "Bludgeoning, Piercing, and Slashing from Nonmagical Attacks"
+      ],
+      "damageImmunities": [],
+      "conditionImmunities": [
+        "Grappled",
+        "Prone",
+        "Restrained"
+      ],
+      "senses": [
+        "Darkvision 60 ft.",
+        "Passive Perception 11"
+      ],
+      "languages": [],
+      "challengeRating": 0.5,
+      "experiencePoints": 100,
+      "legendaryActionsPerRound": 0,
+      "legendaryActionsDescription": "",
+      "savingThrows": [],
+      "skills": [],
+      "additionalAbilities": [
+        {
+          "name": "Sleepless",
+          "description": "The Shiver does not need to sleep, and magic cannot put it to sleep.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Sipping warmth",
+          "description": "Any spell or magical effect within 15 ft. of the Shiver that provides heat, fire resistance, or is a Padding Perfection spell has a 50% chance to fail instantly at the start of each of the Shiver's turns as the creature vacuums the ambient thermal energy.",
+          "descriptionHtml": {}
+        }
+      ],
+      "actions": [
+        {
+          "name": "Frostbite Touch",
+          "description": "Melee Spell Attack: +5 to hit, reach 5 ft., one target. Hit: 5 (1d4 + 3) cold damage, and the target's movement speed is reduced by 10 ft. until the end of its next turn.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Trembling Aura (Recharge 5-6)",
+          "description": "The Shiver pulses with a wave of absolute sub-zero drafts in a 15-foot radius. Each creature in that area must make a DC 11 Constitution saving throw. On a failure, the creature takes 7 (2d6) cold damage and is seized by violent, uncontrollable shivering, forcing a DC 11 Potty Check; on a failure, the intense full-body spasms cause the target to lose 1 Use Charge of their garment.",
+          "descriptionHtml": {}
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [],
+      "hitDieSize": 6,
+      "armorTypeStr": "",
+      "abilityScoreModifiers": {
+        "strength": -2,
+        "dexterity": 3,
+        "constitution": 1,
+        "intelligence": -2,
+        "wisdom": 1,
+        "charisma": -1
+      },
+      "abilityScoreStrs": {
+        "strength": "6 (-2)",
+        "dexterity": "16 (+3)",
+        "constitution": "12 (+1)",
+        "intelligence": "6 (-2)",
+        "wisdom": "12 (+1)",
+        "charisma": "8 (-1)"
+      },
+      "extraHealthFromConstitution": 4,
+      "hitPoints": 28,
+      "hitPointsStr": "28 (4d6 + 4)",
+      "passivePerception": 11,
+      "challengeRatingStr": "1/2"
+    },
+    "name": "Darkling-Shiver"
+  },
+  {
+    "flavor": {
+      "faction": "",
+      "environment": "The Hinterlands (The Frost-March)",
+      "description": "A grotesque, skeletal parody of a massive elk or moose, completely encrusted in black permafrost and shifting shadow-vapor. It stalks the frozen tundra, charging with terrifying momentum and impaling travelers upon its massive, fractal antlers of solid shadow-ice.",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": {}
+    },
+    "stats": {
+      "size": "Large",
+      "race": "Abomination",
+      "alignment": "Piercing Evil",
+      "armorType": "Natural Armor",
+      "armorClass": 15,
+      "numHitDie": 8,
+      "speed": "40 ft.",
+      "abilityScores": {
+        "strength": 18,
+        "dexterity": 12,
+        "constitution": 16,
+        "intelligence": 6,
+        "wisdom": 14,
+        "charisma": 8
+      },
+      "proficiencyBonus": 2,
+      "damageVulnerabilities": [
+        "Fire",
+        "Radiant"
+      ],
+      "damageResistances": [],
+      "damageImmunities": [
+        "Cold"
+      ],
+      "conditionImmunities": [],
+      "senses": [
+        "Darkvision 60 ft.",
+        "Passive Perception 12"
+      ],
+      "languages": [],
+      "challengeRating": 4,
+      "experiencePoints": 1100,
+      "legendaryActionsPerRound": 0,
+      "legendaryActionsDescription": "",
+      "savingThrows": [],
+      "skills": [],
+      "additionalAbilities": [
+        {
+          "name": "Trample Charge",
+          "description": "If the Shatterhorn moves at least 20 ft. straight toward a creature and then hits it with a Gore attack on the same turn, the target takes an extra 9 (2d8) bludgeoning damage and must succeed on a DC 14 Strength saving throw or be knocked prone.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Frost Aura",
+          "description": "At the start of each of the Shatterhorn's turns, each creature within 5 ft. of it takes 3 (1d6) cold damage.",
+          "descriptionHtml": {}
+        }
+      ],
+      "actions": [
+        {
+          "name": "Gore",
+          "description": "Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 13 (2d8 + 4) piercing damage plus 4 (1d8) cold damage.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Stomp",
+          "description": "Melee Weapon Attack: +6 to hit, reach 5 ft., one prone target. Hit: 11 (2d6 + 4) bludgeoning damage.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Shatter-Roar (Recharge 6)",
+          "description": "The Shatterhorn lets out a bone-rattling, crystalline bellow. Each creature within 30 ft. must succeed on a DC 13 Constitution saving throw. On a failure, a creature takes 14 (4d6) thunder damage, is deafened, and must immediately make a DC 13 Potty Check; on a failure, the vibrating force causes a major failure, instantly losing 2 Use Charges and becoming stunned with embarrassment.",
+          "descriptionHtml": {}
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [],
+      "hitDieSize": 10,
+      "armorTypeStr": "(Natural Armor)",
+      "abilityScoreModifiers": {
+        "strength": 4,
+        "dexterity": 1,
+        "constitution": 3,
+        "intelligence": -2,
+        "wisdom": 2,
+        "charisma": -1
+      },
+      "abilityScoreStrs": {
+        "strength": "18 (+4)",
+        "dexterity": "12 (+1)",
+        "constitution": "16 (+3)",
+        "intelligence": "6 (-2)",
+        "wisdom": "14 (+2)",
+        "charisma": "8 (-1)"
+      },
+      "extraHealthFromConstitution": 24,
+      "hitPoints": 104,
+      "hitPointsStr": "104 (8d10 + 24)",
+      "passivePerception": 12,
+      "challengeRatingStr": "4"
+    },
+    "name": "Darkforme-Shatterhorn"
+  },
+  {
+    "flavor": {
+      "faction": "",
+      "environment": "The Hinterlands (The Frost-March)",
+      "description": "This massive, subterranean threat slumbers deep beneath the impenetrable ice of the Rime-Glass Lake. It bursts upward through the ice sheets without warning to swallow foragers and scouts whole, exhaling a dense cloud of absolute-zero fog that freezes magical gear solid and locks targets in place.",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": {}
+    },
+    "stats": {
+      "size": "Huge",
+      "race": "Abomination",
+      "alignment": "Gluttonous Evil",
+      "armorType": "Natural Armor",
+      "armorClass": 16,
+      "numHitDie": 12,
+      "speed": "20 ft., burrow 40 ft. (through ice and snow only)",
+      "abilityScores": {
+        "strength": 22,
+        "dexterity": 8,
+        "constitution": 18,
+        "intelligence": 6,
+        "wisdom": 14,
+        "charisma": 8
+      },
+      "proficiencyBonus": 3,
+      "damageVulnerabilities": [
+        "Fire",
+        "Radiant"
+      ],
+      "damageResistances": [],
+      "damageImmunities": [
+        "Cold"
+      ],
+      "conditionImmunities": [
+        "Frightened",
+        "Prone"
+      ],
+      "senses": [
+        "Darkvision 120 ft.",
+        "Tremorsense 60 ft.",
+        "Passive Perception 12"
+      ],
+      "languages": [],
+      "challengeRating": 6,
+      "experiencePoints": 2300,
+      "legendaryActionsPerRound": 0,
+      "legendaryActionsDescription": "",
+      "savingThrows": [],
+      "skills": [],
+      "additionalAbilities": [
+        {
+          "name": "Ice Burrower",
+          "description": "The Glacier-Maw can burrow through solid ice and snow without reducing its speed. It leaves no tunnel behind it.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Glacial Aura",
+          "description": "The ground within a 20-foot radius of the Glacier-Maw is covered in thick, slippery frost and is treated as difficult terrain. Any creature that starts its turn in this area must succeed on a DC 14 Dexterity saving throw or fall prone.",
+          "descriptionHtml": {}
+        }
+      ],
+      "actions": [
+        {
+          "name": "Bite",
+          "description": "Melee Weapon Attack: +9 to hit, reach 10 ft., one target. Hit: 19 (2d12 + 6) piercing damage plus 7 (2d6) cold damage. If the target is a Large or smaller creature, it is grappled (escape DC 16).",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Swallow Forager",
+          "description": "The Glacier-Maw makes one Bite attack against a Medium or smaller creature it is grappling. On a hit, the target is swallowed. While swallowed, the creature takes 14 (4d6) cold damage and 7 (2d6) acid damage at the start of each of its turns. Additionally, the cryonic pressure forces a DC 15 Potty Check; on a failure, the target suffers a critical failure (instantly losing all use charges and disabling all magical diaper buffs).",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Absolute Zero Belch (Recharge 5-6)",
+          "description": "The Glacier-Maw expels a 30-foot cone of icy mist. Each creature in that area must make a DC 15 Constitution saving throw. On a failure, a creature takes 27 (6d8) cold damage and is paralyzed by ice. Additionally, any garments worn are frozen solid (AC reduced by 1, and speed is halved until thawed).",
+          "descriptionHtml": {}
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [],
+      "hitDieSize": 12,
+      "armorTypeStr": "(Natural Armor)",
+      "abilityScoreModifiers": {
+        "strength": 6,
+        "dexterity": -1,
+        "constitution": 4,
+        "intelligence": -2,
+        "wisdom": 2,
+        "charisma": -1
+      },
+      "abilityScoreStrs": {
+        "strength": "22 (+6)",
+        "dexterity": "8 (-1)",
+        "constitution": "18 (+4)",
+        "intelligence": "6 (-2)",
+        "wisdom": "14 (+2)",
+        "charisma": "8 (-1)"
+      },
+      "extraHealthFromConstitution": 48,
+      "hitPoints": 192,
+      "hitPointsStr": "192 (12d12 + 48)",
+      "passivePerception": 12,
+      "challengeRatingStr": "6"
+    },
+    "name": "Darkforme-Glacier-Maw"
+  },
+  {
+    "flavor": {
+      "faction": "",
+      "environment": "The Faermeadows (The Domesticated Dream)",
+      "description": "A silky, sludge-like shadow that prefers being donned over skulking in the muck. Eccentric hunters and thrill-seeking fae throughout the meadows seek these entities to drape across their shoulders like shifting starlit obsidian. While it siphons ambient mana to grant the wearer short-range teleports, it will greedily constrict and attempt a full possession if the host grows weak.",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": {}
+    },
+    "stats": {
+      "size": "Small",
+      "race": "Abomination",
+      "alignment": "Parasitic/Symbiotic Evil",
+      "armorType": "",
+      "armorClass": 13,
+      "numHitDie": 5,
+      "speed": "25 ft., climb 25 ft.",
+      "abilityScores": {
+        "strength": 10,
+        "dexterity": 16,
+        "constitution": 14,
+        "intelligence": 10,
+        "wisdom": 12,
+        "charisma": 14
+      },
+      "proficiencyBonus": 2,
+      "damageVulnerabilities": [
+        "Radiant"
+      ],
+      "damageResistances": [
+        "Necrotic",
+        "Poison"
+      ],
+      "damageImmunities": [],
+      "conditionImmunities": [
+        "Prone"
+      ],
+      "senses": [
+        "Darkvision 60 ft.",
+        "Passive Perception 11"
+      ],
+      "languages": [],
+      "challengeRating": 1,
+      "experiencePoints": 200,
+      "legendaryActionsPerRound": 0,
+      "legendaryActionsDescription": "",
+      "savingThrows": [
+        {
+          "ability": "dexterity",
+          "proficient": true,
+          "modifier": 5,
+          "modifierStr": "Dex +5"
+        },
+        {
+          "ability": "charisma",
+          "proficient": true,
+          "modifier": 4,
+          "modifierStr": "Cha +4"
+        }
+      ],
+      "skills": [],
+      "additionalAbilities": [
+        {
+          "name": "Symbiotic Shadow",
+          "description": "While worn as a garment, the mantle cannot be targeted; attacks hit the host instead. The wearer can use a bonus action to teleport 20 ft. to a visible space, but doing so siphons kinetic energy, costing 1 Use Charge of their garment.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "False Appearance",
+          "description": "While motionless, the mantle is indistinguishable from a velvet neck-wrap or shawl.",
+          "descriptionHtml": {}
+        }
+      ],
+      "actions": [
+        {
+          "name": "Slippery Envelop",
+          "description": "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) acid damage plus 3 (1d6) necrotic damage. The target is grappled (escape DC 11). If the target is wearing a diaper, the squeezing pressure forces a DC 11 Potty Check; on a failure, they suffer a minor wetting accident, losing 1 Use Charge.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Parasitic Possession",
+          "description": "The mantle tries to seize control of a grappled creature. The target must succeed on a DC 12 Charisma saving throw or be blinded as the mantle wraps around their head. The mantle gains control of their movement on its next turn until the effect ends.",
+          "descriptionHtml": {}
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [],
+      "hitDieSize": 6,
+      "armorTypeStr": "",
+      "abilityScoreModifiers": {
+        "strength": 0,
+        "dexterity": 3,
+        "constitution": 2,
+        "intelligence": 0,
+        "wisdom": 1,
+        "charisma": 2
+      },
+      "abilityScoreStrs": {
+        "strength": "10 (+0)",
+        "dexterity": "16 (+3)",
+        "constitution": "14 (+2)",
+        "intelligence": "10 (+0)",
+        "wisdom": "12 (+1)",
+        "charisma": "14 (+2)"
+      },
+      "extraHealthFromConstitution": 10,
+      "hitPoints": 40,
+      "hitPointsStr": "40 (5d6 + 10)",
+      "passivePerception": 11,
+      "challengeRatingStr": "1"
+    },
+    "name": "Darkling-Glamour-Mantle"
+  },
+  {
+    "flavor": {
+      "faction": "",
+      "environment": "The Faermeadows (The Domesticated Dream)",
+      "description": "This entity is physically unstable, stuttering through the flora with disjointed motions and shadowy afterimages caused by local temporal anomalies. Because it exists in a micro-loop of its own past and future, it is notoriously difficult to strike, often \"rewinding\" itself away from incoming attacks.",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": {}
+    },
+    "stats": {
+      "size": "Medium",
+      "race": "Abomination",
+      "alignment": "Stuttering Evil",
+      "armorType": "Natural Armor",
+      "armorClass": 14,
+      "numHitDie": 6,
+      "speed": "35 ft.",
+      "abilityScores": {
+        "strength": 12,
+        "dexterity": 18,
+        "constitution": 14,
+        "intelligence": 6,
+        "wisdom": 10,
+        "charisma": 8
+      },
+      "proficiencyBonus": 2,
+      "damageVulnerabilities": [
+        "Radiant"
+      ],
+      "damageResistances": [
+        "Bludgeoning, Piercing, and Slashing from Nonmagical Attacks"
+      ],
+      "damageImmunities": [],
+      "conditionImmunities": [],
+      "senses": [
+        "Darkvision 60 ft.",
+        "Passive Perception 10"
+      ],
+      "languages": [],
+      "challengeRating": 1,
+      "experiencePoints": 200,
+      "legendaryActionsPerRound": 0,
+      "legendaryActionsDescription": "",
+      "savingThrows": [
+        {
+          "ability": "dexterity",
+          "proficient": true,
+          "modifier": 6,
+          "modifierStr": "Dex +6"
+        }
+      ],
+      "skills": [],
+      "additionalAbilities": [
+        {
+          "name": "Temporal Stutter",
+          "description": "Attacks against the Stalker have disadvantage unless it is incapacitated or has its speed reduced to 0.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Chronomantic Avoidance (Reaction)",
+          "description": "When hit by a melee attack, the Stalker can teleport 10 ft. to a visible space, halving the damage as it rewinds one second into the past.",
+          "descriptionHtml": {}
+        }
+      ],
+      "actions": [
+        {
+          "name": "Disjointed Claw",
+          "description": "Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 7 (1d6 + 4) slashing damage plus 3 (1d6) force damage.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Stutter-Resonance Pulse (Recharge 5-6)",
+          "description": "The Stalker emits a 10-ft radius wave of temporal echoes. Creatures must make a DC 12 Constitution saving throw or take 9 (2d8) force damage. The glitch forces an involuntary regression; on a failure, a DC 12 Potty Check causes them to comically lose 1 Use Charge as their muscles relax.",
+          "descriptionHtml": {}
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [],
+      "hitDieSize": 8,
+      "armorTypeStr": "(Natural Armor)",
+      "abilityScoreModifiers": {
+        "strength": 1,
+        "dexterity": 4,
+        "constitution": 2,
+        "intelligence": -2,
+        "wisdom": 0,
+        "charisma": -1
+      },
+      "abilityScoreStrs": {
+        "strength": "12 (+1)",
+        "dexterity": "18 (+4)",
+        "constitution": "14 (+2)",
+        "intelligence": "6 (-2)",
+        "wisdom": "10 (+0)",
+        "charisma": "8 (-1)"
+      },
+      "extraHealthFromConstitution": 12,
+      "hitPoints": 60,
+      "hitPointsStr": "60 (6d8 + 12)",
+      "passivePerception": 10,
+      "challengeRatingStr": "1"
+    },
+    "name": "Darkling-Loop-Stalker"
+  },
+  {
+    "flavor": {
+      "faction": "",
+      "environment": "The Faermeadows (The Domesticated Dream)",
+      "description": "A beautifully eerie evolution born when a darkling mimics the biology of a consumed fae. This creature resembles a butterfly with wings of geometric void-slices. Its flapping scatters sparkling \"temporal dust\" that randomly alters the age of everything it touches.",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": {}
+    },
+    "stats": {
+      "size": "Medium",
+      "race": "Abomination",
+      "alignment": "Faeform Evil",
+      "armorType": "",
+      "armorClass": 15,
+      "numHitDie": 10,
+      "speed": "20 ft., fly 45 ft. (hover)",
+      "abilityScores": {
+        "strength": 10,
+        "dexterity": 18,
+        "constitution": 16,
+        "intelligence": 12,
+        "wisdom": 14,
+        "charisma": 16
+      },
+      "proficiencyBonus": 2,
+      "damageVulnerabilities": [
+        "Fire",
+        "Radiant"
+      ],
+      "damageResistances": [
+        "Cold",
+        "Necrotic"
+      ],
+      "damageImmunities": [
+        "Poison"
+      ],
+      "conditionImmunities": [],
+      "senses": [
+        "Darkvision 120 ft.",
+        "Passive Perception 12"
+      ],
+      "languages": [],
+      "challengeRating": 3,
+      "experiencePoints": 700,
+      "legendaryActionsPerRound": 0,
+      "legendaryActionsDescription": "",
+      "savingThrows": [
+        {
+          "ability": "dexterity",
+          "proficient": true,
+          "modifier": 6,
+          "modifierStr": "Dex +6"
+        },
+        {
+          "ability": "wisdom",
+          "proficient": true,
+          "modifier": 4,
+          "modifierStr": "Wis +4"
+        },
+        {
+          "ability": "charisma",
+          "proficient": true,
+          "modifier": 5,
+          "modifierStr": "Cha +5"
+        }
+      ],
+      "skills": [],
+      "additionalAbilities": [
+        {
+          "name": "Magic Resistance",
+          "description": "The Ghast has advantage on saves against magical effects and spells.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Void Edge",
+          "description": "Melee attacks from its wings ignore half and three-quarters cover.",
+          "descriptionHtml": {}
+        }
+      ],
+      "actions": [
+        {
+          "name": "Razor Void-Wing",
+          "description": "Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 11 (2d6 + 4) slashing damage plus 4 (1d8) necrotic damage.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Temporal Dust Spray (Recharge 5-6)",
+          "description": "The Ghast scatters a 30-ft cone of glittering dust. Creatures take 14 (4d6) psychic damage on a failed DC 13 Wisdom save. The regression forces a DC 13 Potty Check; on a failure, the sudden return to toddlerhood causes them to wet their diaper, losing 1 Use Charge and gaining disadvantage on Wisdom saves.",
+          "descriptionHtml": {}
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [],
+      "hitDieSize": 8,
+      "armorTypeStr": "",
+      "abilityScoreModifiers": {
+        "strength": 0,
+        "dexterity": 4,
+        "constitution": 3,
+        "intelligence": 1,
+        "wisdom": 2,
+        "charisma": 3
+      },
+      "abilityScoreStrs": {
+        "strength": "10 (+0)",
+        "dexterity": "18 (+4)",
+        "constitution": "16 (+3)",
+        "intelligence": "12 (+1)",
+        "wisdom": "14 (+2)",
+        "charisma": "16 (+3)"
+      },
+      "extraHealthFromConstitution": 30,
+      "hitPoints": 110,
+      "hitPointsStr": "110 (10d8 + 30)",
+      "passivePerception": 12,
+      "challengeRatingStr": "3"
+    },
+    "name": "Darkforme-Flutter-Ghast"
+  },
+  {
+    "flavor": {
+      "faction": "",
+      "environment": "The Faermeadows (The Domesticated Dream)",
+      "description": "A looming, spider-like entity that stalks the meadow boundaries. Instead of silk, it weaves stagnant temporal energy to trap victims in local loops. Prey is forced to repeat the exact microsecond of capture while the snare feeds on their psychic frustration.",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": {}
+    },
+    "stats": {
+      "size": "Large",
+      "race": "Abomination",
+      "alignment": "Ensnaring Evil",
+      "armorType": "Natural Armor",
+      "armorClass": 15,
+      "numHitDie": 12,
+      "speed": "30 ft., climb 30 ft.",
+      "abilityScores": {
+        "strength": 18,
+        "dexterity": 14,
+        "constitution": 18,
+        "intelligence": 10,
+        "wisdom": 16,
+        "charisma": 12
+      },
+      "proficiencyBonus": 2,
+      "damageVulnerabilities": [],
+      "damageResistances": [
+        "Cold",
+        "Necrotic",
+        "Bludgeoning, Piercing, and Slashing from Nonmagical Attacks"
+      ],
+      "damageImmunities": [
+        "Poison"
+      ],
+      "conditionImmunities": [
+        "Prone"
+      ],
+      "senses": [
+        "Darkvision 120 ft.",
+        "Passive Perception 13"
+      ],
+      "languages": [],
+      "challengeRating": 4,
+      "experiencePoints": 1100,
+      "legendaryActionsPerRound": 0,
+      "legendaryActionsDescription": "",
+      "savingThrows": [
+        {
+          "ability": "constitution",
+          "proficient": true,
+          "modifier": 7,
+          "modifierStr": "Con +7"
+        },
+        {
+          "ability": "wisdom",
+          "proficient": true,
+          "modifier": 6,
+          "modifierStr": "Wis +6"
+        }
+      ],
+      "skills": [],
+      "additionalAbilities": [
+        {
+          "name": "Spider Climb",
+          "description": "The Snare can traverse difficult surfaces and ceilings without making ability checks.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Temporal Sense",
+          "description": "It automatically detects any creature within 60 ft. affected by time-altering spells or conditions like Haste or Slow.",
+          "descriptionHtml": {}
+        }
+      ],
+      "actions": [
+        {
+          "name": "Piercing Shadow-Leg",
+          "description": "Melee Weapon Attack: +7 to hit, reach 10 ft., one target. Hit: 13 (2d8 + 4) piercing damage plus 4 (1d8) cold damage.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Weave Chrono-Snare (Recharge 5-6)",
+          "description": "Shoots a sphere of temporal stagnation at a point within 60 ft. Creatures must succeed on a DC 14 Dexterity save or be restrained and forced to repeat their last action. Biological functions loop as well: a failed DC 14 Potty Check at the start of each turn causes a wetting accident, losing 1 Use Charge. Wisdom saves can break the loop.",
+          "descriptionHtml": {}
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [],
+      "hitDieSize": 10,
+      "armorTypeStr": "(Natural Armor)",
+      "abilityScoreModifiers": {
+        "strength": 4,
+        "dexterity": 2,
+        "constitution": 4,
+        "intelligence": 0,
+        "wisdom": 3,
+        "charisma": 1
+      },
+      "abilityScoreStrs": {
+        "strength": "18 (+4)",
+        "dexterity": "14 (+2)",
+        "constitution": "18 (+4)",
+        "intelligence": "10 (+0)",
+        "wisdom": "16 (+3)",
+        "charisma": "12 (+1)"
+      },
+      "extraHealthFromConstitution": 48,
+      "hitPoints": 168,
+      "hitPointsStr": "168 (12d10 + 48)",
+      "passivePerception": 13,
+      "challengeRatingStr": "4"
+    },
+    "name": "Darkforme-Chrono-Snare"
+  },
+  {
+    "flavor": {
+      "faction": "",
+      "environment": "Dawnshore (Anchor of the Sun)",
+      "description": "This flattened, skittering shadow-beast lurks within the silt-laden edges of the coastal delta. By tucking its spindly, oily legs beneath its glossy carapace, it assumes the perfect likeness of a smooth river stone or a discarded crab shell. Travelers who tread too close find themselves ensnared by vice-like pincers that specifically hunger for legs and protective padding.",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": {}
+    },
+    "stats": {
+      "size": "Small",
+      "race": "Abomination",
+      "alignment": "Deceptive Evil",
+      "armorType": "Natural Armor",
+      "armorClass": 13,
+      "numHitDie": 4,
+      "speed": "30 ft., burrow 15 ft., swim 20 ft.",
+      "abilityScores": {
+        "strength": 10,
+        "dexterity": 16,
+        "constitution": 14,
+        "intelligence": 5,
+        "wisdom": 12,
+        "charisma": 6
+      },
+      "proficiencyBonus": 2,
+      "damageVulnerabilities": [
+        "Radiant"
+      ],
+      "damageResistances": [
+        "Cold",
+        "Necrotic"
+      ],
+      "damageImmunities": [],
+      "conditionImmunities": [],
+      "senses": [
+        "Darkvision 60 ft.",
+        "Passive Perception 11"
+      ],
+      "languages": [],
+      "challengeRating": 0.5,
+      "experiencePoints": 100,
+      "legendaryActionsPerRound": 0,
+      "legendaryActionsDescription": "",
+      "savingThrows": [
+        {
+          "ability": "dexterity",
+          "proficient": true,
+          "modifier": 5,
+          "modifierStr": "Dex +5"
+        }
+      ],
+      "skills": [],
+      "additionalAbilities": [
+        {
+          "name": "Sunlight Fear",
+          "description": "The mimic suffers disadvantage on attack rolls and ability checks while exposed to unshaded, direct sunlight.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "False Appearance",
+          "description": "While remaining still, the mimic is visually indistinguishable from a large delta stone or aquatic shell.",
+          "descriptionHtml": {}
+        }
+      ],
+      "actions": [
+        {
+          "name": "Pincer Pinch",
+          "description": "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 5 (1d4 + 3) piercing damage plus 2 (1d4) necrotic damage, and the target is grappled (escape DC 11).",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Delta Mud Squeeze",
+          "description": "The mimic applies a punishing, localized clamp to a grappled creature's lower limbs. The target must succeed on a DC 11 Potty Check; on a failure, the crushing pressure forces a wetting accident, losing 1 Use Charge of their garment.",
+          "descriptionHtml": {}
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [],
+      "hitDieSize": 6,
+      "armorTypeStr": "(Natural Armor)",
+      "abilityScoreModifiers": {
+        "strength": 0,
+        "dexterity": 3,
+        "constitution": 2,
+        "intelligence": -3,
+        "wisdom": 1,
+        "charisma": -2
+      },
+      "abilityScoreStrs": {
+        "strength": "10 (+0)",
+        "dexterity": "16 (+3)",
+        "constitution": "14 (+2)",
+        "intelligence": "5 (-3)",
+        "wisdom": "12 (+1)",
+        "charisma": "6 (-2)"
+      },
+      "extraHealthFromConstitution": 8,
+      "hitPoints": 32,
+      "hitPointsStr": "32 (4d6 + 8)",
+      "passivePerception": 11,
+      "challengeRatingStr": "1/2"
+    },
+    "name": "Darkling-Delta-Mimic"
+  },
+  {
+    "flavor": {
+      "faction": "",
+      "environment": "Dawnshore (Anchor of the Sun)",
+      "description": "Suspended from the thick mangrove canopy, this chiropteran darkling resembles a slumbering fruit bat during the daylight hours. It possesses a violent aversion to solar energy, and if disturbed, it vents a static-laced, agonizing screech that disrupts magical focus throughout the delta.",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": {}
+    },
+    "stats": {
+      "size": "Small",
+      "race": "Abomination",
+      "alignment": "Static Evil",
+      "armorType": "",
+      "armorClass": 13,
+      "numHitDie": 4,
+      "speed": "10 ft., fly 40 ft. (hover)",
+      "abilityScores": {
+        "strength": 6,
+        "dexterity": 16,
+        "constitution": 12,
+        "intelligence": 6,
+        "wisdom": 14,
+        "charisma": 8
+      },
+      "proficiencyBonus": 2,
+      "damageVulnerabilities": [
+        "Radiant"
+      ],
+      "damageResistances": [
+        "Cold",
+        "Poison"
+      ],
+      "damageImmunities": [],
+      "conditionImmunities": [],
+      "senses": [
+        "Darkvision 120 ft.",
+        "Passive Perception 12"
+      ],
+      "languages": [],
+      "challengeRating": 0.5,
+      "experiencePoints": 100,
+      "legendaryActionsPerRound": 0,
+      "legendaryActionsDescription": "",
+      "savingThrows": [],
+      "skills": [],
+      "additionalAbilities": [
+        {
+          "name": "Sunlight Sensitivity",
+          "description": "Disadvantage on attack rolls and sight-based Perception checks while in direct sunlight.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Twilight Veil",
+          "description": "While in dim light or darkness, the Sol-Shunner can use its bonus action to Hide.",
+          "descriptionHtml": {}
+        }
+      ],
+      "actions": [
+        {
+          "name": "Venomous Shadow-Bite",
+          "description": "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 5 (1d4 + 3) piercing damage plus 3 (1d6) poison damage.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Startle-Screech (Recharge 5-6)",
+          "description": "The Sol-Shunner emits a high-pitched, echoing blast of sound. Each creature within 20 ft. must succeed on a DC 11 Wisdom saving throw or be frightened. This traumatic shock forces an immediate DC 11 Potty Check; on a failure, the sudden terror causes a minor wetting accident, losing 1 Use Charge.",
+          "descriptionHtml": {}
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [],
+      "hitDieSize": 6,
+      "armorTypeStr": "",
+      "abilityScoreModifiers": {
+        "strength": -2,
+        "dexterity": 3,
+        "constitution": 1,
+        "intelligence": -2,
+        "wisdom": 2,
+        "charisma": -1
+      },
+      "abilityScoreStrs": {
+        "strength": "6 (-2)",
+        "dexterity": "16 (+3)",
+        "constitution": "12 (+1)",
+        "intelligence": "6 (-2)",
+        "wisdom": "14 (+2)",
+        "charisma": "8 (-1)"
+      },
+      "extraHealthFromConstitution": 4,
+      "hitPoints": 28,
+      "hitPointsStr": "28 (4d6 + 4)",
+      "passivePerception": 12,
+      "challengeRatingStr": "1/2"
+    },
+    "name": "Darkling-Sol-Shunner"
+  },
+  {
+    "flavor": {
+      "faction": "",
+      "environment": "Dawnshore (Anchor of the Sun)",
+      "description": "This beautifully eerie avian resembles a coastal darter drying its wings upon a half-sunken delta log. Yet its plumage is composed of absolute pitch-shadow that actively consumes ambient light, casting a localized eclipse around its form.",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": {}
+    },
+    "stats": {
+      "size": "Medium",
+      "race": "Abomination",
+      "alignment": "Photophobic Evil",
+      "armorType": "Natural Armor",
+      "armorClass": 15,
+      "numHitDie": 10,
+      "speed": "20 ft., fly 45 ft., swim 30 ft.",
+      "abilityScores": {
+        "strength": 10,
+        "dexterity": 18,
+        "constitution": 16,
+        "intelligence": 8,
+        "wisdom": 14,
+        "charisma": 12
+      },
+      "proficiencyBonus": 2,
+      "damageVulnerabilities": [
+        "Radiant"
+      ],
+      "damageResistances": [
+        "Cold",
+        "Necrotic",
+        "Bludgeoning, Piercing, and Slashing from Nonmagical Attacks"
+      ],
+      "damageImmunities": [],
+      "conditionImmunities": [],
+      "senses": [
+        "Darkvision 120 ft.",
+        "Passive Perception 12"
+      ],
+      "languages": [],
+      "challengeRating": 3,
+      "experiencePoints": 700,
+      "legendaryActionsPerRound": 0,
+      "legendaryActionsDescription": "",
+      "savingThrows": [
+        {
+          "ability": "dexterity",
+          "proficient": true,
+          "modifier": 6,
+          "modifierStr": "Dex +6"
+        },
+        {
+          "ability": "wisdom",
+          "proficient": true,
+          "modifier": 4,
+          "modifierStr": "Wis +4"
+        }
+      ],
+      "skills": [],
+      "additionalAbilities": [
+        {
+          "name": "Solar Eclipse Wings",
+          "description": "The area within 10 ft. of the Sol-Anhinga is perpetually shrouded in dim light as it drinks in the sun.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Water Dart",
+          "description": "The bird gains advantage on melee attacks against targets currently submerged in water.",
+          "descriptionHtml": {}
+        }
+      ],
+      "actions": [
+        {
+          "name": "Spearing Beak",
+          "description": "Melee Weapon Attack: +6 to hit, reach 10 ft., one target. Hit: 11 (2d6 + 4) piercing damage plus 4 (1d8) cold damage.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Eclipse Feather Spray (Recharge 5-6)",
+          "description": "The bird launches a freezing barrage of shadow-feathers in a 30-foot cone. Creatures must succeed on a DC 13 Dexterity save or take 14 (4d6) cold damage. The biting chill forces a DC 13 Potty Check; on a failure, the garment immediately enters the Frozen state, reducing speed by 10 ft. and imposing noisy, icy crinkling.",
+          "descriptionHtml": {}
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [],
+      "hitDieSize": 8,
+      "armorTypeStr": "(Natural Armor)",
+      "abilityScoreModifiers": {
+        "strength": 0,
+        "dexterity": 4,
+        "constitution": 3,
+        "intelligence": -1,
+        "wisdom": 2,
+        "charisma": 1
+      },
+      "abilityScoreStrs": {
+        "strength": "10 (+0)",
+        "dexterity": "18 (+4)",
+        "constitution": "16 (+3)",
+        "intelligence": "8 (-1)",
+        "wisdom": "14 (+2)",
+        "charisma": "12 (+1)"
+      },
+      "extraHealthFromConstitution": 30,
+      "hitPoints": 110,
+      "hitPointsStr": "110 (10d8 + 30)",
+      "passivePerception": 12,
+      "challengeRatingStr": "3"
+    },
+    "name": "Darkforme-Sol-Anhinga"
+  },
+  {
+    "flavor": {
+      "faction": "",
+      "environment": "Dawnshore (Anchor of the Sun)",
+      "description": "Appearing as a massive, twisted knot of black moss and necrotic roots, this entity lies in wait within the delta muck. It uses its thick, tendril-like appendages to drag travelers into the high-pressure swampy sludge, feeding greedily on their physical and spiritual exhaustion.",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": {}
+    },
+    "stats": {
+      "size": "Large",
+      "race": "Abomination",
+      "alignment": "Rooted Evil",
+      "armorType": "Natural Armor",
+      "armorClass": 16,
+      "numHitDie": 12,
+      "speed": "20 ft., climb 20 ft.",
+      "abilityScores": {
+        "strength": 20,
+        "dexterity": 10,
+        "constitution": 18,
+        "intelligence": 8,
+        "wisdom": 14,
+        "charisma": 10
+      },
+      "proficiencyBonus": 3,
+      "damageVulnerabilities": [],
+      "damageResistances": [
+        "Cold",
+        "Necrotic",
+        "Bludgeoning and Piercing from Nonmagical Attacks"
+      ],
+      "damageImmunities": [
+        "Poison"
+      ],
+      "conditionImmunities": [
+        "Prone"
+      ],
+      "senses": [
+        "Darkvision 120 ft.",
+        "Tremorsense 60 ft.",
+        "Passive Perception 12"
+      ],
+      "languages": [],
+      "challengeRating": 5,
+      "experiencePoints": 1800,
+      "legendaryActionsPerRound": 0,
+      "legendaryActionsDescription": "",
+      "savingThrows": [
+        {
+          "ability": "constitution",
+          "proficient": true,
+          "modifier": 7,
+          "modifierStr": "Con +7"
+        },
+        {
+          "ability": "wisdom",
+          "proficient": true,
+          "modifier": 5,
+          "modifierStr": "Wis +5"
+        }
+      ],
+      "skills": [],
+      "additionalAbilities": [
+        {
+          "name": "Spider Climb",
+          "description": "The Matriarch traverses difficult surfaces and ceilings without needing ability checks.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Sunlight Allergy",
+          "description": "Direct sunlight causes 5 radiant damage at the start of its turn and halves its movement speed.",
+          "descriptionHtml": {}
+        }
+      ],
+      "actions": [
+        {
+          "name": "Grasping Shadow-Root",
+          "description": "Melee Weapon Attack: +8 to hit, reach 15 ft., one target. Hit: 14 (2d8 + 5) bludgeoning damage plus 4 (1d8) necrotic damage. The target is restrained and grappled (escape DC 14).",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Swampy Siphon (Recharge 5-6)",
+          "description": "The Matriarch channels decaying energy into a grappled victim. On a failed DC 14 Constitution save, the target takes 18 (4d8) necrotic damage and suffers a major messing accident. The high hydrostatic pressure forces them to lose 2 Use Charges instantly, leaving them incapacitated with shock.",
+          "descriptionHtml": {}
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [],
+      "hitDieSize": 10,
+      "armorTypeStr": "(Natural Armor)",
+      "abilityScoreModifiers": {
+        "strength": 5,
+        "dexterity": 0,
+        "constitution": 4,
+        "intelligence": -1,
+        "wisdom": 2,
+        "charisma": 0
+      },
+      "abilityScoreStrs": {
+        "strength": "20 (+5)",
+        "dexterity": "10 (+0)",
+        "constitution": "18 (+4)",
+        "intelligence": "8 (-1)",
+        "wisdom": "14 (+2)",
+        "charisma": "10 (+0)"
+      },
+      "extraHealthFromConstitution": 48,
+      "hitPoints": 168,
+      "hitPointsStr": "168 (12d10 + 48)",
+      "passivePerception": 12,
+      "challengeRatingStr": "5"
+    },
+    "name": "Darkforme-Mangrove-Matriarch"
+  },
+  {
+    "flavor": {
+      "faction": "",
+      "environment": "Dawnshore (Anchor of the Sun)",
+      "description": "An opportunistic shoreline scavenger that stuffs its shadowy body into clam shells, driftwood hollows, and discarded crates to survive Dawnshore's punishing light. At dusk it pours out in a skittering blur, snatching trinkets, rations, and any loose supplies left by fishers or Delta Rangers.",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": {}
+    },
+    "stats": {
+      "size": "Small",
+      "race": "Abomination",
+      "alignment": "Scavenging Evil",
+      "armorType": "Natural Armor",
+      "armorClass": 13,
+      "numHitDie": 4,
+      "speed": "30 ft., climb 20 ft.",
+      "abilityScores": {
+        "strength": 8,
+        "dexterity": 16,
+        "constitution": 12,
+        "intelligence": 5,
+        "wisdom": 12,
+        "charisma": 6
+      },
+      "proficiencyBonus": 2,
+      "damageVulnerabilities": [
+        "Radiant"
+      ],
+      "damageResistances": [],
+      "damageImmunities": [],
+      "conditionImmunities": [],
+      "senses": [
+        "Darkvision 60 ft.",
+        "Passive Perception 11"
+      ],
+      "languages": [],
+      "challengeRating": 0.25,
+      "experiencePoints": 50,
+      "legendaryActionsPerRound": 0,
+      "legendaryActionsDescription": "",
+      "savingThrows": [
+        {
+          "ability": "dexterity",
+          "proficient": true,
+          "modifier": 5,
+          "modifierStr": "Dex +5"
+        }
+      ],
+      "skills": [
+        {
+          "name": "Stealth",
+          "proficient": true,
+          "modifier": 5,
+          "modifierStr": "Stealth +5"
+        },
+        {
+          "name": "Sleight of Hand",
+          "proficient": true,
+          "modifier": 5,
+          "modifierStr": "Sleight of Hand +5"
+        }
+      ],
+      "additionalAbilities": [
+        {
+          "name": "False Appearance",
+          "description": "While motionless inside a shell, crate, or driftwood hollow, the Shell-Skitterer is indistinguishable from mundane beach debris.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Scavenger Scuttle",
+          "description": "If the Shell-Skitterer starts its turn holding a stolen object, it can take the Dash or Disengage action as a bonus action.",
+          "descriptionHtml": {}
+        }
+      ],
+      "actions": [
+        {
+          "name": "Skitter-Claw",
+          "description": "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 5 (1d4 + 3) slashing damage plus 2 (1d4) necrotic damage.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Pilfering Snatch",
+          "description": "One creature within 5 ft. must succeed on a DC 11 Dexterity saving throw or drop one held object of the Skitterer's choice. If the target is wearing a diaper or garment with exposed tapes, straps, or seals, it must also make a DC 11 Potty Check; on a failure, the creature loses 1 Use Charge as the Skitterer yanks something loose in the panic.",
+          "descriptionHtml": {}
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [],
+      "hitDieSize": 6,
+      "armorTypeStr": "(Natural Armor)",
+      "abilityScoreModifiers": {
+        "strength": -1,
+        "dexterity": 3,
+        "constitution": 1,
+        "intelligence": -3,
+        "wisdom": 1,
+        "charisma": -2
+      },
+      "abilityScoreStrs": {
+        "strength": "8 (-1)",
+        "dexterity": "16 (+3)",
+        "constitution": "12 (+1)",
+        "intelligence": "5 (-3)",
+        "wisdom": "12 (+1)",
+        "charisma": "6 (-2)"
+      },
+      "extraHealthFromConstitution": 0,
+      "hitPoints": 24,
+      "hitPointsStr": "24 (4d6 + 0)",
+      "passivePerception": 11,
+      "challengeRatingStr": "1/4"
+    },
+    "name": "Darkling-Shell-Skitterer"
+  },
+  {
+    "flavor": {
+      "faction": "",
+      "environment": "Dawnshore (Anchor of the Sun)",
+      "description": "This mud-caked delta hunter mimics the silhouette of a gaunt marsh-coyote, masking its shadowy hide beneath clay, reeds, and wet silt. Silt-Hounds circle prey through knee-deep channels and soft riverbanks, driving travelers into boggy traps before the pack descends.",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": {}
+    },
+    "stats": {
+      "size": "Medium",
+      "race": "Abomination",
+      "alignment": "Pack Evil",
+      "armorType": "Natural Armor",
+      "armorClass": 13,
+      "numHitDie": 4,
+      "speed": "40 ft., swim 20 ft.",
+      "abilityScores": {
+        "strength": 14,
+        "dexterity": 14,
+        "constitution": 14,
+        "intelligence": 4,
+        "wisdom": 12,
+        "charisma": 6
+      },
+      "proficiencyBonus": 2,
+      "damageVulnerabilities": [
+        "Radiant"
+      ],
+      "damageResistances": [],
+      "damageImmunities": [],
+      "conditionImmunities": [],
+      "senses": [
+        "Darkvision 60 ft.",
+        "Passive Perception 13"
+      ],
+      "languages": [],
+      "challengeRating": 1,
+      "experiencePoints": 200,
+      "legendaryActionsPerRound": 0,
+      "legendaryActionsDescription": "",
+      "savingThrows": [],
+      "skills": [
+        {
+          "name": "Perception",
+          "proficient": true,
+          "modifier": 3,
+          "modifierStr": "Perception +3"
+        },
+        {
+          "name": "Stealth",
+          "proficient": true,
+          "modifier": 4,
+          "modifierStr": "Stealth +4"
+        },
+        {
+          "name": "Survival",
+          "proficient": true,
+          "modifier": 3,
+          "modifierStr": "Survival +3"
+        }
+      ],
+      "additionalAbilities": [
+        {
+          "name": "Pack Tactics",
+          "description": "The Silt-Hound has advantage on an attack roll against a creature if at least one of the hound's allies is within 5 ft. of the creature and the ally isn't incapacitated.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Mud-Caked Hide",
+          "description": "While the Silt-Hound is in muddy terrain or shallow water, attack rolls against it made from more than 10 ft. away have disadvantage.",
+          "descriptionHtml": {}
+        }
+      ],
+      "actions": [
+        {
+          "name": "Silt-Fang Bite",
+          "description": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 7 (1d10 + 2) piercing damage plus 2 (1d4) necrotic damage.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Reed-Herding Bark (Recharge 5-6)",
+          "description": "The Silt-Hound unleashes a sharp, panicked yelp that coordinates nearby packmates. Each enemy within 15 ft. that can hear it must succeed on a DC 12 Wisdom saving throw or move up to 10 ft. in a direction of the hound's choice if able. A creature that fails this save while wearing a diaper or garment must also make a DC 12 Potty Check; on a failure, the forced stumble and fear cause it to lose 1 Use Charge.",
+          "descriptionHtml": {}
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [],
+      "hitDieSize": 8,
+      "armorTypeStr": "(Natural Armor)",
+      "abilityScoreModifiers": {
+        "strength": 2,
+        "dexterity": 2,
+        "constitution": 2,
+        "intelligence": -3,
+        "wisdom": 1,
+        "charisma": -2
+      },
+      "abilityScoreStrs": {
+        "strength": "14 (+2)",
+        "dexterity": "14 (+2)",
+        "constitution": "14 (+2)",
+        "intelligence": "4 (-3)",
+        "wisdom": "12 (+1)",
+        "charisma": "6 (-2)"
+      },
+      "extraHealthFromConstitution": 8,
+      "hitPoints": 40,
+      "hitPointsStr": "40 (4d8 + 8)",
+      "passivePerception": 13,
+      "challengeRatingStr": "1"
+    },
+    "name": "Darkling-Silt-Hound"
+  },
+  {
+    "flavor": {
+      "faction": "",
+      "environment": "Dawnshore (Anchor of the Sun)",
+      "description": "High in the angular branches of the Astrum Canopy, this avian horror hides as a silhouette among the star-shaped limbs. When prey strays beneath, the Shrike drops like a thrown knife, its metallic shadow-glass plumage turning a silent dive into a lethal impalement.",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": {}
+    },
+    "stats": {
+      "size": "Medium",
+      "race": "Abomination",
+      "alignment": "Plunging Evil",
+      "armorType": "Natural Armor",
+      "armorClass": 15,
+      "numHitDie": 10,
+      "speed": "15 ft., fly 50 ft.",
+      "abilityScores": {
+        "strength": 16,
+        "dexterity": 18,
+        "constitution": 14,
+        "intelligence": 8,
+        "wisdom": 14,
+        "charisma": 8
+      },
+      "proficiencyBonus": 2,
+      "damageVulnerabilities": [
+        "Radiant"
+      ],
+      "damageResistances": [
+        "Piercing and Slashing from Nonmagical Attacks"
+      ],
+      "damageImmunities": [],
+      "conditionImmunities": [],
+      "senses": [
+        "Darkvision 120 ft.",
+        "Passive Perception 14"
+      ],
+      "languages": [],
+      "challengeRating": 3,
+      "experiencePoints": 700,
+      "legendaryActionsPerRound": 0,
+      "legendaryActionsDescription": "",
+      "savingThrows": [
+        {
+          "ability": "dexterity",
+          "proficient": true,
+          "modifier": 6,
+          "modifierStr": "Dex +6"
+        },
+        {
+          "ability": "wisdom",
+          "proficient": true,
+          "modifier": 4,
+          "modifierStr": "Wis +4"
+        }
+      ],
+      "skills": [
+        {
+          "name": "Perception",
+          "proficient": true,
+          "modifier": 4,
+          "modifierStr": "Perception +4"
+        },
+        {
+          "name": "Stealth",
+          "proficient": true,
+          "modifier": 6,
+          "modifierStr": "Stealth +6"
+        }
+      ],
+      "additionalAbilities": [
+        {
+          "name": "Canopy Ambusher",
+          "description": "The Star-Shrike has advantage on attack rolls against creatures that haven't acted yet in combat while it is in dim light, darkness, or heavy foliage.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Dive Impaler",
+          "description": "If the Shrike moves at least 20 ft. downward straight toward a target and hits with Talons on the same turn, the attack deals an extra 7 (2d6) piercing damage.",
+          "descriptionHtml": {}
+        }
+      ],
+      "actions": [
+        {
+          "name": "Multiattack",
+          "description": "The Star-Shrike makes two Talons attacks.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Talons",
+          "description": "Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 10 (2d6 + 3) slashing damage plus 3 (1d6) necrotic damage.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Shadow-Glass Feather Burst (Recharge 5-6)",
+          "description": "The Shrike explodes a volley of razor feathers in a 20-foot cone. Creatures in the area must make a DC 13 Dexterity saving throw, taking 14 (4d6) slashing damage on a failed save, or half as much on a success. A creature that fails while wearing a diaper or garment must also make a DC 13 Potty Check; on a failure, the shock and pain cause it to lose 1 Use Charge.",
+          "descriptionHtml": {}
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [],
+      "hitDieSize": 8,
+      "armorTypeStr": "(Natural Armor)",
+      "abilityScoreModifiers": {
+        "strength": 3,
+        "dexterity": 4,
+        "constitution": 2,
+        "intelligence": -1,
+        "wisdom": 2,
+        "charisma": -1
+      },
+      "abilityScoreStrs": {
+        "strength": "16 (+3)",
+        "dexterity": "18 (+4)",
+        "constitution": "14 (+2)",
+        "intelligence": "8 (-1)",
+        "wisdom": "14 (+2)",
+        "charisma": "8 (-1)"
+      },
+      "extraHealthFromConstitution": 20,
+      "hitPoints": 100,
+      "hitPointsStr": "100 (10d8 + 20)",
+      "passivePerception": 14,
+      "challengeRatingStr": "3"
+    },
+    "name": "Darkforme-Star-Shrike"
+  },
+  {
+    "flavor": {
+      "faction": "",
+      "environment": "Dawnshore (Anchor of the Sun)",
+      "description": "The shadow-monarch of the deepest Astrum Canopy resembles an impossibly calm elk wrought from black roots, obsidian, and slow-breathing darkness. It does not rage or panic like lesser darkformes; it simply decides an intruder has crossed a boundary, and then annihilates them with unstoppable, ritualistic force.",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": {}
+    },
+    "stats": {
+      "size": "Large",
+      "race": "Abomination",
+      "alignment": "Territorial Evil",
+      "armorType": "Natural Armor",
+      "armorClass": 16,
+      "numHitDie": 12,
+      "speed": "50 ft.",
+      "abilityScores": {
+        "strength": 20,
+        "dexterity": 14,
+        "constitution": 16,
+        "intelligence": 8,
+        "wisdom": 16,
+        "charisma": 10
+      },
+      "proficiencyBonus": 3,
+      "damageVulnerabilities": [
+        "Fire",
+        "Radiant"
+      ],
+      "damageResistances": [
+        "Necrotic",
+        "Bludgeoning and Piercing from Nonmagical Attacks"
+      ],
+      "damageImmunities": [],
+      "conditionImmunities": [],
+      "senses": [
+        "Darkvision 120 ft.",
+        "Passive Perception 16"
+      ],
+      "languages": [],
+      "challengeRating": 5,
+      "experiencePoints": 1800,
+      "legendaryActionsPerRound": 0,
+      "legendaryActionsDescription": "",
+      "savingThrows": [
+        {
+          "ability": "strength",
+          "proficient": true,
+          "modifier": 8,
+          "modifierStr": "Str +8"
+        },
+        {
+          "ability": "wisdom",
+          "proficient": true,
+          "modifier": 6,
+          "modifierStr": "Wis +6"
+        }
+      ],
+      "skills": [
+        {
+          "name": "Perception",
+          "proficient": true,
+          "modifier": 6,
+          "modifierStr": "Perception +6"
+        },
+        {
+          "name": "Survival",
+          "proficient": true,
+          "modifier": 6,
+          "modifierStr": "Survival +6"
+        }
+      ],
+      "additionalAbilities": [
+        {
+          "name": "Territorial Charge",
+          "description": "If the Bramble-Stag moves at least 20 ft. straight toward a creature and then hits it with Gore on the same turn, the target takes an extra 9 (2d8) piercing damage and must succeed on a DC 15 Strength saving throw or be knocked prone.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Root-Sure Footing",
+          "description": "The Bramble-Stag ignores nonmagical difficult terrain made of roots, undergrowth, mud, or brambles.",
+          "descriptionHtml": {}
+        }
+      ],
+      "actions": [
+        {
+          "name": "Multiattack",
+          "description": "The Bramble-Stag makes one Gore attack and one Hoof attack.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Gore",
+          "description": "Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 16 (2d10 + 5) piercing damage plus 4 (1d8) necrotic damage.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Hoof",
+          "description": "Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 12 (2d6 + 5) bludgeoning damage.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Canopy Monarch's Bellow (Recharge 5-6)",
+          "description": "The Bramble-Stag releases a deep, resonant territorial bellow. Each hostile creature within 30 ft. that can hear it must succeed on a DC 14 Wisdom saving throw or become frightened until the end of its next turn. A creature that fails this save while wearing a diaper or garment must also make a DC 14 Potty Check; on a failure, the overwhelming instinctive terror forces it to lose 2 Use Charges.",
+          "descriptionHtml": {}
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [],
+      "hitDieSize": 10,
+      "armorTypeStr": "(Natural Armor)",
+      "abilityScoreModifiers": {
+        "strength": 5,
+        "dexterity": 2,
+        "constitution": 3,
+        "intelligence": -1,
+        "wisdom": 3,
+        "charisma": 0
+      },
+      "abilityScoreStrs": {
+        "strength": "20 (+5)",
+        "dexterity": "14 (+2)",
+        "constitution": "16 (+3)",
+        "intelligence": "8 (-1)",
+        "wisdom": "16 (+3)",
+        "charisma": "10 (+0)"
+      },
+      "extraHealthFromConstitution": 36,
+      "hitPoints": 156,
+      "hitPointsStr": "156 (12d10 + 36)",
+      "passivePerception": 16,
+      "challengeRatingStr": "5"
+    },
+    "name": "Darkforme-Bramble-Stag"
+  },
+  {
+    "flavor": {
+      "faction": "",
+      "environment": "Maristannio (The Scavenger's Dreadnought)",
+      "description": "Born where darkling slime mixes with petrodistillate, alchemical runoff, and machine-filth, the Petro-Legion is less a creature than a living industrial spill. It oozes through forgotten bilges and gear gutters, suffocating scavengers, igniting catastrophically when struck by flame, and clogging vital city systems with sentient malice.",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": {}
+    },
+    "stats": {
+      "size": "Large",
+      "race": "Ooze",
+      "alignment": "Polluted Evil",
+      "armorType": "Natural Armor",
+      "armorClass": 14,
+      "numHitDie": 12,
+      "speed": "20 ft., climb 20 ft.",
+      "abilityScores": {
+        "strength": 18,
+        "dexterity": 8,
+        "constitution": 12,
+        "intelligence": 4,
+        "wisdom": 10,
+        "charisma": 6
+      },
+      "proficiencyBonus": 2,
+      "damageVulnerabilities": [
+        "Fire",
+        "Radiant"
+      ],
+      "damageResistances": [
+        "Acid",
+        "Poison"
+      ],
+      "damageImmunities": [],
+      "conditionImmunities": [
+        "Blinded",
+        "Charmed",
+        "Deafened",
+        "Frightened",
+        "Prone"
+      ],
+      "senses": [
+        "Blindsight 60 ft. (blind beyond this radius)",
+        "Passive Perception 10"
+      ],
+      "languages": [],
+      "challengeRating": 3,
+      "experiencePoints": 700,
+      "legendaryActionsPerRound": 0,
+      "legendaryActionsDescription": "",
+      "savingThrows": [],
+      "skills": [],
+      "additionalAbilities": [
+        {
+          "name": "Amorphous",
+          "description": "The Petro-Legion can move through a space as narrow as 1 inch wide without squeezing.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Volatile Fuel-Body",
+          "description": "Whenever the Petro-Legion takes fire damage, each creature within 5 ft. of it takes 3 (1d6) fire damage.",
+          "descriptionHtml": {}
+        }
+      ],
+      "actions": [
+        {
+          "name": "Corrosive Pseudopod",
+          "description": "Melee Weapon Attack: +6 to hit, reach 10 ft., one target. Hit: 11 (2d6 + 4) bludgeoning damage plus 4 (1d8) acid damage.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Gear-Clog Engulf (Recharge 5-6)",
+          "description": "The Legion moves up to its speed. It can enter Large or smaller creatures' spaces during this move. A creature whose space it enters must succeed on a DC 13 Dexterity saving throw or take 10 (3d6) acid damage and become restrained by the ooze until the end of the Legion's next turn. A restrained creature wearing a diaper or garment must also make a DC 13 Potty Check; on a failure, thick corrosive sludge ruins seals and tapes, causing the creature to lose 1 Use Charge.",
+          "descriptionHtml": {}
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [],
+      "hitDieSize": 10,
+      "armorTypeStr": "(Natural Armor)",
+      "abilityScoreModifiers": {
+        "strength": 4,
+        "dexterity": -1,
+        "constitution": 1,
+        "intelligence": -3,
+        "wisdom": 0,
+        "charisma": -2
+      },
+      "abilityScoreStrs": {
+        "strength": "18 (+4)",
+        "dexterity": "8 (-1)",
+        "constitution": "12 (+1)",
+        "intelligence": "4 (-3)",
+        "wisdom": "10 (+0)",
+        "charisma": "6 (-2)"
+      },
+      "extraHealthFromConstitution": 12,
+      "hitPoints": 102,
+      "hitPointsStr": "102 (12d10 + 12)",
+      "passivePerception": 10,
+      "challengeRatingStr": "3"
+    },
+    "name": "Darkling-Petro-Legion"
+  },
+  {
+    "flavor": {
+      "faction": "",
+      "environment": "Maristannio (The Scavenger's Dreadnought)",
+      "description": "This hulking salvage-failure is a corroded warforged chassis awakened by ambient darkness and half-remembered guard orders. Its body leaks steam and black water from split seams as it lurches through dead maintenance sectors, smashing first and interpreting later.",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": {}
+    },
+    "stats": {
+      "size": "Medium",
+      "race": "Construct",
+      "alignment": "Rusted Evil",
+      "armorType": "Rusted Plating",
+      "armorClass": 14,
+      "numHitDie": 5,
+      "speed": "25 ft.",
+      "abilityScores": {
+        "strength": 16,
+        "dexterity": 8,
+        "constitution": 14,
+        "intelligence": 3,
+        "wisdom": 8,
+        "charisma": 5
+      },
+      "proficiencyBonus": 2,
+      "damageVulnerabilities": [
+        "Lightning",
+        "Radiant"
+      ],
+      "damageResistances": [],
+      "damageImmunities": [
+        "Poison",
+        "Psychic"
+      ],
+      "conditionImmunities": [
+        "Charmed",
+        "Exhaustion",
+        "Frightened",
+        "Poisoned"
+      ],
+      "senses": [
+        "Darkvision 60 ft.",
+        "Passive Perception 9"
+      ],
+      "languages": [],
+      "challengeRating": 1,
+      "experiencePoints": 200,
+      "legendaryActionsPerRound": 0,
+      "legendaryActionsDescription": "",
+      "savingThrows": [],
+      "skills": [],
+      "additionalAbilities": [
+        {
+          "name": "Waterlogged Chassis",
+          "description": "If the Slag-Brute takes lightning damage, it cannot take reactions and has disadvantage on attack rolls until the end of its next turn.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Ancient Guard Protocol",
+          "description": "The Slag-Brute has advantage on attack rolls against creatures that interacted with a door, lever, lock, or machine during the current round.",
+          "descriptionHtml": {}
+        }
+      ],
+      "actions": [
+        {
+          "name": "Rust-Crusher Fist",
+          "description": "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 8 (1d10 + 3) bludgeoning damage.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Bilge Ram",
+          "description": "The Slag-Brute moves up to 15 ft. in a straight line and makes one Rust-Crusher Fist attack. If the attack hits, the target must succeed on a DC 12 Strength saving throw or be knocked prone. A creature knocked prone while wearing a diaper or garment must also make a DC 12 Potty Check; on a failure, the impact and panic cause it to lose 1 Use Charge.",
+          "descriptionHtml": {}
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [],
+      "hitDieSize": 8,
+      "armorTypeStr": "(Rusted Plating)",
+      "abilityScoreModifiers": {
+        "strength": 3,
+        "dexterity": -1,
+        "constitution": 2,
+        "intelligence": -4,
+        "wisdom": -1,
+        "charisma": -3
+      },
+      "abilityScoreStrs": {
+        "strength": "16 (+3)",
+        "dexterity": "8 (-1)",
+        "constitution": "14 (+2)",
+        "intelligence": "3 (-4)",
+        "wisdom": "8 (-1)",
+        "charisma": "5 (-3)"
+      },
+      "extraHealthFromConstitution": 10,
+      "hitPoints": 50,
+      "hitPointsStr": "50 (5d8 + 10)",
+      "passivePerception": 9,
+      "challengeRatingStr": "1"
+    },
+    "name": "Darkforged-Slag-Brute"
+  },
+  {
+    "flavor": {
+      "faction": "",
+      "environment": "Maristannio (The Scavenger's Dreadnought)",
+      "description": "Grease-Mites are skittering little maintenance parasites that feed on machine lubricants, alchemical sealants, and magical padding adhesives. They are more nuisance than brute threat, but a cluster of them can unravel a mechanic's preparation in seconds.",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": {}
+    },
+    "stats": {
+      "size": "Tiny",
+      "race": "Abomination",
+      "alignment": "Sabotaging Evil",
+      "armorType": "",
+      "armorClass": 15,
+      "numHitDie": 3,
+      "speed": "20 ft., climb 30 ft.",
+      "abilityScores": {
+        "strength": 4,
+        "dexterity": 18,
+        "constitution": 12,
+        "intelligence": 3,
+        "wisdom": 10,
+        "charisma": 4
+      },
+      "proficiencyBonus": 2,
+      "damageVulnerabilities": [
+        "Fire",
+        "Radiant"
+      ],
+      "damageResistances": [],
+      "damageImmunities": [],
+      "conditionImmunities": [],
+      "senses": [
+        "Darkvision 60 ft.",
+        "Passive Perception 10"
+      ],
+      "languages": [],
+      "challengeRating": 0.25,
+      "experiencePoints": 50,
+      "legendaryActionsPerRound": 0,
+      "legendaryActionsDescription": "",
+      "savingThrows": [],
+      "skills": [
+        {
+          "name": "Stealth",
+          "proficient": true,
+          "modifier": 6,
+          "modifierStr": "Stealth +6"
+        },
+        {
+          "name": "Sleight of Hand",
+          "proficient": true,
+          "modifier": 6,
+          "modifierStr": "Sleight of Hand +6"
+        }
+      ],
+      "additionalAbilities": [
+        {
+          "name": "Crack-Crawler",
+          "description": "The Grease-Mite can move through a space as narrow as half an inch wide without squeezing.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Seal-Feeder",
+          "description": "The Grease-Mite has advantage on ability checks made to open, loosen, peel, or disable fastenings, bindings, or machine seals.",
+          "descriptionHtml": {}
+        }
+      ],
+      "actions": [
+        {
+          "name": "Grease Bite",
+          "description": "Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 4 (1d4 + 2) piercing damage.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Unfasten",
+          "description": "One creature within 5 ft. wearing a diaper, garment, harness, or strapped equipment must succeed on a DC 12 Dexterity saving throw or lose 1 Use Charge as the Grease-Mite magically peels, unsnaps, or untapes a fastening. If the target is concentrating on a spell or operating a machine, it must also succeed on a DC 10 Constitution saving throw or lose concentration / mishandle the device.",
+          "descriptionHtml": {}
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [],
+      "hitDieSize": 4,
+      "armorTypeStr": "",
+      "abilityScoreModifiers": {
+        "strength": -3,
+        "dexterity": 4,
+        "constitution": 1,
+        "intelligence": -4,
+        "wisdom": 0,
+        "charisma": -3
+      },
+      "abilityScoreStrs": {
+        "strength": "4 (-3)",
+        "dexterity": "18 (+4)",
+        "constitution": "12 (+1)",
+        "intelligence": "3 (-4)",
+        "wisdom": "10 (+0)",
+        "charisma": "4 (-3)"
+      },
+      "extraHealthFromConstitution": 3,
+      "hitPoints": 15,
+      "hitPointsStr": "15 (3d4 + 3)",
+      "passivePerception": 10,
+      "challengeRatingStr": "1/4"
+    },
+    "name": "Darkling-Grease-Mite"
+  },
+  {
+    "flavor": {
+      "faction": "",
+      "environment": "Niolantea (The Fungal Spire-Kingdom)",
+      "description": "This invasive darkling prefers not to fight in its natural state. Instead, it seeps into dead or dying fungal architecture and puppeteers the hollow stalks like shambling mech-suits, turning abandoned garden-columns and rotting mycos halls into sudden ambush predators.",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": {}
+    },
+    "stats": {
+      "size": "Small",
+      "race": "Abomination",
+      "alignment": "Parasitic Evil",
+      "armorType": "Fungal Carapace",
+      "armorClass": 14,
+      "numHitDie": 5,
+      "speed": "25 ft., climb 20 ft.",
+      "abilityScores": {
+        "strength": 12,
+        "dexterity": 14,
+        "constitution": 14,
+        "intelligence": 6,
+        "wisdom": 10,
+        "charisma": 8
+      },
+      "proficiencyBonus": 2,
+      "damageVulnerabilities": [
+        "Fire",
+        "Radiant"
+      ],
+      "damageResistances": [
+        "Poison",
+        "Necrotic"
+      ],
+      "damageImmunities": [],
+      "conditionImmunities": [
+        "Blinded"
+      ],
+      "senses": [
+        "Darkvision 60 ft.",
+        "Tremorsense 30 ft.",
+        "Passive Perception 10"
+      ],
+      "languages": [],
+      "challengeRating": 1,
+      "experiencePoints": 200,
+      "legendaryActionsPerRound": 0,
+      "legendaryActionsDescription": "",
+      "savingThrows": [],
+      "skills": [],
+      "additionalAbilities": [
+        {
+          "name": "False Architecture",
+          "description": "While inside dead or dormant fungal growth, the Symbiote is indistinguishable from ordinary Niolantean mycos-architecture.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Puppet Husk",
+          "description": "While the Symbiote has not taken fire damage since the end of its last turn, it gains a +2 bonus to AC from its fungal host.",
+          "descriptionHtml": {}
+        }
+      ],
+      "actions": [
+        {
+          "name": "Splinter Lash",
+          "description": "Melee Weapon Attack: +4 to hit, reach 10 ft., one target. Hit: 6 (1d8 + 2) bludgeoning damage plus 3 (1d6) poison damage.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Spore Burst (Recharge 5-6)",
+          "description": "The Symbiote releases a burst of soporific rot-spores in a 15-foot cone. Creatures in the area must succeed on a DC 12 Constitution saving throw or be poisoned until the end of their next turn. A creature that fails this save while wearing a diaper or garment must also make a DC 12 Potty Check; on a failure, lethargy and fungal discomfort cause it to lose 1 Use Charge.",
+          "descriptionHtml": {}
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [],
+      "hitDieSize": 6,
+      "armorTypeStr": "(Fungal Carapace)",
+      "abilityScoreModifiers": {
+        "strength": 1,
+        "dexterity": 2,
+        "constitution": 2,
+        "intelligence": -2,
+        "wisdom": 0,
+        "charisma": -1
+      },
+      "abilityScoreStrs": {
+        "strength": "12 (+1)",
+        "dexterity": "14 (+2)",
+        "constitution": "14 (+2)",
+        "intelligence": "6 (-2)",
+        "wisdom": "10 (+0)",
+        "charisma": "8 (-1)"
+      },
+      "extraHealthFromConstitution": 10,
+      "hitPoints": 40,
+      "hitPointsStr": "40 (5d6 + 10)",
+      "passivePerception": 10,
+      "challengeRatingStr": "1"
+    },
+    "name": "Darkling-Spore-Symbiote"
+  },
+  {
+    "flavor": {
+      "faction": "",
+      "environment": "Niolantea (The Fungal Spire-Kingdom)",
+      "description": "This iron-vine impostor hangs among Niolantea's hanging gardens and living bridges, glowing with a false, welcoming bioluminescence. When a druid, courier, or wildshaper draws close, the Strangleweed unwraps itself from the architecture and constricts with botanical malice.",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": {}
+    },
+    "stats": {
+      "size": "Large",
+      "race": "Abomination",
+      "alignment": "Invasive Evil",
+      "armorType": "Natural Armor",
+      "armorClass": 15,
+      "numHitDie": 8,
+      "speed": "20 ft., climb 20 ft.",
+      "abilityScores": {
+        "strength": 18,
+        "dexterity": 12,
+        "constitution": 16,
+        "intelligence": 6,
+        "wisdom": 14,
+        "charisma": 8
+      },
+      "proficiencyBonus": 2,
+      "damageVulnerabilities": [
+        "Fire",
+        "Radiant"
+      ],
+      "damageResistances": [
+        "Necrotic",
+        "Bludgeoning and Piercing from Nonmagical Attacks"
+      ],
+      "damageImmunities": [],
+      "conditionImmunities": [
+        "Restrained"
+      ],
+      "senses": [
+        "Darkvision 120 ft.",
+        "Passive Perception 12"
+      ],
+      "languages": [],
+      "challengeRating": 3,
+      "experiencePoints": 700,
+      "legendaryActionsPerRound": 0,
+      "legendaryActionsDescription": "",
+      "savingThrows": [],
+      "skills": [],
+      "additionalAbilities": [
+        {
+          "name": "False Bioluminescence",
+          "description": "While motionless among vines, roots, or cables, the Strangleweed is indistinguishable from decorative Niolantean iron-vines.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Lurking Reach",
+          "description": "Opportunity attacks made by the Strangleweed have a reach of 15 ft.",
+          "descriptionHtml": {}
+        }
+      ],
+      "actions": [
+        {
+          "name": "Iron-Vine Constrict",
+          "description": "Melee Weapon Attack: +6 to hit, reach 15 ft., one target. Hit: 11 (2d6 + 4) bludgeoning damage plus 4 (1d8) necrotic damage, and the target is grappled (escape DC 14).",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Canopy Reel (Recharge 5-6)",
+          "description": "One creature grappled by the Strangleweed is pulled up to 20 ft. in a direction of the creature's choice and takes 10 (3d6) bludgeoning damage if it collides with a solid surface. A creature moved this way while wearing a diaper or garment must also make a DC 13 Potty Check; on a failure, the crushing constriction and violent jerk cause it to lose 1 Use Charge.",
+          "descriptionHtml": {}
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [],
+      "hitDieSize": 10,
+      "armorTypeStr": "(Natural Armor)",
+      "abilityScoreModifiers": {
+        "strength": 4,
+        "dexterity": 1,
+        "constitution": 3,
+        "intelligence": -2,
+        "wisdom": 2,
+        "charisma": -1
+      },
+      "abilityScoreStrs": {
+        "strength": "18 (+4)",
+        "dexterity": "12 (+1)",
+        "constitution": "16 (+3)",
+        "intelligence": "6 (-2)",
+        "wisdom": "14 (+2)",
+        "charisma": "8 (-1)"
+      },
+      "extraHealthFromConstitution": 24,
+      "hitPoints": 104,
+      "hitPointsStr": "104 (8d10 + 24)",
+      "passivePerception": 12,
+      "challengeRatingStr": "3"
+    },
+    "name": "Darkforme-Strangleweed"
+  },
+  {
+    "flavor": {
+      "faction": "",
+      "environment": "Niolantea (The Fungal Spire-Kingdom)",
+      "description": "A hyper-fertile blossom corrupted by darkforme essence, this canopy predator appears as a breathtaking oversized flower until it exhales its infamous Pink Fog. The haze makes victims sluggish, confused, and humiliatingly vulnerable before the flower's hidden tendrils close in.",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": {}
+    },
+    "stats": {
+      "size": "Large",
+      "race": "Abomination",
+      "alignment": "Decaying Evil",
+      "armorType": "Natural Armor",
+      "armorClass": 14,
+      "numHitDie": 12,
+      "speed": "30 ft. (Split between the three bodies), climb 20 ft.",
+      "abilityScores": {
+        "strength": 18,
+        "dexterity": 8,
+        "constitution": 16,
+        "intelligence": 8,
+        "wisdom": 14,
+        "charisma": 12
+      },
+      "proficiencyBonus": 3,
+      "damageVulnerabilities": [
+        "Fire",
+        "Radiant"
+      ],
+      "damageResistances": [
+        "Necrotic",
+        "Poison"
+      ],
+      "damageImmunities": [],
+      "conditionImmunities": [
+        "Charmed",
+        "Poisoned",
+        "Prone"
+      ],
+      "senses": [
+        "Darkvision 120 ft.",
+        "Passive Perception 12"
+      ],
+      "languages": [],
+      "challengeRating": 5,
+      "experiencePoints": 1800,
+      "legendaryActionsPerRound": 0,
+      "legendaryActionsDescription": "",
+      "savingThrows": [],
+      "skills": [],
+      "additionalAbilities": [
+        {
+          "name": "Rooted Predator",
+          "description": "While the Rot-Blossom hasn't moved since the start of its last turn, attack rolls against it from more than 20 ft. away have disadvantage as petals and spores distort its outline.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Canopy Bloom",
+          "description": "The Rot-Blossom can occupy vertical surfaces and hanging fungal shelves as though they were the ground.",
+          "descriptionHtml": {}
+        }
+      ],
+      "actions": [
+        {
+          "name": "Multiattack",
+          "description": "The Rot-Blossom makes three attacks with its Rot-Tendrils. If available, it can choose to replace one of these Rot-Tendril attacks with its Pink Fog Exhalation.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Rot-Tendril",
+          "description": "Melee Weapon Attack: +7 to hit, reach 15 ft., one target. Hit: 15 (2d10 + 4) bludgeoning damage plus 4 (1d8) necrotic damage.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Pink Fog Exhalation (Recharge 5-6)",
+          "description": "The Blossom exhales a 30-foot cone of hallucinogenic, necrotic pollen. Each creature in that area must make a DC 15 Constitution saving throw. On a failure, a creature takes 18 (4d8) necrotic damage and is plunged into a chemical, dreamlike state that drastically reduces and dulls all physical senses. While in this state, the creature is poisoned, has disadvantage on all Wisdom (Perception) checks, and its speed is halved until the end of its next turn. Because this is a severe biological and neuro-chemical suppression rather than an enchantment, it is explicitly not magical sleep and bypasses all racial or magical immunities to sleep effects. Additionally, the extreme lethargy and total bodily surrender force the creature to immediately make a DC 15 Continence Check (Potty Check), regardless of whether they are wearing a diaper or standard garments. On a failure, they suffer a humiliating accident (losing 2 Use Charges if padded, or heavily soiling their clothing if unpadded). On a successful save, the creature takes half damage and suffers no additional effects.",
+          "descriptionHtml": {}
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [],
+      "hitDieSize": 10,
+      "armorTypeStr": "(Natural Armor)",
+      "abilityScoreModifiers": {
+        "strength": 4,
+        "dexterity": -1,
+        "constitution": 3,
+        "intelligence": -1,
+        "wisdom": 2,
+        "charisma": 1
+      },
+      "abilityScoreStrs": {
+        "strength": "18 (+4)",
+        "dexterity": "8 (-1)",
+        "constitution": "16 (+3)",
+        "intelligence": "8 (-1)",
+        "wisdom": "14 (+2)",
+        "charisma": "12 (+1)"
+      },
+      "extraHealthFromConstitution": 36,
+      "hitPoints": 156,
+      "hitPointsStr": "156 (12d10 + 36)",
+      "passivePerception": 12,
+      "challengeRatingStr": "5"
+    },
+    "name": "Darkforme-Rot-Blossom"
+  },
+  {
+    "flavor": {
+      "faction": "",
+      "environment": "Niolantea (The Fungal Spire-Kingdom)",
+      "description": "A colossal ambush bloom hiding among Niolantea's dense fungal terraces, the Umbralraune lures prey closer with hypnotic whispers and luminous foliage before constricting them in shadow-slick vines and dragging them into its maw-like flower.",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": {}
+    },
+    "stats": {
+      "size": "Large",
+      "race": "Abomination",
+      "alignment": "Ambushing Evil",
+      "armorType": "Natural Armor",
+      "armorClass": 15,
+      "numHitDie": 10,
+      "speed": "20 ft., burrow 20 ft. (through loose soil/fungal matter)",
+      "abilityScores": {
+        "strength": 16,
+        "dexterity": 14,
+        "constitution": 14,
+        "intelligence": 12,
+        "wisdom": 14,
+        "charisma": 18
+      },
+      "proficiencyBonus": 2,
+      "damageVulnerabilities": [
+        "Radiant"
+      ],
+      "damageResistances": [
+        "Bludgeoning and Piercing from Nonmagical Attacks"
+      ],
+      "damageImmunities": [],
+      "conditionImmunities": [
+        "Cursed",
+        "Charmed",
+        "Prone"
+      ],
+      "senses": [
+        "Darkvision 60 ft.",
+        "Tremorsense 60 ft.",
+        "Passive Perception 14"
+      ],
+      "languages": [
+        "Understands Common and Sylvan but speaks only in hypnotic, echoing whispers"
+      ],
+      "challengeRating": 4,
+      "experiencePoints": 1100,
+      "legendaryActionsPerRound": 0,
+      "legendaryActionsDescription": "",
+      "savingThrows": [],
+      "skills": [
+        {
+          "name": "Deception",
+          "proficient": true,
+          "modifier": 6,
+          "modifierStr": "Deception +6"
+        },
+        {
+          "name": "Stealth",
+          "proficient": true,
+          "modifier": 6,
+          "modifierStr": "Stealth +6"
+        },
+        {
+          "name": "Perception",
+          "proficient": true,
+          "modifier": 4,
+          "modifierStr": "Perception +4"
+        }
+      ],
+      "additionalAbilities": [
+        {
+          "name": "Shadow-Root Ambush",
+          "description": "While the Umbralraune remains motionless in dim light, darkness, or areas of dense Niolantean flora, she has advantage on Dexterity (Stealth) checks and appears as a massive, albeit exotic, blooming shadow-Rafflesia.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Toxic Allure",
+          "description": "Any creature that starts its turn within 30 feet of the Umbralraune and can see her glowing teal eyes and purple foliage must succeed on a DC 14 Wisdom saving throw or become Charmed until the end of their next turn. A charmed creature is forced to use all its movement to approach her safely. If a creature's saving throw is successful, the creature is immune to her Toxic Allure for the next 24 hours.",
+          "descriptionHtml": {}
+        }
+      ],
+      "actions": [
+        {
+          "name": "Multiattack",
+          "description": "The Umbralraune makes two melee attacks. She can use any combination of her Constricting Vine-Lashes or her Toxospank.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Constricting Vine-Lash",
+          "description": "Melee Weapon Attack: +5 to hit, reach 15 ft., one target. Hit: 10 (2d6 + 3) bludgeoning damage plus 3 (1d6) necrotic damage. If the target is a Medium or smaller creature, it is grappled (escape DC 13). Until this grapple ends, the target is restrained, and the Umbralraune cannot use this specific vine-lash on another target. She can grapple up to two creatures at once.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Toxospank",
+          "description": "Melee Weapon Attack: +5 to hit, reach 15 ft., one target. Hit: The target takes 5 (1d4 + 3) bludgeoning damage and is struck by stinging, toxic shadow-sap. The target's movement speed drops to 10 ft. until the end of their next turn, and they take an additional 1d4 poison damage at the start of their turn for the next 1d4 rounds. Furthermore, if the Umbralraune successfully hits with this attack, she may choose to immediately expend her second action for the turn (if available) to pull the target into the center of her colossal flower and grapple them (escape DC 13).",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Sludge Kiss (Recharge 5-6)",
+          "description": "The Umbralraune pulls a grappled creature into her pitch-black, amorphous visage. The target must make a DC 13 Constitution saving throw. On a failed save, the target takes 18 (4d8) necrotic damage, and the Umbralraune regains hit points equal to half the necrotic damage dealt. Additionally, the terrifying, invasive nature of the darkling sludge forces the target to immediately make a Continence Check (as per the Combat Academy Regulation Handbook), potentially resulting in an immediate, humiliating accident. On a successful save, the target takes half the necrotic damage, is not forced to make a Continence Check, and the Umbralraune does not heal.",
+          "descriptionHtml": {}
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [],
+      "hitDieSize": 10,
+      "armorTypeStr": "(Natural Armor)",
+      "abilityScoreModifiers": {
+        "strength": 3,
+        "dexterity": 2,
+        "constitution": 2,
+        "intelligence": 1,
+        "wisdom": 2,
+        "charisma": 4
+      },
+      "abilityScoreStrs": {
+        "strength": "16 (+3)",
+        "dexterity": "14 (+2)",
+        "constitution": "14 (+2)",
+        "intelligence": "12 (+1)",
+        "wisdom": "14 (+2)",
+        "charisma": "18 (+4)"
+      },
+      "extraHealthFromConstitution": 20,
+      "hitPoints": 75,
+      "hitPointsStr": "75 (10d10 + 20)",
+      "passivePerception": 14,
+      "challengeRatingStr": "4"
+    },
+    "name": "Darkforme Umbralraune"
+  },
+  {
+    "flavor": {
+      "faction": "",
+      "environment": "Heraldia (The Arcokingdom)",
+      "description": "Fashioned by a decadent Heraldian duchess as a supposedly perfect silent servant, the Porcelain Thrall now wanders abandoned mid-spans in feral loops of housekeeping obsession. It glides toward intruders with spotless malice, trying to scrub, polish, and dissolve them into compliance.",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": {}
+    },
+    "stats": {
+      "size": "Medium",
+      "race": "Abomination",
+      "alignment": "Servile Evil",
+      "armorType": "Porcelain Body",
+      "armorClass": 14,
+      "numHitDie": 5,
+      "speed": "30 ft.",
+      "abilityScores": {
+        "strength": 10,
+        "dexterity": 16,
+        "constitution": 10,
+        "intelligence": 8,
+        "wisdom": 10,
+        "charisma": 12
+      },
+      "proficiencyBonus": 2,
+      "damageVulnerabilities": [
+        "Bludgeoning",
+        "Radiant"
+      ],
+      "damageResistances": [
+        "Acid"
+      ],
+      "damageImmunities": [],
+      "conditionImmunities": [
+        "Charmed"
+      ],
+      "senses": [
+        "Darkvision 60 ft.",
+        "Passive Perception 10"
+      ],
+      "languages": [],
+      "challengeRating": 1,
+      "experiencePoints": 200,
+      "legendaryActionsPerRound": 0,
+      "legendaryActionsDescription": "",
+      "savingThrows": [],
+      "skills": [
+        {
+          "name": "Acrobatics",
+          "proficient": true,
+          "modifier": 5,
+          "modifierStr": "Acrobatics +5"
+        },
+        {
+          "name": "Stealth",
+          "proficient": true,
+          "modifier": 5,
+          "modifierStr": "Stealth +5"
+        }
+      ],
+      "additionalAbilities": [
+        {
+          "name": "False Servant",
+          "description": "While standing still with hands folded or posed as a decorative attendant, the Thrall is indistinguishable from an ornate porcelain statue.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Shatter Skitter",
+          "description": "When the Thrall takes bludgeoning damage but isn't destroyed, it can move up to 10 ft. without provoking opportunity attacks as cracks ripple across its body.",
+          "descriptionHtml": {}
+        }
+      ],
+      "actions": [
+        {
+          "name": "Acid Polish Touch",
+          "description": "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) acid damage.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Scouring Splash (Recharge 5-6)",
+          "description": "The Thrall sprays a fan of alchemical cleanser in a 15-foot cone. Creatures in the area must succeed on a DC 12 Dexterity saving throw or take 7 (2d6) acid damage and have disadvantage on the next weapon attack roll they make before the end of their next turn. A creature that fails this save while wearing a diaper or garment must also make a DC 12 Potty Check; on a failure, cleaning fluid ruins tapes and padding, causing it to lose 1 Use Charge.",
+          "descriptionHtml": {}
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [],
+      "hitDieSize": 8,
+      "armorTypeStr": "(Porcelain Body)",
+      "abilityScoreModifiers": {
+        "strength": 0,
+        "dexterity": 3,
+        "constitution": 0,
+        "intelligence": -1,
+        "wisdom": 0,
+        "charisma": 1
+      },
+      "abilityScoreStrs": {
+        "strength": "10 (+0)",
+        "dexterity": "16 (+3)",
+        "constitution": "10 (+0)",
+        "intelligence": "8 (-1)",
+        "wisdom": "10 (+0)",
+        "charisma": "12 (+1)"
+      },
+      "extraHealthFromConstitution": 0,
+      "hitPoints": 40,
+      "hitPointsStr": "40 (5d8 + 0)",
+      "passivePerception": 10,
+      "challengeRatingStr": "1"
+    },
+    "name": "Darkling-Porcelain-Thrall"
+  },
+  {
+    "flavor": {
+      "faction": "",
+      "environment": "Heraldia (The Arcokingdom)",
+      "description": "These noble failures are shadow-oozes poured into the ornate suits of dead Heraldian aristocrats. They posture like duelists, bow like courtiers, and slash with jerky, imitative elegance, all while clinging to a rotten memory of status and pageantry.",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": {}
+    },
+    "stats": {
+      "size": "Medium",
+      "race": "Abomination",
+      "alignment": "Vain Evil",
+      "armorType": "Gilded Armor",
+      "armorClass": 15,
+      "numHitDie": 6,
+      "speed": "30 ft.",
+      "abilityScores": {
+        "strength": 14,
+        "dexterity": 14,
+        "constitution": 14,
+        "intelligence": 8,
+        "wisdom": 10,
+        "charisma": 12
+      },
+      "proficiencyBonus": 2,
+      "damageVulnerabilities": [
+        "Radiant",
+        "Thunder"
+      ],
+      "damageResistances": [
+        "Piercing and Slashing from Nonmagical Attacks"
+      ],
+      "damageImmunities": [],
+      "conditionImmunities": [
+        "Frightened"
+      ],
+      "senses": [
+        "Darkvision 60 ft.",
+        "Passive Perception 10"
+      ],
+      "languages": [],
+      "challengeRating": 2,
+      "experiencePoints": 450,
+      "legendaryActionsPerRound": 0,
+      "legendaryActionsDescription": "",
+      "savingThrows": [],
+      "skills": [
+        {
+          "name": "Performance",
+          "proficient": true,
+          "modifier": 3,
+          "modifierStr": "Performance +3"
+        },
+        {
+          "name": "Intimidation",
+          "proficient": true,
+          "modifier": 3,
+          "modifierStr": "Intimidation +3"
+        }
+      ],
+      "additionalAbilities": [
+        {
+          "name": "Hollow Nobility",
+          "description": "A creature that misses the Gilded-Husk with a melee attack while within 5 ft. of it takes 2 (1d4) psychic damage from its unsettling mockery and impossible posture.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Duellist's Poise",
+          "description": "The Gilded-Husk adds 2 to its AC against one melee attack that would hit it each round.",
+          "descriptionHtml": {}
+        }
+      ],
+      "actions": [
+        {
+          "name": "Gilded Rapier",
+          "description": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 8 (1d8 + 2) piercing damage plus 3 (1d6) necrotic damage.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Aristocrat's Rebuke (Recharge 5-6)",
+          "description": "One creature within 20 ft. that can hear the Husk must succeed on a DC 12 Wisdom saving throw or become frightened until the end of its next turn. A creature that fails this save while wearing a diaper or garment must also make a DC 12 Potty Check; on a failure, the humiliating magical reprimand causes it to lose 1 Use Charge.",
+          "descriptionHtml": {}
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [],
+      "hitDieSize": 8,
+      "armorTypeStr": "(Gilded Armor)",
+      "abilityScoreModifiers": {
+        "strength": 2,
+        "dexterity": 2,
+        "constitution": 2,
+        "intelligence": -1,
+        "wisdom": 0,
+        "charisma": 1
+      },
+      "abilityScoreStrs": {
+        "strength": "14 (+2)",
+        "dexterity": "14 (+2)",
+        "constitution": "14 (+2)",
+        "intelligence": "8 (-1)",
+        "wisdom": "10 (+0)",
+        "charisma": "12 (+1)"
+      },
+      "extraHealthFromConstitution": 12,
+      "hitPoints": 60,
+      "hitPointsStr": "60 (6d8 + 12)",
+      "passivePerception": 10,
+      "challengeRatingStr": "2"
+    },
+    "name": "Darkling-Gilded-Husk"
+  },
+  {
+    "flavor": {
+      "faction": "",
+      "environment": "Heraldia (The Arcokingdom)",
+      "description": "The crowning blasphemy of a mad Heraldian king, the Chimeric Dread was engineered as a pet noble apex predator. It bears the silhouette of a griffin twisted by dark essence, with shifting feathers of shadow-glass, exposed bone, and a vicious certainty that anything not of royal blood exists beneath it.",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": {}
+    },
+    "stats": {
+      "size": "Large",
+      "race": "Abomination",
+      "alignment": "Arrogant Evil",
+      "armorType": "Natural Armor",
+      "armorClass": 16,
+      "numHitDie": 14,
+      "speed": "40 ft., fly 60 ft.",
+      "abilityScores": {
+        "strength": 20,
+        "dexterity": 16,
+        "constitution": 16,
+        "intelligence": 10,
+        "wisdom": 14,
+        "charisma": 14
+      },
+      "proficiencyBonus": 3,
+      "damageVulnerabilities": [
+        "Radiant"
+      ],
+      "damageResistances": [
+        "Cold",
+        "Necrotic",
+        "Bludgeoning, Piercing, and Slashing from Nonmagical Attacks"
+      ],
+      "damageImmunities": [],
+      "conditionImmunities": [
+        "Frightened"
+      ],
+      "senses": [
+        "Darkvision 120 ft.",
+        "Passive Perception 15"
+      ],
+      "languages": [],
+      "challengeRating": 6,
+      "experiencePoints": 2300,
+      "legendaryActionsPerRound": 0,
+      "legendaryActionsDescription": "",
+      "savingThrows": [
+        {
+          "ability": "strength",
+          "proficient": true,
+          "modifier": 8,
+          "modifierStr": "Str +8"
+        },
+        {
+          "ability": "dexterity",
+          "proficient": true,
+          "modifier": 6,
+          "modifierStr": "Dex +6"
+        },
+        {
+          "ability": "wisdom",
+          "proficient": true,
+          "modifier": 5,
+          "modifierStr": "Wis +5"
+        }
+      ],
+      "skills": [
+        {
+          "name": "Perception",
+          "proficient": true,
+          "modifier": 5,
+          "modifierStr": "Perception +5"
+        },
+        {
+          "name": "Intimidation",
+          "proficient": true,
+          "modifier": 5,
+          "modifierStr": "Intimidation +5"
+        }
+      ],
+      "additionalAbilities": [
+        {
+          "name": "Royal Blood Scent",
+          "description": "The Chimeric Dread automatically knows whether a creature within 60 ft. has noble lineage, royal magic, or Heraldian court insignia.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Magic Resistance",
+          "description": "The Chimeric Dread has advantage on saving throws against spells and magical effects.",
+          "descriptionHtml": {}
+        }
+      ],
+      "actions": [
+        {
+          "name": "Multiattack",
+          "description": "The Chimeric Dread makes one Beak attack and two Talon attacks.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Beak",
+          "description": "Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 14 (2d8 + 5) piercing damage.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Talon",
+          "description": "Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 12 (2d6 + 5) slashing damage plus 3 (1d6) necrotic damage.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Sovereign Shriek (Recharge 5-6)",
+          "description": "The Dread unleashes a regal hunting cry in a 30-foot cone. Creatures in that area must succeed on a DC 15 Wisdom saving throw or take 14 (4d6) psychic damage and become frightened until the end of their next turn. A creature that fails this save while wearing a diaper or garment must also make a DC 15 Potty Check; on a failure, the crushing aristocratic terror causes it to lose 2 Use Charges.",
+          "descriptionHtml": {}
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [],
+      "hitDieSize": 10,
+      "armorTypeStr": "(Natural Armor)",
+      "abilityScoreModifiers": {
+        "strength": 5,
+        "dexterity": 3,
+        "constitution": 3,
+        "intelligence": 0,
+        "wisdom": 2,
+        "charisma": 2
+      },
+      "abilityScoreStrs": {
+        "strength": "20 (+5)",
+        "dexterity": "16 (+3)",
+        "constitution": "16 (+3)",
+        "intelligence": "10 (+0)",
+        "wisdom": "14 (+2)",
+        "charisma": "14 (+2)"
+      },
+      "extraHealthFromConstitution": 42,
+      "hitPoints": 182,
+      "hitPointsStr": "182 (14d10 + 42)",
+      "passivePerception": 15,
+      "challengeRatingStr": "6"
+    },
+    "name": "Darkforme-Chimeric-Dread"
+  },
+  {
+    "flavor": {
+      "faction": "",
+      "environment": "The High Skies (Northwest / Stormveil Periphery)",
+      "description": "These knife-winged scavengers ride the violent thermals above the Westersea, clustering in ragged dive-bombing packs. They are terrifying against exposed sailors and skiff crews, but their unstable storm-body burns out spectacularly when caught in Stormveil's disciplined lightning defenses.",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": {}
+    },
+    "stats": {
+      "size": "Small",
+      "race": "Abomination",
+      "alignment": "Plunging Evil",
+      "armorType": "",
+      "armorClass": 14,
+      "numHitDie": 4,
+      "speed": "10 ft., fly 50 ft.",
+      "abilityScores": {
+        "strength": 8,
+        "dexterity": 16,
+        "constitution": 12,
+        "intelligence": 5,
+        "wisdom": 12,
+        "charisma": 6
+      },
+      "proficiencyBonus": 2,
+      "damageVulnerabilities": [
+        "Lightning",
+        "Radiant"
+      ],
+      "damageResistances": [],
+      "damageImmunities": [],
+      "conditionImmunities": [],
+      "senses": [
+        "Darkvision 60 ft.",
+        "Passive Perception 13"
+      ],
+      "languages": [],
+      "challengeRating": 0.5,
+      "experiencePoints": 100,
+      "legendaryActionsPerRound": 0,
+      "legendaryActionsDescription": "",
+      "savingThrows": [],
+      "skills": [
+        {
+          "name": "Acrobatics",
+          "proficient": true,
+          "modifier": 5,
+          "modifierStr": "Acrobatics +5"
+        },
+        {
+          "name": "Perception",
+          "proficient": true,
+          "modifier": 3,
+          "modifierStr": "Perception +3"
+        }
+      ],
+      "additionalAbilities": [
+        {
+          "name": "Flyby",
+          "description": "The Harrier doesn't provoke opportunity attacks when it flies out of an enemy's reach.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Stormveil Instability",
+          "description": "Whenever the Harrier takes lightning damage, its flying speed becomes 0 until the end of its next turn.",
+          "descriptionHtml": {}
+        }
+      ],
+      "actions": [
+        {
+          "name": "Razor Dive",
+          "description": "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) slashing damage.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Snatch Loose Gear",
+          "description": "One creature within 5 ft. must succeed on a DC 11 Dexterity saving throw or drop one small held object. If the creature is wearing a diaper or garment with exposed straps, it must also make a DC 11 Potty Check; on a failure, the Harrier's pass tears away a fastening and the creature loses 1 Use Charge.",
+          "descriptionHtml": {}
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [],
+      "hitDieSize": 6,
+      "armorTypeStr": "",
+      "abilityScoreModifiers": {
+        "strength": -1,
+        "dexterity": 3,
+        "constitution": 1,
+        "intelligence": -3,
+        "wisdom": 1,
+        "charisma": -2
+      },
+      "abilityScoreStrs": {
+        "strength": "8 (-1)",
+        "dexterity": "16 (+3)",
+        "constitution": "12 (+1)",
+        "intelligence": "5 (-3)",
+        "wisdom": "12 (+1)",
+        "charisma": "6 (-2)"
+      },
+      "extraHealthFromConstitution": 4,
+      "hitPoints": 28,
+      "hitPointsStr": "28 (4d6 + 4)",
+      "passivePerception": 13,
+      "challengeRatingStr": "1/2"
+    },
+    "name": "Darkling-Gale-Harrier"
+  },
+  {
+    "flavor": {
+      "faction": "",
+      "environment": "The High Skies (Northwest / Stormveil Periphery)",
+      "description": "A broad, manta-like hunter of flattened darkness, the Nimbus-Ray glides almost soundlessly on the wild thermals over the Westersea. Its favored tactic is to settle over a small vessel like a falling storm canopy, trapping crew in darkness while it feeds.",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": {}
+    },
+    "stats": {
+      "size": "Large",
+      "race": "Abomination",
+      "alignment": "Gliding Evil",
+      "armorType": "Natural Armor",
+      "armorClass": 15,
+      "numHitDie": 12,
+      "speed": "0 ft., fly 60 ft. (hover)",
+      "abilityScores": {
+        "strength": 18,
+        "dexterity": 14,
+        "constitution": 14,
+        "intelligence": 6,
+        "wisdom": 14,
+        "charisma": 8
+      },
+      "proficiencyBonus": 2,
+      "damageVulnerabilities": [
+        "Lightning",
+        "Radiant"
+      ],
+      "damageResistances": [
+        "Cold",
+        "Necrotic"
+      ],
+      "damageImmunities": [],
+      "conditionImmunities": [
+        "Prone"
+      ],
+      "senses": [
+        "Darkvision 120 ft.",
+        "Passive Perception 12"
+      ],
+      "languages": [],
+      "challengeRating": 4,
+      "experiencePoints": 1100,
+      "legendaryActionsPerRound": 0,
+      "legendaryActionsDescription": "",
+      "savingThrows": [
+        {
+          "ability": "dexterity",
+          "proficient": true,
+          "modifier": 4,
+          "modifierStr": "Dex +4"
+        },
+        {
+          "ability": "wisdom",
+          "proficient": true,
+          "modifier": 4,
+          "modifierStr": "Wis +4"
+        }
+      ],
+      "skills": [],
+      "additionalAbilities": [
+        {
+          "name": "Blanketing Glide",
+          "description": "The Nimbus-Ray can move through the spaces of Large or smaller creatures while flying without provoking opportunity attacks.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Dark Canopy",
+          "description": "The area directly beneath the Nimbus-Ray out to 10 ft. is heavily obscured.",
+          "descriptionHtml": {}
+        }
+      ],
+      "actions": [
+        {
+          "name": "Crushing Wing-Edge",
+          "description": "Melee Weapon Attack: +6 to hit, reach 10 ft., one target. Hit: 13 (2d8 + 4) bludgeoning damage plus 4 (1d8) necrotic damage.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Smothering Drop (Recharge 5-6)",
+          "description": "The Nimbus-Ray descends onto a point it can see within 30 ft. Each creature in a 15-foot radius beneath it must succeed on a DC 14 Dexterity saving throw or take 14 (4d6) bludgeoning damage and become blinded until the end of its next turn. A creature that fails this save while wearing a diaper or garment must also make a DC 14 Potty Check; on a failure, panic in the sudden darkness causes it to lose 1 Use Charge.",
+          "descriptionHtml": {}
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [],
+      "hitDieSize": 10,
+      "armorTypeStr": "(Natural Armor)",
+      "abilityScoreModifiers": {
+        "strength": 4,
+        "dexterity": 2,
+        "constitution": 2,
+        "intelligence": -2,
+        "wisdom": 2,
+        "charisma": -1
+      },
+      "abilityScoreStrs": {
+        "strength": "18 (+4)",
+        "dexterity": "14 (+2)",
+        "constitution": "14 (+2)",
+        "intelligence": "6 (-2)",
+        "wisdom": "14 (+2)",
+        "charisma": "8 (-1)"
+      },
+      "extraHealthFromConstitution": 24,
+      "hitPoints": 136,
+      "hitPointsStr": "136 (12d10 + 24)",
+      "passivePerception": 12,
+      "challengeRatingStr": "4"
+    },
+    "name": "Darkforme-Nimbus-Ray"
+  },
+  {
+    "flavor": {
+      "faction": "",
+      "environment": "The High Skies (Northwest / Stormveil Periphery)",
+      "description": "This drifting storm-body is a conscious imitation of the World-Seam's worst sky violence: a swollen mass of darkling vapor, necrotic hail, and murderous downdrafts. It crushes aerial travelers and small vessels beneath its private weather, but recoils instinctively from coordinated lightning retaliation.",
+      "nameIsProper": false,
+      "imageUrl": "",
+      "descriptionHtml": {}
+    },
+    "stats": {
+      "size": "Huge",
+      "race": "Abomination",
+      "alignment": "Atmospheric Evil",
+      "armorType": "Natural Armor",
+      "armorClass": 16,
+      "numHitDie": 14,
+      "speed": "0 ft., fly 40 ft. (hover)",
+      "abilityScores": {
+        "strength": 22,
+        "dexterity": 10,
+        "constitution": 18,
+        "intelligence": 8,
+        "wisdom": 14,
+        "charisma": 12
+      },
+      "proficiencyBonus": 3,
+      "damageVulnerabilities": [
+        "Lightning",
+        "Radiant"
+      ],
+      "damageResistances": [
+        "Cold",
+        "Necrotic",
+        "Bludgeoning, Piercing, and Slashing from Nonmagical Attacks"
+      ],
+      "damageImmunities": [],
+      "conditionImmunities": [
+        "Grappled",
+        "Prone",
+        "Restrained"
+      ],
+      "senses": [
+        "Darkvision 120 ft.",
+        "Passive Perception 12"
+      ],
+      "languages": [],
+      "challengeRating": 7,
+      "experiencePoints": 2900,
+      "legendaryActionsPerRound": 0,
+      "legendaryActionsDescription": "",
+      "savingThrows": [
+        {
+          "ability": "constitution",
+          "proficient": true,
+          "modifier": 7,
+          "modifierStr": "Con +7"
+        },
+        {
+          "ability": "wisdom",
+          "proficient": true,
+          "modifier": 5,
+          "modifierStr": "Wis +5"
+        }
+      ],
+      "skills": [],
+      "additionalAbilities": [
+        {
+          "name": "Storm Mass",
+          "description": "The Thunderhead can move through a space as narrow as 1 inch wide without squeezing.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Downdraft Aura",
+          "description": "Flying creatures that start their turns within 15 ft. of the Thunderhead must succeed on a DC 15 Strength saving throw or descend up to 20 ft. immediately.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "Conductive Collapse",
+          "description": "When the Thunderhead takes lightning damage, it loses its Downdraft Aura until the end of its next turn.",
+          "descriptionHtml": {}
+        }
+      ],
+      "actions": [
+        {
+          "name": "Necrotic Hail",
+          "description": "Ranged Spell Attack: +7 to hit, range 120 ft., one target. Hit: 18 (4d8) cold damage plus 7 (2d6) necrotic damage.",
+          "descriptionHtml": {}
+        },
+        {
+          "name": "World-Seam Imitation (Recharge 5-6)",
+          "description": "The Thunderhead erupts in a 30-foot-radius burst of hail, thunder, and crushing wind centered on itself. Creatures in the area must make a DC 15 Constitution saving throw. On a failure, a creature takes 22 (4d10) cold and thunder damage, is pushed up to 15 ft. in a direction of the Thunderhead's choice, and is knocked prone if it lands on a surface. A creature that fails this save while wearing a diaper or garment must also make a DC 15 Potty Check; on a failure, the concussive panic and violent pressure cause it to lose 2 Use Charges.",
+          "descriptionHtml": {}
+        }
+      ],
+      "reactions": [],
+      "legendaryActions": [],
+      "hitDieSize": 12,
+      "armorTypeStr": "(Natural Armor)",
+      "abilityScoreModifiers": {
+        "strength": 6,
+        "dexterity": 0,
+        "constitution": 4,
+        "intelligence": -1,
+        "wisdom": 2,
+        "charisma": 1
+      },
+      "abilityScoreStrs": {
+        "strength": "22 (+6)",
+        "dexterity": "10 (+0)",
+        "constitution": "18 (+4)",
+        "intelligence": "8 (-1)",
+        "wisdom": "14 (+2)",
+        "charisma": "12 (+1)"
+      },
+      "extraHealthFromConstitution": 56,
+      "hitPoints": 224,
+      "hitPointsStr": "224 (14d12 + 56)",
+      "passivePerception": 12,
+      "challengeRatingStr": "7"
+    },
+    "name": "Darkforme-Thunderhead"
+  }
+  ]
+}

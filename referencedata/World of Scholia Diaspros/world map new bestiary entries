@@ -1,0 +1,963 @@
+🌊 Regional Bestiary: The Bay of Blitz
+System Integration: D&D 5e / Scholia Diaspros Campaign Setting
+Aesthetic Profile: Cartoony-Anime Dark Fantasy
+1. Darkling-Sea-Brackling
+Small Abomination (Ooze), Brackish Evil
+A wriggling, squid-like blob of translucent shadow-ooze that infests the flooded margins of the suburban coves. It loves nothing more than dragging its slippery, glistening body across pristine tile floors to surprise unwary travelers. Unlike common freshwater bracklings, this oceanic variant is highly adapted to the churning tidal salt-spray of the nameless coast.
+Stat Block
+Armor Class: 12 (Natural Armor)
+Hit Points: 32 (4d6 + 8 maximized)
+Speed: 15 ft., swim 30 ft., fly 15 ft. (clumsy)
+Ability Scores:
+STR: 10 (+0)
+DEX: 15 (+2)
+CON: 14 (+2)
+INT: 5 (-3)
+WIS: 10 (+0)
+CHA: 6 (-2)
+Saving Throws: Dex +4
+Damage Vulnerabilities: Radiant
+Condition Immunities: Blinded, Cursed, Prone
+Senses: Darkvision 60 ft., Passive Perception 10
+Challenge: 1 (200 XP)
+Traits
+Amphibious: The Sea-Brackling can breathe both air and water.
+Ink Jet Dash: While submerged or airborne, the Sea-Brackling can expel a pressurized jet of ink as a bonus action, allowing it to take the Dash action without provoking opportunity attacks.
+Actions
+Slippery Tentacle: Melee Weapon Attack: +4 to hit, reach 10 ft., one target. Hit: 5 (1d6 + 2) bludgeoning damage plus 3 (1d6) necrotic damage.
+Obscuring Ink Spray (Recharge 5-6): The Sea-Brackling ejects a 15-foot cone of dark, brackish ink. Each creature in that area must make a DC 12 Dexterity saving throw. On a failure, a creature is blinded until the end of its next turn. Additionally, any affected creature wearing a diaper or garment must immediately make a DC 12 Potty Check; on a failure, the garment loses 1 Use Charge.
+Image Concept Art Prompt
+Prompt: 
+Darkling-Sea-Brackling: Round, squishy, translucent black and dark oily-grey shadow-ooze squid with large glossy glowing hollow neon-cyan eyes, a predatory expression, lifted tentacles, and a hint of black ink. cartoony-anime-aesthetic, white background, no background elements.
+2. Darkling-Squallkin
+Small Abomination, Static Evil
+These floating, huffing balls of pure electrical static and shadow cluster around lonely wizard towers. They love short-circuiting defensive wards and delivering annoying static shocks to passing apprentices.
+Stat Block
+Armor Class: 13
+Hit Points: 20 (4d4 + 4 maximized)
+Speed: 0 ft., fly 30 ft. (hover)
+Ability Scores:
+STR: 6 (-2)
+DEX: 16 (+3)
+CON: 12 (+1)
+INT: 6 (-2)
+WIS: 11 (+0)
+CHA: 8 (-1)
+Damage Immunities: Lightning, Thunder
+Damage Vulnerabilities: Radiant
+Senses: Darkvision 60 ft., Passive Perception 10
+Challenge: 1/2 (100 XP)
+Traits
+Static Disruption: Any creature that hits the Squallkin with a melee attack while within 5 ft. of it takes 3 (1d6) lightning damage. Additionally, if the attacker is wearing a diaper or garment, the shocking jolt triggers an involuntary pelvic reflex, forcing the creature to make a DC 10 Potty Check; on a failure, they suffer a minor wetting accident, losing 1 Use Charge.
+Sleepless: The Squallkin does not need to sleep, and magic cannot put it to sleep.
+Actions
+Static Zap: Ranged Spell Attack: +5 to hit, range 30 ft., one target. Hit: 6 (1d6 + 3) lightning damage, and the target cannot take reactions until the start of its next turn.
+Disrupt Ward (Recharge 6): The Squallkin unleashes an EMP-like crackle targeting one spell effect of 1st level or lower within 15 ft. The Squallkin makes an Intelligence check (+0) against a DC of 10 + the spell's level. On a success, the spell effect ends immediately.
+Image Concept Art Prompt
+Prompt:
+Darkling-Squallkin: Floating fluffy cloud of black and dark oily-grey smoke with crackling yellow static electricity, sharp glowing hollow yellow eyes, and tiny devil horns made of solid lightning. cartoony-anime-aesthetic, white background, no background elements.
+3. Darkforme-Shark
+Large Abomination, Unsettling Evil
+A twisted apex predator that haunts the deeper channels between islands. Its sleek, shadowy form looks normal underwater, but its true horror is revealed when it marches onto dry land using thick, segmented crab legs.
+Stat Block
+Armor Class: 15 (Natural Armor)
+Hit Points: 78 (6d10 + 18 maximized)
+Speed: 10 ft., swim 40 ft. (land speed increases to 30 ft. in Terrestrial Posture)
+Ability Scores:
+STR: 18 (+4)
+DEX: 14 (+2)
+CON: 16 (+3)
+INT: 6 (-2)
+WIS: 12 (+1)
+CHA: 8 (-1)
+Damage Vulnerabilities: Radiant
+Senses: Darkvision 60 ft., Passive Perception 11
+Challenge: 3 (700 XP)
+Traits
+Amphibious: The Darkforme-Shark can breathe air and water.
+Sunlight Sensitivity: Disadvantage on attack rolls and Perception checks while in direct sunlight.
+Actions
+Ravenous Bite: Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 11 (2d6 + 4) piercing damage. If the target is a Medium or smaller creature, it is grappled (escape DC 14).
+Crab-Leg Transition (Recharge 6): The shark suddenly transitions to its terrestrial posture, violently engaging six massive, chitinous crab legs from its underbelly. Every creature within 30 ft. of the shark that can see this grotesque transformation must succeed on a DC 13 Constitution saving throw or suffer a "brown note incident" (Major Potty Check failure, instantly losing 2 Use Charges of padding and becoming incapacitated with shock and embarrassment until the end of its next turn).
+Image Concept Art Prompt
+Prompt:
+Darkforme-Shark: Sleek black and dark oily-grey shark made of solid shadows supported by six thick segmented crab legs, with a feral toothy grin, sharp white teeth, and glowing hollow red eyes in a dynamic crawling pose. cartoony-anime-aesthetic, white background, no background elements.
+4. Darkforme-Deluge
+Large Abomination, Drowning Evil
+A towering, amorphous mass of water-logged shadow-ooze that perfectly mimics the apocalyptic monsoons of the World-Seam. It stalks travelers through dry coves, attempting to envelop and drown them inside its own cold, necrotic body.
+Stat Block
+Armor Class: 14 (Natural Armor)
+Hit Points: 140 (10d10 + 40 maximized)
+Speed: 30 ft., swim 40 ft.
+Ability Scores:
+STR: 20 (+5)
+DEX: 12 (+1)
+CON: 18 (+4)
+INT: 6 (-2)
+WIS: 12 (+1)
+CHA: 8 (-1)
+Damage Resistances: Cold, Necrotic; Bludgeoning, Piercing, and Slashing from Nonmagical Attacks
+Condition Immunities: Grappled, Prone, Restrained
+Senses: Darkvision 60 ft., Passive Perception 11
+Challenge: 5 (1,800 XP)
+Traits
+Amorphous: The Deluge can move through a space as narrow as 1 inch wide without squeezing.
+Water-Logged Core: If the Deluge takes cold damage, its speed is reduced by 10 ft. until the end of its next turn as its outer layers temporarily freeze.
+Actions
+Water-Logged Slam: Melee Weapon Attack: +8 to hit, reach 10 ft., one target. Hit: 14 (2d8 + 5) bludgeoning damage plus 7 (2d6) necrotic damage.
+Drowning Engulf (Recharge 5-6): The Deluge moves up to its speed. While doing so, it can enter Large or smaller creatures' spaces. Any creature whose space the Deluge enters must make a DC 15 Dexterity saving throw. On a success, the creature is pushed 5 ft. to the side. On a failure, the creature takes 14 (4d6) necrotic damage and is engulfed. An engulfed creature cannot breathe, is restrained, and takes 14 (4d6) necrotic damage at the start of each of the Deluge's turns. Additionally, due to the freezing and heavy hydrostatic pressure of the swampy ooze surrounding them, an engulfed creature wearing a diaper or garment must make a DC 15 Potty Check at the start of each of its turns. On a failure, the sheer pressure forces a wetting accident, losing 1 Use Charge of their garment. An engulfed creature can escape by spending an action to succeed on a DC 15 Strength check. The Deluge can engulf up to two Medium creatures or one Large creature at a time.
+Image Concept Art Prompt
+Prompt:
+Darkforme-Deluge: Giant towering elemental formed from swirling black storm clouds and heavy dark oily-grey liquid shadow mass, with glowing hollow blue eyes and an imposing engulfing silhouette. cartoony-anime-aesthetic, white background, no background elements.
+🏔️ Regional Bestiary: The Hinterlands (The Frost-March)
+System Integration: D&D 5e / Scholia Diaspros Campaign Setting
+Aesthetic Profile: Cartoony-Anime Dark Fantasy
+1. Darkling-Rimecreep
+Small Abomination, Freezing Evil
+A viscous, sludge-like darkling whose shadowy body has been permanently flash-frozen into sharp, scraping shards of black icicles. They crawl across the slick surface of the Rime-Glass Lake with a horrifying, metallic fingernail-on-chalkboard scraping sound, seeking warm travelers to latch onto.
+Stat Block
+Armor Class: 12 (Natural Armor)
+Hit Points: 21 (3d6 + 3 maximized)
+Speed: 20 ft., climb 20 ft. (slithers over ice)
+Ability Scores:
+STR: 10 (+0)
+DEX: 14 (+2)
+CON: 12 (+1)
+INT: 4 (-3)
+WIS: 10 (+0)
+CHA: 6 (-2)
+Saving Throws: Dex +4
+Damage Resistances: Cold
+Damage Vulnerabilities: Fire, Radiant
+Condition Immunities: Blinded, Prone
+Senses: Darkvision 60 ft., Passive Perception 10
+Challenge: 1/4 (50 XP)
+Traits
+Ice Walk: The Rimecreep can move across icy and snowy surfaces without needing to make ability checks. Difficult terrain composed of ice or snow does not cost it extra movement.
+False Appearance: While the Rimecreep remains motionless, it is indistinguishable from a cluster of natural dark icicles.
+Actions
+Scraping Icicle Claw: Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 4 (1d4 + 2) slashing damage plus 2 (1d4) cold damage. If the target is a Medium or smaller creature, it is grappled (escape DC 10).
+Freezing Contact: The Rimecreep clamps its frozen mass onto a creature it is grappling, rapidly draining heat. At the start of each of the grappled target's turns, they take 4 (1d8) cold damage. Additionally, the biting chill flash-freezes the target's lower garments, forcing a DC 10 Potty Check; on a failure, the garment immediately enters the Frozen state (reducing speed by 10 ft. and imposing disadvantage on Stealth due to noisy, icy crinkling).
+Image Concept Art Prompt
+Prompt:
+Darkling-Rimecreep: Squishy translucent black and dark oily-grey shadow puddle with sharp glossy black icicles sprouting from its back, huge glowing hollow cold-pink eyes, and a scraping predatory expression in a low slithering pose. cartoony-anime-aesthetic, white background, no background elements.
+2. Darkling-Shiver
+Small Abomination, Trembling Evil
+These fragile, quivering balls of dark mist hide within the silent, snow-packed evergreen forests of the Hinterlands. They do not attack with physical force, but instead emit a highly localized, supernatural draft of sub-zero wind that actively dampens fire, saps energy, and bypasses the warming enchantments of travelers.
+Stat Block
+Armor Class: 13
+Hit Points: 28 (4d6 + 4 maximized)
+Speed: 30 ft.
+Ability Scores:
+STR: 6 (-2)
+DEX: 16 (+3)
+CON: 12 (+1)
+INT: 6 (-2)
+WIS: 12 (+1)
+CHA: 8 (-1)
+Damage Resistances: Cold; Bludgeoning, Piercing, and Slashing from Nonmagical Attacks
+Damage Vulnerabilities: Fire, Radiant
+Condition Immunities: Grappled, Prone, Restrained
+Senses: Darkvision 60 ft., Passive Perception 11
+Challenge: 1/2 (100 XP)
+Traits
+Sleepless: The Shiver does not need to sleep, and magic cannot put it to sleep.
+Sipping warmth: Any spell or magical effect within 15 ft. of the Shiver that provides heat, fire resistance, or is a Padding Perfection spell has a 50% chance to fail instantly at the start of each of the Shiver's turns as the creature vacuums the ambient thermal energy.
+Actions
+Frostbite Touch: Melee Spell Attack: +5 to hit, reach 5 ft., one target. Hit: 5 (1d4 + 3) cold damage, and the target's movement speed is reduced by 10 ft. until the end of its next turn.
+Trembling Aura (Recharge 5-6): The Shiver pulses with a wave of absolute sub-zero drafts in a 15-foot radius. Each creature in that area must make a DC 11 Constitution saving throw. On a failure, the creature takes 7 (2d6) cold damage and is seized by violent, uncontrollable shivering, forcing a DC 11 Potty Check; on a failure, the intense full-body spasms cause the target to lose 1 Use Charge of their garment.
+Image Concept Art Prompt
+Prompt:
+Darkling-Shiver: Tiny round cloud of black and dark oily-grey smoke with giant glowing hollow white eyes, tiny stylized ice horns, and a violently shivering expression with a tight halo of cold flecks close to the body. cartoony-anime-aesthetic, white background, no background elements.
+3. Darkforme-Shatterhorn
+Large Abomination, Piercing Evil
+A grotesque, skeletal parody of a massive elk or moose, completely encrusted in black permafrost and shifting shadow-vapor. It stalks the frozen tundra, charging with terrifying momentum and impaling travelers upon its massive, fractal antlers of solid shadow-ice.
+Stat Block
+Armor Class: 15 (Natural Armor)
+Hit Points: 104 (8d10 + 24 maximized)
+Speed: 40 ft.
+Ability Scores:
+STR: 18 (+4)
+DEX: 12 (+1)
+CON: 16 (+3)
+INT: 6 (-2)
+WIS: 14 (+2)
+CHA: 8 (-1)
+Damage Immunities: Cold
+Damage Vulnerabilities: Fire, Radiant
+Senses: Darkvision 60 ft., Passive Perception 12
+Challenge: 4 (1,100 XP)
+Traits
+Trample Charge: If the Shatterhorn moves at least 20 ft. straight toward a creature and then hits it with a Gore attack on the same turn, the target takes an extra 9 (2d8) bludgeoning damage and must succeed on a DC 14 Strength saving throw or be knocked prone.
+Frost Aura: At the start of each of the Shatterhorn's turns, each creature within 5 ft. of it takes 3 (1d6) cold damage.
+Actions
+Gore: Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 13 (2d8 + 4) piercing damage plus 4 (1d8) cold damage.
+Stomp: Melee Weapon Attack: +6 to hit, reach 5 ft., one prone target. Hit: 11 (2d6 + 4) bludgeoning damage.
+Shatter-Roar (Recharge 6): The Shatterhorn lets out a bone-rattling, crystalline bellow. Each creature within 30 ft. must succeed on a DC 13 Constitution saving throw. On a failure, a creature takes 14 (4d6) thunder damage, is deafened, and must immediately make a DC 13 Potty Check; on a failure, the vibrating force causes a major failure, instantly losing 2 Use Charges and becoming stunned with embarrassment.
+Image Concept Art Prompt
+Prompt:
+Darkforme-Shatterhorn: Majestic stylized skeletal elk made of black and dark oily-grey permafrost with massive glowing neon-cyan antlers shaped like jagged ice fractals, glowing hollow neon-cyan eyes, and a tight aura of black mist and frost particles in a charging pose. cartoony-anime-aesthetic, white background, no background elements.
+4. Darkforme-Glacier-Maw
+Huge Abomination, Gluttonous Evil
+This massive, subterranean threat slumbers deep beneath the impenetrable ice of the Rime-Glass Lake. It bursts upward through the ice sheets without warning to swallow foragers and scouts whole, exhaling a dense cloud of absolute-zero fog that freezes magical gear solid and locks targets in place.
+Stat Block
+Armor Class: 16 (Natural Armor)
+Hit Points: 192 (12d12 + 48 maximized)
+Speed: 20 ft., burrow 40 ft. (through ice and snow only)
+Ability Scores:
+STR: 22 (+6)
+DEX: 8 (-1)
+CON: 18 (+4)
+INT: 6 (-2)
+WIS: 14 (+2)
+CHA: 8 (-1)
+Damage Immunities: Cold
+Damage Vulnerabilities: Fire, Radiant
+Condition Immunities: Frightened, Prone
+Senses: Darkvision 120 ft., Tremorsense 60 ft., Passive Perception 12
+Challenge: 6 (2,300 XP)
+Traits
+Ice Burrower: The Glacier-Maw can burrow through solid ice and snow without reducing its speed. It leaves no tunnel behind it.
+Glacial Aura: The ground within a 20-foot radius of the Glacier-Maw is covered in thick, slippery frost and is treated as difficult terrain. Any creature that starts its turn in this area must succeed on a DC 14 Dexterity saving throw or fall prone.
+Actions
+Bite: Melee Weapon Attack: +9 to hit, reach 10 ft., one target. Hit: 19 (2d12 + 6) piercing damage plus 7 (2d6) cold damage. If the target is a Large or smaller creature, it is grappled (escape DC 16).
+Swallow Forager: The Glacier-Maw makes one Bite attack against a Medium or smaller creature it is grappling. On a hit, the target is swallowed. While swallowed, the creature takes 14 (4d6) cold damage and 7 (2d6) acid damage at the start of each of its turns. Additionally, the cryonic pressure forces a DC 15 Potty Check; on a failure, the target suffers a critical failure (instantly losing all use charges and disabling all magical diaper buffs).
+Absolute Zero Belch (Recharge 5-6): The Glacier-Maw expels a 30-foot cone of icy mist. Each creature in that area must make a DC 15 Constitution saving throw. On a failure, a creature takes 27 (6d8) cold damage and is paralyzed by ice. Additionally, any garments worn are frozen solid (AC reduced by 1, and speed is halved until thawed).
+🌸 Regional Bestiary: The Faermeadows (The Domesticated Dream)
+System Integration: D&D 5e / Scholia Diaspros Campaign Setting
+Aesthetic Profile: Cartoony-Anime Dark Fantasy
+1. Darkling-Glamour-Mantle
+Small Abomination, Parasitic/Symbiotic Evil
+A silky, sludge-like shadow that prefers being donned over skulking in the muck. Eccentric hunters and thrill-seeking fae throughout the meadows seek these entities to drape across their shoulders like shifting starlit obsidian. While it siphons ambient mana to grant the wearer short-range teleports, it will greedily constrict and attempt a full possession if the host grows weak.
+Stat Block
+Armor Class: 13
+Hit Points: 40 (5d6 + 10 maximized)
+Speed: 25 ft., climb 25 ft.
+Ability Scores:
+STR: 10 (+0)
+DEX: 16 (+3)
+CON: 14 (+2)
+INT: 10 (+0)
+WIS: 12 (+1)
+CHA: 14 (+2)
+Saving Throws: Dex +5, Cha +4
+Damage Resistances: Necrotic, Poison
+Damage Vulnerabilities: Radiant
+Condition Immunities: Prone
+Senses: Darkvision 60 ft., Passive Perception 11
+Challenge: 1 (200 XP)
+Traits
+Symbiotic Shadow: While worn as a garment, the mantle cannot be targeted; attacks hit the host instead. The wearer can use a bonus action to teleport 20 ft. to a visible space, but doing so siphons kinetic energy, costing 1 Use Charge of their garment.
+False Appearance: While motionless, the mantle is indistinguishable from a velvet neck-wrap or shawl.
+Actions
+Slippery Envelop: Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) acid damage plus 3 (1d6) necrotic damage. The target is grappled (escape DC 11). If the target is wearing a diaper, the squeezing pressure forces a DC 11 Potty Check; on a failure, they suffer a minor wetting accident, losing 1 Use Charge.
+Parasitic Possession: The mantle tries to seize control of a grappled creature. The target must succeed on a DC 12 Charisma saving throw or be blinded as the mantle wraps around their head. The mantle gains control of their movement on its next turn until the effect ends.
+Image Concept Art Prompt
+Prompt:
+Darkling-Glamour-Mantle: Freaky darkforme symbiote fae with a slender fae body partially overtaken by a squishy translucent black and dark oily-grey sludge mantle fused across the shoulders, chest, back, and arms, blending host and parasite into one uncanny silhouette with multiple glowing hollow ice-blue eyes opening across the merged symbiote mass. cartoony-anime-aesthetic, white background, no background elements.
+2. Darkling-Loop-Stalker
+Medium Abomination, Stuttering Evil
+This entity is physically unstable, stuttering through the flora with disjointed motions and shadowy afterimages caused by local temporal anomalies. Because it exists in a micro-loop of its own past and future, it is notoriously difficult to strike, often "rewinding" itself away from incoming attacks.
+Stat Block
+Armor Class: 14 (Natural Armor)
+Hit Points: 60 (6d8 + 12 maximized)
+Speed: 35 ft.
+Ability Scores:
+STR: 12 (+1)
+DEX: 18 (+4)
+CON: 14 (+2)
+INT: 6 (-2)
+WIS: 10 (+0)
+CHA: 8 (-1)
+Saving Throws: Dex +6
+Damage Resistances: Bludgeoning, Piercing, and Slashing from Nonmagical Attacks
+Damage Vulnerabilities: Radiant
+Senses: Darkvision 60 ft., Passive Perception 10
+Challenge: 1 (200 XP)
+Traits
+Temporal Stutter: Attacks against the Stalker have disadvantage unless it is incapacitated or has its speed reduced to 0.
+Chronomantic Avoidance (Reaction): When hit by a melee attack, the Stalker can teleport 10 ft. to a visible space, halving the damage as it rewinds one second into the past.
+Actions
+Disjointed Claw: Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 7 (1d6 + 4) slashing damage plus 3 (1d6) force damage.
+Stutter-Resonance Pulse (Recharge 5-6): The Stalker emits a 10-ft radius wave of temporal echoes. Creatures must make a DC 12 Constitution saving throw or take 9 (2d8) force damage. The glitch forces an involuntary regression; on a failure, a DC 12 Potty Check causes them to comically lose 1 Use Charge as their muscles relax.
+Image Concept Art Prompt
+Prompt:
+Darkling-Loop-Stalker: Round shadow-beast with a black and dark oily-grey body, large glowing hollow pink eyes, and a glitching stride with translucent black-and-magenta motion-blur frames echoing its body. cartoony-anime-aesthetic, white background, no background elements.
+3. Darkforme-Flutter-Ghast
+Medium Abomination, Faeform Evil
+A beautifully eerie evolution born when a darkling mimics the biology of a consumed fae. This creature resembles a butterfly with wings of geometric void-slices. Its flapping scatters sparkling "temporal dust" that randomly alters the age of everything it touches.
+Stat Block
+Armor Class: 15
+Hit Points: 110 (10d8 + 30 maximized)
+Speed: 20 ft., fly 45 ft. (hover)
+Ability Scores:
+STR: 10 (+0)
+DEX: 18 (+4)
+CON: 16 (+3)
+INT: 12 (+1)
+WIS: 14 (+2)
+CHA: 16 (+3)
+Saving Throws: Dex +6, Wis +4, Cha +5
+Damage Resistances: Cold, Necrotic
+Damage Immunities: Poison
+Damage Vulnerabilities: Fire, Radiant
+Senses: Darkvision 120 ft., Passive Perception 12
+Challenge: 3 (700 XP)
+Traits
+Magic Resistance: The Ghast has advantage on saves against magical effects and spells.
+Void Edge: Melee attacks from its wings ignore half and three-quarters cover.
+Actions
+Razor Void-Wing: Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 11 (2d6 + 4) slashing damage plus 4 (1d8) necrotic damage.
+Temporal Dust Spray (Recharge 5-6): The Ghast scatters a 30-ft cone of glittering dust. Creatures take 14 (4d6) psychic damage on a failed DC 13 Wisdom save. The regression forces a DC 13 Potty Check; on a failure, the sudden return to toddlerhood causes them to wet their diaper, losing 1 Use Charge and gaining disadvantage on Wisdom saves.
+Image Concept Art Prompt
+Prompt:
+Darkforme-Flutter-Ghast: Majestic moth-monster of swirling black and dark oily-grey smoke with glowing cyan fractal wings, glowing hollow yellow eyes, and a halo of temporal dust around the body. cartoony-anime-aesthetic, white background, no background elements.
+4. Darkforme-Chrono-Snare
+Large Abomination, Ensnaring Evil
+A looming, spider-like entity that stalks the meadow boundaries. Instead of silk, it weaves stagnant temporal energy to trap victims in local loops. Prey is forced to repeat the exact microsecond of capture while the snare feeds on their psychic frustration.
+Stat Block
+Armor Class: 15 (Natural Armor)
+Hit Points: 168 (12d10 + 48 maximized)
+Speed: 30 ft., climb 30 ft.
+Ability Scores:
+STR: 18 (+4)
+DEX: 14 (+2)
+CON: 18 (+4)
+INT: 10 (+0)
+WIS: 16 (+3)
+CHA: 12 (+1)
+Saving Throws: Con +7, Wis +6
+Damage Resistances: Cold, Necrotic; Bludgeoning, Piercing, and Slashing from Nonmagical Attacks
+Damage Immunities: Poison
+Condition Immunities: Prone
+Senses: Darkvision 120 ft., Passive Perception 13
+Challenge: 4 (1,100 XP)
+Traits
+Spider Climb: The Snare can traverse difficult surfaces and ceilings without making ability checks.
+Temporal Sense: It automatically detects any creature within 60 ft. affected by time-altering spells or conditions like Haste or Slow.
+Actions
+Piercing Shadow-Leg: Melee Weapon Attack: +7 to hit, reach 10 ft., one target. Hit: 13 (2d8 + 4) piercing damage plus 4 (1d8) cold damage.
+Weave Chrono-Snare (Recharge 5-6): Shoots a sphere of temporal stagnation at a point within 60 ft. Creatures must succeed on a DC 14 Dexterity save or be restrained and forced to repeat their last action. Biological functions loop as well: a failed DC 14 Potty Check at the start of each turn causes a wetting accident, losing 1 Use Charge. Wisdom saves can break the loop.
+Image Concept Art Prompt
+Prompt:
+Darkforme-Chrono-Snare: Giant stylized spider-monster of black and dark oily-grey smoke with jagged bone plating, eight glowing neon-magenta legs, and glowing hollow magenta eyes in an aggressive crouched pose. cartoony-anime-aesthetic, white background, no background elements.
+🌅 Regional Bestiary: Dawnshore (Anchor of the Sun)
+System Integration: D&D 5e / Scholia Diaspros Campaign Setting
+Aesthetic Profile: Cartoony-Anime Dark Fantasy
+1. Darkling-Delta-Mimic
+Small Abomination, Deceptive Evil
+This flattened, skittering shadow-beast lurks within the silt-laden edges of the coastal delta. By tucking its spindly, oily legs beneath its glossy carapace, it assumes the perfect likeness of a smooth river stone or a discarded crab shell. Travelers who tread too close find themselves ensnared by vice-like pincers that specifically hunger for legs and protective padding.
+Stat Block
+Armor Class: 13 (Natural Armor)
+Hit Points: 32 (4d6 + 8 maximized)
+Speed: 30 ft., burrow 15 ft., swim 20 ft.
+Ability Scores:
+STR: 10 (+0)
+DEX: 16 (+3)
+CON: 14 (+2)
+INT: 5 (-3)
+WIS: 12 (+1)
+CHA: 6 (-2)
+Saving Throws: Dex +5
+Damage Resistances: Cold, Necrotic
+Damage Vulnerabilities: Radiant
+Senses: Darkvision 60 ft., Passive Perception 11
+Challenge: 1/2 (100 XP)
+Traits
+Sunlight Fear: The mimic suffers disadvantage on attack rolls and ability checks while exposed to unshaded, direct sunlight.
+False Appearance: While remaining still, the mimic is visually indistinguishable from a large delta stone or aquatic shell.
+Actions
+Pincer Pinch: Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 5 (1d4 + 3) piercing damage plus 2 (1d4) necrotic damage, and the target is grappled (escape DC 11).
+Delta Mud Squeeze: The mimic applies a punishing, localized clamp to a grappled creature's lower limbs. The target must succeed on a DC 11 Potty Check; on a failure, the crushing pressure forces a wetting accident, losing 1 Use Charge of their garment.
+Image Concept Art Prompt
+Prompt:
+Darkling-Delta-Mimic: Glossy black and dark oily-grey crab-like mimic with giant glowing hollow neon-cyan eyes and a tense grasp on a small pink seashell in one claw. cartoony-anime-aesthetic, white background, no background elements.
+2. Darkling-Sol-Shunner
+Small Abomination, Static Evil
+Suspended from the thick mangrove canopy, this chiropteran darkling resembles a slumbering fruit bat during the daylight hours. It possesses a violent aversion to solar energy, and if disturbed, it vents a static-laced, agonizing screech that disrupts magical focus throughout the delta.
+Stat Block
+Armor Class: 13
+Hit Points: 28 (4d6 + 4 maximized)
+Speed: 10 ft., fly 40 ft. (hover)
+Ability Scores:
+STR: 6 (-2)
+DEX: 16 (+3)
+CON: 12 (+1)
+INT: 6 (-2)
+WIS: 14 (+2)
+CHA: 8 (-1)
+Damage Resistances: Cold, Poison
+Damage Vulnerabilities: Radiant
+Senses: Darkvision 120 ft., Passive Perception 12
+Challenge: 1/2 (100 XP)
+Traits
+Sunlight Sensitivity: Disadvantage on attack rolls and sight-based Perception checks while in direct sunlight.
+Twilight Veil: While in dim light or darkness, the Sol-Shunner can use its bonus action to Hide.
+Actions
+Venomous Shadow-Bite: Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 5 (1d4 + 3) piercing damage plus 3 (1d6) poison damage.
+Startle-Screech (Recharge 5-6): The Sol-Shunner emits a high-pitched, echoing blast of sound. Each creature within 20 ft. must succeed on a DC 11 Wisdom saving throw or be frightened. This traumatic shock forces an immediate DC 11 Potty Check; on a failure, the sudden terror causes a minor wetting accident, losing 1 Use Charge.
+Image Concept Art Prompt
+Prompt:
+Darkling-Sol-Shunner: Black and dark oily-grey mangrove-hanging darkling shaped like a shriveled lantern-fruit pod with folded rib-like fins, giant glowing hollow pink eyes, and a strained sun-hating snarl in a dangling upside-down pose. cartoony-anime-aesthetic, white background, no background elements.
+3. Darkforme-Sol-Anhinga
+Medium Abomination, Photophobic Evil
+This beautifully eerie avian resembles a coastal darter drying its wings upon a half-sunken delta log. Yet its plumage is composed of absolute pitch-shadow that actively consumes ambient light, casting a localized eclipse around its form.
+Stat Block
+Armor Class: 15 (Natural Armor)
+Hit Points: 110 (10d8 + 30 maximized)
+Speed: 20 ft., fly 45 ft., swim 30 ft.
+Ability Scores:
+STR: 10 (+0)
+DEX: 18 (+4)
+CON: 16 (+3)
+INT: 8 (-1)
+WIS: 14 (+2)
+CHA: 12 (+1)
+Saving Throws: Dex +6, Wis +4
+Damage Resistances: Cold, Necrotic; Bludgeoning, Piercing, and Slashing from Nonmagical Attacks
+Damage Vulnerabilities: Radiant
+Senses: Darkvision 120 ft., Passive Perception 12
+Challenge: 3 (700 XP)
+Traits
+Solar Eclipse Wings: The area within 10 ft. of the Sol-Anhinga is perpetually shrouded in dim light as it drinks in the sun.
+Water Dart: The bird gains advantage on melee attacks against targets currently submerged in water.
+Actions
+Spearing Beak: Melee Weapon Attack: +6 to hit, reach 10 ft., one target. Hit: 11 (2d6 + 4) piercing damage plus 4 (1d8) cold damage.
+Eclipse Feather Spray (Recharge 5-6): The bird launches a freezing barrage of shadow-feathers in a 30-foot cone. Creatures must succeed on a DC 13 Dexterity save or take 14 (4d6) cold damage. The biting chill forces a DC 13 Potty Check; on a failure, the garment immediately enters the Frozen state, reducing speed by 10 ft. and imposing noisy, icy crinkling.
+Image Concept Art Prompt
+Prompt:
+Darkforme-Sol-Anhinga: Stylized bird made of black and dark oily-grey smoke with glowing neon feathers, glowing hollow cyan eyes, and wings spread wide in an elegant display pose. cartoony-anime-aesthetic, white background, no background elements.
+4. Darkforme-Mangrove-Matriarch
+Large Abomination, Rooted Evil
+Appearing as a massive, twisted knot of black moss and necrotic roots, this entity lies in wait within the delta muck. It uses its thick, tendril-like appendages to drag travelers into the high-pressure swampy sludge, feeding greedily on their physical and spiritual exhaustion.
+Stat Block
+Armor Class: 16 (Natural Armor)
+Hit Points: 168 (12d10 + 48 maximized)
+Speed: 20 ft., climb 20 ft.
+Ability Scores:
+STR: 20 (+5)
+DEX: 10 (+0)
+CON: 18 (+4)
+INT: 8 (-1)
+WIS: 14 (+2)
+CHA: 10 (+0)
+Saving Throws: Con +7, Wis +5
+Damage Resistances: Cold, Necrotic; Bludgeoning and Piercing from Nonmagical Attacks
+Damage Immunities: Poison
+Condition Immunities: Prone
+Senses: Darkvision 120 ft., Tremorsense 60 ft., Passive Perception 12
+Challenge: 5 (1,800 XP)
+Traits
+Spider Climb: The Matriarch traverses difficult surfaces and ceilings without needing ability checks.
+Sunlight Allergy: Direct sunlight causes 5 radiant damage at the start of its turn and halves its movement speed.
+Actions
+Grasping Shadow-Root: Melee Weapon Attack: +8 to hit, reach 15 ft., one target. Hit: 14 (2d8 + 5) bludgeoning damage plus 4 (1d8) necrotic damage. The target is restrained and grappled (escape DC 14).
+Swampy Siphon (Recharge 5-6): The Matriarch channels decaying energy into a grappled victim. On a failed DC 14 Constitution save, the target takes 18 (4d8) necrotic damage and suffers a major messing accident. The high hydrostatic pressure forces them to lose 2 Use Charges instantly, leaving them incapacitated with shock.
+Image Concept Art Prompt
+Prompt:
+Darkforme-Mangrove-Matriarch: Towering root-colossus with a twisted tidal-tree silhouette, barklike black and dark oily-grey mass, trunk-thick limbs, hanging snare-roots, and deep-set glowing hollow violet eyes staring from the core of its warped wooden body. cartoony-anime-aesthetic, white background, no background elements.
+
+5. Darkling-Shell-Skitterer
+Small Abomination, Scavenging Evil
+An opportunistic shoreline scavenger that stuffs its shadowy body into clam shells, driftwood hollows, and discarded crates to survive Dawnshore's punishing light. At dusk it pours out in a skittering blur, snatching trinkets, rations, and any loose supplies left by fishers or Delta Rangers.
+Stat Block
+Armor Class: 13 (Natural Armor)
+Hit Points: 24 (4d6 maximized)
+Speed: 30 ft., climb 20 ft.
+Ability Scores:
+STR: 8 (-1)
+DEX: 16 (+3)
+CON: 12 (+1)
+INT: 5 (-3)
+WIS: 12 (+1)
+CHA: 6 (-2)
+Saving Throws: Dex +5
+Skills: Stealth +5, Sleight of Hand +5
+Damage Vulnerabilities: Radiant
+Senses: Darkvision 60 ft., Passive Perception 11
+Challenge: 1/4 (50 XP)
+Traits
+False Appearance: While motionless inside a shell, crate, or driftwood hollow, the Shell-Skitterer is indistinguishable from mundane beach debris.
+Scavenger Scuttle: If the Shell-Skitterer starts its turn holding a stolen object, it can take the Dash or Disengage action as a bonus action.
+Actions
+Skitter-Claw: Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 5 (1d4 + 3) slashing damage plus 2 (1d4) necrotic damage.
+Pilfering Snatch: One creature within 5 ft. must succeed on a DC 11 Dexterity saving throw or drop one held object of the Skitterer's choice. If the target is wearing a diaper or garment with exposed tapes, straps, or seals, it must also make a DC 11 Potty Check; on a failure, the creature loses 1 Use Charge as the Skitterer yanks something loose in the panic.
+Image Concept Art Prompt
+Prompt:
+Darkling-Shell-Skitterer: Tiny glossy black and dark oily-grey scavenger peeking out of an oversized seashell like a hermit crab, with huge glowing hollow cyan eyes and hooked little claws. cartoony-anime-aesthetic, white background, no background elements.
+
+6. Darkling-Silt-Hound
+Medium Abomination, Pack Evil
+This mud-caked delta hunter mimics the silhouette of a gaunt marsh-coyote, masking its shadowy hide beneath clay, reeds, and wet silt. Silt-Hounds circle prey through knee-deep channels and soft riverbanks, driving travelers into boggy traps before the pack descends.
+Stat Block
+Armor Class: 13 (Natural Armor)
+Hit Points: 40 (4d8 + 8 maximized)
+Speed: 40 ft., swim 20 ft.
+Ability Scores:
+STR: 14 (+2)
+DEX: 14 (+2)
+CON: 14 (+2)
+INT: 4 (-3)
+WIS: 12 (+1)
+CHA: 6 (-2)
+Skills: Perception +3, Stealth +4, Survival +3
+Damage Vulnerabilities: Radiant
+Senses: Darkvision 60 ft., Passive Perception 13
+Challenge: 1 (200 XP)
+Traits
+Pack Tactics: The Silt-Hound has advantage on an attack roll against a creature if at least one of the hound's allies is within 5 ft. of the creature and the ally isn't incapacitated.
+Mud-Caked Hide: While the Silt-Hound is in muddy terrain or shallow water, attack rolls against it made from more than 10 ft. away have disadvantage.
+Actions
+Silt-Fang Bite: Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 7 (1d10 + 2) piercing damage plus 2 (1d4) necrotic damage.
+Reed-Herding Bark (Recharge 5-6): The Silt-Hound unleashes a sharp, panicked yelp that coordinates nearby packmates. Each enemy within 15 ft. that can hear it must succeed on a DC 12 Wisdom saving throw or move up to 10 ft. in a direction of the hound's choice if able. A creature that fails this save while wearing a diaper or garment must also make a DC 12 Potty Check; on a failure, the forced stumble and fear cause it to lose 1 Use Charge.
+Image Concept Art Prompt
+Prompt:
+Darkling-Silt-Hound: Lean swamp-coyote made of black shadow and dark oily-grey clay with glowing hollow yellow eyes, muddy paws, and a tense pack-hunter posture. cartoony-anime-aesthetic, white background, no background elements.
+
+7. Darkforme-Star-Shrike
+Medium Abomination, Plunging Evil
+High in the angular branches of the Astrum Canopy, this avian horror hides as a silhouette among the star-shaped limbs. When prey strays beneath, the Shrike drops like a thrown knife, its metallic shadow-glass plumage turning a silent dive into a lethal impalement.
+Stat Block
+Armor Class: 15 (Natural Armor)
+Hit Points: 100 (10d8 + 20 maximized)
+Speed: 15 ft., fly 50 ft.
+Ability Scores:
+STR: 16 (+3)
+DEX: 18 (+4)
+CON: 14 (+2)
+INT: 8 (-1)
+WIS: 14 (+2)
+CHA: 8 (-1)
+Saving Throws: Dex +6, Wis +4
+Skills: Perception +4, Stealth +6
+Damage Resistances: Piercing and Slashing from Nonmagical Attacks
+Damage Vulnerabilities: Radiant
+Senses: Darkvision 120 ft., Passive Perception 14
+Challenge: 3 (700 XP)
+Traits
+Canopy Ambusher: The Star-Shrike has advantage on attack rolls against creatures that haven't acted yet in combat while it is in dim light, darkness, or heavy foliage.
+Dive Impaler: If the Shrike moves at least 20 ft. downward straight toward a target and hits with Talons on the same turn, the attack deals an extra 7 (2d6) piercing damage.
+Actions
+Multiattack: The Star-Shrike makes two Talons attacks.
+Talons: Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 10 (2d6 + 3) slashing damage plus 3 (1d6) necrotic damage.
+Shadow-Glass Feather Burst (Recharge 5-6): The Shrike explodes a volley of razor feathers in a 20-foot cone. Creatures in the area must make a DC 13 Dexterity saving throw, taking 14 (4d6) slashing damage on a failed save, or half as much on a success. A creature that fails while wearing a diaper or garment must also make a DC 13 Potty Check; on a failure, the shock and pain cause it to lose 1 Use Charge.
+Image Concept Art Prompt
+Prompt:
+Darkforme-Star-Shrike: Sleek black and dark oily-grey shadow-owl or falcon with razor-thin black crystal feathers and glowing hollow cyan eyes in a steep diving attack pose. cartoony-anime-aesthetic, white background, no background elements.
+
+8. Darkforme-Bramble-Stag
+Large Abomination, Territorial Evil
+The shadow-monarch of the deepest Astrum Canopy resembles an impossibly calm elk wrought from black roots, obsidian, and slow-breathing darkness. It does not rage or panic like lesser darkformes; it simply decides an intruder has crossed a boundary, and then annihilates them with unstoppable, ritualistic force.
+Stat Block
+Armor Class: 16 (Natural Armor)
+Hit Points: 156 (12d10 + 36 maximized)
+Speed: 50 ft.
+Ability Scores:
+STR: 20 (+5)
+DEX: 14 (+2)
+CON: 16 (+3)
+INT: 8 (-1)
+WIS: 16 (+3)
+CHA: 10 (+0)
+Saving Throws: Str +8, Wis +6
+Skills: Perception +6, Survival +6
+Damage Resistances: Necrotic; Bludgeoning and Piercing from Nonmagical Attacks
+Damage Vulnerabilities: Fire, Radiant
+Senses: Darkvision 120 ft., Passive Perception 16
+Challenge: 5 (1,800 XP)
+Traits
+Territorial Charge: If the Bramble-Stag moves at least 20 ft. straight toward a creature and then hits it with Gore on the same turn, the target takes an extra 9 (2d8) piercing damage and must succeed on a DC 15 Strength saving throw or be knocked prone.
+Root-Sure Footing: The Bramble-Stag ignores nonmagical difficult terrain made of roots, undergrowth, mud, or brambles.
+Actions
+Multiattack: The Bramble-Stag makes one Gore attack and one Hoof attack.
+Gore: Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 16 (2d10 + 5) piercing damage plus 4 (1d8) necrotic damage.
+Hoof: Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 12 (2d6 + 5) bludgeoning damage.
+Canopy Monarch's Bellow (Recharge 5-6): The Bramble-Stag releases a deep, resonant territorial bellow. Each hostile creature within 30 ft. that can hear it must succeed on a DC 14 Wisdom saving throw or become frightened until the end of its next turn. A creature that fails this save while wearing a diaper or garment must also make a DC 14 Potty Check; on a failure, the overwhelming instinctive terror forces it to lose 2 Use Charges.
+Image Concept Art Prompt
+Prompt:
+Darkforme-Bramble-Stag: Colossal elk made of black roots, obsidian antlers, and dark oily-grey shadow mist with glowing hollow cyan eyes and curling roots around its hooves, posed with regal calm. cartoony-anime-aesthetic, white background, no background elements.
+
+⚙️ Regional Bestiary: Maristannio (The Scavenger's Dreadnought)
+System Integration: D&D 5e / Scholia Diaspros Campaign Setting
+Aesthetic Profile: Cartoony-Anime Dark Fantasy
+1. Darkling-Petro-Legion
+Large Ooze, Polluted Evil
+Born where darkling slime mixes with petrodistillate, alchemical runoff, and machine-filth, the Petro-Legion is less a creature than a living industrial spill. It oozes through forgotten bilges and gear gutters, suffocating scavengers, igniting catastrophically when struck by flame, and clogging vital city systems with sentient malice.
+Stat Block
+Armor Class: 14 (Natural Armor)
+Hit Points: 102 (12d10 + 12 maximized)
+Speed: 20 ft., climb 20 ft.
+Ability Scores:
+STR: 18 (+4)
+DEX: 8 (-1)
+CON: 12 (+1)
+INT: 4 (-3)
+WIS: 10 (+0)
+CHA: 6 (-2)
+Damage Resistances: Acid, Poison
+Damage Vulnerabilities: Fire, Radiant
+Condition Immunities: Blinded, Charmed, Deafened, Frightened, Prone
+Senses: Blindsight 60 ft. (blind beyond this radius), Passive Perception 10
+Challenge: 3 (700 XP)
+Traits
+Amorphous: The Petro-Legion can move through a space as narrow as 1 inch wide without squeezing.
+Volatile Fuel-Body: Whenever the Petro-Legion takes fire damage, each creature within 5 ft. of it takes 3 (1d6) fire damage.
+Actions
+Corrosive Pseudopod: Melee Weapon Attack: +6 to hit, reach 10 ft., one target. Hit: 11 (2d6 + 4) bludgeoning damage plus 4 (1d8) acid damage.
+Gear-Clog Engulf (Recharge 5-6): The Legion moves up to its speed. It can enter Large or smaller creatures' spaces during this move. A creature whose space it enters must succeed on a DC 13 Dexterity saving throw or take 10 (3d6) acid damage and become restrained by the ooze until the end of the Legion's next turn. A restrained creature wearing a diaper or garment must also make a DC 13 Potty Check; on a failure, thick corrosive sludge ruins seals and tapes, causing the creature to lose 1 Use Charge.
+Image Concept Art Prompt
+Prompt:
+Darkling-Petro-Legion: Huge sentient oil slick made of glossy black and dark oily-grey ooze with glowing hollow amber eyes floating in its surface and a heavy surging silhouette. cartoony-anime-aesthetic, white background, no background elements.
+
+2. Darkforged-Slag-Brute
+Medium Construct, Rusted Evil
+This hulking salvage-failure is a corroded warforged chassis awakened by ambient darkness and half-remembered guard orders. Its body leaks steam and black water from split seams as it lurches through dead maintenance sectors, smashing first and interpreting later.
+Stat Block
+Armor Class: 14 (Rusted Plating)
+Hit Points: 50 (5d8 + 10 maximized)
+Speed: 25 ft.
+Ability Scores:
+STR: 16 (+3)
+DEX: 8 (-1)
+CON: 14 (+2)
+INT: 3 (-4)
+WIS: 8 (-1)
+CHA: 5 (-3)
+Damage Vulnerabilities: Lightning, Radiant
+Damage Immunities: Poison, Psychic
+Condition Immunities: Charmed, Exhaustion, Frightened, Poisoned
+Senses: Darkvision 60 ft., Passive Perception 9
+Challenge: 1 (200 XP)
+Traits
+Waterlogged Chassis: If the Slag-Brute takes lightning damage, it cannot take reactions and has disadvantage on attack rolls until the end of its next turn.
+Ancient Guard Protocol: The Slag-Brute has advantage on attack rolls against creatures that interacted with a door, lever, lock, or machine during the current round.
+Actions
+Rust-Crusher Fist: Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 8 (1d10 + 3) bludgeoning damage.
+Bilge Ram: The Slag-Brute moves up to 15 ft. in a straight line and makes one Rust-Crusher Fist attack. If the attack hits, the target must succeed on a DC 12 Strength saving throw or be knocked prone. A creature knocked prone while wearing a diaper or garment must also make a DC 12 Potty Check; on a failure, the impact and panic cause it to lose 1 Use Charge.
+Image Concept Art Prompt
+Prompt:
+Darkforged-Slag-Brute: Bulky blackened and dark oily-grey rusted warforged with one glowing hollow red eye, leaking steam and black fluid from split seams in a heavy stomping pose. cartoony-anime-aesthetic, white background, no background elements.
+
+3. Darkling-Grease-Mite
+Tiny Abomination, Sabotaging Evil
+Grease-Mites are skittering little maintenance parasites that feed on machine lubricants, alchemical sealants, and magical padding adhesives. They are more nuisance than brute threat, but a cluster of them can unravel a mechanic's preparation in seconds.
+Stat Block
+Armor Class: 15
+Hit Points: 15 (3d4 + 3 maximized)
+Speed: 20 ft., climb 30 ft.
+Ability Scores:
+STR: 4 (-3)
+DEX: 18 (+4)
+CON: 12 (+1)
+INT: 3 (-4)
+WIS: 10 (+0)
+CHA: 4 (-3)
+Skills: Stealth +6, Sleight of Hand +6
+Damage Vulnerabilities: Fire, Radiant
+Senses: Darkvision 60 ft., Passive Perception 10
+Challenge: 1/4 (50 XP)
+Traits
+Crack-Crawler: The Grease-Mite can move through a space as narrow as half an inch wide without squeezing.
+Seal-Feeder: The Grease-Mite has advantage on ability checks made to open, loosen, peel, or disable fastenings, bindings, or machine seals.
+Actions
+Grease Bite: Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 4 (1d4 + 2) piercing damage.
+Unfasten: One creature within 5 ft. wearing a diaper, garment, harness, or strapped equipment must succeed on a DC 12 Dexterity saving throw or lose 1 Use Charge as the Grease-Mite magically peels, unsnaps, or untapes a fastening. If the target is concentrating on a spell or operating a machine, it must also succeed on a DC 10 Constitution saving throw or lose concentration / mishandle the device.
+Image Concept Art Prompt
+Prompt:
+Darkling-Grease-Mite: Tiny spider-like darkling with glossy black and dark oily-grey body segments, glowing hollow yellow eyes, and little oily paws in a skittering maintenance-pest pose. cartoony-anime-aesthetic, white background, no background elements.
+
+🍄 Regional Bestiary: Niolantea (The Fungal Spire-Kingdom)
+System Integration: D&D 5e / Scholia Diaspros Campaign Setting
+Aesthetic Profile: Cartoony-Anime Dark Fantasy
+1. Darkling-Spore-Symbiote
+Small Abomination, Parasitic Evil
+This invasive darkling prefers not to fight in its natural state. Instead, it seeps into dead or dying fungal architecture and puppeteers the hollow stalks like shambling mech-suits, turning abandoned garden-columns and rotting mycos halls into sudden ambush predators.
+Stat Block
+Armor Class: 14 (Fungal Carapace)
+Hit Points: 40 (5d6 + 10 maximized)
+Speed: 25 ft., climb 20 ft.
+Ability Scores:
+STR: 12 (+1)
+DEX: 14 (+2)
+CON: 14 (+2)
+INT: 6 (-2)
+WIS: 10 (+0)
+CHA: 8 (-1)
+Damage Resistances: Poison, Necrotic
+Damage Vulnerabilities: Fire, Radiant
+Condition Immunities: Blinded
+Senses: Darkvision 60 ft., Tremorsense 30 ft., Passive Perception 10
+Challenge: 1 (200 XP)
+Traits
+False Architecture: While inside dead or dormant fungal growth, the Symbiote is indistinguishable from ordinary Niolantean mycos-architecture.
+Puppet Husk: While the Symbiote has not taken fire damage since the end of its last turn, it gains a +2 bonus to AC from its fungal host.
+Actions
+Splinter Lash: Melee Weapon Attack: +4 to hit, reach 10 ft., one target. Hit: 6 (1d8 + 2) bludgeoning damage plus 3 (1d6) poison damage.
+Spore Burst (Recharge 5-6): The Symbiote releases a burst of soporific rot-spores in a 15-foot cone. Creatures in the area must succeed on a DC 12 Constitution saving throw or be poisoned until the end of their next turn. A creature that fails this save while wearing a diaper or garment must also make a DC 12 Potty Check; on a failure, lethargy and fungal discomfort cause it to lose 1 Use Charge.
+Image Concept Art Prompt
+Prompt:
+Darkling-Spore-Symbiote: Glossy black and dark oily-grey slime peeking out from inside a hollow mushroom stalk like a tiny pilot in a living mech, with glowing hollow teal eyes and drifting spores close to the body. cartoony-anime-aesthetic, white background, no background elements.
+
+2. Darkforme-Strangleweed
+Large Abomination, Invasive Evil
+This iron-vine impostor hangs among Niolantea's hanging gardens and living bridges, glowing with a false, welcoming bioluminescence. When a druid, courier, or wildshaper draws close, the Strangleweed unwraps itself from the architecture and constricts with botanical malice.
+Stat Block
+Armor Class: 15 (Natural Armor)
+Hit Points: 104 (8d10 + 24 maximized)
+Speed: 20 ft., climb 20 ft.
+Ability Scores:
+STR: 18 (+4)
+DEX: 12 (+1)
+CON: 16 (+3)
+INT: 6 (-2)
+WIS: 14 (+2)
+CHA: 8 (-1)
+Damage Resistances: Necrotic; Bludgeoning and Piercing from Nonmagical Attacks
+Damage Vulnerabilities: Fire, Radiant
+Condition Immunities: Restrained
+Senses: Darkvision 120 ft., Passive Perception 12
+Challenge: 3 (700 XP)
+Traits
+False Bioluminescence: While motionless among vines, roots, or cables, the Strangleweed is indistinguishable from decorative Niolantean iron-vines.
+Lurking Reach: Opportunity attacks made by the Strangleweed have a reach of 15 ft.
+Actions
+Iron-Vine Constrict: Melee Weapon Attack: +6 to hit, reach 15 ft., one target. Hit: 11 (2d6 + 4) bludgeoning damage plus 4 (1d8) necrotic damage, and the target is grappled (escape DC 14).
+Canopy Reel (Recharge 5-6): One creature grappled by the Strangleweed is pulled up to 20 ft. in a direction of the creature's choice and takes 10 (3d6) bludgeoning damage if it collides with a solid surface. A creature moved this way while wearing a diaper or garment must also make a DC 13 Potty Check; on a failure, the crushing constriction and violent jerk cause it to lose 1 Use Charge.
+Image Concept Art Prompt
+Prompt:
+Darkforme-Strangleweed: Huge vine-monster of glossy black roots and dark oily-grey biomass with teal false bioluminescence, glowing hollow teal eyes, and lashing grasping tendrils. cartoony-anime-aesthetic, white background, no background elements.
+
+3.Darkforme-Rot-Blossom
+Large Abomination, Decaying Evil
+A hyper-fertile blossom corrupted by darkforme essence, this canopy predator appears as a breathtaking oversized flower until it exhales its infamous Pink Fog. The haze makes victims sluggish, confused, and humiliatingly vulnerable before the flower's hidden tendrils close in.
+Armor Class: 14 (Natural Armor) 
+Hit Points: 156 (12d10 + 36 maximized) 
+Speed: 30 ft. (Split between the three bodies), climb 20 ft.
+Ability Scores:
+STR 18 (+4)
+DEX 8 (-1)
+CON 16 (+3)
+INT 8 (-1)
+WIS 14 (+2)
+CHA 12 (+1)
+Damage Resistances: Necrotic, Poison Damage Vulnerabilities: Fire, Radiant Condition Immunities: Charmed, Poisoned, Prone Senses: Darkvision 120 ft., Passive Perception 12 Challenge: 5 (1,800 XP)
+Traits:
+Rooted Predator: While the Rot-Blossom hasn't moved since the start of its last turn, attack rolls against it from more than 20 ft. away have disadvantage as petals and spores distort its outline.
+Canopy Bloom: The Rot-Blossom can occupy vertical surfaces and hanging fungal shelves as though they were the ground.
+Actions:
+Multiattack: The Rot-Blossom makes three attacks with its Rot-Tendrils. If available, it can choose to replace one of these Rot-Tendril attacks with its Pink Fog Exhalation.
+Rot-Tendril: Melee Weapon Attack: +7 to hit, reach 15 ft., one target. Hit: 15 (2d10 + 4) bludgeoning damage plus 4 (1d8) necrotic damage.
+Pink Fog Exhalation (Recharge 5-6): The Blossom exhales a 30-foot cone of hallucinogenic, necrotic pollen. Each creature in that area must make a DC 15 Constitution saving throw. On a failure, a creature takes 18 (4d8) necrotic damage and is plunged into a chemical, dreamlike state that drastically reduces and dulls all physical senses. While in this state, the creature is poisoned, has disadvantage on all Wisdom (Perception) checks, and its speed is halved until the end of its next turn. Because this is a severe biological and neuro-chemical suppression rather than an enchantment, it is explicitly not magical sleep and bypasses all racial or magical immunities to sleep effects. Additionally, the extreme lethargy and total bodily surrender force the creature to immediately make a DC 15 Continence Check (Potty Check), regardless of whether they are wearing a diaper or standard garments
+. On a failure, they suffer a humiliating accident (losing 2 Use Charges if padded, or heavily soiling their clothing if unpadded). On a successful save, the creature takes half damage and suffers no additional effects.Image Concept Art Prompt
+Prompt:
+Darkforme-Rot-Blossom: Giant corrupted flower of black petals and dark oily-grey biomass with glowing hollow pink eyes set deep in the bloom, pink mist, and shadowy tendrils curling outward. cartoony-anime-aesthetic, white background, no background elements.
+Darkforme Umbralraune
+Large Abomination, Ambushing Evil
+Armor Class 15 (Natural Armor) 
+Hit Points 75 (10d10 + 20) 
+Speed 20 ft., burrow 20 ft. (through loose soil/fungal matter)
+STR 16 (+3) 
+DEX 14 (+2)
+CON 14 (+2)
+INT 12 (+1)
+WIS 14 (+2)
+CHA 18 (+4)
+Skills Deception +6, Stealth +6, Perception +4 Damage Vulnerabilities Radiant Damage Resistances Bludgeoning, Piercing from non-magical weapons Condition Immunities Cursed, Charmed, Prone Senses Darkvision 60 ft., Tremorsense 60 ft., Passive Perception 14 Languages Understands Common and Sylvan but speaks only in hypnotic, echoing whispers Challenge 4 (1,100 XP)
+Traits:
+Shadow-Root Ambush: While the Umbralraune remains motionless in dim light, darkness, or areas of dense Niolantean flora, she has advantage on Dexterity (Stealth) checks and appears as a massive, albeit exotic, blooming shadow-Rafflesia.
+Toxic Allure: Any creature that starts its turn within 30 feet of the Umbralraune and can see her glowing teal eyes and purple foliage must succeed on a DC 14 Wisdom saving throw or become Charmed until the end of their next turn. A charmed creature is forced to use all its movement to approach her safely. If a creature's saving throw is successful, the creature is immune to her Toxic Allure for the next 24 hours.
+Actions:
+Multiattack: The Umbralraune makes two melee attacks. She can use any combination of her Constricting Vine-Lashes or her Toxospank.
+Constricting Vine-Lash: Melee Weapon Attack: +5 to hit, reach 15 ft., one target. Hit: 10 (2d6 + 3) bludgeoning damage plus 3 (1d6) necrotic damage. If the target is a Medium or smaller creature, it is grappled (escape DC 13). Until this grapple ends, the target is restrained, and the Umbralraune cannot use this specific vine-lash on another target. She can grapple up to two creatures at once.
+Toxospank: Melee Weapon Attack: +5 to hit, reach 15 ft., one target. Hit: The target takes 5 (1d4 + 3) bludgeoning damage and is struck by stinging, toxic shadow-sap. The target's movement speed drops to 10 ft. until the end of their next turn, and they take an additional 1d4 poison damage at the start of their turn for the next 1d4 rounds
+. Furthermore, if the Umbralraune successfully hits with this attack, she may choose to immediately expend her second action for the turn (if available) to pull the target into the center of her colossal flower and grapple them (escape DC 13).
+Sludge Kiss (Recharge 5-6): The Umbralraune pulls a grappled creature into her pitch-black, amorphous visage. The target must make a DC 13 Constitution saving throw. On a failed save, the target takes 18 (4d8) necrotic damage, and the Umbralraune regains hit points equal to half the necrotic damage dealt. Additionally, the terrifying, invasive nature of the darkling sludge forces the target to immediately make a Continence Check (as per the Combat Academy Regulation Handbook), potentially resulting in an immediate, humiliating accident
+. On a successful save, the target takes half the necrotic damage, is not forced to make a Continence Check, and the Umbralraune does not heal.
+🏰 Regional Bestiary: Heraldia (The Arcokingdom)
+System Integration: D&D 5e / Scholia Diaspros Campaign Setting
+Aesthetic Profile: Cartoony-Anime Dark Fantasy
+1. Darkling-Porcelain-Thrall
+Medium Abomination, Servile Evil
+Fashioned by a decadent Heraldian duchess as a supposedly perfect silent servant, the Porcelain Thrall now wanders abandoned mid-spans in feral loops of housekeeping obsession. It glides toward intruders with spotless malice, trying to scrub, polish, and dissolve them into compliance.
+Stat Block
+Armor Class: 14 (Porcelain Body)
+Hit Points: 40 (5d8 maximized)
+Speed: 30 ft.
+Ability Scores:
+STR: 10 (+0)
+DEX: 16 (+3)
+CON: 10 (+0)
+INT: 8 (-1)
+WIS: 10 (+0)
+CHA: 12 (+1)
+Skills: Acrobatics +5, Stealth +5
+Damage Vulnerabilities: Bludgeoning, Radiant
+Damage Resistances: Acid
+Condition Immunities: Charmed
+Senses: Darkvision 60 ft., Passive Perception 10
+Challenge: 1 (200 XP)
+Traits
+False Servant: While standing still with hands folded or posed as a decorative attendant, the Thrall is indistinguishable from an ornate porcelain statue.
+Shatter Skitter: When the Thrall takes bludgeoning damage but isn't destroyed, it can move up to 10 ft. without provoking opportunity attacks as cracks ripple across its body.
+Actions
+Acid Polish Touch: Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) acid damage.
+Scouring Splash (Recharge 5-6): The Thrall sprays a fan of alchemical cleanser in a 15-foot cone. Creatures in the area must succeed on a DC 12 Dexterity saving throw or take 7 (2d6) acid damage and have disadvantage on the next weapon attack roll they make before the end of their next turn. A creature that fails this save while wearing a diaper or garment must also make a DC 12 Potty Check; on a failure, cleaning fluid ruins tapes and padding, causing it to lose 1 Use Charge.
+Image Concept Art Prompt
+Prompt:
+Darkling-Porcelain-Thrall: Doll-like servant with cracked white porcelain skin, black and dark oily-grey shadow ooze visible in the fractures, glowing hollow blue eyes, and a frilled maid silhouette in a poised servitor stance. cartoony-anime-aesthetic, white background, no background elements.
+
+2. Darkling-Gilded-Husk
+Medium Abomination, Vain Evil
+These noble failures are shadow-oozes poured into the ornate suits of dead Heraldian aristocrats. They posture like duelists, bow like courtiers, and slash with jerky, imitative elegance, all while clinging to a rotten memory of status and pageantry.
+Stat Block
+Armor Class: 15 (Gilded Armor)
+Hit Points: 60 (6d8 + 12 maximized)
+Speed: 30 ft.
+Ability Scores:
+STR: 14 (+2)
+DEX: 14 (+2)
+CON: 14 (+2)
+INT: 8 (-1)
+WIS: 10 (+0)
+CHA: 12 (+1)
+Skills: Performance +3, Intimidation +3
+Damage Vulnerabilities: Radiant, Thunder
+Damage Resistances: Piercing and Slashing from Nonmagical Attacks
+Condition Immunities: Frightened
+Senses: Darkvision 60 ft., Passive Perception 10
+Challenge: 2 (450 XP)
+Traits
+Hollow Nobility: A creature that misses the Gilded-Husk with a melee attack while within 5 ft. of it takes 2 (1d4) psychic damage from its unsettling mockery and impossible posture.
+Duellist's Poise: The Gilded-Husk adds 2 to its AC against one melee attack that would hit it each round.
+Actions
+Gilded Rapier: Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 8 (1d8 + 2) piercing damage plus 3 (1d6) necrotic damage.
+Aristocrat's Rebuke (Recharge 5-6): One creature within 20 ft. that can hear the Husk must succeed on a DC 12 Wisdom saving throw or become frightened until the end of its next turn. A creature that fails this save while wearing a diaper or garment must also make a DC 12 Potty Check; on a failure, the humiliating magical reprimand causes it to lose 1 Use Charge.
+Image Concept Art Prompt
+Prompt:
+Darkling-Gilded-Husk: Elegant empty suit of gold-veined armor with black and dark oily-grey shadow slime glowing through the visor and joints, glowing hollow amber eyes in the visor, and a thin rapier flourished in one hand. cartoony-anime-aesthetic, white background, no background elements.
+
+3. Darkforme-Chimeric-Dread
+Large Abomination, Arrogant Evil
+The crowning blasphemy of a mad Heraldian king, the Chimeric Dread was engineered as a pet noble apex predator. It bears the silhouette of a griffin twisted by dark essence, with shifting feathers of shadow-glass, exposed bone, and a vicious certainty that anything not of royal blood exists beneath it.
+Stat Block
+Armor Class: 16 (Natural Armor)
+Hit Points: 182 (14d10 + 42 maximized)
+Speed: 40 ft., fly 60 ft.
+Ability Scores:
+STR: 20 (+5)
+DEX: 16 (+3)
+CON: 16 (+3)
+INT: 10 (+0)
+WIS: 14 (+2)
+CHA: 14 (+2)
+Saving Throws: Str +8, Dex +6, Wis +5
+Skills: Perception +5, Intimidation +5
+Damage Resistances: Cold, Necrotic; Bludgeoning, Piercing, and Slashing from Nonmagical Attacks
+Damage Vulnerabilities: Radiant
+Condition Immunities: Frightened
+Senses: Darkvision 120 ft., Passive Perception 15
+Challenge: 6 (2,300 XP)
+Traits
+Royal Blood Scent: The Chimeric Dread automatically knows whether a creature within 60 ft. has noble lineage, royal magic, or Heraldian court insignia.
+Magic Resistance: The Chimeric Dread has advantage on saving throws against spells and magical effects.
+Actions
+Multiattack: The Chimeric Dread makes one Beak attack and two Talon attacks.
+Beak: Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 14 (2d8 + 5) piercing damage.
+Talon: Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 12 (2d6 + 5) slashing damage plus 3 (1d6) necrotic damage.
+Sovereign Shriek (Recharge 5-6): The Dread unleashes a regal hunting cry in a 30-foot cone. Creatures in that area must succeed on a DC 15 Wisdom saving throw or take 14 (4d6) psychic damage and become frightened until the end of their next turn. A creature that fails this save while wearing a diaper or garment must also make a DC 15 Potty Check; on a failure, the crushing aristocratic terror causes it to lose 2 Use Charges.
+Image Concept Art Prompt
+Prompt:
+Darkforme-Chimeric-Dread: Griffin-like abomination of black feathers, dark oily-grey body mass, bone-white beak, and glowing hollow crimson eyes with wings spread wide in a regal but monstrous stance. cartoony-anime-aesthetic, white background, no background elements.
+
+⛈️ Regional Bestiary: The High Skies (Northwest / Stormveil Periphery)
+System Integration: D&D 5e / Scholia Diaspros Campaign Setting
+Aesthetic Profile: Cartoony-Anime Dark Fantasy
+1. Darkling-Gale-Harrier
+Small Abomination, Plunging Evil
+These knife-winged scavengers ride the violent thermals above the Westersea, clustering in ragged dive-bombing packs. They are terrifying against exposed sailors and skiff crews, but their unstable storm-body burns out spectacularly when caught in Stormveil's disciplined lightning defenses.
+Stat Block
+Armor Class: 14
+Hit Points: 28 (4d6 + 4 maximized)
+Speed: 10 ft., fly 50 ft.
+Ability Scores:
+STR: 8 (-1)
+DEX: 16 (+3)
+CON: 12 (+1)
+INT: 5 (-3)
+WIS: 12 (+1)
+CHA: 6 (-2)
+Skills: Acrobatics +5, Perception +3
+Damage Vulnerabilities: Lightning, Radiant
+Senses: Darkvision 60 ft., Passive Perception 13
+Challenge: 1/2 (100 XP)
+Traits
+Flyby: The Harrier doesn't provoke opportunity attacks when it flies out of an enemy's reach.
+Stormveil Instability: Whenever the Harrier takes lightning damage, its flying speed becomes 0 until the end of its next turn.
+Actions
+Razor Dive: Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) slashing damage.
+Snatch Loose Gear: One creature within 5 ft. must succeed on a DC 11 Dexterity saving throw or drop one small held object. If the creature is wearing a diaper or garment with exposed straps, it must also make a DC 11 Potty Check; on a failure, the Harrier's pass tears away a fastening and the creature loses 1 Use Charge.
+Image Concept Art Prompt
+Prompt:
+Darkling-Gale-Harrier: Jagged black and dark oily-grey shadow seabird with glowing hollow cyan eyes and tiny sparks playing across its wings in a sharp diving pose. cartoony-anime-aesthetic, white background, no background elements.
+
+2. Darkforme-Nimbus-Ray
+Large Abomination, Gliding Evil
+A broad, manta-like hunter of flattened darkness, the Nimbus-Ray glides almost soundlessly on the wild thermals over the Westersea. Its favored tactic is to settle over a small vessel like a falling storm canopy, trapping crew in darkness while it feeds.
+Stat Block
+Armor Class: 15 (Natural Armor)
+Hit Points: 136 (12d10 + 24 maximized)
+Speed: 0 ft., fly 60 ft. (hover)
+Ability Scores:
+STR: 18 (+4)
+DEX: 14 (+2)
+CON: 14 (+2)
+INT: 6 (-2)
+WIS: 14 (+2)
+CHA: 8 (-1)
+Saving Throws: Dex +4, Wis +4
+Damage Resistances: Cold, Necrotic
+Damage Vulnerabilities: Lightning, Radiant
+Condition Immunities: Prone
+Senses: Darkvision 120 ft., Passive Perception 12
+Challenge: 4 (1,100 XP)
+Traits
+Blanketing Glide: The Nimbus-Ray can move through the spaces of Large or smaller creatures while flying without provoking opportunity attacks.
+Dark Canopy: The area directly beneath the Nimbus-Ray out to 10 ft. is heavily obscured.
+Actions
+Crushing Wing-Edge: Melee Weapon Attack: +6 to hit, reach 10 ft., one target. Hit: 13 (2d8 + 4) bludgeoning damage plus 4 (1d8) necrotic damage.
+Smothering Drop (Recharge 5-6): The Nimbus-Ray descends onto a point it can see within 30 ft. Each creature in a 15-foot radius beneath it must succeed on a DC 14 Dexterity saving throw or take 14 (4d6) bludgeoning damage and become blinded until the end of its next turn. A creature that fails this save while wearing a diaper or garment must also make a DC 14 Potty Check; on a failure, panic in the sudden darkness causes it to lose 1 Use Charge.
+Image Concept Art Prompt
+Prompt:
+Darkforme-Nimbus-Ray: Massive manta-shaped creature of black and dark oily-grey storm-cloud shadow with eerie blue highlights, glowing hollow blue eyes, and a silent gliding pose. cartoony-anime-aesthetic, white background, no background elements.
+
+3. Darkforme-Thunderhead
+Huge Abomination, Atmospheric Evil
+This drifting storm-body is a conscious imitation of the World-Seam's worst sky violence: a swollen mass of darkling vapor, necrotic hail, and murderous downdrafts. It crushes aerial travelers and small vessels beneath its private weather, but recoils instinctively from coordinated lightning retaliation.
+Stat Block
+Armor Class: 16 (Natural Armor)
+Hit Points: 224 (14d12 + 56 maximized)
+Speed: 0 ft., fly 40 ft. (hover)
+Ability Scores:
+STR: 22 (+6)
+DEX: 10 (+0)
+CON: 18 (+4)
+INT: 8 (-1)
+WIS: 14 (+2)
+CHA: 12 (+1)
+Saving Throws: Con +7, Wis +5
+Damage Resistances: Cold, Necrotic; Bludgeoning, Piercing, and Slashing from Nonmagical Attacks
+Damage Vulnerabilities: Lightning, Radiant
+Condition Immunities: Grappled, Prone, Restrained
+Senses: Darkvision 120 ft., Passive Perception 12
+Challenge: 7 (2,900 XP)
+Traits
+Storm Mass: The Thunderhead can move through a space as narrow as 1 inch wide without squeezing.
+Downdraft Aura: Flying creatures that start their turns within 15 ft. of the Thunderhead must succeed on a DC 15 Strength saving throw or descend up to 20 ft. immediately.
+Conductive Collapse: When the Thunderhead takes lightning damage, it loses its Downdraft Aura until the end of its next turn.
+Actions
+Necrotic Hail: Ranged Spell Attack: +7 to hit, range 120 ft., one target. Hit: 18 (4d8) cold damage plus 7 (2d6) necrotic damage.
+World-Seam Imitation (Recharge 5-6): The Thunderhead erupts in a 30-foot-radius burst of hail, thunder, and crushing wind centered on itself. Creatures in the area must make a DC 15 Constitution saving throw. On a failure, a creature takes 22 (4d10) cold and thunder damage, is pushed up to 15 ft. in a direction of the Thunderhead's choice, and is knocked prone if it lands on a surface. A creature that fails this save while wearing a diaper or garment must also make a DC 15 Potty Check; on a failure, the concussive panic and violent pressure cause it to lose 2 Use Charges.
+Image Concept Art Prompt
+Prompt:
+Darkforme-Thunderhead: Brooding cloud-monster of black miasma and dark oily-grey storm mass with violet lightning scars and glowing hollow violet eyes, churning in a dense storm-mass silhouette. cartoony-anime-aesthetic, white background, no background elements.
+

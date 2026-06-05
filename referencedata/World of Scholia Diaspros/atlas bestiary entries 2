@@ -1,0 +1,477 @@
+
+1. The Darkforme Sleekrime-Stalker
+Large Abomination, Freezing Evil
+Armor Class 16 (Ice-Glass Armor)Hit Points 85 (10d10 + 30)Speed 50 ft., climb 40 ft.
+STR,DEX,CON,INT,WIS,CHA
+18 (+4),20 (+5),16 (+3),6 (-2),14 (+2),8 (-1)
+Skills Stealth +8, Perception +5Damage Vulnerabilities RadiantDamage Resistances Bludgeoning, Piercing, and Slashing from non-magical weaponsDamage Immunities ColdCondition Immunities Cursed, FrightenedSenses Darkvision 120 ft., Passive Perception 15Challenge 5 (1,800 XP)
+Traits:
+Snow Camouflage: The Sleekrime-Stalker has advantage on Dexterity (Stealth) checks made to hide in snowy or icy terrain.
+Frictionless Stride: The Stalker ignores difficult terrain composed of ice or snow, and its movement does not trigger tremorsense.
+Actions:
+Multiattack: The Stalker makes two attacks: one with its Shadow-Claws and one with its Thermal Bite.
+Shadow-Claws: Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 12 (2d6 + 5) slashing damage plus 4 (1d8) cold damage.
+Thermal Bite: Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 14 (2d8 + 5) piercing damage. If the target is a creature, it must succeed on a DC 14 Constitution saving throw or have its core temperature violently drained, gaining 1 level of Exhaustion.
+Sonic Ice-Shatter (Recharge 5-6): The Stalker unleashes a localized, micro-sonic roar mimicking the Glimmergale. Each creature within a 30-foot cone must make a DC 14 Constitution saving throw, taking 27 (6d8) thunder damage on a failed save, or half as much on a successful one. Any ice or snow beneath the targets instantly shatters, rendering the area difficult terrain and forcing a DC 14 Dexterity saving throw to avoid falling prone into shallow, jagged crevasses.
+
+
+2. The Darkforme-Glacier-Maw
+Huge Abomination, Excavating Evil
+Armor Class 17 (Spinning Ice-Rings)Hit Points 136 (13d12 + 52)Speed 30 ft., burrow 40 ft. (through ice and snow)
+STR,DEX,CON,INT,WIS,CHA
+22 (+6),10 (+0),18 (+4),4 (-3),10 (+0),6 (-2)
+Saving Throws Str +9, Con +7Damage Vulnerabilities Radiant, FireDamage Immunities ColdCondition Immunities Cursed, ProneSenses Tremorsense 120 ft., Darkvision 60 ft., Passive Perception 10Challenge 8 (3,900 XP)
+Traits:
+Ice Borer: The Glacier-Maw can burrow through solid ice and snow at its full burrow speed, leaving a 10-foot-diameter polished tunnel in its wake.
+Actions:
+Multiattack: The Glacier-Maw makes one Crunching Bite attack. If it is burrowing, it may use Bursting Breach instead of moving.
+Crunching Bite: Melee Weapon Attack: +9 to hit, reach 10 ft., one target. Hit: 28 (4d10 + 6) piercing damage plus 7 (2d6) cold damage. If the target is a Large or smaller creature, it is grappled (escape DC 16) and restrained.
+Bursting Breach: The Glacier-Maw bursts from the ice beneath its targets. All creatures within a 15-foot radius of its eruption point must make a DC 16 Dexterity saving throw, taking 22 (4d10) bludgeoning damage and being knocked prone on a failure, or half damage on a success.
+Absolute-Zero Fog (Recharge 5-6): The creature exhales a dense, 40-foot cone of absolute-zero fog. Each creature in that area must make a DC 15 Constitution saving throw. On a failed save, a creature takes 36 (8d8) cold damage and its survival padding instantly enters the rigid "Frozen" state (reducing its speed by 10 feet and granting disadvantage on Stealth checks). On a success, the creature takes half damage and avoids the Frozen state.
+
+
+3. The Darkling-Hoarfrost-Yowler
+Small Abomination, Wailing Evil
+Armor Class 13 (Frosted Wings)Hit Points 22 (4d6 + 8)Speed 10 ft., fly 30 ft.
+STR,DEX,CON,INT,WIS,CHA
+8 (-1),16 (+3),14 (+2),6 (-2),10 (+0),7 (-2)
+Damage Vulnerabilities RadiantDamage Immunities ColdCondition Immunities CursedSenses Passive Perception 10Challenge 1 (200 XP)
+Traits:
+Crackling Flight: Unlike its lesser cousins, the Hoarfrost-Yowler does not suffer the Clumsy Flier penalty. However, its stiff, frozen wings emit a loud, crackling sound, granting disadvantage on its Dexterity (Stealth) checks while flying.
+Actions:
+Frost-Bite: Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) piercing damage plus 3 (1d6) cold damage.
+Freezing Screech (Recharge 5-6): The Yowler emits a piercing, hyper-chilled screech infused with draconic sonic fury. Each creature within a 30-foot cone must succeed on a DC 12 Constitution saving throw. On a failed save, the creature takes 10 (3d6) thunder damage and 10 (3d6) cold damage, and the ambient moisture around them flash-freezes, instantly plunging the temperature of any survival padding they wear to absolute zero and inflicting the "Frozen" state. On a success, the creature takes half damage and avoids the Frozen state.
+
+
+4. The Darkling-Slush-Slurper
+Small Abomination, Hungry Evil
+Armor Class 11 (Natural Armor)Hit Points 32 (5d6 + 15)Speed 30 ft., burrow 20 ft. (snow only)
+STR,DEX,CON,INT,WIS,CHA
+16 (+3),12 (+1),16 (+3),10 (+0),10 (+0),10 (+0)
+Damage Vulnerabilities Radiant, FireDamage Immunities ColdCondition Immunities CursedSenses Tremorsense 30 ft., Passive Perception 10Challenge 2 (450 XP)
+Traits:
+False Appearance (Snowdrift): While the Slush-Slurper remains motionless and buried within snow, it is indistinguishable from a mundane, powdery snowdrift. It perfectly mimics the ambient temperature, rendering it invisible to standard thermal scrying.
+Actions:
+Freezing Slurp (Grapple Attack): Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 8 (1d10 + 3) bludgeoning damage. If the target is a Medium or smaller creature, it is grappled (escape DC 13) as the darkling expands its viscous, freezing mass around the victim's waist and legs.
+Necrotic Frost Pump: As a bonus action against a creature it is grappling, the Slush-Slurper pumps freezing necrotic sludge directly into the victim's garments. The target takes 7 (2d6) cold damage and 7 (2d6) necrotic damage, and their survival diaper immediately enters the debilitating, rigid "Frozen" state, reducing their speed by 10 feet and imposing disadvantage on Stealth checks even if they escape the grapple.
+
+
+DRACESPIRES Twin Brothers
+1. The Darkforme-Shatter-Horn (CR 7)
+Huge Abomination, Territorial Evil
+Armor Class 16 (Natural Armor, Obsidian Plating) Hit Points 138 (12d12 + 60) Speed 40 ft., climb 40 ft.
+STR 22 (+6)
+DEX 12 (+1)
+CON 20 (+5)
+INT 4 (-3)
+WIS 14 (+2)
+CHA 8 (-1)
+Saving Throws Str +9, Con +8 Skills Athletics +9, Perception +5 Damage Vulnerabilities Radiant Damage Resistances Cold; Bludgeoning, Piercing, and Slashing from non-magical weapons Condition Immunities Charmed, Exhaustion, Frightened, Prone Senses Darkvision 120 ft., Passive Perception 15 Languages — Challenge 7 (2,900 XP)
+Traits:
+Sure-Footed Colossus: The Avalanche-Horn has advantage on Strength and Dexterity saving throws made against effects that would knock it off a cliff or move it against its will.
+Devastating Charge: If the Avalanche-Horn moves at least 20 feet straight toward a creature and then hits it with a Ram attack on the same turn, the target takes an extra 16 (3d10) bludgeoning damage. If the target is a creature, it must succeed on a DC 17 Strength saving throw or be knocked prone.
+Actions:
+Multiattack: The Avalanche-Horn makes two attacks: one with its Ram and one with its Obsidian Hooves.
+Ram: Melee Weapon Attack: +9 to hit, reach 10 ft., one target. Hit: 22 (3d10 + 6) bludgeoning damage plus 4 (1d8) cold damage.
+Obsidian Hooves: Melee Weapon Attack: +9 to hit, reach 5 ft., one prone target. Hit: 17 (2d10 + 6) bludgeoning damage.
+Trigger Rockslide (Recharge 5-6): The Avalanche-Horn slams its massive shadow-glass horns into the mountainside. Every creature on the ground within a 30-foot cone originating from the beast must make a DC 16 Dexterity saving throw, taking 28 (8d6) bludgeoning damage on a failed save and being restrained by the falling scree, or half as much damage on a successful one.
+
+2. The Darkling-Scree-Roller (CR 3)
+Medium Abomination, Ambushing Evil
+Armor Class 17 (Stone and Shadow-Glass Shell) Hit Points 52 (8d8 + 16) Speed 25 ft. (50 ft. while rolling)
+STR 16 (+3)
+DEX 14 (+2)
+CON 14 (+2)
+INT 3 (-4)
+WIS 10 (+0)
+CHA 5 (-3)
+Skills Stealth +6 Damage Vulnerabilities Radiant Damage Resistances Piercing and Slashing from non-magical weapons Condition Immunities Prone Senses Tremorsense 60 ft., Darkvision 60 ft., Passive Perception 10 Languages — Challenge 3 (700 XP)
+Traits:
+False Appearance: While the Scree-Roller is curled into a ball and remains motionless, it is indistinguishable from a jagged pile of mountain rocks.
+Momentum Trample: While taking the Dash action to roll, the Scree-Roller can move through the space of any Medium or smaller creature. When it does, the creature must succeed on a DC 13 Dexterity saving throw or take 10 (2d6 + 3) bludgeoning damage and be knocked prone.
+Actions:
+Slam: Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 10 (2d6 + 3) bludgeoning damage.
+Reactions:
+Curling Defense: When a creature the Scree-Roller can see targets it with a melee attack, it can use its reaction to curl into a tight, armored sphere, adding +3 to its AC against the attack.
+
+3. The Darkforme-Gale-Screecher (CR 4)
+Medium Abomination, Arrogant Evil
+Armor Class 14 (Natural Armor) Hit Points 65 (10d8 + 20) Speed 20 ft., fly 50 ft.
+STR 12 (+1)
+DEX 18 (+4)
+CON 14 (+2)
+INT 12 (+1)
+WIS 12 (+1)
+CHA 16 (+3)
+
+Skills Perception +3, Stealth +6 Damage Vulnerabilities Radiant Condition Immunities Charmed Senses Darkvision 120 ft., Passive Perception 13 Languages Understands Common but cannot speak Challenge 4 (1,100 XP)
+Traits:
+Flyby: The Gale-Screecher doesn't provoke opportunity attacks when it flies out of an enemy's reach.
+Silent Drop: If the Gale-Screecher begins its turn clinging to the underside of a surface (like a rock bridge) and drops down onto a target, its first attack has advantage.
+Actions:
+Multiattack: The Gale-Screecher makes two attacks with its Shadow-Glass Talons.
+Shadow-Glass Talons: Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 11 (2d6 + 4) slashing damage plus 3 (1d6) necrotic damage.
+Screech of the Abyss (Recharge 5-6): The creature releases a horrifying, whining shriek of pure void-resonance. Each creature within a 30-foot radius that can hear it must succeed on a DC 13 Constitution saving throw. On a failed save, the creature takes 14 (4d6) psychic damage, drops whatever it is holding, and is frightened until the end of its next turn. Furthermore, the sheer, pants-crapping terror of the screech forces the target to immediately make a DC 13 Potty Check; on a failure, they suffer a humiliating accident, losing 2 Use Charges if padded.
+
+4. The Darkforme-Frost-Gargantua (CR 9)
+Huge Abomination, Apocalyptic Evil
+Armor Class 17 (Frozen Shadow-Ice Armor) Hit Points 172 (15d12 + 75) Speed 30 ft., climb 30 ft.
+STR 24 (+7)
+DEX 10 (+0)
+CON 20 (+5)
+INT 6 (-2)
+WIS 14 (+2)
+CHA 8 (-1)
+Saving Throws Str +11, Con +9, Wis +6 Skills Athletics +11, Perception +6 Damage Vulnerabilities Radiant, Fire Damage Resistances Bludgeoning, Piercing, and Slashing from non-magical weapons Damage Immunities Cold Condition Immunities Exhaustion, Frightened, Paralyzed, Petrified Senses Darkvision 120 ft., Passive Perception 16 Languages — Challenge 9 (5,000 XP)
+Traits:
+Absolute-Zero Core: Any creature that hits the Frost-Gargantua with a melee attack while within 5 feet of it takes 5 (1d10) cold damage.
+Ablative Ice Armor: If the Frost-Gargantua takes Fire damage, its AC is reduced by 2 until the end of its next turn, as the thick, frosted ice-plates temporarily melt away to reveal the softer, bubbling shadow-tar beneath.
+Actions:
+Multiattack: The Frost-Gargantua makes two Ice-Spike Slam attacks.
+Ice-Spike Slam: Melee Weapon Attack: +11 to hit, reach 10 ft., one target. Hit: 20 (3d8 + 7) bludgeoning damage plus 7 (2d6) cold damage. If the target is a Large or smaller creature, it is grappled (escape DC 17).
+Absolute-Zero Bellow (Recharge 5-6): The Frost-Gargantua exhales a terrifying 40-foot cone of pale-blue freezing mist and shadow-spores. Each creature in that area must make a DC 16 Constitution saving throw. On a failed save, a creature takes 36 (8d8) cold damage and its speed is reduced to 0 until the end of its next turn as it is encased in frost. The sheer, violent shock of the freezing mist against the victim's abdominal muscles forces an immediate DC 16 Continence Check. On a failure, the victim suffers a critical failure (instantly saturating their diaper to 0 charges and suffering the Heavy and Sodden penalties of the Wet condition). On a successful save, the creature takes half damage and suffers no additional effects.
+
+
+
+1. The Darkforme Blackdeep Shark
+Mechanics: This variant retains the terrifying terrestrial transition of its lesser cousins 1, but its crab-legs are hardened for ice-climbing, making it an incredibly dangerous vertical ambusher.
+
+Darkforme Blackdeep Shark
+Large Abomination, Unsettling Evil
+Armor Class 16 (Natural Armor, Obsidian Ice-Plating)
+Hit Points 68 (8d10 + 24)
+Speed 30 ft., swim 40 ft., climb 30 ft. (ice only)
+STR 18 (+4)
+DEX 14 (+2)
+CON 16 (+3)
+INT 6 (-2)
+WIS 12 (+1)
+CHA 8 (-1)
+Skills Athletics +6, Stealth +4
+Damage Vulnerabilities Radiant, Fire
+Damage Resistances Cold
+Condition Immunities Cursed
+Senses Darkvision 60 ft., Passive Perception 11
+Challenge 4 (1,100 XP)
+Traits:
+Ice Walk: The Blackdeep Shark can move across and climb icy surfaces without needing to make an ability check. Additionally, difficult terrain composed of ice or snow doesn't cost it extra movement.
+Unsettling Presence (The Ice-Terror): Any creature within 25 ft. that witnesses the Blackdeep Shark's sudden transition from aquatic to terrestrial posture, accompanied by the screech of its obsidian crab-legs digging into the ice, must succeed on a DC 14 Constitution saving throw or suffer a "brown note incident," instantly losing their reactions until the end of their next turn 1.
+***
+Actions:
+Multiattack: The Blackdeep Shark makes two attacks: one with its Ravenous Bite and one with its Obsidian Crab-Claws.
+Ravenous Bite: Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 11 (2d6 + 4) piercing damage plus 3 (1d6) cold damage.
+Obsidian Crab-Claws: Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 8 (1d8 + 4) slashing damage.
+Image Prompt: The Darkforme Blackdeep Shark
+Focus: FULL BODY, UNCROPPED. A twisted, terrifying fusion of a great white shark and a crab, bursting violently out of a flat plane of white space, constructed entirely from smoking black slime and jagged, frosted shadow-glass.Image orientation: landscape/16:9Subject: The Darkforme Blackdeep Shark, a dripping shadow-entity transitioning into a terrestrial stance using horrific crustacean limbs.The Body (The Shadow-Flesh): The creature's main torso mimics a muscular, aggressive shark, but it possesses absolutely no organic skin or cartilage. It is formed entirely from viscous, shiny, pitch-black shadow condensate that constantly bubbles and drips dark oily-grey sludge.The Appendages (The Ice-Picks): Erupting from its lower half are six massive, multi-jointed crab legs. These legs are not biological; they are forged from thick, jagged shards of frosted, opaque white ice and shiny black obsidian shadow-glass, tapering to razor-sharp ice-pick points.The Visage: Its face features a massive, gaping maw filled with jagged glass shards instead of teeth. Staring out from the darkness of its snout are two huge, hollow, bright glowing deep-blue eyes.Setting: Plain White Background. No background elements. Ample white negative space to ensure the crab legs and tail are not cropped.Style: Masterpiece, cartoony-anime-aesthetic, cel-shaded, bold outlines, vibrant colors. Extreme visual contrast between the pure white background, the frosted white ice-legs, and the incredibly shiny, pitch-black void-stuff of its main body.
+2. The Darkforme Benthic Leviathan
+Mechanics: Directly extrapolated from the ancient dread of the Abyssal Leviathan 3, 4, this localized behemoth focuses entirely on its crushing aura and its desperate, siege-engine attempts to shatter the frozen surface of the Maw.
+Darkforme Benthic Leviathan
+Gargantuan Abomination, Ancient Dread
+Armor Class 18 (Natural Armor)
+Hit Points 247 (15d20 + 90)
+Speed 20 ft., swim 60 ft.
+
+STR 26 (+8)
+DEX 10 (+0)
+CON 22 (+6)
+INT 8 (-1)
+WIS 16 (+3)
+CHA 12 (+1)
+Saving Throws Str +13, Con +11, Wis +8
+Damage Resistances Cold, Necrotic; Bludgeoning, Piercing, and Slashing from nonmagical attacks
+Condition Immunities Cursed, Exhaustion, Frightened, Paralyzed, Petrified, Poisoned
+Senses Darkvision 120 ft., Blindsight 60 ft., Passive Perception 18
+Challenge 15 (13,000 XP)
+***
+Traits:
+Amphibious: The Leviathan can breathe air and water 4.
+Siege Monster: The Leviathan deals double damage to objects and structures (specifically utilized to batter against the timelocked ice of Colraneclast) 4.
+Legendary Resistance (3/Day): If the Leviathan fails a saving throw, it can choose to succeed instead 4.
+Hyper-Pressurized Abyssal Aura: At the start of each of the Leviathan's turns, each creature within 30 feet of it takes 7 (2d6) cold damage and 7 (2d6) necrotic damage. A creature that touches the Leviathan or hits it with a melee attack while within 5 feet of it takes this damage as well. Additionally, the area within 30 feet of the Leviathan is difficult terrain for creatures other than darklings 4.
+***
+Actions:
+Multiattack: The Leviathan can use its Frightful Presence. It then makes three attacks: one with its Bite and two with its Tentacle Slams 5.
+Bite: Melee Weapon Attack: +13 to hit, reach 15 ft., one target. Hit: 30 (4d10+8) piercing damage. If the target is a Huge or smaller creature, it is grappled (escape DC 18) and restrained 5.
+Tentacle Slam: Melee Weapon Attack: +13 to hit, reach 20 ft., one target. Hit: 21 (3d8+8) bludgeoning damage 6.
+Frightful Presence: Each creature within 120 feet must succeed on a DC 16 Wisdom saving throw or become frightened for 1 minute 6.
+***
+Legendary Actions (3/Turn):
+Detect: Makes a Wisdom (Perception) check 7.
+Tentacle Attack: Makes one Tentacle Slam attack 7.
+Crushing Depths (Costs 2 Actions): Intensifies its aura. Each creature within 30 feet must succeed on a DC 18 Strength saving throw or be pulled 10 feet directly towards the Leviathan and be knocked prone 7.
+Image Prompt: The Darkforme Benthic Leviathan
+Focus: EXTREME WIDE SHOT, FULL BODY, UNCROPPED. A colossal, apocalyptic mass of tentacles and void-stuff, trapped beneath a flat, transparent layer of jagged, frosted ice at the very top of the frame.Image orientation: portrait/3:4Subject: The Darkforme Benthic Leviathan, a gargantuan deep-sea shadow-horror aggressively pressing its massive tentacles upward against a solid ceiling of ice.The Body (The Abyssal Mass): The creature possesses no biological flesh or scales. Its gargantuan, shifting central mass and dozens of colossal, writhing tentacles are composed entirely of heavily pressurized, viscous, shiny, pitch-black shadow condensate. The tar-like void-material constantly bubbles and bleeds dark oily-grey sludge downward into the stark white negative space.The Ice Barrier: Running horizontally across the very top 15% of the image is a thick, jagged barrier of transparent, light-blue frosted ice. The Leviathan's black shadow-tentacles are violently flattened and smashed against the underside of this ice barrier, attempting to break through.The Visage: Glaring upward from the center of the dark, bubbling mass are six massive, hollow, bright glowing neon-cyan eyes, radiating absolute fury at the ice above.Setting: Plain White Background everywhere below the top ice-layer. No ocean, deep-sea, or environment details other than the ice ceiling.Style: Masterpiece, cartoony-anime-aesthetic, cel-shaded, bold outlines, vibrant colors. Extreme visual contrast between the pure white background, the bright blue ice barrier at the top, and the incredibly shiny, pitch-black void-stuff of the gargantuan creature.
+
+3. The Darkforme-Rime-Spinner
+Mechanics: This newly designated horror blends the terrifying high-altitude ambush tactics of a spider with the absolute-zero elements of the Weaver's localized magic.
+Darkforme-Rime-Spinner
+Large Abomination, Ensnaring Evil
+Armor Class 15 (Natural Armor)
+Hit Points 114 (12d10 + 48)
+Speed 40 ft., climb 40 ft.
+
+STR 16 (+3)
+DEX 18 (+4)
+CON 18 (+4)
+INT 8 (-1)
+WIS 14 (+2)
+CHA 6 (-2)
+
+Skills Stealth +7, Perception +5
+Damage Vulnerabilities Radiant, Fire
+Damage Immunities Cold
+Condition Immunities Cursed, Restrained
+Senses Blindsight 30 ft., Darkvision 60 ft., Passive Perception 15
+Challenge 6 (2,300 XP)
+***
+Traits:
+Ice Walk & Spider Climb: The Spinner can move across icy surfaces and climb difficult surfaces, including upside down on ceilings, without needing to make an ability check.
+Weaver's Echo: The Spinner ignores movement restrictions caused by webbing or ice, and it knows the exact location of any creature in contact with a web or frozen surface it is touching.
+***
+Actions:
+Multiattack: The Spinner makes two attacks: one with its Frost-Bite and one with its Shadow-Limb.
+Frost-Bite: Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 13 (2d8 + 4) piercing damage plus 7 (2d6) cold damage.
+Shadow-Limb: Melee Weapon Attack: +7 to hit, reach 10 ft., one target. Hit: 11 (2d6 + 4) bludgeoning damage.
+Absolute-Zero Web (Recharge 5-6): Ranged Weapon Attack: +7 to hit, range 30/60 ft., one creature. Hit: The target is restrained by an invisible, freezing silken web. While restrained in this way, the target takes 7 (2d6) cold damage at the start of each of its turns as the web drains its thermal energy. As an action, the restrained target can make a DC 15 Strength check, bursting the webbing on a success. The webbing can also be attacked and destroyed (AC 10; hp 15; vulnerability to fire damage; immunity to bludgeoning, cold, and poison damage).
+
+
+src\assets\images\Monsters\Darkforme_Blackdeep_Shark.webp
+src\assets\images\Monsters\Darkforme_Benthic_Leviathan.webp
+src\assets\images\Monsters\Darkling-Spore-Symbiote.webp
+src\assets\images\Monsters\Darkling-Slush-Slurper.webp
+src\assets\images\Monsters\Darkling-Scree-Roller.webp
+src\assets\images\Monsters\Darkling-Hoarfrost-Yowler.webp
+src\assets\images\Monsters\Darkforme-Rime-Spinner.webp
+src\assets\images\Monsters\Darkforme-Glacier-Maw__Focus.webp
+src\assets\images\Monsters\Darkling-Shiver.webp
+src\assets\images\Monsters\Darkforged-Slag-Brute.webp
+src\assets\images\Monsters\Darkforme-Glacier-Maw.webp
+src\assets\images\Monsters\Darkling-Squallkin.webp
+src\assets\images\Monsters\Darkling-Petro-Legion.webp
+src\assets\images\Monsters\Darkling-Gilded-Husk.webp
+src\assets\images\Monsters\Darkforme_Umbralraune.webp
+src\assets\images\Monsters\Darkling-Sol-Shunner.webp
+src\assets\images\Monsters\Darkling-Silt-Hound.webp
+src\assets\images\Monsters\Darkling-Shell-Skitterer.webp
+src\assets\images\Monsters\Darkling-Sea-Brackling.webp
+src\assets\images\Monsters\Darkling-Rimecreep.webp
+src\assets\images\Monsters\Darkling-Porcelain-Thrall.webp
+src\assets\images\Monsters\Darkling-Loop-Stalker.webp
+src\assets\images\Monsters\Darkling-Grease-Miter.webp
+src\assets\images\Monsters\Darkling-Glamour-Mantle (2).webp
+src\assets\images\Monsters\Darkling-Gale-Harrier.webp
+src\assets\images\Monsters\Darkling-Delta-Mimic.webp
+src\assets\images\Monsters\Darkforme-Thunderhead.webp
+src\assets\images\Monsters\Darkforme-Strangleweed.webp
+src\assets\images\Monsters\Darkforme-Star-Shrike.webp
+src\assets\images\Monsters\Darkforme-Sol-Anhinga.webp
+src\assets\images\Monsters\Darkforme-Shatterhorn.webp
+src\assets\images\Monsters\darkforme-rot-blossom.webp
+src\assets\images\Monsters\Darkforme-Nimbus-Ray.webp
+src\assets\images\Monsters\Darkforme-Mangrove-Matriarch.webp
+src\assets\images\Monsters\Darkforme-Flutter-Ghast.webp
+src\assets\images\Monsters\Darkforme-Deluge.webp
+src\assets\images\Monsters\Darkforme-Chrono-Snare.webp
+src\assets\images\Monsters\Darkforme-Chimeric-Dread.webp
+src\assets\images\Monsters\Darkforme-Black-Bramble-Stag.webp
+src\assets\images\Monsters\Darkshade Fungi Darkling_ (4).webp
+src\assets\images\Monsters\Funky Fungi Darkling1.webp
+src\assets\images\Monsters\Funky Fungi Darkling.webp
+src\assets\images\Monsters\Darkshade Fungi Darkling_ (3).webp
+src\assets\images\Monsters\Darkshade Fungi Darkling_ (2).webp
+src\assets\images\Monsters\Spore Spreader Darkling1.webp
+src\assets\images\Monsters\Spore Spreader Darkling.webp
+src\assets\images\Monsters\Darkforme Mycomugger1.webp
+src\assets\images\Monsters\Darkforme Mycomugger.webp
+src\assets\images\Monsters\Dark Mycoforme Rotter.webp
+src\assets\images\Monsters\Funky Fungi Darkling2.webp
+src\assets\images\Monsters\Darkshade Fungi Darkling_.webp
+src\assets\images\Monsters\Darkshade Fungi Darkling (2).webp
+src\assets\images\Monsters\Darkshade Fungi Darkling.webp
+src\assets\images\Monsters\Dark Mycoforme Rotter1.webp
+src\assets\images\Monsters\Darkforme Mycomystic.webp
+src\assets\images\Monsters\darklinggourdling.webp
+src\assets\images\Monsters\darkformegourdlord.webp
+src\assets\images\Monsters\livingmagmaclot.webp
+src\assets\images\Monsters\caelistianregimentcommander1.webp
+src\assets\images\Monsters\caelistianregimentcommander.webp
+src\assets\images\Monsters\caelistianregimentpsycommander1.webp
+src\assets\images\Monsters\caelistianregimentpsycommander.webp
+src\assets\images\Monsters\hactor.webp
+src\assets\images\Monsters\furuzzle.webp
+src\assets\images\Monsters\blancoz.webp
+src\assets\images\Monsters\cublingsuppsipper.webp
+src\assets\images\Monsters\tittalusmanus.webp
+src\assets\images\Monsters\darkformeticklemonster.webp
+src\assets\images\Monsters\caelistianremnantzealot2.webp
+src\assets\images\Monsters\caelistianremnantinfiltrator (3).webp
+src\assets\images\Monsters\caelistianremnantinfiltrator (1).webp
+src\assets\images\Monsters\caelistianremnantinfiltrator (2).webp
+src\assets\images\Monsters\caelistianremnantvanguard.webp
+src\assets\images\Monsters\caelistianremnantinfiltrator.webp
+src\assets\images\Monsters\caelistianremnantgunner2.webp
+src\assets\images\Monsters\caelistianremnantgunner1.webp
+src\assets\images\Monsters\caelistianremnantzealot.webp
+src\assets\images\Monsters\caelistianremnantvanguard1.webp
+src\assets\images\Monsters\toddlegeist.webp
+src\assets\images\Monsters\darkformegutroar.webp
+src\assets\images\Monsters\grizzwauler.webp
+src\assets\images\Monsters\pseudomaiden1.webp
+src\assets\images\Monsters\pseudomaiden.webp
+src\assets\images\Monsters\darklingcanopygiggler.webp
+src\assets\images\Monsters\darklingcanopycacklermawface.webp
+src\assets\images\Monsters\darklingcanopycackler.webp
+src\assets\images\Monsters\darkformenoxback.webp
+src\assets\images\Monsters\vora.webp
+src\assets\images\Monsters\krazis.webp
+src\assets\images\Monsters\sisselthemistwalker.webp
+src\assets\images\Monsters\darkformeprefect.webp
+src\assets\images\Monsters\darkformeslinger.webp
+src\assets\images\Monsters\darkformemarshallrictus.webp
+src\assets\images\Monsters\gatekeeperkrell.webp
+src\assets\images\Monsters\quartermastergnash.webp
+src\assets\images\Monsters\boneshaman.webp
+src\assets\images\Monsters\ossokinvestal5.webp
+src\assets\images\Monsters\ossokinvestal4.webp
+src\assets\images\Monsters\ossokinvestal3.webp
+src\assets\images\Monsters\ossokinvestal2.webp
+src\assets\images\Monsters\ossokinvestal1.webp
+src\assets\images\Monsters\ossokinminivestal.webp
+src\assets\images\Monsters\ossokindeclaryte1.webp
+src\assets\images\Monsters\ossokinbonesinger.webp
+src\assets\images\Monsters\ossokinapostlyte2.webp
+src\assets\images\Monsters\ossokinapostlyte1.webp
+src\assets\images\Monsters\darkformeskirmisher1.webp
+src\assets\images\Monsters\darkformeskirmisher.webp
+src\assets\images\Monsters\darkformeshieldguard.webp
+src\assets\images\Monsters\darkformeharrierskycommander.webp
+src\assets\images\Monsters\darkformeharrier1.webp
+src\assets\images\Monsters\darkformeharrier.webp
+src\assets\images\Monsters\darkformeballisteer.webp
+src\assets\images\Monsters\ossokinapostlytea.webp
+src\assets\images\Monsters\ossokinapostlyte.webp
+src\assets\images\Monsters\ossokinscrapper.webp
+src\assets\images\Monsters\ossokindeclaryte.webp
+src\assets\images\Monsters\darklingcactine.webp
+src\assets\images\Monsters\darkformeossuitechargeromega.webp
+src\assets\images\Monsters\psychicbloom.webp
+src\assets\images\Monsters\planarwarden.webp
+src\assets\images\Monsters\shadowychamberlain.webp
+src\assets\images\Monsters\darkforgedremnantspike.webp
+src\assets\images\Monsters\darkforgedremnantlash.webp
+src\assets\images\Monsters\darkforgedremnantbulwark.webp
+src\assets\images\Monsters\darkforgedremnantbrute.webp
+src\assets\images\Monsters\viscountofviscera.webp
+src\assets\images\Monsters\royaljestersofdespair.webp
+src\assets\images\Monsters\baronessofblackbile.webp
+src\assets\images\Monsters\darklingdetentionprofessorweapons.webp
+src\assets\images\Monsters\darklingdetentionprofessormagics.webp
+src\assets\images\Monsters\darkformedisciplinedean.webp
+src\assets\images\Monsters\darkdimensionvoidscholar.webp
+src\assets\images\Monsters\darkdimensioninfiltrator.webp
+src\assets\images\Monsters\darkdimensionvanguard.webp
+src\assets\images\Monsters\darkdimensionjusticar.webp
+src\assets\images\Monsters\darklinghallmonitor.webp
+src\assets\images\Monsters\tiny darkling slime.webp
+src\assets\images\Monsters\smalldarklingslime.webp
+src\assets\images\Monsters\mobilehallcleaner.webp
+src\assets\images\Monsters\darklingslimecubeprincess.webp
+src\assets\images\Monsters\darklingslimebigboy.webp
+src\assets\images\Monsters\smalldarklingcuboidslime.webp
+src\assets\images\Monsters\changebot.webp
+src\assets\images\Monsters\cavesweller.webp
+src\assets\images\Monsters\bratnapper.webp
+src\assets\images\Monsters\bloodgorger.webp
+src\assets\images\Monsters\abyssalleviathan.webp
+src\assets\images\Monsters\weedtangler.webp
+src\assets\images\Monsters\voravenor.webp
+src\assets\images\Monsters\traineeauditor.webp
+src\assets\images\Monsters\titansnapper.webp
+src\assets\images\Monsters\ticklefinger.webp
+src\assets\images\Monsters\the-darkformless.webp
+src\assets\images\Monsters\temporalcribguardian.webp
+src\assets\images\Monsters\shadowstorm.webp
+src\assets\images\Monsters\shadowbabysitter.webp
+src\assets\images\Monsters\shadesneak.webp
+src\assets\images\Monsters\regressionfog.webp
+src\assets\images\Monsters\projectauditor.webp
+src\assets\images\Monsters\pondskulker.webp
+src\assets\images\Monsters\pikemaw.webp
+src\assets\images\Monsters\packalpha.webp
+src\assets\images\Monsters\nightmarelullaby.webp
+src\assets\images\Monsters\murkfinswarmer.webp
+src\assets\images\Monsters\mudgnasher.webp
+src\assets\images\Monsters\mirecroaker.webp
+src\assets\images\Monsters\lakeopus_rex.webp
+src\assets\images\Monsters\gloomnewt.webp
+src\assets\images\Monsters\forgottenrattle.webp
+src\assets\images\Monsters\dreamstealer.webp
+src\assets\images\Monsters\darkpunishmentmaid.webp
+src\assets\images\Monsters\darkling-shark.webp
+src\assets\images\Monsters\darkling-hungerer.webp
+src\assets\images\Monsters\darklingbellowbelly.webp
+src\assets\images\Monsters\darkforme-shark.webp
+src\assets\images\Monsters\darkdimensionregressorfield.webp
+src\assets\images\Monsters\currentsnapper.webp
+src\assets\images\Monsters\currentdrifter.webp
+src\assets\images\Monsters\cryingstarmass.webp
+src\assets\images\Monsters\the-darkformless.png"
+src\assets\images\Monsters\darkling-nightshade-elemental.webp
+src\assets\images\Monsters\auditarch.webp
+src\assets\images\Monsters\onesie.webp
+src\assets\images\Monsters\rillskitter.webp
+src\assets\images\Monsters\anglerlurk.webp
+src\assets\images\Monsters\weirdling-paralurker.webp
+src\assets\images\Monsters\teddybombination.webp
+src\assets\images\Monsters\slimepress.webp
+src\assets\images\Monsters\sky-darkener-nightveil.webp
+src\assets\images\Monsters\sentientcrib.webp
+src\assets\images\Monsters\rivertyrant.webp
+src\assets\images\Monsters\pacifiergolem.webp
+src\assets\images\Monsters\nannybotmatron.webp
+src\assets\images\Monsters\matronbot_bria.webp
+src\assets\images\Monsters\matronbot.webp
+src\assets\images\Monsters\lostplushie.webp
+src\assets\images\Monsters\liquidlegion.webp
+src\assets\images\Monsters\ghostiby.webp
+src\assets\images\Monsters\enforcer.webp
+src\assets\images\Monsters\derangeddiapercheckbot.webp
+src\assets\images\Monsters\warforgeddarkwatch.webp
+src\assets\images\Monsters\darkling-slitherscale.webp
+src\assets\images\Monsters\darkling-paralurker.webp
+src\assets\images\Monsters\darkling-ossuite-charger.webp
+src\assets\images\Monsters\darkling-ossokin-proselyte.webp
+src\assets\images\Monsters\darkling-ossokin.webp
+src\assets\images\Monsters\darkling-hooter.webp
+src\assets\images\Monsters\darkling-cactine-biggo-boy.webp
+src\assets\images\Monsters\Darkling Yowler.webp
+src\assets\images\Monsters\Darkling Slurper.webp
+src\assets\images\Monsters\Darkling Lurker.webp
+src\assets\images\Monsters\Darkling Cubling.webp
+src\assets\images\Monsters\darklingbellowbellycubling.webp
+src\assets\images\Monsters\Darkling Caller.webp
+src\assets\images\Monsters\darkforme-suffocator.webp
+src\assets\images\Monsters\darkforme-spinebearer.webp
+src\assets\images\Monsters\Darkforme-Overwatch.webp
+src\assets\images\Monsters\darkforme-ossuarian.webp
+src\assets\images\Monsters\darkforme-ossokin-aegisite.webp
+src\assets\images\Monsters\darkforme-nightpinyon.webp
+src\assets\images\Monsters\darkforme-hungore.webp
+src\assets\images\Monsters\Darkforme Shadow-Lurker.webp
+src\assets\images\Monsters\Darkforme Shadow-Lurker Pack Alpha.webp
+src\assets\images\Monsters\Darkforme Enforcer.webp
+src\assets\images\Monsters\Darkforme Cavesweller.webp
+src\assets\images\Monsters\Darkforme Bellowbelly.webp
+src\assets\images\Monsters\diaperdimensionrift.webp
+src\assets\images\Monsters\darkaconda.webp
+src\assets\images\Monsters\chaphell.webp
+src\assets\images\Monsters\bracklings.webp
+src\assets\images\Monsters\Brackling.webp
+src\assets\images\Monsters\bottleelemental.webp
+src\assets\images\Monsters\bottlebeast.webp
+src\assets\images\Monsters\bellyacher.webp
+src\assets\images\Monsters\riverlurk.png"
+src\assets\images\Monsters\Darkforme-Gale-Screecher.webp
+src\assets\images\Monsters\Darkforme-Frost-Gargantua.webp
+src\assets\images\Monsters\Darkforme-Avalanche-Horn.webp
+src\assets\images\Monsters\Darkforme_Sleekrime-Stalker.webp

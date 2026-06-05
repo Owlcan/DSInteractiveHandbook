@@ -475,7 +475,7 @@ const regaliaTypes = [
     { name: "Adamantine Splint Armor", ac: 17, notes: "Stealth Disadvantage, Str 15 req., Critical hits become normal hits", value: 2200 },
     { name: "Adamantine Plate Armor", ac: 18, notes: "Stealth Disadvantage, Str 15 req., Critical hits become normal hits", value: 3500 },
 
-    // **Jewelry & Accessories** (Assuming 'ac: X' for these means '+X AC Bonus')
+    // **Jewelry & Accessories** ('ac: X' for these means '+X AC Bonus')
     { name: "Frilly Arcane Witch Hat", ac: 1, notes: "A lace-adorned hat that boosts magical prowess. Wearer gains +1 bonus to spell attack rolls.", value: 2200 }, // +1 AC & spell
     { name: "Gold/Silver Ring", ac: 1, notes: "A simple ring that grants a +1 bonus to AC and requires attunement, a basic regalia base.", value: 1400 }, // +1 AC
     { name: "Gold/Silver Necklace", ac: 1, notes: "A simple necklace that grants a +1 bonus to AC and requires attunement, a basic regalia base.", value: 1400 }, // +1 AC
@@ -484,19 +484,21 @@ const regaliaTypes = [
     { name: "Enchanted Pacifier", ac: 1, notes: "A simple pacifier that grants a +1 bonus to AC and requires attunement, a basic regalia base.", value: 1400 }, // +1 AC
     { name: "Enchanted Diaper Pin", ac: 1, notes: "Grants +1 AC and allows wearer to cast Mage Armor once per long rest", value: 1400 }, // +1 AC & spell
     { name: "Mystic Brooch", ac: 1, notes: "Grants +1 AC and allows wearer to cast Protection from Evil and Good once per long rest", value: 1400 }, // +1 AC & spell
-    { name: "RuneShield Ring", ac: 1, notes: "Grants +1 AC and allows wearer to cast Shield of Faith once per long rest", value: 1400 }, // +1 AC & spell
+    { name: "RuneShield Ring", ac: 1, notes: "Grants +1 AC and allows wearer to cast Shield of Faith once per long rest", value: 4000 }, // +1 AC & spell
+    { name: "Ring of Daylight", ac: 1, notes: "3 charges, regains 1d3 at dawn. Sheds bright light in a 60-foot radius for 1 hour, dispels 3rd-level-or-lower magical darkness in that area, and your melee and ranged attacks deal radiant damage instead of their normal type.", value: 10000 }, // Rare utility/offense ring, 12k after regalia premium
     { name: "ArcaneWard Pendant", ac: 1, notes: "Grants +1 AC and allows wearer to cast Mage Armor once per long rest", value: 1400 }, // +1 AC & spell
     { name: "Celestial Amulet", ac: 1, notes: "Grants +1 AC and allows wearer to cast Bless once per long rest", value: 1400 }, // +1 AC & spell
     { name: "Diaper Cover of the Arcane Guardian", ac: 2, notes: "Grants +2 AC and allows wearer to cast Shield spell once per long rest", value: 2200 }, // +2 AC & powerful spell
 
-    // **Armor Partials & Accessories** (Assuming 'ac: X' for these means '+X AC Bonus', unless it's a shield)
+    // **Armor Partials & Accessories** ('ac: X' for these means '+X AC Bonus', unless it's a shield)
     { name: "Steel-Reinforced Pauldrons", ac: 1, notes: "Stackable with other armor; grants resistance to bludgeoning damage from above attacks", value: 2200 }, // +1 AC & resistance
     { name: "Shield", ac: 2, notes: "Grants +2 AC when wielded.", value: 10 },
     { name: "+1 Shield", ac: 3, notes: "Grants +3 AC when wielded.", value: 1400 }, // Standard +1 magic item
     { name: "Buckler Shield", ac: 1, notes: "Grants +1 AC when wielded; does not impose disadvantage on Dexterity (Stealth) checks.", value: 5 }, // Cheaper shield variant
     { name: "Enchanted Bracers", ac: 1, notes: "Grants +1 AC and allows wearer to cast Shield spell once per long rest", value: 1400 }, // +1 AC & spell
     { name: "Mystic Cloak", ac: 1, notes: "Grants advantage on Dexterity (Stealth) checks and resistance to fire damage", value: 2200 }, // +1 AC, stealth adv, & resistance
-    { name: "Runed Gauntlets", ac: 1, notes: "Adds +1 to unarmed strikes and allows wearer to punch ghosts", value: 1400 }, // +1 AC & magical unarmed strikes
+    { name: "Runed Gauntlets", ac: 1, notes: "Adds +1 to unarmed strikes and allows wearer to punch ghosts", value: 6000 }, // +1 AC & magical unarmed strikes
+    { name: "Eldritch Claw Tattoo", ac: 1, notes: "Your unarmed strikes are magical and gain +1 to attack and damage rolls. Once per dawn, as a bonus action for 1 minute, your melee attacks gain 15-foot reach and deal an extra 1d6 force damage on a hit.", value: 10000 }, // Uncommon tattoo tuned to 12k after regalia premium
     { name: "Boots of the Warden", ac: 1, notes: "Grants advantage on Dexterity (Stealth) checks in dim light or darkness", value: 1400 }, // +1 AC & stealth adv
     { name: "Greaves of the Titan", ac: 1, notes: "Wearer cannot be knocked prone by non-magical effects", value: 1400 }, // +1 AC & prone immunity
     { name: "Ceremonial Cloak of the Gilded", ac: 1, notes: "Grants +1 to Charisma-based skill checks and resistance to radiant damage", value: 2200 }, // +1 AC, skill bonus, & resistance
@@ -506,7 +508,7 @@ const regaliaTypes = [
     { name: "Frozen Guard Bracers", ac: 1, notes: "Grants resistance to cold damage", value: 2200 }, // +1 AC & resistance
     { name: "Runed Battlemage Cloak", ac: 1, notes: "Allows wearer to ignore the verbal component of one spell per long rest", value: 1400 }, // +1 AC & spell utility
     { name: "Dragonhide Bracers", ac: 1, notes: "Grants resistance to fire damage", value: 2200 }, // +1 AC & resistance
-    { name: "Mithral Gauntlets", ac: 1, notes: "Adds +1 to unarmed strikes and allows wearer to punch ghosts", value: 1400 }, // +1 AC & magical unarmed strikes
+    { name: "Mithral Gauntlets", ac: 1, notes: "Adds +1 to unarmed strikes and allows wearer to punch ghosts", value: 6000 }, // +1 AC & magical unarmed strikes
     { name: "Shadowstep Boots", ac: 1, notes: "Grants advantage on Dexterity (Stealth) checks in dim light or darkness", value: 1400 }, // +1 AC & stealth adv
     { name: "Titan’s Greaves", ac: 1, notes: "Wearer cannot be knocked prone by non-magical effects", value: 1400 }, // +1 AC & prone immunity
     // Duplicates from original list - values assigned as per their first instance
@@ -523,7 +525,7 @@ const regaliaTypes = [
     { name: "Voidbound Mask", ac: 1, notes: "Wearer cannot be tracked by non-magical means", value: 1400 }, // +1 AC & tracking immunity
     { name: "Bloodforged Gauntlets", ac: 1, notes: "When wearer reduces an enemy to 0 HP, they gain temporary HP equal to their proficiency bonus", value: 1400 }, // +1 AC & temp HP gain
     
-    // Non-armor items (AC 10 likely means base unarmored AC, value based on magical properties)
+    // Non-armor items (AC 10 means base unarmored AC, value based on magical properties)
     { name: "Spectacles of Insight", ac: 10, notes: "These finely crafted glasses grant the wearer advantage on Perception and Investigation checks when searching for hidden details.", value: 1400 }, // Adv on two key skills
     { name: "Mystic Monocle", ac: 10, notes: "A single enchanted lens that, once per encounter, provides a +2 bonus on Intelligence checks (Investigation, Arcana, or History) when examining intricate details.", value: 1400 }, // Potent limited skill bonus
     { name: "Tech-Enhanced Visor", ac: 10, notes: "A futuristic visor with augmented-reality overlays. Grants the wearer a +2 bonus on Arcana checks related to technology and reveals hidden digital or magical auras within 30 feet.", value: 2200 }, // Skill bonus & aura detection
@@ -574,6 +576,20 @@ const clothingArmorCategories = [
   "Adamantine Chain Shirt", "Adamantine Scale Mail", "Adamantine Breastplate", 
   "Adamantine Half Plate Armor", "Adamantine Chain Mail", "Adamantine Splint Armor", "Adamantine Plate Armor"
 ];
+
+function normalizeRegaliaCategoryName(name) {
+  return String(name || "")
+    .replace(/[’‘]/g, "'")
+    .trim();
+}
+
+const clothingArmorCategorySet = new Set(
+  clothingArmorCategories.map(normalizeRegaliaCategoryName)
+);
+
+function isClothingArmorBase(name) {
+  return clothingArmorCategorySet.has(normalizeRegaliaCategoryName(name));
+}
 
 const regaliaUpgrades = [
     // **Defense Upgrades**
@@ -1095,7 +1111,7 @@ const regaliaUpgrades = [
 
     const totalSlots = Math.max(1, Math.min(10, Number(data.totalSlots) || 1));
     const desiredEnhancement = String(data.selectedEnhancement || '').trim();
-    const isArmorClothing = clothingArmorCategories.includes(selectedBase);
+    const isArmorClothing = isClothingArmorBase(selectedBase);
     const enhancementToApply = (isArmorClothing && (desiredEnhancement === '' || Object.prototype.hasOwnProperty.call(enhancementPricing, desiredEnhancement)))
       ? desiredEnhancement
       : "";
@@ -1236,7 +1252,7 @@ const regaliaUpgrades = [
       }
       option.textContent = displayText;
       
-      if (clothingArmorCategories.includes(regalia.name)) {
+      if (isClothingArmorBase(regalia.name)) {
         clothingArmorSelect.appendChild(option);
       } else {
         // Everything else goes to accessories
@@ -1276,7 +1292,7 @@ const regaliaUpgrades = [
     selectedRegaliaBase = state.selectedRegaliaBase;
     
     // Show/hide enhancement options based on whether it's armor/clothing
-    const armorClothingCheck = clothingArmorCategories.includes(selectedName);
+    const armorClothingCheck = isClothingArmorBase(selectedName);
     const enhancementDiv = document.querySelector('#slotSelectionCtn > div');
     if (enhancementDiv) {
       enhancementDiv.style.display = armorClothingCheck ? 'block' : 'none';

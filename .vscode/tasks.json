@@ -9,6 +9,15 @@
 				"tools/diff_spellbook_vs_morespells.js"
 			],
 			"isBackground": false
+		},
+		{
+			"label": "Generate strict atlas media manifest",
+			"type": "shell",
+			"command": "node",
+			"args": [
+				"tools/generate_atlas_media_gap_manifest.js"
+			],
+			"isBackground": false
 		}
 	]
 }

@@ -13,6 +13,7 @@
 		"start": "node server.js",
 		"build:tailwind": "tailwindcss -i ./styles/tailwind-input.css -o ./styles/tailwind.css --minify",
 		"watch:tailwind": "tailwindcss -i ./styles/tailwind-input.css -o ./styles/tailwind.css --watch",
+		"build:bestiary:runtime": "node tools/build_runtime_bestiary_bundle.js",
 		"split:worldmapzones": "node tools/split_worldmap_zones_json.js --in worldmap-zones.json --outDir worldmap-zones.split",
 		"merge:worldmapzones": "node tools/split_worldmap_zones_json.js --merge --inDir worldmap-zones.split --out worldmap-zones.merged.json",
 		"build:bestiary:stopgap": "node tools/build_bestiary_stopgap_singlefile.js",

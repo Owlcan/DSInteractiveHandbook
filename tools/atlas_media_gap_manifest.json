@@ -1,0 +1,1682 @@
+{
+  "generatedAt": "2026-05-26T16:40:24.236Z",
+  "source": "src/data/scholia-map/regionMetadata.js",
+  "strictAudit": {
+    "imageFiles": true,
+    "musicFiles": true
+  },
+  "summary": {
+    "totalRegions": 28,
+    "regionsWithAnyGap": 28,
+    "regionsWithPlaceholderSlots": 0,
+    "regionsWithMissingGalleryFiles": 0,
+    "regionsWithMissingMusicFiles": 0,
+    "regionsWithPendingMusic": 9,
+    "totalMissingGalleryFiles": 0,
+    "totalMissingMusicFiles": 0
+  },
+  "regions": [
+    {
+      "regionName": "Bay Of Blitz",
+      "slug": "bay-of-blitz",
+      "galleryCount": 3,
+      "musicLabel": "Battle for the Rocks; Rebuilt Forever to Crash Upon The Shores of Battle",
+      "musicPending": false,
+      "placeholderSlots": [],
+      "missingGalleryFiles": [],
+      "missingMusicFiles": [],
+      "mediaNeedsExplicit": [
+        "Add supporting imagery for trade movement, coastline, or weather-driven drama.",
+        "Assign a sailor, merchant, or maritime threat portrait."
+      ],
+      "mediaNeedsComputed": [],
+      "mediaNeedsCombined": [
+        "Add supporting imagery for trade movement, coastline, or weather-driven drama.",
+        "Assign a sailor, merchant, or maritime threat portrait."
+      ],
+      "galleryAudit": [
+        {
+          "index": 1,
+          "label": "Bay-scale water conflict",
+          "src": "src/assets/images/lore/thewaterwar.png",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\lore\\thewaterwar.png"
+        },
+        {
+          "index": 2,
+          "label": "Maritime battle scene",
+          "src": "src/assets/images/lore/waterwar_1.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\lore\\waterwar_1.webp"
+        },
+        {
+          "index": 3,
+          "label": "Lightning-struck bay resource",
+          "src": "src/assets/images/stormlode.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\stormlode.webp"
+        }
+      ],
+      "musicAudit": [
+        {
+          "index": 1,
+          "trackName": "Battle for the Rocks",
+          "fileName": "Battle for the Rocks.mp3",
+          "src": "src/assets/audio/World Map Music/Battle for the Rocks.mp3",
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\audio\\World Map Music\\Battle for the Rocks.mp3"
+        },
+        {
+          "index": 2,
+          "trackName": "Rebuilt Forever to Crash Upon The Shores of Battle",
+          "fileName": "Rebuilt Forever to Crash Upon The Shores of Battle.mp3",
+          "src": "src/assets/audio/World Map Music/Rebuilt Forever to Crash Upon The Shores of Battle.mp3",
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\audio\\World Map Music\\Rebuilt Forever to Crash Upon The Shores of Battle.mp3"
+        }
+      ],
+      "hasAnyGap": true
+    },
+    {
+      "regionName": "Cape of Sunrise",
+      "slug": "cape-of-sunrise",
+      "galleryCount": 3,
+      "musicLabel": "A Pretty and Precarious Place",
+      "musicPending": false,
+      "placeholderSlots": [],
+      "missingGalleryFiles": [],
+      "missingMusicFiles": [],
+      "mediaNeedsExplicit": [
+        "Add supporting visuals for cliffs, coast, or lookout points.",
+        "Assign a sentinel, sailor, or local landmark figure portrait."
+      ],
+      "mediaNeedsComputed": [],
+      "mediaNeedsCombined": [
+        "Add supporting visuals for cliffs, coast, or lookout points.",
+        "Assign a sentinel, sailor, or local landmark figure portrait."
+      ],
+      "galleryAudit": [
+        {
+          "index": 1,
+          "label": "Sunrise cape landmark",
+          "src": "src/assets/images/lore/thornofsunrise.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\lore\\thornofsunrise.webp"
+        },
+        {
+          "index": 2,
+          "label": "Condensed dawn light",
+          "src": "src/assets/images/Sunlight Condensate.png",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\Sunlight Condensate.png"
+        },
+        {
+          "index": 3,
+          "label": "Golden sunrise palette reference",
+          "src": "src/assets/images/Golden Dawn Candy.png",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\Golden Dawn Candy.png"
+        }
+      ],
+      "musicAudit": [
+        {
+          "index": 1,
+          "trackName": "A Pretty and Precarious Place",
+          "fileName": "A Pretty and Precarious Place.mp3",
+          "src": "src/assets/audio/World Map Music/A Pretty and Precarious Place.mp3",
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\audio\\World Map Music\\A Pretty and Precarious Place.mp3"
+        }
+      ],
+      "hasAnyGap": true
+    },
+    {
+      "regionName": "County Majicka",
+      "slug": "county-majicka",
+      "galleryCount": 3,
+      "musicLabel": "Beat the Streets",
+      "musicPending": false,
+      "placeholderSlots": [],
+      "missingGalleryFiles": [],
+      "missingMusicFiles": [],
+      "mediaNeedsExplicit": [
+        "Add supporting imagery for spellcraft, civic landmarks, or magical infrastructure.",
+        "Assign a mage, county official, or enchanted local portrait."
+      ],
+      "mediaNeedsComputed": [],
+      "mediaNeedsCombined": [
+        "Add supporting imagery for spellcraft, civic landmarks, or magical infrastructure.",
+        "Assign a mage, county official, or enchanted local portrait."
+      ],
+      "galleryAudit": [
+        {
+          "index": 1,
+          "label": "Magical county integration",
+          "src": "src/assets/images/lore/planarintegration.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\lore\\planarintegration.webp"
+        },
+        {
+          "index": 2,
+          "label": "Majickan outreach scene",
+          "src": "src/assets/images/lore/planaroutreach.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\lore\\planaroutreach.webp"
+        },
+        {
+          "index": 3,
+          "label": "Arcane civic instability",
+          "src": "src/assets/images/lore/arcanetcrash.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\lore\\arcanetcrash.webp"
+        }
+      ],
+      "musicAudit": [
+        {
+          "index": 1,
+          "trackName": "Beat the Streets",
+          "fileName": "Beat the Streets.mp3",
+          "src": "src/assets/audio/World Map Music/Beat the Streets.mp3",
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\audio\\World Map Music\\Beat the Streets.mp3"
+        }
+      ],
+      "hasAnyGap": true
+    },
+    {
+      "regionName": "Darwitch",
+      "slug": "darwitch",
+      "galleryCount": 13,
+      "musicLabel": "Where The Ball Is Forever; Out on the Avenue",
+      "musicPending": false,
+      "placeholderSlots": [],
+      "missingGalleryFiles": [],
+      "missingMusicFiles": [],
+      "mediaNeedsExplicit": [],
+      "mediaNeedsComputed": [],
+      "mediaNeedsCombined": [],
+      "galleryAudit": [
+        {
+          "index": 1,
+          "label": "Velvet Spire guard post and perimeter security",
+          "src": "src/assets/images/lore/darvitchvelvetspireguard.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\lore\\darvitchvelvetspireguard.webp"
+        },
+        {
+          "index": 2,
+          "label": "Upper Fangs crystal terraces and moon-bridge architecture",
+          "src": "src/assets/images/lore/darvitchupperfangs1.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\lore\\darvitchupperfangs1.webp"
+        },
+        {
+          "index": 3,
+          "label": "Upper Fangs night balcony district above the cloudline",
+          "src": "src/assets/images/lore/darvitchupperfangs2.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\lore\\darvitchupperfangs2.webp"
+        },
+        {
+          "index": 4,
+          "label": "Center-city clockspire, transit web, and magitek skyline",
+          "src": "src/assets/images/lore/darvitchcentercity.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\lore\\darvitchcentercity.webp"
+        },
+        {
+          "index": 5,
+          "label": "Mid-Fangs textile bazaar and cable-car trade lanes",
+          "src": "src/assets/images/lore/darvitchmidfangs1.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\lore\\darvitchmidfangs1.webp"
+        },
+        {
+          "index": 6,
+          "label": "Mid-Fangs cable district with Tech-Row and vendor decks",
+          "src": "src/assets/images/lore/darvitchmidfangs2.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\lore\\darvitchmidfangs2.webp"
+        },
+        {
+          "index": 7,
+          "label": "Silk-Road commercial bridge for Nightweaver textile exports",
+          "src": "src/assets/images/lore/darvitchsilkroad.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\lore\\darvitchsilkroad.webp"
+        },
+        {
+          "index": 8,
+          "label": "Lower Fangs heavy foundries and industrial ward streets",
+          "src": "src/assets/images/lore/darvitchlowerfangs.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\lore\\darvitchlowerfangs.webp"
+        },
+        {
+          "index": 9,
+          "label": "Middenworks smeltery interior and forge-line labor",
+          "src": "src/assets/images/lore/darvitchmiddenworks.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\lore\\darvitchmiddenworks.webp"
+        },
+        {
+          "index": 10,
+          "label": "Temple-engine sanctum and chronomantic ritual hall",
+          "src": "src/assets/images/lore/darvitchtemples.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\lore\\darvitchtemples.webp"
+        },
+        {
+          "index": 11,
+          "label": "Sanguine high-society salon and aristocratic nightlife",
+          "src": "src/assets/images/lore/darvitchsanguinehighsociety.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\lore\\darvitchsanguinehighsociety.webp"
+        },
+        {
+          "index": 12,
+          "label": "Masquerade opera hall performance under neon-luxury patronage",
+          "src": "src/assets/images/lore/darvitchopera1.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\lore\\darvitchopera1.webp"
+        },
+        {
+          "index": 13,
+          "label": "Grand stagehouse crowd scene and vampiric cultural spectacle",
+          "src": "src/assets/images/lore/darvitchopera2.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\lore\\darvitchopera2.webp"
+        }
+      ],
+      "musicAudit": [
+        {
+          "index": 1,
+          "trackName": "Where The Ball Is Forever",
+          "fileName": "Where The Ball Is Forever.mp3",
+          "src": "src/assets/audio/World Map Music/Where The Ball Is Forever.mp3",
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\audio\\World Map Music\\Where The Ball Is Forever.mp3"
+        },
+        {
+          "index": 2,
+          "trackName": "Out on the Avenue",
+          "fileName": "Out on the Avenue.mp3",
+          "src": "src/assets/audio/World Map Music/Out on the Avenue.mp3",
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\audio\\World Map Music\\Out on the Avenue.mp3"
+        }
+      ],
+      "hasAnyGap": true
+    },
+    {
+      "regionName": "Dawnshore",
+      "slug": "dawnshore",
+      "galleryCount": 3,
+      "musicLabel": "Home of Our Summer Days",
+      "musicPending": false,
+      "placeholderSlots": [],
+      "missingGalleryFiles": [],
+      "missingMusicFiles": [],
+      "mediaNeedsExplicit": [
+        "Add supporting imagery for sea routes, docks, or local settlement culture.",
+        "Assign a local captain, ferrymaster, or coastal resident portrait."
+      ],
+      "mediaNeedsComputed": [],
+      "mediaNeedsCombined": [
+        "Add supporting imagery for sea routes, docks, or local settlement culture.",
+        "Assign a local captain, ferrymaster, or coastal resident portrait."
+      ],
+      "galleryAudit": [
+        {
+          "index": 1,
+          "label": "Dawn-lit coastal landmark",
+          "src": "src/assets/images/lore/thornofsunrise.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\lore\\thornofsunrise.webp"
+        },
+        {
+          "index": 2,
+          "label": "Sunrise-aligned essence",
+          "src": "src/assets/images/Sunlight Condensate.png",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\Sunlight Condensate.png"
+        },
+        {
+          "index": 3,
+          "label": "Shoreline light study",
+          "src": "src/assets/images/Sunset Essence.png",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\Sunset Essence.png"
+        }
+      ],
+      "musicAudit": [
+        {
+          "index": 1,
+          "trackName": "Home of Our Summer Days",
+          "fileName": "Home of Our Summer Days.mp3",
+          "src": "src/assets/audio/World Map Music/Home of Our Summer Days.mp3",
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\audio\\World Map Music\\Home of Our Summer Days.mp3"
+        }
+      ],
+      "hasAnyGap": true
+    },
+    {
+      "regionName": "Eastersea",
+      "slug": "eastersea",
+      "galleryCount": 3,
+      "musicLabel": "Along the Flowing Waters",
+      "musicPending": false,
+      "placeholderSlots": [],
+      "missingGalleryFiles": [],
+      "missingMusicFiles": [],
+      "mediaNeedsExplicit": [
+        "Add supporting visuals for routes, distant travel, or maritime atmosphere.",
+        "Assign a sailor, explorer, or sea-creature portrait."
+      ],
+      "mediaNeedsComputed": [],
+      "mediaNeedsCombined": [
+        "Add supporting visuals for routes, distant travel, or maritime atmosphere.",
+        "Assign a sailor, explorer, or sea-creature portrait."
+      ],
+      "galleryAudit": [
+        {
+          "index": 1,
+          "label": "Eastern sea approach",
+          "src": "src/assets/images/lore/aquatictreaty_1.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\lore\\aquatictreaty_1.webp"
+        },
+        {
+          "index": 2,
+          "label": "Distant maritime conflict",
+          "src": "src/assets/images/lore/thewaterwar.png",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\lore\\thewaterwar.png"
+        },
+        {
+          "index": 3,
+          "label": "Eastern sea treasure",
+          "src": "src/assets/images/fellowship_pearl.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\fellowship_pearl.webp"
+        }
+      ],
+      "musicAudit": [
+        {
+          "index": 1,
+          "trackName": "Along the Flowing Waters",
+          "fileName": "Along the Flowing Waters.mp3",
+          "src": "src/assets/audio/World Map Music/Along the Flowing Waters.mp3",
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\audio\\World Map Music\\Along the Flowing Waters.mp3"
+        }
+      ],
+      "hasAnyGap": true
+    },
+    {
+      "regionName": "Faermeadows",
+      "slug": "faermeadows",
+      "galleryCount": 3,
+      "musicLabel": "The Fields of Glimmer",
+      "musicPending": false,
+      "placeholderSlots": [],
+      "missingGalleryFiles": [],
+      "missingMusicFiles": [],
+      "mediaNeedsExplicit": [
+        "Add supporting visuals for flora, paths, or meadow landmarks.",
+        "Assign a local druid, traveler, or meadow creature portrait."
+      ],
+      "mediaNeedsComputed": [],
+      "mediaNeedsCombined": [
+        "Add supporting visuals for flora, paths, or meadow landmarks.",
+        "Assign a local druid, traveler, or meadow creature portrait."
+      ],
+      "galleryAudit": [
+        {
+          "index": 1,
+          "label": "Meadow bloom",
+          "src": "src/assets/images/rain_lily.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\rain_lily.webp"
+        },
+        {
+          "index": 2,
+          "label": "Field blossom stand",
+          "src": "src/assets/images/white_flower.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\white_flower.webp"
+        },
+        {
+          "index": 3,
+          "label": "Golden meadow flora",
+          "src": "src/assets/images/gildenrods.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\gildenrods.webp"
+        }
+      ],
+      "musicAudit": [
+        {
+          "index": 1,
+          "trackName": "The Fields of Glimmer",
+          "fileName": "The Fields of Glimmer.mp3",
+          "src": "src/assets/audio/World Map Music/The Fields of Glimmer.mp3",
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\audio\\World Map Music\\The Fields of Glimmer.mp3"
+        }
+      ],
+      "hasAnyGap": true
+    },
+    {
+      "regionName": "Gildermount",
+      "slug": "gildermount",
+      "galleryCount": 3,
+      "musicLabel": "Region playlist pending",
+      "musicPending": true,
+      "placeholderSlots": [],
+      "missingGalleryFiles": [],
+      "missingMusicFiles": [],
+      "mediaNeedsExplicit": [
+        "Add supporting visuals for overlooks, trails, or landmark sites.",
+        "Assign a local guide, noble, or highland creature portrait."
+      ],
+      "mediaNeedsComputed": [
+        "Assign at least one mapped music track label for this region."
+      ],
+      "mediaNeedsCombined": [
+        "Add supporting visuals for overlooks, trails, or landmark sites.",
+        "Assign a local guide, noble, or highland creature portrait.",
+        "Assign at least one mapped music track label for this region."
+      ],
+      "galleryAudit": [
+        {
+          "index": 1,
+          "label": "Gildermount ascent",
+          "src": "src/assets/images/lore/mountainstumbling.jpeg",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\lore\\mountainstumbling.jpeg"
+        },
+        {
+          "index": 2,
+          "label": "Highland summit bounty",
+          "src": "src/assets/images/Star Sugar.png",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\Star Sugar.png"
+        },
+        {
+          "index": 3,
+          "label": "Gilded mountain ore",
+          "src": "src/assets/images/Starshot Ore.png",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\Starshot Ore.png"
+        }
+      ],
+      "musicAudit": [],
+      "hasAnyGap": true
+    },
+    {
+      "regionName": "Greensea Expanse",
+      "slug": "greensea-expanse",
+      "galleryCount": 3,
+      "musicLabel": "Deep Vine Trauma Kiss; Where Things Holy Dwelt; Fog and Mangrove; Battlefield Forest",
+      "musicPending": false,
+      "placeholderSlots": [],
+      "missingGalleryFiles": [],
+      "missingMusicFiles": [],
+      "mediaNeedsExplicit": [
+        "Add a wide environmental establishing shot for the Greensea wetlands.",
+        "Assign at least one local creature or notable portrait for the region fact file."
+      ],
+      "mediaNeedsComputed": [],
+      "mediaNeedsCombined": [
+        "Add a wide environmental establishing shot for the Greensea wetlands.",
+        "Assign at least one local creature or notable portrait for the region fact file."
+      ],
+      "galleryAudit": [
+        {
+          "index": 1,
+          "label": "Greensea cacao",
+          "src": "src/assets/images/greensea cacao.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\greensea cacao.webp"
+        },
+        {
+          "index": 2,
+          "label": "Greensea produce",
+          "src": "src/assets/images/greenseamatoto.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\greenseamatoto.webp"
+        },
+        {
+          "index": 3,
+          "label": "Greensea forage",
+          "src": "src/assets/images/greenseananners.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\greenseananners.webp"
+        }
+      ],
+      "musicAudit": [
+        {
+          "index": 1,
+          "trackName": "Deep Vine Trauma Kiss",
+          "fileName": "Deep Vine Trauma Kiss.mp3",
+          "src": "src/assets/audio/World Map Music/Deep Vine Trauma Kiss.mp3",
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\audio\\World Map Music\\Deep Vine Trauma Kiss.mp3"
+        },
+        {
+          "index": 2,
+          "trackName": "Where Things Holy Dwelt",
+          "fileName": "Where Things Holy Dwelt_converted.mp3",
+          "src": "src/assets/audio/World Map Music/Where Things Holy Dwelt_converted.mp3",
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\audio\\World Map Music\\Where Things Holy Dwelt_converted.mp3"
+        },
+        {
+          "index": 3,
+          "trackName": "Fog and Mangrove",
+          "fileName": "Fog and Mangrove.mp3",
+          "src": "src/assets/audio/World Map Music/Fog and Mangrove.mp3",
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\audio\\World Map Music\\Fog and Mangrove.mp3"
+        },
+        {
+          "index": 4,
+          "trackName": "Battlefield Forest",
+          "fileName": "Battlefield Forest.mp3",
+          "src": "src/assets/audio/World Map Music/Battlefield Forest.mp3",
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\audio\\World Map Music\\Battlefield Forest.mp3"
+        }
+      ],
+      "hasAnyGap": true
+    },
+    {
+      "regionName": "Heraldia",
+      "slug": "heraldia",
+      "galleryCount": 3,
+      "musicLabel": "Region playlist pending",
+      "musicPending": true,
+      "placeholderSlots": [],
+      "missingGalleryFiles": [],
+      "missingMusicFiles": [],
+      "mediaNeedsExplicit": [
+        "Add a bannered exterior or castle-front image if a more explicitly heraldic landmark becomes available."
+      ],
+      "mediaNeedsComputed": [
+        "Assign at least one mapped music track label for this region."
+      ],
+      "mediaNeedsCombined": [
+        "Add a bannered exterior or castle-front image if a more explicitly heraldic landmark becomes available.",
+        "Assign at least one mapped music track label for this region."
+      ],
+      "galleryAudit": [
+        {
+          "index": 1,
+          "label": "Heraldic civic arcade",
+          "src": "src/assets/images/lore/planarintegration.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\lore\\planarintegration.webp"
+        },
+        {
+          "index": 2,
+          "label": "Sunlit ceremonial colonnade",
+          "src": "src/assets/images/lore/thornofsunrise.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\lore\\thornofsunrise.webp"
+        },
+        {
+          "index": 3,
+          "label": "Realm interior under strain",
+          "src": "src/assets/images/lore/arcanetcrash.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\lore\\arcanetcrash.webp"
+        }
+      ],
+      "musicAudit": [],
+      "hasAnyGap": true
+    },
+    {
+      "regionName": "Hibernating Ecoliee",
+      "slug": "hibernating-ecoliee",
+      "galleryCount": 3,
+      "musicLabel": "Within the Well of Souls",
+      "musicPending": false,
+      "placeholderSlots": [],
+      "missingGalleryFiles": [],
+      "missingMusicFiles": [],
+      "mediaNeedsExplicit": [
+        "Add supporting visuals that clarify why the area is singular or memorable.",
+        "Assign a key figure, guardian, or mystery-linked portrait."
+      ],
+      "mediaNeedsComputed": [],
+      "mediaNeedsCombined": [
+        "Add supporting visuals that clarify why the area is singular or memorable.",
+        "Assign a key figure, guardian, or mystery-linked portrait."
+      ],
+      "galleryAudit": [
+        {
+          "index": 1,
+          "label": "Singular mystery focal point",
+          "src": "src/assets/images/lore/wellofsoulsunveil.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\lore\\wellofsoulsunveil.webp"
+        },
+        {
+          "index": 2,
+          "label": "Hidden-site unveiling",
+          "src": "src/assets/images/lore/unveilingwellofsouls.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\lore\\unveilingwellofsouls.webp"
+        },
+        {
+          "index": 3,
+          "label": "Reserved sacred landmark",
+          "src": "src/assets/images/lore/wellofsouls.jpeg",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\lore\\wellofsouls.jpeg"
+        }
+      ],
+      "musicAudit": [
+        {
+          "index": 1,
+          "trackName": "Within the Well of Souls",
+          "fileName": "Within the Well of Souls.mp3",
+          "src": "src/assets/audio/World Map Music/Within the Well of Souls.mp3",
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\audio\\World Map Music\\Within the Well of Souls.mp3"
+        }
+      ],
+      "hasAnyGap": true
+    },
+    {
+      "regionName": "Hinterland",
+      "slug": "hinterland",
+      "galleryCount": 3,
+      "musicLabel": "To Where We May Go",
+      "musicPending": false,
+      "placeholderSlots": [],
+      "missingGalleryFiles": [],
+      "missingMusicFiles": [],
+      "mediaNeedsExplicit": [
+        "Create a wide roads-and-caravans establishing shot for Hinterland.",
+        "Create supporting art showing mixed regional influences meeting along a shared overland corridor.",
+        "Create a border watch-post, inn, or waystation exterior so the region has built geography instead of cast stand-ins."
+      ],
+      "mediaNeedsComputed": [],
+      "mediaNeedsCombined": [
+        "Create a wide roads-and-caravans establishing shot for Hinterland.",
+        "Create supporting art showing mixed regional influences meeting along a shared overland corridor.",
+        "Create a border watch-post, inn, or waystation exterior so the region has built geography instead of cast stand-ins."
+      ],
+      "galleryAudit": [
+        {
+          "index": 1,
+          "label": "Interior transit and shared-route corridor",
+          "src": "src/assets/images/lore/planaroutreach.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\lore\\planaroutreach.webp"
+        },
+        {
+          "index": 2,
+          "label": "Cross-border movement through the interior",
+          "src": "src/assets/images/lore/planaroutreach1.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\lore\\planaroutreach1.webp"
+        },
+        {
+          "index": 3,
+          "label": "Border pressure and interior checkpoint conflict",
+          "src": "src/assets/images/lore/internalsiege.png",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\lore\\internalsiege.png"
+        }
+      ],
+      "musicAudit": [
+        {
+          "index": 1,
+          "trackName": "To Where We May Go",
+          "fileName": "To Where We May Go.mp3",
+          "src": "src/assets/audio/World Map Music/To Where We May Go.mp3",
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\audio\\World Map Music\\To Where We May Go.mp3"
+        }
+      ],
+      "hasAnyGap": true
+    },
+    {
+      "regionName": "Lissome Plains",
+      "slug": "lissome-plains",
+      "galleryCount": 3,
+      "musicLabel": "Region playlist pending",
+      "musicPending": true,
+      "placeholderSlots": [],
+      "missingGalleryFiles": [],
+      "missingMusicFiles": [],
+      "mediaNeedsExplicit": [
+        "Add a broad horizon or settlement image that represents the plains as a place, not only as ingredients.",
+        "Assign one local travel or culture illustration for the modal header rotation."
+      ],
+      "mediaNeedsComputed": [
+        "Assign at least one mapped music track label for this region."
+      ],
+      "mediaNeedsCombined": [
+        "Add a broad horizon or settlement image that represents the plains as a place, not only as ingredients.",
+        "Assign one local travel or culture illustration for the modal header rotation.",
+        "Assign at least one mapped music track label for this region."
+      ],
+      "galleryAudit": [
+        {
+          "index": 1,
+          "label": "Heart of the plains",
+          "src": "src/assets/images/heartofthelissomeplains.png",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\heartofthelissomeplains.png"
+        },
+        {
+          "index": 2,
+          "label": "Lissome orchard produce",
+          "src": "src/assets/images/lissomelemons.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\lissomelemons.webp"
+        },
+        {
+          "index": 3,
+          "label": "Lissome harvest stock",
+          "src": "src/assets/images/lissomesoybeans.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\lissomesoybeans.webp"
+        }
+      ],
+      "musicAudit": [],
+      "hasAnyGap": true
+    },
+    {
+      "regionName": "Maristannio",
+      "slug": "maristannio",
+      "galleryCount": 3,
+      "musicLabel": "Region playlist pending",
+      "musicPending": true,
+      "placeholderSlots": [],
+      "missingGalleryFiles": [],
+      "missingMusicFiles": [],
+      "mediaNeedsExplicit": [
+        "Create a market, foundry, or exterior workshop-quarter image for Maristannio.",
+        "Create one territory-scale establishing shot so Maristannio reads as a place rather than only interiors and materials."
+      ],
+      "mediaNeedsComputed": [
+        "Assign at least one mapped music track label for this region."
+      ],
+      "mediaNeedsCombined": [
+        "Create a market, foundry, or exterior workshop-quarter image for Maristannio.",
+        "Create one territory-scale establishing shot so Maristannio reads as a place rather than only interiors and materials.",
+        "Assign at least one mapped music track label for this region."
+      ],
+      "galleryAudit": [
+        {
+          "index": 1,
+          "label": "Craft-and-containment local signature",
+          "src": "src/assets/images/lore/bottlebeasts.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\lore\\bottlebeasts.webp"
+        },
+        {
+          "index": 2,
+          "label": "Territory workshop ecology",
+          "src": "src/assets/images/lore/bottlebeasts_1.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\lore\\bottlebeasts_1.webp"
+        },
+        {
+          "index": 3,
+          "label": "Contained magical industry frontage",
+          "src": "src/assets/images/lore/bottlebeasts_2.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\lore\\bottlebeasts_2.webp"
+        }
+      ],
+      "musicAudit": [],
+      "hasAnyGap": true
+    },
+    {
+      "regionName": "Mouth of Colra",
+      "slug": "mouth-of-colra",
+      "galleryCount": 3,
+      "musicLabel": "Up Chococreek",
+      "musicPending": false,
+      "placeholderSlots": [],
+      "missingGalleryFiles": [],
+      "missingMusicFiles": [],
+      "mediaNeedsExplicit": [
+        "Add supporting visuals for river traffic, coastal settlement, or gateway geography.",
+        "Assign a harbor official, ferrymaster, or local guide portrait."
+      ],
+      "mediaNeedsComputed": [],
+      "mediaNeedsCombined": [
+        "Add supporting visuals for river traffic, coastal settlement, or gateway geography.",
+        "Assign a harbor official, ferrymaster, or local guide portrait."
+      ],
+      "galleryAudit": [
+        {
+          "index": 1,
+          "label": "Estuary botanical growth",
+          "src": "src/assets/images/lakale.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\lakale.webp"
+        },
+        {
+          "index": 2,
+          "label": "River-mouth shellfish",
+          "src": "src/assets/images/school_clam.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\school_clam.webp"
+        },
+        {
+          "index": 3,
+          "label": "Water-worn shoreline material",
+          "src": "src/assets/images/river_glass.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\river_glass.webp"
+        }
+      ],
+      "musicAudit": [
+        {
+          "index": 1,
+          "trackName": "Up Chococreek",
+          "fileName": "Up Chococreek.mp3",
+          "src": "src/assets/audio/World Map Music/Up Chococreek.mp3",
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\audio\\World Map Music\\Up Chococreek.mp3"
+        }
+      ],
+      "hasAnyGap": true
+    },
+    {
+      "regionName": "Niolantea",
+      "slug": "niolantea",
+      "galleryCount": 3,
+      "musicLabel": "Region playlist pending",
+      "musicPending": true,
+      "placeholderSlots": [],
+      "missingGalleryFiles": [],
+      "missingMusicFiles": [],
+      "mediaNeedsExplicit": [
+        "Create a Niolantean landmark, festival plaza, or court exterior to replace the remaining thematic fallback slot.",
+        "Create one broader locality shot that clarifies whether Niolantea is coastal, civic, festive, or courtly in built form."
+      ],
+      "mediaNeedsComputed": [
+        "Assign at least one mapped music track label for this region."
+      ],
+      "mediaNeedsCombined": [
+        "Create a Niolantean landmark, festival plaza, or court exterior to replace the remaining thematic fallback slot.",
+        "Create one broader locality shot that clarifies whether Niolantea is coastal, civic, festive, or courtly in built form.",
+        "Assign at least one mapped music track label for this region."
+      ],
+      "galleryAudit": [
+        {
+          "index": 1,
+          "label": "Ceremonial seaside arcade",
+          "src": "src/assets/images/lore/thornofsunrise.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\lore\\thornofsunrise.webp"
+        },
+        {
+          "index": 2,
+          "label": "Curated arcane venue",
+          "src": "src/assets/images/lore/planarintegration.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\lore\\planarintegration.webp"
+        },
+        {
+          "index": 3,
+          "label": "Niolantean festival plaza and landmark exterior",
+          "src": "src/assets/images/lore/theplanargames.png",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\lore\\theplanargames.png"
+        }
+      ],
+      "musicAudit": [],
+      "hasAnyGap": true
+    },
+    {
+      "regionName": "Sands of Perdu",
+      "slug": "sands-of-perdu",
+      "galleryCount": 2,
+      "musicLabel": "Two Sets of Footsteps Circled in Unmoving Desert Sand; Barren Rendered",
+      "musicPending": false,
+      "placeholderSlots": [],
+      "missingGalleryFiles": [],
+      "missingMusicFiles": [],
+      "mediaNeedsExplicit": [
+        "Add at least one supporting gallery image for expeditions, trade routes, or exposed ruins.",
+        "Assign a region-specific creature, guide, or expedition portrait."
+      ],
+      "mediaNeedsComputed": [],
+      "mediaNeedsCombined": [
+        "Add at least one supporting gallery image for expeditions, trade routes, or exposed ruins.",
+        "Assign a region-specific creature, guide, or expedition portrait."
+      ],
+      "galleryAudit": [
+        {
+          "index": 1,
+          "label": "Desert bloom frontier",
+          "src": "src/assets/images/backgrounds/desert_bloom.png",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\backgrounds\\desert_bloom.png"
+        },
+        {
+          "index": 2,
+          "label": "Perdu desert threat",
+          "src": "src/assets/images/darkling-cactine-biggo-boy.png",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\darkling-cactine-biggo-boy.png"
+        }
+      ],
+      "musicAudit": [
+        {
+          "index": 1,
+          "trackName": "Two Sets of Footsteps Circled in Unmoving Desert Sand",
+          "fileName": "Two Sets of Footsteps Circled in Unmoving Desert Sand.mp3",
+          "src": "src/assets/audio/World Map Music/Two Sets of Footsteps Circled in Unmoving Desert Sand.mp3",
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\audio\\World Map Music\\Two Sets of Footsteps Circled in Unmoving Desert Sand.mp3"
+        },
+        {
+          "index": 2,
+          "trackName": "Barren Rendered",
+          "fileName": "Barren Rendered(1).mp3",
+          "src": "src/assets/audio/World Map Music/Barren Rendered(1).mp3",
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\audio\\World Map Music\\Barren Rendered(1).mp3"
+        }
+      ],
+      "hasAnyGap": true
+    },
+    {
+      "regionName": "Scholia Diaspros",
+      "slug": "scholia-diaspros",
+      "galleryCount": 3,
+      "musicLabel": "The Sound of Our Bells; Theme of the Academy",
+      "musicPending": false,
+      "placeholderSlots": [],
+      "missingGalleryFiles": [],
+      "missingMusicFiles": [],
+      "mediaNeedsExplicit": [
+        "Assign a dedicated atlas hero illustration for the world-atlas landing state.",
+        "Curate at least one character portrait tied directly to the academy-facing Scholia entry."
+      ],
+      "mediaNeedsComputed": [],
+      "mediaNeedsCombined": [
+        "Assign a dedicated atlas hero illustration for the world-atlas landing state.",
+        "Curate at least one character portrait tied directly to the academy-facing Scholia entry."
+      ],
+      "galleryAudit": [
+        {
+          "index": 1,
+          "label": "Local area and campus",
+          "src": "src/assets/images/lore/scholialocal.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\lore\\scholialocal.webp"
+        },
+        {
+          "index": 2,
+          "label": "Scholia proper",
+          "src": "src/assets/images/lore/scholiaproper.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\lore\\scholiaproper.webp"
+        },
+        {
+          "index": 3,
+          "label": "Great library reference",
+          "src": "src/assets/images/lore/scholialibrary.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\lore\\scholialibrary.webp"
+        }
+      ],
+      "musicAudit": [
+        {
+          "index": 1,
+          "trackName": "The Sound of Our Bells",
+          "fileName": "The Sound of Our Bells.mp3",
+          "src": "src/assets/audio/World Map Music/The Sound of Our Bells.mp3",
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\audio\\World Map Music\\The Sound of Our Bells.mp3"
+        },
+        {
+          "index": 2,
+          "trackName": "Theme of the Academy",
+          "fileName": "Theme of the Academy.mp3",
+          "src": "src/assets/audio/World Map Music/Theme of the Academy.mp3",
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\audio\\World Map Music\\Theme of the Academy.mp3"
+        }
+      ],
+      "hasAnyGap": true
+    },
+    {
+      "regionName": "Stormveil Dominion",
+      "slug": "stormveil-dominion",
+      "galleryCount": 3,
+      "musicLabel": "Region playlist pending",
+      "musicPending": true,
+      "placeholderSlots": [],
+      "missingGalleryFiles": [],
+      "missingMusicFiles": [],
+      "mediaNeedsExplicit": [
+        "Add a true exterior fortification or skyline image if one becomes available so Stormveil is not inferred from atmosphere alone.",
+        "Assign a ruler, marshal, or political figure portrait."
+      ],
+      "mediaNeedsComputed": [
+        "Assign at least one mapped music track label for this region."
+      ],
+      "mediaNeedsCombined": [
+        "Add a true exterior fortification or skyline image if one becomes available so Stormveil is not inferred from atmosphere alone.",
+        "Assign a ruler, marshal, or political figure portrait.",
+        "Assign at least one mapped music track label for this region."
+      ],
+      "galleryAudit": [
+        {
+          "index": 1,
+          "label": "Storm-battered dominion conflict",
+          "src": "src/assets/images/lore/technomanticstrike.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\lore\\technomanticstrike.webp"
+        },
+        {
+          "index": 2,
+          "label": "Dominion civic architecture",
+          "src": "src/assets/images/lore/planarintegration.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\lore\\planarintegration.webp"
+        },
+        {
+          "index": 3,
+          "label": "Storm-charged regional material",
+          "src": "src/assets/images/stormlode.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\stormlode.webp"
+        }
+      ],
+      "musicAudit": [],
+      "hasAnyGap": true
+    },
+    {
+      "regionName": "The Eastseam",
+      "slug": "the-eastseam",
+      "galleryCount": 3,
+      "musicLabel": "Along the Flowing Waters",
+      "musicPending": false,
+      "placeholderSlots": [],
+      "missingGalleryFiles": [],
+      "missingMusicFiles": [],
+      "mediaNeedsExplicit": [
+        "Add supporting visuals for strange edges, coastlines, or frontier movement.",
+        "Assign an explorer, lookout, or frontier-linked entity portrait."
+      ],
+      "mediaNeedsComputed": [],
+      "mediaNeedsCombined": [
+        "Add supporting visuals for strange edges, coastlines, or frontier movement.",
+        "Assign an explorer, lookout, or frontier-linked entity portrait."
+      ],
+      "galleryAudit": [
+        {
+          "index": 1,
+          "label": "Eastern frontier waters",
+          "src": "src/assets/images/lore/aquatictreaty_1.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\lore\\aquatictreaty_1.webp"
+        },
+        {
+          "index": 2,
+          "label": "Eastseam shoreline remnants",
+          "src": "src/assets/images/shellshard.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\shellshard.webp"
+        },
+        {
+          "index": 3,
+          "label": "Eastern sea pearl find",
+          "src": "src/assets/images/scholars_pearl.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\scholars_pearl.webp"
+        }
+      ],
+      "musicAudit": [
+        {
+          "index": 1,
+          "trackName": "Along the Flowing Waters",
+          "fileName": "Along the Flowing Waters.mp3",
+          "src": "src/assets/audio/World Map Music/Along the Flowing Waters.mp3",
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\audio\\World Map Music\\Along the Flowing Waters.mp3"
+        }
+      ],
+      "hasAnyGap": true
+    },
+    {
+      "regionName": "The Glacial Domain",
+      "slug": "the-glacial-domain",
+      "galleryCount": 3,
+      "musicLabel": "Region playlist pending",
+      "musicPending": true,
+      "placeholderSlots": [],
+      "missingGalleryFiles": [],
+      "missingMusicFiles": [],
+      "mediaNeedsExplicit": [
+        "Add supporting gallery art for hazards, landmarks, or inhabitants.",
+        "Assign a creature or sentinel portrait tied to the frozen reaches."
+      ],
+      "mediaNeedsComputed": [
+        "Assign at least one mapped music track label for this region."
+      ],
+      "mediaNeedsCombined": [
+        "Add supporting gallery art for hazards, landmarks, or inhabitants.",
+        "Assign a creature or sentinel portrait tied to the frozen reaches.",
+        "Assign at least one mapped music track label for this region."
+      ],
+      "galleryAudit": [
+        {
+          "index": 1,
+          "label": "Aurora-lit glacial tone",
+          "src": "src/assets/images/Aurora Infinium.png",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\Aurora Infinium.png"
+        },
+        {
+          "index": 2,
+          "label": "Polar magical bloom",
+          "src": "src/assets/images/Aurora Amalgam.png",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\Aurora Amalgam.png"
+        },
+        {
+          "index": 3,
+          "label": "Blue-moon frost reference",
+          "src": "src/assets/images/Azure Moon Cream.png",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\Azure Moon Cream.png"
+        }
+      ],
+      "musicAudit": [],
+      "hasAnyGap": true
+    },
+    {
+      "regionName": "The Jagged Sea",
+      "slug": "the-jagged-sea",
+      "galleryCount": 3,
+      "musicLabel": "Along the Flowing Waters",
+      "musicPending": false,
+      "placeholderSlots": [],
+      "missingGalleryFiles": [],
+      "missingMusicFiles": [],
+      "mediaNeedsExplicit": [
+        "Add supporting imagery for navigation hazards or maritime travel routes.",
+        "Assign a sea monster, navigator, or ship captain portrait."
+      ],
+      "mediaNeedsComputed": [],
+      "mediaNeedsCombined": [
+        "Add supporting imagery for navigation hazards or maritime travel routes.",
+        "Assign a sea monster, navigator, or ship captain portrait."
+      ],
+      "galleryAudit": [
+        {
+          "index": 1,
+          "label": "Open-water regional scene",
+          "src": "src/assets/images/lore/aquatictreaty.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\lore\\aquatictreaty.webp"
+        },
+        {
+          "index": 2,
+          "label": "Jagged coastal remains",
+          "src": "src/assets/images/shellshard.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\shellshard.webp"
+        },
+        {
+          "index": 3,
+          "label": "Sea-route shoreline harvest",
+          "src": "src/assets/images/school_clam.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\school_clam.webp"
+        }
+      ],
+      "musicAudit": [
+        {
+          "index": 1,
+          "trackName": "Along the Flowing Waters",
+          "fileName": "Along the Flowing Waters.mp3",
+          "src": "src/assets/audio/World Map Music/Along the Flowing Waters.mp3",
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\audio\\World Map Music\\Along the Flowing Waters.mp3"
+        }
+      ],
+      "hasAnyGap": true
+    },
+    {
+      "regionName": "The Nightshores",
+      "slug": "the-nightshores",
+      "galleryCount": 2,
+      "musicLabel": "Burning Beneath the Eternal Daytime Blue; Passing Through Sand, Time, and Perdition; To the City of White Nights; The Savage Evening",
+      "musicPending": false,
+      "placeholderSlots": [],
+      "missingGalleryFiles": [],
+      "missingMusicFiles": [],
+      "mediaNeedsExplicit": [
+        "Add a dedicated coastline or shore-at-night vista for the Silver Coast and Twilight Sea.",
+        "Add a biome plate or establishing image for the Sable Sands, Amber Savannah, or Nightwash so the region reads as a full ecological band rather than a single shoreline.",
+        "Assign one creature portrait or local threat image specific to the Nightshores, ideally tied to Day Manor, the Velvet Hills, or the darkling wilds."
+      ],
+      "mediaNeedsComputed": [],
+      "mediaNeedsCombined": [
+        "Add a dedicated coastline or shore-at-night vista for the Silver Coast and Twilight Sea.",
+        "Add a biome plate or establishing image for the Sable Sands, Amber Savannah, or Nightwash so the region reads as a full ecological band rather than a single shoreline.",
+        "Assign one creature portrait or local threat image specific to the Nightshores, ideally tied to Day Manor, the Velvet Hills, or the darkling wilds."
+      ],
+      "galleryAudit": [
+        {
+          "index": 1,
+          "label": "Nightshore fungus",
+          "src": "src/assets/images/nightshroom.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\nightshroom.webp"
+        },
+        {
+          "index": 2,
+          "label": "Nightshore essence reference",
+          "src": "src/assets/images/Distillation of a Night Sky.png",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\Distillation of a Night Sky.png"
+        }
+      ],
+      "musicAudit": [
+        {
+          "index": 1,
+          "trackName": "Burning Beneath the Eternal Daytime Blue",
+          "fileName": "Burning Beneath the Eternal Daytime Blue.mp3",
+          "src": "src/assets/audio/World Map Music/Burning Beneath the Eternal Daytime Blue.mp3",
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\audio\\World Map Music\\Burning Beneath the Eternal Daytime Blue.mp3"
+        },
+        {
+          "index": 2,
+          "trackName": "Passing Through Sand, Time, and Perdition",
+          "fileName": "Passing Through Sand, Time, and Perdition.mp3",
+          "src": "src/assets/audio/World Map Music/Passing Through Sand, Time, and Perdition.mp3",
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\audio\\World Map Music\\Passing Through Sand, Time, and Perdition.mp3"
+        },
+        {
+          "index": 3,
+          "trackName": "To the City of White Nights",
+          "fileName": "To the City of White Nights.mp3",
+          "src": "src/assets/audio/World Map Music/To the City of White Nights.mp3",
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\audio\\World Map Music\\To the City of White Nights.mp3"
+        },
+        {
+          "index": 4,
+          "trackName": "The Savage Evening",
+          "fileName": "The Savage Evening.mp3",
+          "src": "src/assets/audio/World Map Music/The Savage Evening.mp3",
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\audio\\World Map Music\\The Savage Evening.mp3"
+        }
+      ],
+      "hasAnyGap": true
+    },
+    {
+      "regionName": "The Three Sisters Mountains",
+      "slug": "three-sisters-mountains",
+      "galleryCount": 3,
+      "musicLabel": "Region playlist pending",
+      "musicPending": true,
+      "placeholderSlots": [],
+      "missingGalleryFiles": [],
+      "missingMusicFiles": [],
+      "mediaNeedsExplicit": [
+        "Add supporting visuals for expedition paths, local hazards, or nearby settlements.",
+        "Assign a climber, guide, or mountain creature portrait."
+      ],
+      "mediaNeedsComputed": [
+        "Assign at least one mapped music track label for this region."
+      ],
+      "mediaNeedsCombined": [
+        "Add supporting visuals for expedition paths, local hazards, or nearby settlements.",
+        "Assign a climber, guide, or mountain creature portrait.",
+        "Assign at least one mapped music track label for this region."
+      ],
+      "galleryAudit": [
+        {
+          "index": 1,
+          "label": "Mountain-route ascent",
+          "src": "src/assets/images/lore/mountainstumbling.jpeg",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\lore\\mountainstumbling.jpeg"
+        },
+        {
+          "index": 2,
+          "label": "Mountain mineral face",
+          "src": "src/assets/images/Starshot Ore.png",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\Starshot Ore.png"
+        },
+        {
+          "index": 3,
+          "label": "Highland crystal deposit",
+          "src": "src/assets/images/matrixmalachite.png",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\matrixmalachite.png"
+        }
+      ],
+      "musicAudit": [],
+      "hasAnyGap": true
+    },
+    {
+      "regionName": "The Two Brothers Mountain Range",
+      "slug": "two-brothers-mountain-range",
+      "galleryCount": 3,
+      "musicLabel": "Climb, Climb, Climb!; Now! THIS is Where A Final Battle Should Be Fought!!!",
+      "musicPending": false,
+      "placeholderSlots": [],
+      "missingGalleryFiles": [],
+      "missingMusicFiles": [],
+      "mediaNeedsExplicit": [
+        "Add at least one true mountain landscape image for this range.",
+        "Add a landmark illustration for a pass, summit, or settlement tied to the range."
+      ],
+      "mediaNeedsComputed": [],
+      "mediaNeedsCombined": [
+        "Add at least one true mountain landscape image for this range.",
+        "Add a landmark illustration for a pass, summit, or settlement tied to the range."
+      ],
+      "galleryAudit": [
+        {
+          "index": 1,
+          "label": "Starshot ore",
+          "src": "src/assets/images/Starshot Ore.png",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\Starshot Ore.png"
+        },
+        {
+          "index": 2,
+          "label": "High-altitude bounty",
+          "src": "src/assets/images/Star Sugar.png",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\Star Sugar.png"
+        },
+        {
+          "index": 3,
+          "label": "Mountain rare ingredient",
+          "src": "src/assets/images/Starsoaked Vanilla.png",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\Starsoaked Vanilla.png"
+        }
+      ],
+      "musicAudit": [
+        {
+          "index": 1,
+          "trackName": "Climb, Climb, Climb!",
+          "fileName": "Climb, Climb, Climb!.mp3",
+          "src": "src/assets/audio/World Map Music/Climb, Climb, Climb!.mp3",
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\audio\\World Map Music\\Climb, Climb, Climb!.mp3"
+        },
+        {
+          "index": 2,
+          "trackName": "Now! THIS is Where A Final Battle Should Be Fought!!!",
+          "fileName": "Now! THIS is Where A Final Battle Should Be Fought!!!.mp3",
+          "src": "src/assets/audio/World Map Music/Now! THIS is Where A Final Battle Should Be Fought!!!.mp3",
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\audio\\World Map Music\\Now! THIS is Where A Final Battle Should Be Fought!!!.mp3"
+        }
+      ],
+      "hasAnyGap": true
+    },
+    {
+      "regionName": "The Wester Plainseam",
+      "slug": "the-wester-plainseam",
+      "galleryCount": 3,
+      "musicLabel": "Region playlist pending",
+      "musicPending": true,
+      "placeholderSlots": [],
+      "missingGalleryFiles": [],
+      "missingMusicFiles": [],
+      "mediaNeedsExplicit": [
+        "Add supporting visuals for travel routes, atmosphere, or local stops.",
+        "Assign a traveler, rider, or local encounter portrait."
+      ],
+      "mediaNeedsComputed": [
+        "Assign at least one mapped music track label for this region."
+      ],
+      "mediaNeedsCombined": [
+        "Add supporting visuals for travel routes, atmosphere, or local stops.",
+        "Assign a traveler, rider, or local encounter portrait.",
+        "Assign at least one mapped music track label for this region."
+      ],
+      "galleryAudit": [
+        {
+          "index": 1,
+          "label": "Wide plainseam horizon",
+          "src": "src/assets/images/heartofthelissomeplains.png",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\heartofthelissomeplains.png"
+        },
+        {
+          "index": 2,
+          "label": "Open-country grain route",
+          "src": "src/assets/images/tumble_grain.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\tumble_grain.webp"
+        },
+        {
+          "index": 3,
+          "label": "Western plains forage",
+          "src": "src/assets/images/plainspeanuts.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\plainspeanuts.webp"
+        }
+      ],
+      "musicAudit": [],
+      "hasAnyGap": true
+    },
+    {
+      "regionName": "The World Gash",
+      "slug": "the-world-gash",
+      "galleryCount": 3,
+      "musicLabel": "Echoes of Purloined Futures",
+      "musicPending": false,
+      "placeholderSlots": [],
+      "missingGalleryFiles": [],
+      "missingMusicFiles": [],
+      "mediaNeedsExplicit": [
+        "Add supporting visuals for rupture edges, fallout, or nearby landmarks.",
+        "Assign a survivor, witness, or anomaly-linked entity portrait."
+      ],
+      "mediaNeedsComputed": [],
+      "mediaNeedsCombined": [
+        "Add supporting visuals for rupture edges, fallout, or nearby landmarks.",
+        "Assign a survivor, witness, or anomaly-linked entity portrait."
+      ],
+      "galleryAudit": [
+        {
+          "index": 1,
+          "label": "World-rending anomaly",
+          "src": "src/assets/images/backgrounds/chronal_anomaly.png",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\backgrounds\\chronal_anomaly.png"
+        },
+        {
+          "index": 2,
+          "label": "Reality fracture aftermath",
+          "src": "src/assets/images/lore/ontologydysfunction.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\lore\\ontologydysfunction.webp"
+        },
+        {
+          "index": 3,
+          "label": "Arcane destabilization scene",
+          "src": "src/assets/images/lore/inkwellcrisis.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\lore\\inkwellcrisis.webp"
+        }
+      ],
+      "musicAudit": [
+        {
+          "index": 1,
+          "trackName": "Echoes of Purloined Futures",
+          "fileName": "Echoes of Purloined Futures.mp3",
+          "src": "src/assets/audio/World Map Music/Echoes of Purloined Futures.mp3",
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\audio\\World Map Music\\Echoes of Purloined Futures.mp3"
+        }
+      ],
+      "hasAnyGap": true
+    },
+    {
+      "regionName": "Westersea",
+      "slug": "westersea",
+      "galleryCount": 3,
+      "musicLabel": "Along the Flowing Waters",
+      "musicPending": false,
+      "placeholderSlots": [],
+      "missingGalleryFiles": [],
+      "missingMusicFiles": [],
+      "mediaNeedsExplicit": [
+        "Add supporting visuals for navigation, sea lanes, or coastal settlements.",
+        "Assign a navigator, dockmaster, or maritime threat portrait."
+      ],
+      "mediaNeedsComputed": [],
+      "mediaNeedsCombined": [
+        "Add supporting visuals for navigation, sea lanes, or coastal settlements.",
+        "Assign a navigator, dockmaster, or maritime threat portrait."
+      ],
+      "galleryAudit": [
+        {
+          "index": 1,
+          "label": "Western sea crossing",
+          "src": "src/assets/images/lore/aquatictreaty.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\lore\\aquatictreaty.webp"
+        },
+        {
+          "index": 2,
+          "label": "Coastal shellfish beds",
+          "src": "src/assets/images/school_clam.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\school_clam.webp"
+        },
+        {
+          "index": 3,
+          "label": "Weathered sea remains",
+          "src": "src/assets/images/shellshard.webp",
+          "isPlaceholder": false,
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\images\\shellshard.webp"
+        }
+      ],
+      "musicAudit": [
+        {
+          "index": 1,
+          "trackName": "Along the Flowing Waters",
+          "fileName": "Along the Flowing Waters.mp3",
+          "src": "src/assets/audio/World Map Music/Along the Flowing Waters.mp3",
+          "exists": true,
+          "resolvedPath": "C:\\Users\\Lulu\\Desktop\\InteractiveHandbook\\src\\assets\\audio\\World Map Music\\Along the Flowing Waters.mp3"
+        }
+      ],
+      "hasAnyGap": true
+    }
+  ]
+}

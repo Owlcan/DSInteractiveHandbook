@@ -857,6 +857,7 @@
       <button id="btn-legacy-Weapons">Legacy Weapons</button>
       <button id="btn-regalia" class="section-button">Regalia Creator</button>
       <button id="btn-lore">Lore</button>
+        <button id="btn-world-atlas" class="nav-button">World Atlas</button>
       <button id="btn-spellbook">Spellbook</button>
   <button id="btn-games" class="nav-button">Games</button>
       <button id="btn-pamperlogue" class="nav-button">Pamperlogue</button>
@@ -2784,7 +2785,13 @@
         </div>
     </div>
 
-    
+    <div id="world-atlas-section" class="content-section" data-prefer-hide-tabs="true" data-prefer-wide-layout="true" data-prefer-full-frame="true">
+      <div class="section-header-row">
+        <h2>World Atlas</h2>
+        <button type="button" class="popout-btn" onclick="window.popOutTool && window.popOutTool('worldatlas')">Pop out</button>
+      </div>
+      <div id="world-atlas-iframe-container" class="iframe-container"></div>
+    </div>
 
     <div id="spellbook-section" class="content-section">
       <div class="section-header-row">
@@ -2816,6 +2823,7 @@
         { containerId: 'items-iframe-container', iframeId: 'items-iframe', type: 'dynamic' },
         { containerId: 'crafting-iframe-container', iframeId: 'crafting-iframe', type: 'dynamic' },
         { containerId: 'sheet-helper-iframe-container', iframeId: 'sheet-helper-iframe', type: 'dynamic' },
+        { containerId: 'world-atlas-iframe-container', iframeId: 'world-atlas-iframe', type: 'dynamic' },
         { containerId: 'spellbook-iframe-container', iframeId: 'spellbook-iframe', type: 'dynamic' },
         { containerId: 'tracker-iframe-container', iframeId: 'tracker-iframe', type: 'dynamic' },
         { containerId: 'book-reader-iframe-container', iframeId: 'book-reader-iframe', type: 'dynamic' },
@@ -2968,6 +2976,9 @@
           popOutByIframeId('book-reader-iframe', fallback, 'Library');
           break;
         }
+        case 'worldatlas':
+          popOutByIframeId('world-atlas-iframe', '../scholia-diaspros-map.html', 'World Atlas');
+          break;
         case 'spellbook':
           popOutByIframeId('spellbook-iframe', '../spellbook.html', 'Spellbook');
           break;
@@ -3113,6 +3124,13 @@
           iframeId: 'book-reader-iframe',
           baseSrc: 'BookReader.html',
           title: 'Library'
+        },
+        worldatlas: {
+          buttonId: 'btn-world-atlas',
+          containerId: 'world-atlas-iframe-container',
+          iframeId: 'world-atlas-iframe',
+          baseSrc: '../scholia-diaspros-map.html',
+          title: 'World Atlas'
         }
       };
 
@@ -3269,6 +3287,10 @@
         }
       }
 
+      window.handbookNavigateToTool = function handbookNavigateToTool(toolKey, query) {
+        goToTool(toolKey, query);
+      };
+
       // Curated entries are the “easy to add” layer.
       // Add more by appending: entry('Term', Dest.tool('bestiary', 'Owlbear'), { aliases:[...], description:'...' })
       function makeLibraryDocEntry(fileName) {
@@ -3326,6 +3348,7 @@
         entry('Bestiary', Dest.tool('bestiary'), { aliases: ['monsters', 'creatures'], description: 'Browse creatures and search by name.' }),
         entry('Items', Dest.tool('items'), { aliases: ['gear', 'equipment', 'loot'], description: 'Search the item compendium.' }),
         entry('Spellbook', Dest.tool('spellbook'), { aliases: ['spells', 'magic'], description: 'Browse and filter spells.' }),
+        entry('World Atlas', Dest.tool('worldatlas'), { aliases: ['map', 'world map', 'atlas', 'regions', 'scholia map'], description: 'Open the Scholia Diaspros interactive world atlas.' }),
         entry('Tracker', Dest.tool('tracker'), { aliases: ['swat', 'maturity meter', 'maturity'], description: 'Open the SWaT System Tracker.' }),
         entry('Races', Dest.tool('races'), { aliases: ['species', 'ancestry'], description: 'Browse races and jump by name.' }),
         entry('Library', Dest.tool('library'), { aliases: ['books', 'documents', 'pdf', 'tomes'], description: 'Open the Library and select a document.' }),
@@ -3959,6 +3982,12 @@
             if (window.initLoreEntryCollapsibles) {
               window.initLoreEntryCollapsibles(lore);
             }
+        },
+        'btn-world-atlas': () => {
+          const section = document.getElementById('world-atlas-section');
+          section.classList.add('active');
+          applySectionUiPreferences(section);
+          createOrRefreshIframe('world-atlas-iframe-container', 'world-atlas-iframe', '../scholia-diaspros-map.html', 'World Atlas');
         },
         'btn-spellbook': () => {
           const section = document.getElementById('spellbook-section');

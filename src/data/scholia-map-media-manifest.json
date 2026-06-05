@@ -1,0 +1,404 @@
+{
+  "version": 1,
+  "generatedAt": "2026-05-25T00:00:00.000Z",
+  "description": "Explicit media and resource manifest for the Scholia Diaspros atlas.",
+  "roots": {
+    "images": "/src/assets/images/",
+    "lore": "/src/assets/images/lore/",
+    "monsters": "/src/assets/images/Monsters/"
+  },
+  "manifests": {
+    "bestiary": "/src/data/Diaper-School-Full-BestiaryV3.json",
+    "items": "/src/data/allData.js"
+  },
+  "regions": {
+    "Scholia Diaspros": {
+      "galleryImages": [
+        { "src": "src/assets/images/lore/scholialocal.webp", "label": "Local area and campus" },
+        { "src": "src/assets/images/lore/scholiaproper.webp", "label": "Scholia proper" },
+        { "src": "src/assets/images/lore/scholialibrary.webp", "label": "Great library reference" }
+      ],
+      "mediaNeeds": [
+        "Assign a dedicated atlas hero illustration for the world-atlas landing state.",
+        "Curate at least one character portrait tied directly to the academy-facing Scholia entry."
+      ],
+      "resourceSources": [
+        { "type": "images", "label": "Local lore art", "source": "/src/assets/images/lore/" },
+        { "type": "items", "label": "Handbook item runtime", "source": "/src/data/allData.js" },
+        { "type": "lore", "label": "Handbook lore panels", "source": "/src/simple-handbook.html" }
+      ]
+    },
+    "Greensea Expanse": {
+      "galleryImages": [
+        { "src": "src/assets/images/greensea cacao.webp", "label": "Greensea cacao" },
+        { "src": "src/assets/images/greenseamatoto.webp", "label": "Greensea produce" },
+        { "src": "src/assets/images/greenseananners.webp", "label": "Greensea forage" }
+      ],
+      "mediaNeeds": [
+        "Add a wide environmental establishing shot for the Greensea wetlands.",
+        "Assign at least one local creature or notable portrait for the region fact file."
+      ],
+      "resourceSources": [
+        { "type": "images", "label": "Local region images", "source": "/src/assets/images/" },
+        { "type": "items", "label": "Handbook item runtime", "source": "/src/data/allData.js" },
+        { "type": "monsters", "label": "Bestiary applet data", "source": "/src/data/Diaper-School-Full-BestiaryV3.json" }
+      ]
+    },
+    "Lissome Plains": {
+      "galleryImages": [
+        { "src": "src/assets/images/heartofthelissomeplains.png", "label": "Heart of the plains" },
+        { "src": "src/assets/images/lissomelemons.webp", "label": "Lissome orchard produce" },
+        { "src": "src/assets/images/lissomesoybeans.webp", "label": "Lissome harvest stock" }
+      ],
+      "mediaNeeds": [
+        "Add a broad horizon or settlement image that represents the plains as a place, not only as ingredients.",
+        "Assign one local travel or culture illustration for the modal header rotation."
+      ],
+      "resourceSources": [
+        { "type": "images", "label": "Local region images", "source": "/src/assets/images/" },
+        { "type": "items", "label": "Handbook item runtime", "source": "/src/data/allData.js" }
+      ]
+    },
+    "Sands of Perdu": {
+      "galleryImages": [
+        { "src": "src/assets/images/the-map.png", "label": "Placeholder regional art" }
+      ],
+      "mediaNeeds": [
+        "Add a primary desert landscape or ruin vista for the region hero image.",
+        "Add at least one supporting gallery image for expeditions, trade routes, or exposed ruins.",
+        "Assign a region-specific creature, guide, or expedition portrait."
+      ],
+      "resourceSources": [
+        { "type": "monsters", "label": "Bestiary image candidates", "source": "/src/data/Diaper-School-Full-BestiaryV3.json" }
+      ]
+    },
+    "The Glacial Domain": {
+      "galleryImages": [
+        { "src": "src/assets/images/the-map.png", "label": "Placeholder regional art" }
+      ],
+      "mediaNeeds": [
+        "Add a primary icefield, glacier, or frozen-settlement hero image.",
+        "Add supporting gallery art for hazards, landmarks, or inhabitants.",
+        "Assign a creature or sentinel portrait tied to the frozen reaches."
+      ],
+      "resourceSources": [
+        { "type": "monsters", "label": "Bestiary applet data", "source": "/src/data/Diaper-School-Full-BestiaryV3.json" }
+      ]
+    },
+    "The Two Brothers Mountain Range": {
+      "galleryImages": [
+        { "src": "src/assets/images/Starshot Ore.png", "label": "Starshot ore" },
+        { "src": "src/assets/images/Star Sugar.png", "label": "High-altitude bounty" },
+        { "src": "src/assets/images/Starsoaked Vanilla.png", "label": "Mountain rare ingredient" }
+      ],
+      "mediaNeeds": [
+        "Add at least one true mountain landscape image for this range.",
+        "Add a landmark illustration for a pass, summit, or settlement tied to the range."
+      ],
+      "resourceSources": [
+        { "type": "images", "label": "Star-themed local art", "source": "/src/assets/images/" },
+        { "type": "monsters", "label": "Bestiary image candidates", "source": "/src/data/monster-image-manifest.json" }
+      ]
+    },
+    "The Nightshores": {
+      "galleryImages": [
+        { "src": "src/assets/images/nightshroom.webp", "label": "Nightshore fungus" },
+        { "src": "src/assets/images/Distillation of a Night Sky.png", "label": "Nightshore essence reference" }
+      ],
+      "mediaNeeds": [
+        "Add a dedicated coastline or shore-at-night vista for the Silver Coast and Twilight Sea.",
+        "Add a biome plate or establishing image for the Sable Sands, Amber Savannah, or Nightwash so the region reads as a full ecological band rather than a single shoreline.",
+        "Assign one creature portrait or local threat image specific to the Nightshores, ideally tied to Day Manor, the Velvet Hills, or the darkling wilds."
+      ],
+      "resourceSources": [
+        { "type": "images", "label": "Night-themed local art", "source": "/src/assets/images/" },
+        { "type": "monsters", "label": "Bestiary applet data", "source": "/src/data/Diaper-School-Full-BestiaryV3.json" },
+        { "type": "lore", "label": "Nightshores region profile", "source": "/referencedata/World of Scholia Diaspros/Region Profile_ The Nightshores & The Twilight Sea.md" }
+      ]
+    },
+    "Hinterland": {
+      "galleryImages": [
+        { "src": "src/assets/images/the-map.png", "label": "Placeholder regional art" }
+      ],
+      "mediaNeeds": [
+        "Add a primary travel-route or borderland hero image.",
+        "Add supporting art showing crossroads traffic, roads, or mixed regional influences.",
+        "Assign a scout, caravan, or border figure portrait."
+      ],
+      "resourceSources": [
+        { "type": "items", "label": "Handbook item runtime", "source": "/src/data/allData.js" }
+      ]
+    },
+    "Darvitch": {
+      "galleryImages": [
+        { "src": "src/assets/images/lore/Darvitch.png", "label": "Darvitch city overview from the Isle of Evening" },
+        { "src": "src/assets/images/lore/darvitchvelvetspireguard.webp", "label": "Velvet Spire guard post and perimeter security" },
+        { "src": "src/assets/images/lore/darvitchupperfangs1.webp", "label": "Upper Fangs crystal terraces and moon-bridge architecture" },
+        { "src": "src/assets/images/lore/darvitchupperfangs2.webp", "label": "Upper Fangs night balcony district above the cloudline" },
+        { "src": "src/assets/images/lore/darvitchcentercity.webp", "label": "Center-city clockspire, transit web, and magitek skyline" },
+        { "src": "src/assets/images/lore/darvitchmidfangs1.webp", "label": "Mid-Fangs textile bazaar and cable-car trade lanes" },
+        { "src": "src/assets/images/lore/darvitchmidfangs2.webp", "label": "Mid-Fangs cable district with Tech-Row and vendor decks" },
+        { "src": "src/assets/images/lore/darvitchsilkroad.webp", "label": "Silk-Road commercial bridge for Nightweaver textile exports" },
+        { "src": "src/assets/images/lore/darvitchlowerfangs.webp", "label": "Lower Fangs heavy foundries and industrial ward streets" },
+        { "src": "src/assets/images/lore/darvitchmiddenworks.webp", "label": "Middenworks smeltery interior and forge-line labor" },
+        { "src": "src/assets/images/lore/darvitchtemples.webp", "label": "Temple-engine sanctum and chronomantic ritual hall" },
+        { "src": "src/assets/images/lore/darvitchsanguinehighsociety.webp", "label": "Sanguine high-society salon and aristocratic nightlife" },
+        { "src": "src/assets/images/lore/darvitchopera1.webp", "label": "Masquerade opera hall performance under neon-luxury patronage" },
+        { "src": "src/assets/images/lore/darvitchopera2.webp", "label": "Grand stagehouse crowd scene and vampiric cultural spectacle" }
+      ],
+      "mediaNeeds": [],
+      "resourceSources": [
+        { "type": "images", "label": "Darvitch local lore art", "source": "/src/assets/images/lore/" },
+        { "type": "items", "label": "Handbook item runtime", "source": "/src/data/allData.js" },
+        { "type": "lore", "label": "Darvitch city guide", "source": "/referencedata/World of Scholia Diaspros/City Guide_ Darvitch (The City of Fangs).md" }
+      ]
+    },
+    "Dawnshore": {
+      "galleryImages": [
+        { "src": "src/assets/images/the-map.png", "label": "Placeholder regional art" }
+      ],
+      "mediaNeeds": [
+        "Add a shoreline or harbor sunrise hero image.",
+        "Add supporting imagery for sea routes, docks, or local settlement culture.",
+        "Assign a local captain, ferrymaster, or coastal resident portrait."
+      ],
+      "resourceSources": []
+    },
+    "Stormveil Dominion": {
+      "galleryImages": [
+        { "src": "src/assets/images/lore/Stormveil_The_Capital.webp", "label": "The protected capital nested within Stormveil's mountain cradle" },
+        { "src": "src/assets/images/lore/Stormveil_To_Be_Crowned_by_the_Storm.webp", "label": "The royal storm-crowning rite atop the high tower" },
+        { "src": "src/assets/images/lore/Stormveil_The_Unyielding_Sovereigns.webp", "label": "The sovereign couple who define modern Stormveil's severity" },
+        { "src": "src/assets/images/lore/Stormveil_The_Astrakeros_Artificer.webp", "label": "An artificer shaping Stormveil's lightning economy" },
+        { "src": "src/assets/images/lore/Stormveil_Cinder.webp", "label": "Princess Cinder Stormveil under the weight of succession" }
+      ],
+      "mediaNeeds": [
+        "Add one image focused on the lightning towers or agricultural domes if you want Stormveil's infrastructure to read as strongly as its rulers and rituals.",
+        "Add one image depicting the World-Seam War mudflat ambush so Lawrence Stormcaller's founding victory is represented directly instead of inferred from the kingdom's later institutions."
+      ],
+      "resourceSources": []
+    },
+    "Heraldia": {
+      "galleryImages": [
+        { "src": "src/assets/images/the-map.png", "label": "Placeholder regional art" }
+      ],
+      "mediaNeeds": [
+        "Add a heraldic or civic hero illustration for the realm.",
+        "Add supporting visuals for banners, ceremonial spaces, or local architecture.",
+        "Assign at least one notable figure portrait linked to the realm’s identity."
+      ],
+      "resourceSources": []
+    },
+    "Bay Of Blitz": {
+      "galleryImages": [
+        { "src": "src/assets/images/the-map.png", "label": "Placeholder regional art" }
+      ],
+      "mediaNeeds": [
+        "Add a bay or stormfront hero image that defines the region visually.",
+        "Add supporting imagery for trade movement, coastline, or weather-driven drama.",
+        "Assign a sailor, merchant, or maritime threat portrait."
+      ],
+      "resourceSources": []
+    },
+    "County Majicka": {
+      "galleryImages": [
+        { "src": "src/assets/images/lore/Majicka_The_Golden_Age_of_Old.webp", "label": "Old Magiana in its prewar agricultural prime" },
+        { "src": "src/assets/images/lore/Majicka_End of Old Majicka.webp", "label": "The catastrophic destruction of Old Magiana" },
+        { "src": "src/assets/images/lore/Majicka_Second Founding.webp", "label": "The postwar second founding of County Majicka" },
+        { "src": "src/assets/images/lore/Majicka_Building_the_Perpetual_Suburb.webp", "label": "The construction of Majicka's insulated suburban identity" },
+        { "src": "src/assets/images/lore/Majicka_Comfort and Relaxation.webp", "label": "The comfort-first everyday culture of County Majicka" },
+        { "src": "src/assets/images/lore/Majicka_Little Diaper Class.webp", "label": "Majicka's comfort-oriented junior education system" },
+        { "src": "src/assets/images/lore/Majicka_The_Rowdiest_Friendly_Township.webp", "label": "Majicka's rowdy but survivable neighborhood violence" },
+        { "src": "src/assets/images/lore/Majicka_The_Relic_of_the_Rails.webp", "label": "Lost and Found Alley in the shell of the old terminal" },
+        { "src": "src/assets/images/lore/Majicka_Senkay’s_Item_Shoppe_(The_Haggle).webp", "label": "A haggle inside Senkay's Item Shoppe" },
+        { "src": "src/assets/images/lore/Majicka_M4_Industries_(The_Corporate_Matriarch).webp", "label": "M4 Industries and Mama Marlette's industrial reach" },
+        { "src": "src/assets/images/lore/Majicka_The Best Turndown Service.webp", "label": "Majicka's standard of restorative hospitality" },
+        { "src": "src/assets/images/lore/Majicka_Surviving the Best Grocer.webp", "label": "A local merchant encounter with real Majickan personality" },
+        { "src": "src/assets/images/lore/Majicka_The_Mayor's_Office.webp", "label": "The center of Majicka's stubborn civic administration" },
+        { "src": "src/assets/images/lore/Majicka_The_Eternal_Penance.webp", "label": "Monacalath's continuing exile inside the county" }
+      ],
+      "mediaNeeds": [
+        "Add one image focused on Lost and Found Alley's 360-degree traversal effect so the bazaar's folded geometry reads directly instead of only through description.",
+        "Add one image centered on the Veiled Librarian, Lyte's clinic, or the Hearth & Bottle if you want Majicka's notable residents and recovery institutions to read as strongly as its mayoral and commercial spaces."
+      ],
+      "resourceSources": []
+    },
+    "The Jagged Sea": {
+      "galleryImages": [
+        { "src": "src/assets/images/the-map.png", "label": "Placeholder regional art" }
+      ],
+      "mediaNeeds": [
+        "Add a hero image showing broken waters, reefs, or dangerous coastlines.",
+        "Add supporting imagery for navigation hazards or maritime travel routes.",
+        "Assign a sea monster, navigator, or ship captain portrait."
+      ],
+      "resourceSources": [
+        { "type": "monsters", "label": "Bestiary applet data", "source": "/src/data/Diaper-School-Full-BestiaryV3.json" }
+      ]
+    },
+    "Mouth of Colra": {
+      "galleryImages": [
+        { "src": "src/assets/images/the-map.png", "label": "Placeholder regional art" }
+      ],
+      "mediaNeeds": [
+        "Add an estuary or river-mouth hero image.",
+        "Add supporting visuals for river traffic, coastal settlement, or gateway geography.",
+        "Assign a harbor official, ferrymaster, or local guide portrait."
+      ],
+      "resourceSources": []
+    },
+    "Hibernating Ecoliee": {
+      "galleryImages": [
+        { "src": "src/assets/images/lore/Hibernating_Ecoliee_The_Threshold_of_Hibernation.webp", "label": "The threshold where seam-noise is smothered into sleep" },
+        { "src": "src/assets/images/lore/Hibernating_Ecoliee_The_Stillwater_Stream.webp", "label": "Temporal stillwaters surrounding the island sanctuary" },
+        { "src": "src/assets/images/lore/Hibernating_Ecoliee_The_Ark_of_What_Once_Was.webp", "label": "The preserved outer ring of skipped epochs" },
+        { "src": "src/assets/images/lore/Hibernating_Ecoliee_The_Luminous_Labyrinth.webp", "label": "The blinding containment halls beneath the island" },
+        { "src": "src/assets/images/lore/Hibernating_Ecoliee_Containment_Hopebringer.webp", "label": "The sealed stasis chamber of Hopebringer's shards" },
+        { "src": "src/assets/images/lore/Hibernating_Ecoliee_The_Penitent_Chronomancer.webp", "label": "Archivist Linnea in voluntary chronal imprisonment" },
+        { "src": "src/assets/images/lore/Hibernating_Ecoliee_The_Cradle_of_the_First.webp", "label": "The central cradle warded by the White Hand of Mercy" },
+        { "src": "src/assets/images/lore/Hibernating_Ecoliee_The Horn.webp", "label": "The Horn of Nenakarna safeguarded at the core" }
+      ],
+      "mediaNeeds": [
+        "Add one image focused directly on the White Hand of Mercy or the Silken Glove if you want the sanctuary's governing custodians to read as strongly as the relic spaces.",
+        "Add one image of the outer ring's preserved apex fauna or primordial flora if you want the skipped-evolution premise to read as strongly as the containment vault below."
+      ],
+      "resourceSources": []
+    },
+    "The Three Sisters Mountains": {
+      "galleryImages": [
+        { "src": "src/assets/images/the-map.png", "label": "Placeholder regional art" }
+      ],
+      "mediaNeeds": [
+        "Add a hero image that clearly establishes the three-summit landmark.",
+        "Add supporting visuals for expedition paths, local hazards, or nearby settlements.",
+        "Assign a climber, guide, or mountain creature portrait."
+      ],
+      "resourceSources": []
+    },
+    "Eastersea": {
+      "galleryImages": [
+        { "src": "src/assets/images/the-map.png", "label": "Placeholder regional art" }
+      ],
+      "mediaNeeds": [
+        "Add an open-water or eastern coastline hero image.",
+        "Add supporting visuals for routes, distant travel, or maritime atmosphere.",
+        "Assign a sailor, explorer, or sea-creature portrait."
+      ],
+      "resourceSources": [
+        { "type": "monsters", "label": "Monster image manifest", "source": "/src/data/monster-image-manifest.json" }
+      ]
+    },
+    "The Westerseam": {
+      "galleryImages": [
+        { "src": "src/assets/images/the-map.png", "label": "Placeholder regional art" }
+      ],
+      "mediaNeeds": [
+        "Add a hero image showing the seam between plains and western coast.",
+        "Add supporting visuals for travel routes, atmosphere, or local stops.",
+        "Assign a traveler, rider, or local encounter portrait."
+      ],
+      "resourceSources": []
+    },
+    "Gildermount": {
+      "galleryImages": [
+        { "src": "src/assets/images/the-map.png", "label": "Placeholder regional art" }
+      ],
+      "mediaNeeds": [
+        "Add a destination-defining highland or mountain hero image.",
+        "Add supporting visuals for overlooks, trails, or landmark sites.",
+        "Assign a local guide, noble, or highland creature portrait."
+      ],
+      "resourceSources": []
+    },
+    "Elzbereth": {
+      "galleryImages": [
+        { "src": "src/assets/images/the-map.png", "label": "Placeholder regional art" }
+      ],
+      "mediaNeeds": [
+        "Add an undercity-defining hero image for Elzbereth.",
+        "Add supporting visuals for major districts, transit, or industrial landmarks.",
+        "Assign a guild engineer, archivist, construct, or Dimspark local portrait."
+      ],
+      "resourceSources": []
+    },
+    "Westersea": {
+      "galleryImages": [
+        { "src": "src/assets/images/the-map.png", "label": "Placeholder regional art" }
+      ],
+      "mediaNeeds": [
+        "Add a western-sea hero image with ports or weather context.",
+        "Add supporting visuals for navigation, sea lanes, or coastal settlements.",
+        "Assign a navigator, dockmaster, or maritime threat portrait."
+      ],
+      "resourceSources": [
+        { "type": "monsters", "label": "Monster image manifest", "source": "/src/data/monster-image-manifest.json" }
+      ]
+    },
+    "Niolantea": {
+      "galleryImages": [
+        { "src": "src/assets/images/the-map.png", "label": "Placeholder regional art" }
+      ],
+      "mediaNeeds": [
+        "Add a bespoke hero image that establishes Niolantea’s identity immediately.",
+        "Add supporting visuals for local landmarks, culture, or architecture.",
+        "Assign a named local figure or creature portrait."
+      ],
+      "resourceSources": []
+    },
+    "Maristannio": {
+      "galleryImages": [
+        { "src": "src/assets/images/the-map.png", "label": "Placeholder regional art" }
+      ],
+      "mediaNeeds": [
+        "Add a territory-defining hero image for Maristannio.",
+        "Add supporting visuals for local detail, settlement texture, or notable sites.",
+        "Assign a named local resident, authority, or creature portrait."
+      ],
+      "resourceSources": []
+    },
+    "Faermeadows": {
+      "galleryImages": [
+        { "src": "src/assets/images/the-map.png", "label": "Placeholder regional art" }
+      ],
+      "mediaNeeds": [
+        "Add a meadow or floral hero image for the region.",
+        "Add supporting visuals for flora, paths, or meadow landmarks.",
+        "Assign a local druid, traveler, or meadow creature portrait."
+      ],
+      "resourceSources": []
+    },
+    "The World Gash": {
+      "galleryImages": [
+        { "src": "src/assets/images/the-map.png", "label": "Placeholder regional art" }
+      ],
+      "mediaNeeds": [
+        "Add a dramatic anomaly hero image that sells the scale of the World Gash.",
+        "Add supporting visuals for rupture edges, fallout, or nearby landmarks.",
+        "Assign a survivor, witness, or anomaly-linked entity portrait."
+      ],
+      "resourceSources": []
+    },
+    "Cape of Sunrise": {
+      "galleryImages": [
+        { "src": "src/assets/images/the-map.png", "label": "Placeholder regional art" }
+      ],
+      "mediaNeeds": [
+        "Add a scenic cape hero image at dawn or sunrise light.",
+        "Add supporting visuals for cliffs, coast, or lookout points.",
+        "Assign a sentinel, sailor, or local landmark figure portrait."
+      ],
+      "resourceSources": []
+    },
+    "The Easterseam": {
+      "galleryImages": [
+        { "src": "src/assets/images/the-map.png", "label": "Placeholder regional art" }
+      ],
+      "mediaNeeds": [
+        "Add a frontier-edge or eastern coastline hero image.",
+        "Add supporting visuals for strange edges, coastlines, or frontier movement.",
+        "Assign an explorer, lookout, or frontier-linked entity portrait."
+      ],
+      "resourceSources": []
+    }
+  }
+}

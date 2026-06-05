@@ -2203,8 +2203,17 @@ const itemsData = [
     value: "28 GP",
     type: "Ingredient (Material)",
     rarity: "Uncommon",
-    description: "A high-tensile natural thread harvested from arboreal weaver-spiders in dense jungle canopies. Congealed Silk serves as the base fiber for a wide range of Scholian magic-conductive textiles and enchanted fabrics.",
+    description: "A high-tensile natural thread harvested from giant weaver-spiders and refined into the pre-manufactured Nightweaver silk traded through Darvitch. Congealed Silk serves as the base fiber for mana-conductive textiles, structural silk-cables, and enchanted fabrics throughout the Nightshores and beyond.",
     image: "assets/images/congealed_silk.webp"
+  },
+  {
+    name: "Frost-Glass",
+    value: "40 GP",
+    type: "Ingredient (Material)",
+    rarity: "Rare",
+    description: "A razor-fine frozen silica gathered from the Sable Sands at the eastern edge of the Nightshores. Frost-Glass forms during freezing particulate storms, producing black-crystal grains prized for cold-resistant lenses, cutting dusts, and severe alchemical suspensions.",
+    location: "The Nightshores (Sable Sands)",
+    image: "assets/images/frostedglass.webp"
   },
   {
     name: "River-Glass",
@@ -2227,8 +2236,35 @@ const itemsData = [
     value: "20 GP",
     type: "Ingredient (Botanical)",
     rarity: "Uncommon",
-    description: "A beautiful rainforest flower that naturally collects pure, sweet liquid during heavy deluges. Rain-Lily acts as a magical stabilizer in liquid-based culinary and alchemical recipes, helping prevent spoilage or magical destabilization.",
+    description: "A beautiful cup-shaped flower, known in the rain-lashed Nightwash as a Rain-Cup, that naturally collects pure sweet liquid during heavy deluges. Rain-Lily acts as a magical stabilizer in liquid-based culinary and alchemical recipes, helping prevent spoilage or magical destabilization.",
     image: "assets/images/rain_lily.webp"
+  },
+  {
+    name: "Sun-Gold Wine",
+    value: "150 GP",
+    type: "Crafted (Drink)",
+    rarity: "Rare",
+    description: "A pre-war vintage rumored to survive in the cellars of ruined Day Manor. Each bottle holds a soft golden glow, as if daylight itself had been trapped within the wine before the Nightshores fell fully into eternal dusk. Restores 1d8 HP (or 8 HP during a short rest), and drinking it forces a DC 12 Constitution check or increases inebriation by 1 stage.",
+    location: "The Nightshores (Day Manor)",
+    image: "assets/images/sungold_wine.webp"
+  },
+  {
+    name: "Sun-Gold Wine: Black Sun Reserve",
+    value: "500 GP",
+    type: "Crafted (Drink)",
+    rarity: "Very-Rare",
+    description: "An elite reserve aged in light-sealed vampiric casks beneath the Nightshores. Restores 2d10 HP (or 20 HP during a short rest), and drinking it forces a DC 12 Constitution check or increases inebriation by 2 stages.",
+    location: "The Nightshores (Day Manor Vaults)",
+    image: "assets/images/sungold_wine_blacksunreserve.webp"
+  },
+  {
+    name: "Mother's Eternal Heart Bloodwine",
+    value: "1000 GP",
+    type: "Crafted (Drink)",
+    rarity: "Legendary",
+    description: "A near-mythic pampire sacramental bloodwine served only in the highest circles. Restores 3d12 HP (or 36 HP during a short rest), and drinking it forces a DC 15 Constitution check or increases inebriation by 2 stages.",
+    location: "The Nightshores (Pampire Houses)",
+    image: "assets/images/mothers_eternal_heart_bloodwine.webp"
   },
   {
     name: "Serpent-Shed",

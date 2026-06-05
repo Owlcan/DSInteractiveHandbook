@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Atlas Region Music Planner</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="src/data/scholia-map/regionMetadata.js"></script>
+  <script src="src/data/worldmap-music-library.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: radial-gradient(circle at top right, #332817 0%, #1a1610 45%, #110e09 100%);
+      color: #e8e2c8;
+    }
+
+    .panel {
+      background: #221c14;
+      border: 1px solid #3f3527;
+    }
+
+    .drop-zone {
+      border: 2px dashed #524531;
+      background: #19150f;
+      transition: all 0.15s ease;
+    }
+
+    .drop-zone.dragover {
+      border-color: #d2ad66;
+      background: #2b2318;
+    }
+
+    .drop-zone.complete {
+      border-style: solid;
+      border-color: #74bf84;
+      background: #172117;
+    }
+
+    .mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+<body class="min-h-screen p-4 md:p-8">
+  <div class="mx-auto max-w-7xl">
+    <header class="panel sticky top-3 z-10 mb-6 rounded-xl p-4 md:p-5">
+      <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <div>
+          <h1 class="text-xl font-bold tracking-wide text-[#e8d09b]">Atlas Region Music Planner</h1>
+          <p class="mt-1 text-sm text-[#b9af8f]">Uses the live atlas region metadata as the benchmark. Review what each region is still missing, browse the available world map music library, and build playlists for regions whose music is still pending.</p>
+        </div>
+
+        <div class="flex flex-wrap gap-2">
+          <input id="mapping-upload" type="file" accept="application/json" class="hidden" />
+          <button id="upload-mapping-btn" class="rounded border border-[#d2ad66] bg-[#2c2418] px-3 py-2 text-sm font-semibold text-[#e8d09b] hover:bg-[#3a2f1f]">Load Playlist Mapping</button>
+
+          <button id="refresh-data-btn" class="rounded border border-[#d2ad66] bg-[#2c2418] px-3 py-2 text-sm font-semibold text-[#e8d09b] hover:bg-[#3a2f1f]">Reload Live Atlas Data</button>
+          <button id="save-mapping-btn" class="rounded bg-[#d2ad66] px-3 py-2 text-sm font-bold text-[#1a1610] hover:bg-[#e0be7d]">Save Playlist Mapping</button>
+          <button id="export-zip-btn" class="rounded bg-[#74bf84] px-3 py-2 text-sm font-bold text-[#0f160f] hover:bg-[#85ce95] disabled:cursor-not-allowed disabled:opacity-50">Export Playlist JSON</button>
+        </div>
+      </div>
+
+      <div class="mt-4 flex flex-col gap-2 text-sm text-[#ccb98a] md:flex-row md:items-center md:justify-between">
+        <div id="status-line">Loading live atlas data...</div>
+        <div class="flex items-center gap-3">
+          <label class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-[#b9af8f]">
+            <input id="hide-completed" type="checkbox" class="h-4 w-4 accent-[#d2ad66]" />
+            Show pending music only
+          </label>
+          <button id="clear-session-btn" class="rounded border border-[#5a4a33] px-2 py-1 text-xs font-semibold text-[#e0a2a2] hover:bg-[#2d2518]">Clear Playlist Drafts</button>
+        </div>
+      </div>
+    </header>
+
+    <section id="summary-grid" class="mb-6 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-5"></section>
+
+    <div id="empty-state" class="panel rounded-xl p-8 text-center text-[#a79c7e] hidden">
+      <p class="text-lg">No regions match the current filters.</p>
+      <p class="mt-2 text-sm">Try turning off the pending-only filter, changing the missing-state filter, or reload the live atlas data.</p>
+    </div>
+
+    <div class="grid grid-cols-1 gap-6 xl:grid-cols-[1.35fr_0.65fr]">
+      <section>
+        <div class="mb-3 flex flex-wrap items-center gap-3">
+          <input id="region-search" type="search" placeholder="Search regions, tracks, tags, or missing categories" class="w-full rounded border border-[#4b3f2f] bg-[#1a150f] px-3 py-2 text-sm text-[#efe7cf] md:max-w-md" />
+          <select id="missing-filter" class="rounded border border-[#4b3f2f] bg-[#1a150f] px-3 py-2 text-sm text-[#efe7cf]">
+            <option value="all">All missing states</option>
+            <option value="music">Missing music</option>
+            <option value="lore">Missing lore</option>
+            <option value="items">Missing items</option>
+            <option value="monsters">Missing monsters</option>
+            <option value="gallery">Missing gallery</option>
+          </select>
+        </div>
+        <div id="rows" class="grid grid-cols-1 gap-4"></div>
+      </section>
+
+      <aside class="space-y-4">
+        <section class="panel rounded-xl p-4">
+          <h2 class="text-sm font-bold uppercase tracking-[0.14em] text-[#d2ad66]">Selected Region</h2>
+          <div id="selected-region-panel" class="mt-3 text-sm text-[#b9af8f]">Pick a region to inspect its current music state and build a playlist draft.</div>
+        </section>
+
+        <section class="panel rounded-xl p-4">
+          <div class="flex items-center justify-between gap-3">
+            <h2 class="text-sm font-bold uppercase tracking-[0.14em] text-[#d2ad66]">Available Music Library</h2>
+            <div id="track-pool-count" class="text-xs text-[#b9af8f]"></div>
+          </div>
+          <p id="track-pool-description" class="mt-2 text-xs text-[#9f9476]">This pool is loaded from the local world map music library when available, then falls back to tracks already assigned in atlas metadata. Click a track to add it to the selected region draft playlist.</p>
+          <input id="track-search" type="search" placeholder="Filter track pool" class="mt-3 w-full rounded border border-[#4b3f2f] bg-[#1a150f] px-3 py-2 text-sm text-[#efe7cf]" />
+          <div id="track-pool" class="mt-3 max-h-[55vh] overflow-y-auto space-y-2"></div>
+        </section>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'atlas_region_music_planner_v1';
+    const mappingUploadInput = document.getElementById('mapping-upload');
+    const uploadMappingBtn = document.getElementById('upload-mapping-btn');
+    const refreshDataBtn = document.getElementById('refresh-data-btn');
+    const saveMappingBtn = document.getElementById('save-mapping-btn');
+    const exportJsonBtn = document.getElementById('export-zip-btn');
+    const hideCompletedToggle = document.getElementById('hide-completed');
+    const clearSessionBtn = document.getElementById('clear-session-btn');
+    const statusLine = document.getElementById('status-line');
+    const summaryGrid = document.getElementById('summary-grid');
+    const rowsContainer = document.getElementById('rows');
+    const emptyState = document.getElementById('empty-state');
+    const regionSearchInput = document.getElementById('region-search');
+    const missingFilterSelect = document.getElementById('missing-filter');
+    const selectedRegionPanel = document.getElementById('selected-region-panel');
+    const trackPool = document.getElementById('track-pool');
+    const trackPoolCount = document.getElementById('track-pool-count');
+    const trackPoolDescription = document.getElementById('track-pool-description');
+    const trackSearchInput = document.getElementById('track-search');
+
+    let regions = [];
+    let selectedRegionId = '';
+    let atlasTrackPool = [];
+    let atlasTrackPoolSource = 'assigned';
+    let playlistDrafts = {};
+
+    const escapeHtml = (value) => String(value || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+
+    const uid = () => `r_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
+    const normalizeText = (value) => String(value || '').trim();
+    const normalize = (value) => normalizeText(value).toLowerCase();
+    const pendingRegex = /pending/i;
+
+    const parseTrackList = (raw) => {
+      const value = normalizeText(raw);
+      if (!value || pendingRegex.test(value)) return [];
+
+      if (value.startsWith('[') && value.endsWith(']')) {
+        try {
+          const parsed = JSON.parse(value);
+          if (Array.isArray(parsed)) return parsed.map((entry) => normalizeText(entry)).filter(Boolean);
+        } catch {
+          // Fall through to delimiter splitting.
+        }
+      }
+
+      return value
+        .split(/;|\n/)
+        .map((entry) => normalizeText(entry))
+        .filter(Boolean);
+    };
+
+    const unique = (values) => Array.from(new Set((Array.isArray(values) ? values : []).map((value) => normalizeText(value)).filter(Boolean)));
+
+    const countArray = (value) => Array.isArray(value) ? value.length : 0;
+
+    const buildMissingSummary = (entry) => {
+      const missing = [];
+      if (!countArray(entry.loreSections)) missing.push('lore');
+      if (!countArray(entry.galleryImages)) missing.push('gallery');
+      if (!countArray(entry.curatedItemNames)) missing.push('items');
+      if (!countArray(entry.curatedEntityNames)) missing.push('monsters');
+      if (!normalizeText(entry.musicLabel) || pendingRegex.test(entry.musicLabel)) missing.push('music');
+      return missing;
+    };
+
+    const summarizeRegion = (title, entry) => {
+      const tracks = parseTrackList(entry.musicLabel);
+      return {
+        id: uid(),
+        title,
+        slug: normalizeText(entry.slug) || normalize(title).replace(/[^a-z0-9]+/g, '-'),
+        shortDescription: normalizeText(entry.shortDescription),
+        description: normalizeText(entry.description),
+        tags: Array.isArray(entry.tags) ? entry.tags : [],
+        loreSections: Array.isArray(entry.loreSections) ? entry.loreSections : [],
+        curatedItemNames: Array.isArray(entry.curatedItemNames) ? entry.curatedItemNames : [],
+        curatedEntityNames: Array.isArray(entry.curatedEntityNames) ? entry.curatedEntityNames : [],
+        galleryImages: Array.isArray(entry.galleryImages) ? entry.galleryImages : [],
+        mediaNeeds: Array.isArray(entry.mediaNeeds) ? entry.mediaNeeds : [],
+        musicLabel: normalizeText(entry.musicLabel),
+        currentTracks: tracks,
+        missing: buildMissingSummary(entry),
+      };
+    };
+
+    const countPendingPlaylists = () => regions.filter((region) => region.missing.includes('music')).length;
+    const countWithDrafts = () => Object.values(playlistDrafts).filter((draft) => Array.isArray(draft?.tracks) && draft.tracks.length).length;
+
+    const getDraftForRegion = (region) => {
+      const saved = playlistDrafts[region.slug];
+      if (saved && Array.isArray(saved.tracks)) return saved;
+      return {
+        regionTitle: region.title,
+        slug: region.slug,
+        tracks: [...region.currentTracks],
+        notes: '',
+        generatedAt: '',
+      };
+    };
+
+    const setDraftForRegion = (region, draft) => {
+      playlistDrafts[region.slug] = {
+        ...draft,
+        regionTitle: region.title,
+        slug: region.slug,
+        tracks: unique(draft.tracks),
+        generatedAt: new Date().toISOString(),
+      };
+      persistSession();
+      render();
+    };
+
+    const removeTrackFromDraft = (region, track) => {
+      const draft = getDraftForRegion(region);
+      draft.tracks = draft.tracks.filter((entry) => normalize(entry) !== normalize(track));
+      setDraftForRegion(region, draft);
+    };
+
+    const addTrackToDraft = (region, track) => {
+      const cleanTrack = normalizeText(track);
+      if (!cleanTrack) return;
+      const draft = getDraftForRegion(region);
+      draft.tracks = unique([...(draft.tracks || []), cleanTrack]);
+      setDraftForRegion(region, draft);
+    };
+
+    const saveDraftNotes = (region, notes) => {
+      const draft = getDraftForRegion(region);
+      draft.notes = normalizeText(notes);
+      setDraftForRegion(region, draft);
+    };
+
+    const removeDraft = (region) => {
+      delete playlistDrafts[region.slug];
+      persistSession();
+      render();
+    };
+
+    const loadAvailableTrackLibrary = () => {
+      const library = window.WORLD_MAP_MUSIC_LIBRARY;
+      if (!Array.isArray(library)) return [];
+      return unique(library);
+    };
+
+    const compileTrackPool = () => {
+      const availableLibrary = loadAvailableTrackLibrary();
+      if (availableLibrary.length) {
+        atlasTrackPoolSource = 'library';
+        atlasTrackPool = availableLibrary;
+        return;
+      }
+
+      atlasTrackPoolSource = 'assigned';
+      atlasTrackPool = unique(regions.flatMap((region) => region.currentTracks));
+    };
+
+    const readJsonFile = (file) => new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          resolve(JSON.parse(String(reader.result || '{}')));
+        } catch (error) {
+          reject(error);
+        }
+      };
+      reader.onerror = () => reject(new Error('Failed to read file.'));
+      reader.readAsText(file);
+    });
+
+    const loadRegionMetadata = async () => {
+      const metadata = window.SCHOLIA_REGION_METADATA || {};
+      if (!Object.keys(metadata).length) {
+        throw new Error('Live atlas metadata script did not load. Open this file from the repository root so src/data/scholia-map/regionMetadata.js resolves correctly.');
+      }
+      return Object.entries(metadata).map(([title, entry]) => summarizeRegion(title, entry));
+    };
+
+    const persistSession = () => {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ playlistDrafts, selectedRegionId }));
+      } catch {
+        // Keep app usable even if storage is unavailable.
+      }
+    };
+
+    const restoreSession = () => {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return false;
+        const parsed = JSON.parse(raw);
+        playlistDrafts = parsed?.playlistDrafts && typeof parsed.playlistDrafts === 'object' ? parsed.playlistDrafts : {};
+        selectedRegionId = normalizeText(parsed?.selectedRegionId);
+        return true;
+      } catch {
+        return false;
+      }
+    };
+
+    const setStatus = () => {
+      const total = regions.length;
+      const pending = countPendingPlaylists();
+      const drafts = countWithDrafts();
+      const fullyComplete = regions.filter((region) => !region.missing.length).length;
+      statusLine.textContent = `${total} atlas regions | ${pending} pending music | ${drafts} playlist draft${drafts === 1 ? '' : 's'} | ${fullyComplete} fully complete`;
+      exportJsonBtn.disabled = total === 0;
+    };
+
+    const ensureSelectedRegion = () => {
+      if (!regions.length) {
+        selectedRegionId = '';
+        return;
+      }
+      if (selectedRegionId && regions.some((region) => region.id === selectedRegionId)) return;
+      const pendingFirst = regions.find((region) => region.missing.includes('music')) || regions[0];
+      selectedRegionId = pendingFirst.id;
+    };
+
+    const exportMappingJson = () => {
+      const payloadEntries = regions
+        .filter((region) => {
+          const draft = getDraftForRegion(region);
+          return draft.tracks.length || draft.notes;
+        })
+        .map((region) => {
+          const draft = getDraftForRegion(region);
+          return {
+            region: region.title,
+            slug: region.slug,
+            currentMusicLabel: region.musicLabel,
+            draftMusicLabel: draft.tracks.join('; '),
+            tracks: draft.tracks,
+            notes: draft.notes || '',
+            missing: region.missing,
+            loreSectionCount: region.loreSections.length,
+            itemCount: region.curatedItemNames.length,
+            monsterCount: region.curatedEntityNames.length,
+            galleryCount: region.galleryImages.length,
+          };
+        });
+
+      const payload = {
+        generatedAt: new Date().toISOString(),
+        source: 'src/data/scholia-map/regionMetadata.js',
+        regionCount: regions.length,
+        pendingMusicRegionCount: countPendingPlaylists(),
+        trackPoolSource: atlasTrackPoolSource,
+        trackPool: atlasTrackPool,
+        entries: payloadEntries,
+      };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement('a');
+      anchor.href = url;
+      anchor.download = 'atlas_region_music_mapping.json';
+      document.body.appendChild(anchor);
+      anchor.click();
+      document.body.removeChild(anchor);
+      URL.revokeObjectURL(url);
+    };
+
+    const exportPlaylistJson = async () => {
+      exportJsonBtn.disabled = true;
+      exportJsonBtn.textContent = 'Exporting...';
+      try {
+        exportMappingJson();
+      } finally {
+        exportJsonBtn.textContent = 'Export Playlist JSON';
+        setStatus();
+      }
+    };
+
+    const renderSummaryCards = () => {
+      const cards = [
+        { label: 'Regions', value: String(regions.length), tone: 'text-[#e8d09b]' },
+        { label: 'Pending Music', value: String(countPendingPlaylists()), tone: 'text-[#f4be7d]' },
+        { label: 'Draft Playlists', value: String(countWithDrafts()), tone: 'text-[#9bd9a6]' },
+        { label: 'Available Tracks', value: String(atlasTrackPool.length), tone: 'text-[#8ad0e2]' },
+        { label: 'Missing Monsters', value: String(regions.filter((region) => region.missing.includes('monsters')).length), tone: 'text-[#d9a0a0]' },
+      ];
+
+      summaryGrid.innerHTML = cards.map((card) => `
+        <article class="panel rounded-xl p-4">
+          <div class="text-[0.72rem] uppercase tracking-[0.14em] text-[#9f9476]">${card.label}</div>
+          <div class="mt-2 text-2xl font-bold ${card.tone}">${card.value}</div>
+        </article>
+      `).join('');
+    };
+
+    const renderSelectedRegionPanel = () => {
+      const region = regions.find((entry) => entry.id === selectedRegionId);
+      if (!region) {
+        selectedRegionPanel.innerHTML = 'Pick a region to inspect its current music state and build a playlist draft.';
+        return;
+      }
+
+      const draft = getDraftForRegion(region);
+      const missingBadges = region.missing.length
+        ? region.missing.map((item) => `<span class="rounded border border-[#5a4a33] px-2 py-1 text-[0.68rem] uppercase tracking-[0.12em] text-[#f0be83]">${escapeHtml(item)}</span>`).join('')
+        : '<span class="rounded border border-[#35543a] px-2 py-1 text-[0.68rem] uppercase tracking-[0.12em] text-[#8ed09b]">complete</span>';
+
+      selectedRegionPanel.innerHTML = `
+        <div class="space-y-4">
+          <div>
+            <div class="text-lg font-bold text-[#efe7cf]">${escapeHtml(region.title)}</div>
+            <div class="mt-1 text-xs uppercase tracking-[0.13em] text-[#9f9476]">${escapeHtml(region.slug)}</div>
+            <p class="mt-2 text-sm text-[#b9af8f]">${escapeHtml(region.shortDescription || region.description || 'No summary.')}</p>
+          </div>
+
+          <div class="flex flex-wrap gap-2">${missingBadges}</div>
+
+          <div class="grid grid-cols-2 gap-2 text-xs text-[#b9af8f]">
+            <div class="rounded border border-[#3f3527] bg-[#17130e] px-3 py-2">Lore: <span class="text-[#efe7cf]">${region.loreSections.length}</span></div>
+            <div class="rounded border border-[#3f3527] bg-[#17130e] px-3 py-2">Gallery: <span class="text-[#efe7cf]">${region.galleryImages.length}</span></div>
+            <div class="rounded border border-[#3f3527] bg-[#17130e] px-3 py-2">Items: <span class="text-[#efe7cf]">${region.curatedItemNames.length}</span></div>
+            <div class="rounded border border-[#3f3527] bg-[#17130e] px-3 py-2">Monsters: <span class="text-[#efe7cf]">${region.curatedEntityNames.length}</span></div>
+          </div>
+
+          <div>
+            <div class="text-[0.72rem] uppercase tracking-[0.14em] text-[#9f9476]">Current Music Label</div>
+            <div class="mt-1 rounded border border-[#3f3527] bg-[#17130e] px-3 py-2 text-sm text-[#efe7cf]">${escapeHtml(region.musicLabel || 'Playlist pending')}</div>
+          </div>
+
+          <div>
+            <div class="flex items-center justify-between gap-3">
+              <div class="text-[0.72rem] uppercase tracking-[0.14em] text-[#9f9476]">Draft Playlist</div>
+              <button id="clear-draft-btn" class="rounded border border-[#5a4a33] px-2 py-1 text-[0.68rem] font-semibold text-[#d2ad66] hover:bg-[#2d2518]">Reset Draft</button>
+            </div>
+            <div id="draft-track-list" class="mt-2 flex flex-wrap gap-2">${draft.tracks.length
+              ? draft.tracks.map((track) => `<button data-track-remove="${escapeHtml(track)}" class="rounded border border-[#3f3527] bg-[#17130e] px-2 py-1 text-xs text-[#efe7cf] hover:border-[#d2ad66]">${escapeHtml(track)} ×</button>`).join('')
+              : '<div class="rounded border border-[#3f3527] bg-[#17130e] px-3 py-2 text-xs text-[#9f9476]">No draft tracks yet.</div>'}</div>
+          </div>
+
+          <div>
+            <label class="mb-1 block text-[0.72rem] uppercase tracking-[0.14em] text-[#9f9476]">Add Custom Track</label>
+            <div class="flex gap-2">
+              <input id="custom-track-input" type="text" class="w-full rounded border border-[#4b3f2f] bg-[#1a150f] px-3 py-2 text-sm text-[#efe7cf]" placeholder="Type a track label" />
+              <button id="add-custom-track-btn" class="rounded bg-[#d2ad66] px-3 py-2 text-sm font-bold text-[#1a1610] hover:bg-[#e0be7d]">Add</button>
+            </div>
+          </div>
+
+          <div>
+            <label class="mb-1 block text-[0.72rem] uppercase tracking-[0.14em] text-[#9f9476]">Draft Notes</label>
+            <textarea id="draft-notes-input" class="min-h-[96px] w-full rounded border border-[#4b3f2f] bg-[#1a150f] px-3 py-2 text-sm text-[#efe7cf]" placeholder="Optional notes for this region playlist">${escapeHtml(draft.notes || '')}</textarea>
+          </div>
+
+          <div>
+            <div class="text-[0.72rem] uppercase tracking-[0.14em] text-[#9f9476]">Open Atlas Needs</div>
+            <ul class="mt-2 space-y-2 text-sm text-[#b9af8f]">${region.mediaNeeds.length
+              ? region.mediaNeeds.map((need) => `<li class="rounded border border-[#3f3527] bg-[#17130e] px-3 py-2">${escapeHtml(need)}</li>`).join('')
+              : '<li class="rounded border border-[#35543a] bg-[#172117] px-3 py-2 text-[#8ed09b]">No open media needs recorded.</li>'}</ul>
+          </div>
+        </div>
+      `;
+
+      selectedRegionPanel.querySelector('#clear-draft-btn').addEventListener('click', () => removeDraft(region));
+      selectedRegionPanel.querySelectorAll('[data-track-remove]').forEach((button) => {
+        button.addEventListener('click', () => removeTrackFromDraft(region, button.getAttribute('data-track-remove') || ''));
+      });
+      selectedRegionPanel.querySelector('#add-custom-track-btn').addEventListener('click', () => {
+        const input = selectedRegionPanel.querySelector('#custom-track-input');
+        const value = input?.value || '';
+        addTrackToDraft(region, value);
+      });
+      selectedRegionPanel.querySelector('#draft-notes-input').addEventListener('input', (evt) => saveDraftNotes(region, evt.target.value));
+    };
+
+    const renderTrackPool = () => {
+      const region = regions.find((entry) => entry.id === selectedRegionId);
+      const filter = normalize(trackSearchInput.value);
+      const visibleTracks = atlasTrackPool.filter((track) => !filter || normalize(track).includes(filter));
+      const sourceLabel = atlasTrackPoolSource === 'library' ? 'library' : 'assigned';
+      trackPoolCount.textContent = `${visibleTracks.length} shown / ${atlasTrackPool.length} total (${sourceLabel})`;
+      trackPoolDescription.textContent = atlasTrackPoolSource === 'library'
+        ? 'This pool is loaded from src/assets/audio/World Map Music via a local manifest. Click a track to add it to the selected region draft playlist.'
+        : 'No local world map music library manifest was found, so this pool falls back to tracks already assigned in atlas metadata.';
+
+      if (!visibleTracks.length) {
+        trackPool.innerHTML = '<div class="rounded border border-[#3f3527] bg-[#17130e] px-3 py-2 text-sm text-[#9f9476]">No tracks match the current filter.</div>';
+        return;
+      }
+
+      const draft = region ? getDraftForRegion(region) : { tracks: [] };
+      trackPool.innerHTML = visibleTracks.map((track) => {
+        const alreadyInDraft = draft.tracks.some((entry) => normalize(entry) === normalize(track));
+        return `
+          <button data-track="${escapeHtml(track)}" class="flex w-full items-start justify-between gap-3 rounded border ${alreadyInDraft ? 'border-[#74bf84] bg-[#172117]' : 'border-[#3f3527] bg-[#17130e]'} px-3 py-2 text-left hover:border-[#d2ad66]">
+            <span class="text-sm text-[#efe7cf]">${escapeHtml(track)}</span>
+            <span class="text-[0.68rem] uppercase tracking-[0.12em] ${alreadyInDraft ? 'text-[#8ed09b]' : 'text-[#9f9476]'}">${alreadyInDraft ? 'In Draft' : 'Add'}</span>
+          </button>
+        `;
+      }).join('');
+
+      trackPool.querySelectorAll('[data-track]').forEach((button) => {
+        button.addEventListener('click', () => {
+          if (!region) return;
+          addTrackToDraft(region, button.getAttribute('data-track') || '');
+        });
+      });
+    };
+
+    const render = () => {
+      ensureSelectedRegion();
+      renderSummaryCards();
+
+      const showPendingOnly = Boolean(hideCompletedToggle.checked);
+      const missingFilter = normalizeText(missingFilterSelect.value || 'all');
+      const search = normalize(regionSearchInput.value);
+
+      const visibleRegions = regions.filter((region) => {
+        if (showPendingOnly && !region.missing.includes('music')) return false;
+        if (missingFilter !== 'all' && !region.missing.includes(missingFilter)) return false;
+        if (!search) return true;
+
+        const haystack = [
+          region.title,
+          region.slug,
+          region.shortDescription,
+          region.description,
+          ...region.tags,
+          ...region.missing,
+          ...region.currentTracks,
+          ...region.curatedItemNames,
+          ...region.curatedEntityNames,
+        ].join(' ').toLowerCase();
+        return haystack.includes(search);
+      });
+
+      rowsContainer.innerHTML = '';
+      emptyState.classList.toggle('hidden', visibleRegions.length > 0);
+
+      visibleRegions.forEach((region) => {
+        const draft = getDraftForRegion(region);
+        const isSelected = region.id === selectedRegionId;
+        const card = document.createElement('article');
+        card.className = `panel rounded-xl p-4 ${isSelected ? 'ring-2 ring-[#d2ad66]' : ''}`;
+        const missingBadges = region.missing.length
+          ? region.missing.map((item) => `<span class="rounded border border-[#5a4a33] px-2 py-1 text-[0.64rem] uppercase tracking-[0.12em] text-[#f0be83]">${escapeHtml(item)}</span>`).join('')
+          : '<span class="rounded border border-[#35543a] px-2 py-1 text-[0.64rem] uppercase tracking-[0.12em] text-[#8ed09b]">complete</span>';
+
+        card.innerHTML = `
+          <div class="flex flex-col gap-3">
+            <div class="flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
+              <div class="min-w-0 flex-1">
+                <div class="mb-1 text-xs font-semibold uppercase tracking-[0.12em] text-[#b9af8f]">${escapeHtml(region.slug)}</div>
+                <button data-action="select-region" class="text-left text-lg font-bold text-[#efe7cf] hover:text-[#f2dca7]">${escapeHtml(region.title)}</button>
+                <p class="mt-2 text-sm text-[#b9af8f]">${escapeHtml(region.shortDescription || region.description || 'No description.')}</p>
+              </div>
+              <div class="flex flex-wrap items-center gap-2">${missingBadges}</div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2 text-xs text-[#b9af8f] md:grid-cols-5">
+              <div class="rounded border border-[#3f3527] bg-[#17130e] px-3 py-2">Lore <span class="text-[#efe7cf]">${region.loreSections.length}</span></div>
+              <div class="rounded border border-[#3f3527] bg-[#17130e] px-3 py-2">Gallery <span class="text-[#efe7cf]">${region.galleryImages.length}</span></div>
+              <div class="rounded border border-[#3f3527] bg-[#17130e] px-3 py-2">Items <span class="text-[#efe7cf]">${region.curatedItemNames.length}</span></div>
+              <div class="rounded border border-[#3f3527] bg-[#17130e] px-3 py-2">Monsters <span class="text-[#efe7cf]">${region.curatedEntityNames.length}</span></div>
+              <div class="rounded border border-[#3f3527] bg-[#17130e] px-3 py-2">Needs <span class="text-[#efe7cf]">${region.mediaNeeds.length}</span></div>
+            </div>
+
+            <div>
+              <div class="mb-1 text-[0.7rem] font-semibold uppercase tracking-[0.11em] text-[#b9af8f]">Current Music</div>
+              <div class="rounded border border-[#3f3527] bg-[#17130e] px-3 py-2 text-sm text-[#efe7cf]">${escapeHtml(region.musicLabel || 'Playlist pending')}</div>
+            </div>
+            <div>
+              <div class="mb-1 text-[0.7rem] font-semibold uppercase tracking-[0.11em] text-[#b9af8f]">Draft Playlist</div>
+              <div class="rounded border border-[#3f3527] bg-[#17130e] px-3 py-2 text-sm text-[#efe7cf]">${draft.tracks.length ? escapeHtml(draft.tracks.join('; ')) : 'No draft playlist yet.'}</div>
+            </div>
+
+            <div class="flex flex-wrap gap-2 text-[0.68rem] text-[#9f9476]">${region.currentTracks.length
+              ? region.currentTracks.map((track) => `<span class="rounded border border-[#3f3527] bg-[#17130e] px-2 py-1 text-[#d7cca9]">${escapeHtml(track)}</span>`).join('')
+              : '<span class="rounded border border-[#6a4a2c] bg-[#2a1d14] px-2 py-1 text-[#f0be83]">No assigned music yet</span>'}</div>
+
+            <div class="rounded-lg border border-[#3e3427] bg-[#17130e] p-3">
+              <div class="text-[0.7rem] uppercase tracking-[0.11em] text-[#b9af8f]">Open Needs</div>
+              <ul class="mt-2 space-y-1 text-sm text-[#efe7cf]">${region.mediaNeeds.length
+                ? region.mediaNeeds.map((need) => `<li>${escapeHtml(need)}</li>`).join('')
+                : '<li class="text-[#8ed09b]">No open needs recorded.</li>'}</ul>
+            </div>
+          </div>
+        `;
+
+        card.querySelector('[data-action="select-region"]').addEventListener('click', () => {
+          selectedRegionId = region.id;
+          persistSession();
+          render();
+        });
+
+        rowsContainer.appendChild(card);
+      });
+
+      renderSelectedRegionPanel();
+      renderTrackPool();
+      setStatus();
+    };
+
+    const applyPlaylistMappingPayload = (payload) => {
+      const incoming = Array.isArray(payload)
+        ? payload
+        : (Array.isArray(payload?.entries) ? payload.entries : []);
+
+      incoming.forEach((entry) => {
+        const region = regions.find((candidate) => normalize(candidate.title) === normalize(entry.region) || normalize(candidate.slug) === normalize(entry.slug));
+        if (!region) return;
+        playlistDrafts[region.slug] = {
+          regionTitle: region.title,
+          slug: region.slug,
+          tracks: unique(Array.isArray(entry.tracks) ? entry.tracks : parseTrackList(entry.draftMusicLabel || entry.musicLabel || '')),
+          notes: normalizeText(entry.notes),
+          generatedAt: normalizeText(entry.generatedAt),
+        };
+      });
+
+      persistSession();
+      render();
+    };
+
+    uploadMappingBtn.addEventListener('click', () => mappingUploadInput.click());
+
+    mappingUploadInput.addEventListener('change', async (evt) => {
+      const file = evt.target.files && evt.target.files[0];
+      if (!file) return;
+      try {
+        const payload = await readJsonFile(file);
+        applyPlaylistMappingPayload(payload);
+      } catch (error) {
+        alert(`Mapping load failed: ${error.message}`);
+      }
+      evt.target.value = '';
+    });
+
+    saveMappingBtn.addEventListener('click', exportMappingJson);
+    exportJsonBtn.addEventListener('click', exportPlaylistJson);
+
+    clearSessionBtn.addEventListener('click', () => {
+      const ok = window.confirm('Clear all playlist drafts stored in this browser session?');
+      if (!ok) return;
+      playlistDrafts = {};
+      selectedRegionId = '';
+      localStorage.removeItem(STORAGE_KEY);
+      render();
+    });
+
+    hideCompletedToggle.addEventListener('change', render);
+    regionSearchInput.addEventListener('input', render);
+    missingFilterSelect.addEventListener('change', render);
+    trackSearchInput.addEventListener('input', renderTrackPool);
+
+    const boot = async () => {
+      try {
+        regions = await loadRegionMetadata();
+        compileTrackPool();
+        ensureSelectedRegion();
+        render();
+      } catch (error) {
+        console.error(error);
+        statusLine.textContent = `Unable to load live atlas data: ${error.message}`;
+        emptyState.classList.remove('hidden');
+      }
+    };
+
+    refreshDataBtn.addEventListener('click', boot);
+
+    restoreSession();
+    boot();
+  </script>
+</body>
+</html>

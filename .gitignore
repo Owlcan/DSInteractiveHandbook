@@ -178,5 +178,10 @@ src/data/worldmap-biome-encounters.json
 tools/render_worldmap_zones_overview.js
 tools/split_worldmap_zones_json.js
 tools/_tmp_worldmap_zones_merged.json
-/src/assets/audio/World Map Music
 /src/assets/images/World map
+/worldmap-backup
+src/assets/images/otherimages
+worldeventimageassignment.html
+src/data/worldmap-forest-event-hexes1.json
+src/data/worldmap-forest-event-hexes2.json
+src/data/worldmap-forest-event-hexes4.json

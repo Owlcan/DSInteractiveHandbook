@@ -1,0 +1,1136 @@
+[
+    {
+        "name":  "Dark Dimension Auditarch",
+        "description":  "Medium Humanoid, domineering evil",
+        "race":  "Humanoid",
+        "size":  "Medium",
+        "crStr":  "11",
+        "imageUrl":  "https://ik.imagekit.io/owlcan/Monsters/annapasted-image_bria.png",
+        "environment":  ""
+    },
+    {
+        "name":  "Shadow Slimepress",
+        "description":  "The Shadow Slimepress is an arrogant and tyrannical monarch of the deep. This massive ooze rules over a grotesque court of ooze-kin with an oppressive, corrosive presence. Its shifting form and psychic decrees subdue all who defy its orders.",
+        "race":  "Ooze",
+        "size":  "Large",
+        "crStr":  "10",
+        "imageUrl":  "",
+        "environment":  ""
+    },
+    {
+        "name":  "Pacifier Golem",
+        "description":  "Large construct, unaligned",
+        "race":  "construct",
+        "size":  "Large",
+        "crStr":  "5",
+        "imageUrl":  "",
+        "environment":  ""
+    },
+    {
+        "name":  "Night-Mare Shadowstorm",
+        "description":  "A towering evolution of the Darkling‑Ossuite Charger, she embodies both savage brutality and an almost otherworldly allure—her presence on the battlefield is as mesmerizing as it is deadly.",
+        "race":  "Variant Darkling-Ossuite Charger Omega",
+        "size":  "Large",
+        "crStr":  "9",
+        "imageUrl":  "https://ik.imagekit.io/owlcan/night-mare.png",
+        "environment":  "Shadowy Plains, Underdark, Battlefields"
+    },
+    {
+        "name":  "Darkforme Abyssal Leviathan",
+        "description":  "Gargantuan abomination, ancient dread",
+        "race":  "abomination",
+        "size":  "Gargantuan",
+        "crStr":  "15",
+        "imageUrl":  "",
+        "environment":  "Aquatic"
+    },
+    {
+        "name":  "Lakeopus Rex",
+        "description":  "Huge abomination, ancient evil",
+        "race":  "Abomination",
+        "size":  "Huge",
+        "crStr":  "10",
+        "imageUrl":  "https://ik.imagekit.io/owlcan/Monsters/lakeopus_rex.png",
+        "environment":  ""
+    },
+    {
+        "name":  "Dark Dimension Changebot",
+        "description":  "Medium construct, lawful evil",
+        "race":  "construct",
+        "size":  "Medium",
+        "crStr":  "2",
+        "imageUrl":  "",
+        "environment":  ""
+    },
+    {
+        "name":  "Primordial Bottle Beast",
+        "description":  "Large elemental, chaotic neutral",
+        "race":  "elemental",
+        "size":  "Large",
+        "crStr":  "4",
+        "imageUrl":  "",
+        "environment":  ""
+    },
+    {
+        "name":  "Lost Plushie",
+        "description":  "Tiny construct, unaligned",
+        "race":  "construct",
+        "size":  "Tiny",
+        "crStr":  "1/8",
+        "imageUrl":  "",
+        "environment":  ""
+    },
+    {
+        "name":  "Darkling-Ghostiby",
+        "description":  "Small monstrosity, chaotic evil",
+        "race":  "monstrosity",
+        "size":  "Small",
+        "crStr":  "1/4",
+        "imageUrl":  "",
+        "environment":  ""
+    },
+    {
+        "name":  "Bottle Elemental",
+        "description":  "Medium elemental, neutral",
+        "race":  "elemental",
+        "size":  "Medium",
+        "crStr":  "2",
+        "imageUrl":  "",
+        "environment":  ""
+    },
+    {
+        "name":  "Darkling-Hooter",
+        "description":  "Tiny abomination, a cute yet annoying hooter whose gutwrenching call shakes nerves.",
+        "race":  "Abomination",
+        "size":  "Tiny",
+        "crStr":  "1/8",
+        "imageUrl":  "https://i.postimg.cc/br86ctwG/darkling-hooter.png",
+        "environment":  "Urban/Shady"
+    },
+    {
+        "name":  "Darkforme River Tyrant",
+        "description":  "Large abomination, dominating evil",
+        "race":  "abomination",
+        "size":  "Large",
+        "crStr":  "5",
+        "imageUrl":  "",
+        "environment":  "Aquatic"
+    },
+    {
+        "name":  "Darkaconda",
+        "description":  "Huge abomination, a colossal serpentine dark serpent whose abyssal form can crush, devour, and lunge forth from the shadows with terrifying reach.",
+        "race":  "Abomination",
+        "size":  "Huge",
+        "crStr":  "4",
+        "imageUrl":  "https://i.postimg.cc/GhgjzNGT/darkaconda.png",
+        "environment":  "Nightmarish Swamp"
+    },
+    {
+        "name":  "Darkling Liquid Legion",
+        "description":  "Medium ooze, chaotic evil",
+        "race":  "ooze",
+        "size":  "Medium",
+        "crStr":  "2",
+        "imageUrl":  "",
+        "environment":  ""
+    },
+    {
+        "name":  "Darkforme-Nightpinyon",
+        "description":  "Medium abomination, a larger and aggressive hooter whose piercing, debilitating peck leaves foes breathless—and reactionless.",
+        "race":  "Abomination",
+        "size":  "Medium",
+        "crStr":  "2",
+        "imageUrl":  "https://i.postimg.cc/Z51xzdfT/darkforme-nightpinyon.png",
+        "environment":  "High Skies"
+    },
+    {
+        "name":  "Darkling-Slitherscale",
+        "description":  "Small abomination, a sinuous reptilian darkling whose shimmering scales ripple as it slithers silently.",
+        "race":  "Abomination",
+        "size":  "Small",
+        "crStr":  "1/2",
+        "imageUrl":  "https://i.postimg.cc/NFgxPvdm/darkling-slitherscale.png",
+        "environment":  "Swamp/Shadow"
+    },
+    {
+        "name":  "Darkforme Mire-Croaker",
+        "description":  "Medium abomination, croaking evil",
+        "race":  "abomination",
+        "size":  "Medium",
+        "crStr":  "1",
+        "imageUrl":  "",
+        "environment":  "Aquatic"
+    },
+    {
+        "name":  "Darkling Pond-Skulker",
+        "description":  "Small abomination, thieving evil",
+        "race":  "abomination",
+        "size":  "Small",
+        "crStr":  "1/2",
+        "imageUrl":  "",
+        "environment":  "Aquatic"
+    },
+    {
+        "name":  "Sky-Darkener Nightveil",
+        "description":  "Large abomination, a majestic aerial predator rumored to have inspired umbral raven forms. With perfect flight and lethal swoop-and-dive tactics, it dominates the heavens.",
+        "race":  "Abomination",
+        "size":  "Large",
+        "crStr":  "5",
+        "imageUrl":  "https://i.postimg.cc/90JY6gkS/sky-darkener-nightveil.png",
+        "environment":  "Open Skies"
+    },
+    {
+        "name":  "Darkling-Ossokin",
+        "description":  "Tiny abomination, a small little bone guy with an annoying shin-smacking attack that falls apart when defeated. Occasionally, its scattered bones reassemble—if not consecrated—minutes later.",
+        "race":  "Abomination",
+        "size":  "Tiny",
+        "crStr":  "1/8",
+        "imageUrl":  "https://i.postimg.cc/wTwwZ38v/darkling-ossokin.png",
+        "environment":  "Haunted Crypts"
+    },
+    {
+        "name":  "Forgotten Rattle",
+        "description":  "Small construct, unaligned",
+        "race":  "construct",
+        "size":  "Small",
+        "crStr":  "1/2",
+        "imageUrl":  "",
+        "environment":  ""
+    },
+    {
+        "name":  "Darkforme-Suffocator",
+        "description":  "Medium abomination, a grotesque creature with elongated, enveloping limbs that suffocate its prey with a crushing grip.",
+        "race":  "Abomination",
+        "size":  "Medium",
+        "crStr":  "2",
+        "imageUrl":  "https://i.postimg.cc/GtQXcm4X/darkforme-suffocator.png",
+        "environment":  "Damp Ruins"
+    },
+    {
+        "name":  "Darkling-Ticklefinger",
+        "description":  "Small monstrosity, mischievous evil",
+        "race":  "monstrosity",
+        "size":  "Small",
+        "crStr":  "1/2",
+        "imageUrl":  "",
+        "environment":  ""
+    },
+    {
+        "name":  "Darkling-Cactine-Biggo-Boy",
+        "description":  "Small abomination, a chunkier, delightfully round cactus creature whose smooth exterior hides microcrystalline spines. Quick-footed and mischievous, it combines the call for backup of its kin with a painful, restraining embrace.",
+        "race":  "Abomination",
+        "size":  "Small",
+        "crStr":  "1",
+        "imageUrl":  "https://i.postimg.cc/BZcY5Mm2/darkling-cactine-biggo-boy.png",
+        "environment":  "Desert/Arid"
+    },
+    {
+        "name":  "Darkforme-Ossokin-Aegisite",
+        "description":  "Medium bone golem abomination with a large build. Its fearsome, unliving bulk forms an unyielding defensive bulwark on the battlefield.",
+        "race":  "Abomination",
+        "size":  "Medium",
+        "crStr":  "2",
+        "imageUrl":  "https://i.postimg.cc/VNnBfkTX/darkforme-ossokin-aegisite.png",
+        "environment":  "Ancient Crypts"
+    },
+    {
+        "name":  "Darkling River-Lurk",
+        "description":  "Small abomination, slithering evil",
+        "race":  "abomination",
+        "size":  "Small",
+        "crStr":  "1/4",
+        "imageUrl":  "",
+        "environment":  "Aquatic"
+    },
+    {
+        "name":  "Darkling Weed-Tangler",
+        "description":  "Medium abomination, ensnaring evil",
+        "race":  "abomination",
+        "size":  "Medium",
+        "crStr":  "1",
+        "imageUrl":  "",
+        "environment":  "Aquatic"
+    },
+    {
+        "name":  "Darkforme-Spinebearer",
+        "description":  "Medium abomination, a bristling cactus menace with brutal spike attacks and a lethal grappling maneuver called Heel ¡Lucha!",
+        "race":  "Abomination",
+        "size":  "Medium",
+        "crStr":  "3",
+        "imageUrl":  "https://i.postimg.cc/C5LjsHK4/darkforme-spinebearer.png",
+        "environment":  "Desert/Arid"
+    },
+    {
+        "name":  "Shadow Babysitter",
+        "description":  "Medium fey, neutral evil",
+        "race":  "fey",
+        "size":  "Medium",
+        "crStr":  "4",
+        "imageUrl":  "",
+        "environment":  ""
+    },
+    {
+        "name":  "Darkling-Ossuite Charger",
+        "description":  "Large centauroid abomination darkling with four-legged speed and a bow that fires arrow-tipped tendrils. Those struck must succeed on a saving throw or be grappled by the sticky tendrils, which attach with 10 HP and an AC of 8.",
+        "race":  "Abomination",
+        "size":  "Large",
+        "crStr":  "2",
+        "imageUrl":  "https://i.postimg.cc/yNZnDPJg/darkling-ossuite-charger.png",
+        "environment":  "Battlefields"
+    },
+    {
+        "name":  "Darkling-Cactine",
+        "description":  "Small abomination, a whimsical cactus creature that unexpectedly calls for help with its backup spines.",
+        "race":  "Abomination",
+        "size":  "Small",
+        "crStr":  "1/2",
+        "imageUrl":  "https://i.postimg.cc/1tDWjHsh/darkling-cactine.png",
+        "environment":  "Desert/Arid"
+    },
+    {
+        "name":  "Darkforme Current-Snapper",
+        "description":  "Medium abomination, lurking evil",
+        "race":  "abomination",
+        "size":  "Medium",
+        "crStr":  "2",
+        "imageUrl":  "",
+        "environment":  "Aquatic"
+    },
+    {
+        "name":  "Darkforme Punishment Maid",
+        "description":  "Medium monstrosity, lawful evil",
+        "race":  "monstrosity",
+        "size":  "Medium",
+        "crStr":  "3",
+        "imageUrl":  "",
+        "environment":  ""
+    },
+    {
+        "name":  "Darkforme Mud-Gnasher",
+        "description":  "Medium abomination, territorial evil",
+        "race":  "abomination",
+        "size":  "Medium",
+        "crStr":  "1",
+        "imageUrl":  "",
+        "environment":  "Aquatic"
+    },
+    {
+        "name":  "Darkform Enforcer",
+        "description":  "Large abomination, salty evil",
+        "race":  "Abomination",
+        "size":  "Large",
+        "crStr":  "5",
+        "imageUrl":  "https://ik.imagekit.io/owlcan/Monsters/Darkforme%20Enforcer.png",
+        "environment":  ""
+    },
+    {
+        "name":  "Darkling-Ossokin-Proselyte",
+        "description":  "A small, skeletal abomination support creature, its form composed of formless black and smoky miasmic condensate. This eerie being channels divine energy to aid its ossuite and ossokin allies. Its uncanny, bone-like structure belies its cleric abilities, and it wields a handful of divine spells – including the cantrip Spontaneous Accident – to bolster its kin in battle.",
+        "race":  "Abomination",
+        "size":  "Small",
+        "crStr":  "1",
+        "imageUrl":  "https://i.postimg.cc/kgDTm9qy/darkling-ossokin-proselyte.png",
+        "environment":  "Shadowy Crypts"
+    },
+    {
+        "name":  "Crawling Onesie",
+        "description":  "Medium construct, unaligned",
+        "race":  "construct",
+        "size":  "Medium",
+        "crStr":  "1",
+        "imageUrl":  "",
+        "environment":  ""
+    },
+    {
+        "name":  "Darkforme-Ossuarian",
+        "description":  "Huge abomination—a living ossuary formed by countless ossuite remains fused into a massive, lumbering bone monster. It shuffles slowly along the floor, exuding a pants‐crapping fear presence. Its hideous body carries brutal melee attacks reminiscent of lesser ossuite kin, and it wields an array of dark, divine spells that combine arcane and clerical power. Once per day, it can teleport to a new space, forcing all in its wake to contend with a crushing, pinning avalanche of bones.",
+        "race":  "Abomination",
+        "size":  "Huge",
+        "crStr":  "7",
+        "imageUrl":  "https://i.postimg.cc/9M2Prj5K/Darkforme-Ossuarian.png",
+        "environment":  "Haunted Catacombs"
+    },
+    {
+        "name":  "Darkling Murkfin Swarmer",
+        "description":  "Tiny abomination, numerous evil",
+        "race":  "abomination",
+        "size":  "Tiny",
+        "crStr":  "1/4",
+        "imageUrl":  "",
+        "environment":  "Aquatic"
+    },
+    {
+        "name":  "Darkling Angler-Lurk",
+        "description":  "Small abomination, deceptive evil",
+        "race":  "abomination",
+        "size":  "Small",
+        "crStr":  "1/2",
+        "imageUrl":  "",
+        "environment":  "Aquatic"
+    },
+    {
+        "name":  "Darkling-Ossuite Charger Omega",
+        "description":  "A larger, more fearsome evolution of the Darkling-Ossuite Charger, this massive centauroid abomination uses its lance to deadly effect. It charges in a devastating line attack, trampling through foes, and can unleash shadowy tendrils to entangle and slow its enemies. Writhing black miasma flows over its skeletal, shadowy frame, forming a grotesque yet awe-inspiring presence.",
+        "race":  "Abomination",
+        "size":  "Large",
+        "crStr":  "6",
+        "imageUrl":  "https://i.postimg.cc/Jh67Phkj/Comfy-UI-00880.png",
+        "environment":  "Battlefields"
+    },
+    {
+        "name":  "Darkling-Bellowbelly",
+        "description":  "Medium abomination, wailing evil",
+        "race":  "Abomination",
+        "size":  "Medium",
+        "crStr":  "1",
+        "imageUrl":  "https://ik.imagekit.io/owlcan/Monsters/Darkforme%20Bellowbelly.png",
+        "environment":  ""
+    },
+    {
+        "name":  "Sentient Crib",
+        "description":  "Large construct, neutral",
+        "race":  "construct",
+        "size":  "Large",
+        "crStr":  "3",
+        "imageUrl":  "",
+        "environment":  ""
+    },
+    {
+        "name":  "Darkforme-Shade-Sneak",
+        "description":  "Small abomination, stalking evil",
+        "race":  "Abomination",
+        "size":  "Small",
+        "crStr":  "1/2",
+        "imageUrl":  "https://ik.imagekit.io/owlcan/Monsters/Darkforme%20Shadow-Lurker.png",
+        "environment":  ""
+    },
+    {
+        "name":  "Regression Fog",
+        "description":  "Large ooze, unaligned",
+        "race":  "ooze",
+        "size":  "Large",
+        "crStr":  "5",
+        "imageUrl":  "",
+        "environment":  ""
+    },
+    {
+        "name":  "Chap\u0027Hell",
+        "description":  "Huge abomination—a living ossuary formed by countless ossuite remains fused into a massive, lumbering bone monster. It shuffles slowly along the floor, exuding a pants‐crapping fear presence. Its hideous body carries brutal melee attacks reminiscent of lesser ossuite kin, and it wields an array of dark, divine spells that combine arcane and clerical power. Once per day, it can teleport to a new space, forcing all in its wake to contend with a crushing, pinning avalanche of bones.",
+        "race":  "Abomination",
+        "size":  "Huge",
+        "crStr":  "14",
+        "imageUrl":  "https://ik.imagekit.io/owlcan/chaphell.png",
+        "environment":  "Haunted Catacombs"
+    },
+    {
+        "name":  "Darkforme Titan-Snapper",
+        "description":  "Huge abomination, ancient evil",
+        "race":  "abomination",
+        "size":  "Huge",
+        "crStr":  "8",
+        "imageUrl":  "",
+        "environment":  "Aquatic"
+    },
+    {
+        "name":  "Darkforme Nightsipper",
+        "description":  "A bulbous, fast-flying mid-boss darkling ooze known as the Darkforme Nightsipper. It regenerates by drinking from foes and unleashes a terrifying brown-note screech that incapacitates and instills fear.",
+        "race":  "Ooze",
+        "size":  "Large",
+        "crStr":  "4",
+        "imageUrl":  "https://ik.imagekit.io/owlcan/thin%20and%20decrepit%20shadow%20monster%20bat%20oozing%20black%20goo%20and%20slime%20from%20its%20emaciated%20form%20with%20diaphan1.png",
+        "environment":  "Twisted Skies"
+    },
+    {
+        "name":  "Diaper Dimension Rift",
+        "description":  "Large aberration, chaotic evil",
+        "race":  "aberration",
+        "size":  "Large",
+        "crStr":  "10",
+        "imageUrl":  "",
+        "environment":  ""
+    },
+    {
+        "name":  "Darkforme-Sleek-Lurker Pack Alpha",
+        "description":  "Medium abomination, stalking evil",
+        "race":  "Abomination",
+        "size":  "Medium",
+        "crStr":  "1",
+        "imageUrl":  "https://ik.imagekit.io/owlcan/Monsters/Darkforme%20Shadow-Lurker%20Pack%20Alpha.png",
+        "environment":  ""
+    },
+    {
+        "name":  "Darkforme Pike-Maw",
+        "description":  "Medium abomination, sudden evil",
+        "race":  "abomination",
+        "size":  "Medium",
+        "crStr":  "2",
+        "imageUrl":  "",
+        "environment":  "Aquatic"
+    },
+    {
+        "name":  "Weirdling-Paralurker",
+        "description":  "Small abomination, unsettling evil",
+        "race":  "Abomination",
+        "size":  "Small",
+        "crStr":  "1",
+        "imageUrl":  "https://i.postimg.cc/sDgcYyQR/weirdling-paralurker.png",
+        "environment":  ""
+    },
+    {
+        "name":  "Dark Dimension Regressor Field",
+        "description":  "Large aberration, lawful evil",
+        "race":  "aberration",
+        "size":  "Large",
+        "crStr":  "6",
+        "imageUrl":  "",
+        "environment":  ""
+    },
+    {
+        "name":  "Darkforme-Ossuarian",
+        "description":  "Huge abomination—a living ossuary formed by countless ossuite remains fused into a massive, lumbering bone monster. It shuffles slowly along the floor, exuding a pants‐crapping fear presence. Its hideous body carries brutal melee attacks reminiscent of lesser ossuite kin, and it wields an array of dark, divine spells that combine arcane and clerical power. Once per day, it can teleport to a new space, forcing all in its wake to contend with a crushing, pinning avalanche of bones.",
+        "race":  "Abomination",
+        "size":  "Huge",
+        "crStr":  "7",
+        "imageUrl":  "https://i.postimg.cc/9M2Prj5K/Darkforme-Ossuarian.png",
+        "environment":  "Haunted Catacombs"
+    },
+    {
+        "name":  "Darkling Gloom-Newt",
+        "description":  "Medium abomination, disorienting evil",
+        "race":  "abomination",
+        "size":  "Medium",
+        "crStr":  "1/2",
+        "imageUrl":  "",
+        "environment":  "Aquatic"
+    },
+    {
+        "name":  "Darkling-Hungerer",
+        "description":  "Medium abomination, frail and insatiably hungry",
+        "race":  "Abomination",
+        "size":  "Medium",
+        "crStr":  "1/2",
+        "imageUrl":  "https://i.postimg.cc/rFVhfxH3/darkling-hungerer.png",
+        "environment":  ""
+    },
+    {
+        "name":  "Darkling Rill-Skitter",
+        "description":  "Small abomination, skittering evil",
+        "race":  "abomination",
+        "size":  "Small",
+        "crStr":  "1/4",
+        "imageUrl":  "",
+        "environment":  "Aquatic"
+    },
+    {
+        "name":  "Darkforme-Hungore",
+        "description":  "Large abomination, a menacing mid-boss with a voracious maw",
+        "race":  "Abomination",
+        "size":  "Large",
+        "crStr":  "2",
+        "imageUrl":  "https://i.postimg.cc/RZ3LYRLs/darkforme-hungore.png",
+        "environment":  ""
+    },
+    {
+        "name":  "Darkling Blood-Gorger",
+        "description":  "Small abomination, draining evil",
+        "race":  "abomination",
+        "size":  "Small",
+        "crStr":  "1/2",
+        "imageUrl":  "",
+        "environment":  "Aquatic"
+    },
+    {
+        "name":  "Dark Dimension Matronbot",
+        "description":  "Large Nannybot, authoritarian evil",
+        "race":  "Nannybot",
+        "size":  "Large",
+        "crStr":  "5",
+        "imageUrl":  "https://ik.imagekit.io/owlcan/Monsters/matronbot_bria.png",
+        "environment":  ""
+    },
+    {
+        "name":  "Nightmare Lullaby",
+        "description":  "Medium fey, neutral evil",
+        "race":  "fey",
+        "size":  "Medium",
+        "crStr":  "7",
+        "imageUrl":  "",
+        "environment":  ""
+    },
+    {
+        "name":  "Deranged Diaper-check Bot",
+        "description":  "Medium Nannybot, annoying evil",
+        "race":  "Nannybot",
+        "size":  "Medium",
+        "crStr":  "1/8",
+        "imageUrl":  "",
+        "environment":  ""
+    },
+    {
+        "name":  "Teddy Abomination",
+        "description":  "Large monstrosity, chaotic evil",
+        "race":  "monstrosity",
+        "size":  "Large",
+        "crStr":  "6",
+        "imageUrl":  "",
+        "environment":  ""
+    },
+    {
+        "name":  "Darkforme Current-Drifter",
+        "description":  "Medium abomination, shocking evil",
+        "race":  "abomination",
+        "size":  "Medium",
+        "crStr":  "2",
+        "imageUrl":  "",
+        "environment":  "Aquatic"
+    },
+    {
+        "name":  "Dark Dimension Nannybot Bratnapper",
+        "description":  "Medium Nannybot, mischievous evil",
+        "race":  "Nannybot",
+        "size":  "Medium",
+        "crStr":  "1",
+        "imageUrl":  "https://ik.imagekit.io/owlcan/Monsters/nannybot.jpg",
+        "environment":  ""
+    },
+    {
+        "name":  "Darkling-Shark",
+        "description":  "Medium abomination, a stealthy aquatic predator with a predatory grin",
+        "race":  "Abomination",
+        "size":  "Medium",
+        "crStr":  "1",
+        "imageUrl":  "https://i.postimg.cc/qRcLLvxp/darkling-shark.png",
+        "environment":  "Aquatic"
+    },
+    {
+        "name":  "Darkforme-Shark",
+        "description":  "Large abomination, a twisted aquatic predator with crab legs and an unsettling presence",
+        "race":  "Abomination",
+        "size":  "Large",
+        "crStr":  "3",
+        "imageUrl":  "https://i.postimg.cc/ZRL8NDJR/darkforme-shark.png",
+        "environment":  "Aquatic/Land"
+    },
+    {
+        "name":  "Crying Starmass",
+        "description":  "Huge aberration, chaotic neutral",
+        "race":  "aberration",
+        "size":  "Huge",
+        "crStr":  "9",
+        "imageUrl":  "",
+        "environment":  ""
+    },
+    {
+        "name":  "Temporal Crib Guardian",
+        "description":  "Large construct, lawful neutral",
+        "race":  "construct",
+        "size":  "Large",
+        "crStr":  "8",
+        "imageUrl":  "",
+        "environment":  ""
+    },
+    {
+        "name":  "Dream Stealer",
+        "description":  "Medium fey, neutral evil",
+        "race":  "fey",
+        "size":  "Medium",
+        "crStr":  "8",
+        "imageUrl":  "",
+        "environment":  ""
+    },
+    {
+        "name":  "Dark Dimension Trainee Auditor",
+        "description":  "Medium Humanoid, lawful evil",
+        "race":  "Humanoid",
+        "size":  "Medium",
+        "crStr":  "3",
+        "imageUrl":  "https://ik.imagekit.io/owlcan/ComfyUI_02438_.png",
+        "environment":  ""
+    },
+    {
+        "name":  "Darkling-Nightshade Elemental",
+        "description":  "Medium elemental abomination, a shadowy presence that instills fear with its eerie, whispering darkness",
+        "race":  "Elemental",
+        "size":  "Medium",
+        "crStr":  "2",
+        "imageUrl":  "https://i.postimg.cc/x17tj7dV/darkling-nightshade-elemental.png",
+        "environment":  "Shadowy"
+    },
+    {
+        "name":  "Darkforme Overwatch",
+        "description":  "",
+        "race":  "Abomination",
+        "size":  "Medium",
+        "crStr":  "2",
+        "imageUrl":  "https://ik.imagekit.io/owlcan/Monsters/Darkforme-Overwatch.png",
+        "environment":  ""
+    },
+    {
+        "name":  "Darkforme-Cavesweller",
+        "description":  "Large abomination, brooding evil",
+        "race":  "Abomination",
+        "size":  "Large",
+        "crStr":  "3",
+        "imageUrl":  "https://ik.imagekit.io/owlcan/Monsters/Darkforme%20Cavesweller.png",
+        "environment":  ""
+    },
+    {
+        "name":  "Darkling-Yowler",
+        "description":  "Small abomination, wailing evil",
+        "race":  "Abomination",
+        "size":  "Small",
+        "crStr":  "1/2",
+        "imageUrl":  "https://ik.imagekit.io/owlcan/Monsters/Darkling%20Yowler.png",
+        "environment":  ""
+    },
+    {
+        "name":  "Darkling-Caller",
+        "description":  "Small abomination, wheezing evil",
+        "race":  "Abomination",
+        "size":  "Small",
+        "crStr":  "1/4",
+        "imageUrl":  "https://ik.imagekit.io/owlcan/Monsters/Darkling%20Caller.png",
+        "environment":  ""
+    },
+    {
+        "name":  "Darkling-Lurker",
+        "description":  "Small abomination, sad evil",
+        "race":  "Abomination",
+        "size":  "Small",
+        "crStr":  "1/2",
+        "imageUrl":  "https://ik.imagekit.io/owlcan/Monsters/Darkling%20Lurker.png",
+        "environment":  ""
+    },
+    {
+        "name":  "Darkling-Brackling",
+        "description":  "Medium abomination, brackish evil",
+        "race":  "Abomination",
+        "size":  "Small",
+        "crStr":  "1",
+        "imageUrl":  "https://ik.imagekit.io/owlcan/Monsters/Brackling.png",
+        "environment":  ""
+    },
+    {
+        "name":  "Darkling-Slurper",
+        "description":  "Small abomination, hungy evil",
+        "race":  "Abomination",
+        "size":  "Small",
+        "crStr":  "1/2",
+        "imageUrl":  "https://ik.imagekit.io/owlcan/Monsters/Darkling%20Slurper.png",
+        "environment":  ""
+    },
+    {
+        "name":  "Dark Dimension Project Auditor",
+        "description":  "Medium Humanoid, lawful evil",
+        "race":  "Humanoid",
+        "size":  "Medium",
+        "crStr":  "7",
+        "imageUrl":  "https://ik.imagekit.io/owlcan/projectauditor.png",
+        "environment":  "Any,"
+    },
+    {
+        "name":  "Darkling Bellowbelly Cubling",
+        "description":  "Small abomination, squeaky evil",
+        "race":  "Abomination",
+        "size":  "Small",
+        "crStr":  "1/4",
+        "imageUrl":  "https://ik.imagekit.io/owlcan/Monsters/Darkling%20Cubling.png",
+        "environment":  ""
+    },
+    {
+        "name":  "The Darkformless",
+        "description":  "Medium abomination elemental mage wielding both shadow and non-elemental magic in unsettling ways",
+        "race":  "Abomination Elemental Mage",
+        "size":  "Medium",
+        "crStr":  "4",
+        "imageUrl":  "https://i.postimg.cc/v8zhxDmz/the-darkformless.png",
+        "environment":  "Urban/Shadowed"
+    },
+    {
+        "name":  "Darkling-Paralurker",
+        "description":  "Small abomination, gliding evil",
+        "race":  "Abomination",
+        "size":  "Small",
+        "crStr":  "1/2",
+        "imageUrl":  "https://i.postimg.cc/ydCjcZ9f/darkling-paralurker.png",
+        "environment":  ""
+    },
+    {
+        "name":  "Voravenor: Hungore-Absolutor",
+        "description":  "A colossal blackened mass of bone and sinew, missing its legs and lashed together with inky black ooze. Voravenor rises from a massive bottomless bone pit of darkling biomass, its massive ventral maw gaping hungrily. Its two baleful eyes maintain a Shroud of Black Dread, which must be dispelled by blinding or destroying them to reveal its vulnerability to radiant light.",
+        "race":  "Abomination",
+        "size":  "Colossal+",
+        "crStr":  "13",
+        "imageUrl":  "https://ik.imagekit.io/owlcan/voravenor.webp",
+        "environment":  "Bottomless Pit, Cavern"
+    },
+    {
+        "name":  "Nightmare Sire Reaver",
+        "description":  "A crown‑bound juggernaut of shadow and bone, the Sire Reaver is the perfected warform of the Darkling‑Ossuite line — a predator‑warlord whose very advance unravels ranks. His every stride is a storm of iron hooves and soul‑rending will, and the fall of the Crown of Tyranny marks the moment the battle turns desperate for all who stand before him.",
+        "race":  "Variant Darkling-Ossuite Charger Omega",
+        "size":  "Huge",
+        "crStr":  "14",
+        "imageUrl":  "https://ik.imagekit.io/owlcan/Pagematerials/sire_reaver.png",
+        "environment":  "Shadowy Plains, Underdark, Battlefields"
+    },
+    {
+        "name":  "Lurker Primogenitor",
+        "description":  "Medium abomination, cunning evil",
+        "race":  "Abomination",
+        "size":  "Medium",
+        "crStr":  "4",
+        "imageUrl":  "",
+        "environment":  "Cellarways"
+    },
+    {
+        "name":  "Darkling Gourdling",
+        "description":  "Small abomination, chaotic evil",
+        "race":  "Abomination",
+        "size":  "Small",
+        "crStr":  "1",
+        "imageUrl":  "",
+        "environment":  "Any"
+    },
+    {
+        "name":  "Darkforme Gourd Lord",
+        "description":  "Medium abomination, cunning evil",
+        "race":  "Abomination",
+        "size":  "Medium",
+        "crStr":  "3",
+        "imageUrl":  "",
+        "environment":  "Any"
+    },
+    {
+        "name":  "Ossokin Apostlyte",
+        "description":  "A weedy skeletal warrior, small in stature but burning with a fanatical necrotic zeal. Resembling a stunted paladin, it wears a patchwork of rib-cage plate armor and wields a weapon too large for its frame. Alone it is pitiful, but among fellow Ossokin its conviction hardens into tangible defense.",
+        "race":  "Abomination",
+        "size":  "Small",
+        "crStr":  "2",
+        "imageUrl":  "https://i.postimg.cc/placeholder/apostlyte.png",
+        "environment":  "Shadowy Crypts"
+    },
+    {
+        "name":  "Ossokin Declaryte",
+        "description":  "A gaunt, robed figure that acts as a herald for the Ossuite forces. It carries a scroll of skin and a jagged bone dagger. It does not fight with strength, but with a screeching, mocking voice that demoralizes enemies and bolsters the undead. Its padding is merely bunched ceremonial rags.",
+        "race":  "Abomination",
+        "size":  "Medium",
+        "crStr":  "2",
+        "imageUrl":  "https://i.postimg.cc/placeholder/declaryte.png",
+        "environment":  "Shadowy Crypts"
+    },
+    {
+        "name":  "Ossokin Vestal",
+        "description":  "The Ossokin Vestal is a parody of a shrine maiden, wrapped in excessively thick, quilted white vestments. She carries a broom that is actually a three-pronged bone trident. Bratty, demanding, and volatile, she channels divine necrotic energy through petulant rites and punishing smites.",
+        "race":  "Abomination",
+        "size":  "Medium",
+        "crStr":  "3",
+        "imageUrl":  "https://i.postimg.cc/placeholder/vestal.png",
+        "environment":  "Shadowy Crypts"
+    },
+    {
+        "name":  "Ossokin Bonesinger",
+        "description":  "An Ossokin Bonesinger is a small, skeletal figure that hums with a vibrating, unnerving resonance. Unlike the mindless clicking of others, it produces a melodic, grinding drone by rubbing its ribs together. It is fragile, but its song knits its bones back together as fast as they are shattered, unless purified by light or fire.",
+        "race":  "Abomination",
+        "size":  "Small",
+        "crStr":  "1",
+        "imageUrl":  "https://i.postimg.cc/placeholder/bonesinger.png",
+        "environment":  "Shadowy Crypts"
+    },
+    {
+        "name":  "Ossokin Bone Shaman",
+        "description":  "The Ossokin Bone Shaman is a small, morbidly obese skeleton—a paradox of anatomy where smoky, solidified miasma fills the gaps between bones to create a rotund, pudgy silhouette. It waddles slowly, draped in heavy, opulent vestments of gloom. As a High Priest of the Ossuites, it commands dark miracles and can turn the very bones of its enemies against them.",
+        "race":  "Abomination",
+        "size":  "Small",
+        "crStr":  "5",
+        "imageUrl":  "https://i.postimg.cc/placeholder/boneshaman.png",
+        "environment":  "Shadowy Crypts"
+    },
+    {
+        "name":  "Darkforme-Shieldguard",
+        "description":  "",
+        "race":  "Humanoid (Darkforme-Construct)",
+        "size":  "Medium",
+        "crStr":  "4",
+        "imageUrl":  "",
+        "environment":  ""
+    },
+    {
+        "name":  "Darkforme-Prefect (The Gavel)",
+        "description":  "Faction: The Gavel (Administrative Guard)\nRole: Discipline and containment. Prefects are tasked with \"detaining\" unruly students and suppressing magical outbursts.",
+        "race":  "Humanoid (Darkforme-Caster)",
+        "size":  "Medium",
+        "crStr":  "5",
+        "imageUrl":  "",
+        "environment":  ""
+    },
+    {
+        "name":  "Darkforme-Skirmisher",
+        "description":  "Faction: The Swift-Strider Scouts\nRole: Light melee infantry used for flanking and harassing spellcasters. They are high-mobility units designed to bypass the frontline.",
+        "race":  "Humanoid (Darkforme)",
+        "size":  "Medium",
+        "crStr":  "2",
+        "imageUrl":  "",
+        "environment":  ""
+    },
+    {
+        "name":  "Darkforme-Harrier",
+        "description":  "Faction: The Cloud-Watcher Legion\nRole: Flighted infantry utilized for aerial reconnaissance and dropping psychological payloads. Their wings are made of solidified shadow-mist.",
+        "race":  "Humanoid (Darkforme)",
+        "size":  "Medium",
+        "crStr":  "2",
+        "imageUrl":  "",
+        "environment":  ""
+    },
+    {
+        "name":  "Darkforme-Ballisteer",
+        "description":  "",
+        "race":  "Humanoid (Darkforme)",
+        "size":  "Medium",
+        "crStr":  "3",
+        "imageUrl":  "",
+        "environment":  ""
+    },
+    {
+        "name":  "Darkforme-Gatekeeper (Gatekeeper Krell)",
+        "description":  "Location: Zone A: The Foyer of Echoes",
+        "race":  "Undead (Darkforme-Construct)",
+        "size":  "Medium",
+        "crStr":  "6",
+        "imageUrl":  "",
+        "environment":  ""
+    },
+    {
+        "name":  "Darkforme-Slinger",
+        "description":  "Faction: The Iron-Root Sappers (Light Support)\nRole: Mid-range support units that fire alchemical and psychic canisters. They provide cover for the Enforcers.",
+        "race":  "Humanoid (Darkforme)",
+        "size":  "Medium",
+        "crStr":  "2",
+        "imageUrl":  "",
+        "environment":  ""
+    },
+    {
+        "name":  "Darkforme-Marshal (Marshal Rictus)",
+        "description":  "Location: Zone D: The War Room",
+        "race":  "Undead (Darkforme-Commander)",
+        "size":  "Medium",
+        "crStr":  "8",
+        "imageUrl":  "",
+        "environment":  ""
+    },
+    {
+        "name":  "Darkforme-Quartermaster (Quartermaster Gnash)",
+        "description":  "Location: Zone B: The Mess Hall",
+        "race":  "Monstrosity (Darkforme)",
+        "size":  "Medium",
+        "crStr":  "5",
+        "imageUrl":  "",
+        "environment":  ""
+    },
+    {
+        "name":  "Darkforme-Suffocator",
+        "description":  "Location: Marshland Nexus (Greensea Expanse)",
+        "race":  "Monstrosity (Darkforme)",
+        "size":  "Medium",
+        "crStr":  "3",
+        "imageUrl":  "",
+        "environment":  ""
+    },
+    {
+        "name":  "Ossokin Scrapper",
+        "description":  "",
+        "race":  "Undead (Ossokin)",
+        "size":  "Small",
+        "crStr":  "1/4",
+        "imageUrl":  "",
+        "environment":  ""
+    },
+    {
+        "name":  "Vora the Soul-Squeezer",
+        "description":  "",
+        "race":  "",
+        "size":  "Gargantuan",
+        "crStr":  "9",
+        "imageUrl":  "",
+        "environment":  ""
+    },
+    {
+        "name":  "Sissel the Mist-Walker",
+        "description":  "",
+        "race":  "",
+        "size":  "Huge",
+        "crStr":  "7",
+        "imageUrl":  "",
+        "environment":  ""
+    },
+    {
+        "name":  "Krazis the Corrupted",
+        "description":  "",
+        "race":  "",
+        "size":  "Huge",
+        "crStr":  "6",
+        "imageUrl":  "",
+        "environment":  ""
+    },
+    {
+        "name":  "Giggling Cackler",
+        "description":  "Small, hyper-active simians partially cured of Darkling rot. Mischievous but useful.",
+        "race":  "Beast (Darkling-Kin)",
+        "size":  "Small",
+        "crStr":  "1/8",
+        "imageUrl":  "",
+        "environment":  "Greensea Outskirts, Meaglow Grove"
+    },
+    {
+        "name":  "Canopy Cackler",
+        "description":  "The standard nuisance of the woods, known for hurling sticky Glut-Pellets.",
+        "race":  "Darkling (Beast)",
+        "size":  "Small",
+        "crStr":  "1/2",
+        "imageUrl":  "",
+        "environment":  "Campus Woods, Greensea Jungle"
+    },
+    {
+        "name":  "Maw-Faced Cackler",
+        "description":  "A horrifying monstrosity with a vertical maw where its face should be.",
+        "race":  "Darkforme (Monstrosity)",
+        "size":  "Small",
+        "crStr":  "2",
+        "imageUrl":  "",
+        "environment":  "Greensea Depths"
+    },
+    {
+        "name":  "Darkforme Noxback",
+        "description":  "The silver-backed king of the Dark simians. Coordaintes swarms with terrifying precision.",
+        "race":  "Darkforme (Monstrosity)",
+        "size":  "Large",
+        "crStr":  "5",
+        "imageUrl":  "",
+        "environment":  "Greensea Depths, Marshland Nexus"
+    },
+    {
+        "name":  "Hactor the Everhopping",
+        "description":  "",
+        "race":  "",
+        "size":  "Huge",
+        "crStr":  "8",
+        "imageUrl":  "",
+        "environment":  ""
+    },
+    {
+        "name":  "Lord Furuzzle: Bunnarch of All Bunkind",
+        "description":  "",
+        "race":  "",
+        "size":  "Gargantuan",
+        "crStr":  "15",
+        "imageUrl":  "",
+        "environment":  ""
+    },
+    {
+        "name":  "Blanz-Coh the Tiny Terror",
+        "description":  "",
+        "race":  "",
+        "size":  "Small",
+        "crStr":  "10",
+        "imageUrl":  "",
+        "environment":  ""
+    },
+    {
+        "name":  "Darkforme Gutroar",
+        "description":  "Huge monstrosity (darkforme), neutral evil",
+        "race":  "monstrosity (darkforme)",
+        "size":  "Huge",
+        "crStr":  "4",
+        "imageUrl":  "",
+        "environment":  ""
+    },
+    {
+        "name":  "Darkling Cubling Suppsipper",
+        "description":  "Small monstrosity (darkling), chaotic evil",
+        "race":  "monstrosity (darkling)",
+        "size":  "Small",
+        "crStr":  "1/2",
+        "imageUrl":  "",
+        "environment":  ""
+    },
+    {
+        "name":  "Grizzwauler, the Gargant",
+        "description":  "Gargantuan monstrosity (darkforme, legendary), chaotic evil",
+        "race":  "monstrosity (darkforme, legendary)",
+        "size":  "Gargantuan",
+        "crStr":  "8",
+        "imageUrl":  "",
+        "environment":  ""
+    },
+    {
+        "name":  "Darkforme Pseudomaiden",
+        "description":  "Medium undead (darkforme), neutral evil",
+        "race":  "undead (darkforme)",
+        "size":  "Medium",
+        "crStr":  "3",
+        "imageUrl":  "",
+        "environment":  ""
+    },
+    {
+        "name":  "Darkforme Tickle Monster",
+        "description":  "Medium monstrosity (darkforme), chaotic evil",
+        "race":  "monstrosity (darkforme)",
+        "size":  "Medium",
+        "crStr":  "2",
+        "imageUrl":  "",
+        "environment":  ""
+    },
+    {
+        "name":  "Tittalus Manus, The Bad Toucher",
+        "description":  "Large monstrosity (darkforme, legendary), chaotic evil",
+        "race":  "monstrosity (darkforme, legendary)",
+        "size":  "Large",
+        "crStr":  "8",
+        "imageUrl":  "https://gleaming-cannedlulu.wordpress.com/wp-content/uploads/2026/03/a_gigantic_horrific_202603180119_inspyrenet-3.png",
+        "environment":  ""
+    },
+    {
+        "name":  "Darkforme Toddlegeist",
+        "description":  "Small undead (darkling), chaotic evil",
+        "race":  "undead (darkling)",
+        "size":  "Small",
+        "crStr":  "3",
+        "imageUrl":  "",
+        "environment":  ""
+    },
+    {
+        "name":  "Caelistian Vanguard",
+        "description":  "Medium humanoid (any race), lawful evil",
+        "race":  "humanoid (any race)",
+        "size":  "Medium",
+        "crStr":  "3",
+        "imageUrl":  "",
+        "environment":  "Academy Ruins, The Greensea Expanse"
+    },
+    {
+        "name":  "Caelistian Gunner",
+        "description":  "Medium humanoid (any race), lawful evil",
+        "race":  "humanoid (any race)",
+        "size":  "Medium",
+        "crStr":  "3",
+        "imageUrl":  "",
+        "environment":  "Academy Ruins, The Greensea Expanse"
+    },
+    {
+        "name":  "Caelistian Zealot",
+        "description":  "Medium humanoid (any race), lawful evil",
+        "race":  "humanoid (any race)",
+        "size":  "Medium",
+        "crStr":  "3",
+        "imageUrl":  "",
+        "environment":  "Academy Ruins, The Greensea Expanse"
+    },
+    {
+        "name":  "Caelistian Infiltrator",
+        "description":  "Medium humanoid (any race), lawful evil",
+        "race":  "humanoid (any race)",
+        "size":  "Medium",
+        "crStr":  "3",
+        "imageUrl":  "",
+        "environment":  "Academy Ruins, The Greensea Expanse"
+    }
+]
