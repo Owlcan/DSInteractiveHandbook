@@ -29,7 +29,13 @@
                         <button id="inventory-export-md-btn" class="dropdown-item" role="menuitem">Export Inventory as Markdown table</button>
                     </div>
                 </div>
-                <button id="export-save-btn" class="fancy-button">Export Save</button>
+                <div class="dropdown">
+                    <button id="export-save-btn" class="fancy-button dropdown-toggle" aria-haspopup="true" aria-expanded="false">Export Save</button>
+                    <div id="export-save-menu" class="dropdown-menu" role="menu" aria-label="Export Save Options">
+                        <button id="export-save-full-btn" class="dropdown-item" role="menuitem">Export Full Save</button>
+                        <button id="export-save-crafted-btn" class="dropdown-item" role="menuitem">Export Crafted-Only Save</button>
+                    </div>
+                </div>
                 <button id="import-save-btn" class="fancy-button">Load Save</button>
                 <button id="upload-bundle-btn" class="fancy-button">Upload Bundle</button>
             </div>

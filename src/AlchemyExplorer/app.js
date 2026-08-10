@@ -19,6 +19,109 @@ document.addEventListener('DOMContentLoaded', function() {
     let discoveredRecipes = {};
     let playerCraftedItems = {};
     let craftedInventory = {};
+    const TRANSFERABLE_BRIDGE_ITEM_IDS = new Set([
+        'cream',
+        'white-sugar',
+        'egg',
+        'vanilla',
+        'azure-cream',
+        'star-sugar',
+        'lunar-egg',
+        'starsoaked-vanilla',
+        'night-sky',
+        'flavor-matrix',
+        'turbonado-sugar',
+        'liquid-pain',
+        'touch-of-love',
+        'chromatic-platinum',
+        'fractal-copper',
+        'defractor-prism',
+        'glimmelectrum',
+        'glimmergold',
+        'orichalchite',
+        'starshot-ore',
+        'hemimetrichite',
+        'matrix-malachite',
+        'robusca',
+        'vitalium',
+        'vitalocanum',
+        'birch-syrup',
+        'wildflower-honey-cream',
+        'dreamvapor',
+        'sunset-essence',
+        'jadicine',
+        'prismatic-activator',
+        'phoenix-feather',
+        'darkessence',
+        'adhesive',
+        'crafted-adhesive',
+        'plasticizer',
+        'solvent',
+        'barkgum',
+        'berrimaters',
+        'water',
+        'simple-herb',
+        'common-herb',
+        'sweetleaf',
+        'savour-herb',
+        'greensea-cacao',
+        'eldritch-cacao',
+        'rock-salt',
+        'flour',
+        'water-essence',
+        'tastetanium-crystal',
+        'butter',
+        'whipped-butter',
+        'herb-butter',
+        'magibutter',
+        'yarn',
+        'cotton-fluff',
+        'plastic-sheeting',
+        'petrodistillate',
+        'bronzewood',
+        'yeast',
+        'rice',
+        'royalrice',
+        'planarcherry',
+        'plainspeanuts',
+        'lissomesoybeans',
+        'lissomelemons',
+        'greenwood',
+        'vanilla-ice-cream',
+        'azure-ice-cream',
+        'quiche',
+        'caramel',
+        'vanilla-frosting',
+        'white-cake',
+        'sugar-cookie',
+        'simple-waffle-cookie',
+        'chocochipper',
+        'cookies-and-cream-pie',
+        'magic-stroopwafel',
+        'magicookie',
+        'simple-biscuit',
+        'simple-tea',
+        'lovely-diaper',
+        'comforting-custard',
+        'soothing-herb-biscuit',
+        'mild-recovery-porridge',
+        'mending-muffin',
+        'healthy-bread-pudding',
+        'dragons-fist-elixir',
+        'mystic-surge-tonic',
+        'arcane-catalyst-brew',
+        'omni-infusion-elixir',
+        'omni-infusion-elixir-enhanced',
+        'littlespace-lick',
+        'babybrain-syrup',
+        'babybrain-bullets',
+        'babybrain-grenade',
+        'giggle-gas',
+        'potion-of-parental-power',
+        'bitter-balm',
+        'bitter-sweet-draught',
+        'birch-beer'
+    ]);
 
     // Helper functions for inventory management
     function initializeInventory() {
@@ -245,6 +348,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Save / Load / Bundle buttons
     const exportSaveBtn = document.getElementById('export-save-btn');
+    const exportSaveFullBtn = document.getElementById('export-save-full-btn');
+    const exportSaveCraftedBtn = document.getElementById('export-save-crafted-btn');
     const importSaveBtn = document.getElementById('import-save-btn');
     const uploadBundleBtn = document.getElementById('upload-bundle-btn');
 
@@ -520,6 +625,15 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    if (exportSaveBtn) {
+        const dropdown = closestDropdown(exportSaveBtn);
+        exportSaveBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const isOpen = dropdown && dropdown.classList.contains('is-open');
+            setDropdownOpen(dropdown, !isOpen);
+        });
+    }
+
     // Initialize the player's inventory
     initializeInventory();
     syncGlobalState();
@@ -761,6 +875,83 @@ document.addEventListener('DOMContentLoaded', function() {
         return payload;
     }
 
+    function buildCraftedOnlySavePayload() {
+        const payload = buildSavePayload();
+        const recipesList = (typeof recipes !== 'undefined' && Array.isArray(recipes))
+            ? recipes
+            : (Array.isArray(window.recipes) ? window.recipes : []);
+        const recipeIdSet = new Set((Array.isArray(recipesList) ? recipesList : []).map(r => r && (r.outputId || r.id)).filter(Boolean));
+
+        const craftedInventoryOnly = {};
+        Object.entries(playerInventory || {}).forEach(([id, amount]) => {
+            const qty = Math.floor(Number(amount));
+            if (!recipeIdSet.has(id) || !Number.isFinite(qty) || qty <= 0) return;
+            craftedInventoryOnly[id] = qty;
+        });
+
+        const craftedCountsOnly = {};
+        Object.entries(playerCraftedItems || {}).forEach(([id, amount]) => {
+            const qty = Math.floor(Number(amount));
+            if (!recipeIdSet.has(id) || !Number.isFinite(qty) || qty <= 0) return;
+            craftedCountsOnly[id] = qty;
+        });
+
+        payload.data = {
+            ...(payload.data || {}),
+            playerInventory: craftedInventoryOnly,
+            craftedInventory: {},
+            playerCraftedItems: craftedCountsOnly,
+        };
+
+        return {
+            payload,
+            exportedRows: Object.entries(craftedInventoryOnly).map(([id, amount]) => ({ id, amount }))
+        };
+    }
+
+    function clearInventoryRowsAfterSaveExport(idsToClear) {
+        const clearIds = idsToClear instanceof Set ? idsToClear : new Set(Array.isArray(idsToClear) ? idsToClear : []);
+        const removedInventoryRows = [];
+        let removedInventoryItemCount = 0;
+        let removedCraftedCountRows = 0;
+
+        Array.from(clearIds).forEach((id) => {
+            const inventoryAmount = Math.floor(Number(playerInventory && playerInventory[id] ? playerInventory[id] : 0));
+            if (Number.isFinite(inventoryAmount) && inventoryAmount > 0) {
+                removedInventoryRows.push({ id, amount: inventoryAmount });
+                removedInventoryItemCount += inventoryAmount;
+                delete playerInventory[id];
+            }
+
+            const craftedAmount = Math.floor(Number(playerCraftedItems && playerCraftedItems[id] ? playerCraftedItems[id] : 0));
+            if (Number.isFinite(craftedAmount) && craftedAmount > 0) {
+                removedCraftedCountRows += 1;
+                delete playerCraftedItems[id];
+            }
+        });
+
+        localStorage.setItem('playerInventory', JSON.stringify(playerInventory || {}));
+        craftedInventory = {};
+        localStorage.setItem('craftedInventory', JSON.stringify(craftedInventory));
+        localStorage.setItem('playerCraftedItems', JSON.stringify(playerCraftedItems || {}));
+        syncGlobalState();
+
+        updateCraftedItemsDisplay();
+        const activeCategory = document.querySelector('.category-btn.active')?.dataset?.category || 'all';
+        loadIngredients(activeCategory);
+        checkBrewButton();
+
+        return {
+            removedInventoryRows,
+            removedInventoryItemCount,
+            removedCraftedCountRows
+        };
+    }
+
+    function clearTransferableInventoryAfterSaveExport() {
+        return clearInventoryRowsAfterSaveExport(TRANSFERABLE_BRIDGE_ITEM_IDS);
+    }
+
     function applySavePayload(payload) {
         if (!payload || payload.type !== 'crafting-tools-save') {
             throw new Error('Not a crafting-tools-save JSON');
@@ -828,10 +1019,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
         try {
             if (window.Logbook && typeof window.Logbook.addEntry === 'function' && granted.length) {
+                const totalAmount = granted.reduce((sum, row) => sum + Math.max(0, Math.floor(Number(row.amount) || 0)), 0);
                 window.Logbook.addEntry({
                     type: 'bundle',
-                    title: `Bundle applied · ${granted.length} item(s)`,
-                    data: { items: granted, bundleCreatedAt: payload.createdAt || null }
+                    title: `Bundle applied · ${granted.length} item stack(s)`,
+                    data: { items: granted, totalAmount, direction: 'in', bundleCreatedAt: payload.createdAt || null }
                 });
             }
         } catch (e) {
@@ -847,8 +1039,84 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function exportSaveToJson() {
         const payload = buildSavePayload();
+        const transferableInventoryRows = Array.from(TRANSFERABLE_BRIDGE_ITEM_IDS)
+            .map((id) => ({ id, amount: Math.floor(Number(playerInventory && playerInventory[id] ? playerInventory[id] : 0)) }))
+            .filter((row) => Number.isFinite(row.amount) && row.amount > 0);
+        const transferableItemCount = transferableInventoryRows.reduce((sum, row) => sum + row.amount, 0);
+
+        if (transferableInventoryRows.length > 0) {
+            const confirmed = window.confirm(
+                `Export this Alchemy save and transfer ${transferableInventoryRows.length} transferable stack(s)?\n\n`
+                + `This will remove ${transferableItemCount} transferable item(s) from the current Alchemy inventory after the save is created.\n`
+                + 'Only bridge-transferable crafted counts will be cleared from playerCraftedItems; everything outside the bridge stays behind.\n\n'
+                + 'If this was a mistake, you can load this save right back into the app.'
+            );
+            if (!confirmed) return;
+        }
+
         const stamp = new Date().toISOString().replace(/[:.]/g, '-');
         downloadJson(`crafting-tools-save-${stamp}.json`, payload);
+
+        if (transferableInventoryRows.length > 0) {
+            const cleared = clearTransferableInventoryAfterSaveExport();
+            try {
+                if (window.Logbook && typeof window.Logbook.addEntry === 'function' && cleared.removedInventoryRows.length) {
+                    const totalAmount = cleared.removedInventoryRows.reduce((sum, row) => sum + Math.max(0, Math.floor(Number(row.amount) || 0)), 0);
+                    window.Logbook.addEntry({
+                        type: 'bundle',
+                        title: `Save exported · ${cleared.removedInventoryRows.length} transferable stack(s) moved out`,
+                        data: {
+                            items: cleared.removedInventoryRows,
+                            totalAmount,
+                            direction: 'out',
+                            saveCreatedAt: payload.createdAt || null
+                        }
+                    });
+                }
+            } catch (e) {
+                console.warn('Failed to log save export transfer', e);
+            }
+        }
+    }
+
+    async function exportCraftedOnlySaveToJson() {
+        const { payload, exportedRows } = buildCraftedOnlySavePayload();
+        if (!exportedRows.length) {
+            alert('No crafted/player-craftable inventory is currently available to export.');
+            return;
+        }
+
+        const exportedItemCount = exportedRows.reduce((sum, row) => sum + Math.max(0, Math.floor(Number(row.amount) || 0)), 0);
+        const confirmed = window.confirm(
+            `Export a crafted-only save with ${exportedRows.length} crafted stack(s)?\n\n`
+            + `This will remove ${exportedItemCount} crafted item(s) from the current Alchemy inventory after the save is created.\n`
+            + 'Ingredients and other non-crafted inventory will stay behind.\n\n'
+            + 'If this was a mistake, you can load this save right back into the app.'
+        );
+        if (!confirmed) return;
+
+        const stamp = new Date().toISOString().replace(/[:.]/g, '-');
+        downloadJson(`crafting-tools-crafted-only-save-${stamp}.json`, payload);
+
+        const cleared = clearInventoryRowsAfterSaveExport(new Set(exportedRows.map((row) => row.id)));
+        try {
+            if (window.Logbook && typeof window.Logbook.addEntry === 'function' && cleared.removedInventoryRows.length) {
+                const totalAmount = cleared.removedInventoryRows.reduce((sum, row) => sum + Math.max(0, Math.floor(Number(row.amount) || 0)), 0);
+                window.Logbook.addEntry({
+                    type: 'bundle',
+                    title: `Crafted-only save exported · ${cleared.removedInventoryRows.length} crafted stack(s) moved out`,
+                    data: {
+                        items: cleared.removedInventoryRows,
+                        totalAmount,
+                        direction: 'out',
+                        exportMode: 'crafted-only',
+                        saveCreatedAt: payload.createdAt || null
+                    }
+                });
+            }
+        } catch (e) {
+            console.warn('Failed to log crafted-only save export', e);
+        }
     }
 
     async function loadSaveFromJson() {
@@ -879,7 +1147,20 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    if (exportSaveBtn) exportSaveBtn.addEventListener('click', exportSaveToJson);
+    if (exportSaveFullBtn) {
+        exportSaveFullBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            await exportSaveToJson();
+            setDropdownOpen(closestDropdown(exportSaveFullBtn), false);
+        });
+    }
+    if (exportSaveCraftedBtn) {
+        exportSaveCraftedBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            await exportCraftedOnlySaveToJson();
+            setDropdownOpen(closestDropdown(exportSaveCraftedBtn), false);
+        });
+    }
     if (importSaveBtn) importSaveBtn.addEventListener('click', loadSaveFromJson);
     if (uploadBundleBtn) uploadBundleBtn.addEventListener('click', uploadBundleFromJson);
     
@@ -1800,6 +2081,10 @@ document.addEventListener('DOMContentLoaded', function() {
         console.group('Brewing Process');
         console.log('Current slot contents:', slotContents);
         
+        // Clear result chamber and tooltip immediately when crafting starts
+        clearResultChamberOnly();
+        hideItemTooltip();
+        
         // Try to find a matching recipe
         const recipe = findMatchingRecipe(slotContents);
         console.log('Found recipe:', recipe?.id);
@@ -2161,6 +2446,37 @@ document.addEventListener('DOMContentLoaded', function() {
         let previewBox = document.querySelector('.recipe-preview');
         if (previewBox) {
             previewBox.remove();
+        }
+
+        if (recipe) {
+            const outputId = (recipe.outputId && typeof recipe.outputId === 'string') ? recipe.outputId : recipe.id;
+            const hasCraftedBefore = discoveredRecipes[recipe.id] || (playerCraftedItems && (playerCraftedItems[recipe.id] > 0 || playerCraftedItems[outputId] > 0));
+
+            if (hasCraftedBefore) {
+                const bestResultImage = recipe.result.craftedImage || recipe.result.image;
+                const img = document.createElement('img');
+                img.className = 'result-chamber-preview-image';
+                img.src = normalizeImagePath(bestResultImage);
+                img.alt = recipe.result.name;
+                img.style.opacity = '0.5';
+                img.style.transition = 'opacity 0.2s ease';
+                img.style.cursor = 'pointer';
+
+                // Add hover interactions
+                img.addEventListener('mouseenter', (e) => {
+                    img.style.opacity = '1';
+                    showItemTooltip(recipe.result, e);
+                });
+                img.addEventListener('mousemove', (e) => {
+                    positionTooltip(document.getElementById('item-tooltip'), e);
+                });
+                img.addEventListener('mouseleave', () => {
+                    img.style.opacity = '0.5';
+                    hideItemTooltip();
+                });
+
+                resultChamber.appendChild(img);
+            }
         }
     }
     

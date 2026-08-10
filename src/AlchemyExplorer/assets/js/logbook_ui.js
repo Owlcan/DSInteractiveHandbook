@@ -69,6 +69,22 @@
                         .map(r => `${escapeHtml(r.id)}${r.amount > 1 ? ` x${r.amount}` : ''}`)
                         .join(', ');
                     details = rewardText ? `<div class="logbook-details">${rewardText}</div>` : '';
+                } else if (e.data && Array.isArray(e.data.items) && e.data.items.length) {
+                    const totalAmount = Math.max(0, Math.floor(Number(e.data.totalAmount) || e.data.items.reduce((sum, row) => sum + Math.max(0, Math.floor(Number(row?.amount) || 0)), 0)));
+                    const directionText = e.data.direction === 'out'
+                        ? 'Moved out'
+                        : (e.data.direction === 'in' ? 'Received' : 'Items');
+                    const manifestHtml = e.data.items.map((row) => {
+                        const itemName = escapeHtml(String(row && (row.name || row.id) || 'Unknown item'));
+                        const amount = Math.max(0, Math.floor(Number(row && row.amount || 0)));
+                        return `<div>${itemName} x${amount}</div>`;
+                    }).join('');
+                    details = `
+                        <div class="logbook-details">
+                            <div><strong>${escapeHtml(directionText)}:</strong> ${escapeHtml(String(e.data.items.length))} stack(s), ${escapeHtml(String(totalAmount))} total item(s)</div>
+                            <div style="margin-top:6px; display:grid; gap:2px;">${manifestHtml}</div>
+                        </div>
+                    `;
                 }
 
                 return `

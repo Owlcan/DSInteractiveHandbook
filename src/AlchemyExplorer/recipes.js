@@ -55,7 +55,7 @@ const recipes = [
             effects: 'A legendary catalyst that can dramatically enhance the potency of any recipe.',
             image: 'assets/images/TurbonadoSugar.webp'
         },
-        validate: function(slots) {
+        validate: function (slots) {
             // Extensive debug logging
             console.group('Turbonado Sugar Recipe Validation');
             console.log('Slot Contents:', slots);
@@ -63,13 +63,13 @@ const recipes = [
             console.log('Checking slot E:', slots.e?.id);
             console.log('Expected slot C: white-sugar'); // Updated to match ingredients.js
             console.log('Expected slot E: flavor-matrix');
-            
+
             // Updated validation to use white-sugar
             const isValid = slots.c?.id === 'white-sugar' && slots.e?.id === 'flavor-matrix';
-            
+
             console.log('Validation result:', isValid);
             console.groupEnd();
-            
+
             return isValid;
         }
     },
@@ -94,7 +94,7 @@ const recipes = [
         exoticIngredient: null,
         outputId: 'white-sugar',
         resultAmount: 1,
-        validate: function(slots) {
+        validate: function (slots) {
             // Exactly 2 sweetleaf, no exotic.
             if (slots.e) return false;
             const ids = Object.values(slots)
@@ -141,11 +141,11 @@ const recipes = [
         name: 'Butter',
         ingredients: ['cream', 'rock-salt'],
         exoticIngredient: null,
-        validate: function(slots) {
+        validate: function (slots) {
             // Only cream and rock-salt, exactly 2 ingredients
             const slotArray = Object.values(slots).filter(slot => slot !== null);
-            const hasRequiredIngredients = slotArray.some(slot => slot.id === 'cream') && 
-                                         slotArray.some(slot => slot.id === 'rock-salt');
+            const hasRequiredIngredients = slotArray.some(slot => slot.id === 'cream') &&
+                slotArray.some(slot => slot.id === 'rock-salt');
             return hasRequiredIngredients && slotArray.length === 2;
         },
         result: {
@@ -160,18 +160,18 @@ const recipes = [
         name: 'Whipped White Butter',
         ingredients: ['cream', 'rock-salt'], // Updated to include ingredients
         exoticIngredient: null,
-        validate: function(slots) {
+        validate: function (slots) {
             // Debug logging
             console.log('Validating Whipped Butter Recipe');
             console.log('Slot contents:', slots);
-            
+
             // Count how many slots contain butter
             const butterCount = Object.values(slots)
                 .filter(slot => slot && slot.id === 'butter')
                 .length;
-            
+
             console.log('Found butter in', butterCount, 'slots');
-            
+
             // Need exactly 2 butter for whipped butter
             return butterCount === 2;
         },
@@ -187,11 +187,11 @@ const recipes = [
         name: 'Herb Butter',
         ingredients: ['cream', 'rock-salt', 'savour-herb'], // Updated to include ingredients
         exoticIngredient: null,
-        validate: function(slots) {
+        validate: function (slots) {
             // Debug logging
             console.log('Validating Herb Butter Recipe');
             console.log('Slot contents:', slots);
-            
+
             // Check for cream, rock salt, and savour herb in any slots
             const hasIngredients = {
                 cream: false,
@@ -209,14 +209,14 @@ const recipes = [
 
             // All ingredients must be present and must have exactly 3 ingredients
             const totalIngredients = Object.values(slots).filter(slot => slot !== null).length;
-            const isValid = hasIngredients.cream && 
-                          hasIngredients.rockSalt && 
-                          hasIngredients.savourHerb &&
-                          totalIngredients === 3;
+            const isValid = hasIngredients.cream &&
+                hasIngredients.rockSalt &&
+                hasIngredients.savourHerb &&
+                totalIngredients === 3;
 
             console.log('Herb Butter validation:', hasIngredients, 'Total ingredients:', totalIngredients);
             console.log('Recipe is valid:', isValid);
-            
+
             return isValid;
         },
         result: {
@@ -231,14 +231,14 @@ const recipes = [
         name: 'Magibutter',
         ingredients: ['cream', 'rock-salt'],
         exoticIngredient: 'tastetanium-crystal',
-        validate: function(slots) {
+        validate: function (slots) {
             // Need cream, rock-salt, and tastetanium-crystal in exotic slot
             const hasBasicIngredients = Object.values(slots)
                 .filter(slot => slot !== null)
                 .some(slot => slot.id === 'cream') &&
                 Object.values(slots)
-                .filter(slot => slot !== null)
-                .some(slot => slot.id === 'rock-salt');
+                    .filter(slot => slot !== null)
+                    .some(slot => slot.id === 'rock-salt');
             const hasExotic = slots.e?.id === 'tastetanium-crystal';
             return hasBasicIngredients && hasExotic;
         },
@@ -254,16 +254,16 @@ const recipes = [
         name: 'Plastic Sheeting',
         ingredients: ['plasticizer', 'petrodistillate'],
         exoticIngredient: null,
-        validate: function(slots) {
+        validate: function (slots) {
             // Need exactly plasticizer and petrodistillate
             const ingredients = Object.values(slots)
                 .filter(slot => slot !== null)
                 .map(slot => slot.id);
-            
+
             const hasPlasticizer = ingredients.includes('plasticizer');
             const hasPetrodistillate = ingredients.includes('petrodistillate');
             const hasExactly2Ingredients = ingredients.length === 2;
-            
+
             return hasPlasticizer && hasPetrodistillate && hasExactly2Ingredients;
         },
         result: {
@@ -280,17 +280,17 @@ const recipes = [
         name: 'Adhesive',
         ingredients: ['barkgum', 'plasticizer', 'solvent'],
         exoticIngredient: null,
-        validate: function(slots) {
+        validate: function (slots) {
             // Need exactly barkgum, plasticizer, and solvent
             const ingredients = Object.values(slots)
                 .filter(slot => slot !== null)
                 .map(slot => slot.id);
-            
+
             const hasBarkgum = ingredients.includes('barkgum');
             const hasPlasticizer = ingredients.includes('plasticizer');
             const hasSolvent = ingredients.includes('solvent');
             const hasExactly3Ingredients = ingredients.length === 3;
-            
+
             return hasBarkgum && hasPlasticizer && hasSolvent && hasExactly3Ingredients;
         },
         result: {
@@ -307,18 +307,18 @@ const recipes = [
         name: 'Diaper',
         ingredients: ['plastic-sheeting', 'adhesive', 'cotton-fluff'],
         exoticIngredient: null,
-        validate: function(slots) {
+        validate: function (slots) {
             // Need exactly plastic-sheeting, adhesive, and cotton-fluff
             const ingredients = Object.values(slots)
                 .filter(slot => slot !== null)
                 .map(slot => slot.id);
-            
+
             const hasPlasticSheeting = ingredients.includes('plastic-sheeting');
             const hasAdhesive = ingredients.includes('adhesive');
             const hasCottonFluff = ingredients.includes('cotton-fluff');
             const hasExactly3Ingredients = ingredients.length === 3;
             const noExotic = !slots.e;
-            
+
             return hasPlasticSheeting && hasAdhesive && hasCottonFluff && hasExactly3Ingredients && noExotic;
         },
         result: {
@@ -335,18 +335,18 @@ const recipes = [
         name: 'Lovely Diaper',
         ingredients: ['plastic-sheeting', 'adhesive', 'cotton-fluff'],
         exoticIngredient: 'touch-of-love',
-        validate: function(slots) {
+        validate: function (slots) {
             // Need exactly plastic-sheeting, adhesive, cotton-fluff, and touch-of-love in exotic slot
             const ingredients = Object.values(slots)
                 .filter(slot => slot !== null && slot.id !== 'touch-of-love')
                 .map(slot => slot.id);
-            
+
             const hasPlasticSheeting = ingredients.includes('plastic-sheeting');
             const hasAdhesive = ingredients.includes('adhesive');
             const hasCottonFluff = ingredients.includes('cotton-fluff');
             const hasExotic = slots.e && slots.e.id === 'touch-of-love';
             const hasExactly3RegularIngredients = ingredients.length === 3;
-            
+
             return hasPlasticSheeting && hasAdhesive && hasCottonFluff && hasExotic && hasExactly3RegularIngredients;
         },
         result: {
@@ -363,18 +363,18 @@ const recipes = [
         name: 'Quiche',
         ingredients: ['egg', 'cream', 'flour', 'herb-butter'],
         exoticIngredient: null,
-        validate: function(slots) {
+        validate: function (slots) {
             // Need these 4 ingredients
             const ingredients = Object.values(slots)
                 .filter(slot => slot !== null)
                 .map(slot => slot.id);
-            
+
             const hasEgg = ingredients.includes('egg');
             const hasCream = ingredients.includes('cream');
             const hasFlour = ingredients.includes('flour');
             const hasHerbButter = ingredients.includes('herb-butter');
             const hasExactly4Ingredients = ingredients.length === 4;
-            
+
             return hasEgg && hasCream && hasFlour && hasHerbButter && hasExactly4Ingredients;
         },
         result: {
@@ -713,7 +713,7 @@ const recipes = [
         name: 'Littlespace Lick',
         ingredients: ['turbonado-sugar'],
         exoticIngredient: 'tastetanium-crystal',
-        validate: function(slots) {
+        validate: function (slots) {
             // Turbonado Sugar + (any fruit or sweet herb) + Tastetanium Crystal in exotic slot
             const regularSlots = ['a', 'b', 'c', 'd']
                 .map(k => slots[k])
@@ -807,7 +807,7 @@ const recipes = [
         ingredients: [],
         exoticIngredient: null,
         resultAmount: 1,
-        validate: function(slots) {
+        validate: function (slots) {
             // Two valid combos (exactly 2 regular ingredients):
             // - Magibutter + White Sugar
             // - Turbonado Sugar + Butter
@@ -1174,7 +1174,7 @@ const recipes = [
     {
         id: 'standard-bullets',
         name: 'Standard Bullets',
-        ingredients: ['robusca', 'petrodistillate', 'fractal-copper'], 
+        ingredients: ['robusca', 'petrodistillate', 'fractal-copper'],
         exoticIngredient: null,
         resultAmount: 20,
         result: {
@@ -1722,7 +1722,7 @@ const recipes = [
             craftedImage: 'assets/images/chocolate frosting.webp'
         }
     },
-        {
+    {
         id: 'darkwood-paddle',
         name: 'Darkwood Paddle',
         ingredients: ['bronzewood', 'vitalium', 'defractor-prism'],
@@ -1770,6 +1770,576 @@ const recipes = [
                 width: 128,
                 height: 128
             }
+        }
+    },
+    {
+        id: 'lemon-cheesecake-donut',
+        name: 'Lemon Cheesecake Donut',
+        ingredients: ['flour', 'cream', 'white-sugar', 'lissomelemons'],
+        exoticIngredient: null,
+        resultAmount: 3,
+        result: {
+            name: 'Lemon Cheesecake Donut',
+            description: 'A rich, zesty donut filled with creamy sweetness and topped with a bright, static-charged lemon glaze.',
+            effects: 'Restores 1d8+4 HP in combat or 12 HP during a short rest. Additionally, the zesty charge grants immunity to Sleep and Hallucination effects for 1 hour. Overconsumption: consuming more than 1 per short rest requires an immediate potty check at the end of that short rest.',
+            category: ['food', 'crafted'],
+            image: 'assets/images/lemoncheesecakedonut.webp',
+            craftedImage: 'assets/images/lemoncheesecakedonut.webp'
+        }
+    },
+    {
+        id: 'lavender-cream-donut',
+        name: 'Lavender Cream Donut',
+        ingredients: ['flour', 'cream', 'white-sugar', 'dreamvapor'],
+        exoticIngredient: null,
+        resultAmount: 3,
+        result: {
+            name: 'Lavender Cream Donut',
+            description: 'A delicate, fluffy donut infused with the ephemeral, soothing essence of lavender mist and lost lullabies.',
+            effects: 'Restores 1d8+4 HP in combat or 12 HP during a short rest. Additionally, its soothing nature grants advantage on saving throws against being Charmed or Frightened for 1 hour. Overconsumption: consuming more than 1 per short rest requires an immediate potty check at the end of that short rest.',
+            category: ['food', 'crafted'],
+            image: 'assets/images/lavendercreamdonut.webp',
+            craftedImage: 'assets/images/lavendercreamdonut.webp'
+        }
+    },
+    {
+        id: 'wildberry-tart-donut',
+        name: 'Wildberry Tart Donut',
+        ingredients: ['flour', 'egg', 'white-sugar', 'planarcherry'],
+        exoticIngredient: null,
+        resultAmount: 3,
+        result: {
+            name: 'Wildberry Tart Donut',
+            description: 'A sweet, doughy ring topped with a brilliant, dimensional tart-berry reduction that tingles on the tongue.',
+            effects: 'Restores 1d8+4 HP in combat or 12 HP during a short rest. Additionally, the multi-dimensional fruit grants a +10 ft bonus to your walking speed for 10 minutes. Overconsumption: consuming more than 1 per short rest requires an immediate potty check at the end of that short rest.',
+            category: ['food', 'crafted'],
+            image: 'assets/images/wildberrytartdonut.webp',
+            craftedImage: 'assets/images/wildberrytartdonut.webp'
+        }
+    },
+    {
+        id: 'strawberry-iced-donut',
+        name: 'Strawberry Iced Donut',
+        ingredients: ['flour', 'butter', 'white-sugar', 'berrimaters'],
+        exoticIngredient: null,
+        resultAmount: 3,
+        result: {
+            name: 'Strawberry Iced Donut',
+            description: 'The ultimate comforting classic. A perfectly fried ring topped with a sweet, cherry-red berrimater icing and colorful sprinkles.',
+            effects: 'Restores 1d8+4 HP in combat or 12 HP during a short rest. Additionally, the pure sugary comfort grants 1d4 temporary hit points that last for 1 hour. Overconsumption: consuming more than 1 per short rest requires an immediate potty check at the end of that short rest.',
+            category: ['food', 'crafted'],
+            image: 'assets/images/strawberryiceddonut.webp',
+            craftedImage: 'assets/images/strawberryiceddonut.webp'
+        }
+    },
+    {
+        id: 'old-fashioned-choco-classic',
+        name: 'Old-Fashioned Choco-Classic',
+        ingredients: ['flour', 'egg', 'white-sugar', 'greensea-cacao'],
+        exoticIngredient: null,
+        resultAmount: 3,
+        result: {
+            name: 'Old-Fashioned Choco-Classic',
+            description: 'A dense, cakey donut with a perfect, slightly crunchy exterior, heavily glazed in rich, dark jungle cacao.',
+            effects: 'Restores 1d8+4 HP in combat or 12 HP during a short rest. Overconsumption: consuming more than 1 per short rest requires an immediate potty check at the end of that short rest.',
+            category: ['food', 'crafted'],
+            image: 'assets/images/oldfashionedchococlassic.webp',
+            craftedImage: 'assets/images/oldfashionedchococlassic.webp'
+        }
+    },
+    {
+        id: 'greater-hp-potion',
+        name: 'Greater HP Potion',
+        ingredients: ['robusca', 'vitalocanum', 'water-essence'],
+        exoticIngredient: 'sunset-essence',
+        resultAmount: 1,
+        result: {
+            name: 'Greater HP Potion',
+            description: 'A strong restorative potion that mends deep injuries much faster than the academy-standard red bottle.',
+            effects: 'Restores 6d4+6 HP in combat, or up to 30 HP outside combat.',
+            category: ['crafted', 'essence'],
+            image: 'assets/images/greaterhealthpotion.webp',
+            craftedImage: 'assets/images/greaterhealthpotion.webp'
+        }
+    },
+    {
+        id: 'weaver-sigil',
+        name: 'Weaver Sigil',
+        ingredients: ['congealed-silk', 'yarn', 'defractor-prism'],
+        exoticIngredient: null,
+        resultAmount: 1,
+        result: {
+            name: 'Weaver Sigil',
+            description: 'A spun sigil keyed to the Great Weaver. Invoke it outside combat to veil one traveler, halving random encounter cadence.',
+            effects: 'Halves random encounter cadence for one traveler for the next 150 hexes of movement. Consumed on use.',
+            category: ['crafted', 'essence'],
+            image: 'assets/images/weaversigil.webp',
+            craftedImage: 'assets/images/weaversigil.webp'
+        }
+    },
+    {
+        id: 'refined-silk',
+        name: 'Refined Silk',
+        ingredients: ['congealed-silk', 'solvent'],
+        exoticIngredient: null,
+        resultAmount: 1,
+        result: {
+            name: 'Refined Silk',
+            description: 'Silken thread spun and treated to form a light, shimmering fabric with high magical affinity.',
+            effects: 'A processed material used in high-end magical crafting.',
+            category: ['crafted', 'material', 'textile', 'rare'],
+            image: 'assets/images/refinedsilk.webp',
+            craftedImage: 'assets/images/refinedsilk.webp'
+        }
+    },
+    {
+        id: 'emergency-rescue-beacon',
+        name: 'Emergency Rescue Beacon',
+        ingredients: ['refined-silk', 'vitalocanum', 'defractor-prism', 'sunset-essence'],
+        exoticIngredient: 'prismatic-activator',
+        resultAmount: 1,
+        result: {
+            name: 'Emergency Rescue Beacon',
+            description: 'A single-use rescue flare keyed to Scholia. Trigger it outside combat to yank one bearer back to the Scholia front gates.',
+            effects: 'Return one bearer to the Scholia front gates. Consumed on use.',
+            category: ['crafted', 'essence'],
+            image: 'assets/images/rescuebeacon.webp',
+            craftedImage: 'assets/images/rescuebeacon.webp'
+        }
+    },
+    {
+        id: 'brown-tincture',
+        name: 'Brown Tincture',
+        ingredients: ['pottytime-fungus', 'nightshroom', 'water'],
+        exoticIngredient: null,
+        resultAmount: 1,
+        result: {
+            name: 'Brown Tincture',
+            description: 'An ingestion poison that forces DC 15 CON saves against bowel incontinence.',
+            effects: 'DC 15 Constitution Save or bowel incontinence for 1d2 days.',
+            category: ['crafted', 'essence'],
+            image: 'assets/images/healthpotion.webp',
+            craftedImage: 'assets/images/healthpotion.webp'
+        }
+    },
+    {
+        id: 'echoing-mana-brew',
+        name: 'Echoing Mana Brew',
+        ingredients: ['echo-shard', 'chronal-crystal', 'water'],
+        exoticIngredient: null,
+        resultAmount: 1,
+        result: {
+            name: 'Echoing Mana Brew',
+            description: 'A resonating magical beverage crafted from chronal crystals and echo shards. Overconsumption of its temporal properties causes rapid biological urgency, forcing an immediate potty check.',
+            effects: 'Restores one 1st-level spell slot and one 2nd-level spell slot. Overconsumption triggers an immediate potty check.',
+            category: ['food', 'crafted'],
+            image: 'assets/images/echoing_mana_brew.webp',
+            craftedImage: 'assets/images/echoing_mana_brew.webp'
+        }
+    },
+    {
+        id: 'eldritch-spiced-cocoa',
+        name: 'Eldritch Spiced Cocoa',
+        ingredients: ['eldritch-cacao', 'starshot-ore', 'lunar-egg', 'white-sugar'],
+        exoticIngredient: null,
+        resultAmount: 2,
+        result: {
+            name: 'Eldritch Spiced Cocoa',
+            description: 'A decadent spiced chocolate beverage that tempers the spirit but challenges the stomach, forcing an immediate potty check.',
+            effects: 'Restores 10 HP and grants temporary resistance to Psychic damage for 4 hours. Overconsumption triggers an immediate potty check.',
+            category: ['food', 'crafted'],
+            image: 'assets/images/eldritch_spiced_cocoa.webp',
+            craftedImage: 'assets/images/eldritch_spiced_cocoa.webp'
+        }
+    },
+    {
+        id: 'resilience-ointment',
+        name: 'Resilience Ointment',
+        ingredients: ['simple-herb', 'adhesive', 'vitalium'],
+        exoticIngredient: null,
+        resultAmount: 3,
+        result: {
+            name: 'Resilience Ointment',
+            description: 'A thick herbal balm that bolsters physical endurance and Constitution saving throws.',
+            effects: 'Grants advantage on Constitution saving throws (including continence checks) for 2 hours.',
+            category: ['crafted', 'essence'],
+            image: 'assets/images/resilience_ointment.webp',
+            craftedImage: 'assets/images/resilience_ointment.webp'
+        }
+    },
+    {
+        id: 'phoenix-embers-glaze',
+        name: 'Phoenix Embers Glaze',
+        ingredients: ['wildflower-honey-cream', 'star-sugar', 'water-essence'],
+        exoticIngredient: 'phoenix-feather',
+        resultAmount: 1,
+        result: {
+            name: 'Phoenix Embers Glaze',
+            description: 'A sweet, glowing glaze that bestows the eternal protective warmth of the phoenix. Its explosive fiery heat requires an immediate potty check.',
+            effects: 'Restores 15 HP and grants Fire immunity and Cold resistance for 2 hours. Overconsumption triggers an immediate potty check.',
+            category: ['food', 'crafted', 'legendary'],
+            image: 'assets/images/phoenix_embers_glaze.webp',
+            craftedImage: 'assets/images/phoenix_embers_glaze.webp'
+        }
+    },
+    {
+        id: 'planar-cherry-tart',
+        name: 'Planar Cherry Tart',
+        ingredients: ['planarcherry', 'butter', 'flour', 'star-sugar'],
+        exoticIngredient: null,
+        resultAmount: 1,
+        result: {
+            name: 'Planar Cherry Tart',
+            description: 'A sweet, space-bending pastry that accelerates travel. Its dimensional shifting forces an immediate potty check.',
+            effects: 'Restores 12 HP and increases travel speed by 3 hexes for the next 300 hexes of travel. Overconsumption triggers an immediate potty check.',
+            category: ['food', 'crafted'],
+            image: 'assets/images/planar_cherry_tart.webp',
+            craftedImage: 'assets/images/planar_cherry_tart.webp'
+        }
+    },
+    {
+        id: 'marbled-marshmallows',
+        name: 'Marbled Marshmallows',
+        ingredients: ['marsh-mallow-root', 'white-sugar', 'spring-water'],
+        resultAmount: 5,
+        exoticIngredient: null,
+        result: {
+            name: 'Marbled Marshmallows',
+            description: 'A spongy, delightfully soft cuboid treat popular among students camping in the Campus Woods. The ambient glowing fog of the Marshland Nexus gives it a beautiful, faint-blue marbling.',
+            effects: 'Restores 1d4 HP (Maximum 4 HP if consumed during a short rest) and grants resistance to falling damage for 1 hour. Overconsumption Penalty: Consuming more than four per short rest forces an immediate Potty Check.',
+            image: 'assets/images/marbled-marshmallows.webp',
+            craftedImage: 'assets/images/marbled-marshmallows.webp',
+            category: ['food', 'consumable']
+        }
+    },
+    {
+        id: 'school-clam-chowder',
+        name: 'School Clam Chowder',
+        ingredients: ['school-clam', 'cream', 'savour-herb', 'rock-salt'],
+        resultAmount: 1,
+        exoticIngredient: null,
+        result: {
+            name: 'School Clam Chowder',
+            description: 'A thick, deeply warming, and profoundly savory soup. It is a staple comfort food designed to shake off the bone-chilling dampness of the coastal winds or the humid chill of the deep jungle.',
+            effects: 'Grants 2d6 Temporary Hit Points (Maximum 12 Temp HP if consumed during a short rest) and advantage on Constitution saving throws against cold environments for 12 hours. Overconsumption Penalty: The rich dairy base forces an immediate Potty Check if more than one bowl is eaten per short rest.',
+            image: 'assets/images/School_Clam_Chowder.webp',
+            craftedImage: 'assets/images/School_Clam_Chowder.webp',
+            category: ['food', 'consumable']
+        }
+    },
+    {
+        id: 'smores',
+        name: 'Smores',
+        ingredients: ['chocolate-bar', 'simple-biscuit', 'marbled-marshmallows'],
+        resultAmount: 2,
+        exoticIngredient: null,
+        result: {
+            name: 'Smores',
+            description: 'The quintessential champion of outdoor student survival, assembled over a crackling campfire. The hot, toasted marshmallow melts the chocolate, creating a gooey, transcendent center of domestic comfort.',
+            effects: 'Instantly removes the Frightened or Charmed condition. If consumed during a Short Rest, the profound sense of comfort allows the student to add a +1 bonus to the maximum value of every Hit Die rolled. Overconsumption Penalty: The intense sugar rush forces an immediate Potty Check.',
+            image: 'assets/images/Smores.webp',
+            craftedImage: 'assets/images/Smores.webp',
+            category: ['food', 'consumable']
+        }
+    },
+    {
+        id: 'foundry-floor-coffee',
+        name: 'Foundry-Floor Coffee',
+        ingredients: ['water', 'cream', 'greensea-coffee-beans'],
+        resultAmount: 2,
+        exoticIngredient: null,
+        result: {
+            name: 'Foundry-Floor Coffee',
+            description: 'A dark, viscous, and incredibly potent brew consumed by the gallon in the subterranean macro-forges of Elzbereth. It is functional, bitter, and hits the nervous system like a warhammer.',
+            effects: 'Restores 1d4 HP (Maximum 4 HP if consumed during a short rest). For the next hour, the drinker gains a +2 bonus to Initiative rolls. Overconsumption Penalty: The sheer acidic caffeine content is brutal on the digestive tract. Consuming more than one per short rest forces an immediate Potty Check at disadvantage.',
+            image: 'assets/images/Foundry-Floor_Coffee.webp',
+            craftedImage: 'assets/images/Foundry-Floor_Coffee.webp',
+            category: ['beverage', 'consumable']
+        }
+    },
+    {
+        id: 'arcanists-espresso-cake',
+        name: "Arcanist's Espresso Cake",
+        ingredients: ['flour', 'butter', 'white-sugar', 'greensea-coffee-beans'],
+        resultAmount: 2,
+        exoticIngredient: null,
+        result: {
+            name: "Arcanist's Espresso Cake",
+            description: 'A dense, springy sponge cake deeply marbled with concentrated coffee. It is a favored treat among chronomancers who require massive bursts of simultaneous caloric and mental energy.',
+            effects: 'Restores 1d6 HP (Maximum 6 HP if consumed during a short rest). Grants advantage on Intelligence (Arcana) checks for 10 minutes. Overconsumption Penalty: The dense combination of fat, sugar, and raw caffeine acts as an aggressive laxative. Eating more than one slice per short rest forces an immediate Potty Check.',
+            image: 'assets/images/Arcanist_Espresso_Cake.webp',
+            craftedImage: 'assets/images/Arcanist_Espresso_Cake.webp',
+            category: ['food', 'consumable']
+        }
+    },
+    {
+        id: 'greensea-canopy-salad',
+        name: 'Greensea Canopy Salad',
+        ingredients: ['lakale', 'greenseamatoto', 'coneseeds', 'savour-herb'],
+        resultAmount: 2,
+        exoticIngredient: null,
+        result: {
+            name: 'Greensea Canopy Salad',
+            description: 'A crunchy, nutrient-dense, and highly fibrous bowl of raw greens natively harvested from the untamed borders of the Greensea Expanse. It tastes intensely of the earth and requires serious jaw-strength to chew.',
+            effects: 'Restores 1d8 HP (Maximum 8 HP if consumed during a short rest). Eating this superfood immediately cures the Poisoned condition. Overconsumption Penalty: The extreme volume of raw, magical jungle fiber is notoriously difficult to process. Eating more than one salad per short rest forcefully purges the system, triggering an immediate Potty Check at disadvantage.',
+            image: 'assets/images/Greensea_Canopy_Salad.webp',
+            craftedImage: 'assets/images/Greensea_Canopy_Salad.webp',
+            category: ['food', 'consumable']
+        }
+    },
+    {
+        id: 'wayfarers-gotato-fries',
+        name: "Wayfarer's Gotato Fries",
+        ingredients: ['gotato', 'cooking-oil', 'rock-salt'],
+        resultAmount: 1,
+        exoticIngredient: null,
+        result: {
+            name: "Wayfarer's Gotato Fries",
+            description: 'A greasy, salty, universally beloved comfort food sold in paper cones at the snack shack along the Road to Majica.',
+            effects: 'Restores 1d6 HP (Maximum 6 HP if consumed during a short rest). Grants a +1 bonus to the next saving throw made within 10 minutes. Overconsumption Penalty: The heavy grease from the cooking oil settles poorly in a resting stomach. Eating more than one serving per short rest forces an immediate Potty Check.',
+            image: 'assets/images/Wayfarer_Gotato_Fries.webp',
+            craftedImage: 'assets/images/Wayfarer_Gotato_Fries.webp',
+            category: ['food', 'consumable']
+        }
+    },
+    {
+        id: 'crimson-mess-hall-mashed-gotatos',
+        name: 'Crimson Mess Hall Mashed Gotatos',
+        ingredients: ['gotato', 'cream', 'rock-salt', 'herb-butter'],
+        resultAmount: 2,
+        exoticIngredient: null,
+        result: {
+            name: 'Crimson Mess Hall Mashed Gotatos',
+            description: 'A thick, buttery, and incredibly heavy side dish traditionally served in the grand chambers of the Crimson Mess Hall. It is designed to physically weigh a student down and coat the ribs.',
+            effects: 'Restores 2d4 HP (Maximum 8 HP if consumed during a short rest). Restores 1 lost Maturity Point. Overconsumption Penalty: The overwhelming amount of heavy dairy fat mixed with dense starch creates an undeniable biological pressure. Consuming more than one bowl per short rest forces an immediate Potty Check at disadvantage.',
+            image: 'assets/images/Crimson_Mess_Hall_Mashed_Gotatos.webp',
+            craftedImage: 'assets/images/Crimson_Mess_Hall_Mashed_Gotatos.webp',
+            category: ['food', 'consumable']
+        }
+    },
+    {
+        id: 'greensea-nanner-loaf',
+        name: 'Greensea Nanner Loaf',
+        ingredients: ['greenseananners', 'flour', 'butter', 'egg'],
+        resultAmount: 2,
+        exoticIngredient: null,
+        result: {
+            name: 'Greensea Nanner Loaf',
+            description: 'A sweet, incredibly dense, and moist bread that utilizes the naturally sweet, energy-rich fruits found in the humid, explosive growth of the Temperate Jungle.',
+            effects: 'Restores 1d8 HP (Maximum 8 HP if consumed during a short rest). Grants 1d4 temporary hit points that last until the next rest. Overconsumption Penalty: The heavy, dense fruit bread sits like a brick in the lower intestines. Eating more than one loaf per short rest forces an immediate Potty Check.',
+            image: 'assets/images/Greensea_Nanner_Loaf.webp',
+            craftedImage: 'assets/images/Greensea_Nanner_Loaf.webp',
+            category: ['food', 'consumable']
+        }
+    },
+    {
+        id: 'the-nanners-hootzer',
+        name: 'The Nanners Hootzer',
+        ingredients: ['greenseananners', 'greensea-cacao', 'cream', 'caramel'],
+        resultAmount: 1,
+        exoticIngredient: null, // Since the logic dictates combination-based legendary, but we could assign one if it used a specific catalyst.
+        result: {
+            name: 'The Nanners Hootzer',
+            description: 'A decadent, awe-inspiring, and outrageously indulgent legendary dessert named in honor of Headmaster Horace Hootz. It is a massive sundae-style concoction usually reserved for graduating seniors.',
+            effects: 'Restores 4d4 HP (Maximum 16 HP if consumed during a short rest). Instantly removes one level of exhaustion and restores all missing Maturity Points. Overconsumption Penalty: This dish is an absolute biological ticking time bomb of pure sugar, heavy dairy, and rich cacao. Consuming more than one of these massive sundaes per short rest completely overwhelms the digestive tract, forcing an immediate Potty Check at disadvantage, and reducing the eater’s movement speed by 5 feet for 1 hour due to intense bloating.',
+            image: 'assets/images/The_Nanners_Hootzer.webp',
+            craftedImage: 'assets/images/The_Nanners_Hootzer.webp',
+            category: ['food', 'legendary', 'consumable']
+        }
+    },
+    {
+        id: 'cosmic-cold-brew',
+        name: 'Cosmic Cold Brew',
+        ingredients: ['water', 'greensea-coffee-beans', 'star-sugar'],
+        resultAmount: 1,
+        exoticIngredient: 'distillation-of-a-night-sky',
+        result: {
+            name: 'Cosmic Cold Brew',
+            description: 'A freezing, glittering stimulant that looks like a swirling galaxy trapped within a heavy, industrial mug.',
+            effects: 'Restores 4d4 HP (Maximum 16 HP if consumed during a short rest). Cures all levels of exhaustion instantly and grants the drinker Darkvision and a +10 ft. bonus to their movement speed for 8 hours. Overconsumption Penalty: Consuming more than one per short rest forces an immediate Potty Check.',
+            image: 'assets/images/Cosmic_Cold_Brew.webp',
+            craftedImage: 'assets/images/Cosmic_Cold_Brew.webp',
+            category: ['beverage', 'legendary', 'consumable']
+        }
+    },
+    {
+        id: 'mothers-comfort-mash',
+        name: "Mother's Comfort Mash",
+        ingredients: ['gotato', 'magibutter', 'cream', 'rock-salt'],
+        resultAmount: 1,
+        exoticIngredient: 'touch-of-love',
+        result: {
+            name: "Mother's Comfort Mash",
+            description: 'The ultimate expression of domestic safety in County Majicka, a haven known for its comfortable, padded domesticity. The infusion of common love magic turns a simple bowl of mashed gotatos into a comforting psychological shield.',
+            effects: 'Restores 3d6 HP (Maximum 18 HP if consumed during a short rest). The eater gains advantage on saving throws against the Frightened and Charmed conditions for 4 hours, wrapped in a soothing sense of maternal protection. Overconsumption Penalty: Consuming more than one per short rest forces an immediate Potty Check.',
+            image: 'assets/images/Mothers_Comfort_Mash.webp',
+            craftedImage: 'assets/images/Mothers_Comfort_Mash.webp',
+            category: ['food', 'uncommon', 'consumable']
+        }
+    },
+    {
+        id: 'matrix-glazed-biscuits',
+        name: 'Matrix-Glazed Biscuits',
+        ingredients: ['biscuits', 'white-sugar', 'butter'],
+        resultAmount: 4,
+        exoticIngredient: 'flavor-matrix',
+        result: {
+            name: 'Matrix-Glazed Biscuits',
+            description: 'An ordinary, crumbly biscuit weaponized by the awesome gastronomic might of the flavor matrix. The glaze shifts colors randomly and tastes like pure, concentrated dopamine.',
+            effects: 'Restores 2d4 HP (Maximum 8 HP if consumed during a short rest). A volatile catalyst snack: roll 1d4 when eaten to restore that many expended spell slots of 1st or 2nd level. Overconsumption Penalty: Consuming more than two per short rest forces an immediate Potty Check.',
+            image: 'assets/images/Matrix-Glazed_Biscuits.webp',
+            craftedImage: 'assets/images/Matrix-Glazed_Biscuits.webp',
+            category: ['food', 'legendary', 'consumable']
+        }
+    },
+    {
+        id: 'azure-clam-chowder',
+        name: 'Azure Clam Chowder',
+        ingredients: ['school-clam', 'azure-cream', 'rock-salt', 'savour-herb'],
+        resultAmount: 1,
+        exoticIngredient: 'distillation-of-a-night-sky',
+        result: {
+            name: 'Azure Clam Chowder',
+            description: 'A glowing, ethereal blue chowder. The bottled twilight essence perfectly complements the oceanic brine of the clam harvested from the Westersea.',
+            effects: 'Restores 3d8 HP (Maximum 24 HP if consumed during a short rest). Grants the eater resistance to Cold and Fire damage for the duration of an expedition, and allows them to breathe underwater for 1 hour. Overconsumption Penalty: Consuming more than one per short rest forces an immediate Potty Check.',
+            image: 'assets/images/Azure_Clam_Chowder.webp',
+            craftedImage: 'assets/images/Azure_Clam_Chowder.webp',
+            category: ['food', 'legendary', 'consumable']
+        }
+    },
+    {
+        id: 'lovers-latte',
+        name: 'Lover’s Latte',
+        ingredients: ['water', 'greensea-coffee-beans', 'wildflower-honey-cream', 'star-sugar'],
+        resultAmount: 1,
+        exoticIngredient: 'touch-of-love',
+        result: {
+            name: 'Lover’s Latte',
+            description: 'A warm, perfectly frothed morning beverage adorned with a glowing pink foam heart that never dissolves.',
+            effects: 'Restores 2d6 HP (Maximum 12 HP if consumed during a short rest). Grants the drinker advantage on all Charisma-based checks for 1 hour, and immediately restores 1d4 Maturity Points. Overconsumption Penalty: Consuming more than one per short rest forces an immediate Potty Check.',
+            image: 'assets/images/Lovers_Latte.webp',
+            craftedImage: 'assets/images/Lovers_Latte.webp',
+            category: ['beverage', 'uncommon', 'consumable']
+        }
+    },
+    {
+        id: 'starlight-mallow-fudge',
+        name: 'Starlight Mallow-Fudge',
+        ingredients: ['marsh-mallow-root', 'magibutter', 'eldritch-cacao', 'star-sugar'],
+        resultAmount: 4,
+        exoticIngredient: 'flavor-matrix',
+        result: {
+            name: 'Starlight Mallow-Fudge',
+            description: 'A cube of fudge so dense, sweet, and perfectly synthesized that it defies standard culinary physics, never melting in the sun.',
+            effects: 'Restores 4d10 HP (Maximum 40 HP if consumed during a short rest). Acts as a perfect survival ration. One bite sustains a creature for a full day and grants 10 Temporary Hit Points. Overconsumption Penalty: Consuming more than two per short rest forces an immediate Potty Check.',
+            image: 'assets/images/Starlight_Mallow-Fudge.webp',
+            craftedImage: 'assets/images/Starlight_Mallow-Fudge.webp',
+            category: ['food', 'legendary', 'consumable']
+        }
+    },
+    {
+        id: 'star-soaked-nanner-flambe',
+        name: 'Star-Soaked Nanner Flambé',
+        ingredients: ['everripenanners', 'magicaramel', 'magibutter', 'starsoaked-vanilla'],
+        resultAmount: 1,
+        exoticIngredient: null,
+        result: {
+            name: 'Star-Soaked Nanner Flambé',
+            description: 'Using the legendary, luminous starsoaked-vanilla and potent magicaramel to flambé the extremely rare, energy-rich jungle fruit cultivated near the humid canopy of the Greensea.',
+            effects: 'Restores 2d10 HP (Maximum 20 HP if consumed during a short rest). A heavy, magical sugar rush that grants a +10 ft. bonus to walking speed for 12 hours. Overconsumption Penalty: Consuming more than one per short rest forces an immediate Potty Check.',
+            image: 'assets/images/Star-Soaked_Nanner_Flambe.webp',
+            craftedImage: 'assets/images/Star-Soaked_Nanner_Flambe.webp',
+            category: ['food', 'epic', 'consumable']
+        }
+    },
+    {
+        id: 'lunar-egg-custard',
+        name: 'Lunar Egg Custard',
+        ingredients: ['lunar-egg', 'azure-cream', 'star-sugar'],
+        resultAmount: 1,
+        exoticIngredient: null,
+        result: {
+            name: 'Lunar Egg Custard',
+            description: 'A wildly expensive, glowing blue pudding made entirely of high-tier celestial drops without needing a true exotic catalyst.',
+            effects: 'Restores 2d8+3 HP (Maximum 19 HP if consumed during a short rest). Cures all non-magical diseases and poisons. Overconsumption Penalty: Consuming more than one per short rest forces an immediate Potty Check.',
+            image: 'assets/images/Lunar_Egg_Custard.webp',
+            craftedImage: 'assets/images/Lunar_Egg_Custard.webp',
+            category: ['food', 'legendary', 'consumable']
+        }
+    },
+    {
+        id: 'savour-herb-nanner-salad',
+        name: 'Savour-Herb Nanner Salad',
+        ingredients: ['lakale', 'greenseananners', 'coneseeds', 'savour-herb'],
+        resultAmount: 1,
+        exoticIngredient: null,
+        result: {
+            name: 'Savour-Herb Nanner Salad',
+            description: 'A confusing but incredibly healthy mix of tough jungle fiber, sweet fruit, and savory herbs.',
+            effects: 'Restores 1d8 HP (Maximum 8 HP if consumed during a short rest). Grants advantage on Constitution saving throws against ingested hazards for 8 hours. Overconsumption Penalty: Consuming more than one per short rest forces an immediate Potty Check.',
+            image: 'assets/images/Savour-Herb_Nanner_Salad.webp',
+            craftedImage: 'assets/images/Savour-Herb_Nanner_Salad.webp',
+            category: ['food', 'uncommon', 'consumable']
+        }
+    },
+    {
+        id: 'marbled-mocha',
+        name: 'Marbled Mocha',
+        ingredients: ['water', 'greensea-coffee-beans', 'marbled-marshmallows', 'chocolate-bar'],
+        resultAmount: 1,
+        exoticIngredient: null,
+        result: {
+            name: 'Marbled Mocha',
+            description: 'A hot, sweet coffee drink where the blue-marbled mallows have melted into a thick, magical, buoyant foam atop a rich cosmic chocolate base.',
+            effects: 'Restores 2d6 HP (Maximum 12 HP if consumed during a short rest). Removes one level of exhaustion and grants a +1 bonus to Strength and Dexterity checks for 3 hours. Overconsumption Penalty: Consuming more than one per short rest forces an immediate Potty Check.',
+            image: 'assets/images/Marbled_Mocha.webp',
+            craftedImage: 'assets/images/Marbled_Mocha.webp',
+            category: ['beverage', 'rare', 'consumable']
+        }
+    },
+    {
+        id: 'cosmic-caramel-crunch',
+        name: 'Cosmic Caramel Crunch',
+        ingredients: ['caramel', 'coneseeds', 'rock-salt'],
+        resultAmount: 3,
+        exoticIngredient: 'distillation-of-a-night-sky',
+        result: {
+            name: 'Cosmic Caramel Crunch',
+            description: 'Sticky, salty, roasted seeds suspended in a hardened, black-and-silver starry caramel brittle.',
+            effects: 'Restores 1d4 HP (Maximum 4 HP if consumed during a short rest). When chewed, the starry brittle pops loudly, granting the eater the ability to cast the Light cantrip at will for 1 hour. Overconsumption Penalty: Consuming more than one per short rest forces an immediate Potty Check.',
+            image: 'assets/images/Cosmic_Caramel_Crunch.webp',
+            craftedImage: 'assets/images/Cosmic_Caramel_Crunch.webp',
+            category: ['food', 'legendary', 'consumable']
+        }
+    },
+    {
+        id: 'eldritch-touch-cocoa',
+        name: 'Eldritch Touch Cocoa',
+        ingredients: ['water', 'eldritch-cacao', 'wildflower-honey-cream', 'white-sugar'],
+        resultAmount: 1,
+        exoticIngredient: 'touch-of-love',
+        result: {
+            name: 'Eldritch Touch Cocoa',
+            description: 'The quintessential rainy-day drink infused with rare, mind-bending cacao and divine affection. Thick, warm, and overwhelmingly nostalgic.',
+            effects: 'Restores 3d10 HP (Maximum 30 HP if consumed during a short rest). Removes the Frightened condition, fully restores a student\'s Maturity Meter, and grants 1d6 Temporary Hit Points. Overconsumption Penalty: Consuming more than one per short rest forces an immediate Potty Check.',
+            image: 'assets/images/Eldritch_Touch_Cocoa.webp',
+            craftedImage: 'assets/images/Eldritch_Touch_Cocoa.webp',
+            category: ['beverage', 'epic', 'consumable']
+        }
+    },
+    {
+        id: 'soothing-lavender-compress',
+        name: 'Soothing Lavender Compress',
+        ingredients: ['refined-silk', 'cotton-fluff', 'simple-herb', 'water'],
+        exoticIngredient: null,
+        resultAmount: 1,
+        result: {
+            name: 'Soothing Lavender Compress',
+            description: 'A lavender-infused cloth treated with refined silk and cotton fluff. Placed on a traveler, it heals exhaustion and promotes calming sleep.',
+            effects: 'Removes 1 level of exhaustion and restores 15 HP. Clears active debuffs.',
+            category: ['crafted', 'material', 'textile'],
+            image: 'assets/images/soothing_lavender_compress.webp',
+            craftedImage: 'assets/images/soothing_lavender_compress.webp'
         }
     }
 ];
@@ -1867,16 +2437,16 @@ function checkForDiscoveredRecipe() {
     if (recipe) {
         console.log('Found recipe:', recipe.id);
         console.log('Recipe is discovered:', !!discoveredRecipes[recipe.id]);
-        
+
         // Show preview if recipe is valid and discovered
         if (discoveredRecipes[recipe.id] && isRecipeComplete(slotContents, recipe)) {
             previewBox.style.display = 'flex';
-            
+
             const img = document.createElement('img');
             img.src = recipe.result.image;
             img.alt = recipe.result.name;
             previewBox.appendChild(img);
-            
+
             // Add tooltip and visual feedback
             previewBox.title = `Click Craft to create: ${recipe.result.name}`;
             previewBox.style.opacity = '1';

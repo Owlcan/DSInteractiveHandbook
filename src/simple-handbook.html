@@ -558,6 +558,8 @@
     #origin-feats-section.active,
     #trinket-generator-section.active,
     #auto-dm-section.active,
+    #owltv-section.active,
+    #item-shop-section.active,
     /* #legacy-Weapons.active,  Letting specific rule above handle its height */
     /* #legacy-Regalia.active, Leting specific rule above handle its height */
     #pamperlogue.active,
@@ -567,7 +569,7 @@
     }
 
     
-    #legacy-Weapons, #legacy-Regalia, #pamperlogue, #potty-checker, #achievement-tracker {
+    #legacy-Weapons, #legacy-Regalia, #pamperlogue, #potty-checker, #achievement-tracker, #owltv-section, #item-shop-section {
       background-color: #2c2619; 
       position: relative; 
       z-index: 10; 
@@ -860,6 +862,8 @@
         <button id="btn-world-atlas" class="nav-button">World Atlas</button>
       <button id="btn-spellbook">Spellbook</button>
   <button id="btn-games" class="nav-button">Games</button>
+        <button id="btn-owltv" class="nav-button">OwlTV</button>
+        <button id="btn-item-shop" class="nav-button">Item Shop</button>
       <button id="btn-pamperlogue" class="nav-button">Pamperlogue</button>
       <button id="btn-potty-checker" class="nav-button">Potty Checker</button>
   <button id="btn-tracker" class="nav-button">Tracker</button>
@@ -935,7 +939,7 @@
         	 <li><strong>Your Hero Storybook: Character Sheets!</strong> Every brave adventurer needs a storybook that tells everyone how amazing they are! This is your character sheet. You can make one using:
           	 <ul>
             	 <li><a href="https://www.dndbeyond.com/" target="_blank" rel="noopener noreferrer">D&D Beyond</a>: It's super easy, like coloring by numbers, and helps you keep track of all your cool powers!</li>
-            	 <li>Our Special <a href="https://docs.google.com/spreadsheets/d/1ApmbXHTln99fPTUpanyQRTXNzXbQ8UBTt3Uq8xInQKw/edit?usp=sharing" target="_blank" rel="noopener noreferrer">Google Sheet Template</a>: This is another magic scroll that helps you build your hero!</li>
+              	 <li>Our Special <a href="https://docs.google.com/spreadsheets/d/1SHitS8C3_C08vPgoIXMjKZfHK8frdxGnvYuBWo20sjU/edit?usp=sharing" target="_blank" rel="noopener noreferrer">Google Sheet Template</a>: This is another magic scroll that helps you build your hero!</li>
           	 </ul>
           	 Both are fantastic for showing off your character!
         	 </li>
@@ -1240,6 +1244,13 @@
         </div>
 
         <div class="h2p-accordion-item">
+          <h4 class="h2p-accordion-header">Which ASIs do I use during character creation?<span class="arrow">&#9662;</span></h4>
+          <div class="h2p-accordion-content">
+            <p>Use both. Character creation uses your racial ASIs and your background ASIs together, combined into the same final starting spread.</p>
+          </div>
+        </div>
+
+        <div class="h2p-accordion-item">
             <h4 class="h2p-accordion-header">What level do student characters start at? What about teachers?<span class="arrow">&#9662;</span></h4>
             <div class="h2p-accordion-content">
                 <p>Student characters start at Level 5. Teacher characters start at Level 11. Advancement is typically by milestone. (Handbook, p. 7)</p>
@@ -1522,6 +1533,27 @@
             </div>
         </div>
 
+            <div class="h2p-accordion-item">
+              <h4 class="h2p-accordion-header">How do I use the alchemy and crafting apps?<span class="arrow">&#9662;</span></h4>
+              <div class="h2p-accordion-content">
+                <p>The alchemy and crafting tools are open to everyone. All alchemy items can be crafted by any player using the mini-game, materials gathered in-world, and ingredients collected through the Scholia RPG. If an item appears in the crafting flow, that means it is intended to be obtainable through play rather than locked to a specific class or role.</p>
+              </div>
+            </div>
+
+            <div class="h2p-accordion-item">
+              <h4 class="h2p-accordion-header">Where do I forage and harvest ingredients from the Item Compendium?<span class="arrow">&#9662;</span></h4>
+              <div class="h2p-accordion-content">
+                <p>The Scholia RPG is the main answer. Players gather ingredients by exploring its zones, foraging and harvesting in matching environments, fishing where appropriate, and collecting drops tied to the realm's biomes and encounters. In practice, the item compendium's gatherable materials are meant to be sourced through the Scholia RPG, the crafting/alchemy mini-game loop, and related in-world gathering play.</p>
+              </div>
+            </div>
+
+            <div class="h2p-accordion-item">
+              <h4 class="h2p-accordion-header">How do I get realm money?<span class="arrow">&#9662;</span></h4>
+              <div class="h2p-accordion-content">
+                <p>You earn realm money by participating in games and events across the Scholia ecosystem. That includes Fishing, Alchemy/Crafting and its mini-game, and the Scholia RPG. Players can also earn realm money from Scholia team events and contests, from the in-server marketplace by buying and selling items, and by completing quests and challenges in the Scholia RPG. Realm money can then be spent in the Item Shop and used to participate in the Scholia Casino Games.</p>
+              </div>
+            </div>
+
         <div class="h2p-accordion-item">
             <h4 class="h2p-accordion-header">What is the price of XYZ item?<span class="arrow">&#9662;</span></h4>
             <div class="h2p-accordion-content clearfix">
@@ -1536,6 +1568,27 @@
             <div class="h2p-accordion-content">
                 <p>Normally yes, but all gear purchase approvals must be submitted in the #i-want-to-buy-something channel on Discord for staff review. This ensures items are appropriate for the game balance and setting.</p>
             </div>
+        </div>
+
+        <div class="h2p-accordion-item">
+          <h4 class="h2p-accordion-header">How do I make or customize legacy weapons and regalia?<span class="arrow">&#9662;</span></h4>
+          <div class="h2p-accordion-content">
+            <p>Use the Legacy Weapon Creator and Regalia Creator tabs. Those apps walk you through choosing the base item, selecting slots or enhancement levels, and then spending those slots on magical upgrades, utility effects, defenses, class-flavored options, and accessories. In short: legacy weapons are your customizable magical weapon path, and regalia is the same idea for armor, clothing, and related accessory builds.</p>
+          </div>
+        </div>
+
+        <div class="h2p-accordion-item">
+          <h4 class="h2p-accordion-header">What are the slot limits for legacy weapons and regalia?<span class="arrow">&#9662;</span></h4>
+          <div class="h2p-accordion-content">
+            <p>Slots are limited by the build you choose in the creator apps. Legacy weapons begin as awakened items and grow through stronger legacy tiers, which increases how much upgrade space the weapon can support. Regalia uses a combination of chosen upgrade slots plus any bonus slots granted by its enhancement level. Once all available slots are filled, the item is capped until you upgrade it further or acquire additional loose slots through play or trade.</p>
+          </div>
+        </div>
+
+        <div class="h2p-accordion-item">
+          <h4 class="h2p-accordion-header">How do I obtain legacy weapons and regalia items?<span class="arrow">&#9662;</span></h4>
+          <div class="h2p-accordion-content">
+            <p>Legacy and regalia items come from crafting, events, and in-game activities across the Scholia ecosystem. Supporting the creator on SubscribeStar also earns supporters a tier 2 or tier 4 legacy weapon or regalia item of their choice, depending on support tier. These items can also appear through special events, promotions, in-game achievements, and milestones. Players may also trade or sell legacy items, regalia items, and loose enchantment slots for realm money within the Scholia community.</p>
+          </div>
         </div>
 
         <div class="h2p-accordion-item">
@@ -1868,6 +1921,28 @@
             <p class="game-card__desc">Turn-based party battles across the plains. Build your team and outwit waves of foes.</p>
             <div class="actions">
               <a class="btn btn--play" href="../plainsminibattle copy.html">Play</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="game-card">
+          <header class="game-card__header">Plushie Panic</header>
+          <div class="game-card__body">
+            <img class="game-card__banner" src="../src/AlchemyExplorer/assets/images/Plushie%20Panic.webp" alt="Plushie Panic banner" loading="lazy">
+            <p class="game-card__desc">A 3D stationary shooter with 20 levels plus an endless practice mode for score-seekers.</p>
+            <div class="actions">
+              <a class="btn btn--play" href="https://drive.google.com/file/d/1cQ7PBx1HEOMZJ79CMfq2QsSOOBEEO9SK/view?usp=drive_link" target="_blank" rel="noopener noreferrer">Download Plushie Panic.exe</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="game-card">
+          <header class="game-card__header">Scholia Casino Games</header>
+          <div class="game-card__body">
+            <img class="game-card__banner" src="../src/assets/images/casinogames.webp" alt="Scholia Casino Games banner" loading="lazy">
+            <p class="game-card__desc">Blackjack, Hold'Em, Cee-lo, Roulette, Slots, and Target Shooting. Spend realm money to try to win big and cash out for in-game gold. No real money is required.</p>
+            <div class="actions">
+              <a class="btn btn--play" href="https://owlcan.github.io/Pampjack/" target="_blank" rel="noopener noreferrer">Play</a>
             </div>
           </div>
         </article>
@@ -2769,6 +2844,22 @@
         </div>
     </div>
 
+    <div id="owltv-section" class="content-section" data-prefer-hide-tabs="true" data-prefer-wide-layout="true" data-prefer-full-frame="true">
+      <div class="section-header-row">
+        <h2>OwlTV</h2>
+        <button type="button" class="popout-btn" onclick="window.popOutTool && window.popOutTool('owltv')">Pop out</button>
+      </div>
+      <div id="owltv-iframe-container" class="iframe-container"></div>
+    </div>
+
+    <div id="item-shop-section" class="content-section" data-prefer-hide-tabs="true" data-prefer-wide-layout="true" data-prefer-full-frame="true">
+      <div class="section-header-row">
+        <h2>Item Shop</h2>
+        <button type="button" class="popout-btn" onclick="window.popOutTool && window.popOutTool('itemshop')">Pop out</button>
+      </div>
+      <div id="item-shop-iframe-container" class="iframe-container"></div>
+    </div>
+
     <div id="school-events-section" class="content-section">
       <div class="section-header-row">
         <h2>School Events Generator</h2>
@@ -2832,6 +2923,8 @@
         { containerId: 'races-iframe-container', iframeId: 'races-iframe', type: 'dynamic' },
         { containerId: 'backgrounds-iframe-container', iframeId: 'backgrounds-iframe', type: 'dynamic' },
         { containerId: 'origin-feats-iframe-container', iframeId: 'origin-feats-iframe', type: 'dynamic' },
+        { containerId: 'owltv-iframe-container', iframeId: 'owltv-iframe', type: 'dynamic' },
+        { containerId: 'item-shop-iframe-container', iframeId: 'item-shop-iframe', type: 'dynamic' },
         // Statically placed iframes (src will be blanked, loading div handled by its own onload or reset)
         { iframeId: 'legacy-weapon-iframe', type: 'static' },
         { iframeId: 'regalia-creator-iframe', type: 'static' },
@@ -3002,6 +3095,12 @@
           break;
         case 'autodm':
           popOutByIframeId('auto-dm-iframe', '../AutoDM App.html', 'Auto-DM');
+          break;
+        case 'owltv':
+          popOutByIframeId('owltv-iframe', 'https://owlcan.github.io/owlTV/', 'OwlTV');
+          break;
+        case 'itemshop':
+          popOutByIframeId('item-shop-iframe', 'https://owlcan.github.io/Bridget-s-Store/', 'Item Shop');
           break;
         case 'events': {
           const eventsMap = {
@@ -4073,6 +4172,18 @@
           section.classList.add('active');
           applySectionUiPreferences(section);
             createOrRefreshIframe('auto-dm-iframe-container', 'auto-dm-iframe', '../AutoDM App.html', 'Auto-DM');
+        },
+        'btn-owltv': () => {
+          const section = document.getElementById('owltv-section');
+          section.classList.add('active');
+          applySectionUiPreferences(section);
+            createOrRefreshIframe('owltv-iframe-container', 'owltv-iframe', 'https://owlcan.github.io/owlTV/', 'OwlTV');
+        },
+        'btn-item-shop': () => {
+          const section = document.getElementById('item-shop-section');
+          section.classList.add('active');
+          applySectionUiPreferences(section);
+            createOrRefreshIframe('item-shop-iframe-container', 'item-shop-iframe', 'https://owlcan.github.io/Bridget-s-Store/', 'Item Shop');
         },
   'btn-school-events': () => { 
             const section = document.getElementById('school-events-section');

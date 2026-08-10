@@ -569,6 +569,33 @@
         border-color: #daac17;
         box-shadow: 0 0 5px rgba(218, 172, 23, 0.5);
     }
+
+    .search-actions {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        flex-wrap: wrap;
+        width: 100%;
+    }
+
+    .export-json-btn {
+        padding: 12px 18px;
+        background: linear-gradient(to bottom, #fae791, #daac17);
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        font-family: 'Cormorant Garamond', serif;
+        font-weight: bold;
+        color: #2C2614;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+        transition: all 0.2s ease;
+    }
+
+    .export-json-btn:hover {
+        background: linear-gradient(to bottom, #daac17, #97740a);
+        transform: translateY(-1px);
+    }
     
     .no-results {
         text-align: center;
@@ -585,7 +612,11 @@
         
         <!-- Search container replaces monster list -->
         <div class="search-container">
-            <input type="text" class="search-input" id="monsterSearch" placeholder="Search monsters by name...">
+            <div class="search-actions">
+                <input type="text" class="search-input" id="monsterSearch" placeholder="Search monsters by name or details...">
+                <button type="button" class="export-json-btn" id="copyFilteredMonstersButton">Copy Filtered Monsters</button>
+                <button type="button" class="export-json-btn" id="exportLoadedBestiaryButton">Download Loaded Bestiary JSON</button>
+            </div>
         </div>
 
         <div class="bestiary-status" id="monsterCount" aria-live="polite">
@@ -18530,6 +18561,7 @@
 
         // Current selected monster
         let selectedMonster = null;
+        let visibleMonsters = [];
 
         function normalizeCreatureName(name) {
             return String(name || '').trim().toLowerCase();
@@ -18735,6 +18767,8 @@
             
             // Set up search functionality
             setupSearch();
+            setupCopyFilteredMonsters();
+            setupLoadedBestiaryExport();
 
             // Apply deep-link query (?q=...) if present
             applyInitialQueryFromUrl();
@@ -18781,6 +18815,108 @@
             const total = Number.isFinite(totalCount) ? totalCount : 0;
             monsterCount.innerHTML = `Showing <strong>${visible}</strong> of <strong>${total}</strong> monsters loaded.<span class="bestiary-status-note">Sorted A-Z</span>`;
         }
+
+        function buildLoadedBestiaryExport() {
+            const creatures = Array.isArray(bestiary && bestiary.creatures)
+                ? getSortedCreatures(bestiary.creatures)
+                : [];
+
+            return {
+                ...(bestiary && typeof bestiary === 'object' ? bestiary : {}),
+                exportedAt: new Date().toISOString(),
+                creatures
+            };
+        }
+
+        function downloadLoadedBestiaryJson() {
+            const exportPayload = buildLoadedBestiaryExport();
+            const creatureCount = Array.isArray(exportPayload.creatures) ? exportPayload.creatures.length : 0;
+            const blob = new Blob([JSON.stringify(exportPayload, null, 2) + '\n'], {
+                type: 'application/json'
+            });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `loaded-bestiary-${creatureCount}-monsters.json`;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            URL.revokeObjectURL(url);
+        }
+
+        function setupLoadedBestiaryExport() {
+            const exportButton = document.getElementById('exportLoadedBestiaryButton');
+            if (!exportButton) return;
+            exportButton.addEventListener('click', downloadLoadedBestiaryJson);
+        }
+
+        function formatMonsterCr(monster) {
+            return String(monster?.stats?.challengeRatingStr ?? monster?.stats?.challengeRating ?? '—');
+        }
+
+        function buildVisibleMonstersCopyText() {
+            return visibleMonsters
+                .map(monster => `${String(monster?.name || '').trim()}\tCR ${formatMonsterCr(monster)}`)
+                .filter(row => row.trim())
+                .join('\n');
+        }
+
+        async function copyTextToClipboard(text) {
+            const value = String(text || '');
+            if (!value) return false;
+
+            if (navigator.clipboard && window.isSecureContext) {
+                try {
+                    await navigator.clipboard.writeText(value);
+                    return true;
+                } catch (_) {
+                    // Fall through to the legacy copy path.
+                }
+            }
+
+            const textarea = document.createElement('textarea');
+            textarea.value = value;
+            textarea.setAttribute('readonly', '');
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            textarea.setSelectionRange(0, textarea.value.length);
+
+            let copied = false;
+            try {
+                copied = document.execCommand('copy');
+            } catch (_) {
+                copied = false;
+            }
+
+            textarea.remove();
+            return copied;
+        }
+
+        function setupCopyFilteredMonsters() {
+            const copyButton = document.getElementById('copyFilteredMonstersButton');
+            if (!copyButton) return;
+
+            copyButton.addEventListener('click', async function() {
+                const rows = buildVisibleMonstersCopyText();
+                if (!rows) {
+                    const originalText = copyButton.textContent;
+                    copyButton.textContent = 'No Monsters To Copy';
+                    setTimeout(() => {
+                        copyButton.textContent = originalText;
+                    }, 1500);
+                    return;
+                }
+
+                const copied = await copyTextToClipboard(rows);
+                const originalText = copyButton.textContent;
+                copyButton.textContent = copied ? 'Copied Filtered Monsters' : 'Copy Failed';
+                setTimeout(() => {
+                    copyButton.textContent = originalText;
+                }, 1500);
+            });
+        }
         
         // Filter monsters based on search term
         function filterMonsters(searchTerm) {
@@ -18788,6 +18924,7 @@
             monsterGrid.innerHTML = '';
             monsterGrid.className = 'monster-grid'; // Reset class
             const totalCount = Array.isArray(bestiary && bestiary.creatures) ? bestiary.creatures.length : 0;
+            const searchTerms = String(searchTerm || '').split(/\s+/).filter(Boolean);
             
             if (!searchTerm) {
                 // If search is empty, show all monsters
@@ -18796,9 +18933,11 @@
             }
             
             // Filter monsters based on search term
-            const filteredMonsters = getSortedCreatures(bestiary.creatures.filter(monster => 
-                monster.name.toLowerCase().includes(searchTerm)
-            ));
+            const filteredMonsters = getSortedCreatures(bestiary.creatures.filter(monster => {
+                const searchIndex = buildMonsterSearchIndex(monster);
+                return searchTerms.every(term => searchIndex.includes(term));
+            }));
+            visibleMonsters = filteredMonsters;
             updateMonsterCount(filteredMonsters.length, totalCount);
             
             if (filteredMonsters.length === 0) {
@@ -18829,6 +18968,7 @@
             monsterGrid.innerHTML = '';
             monsterGrid.className = 'monster-grid'; // Reset to default class
             const sortedMonsters = getSortedCreatures(bestiary.creatures);
+            visibleMonsters = sortedMonsters;
             updateMonsterCount(sortedMonsters.length, sortedMonsters.length);
             
             sortedMonsters.forEach(monster => {
@@ -19074,6 +19214,38 @@
             }
             if (typeof value === 'string') return [value.trim()].filter(Boolean);
             return [];
+        }
+
+        function collectMonsterSearchText(value, parts = []) {
+            if (value == null) return parts;
+
+            if (typeof value === 'string' || typeof value === 'number') {
+                const text = String(value).trim();
+                if (text) parts.push(text);
+                return parts;
+            }
+
+            if (Array.isArray(value)) {
+                value.forEach(item => collectMonsterSearchText(item, parts));
+                return parts;
+            }
+
+            if (typeof value === 'object') {
+                Object.entries(value).forEach(([key, nestedValue]) => {
+                    if (key === '_id' || key === 'imageUrl') return;
+                    collectMonsterSearchText(nestedValue, parts);
+                });
+            }
+
+            return parts;
+        }
+
+        function buildMonsterSearchIndex(monster) {
+            return collectMonsterSearchText({
+                name: monster?.name,
+                flavor: monster?.flavor,
+                stats: monster?.stats,
+            }).join(' ').toLowerCase();
         }
 
         function formatTraitList(value) {

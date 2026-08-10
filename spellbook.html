@@ -319,6 +319,10 @@ button:hover {
 				<input id="name-filter" type="text" placeholder="Search spells…" />
 			</div>
 
+			<div class="filter-group">
+				<button id="source-toggle" type="button">Academy/Scholia Only</button>
+			</div>
+
       <button id="apply-filters">Apply Filters</button>
       <button id="reset-filters">Reset</button>
       <button id="toggle-view">Condensed View</button>
@@ -2528,6 +2532,7 @@ button:hover {
 ];
 
   let isCondensedView = false;
+	let showAllSpellSources = false;
 
 	// Runtime merged spells: homebrew spellsData + optional SRD spell index.
 	// The embedded spellsData list is Scholia homebrew by design (pink-highlighted).
@@ -2617,6 +2622,12 @@ button:hover {
 
 	function isScholiaHomebrewSpell(spell) {
 		return !!(spell && typeof spell === 'object' && typeof spell.__spellbookSource === 'string' && spell.__spellbookSource.startsWith('homebrew'));
+	}
+
+	function updateSourceToggleLabel() {
+		const sourceToggleButton = document.getElementById('source-toggle');
+		if (!sourceToggleButton) return;
+		sourceToggleButton.textContent = showAllSpellSources ? 'All SRD + Homebrew Spells' : 'Academy/Scholia Only';
 	}
 
 	function escapeHtml(text) {
@@ -2830,6 +2841,10 @@ button:hover {
 		if (nameValue) {
 			filteredSpells = filteredSpells.filter(spell => String(spell.name || '').toLowerCase().includes(nameValue));
 		}
+
+		if (!showAllSpellSources) {
+			filteredSpells = filteredSpells.filter(isScholiaHomebrewSpell);
+		}
     
     // Display spells
 		if (filteredSpells.length === 0) {
@@ -2996,6 +3011,7 @@ button:hover {
     const applyFiltersButton = document.getElementById('apply-filters');
     const resetFiltersButton = document.getElementById('reset-filters');
     const toggleViewButton = document.getElementById('toggle-view');
+	const sourceToggleButton = document.getElementById('source-toggle');
     const levelFilterEl = document.getElementById('level-filter');
     const schoolFilterEl = document.getElementById('school-filter');
 	const nameFilterEl = document.getElementById('name-filter');
@@ -3016,6 +3032,15 @@ button:hover {
 				if (levelFilter) levelFilter.value = 'all';
 				if (schoolFilter) schoolFilter.value = 'all';
 				if (nameFilter) nameFilter.value = '';
+				loadSpells();
+			});
+		}
+
+		if (sourceToggleButton) {
+			updateSourceToggleLabel();
+			sourceToggleButton.addEventListener('click', function() {
+				showAllSpellSources = !showAllSpellSources;
+				updateSourceToggleLabel();
 				loadSpells();
 			});
 		}

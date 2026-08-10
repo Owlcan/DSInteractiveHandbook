@@ -101,10 +101,26 @@
     <div id="notesTabContent" class="flex-1 hidden flex-col p-4 bg-[#2d1b0f] gap-4 overflow-y-auto">
       <div>
         <h3 class="text-lg font-bold mb-2">Gemini API Key</h3>
-        <p class="text-sm text-[#bda169] mb-2">Get your free API key from <a href="https://aistudio.google.com/app/apikey" target="_blank" class="underline">Google AI Studio</a>. The key is saved in your browser's local storage.</p>
+        <p class="text-sm text-[#bda169] mb-2">Get your free API key from <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" class="underline">Google AI Studio</a>. The key is saved in your browser's local storage.</p>
         <div class="flex gap-2">
             <input type="password" id="apiKeyEl" placeholder="Paste your Gemini API Key here" class="flex-1 p-2 bg-[#4a3520] text-[#e6c786] border border-[#8b5a2b] rounded">
             <button id="saveApiKeyBtn" class="p-2 bg-[#8b5a2b] text-[#e6c786] border-none cursor-pointer rounded">Save Key</button>
+        </div>
+        <div class="mt-3">
+          <h4 class="text-base font-bold mb-2">Gemini Model</h4>
+          <p class="text-sm text-[#bda169] mb-2">Default is Gemini 2.5 Flash. Free API keys do not work with every Gemini model, so some choices may require paid or otherwise enabled access.</p>
+          <div class="flex flex-col gap-2">
+            <select id="modelPresetEl" class="w-full p-2 bg-[#4a3520] text-[#e6c786] border border-[#8b5a2b] rounded">
+              <option value="gemini-2.5-flash" selected>Gemini 2.5 Flash</option>
+              <option value="gemini-2.5-pro">Gemini 2.5 Pro</option>
+              <option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
+              <option value="custom">Custom model name...</option>
+            </select>
+            <input type="text" id="customModelEl" placeholder="Enter a Gemini model name" class="w-full p-2 bg-[#4a3520] text-[#e6c786] border border-[#8b5a2b] rounded hidden">
+            <div class="flex justify-end">
+              <button id="saveModelBtn" class="p-2 bg-[#8b5a2b] text-[#e6c786] border-none cursor-pointer rounded">Save Model</button>
+            </div>
+          </div>
         </div>
       </div>
        <div>
@@ -174,6 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let lineDrawStart = null;
   let playerNotes = "";
   let apiKey = "";
+  let selectedModel = 'gemini-2.5-flash';
   let isDraggingBackground = false;
   let backgroundDragStart = { x: 0, y: 0 };
 
@@ -194,6 +211,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const sendBtn = getEl('sendBtn');
   const apiKeyEl = getEl('apiKeyEl');
   const saveApiKeyBtn = getEl('saveApiKeyBtn');
+  const modelPresetEl = getEl('modelPresetEl');
+  const customModelEl = getEl('customModelEl');
+  const saveModelBtn = getEl('saveModelBtn');
   const playerNotesEl = getEl('playerNotesEl');
   const saveNotesBtn = getEl('saveNotesBtn');
   const loadNotesBtn = getEl('loadNotesBtn');
@@ -226,6 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setupEventListeners();
     createGrid();
     loadApiKey();
+    loadModelSelection();
     loadPlayerNotes();
     addMessage("Welcome! To get started, go to the 'Notes & Settings' tab and enter your Gemini API key. You can get a free key from Google AI Studio.", "dm");
   }
@@ -239,6 +260,8 @@ document.addEventListener('DOMContentLoaded', () => {
     loadNotesBtn.addEventListener('click', () => notesInputEl.click());
     notesInputEl.addEventListener('change', handleNotesUpload);
     sendBtn.addEventListener('click', handleSendMessage);
+    modelPresetEl.addEventListener('change', updateModelInputVisibility);
+    saveModelBtn.addEventListener('click', saveModelSelection);
     userInputEl.addEventListener('keydown', e => {
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
@@ -392,6 +415,48 @@ document.addEventListener('DOMContentLoaded', () => {
           apiKey = savedKey;
           apiKeyEl.value = apiKey;
       }
+  }
+
+  function getSelectedModel() {
+    if (modelPresetEl.value === 'custom') {
+      return customModelEl.value.trim();
+    }
+    return modelPresetEl.value;
+  }
+
+  function updateModelInputVisibility() {
+    const isCustom = modelPresetEl.value === 'custom';
+    customModelEl.classList.toggle('hidden', !isCustom);
+    if (!isCustom) {
+      customModelEl.value = '';
+    }
+  }
+
+  function saveModelSelection() {
+    const modelName = getSelectedModel();
+    if (!modelName) {
+      showToast('Please choose a model or enter a custom model name.', true);
+      return;
+    }
+
+    selectedModel = modelName;
+    localStorage.setItem('dmApp_model', selectedModel);
+    showToast(`Model saved: ${selectedModel}`);
+  }
+
+  function loadModelSelection() {
+    const savedModel = localStorage.getItem('dmApp_model') || selectedModel;
+    const presetValues = Array.from(modelPresetEl.options).map(option => option.value);
+
+    selectedModel = savedModel;
+    if (presetValues.includes(savedModel)) {
+      modelPresetEl.value = savedModel;
+    } else {
+      modelPresetEl.value = 'custom';
+      customModelEl.value = savedModel;
+    }
+
+    updateModelInputVisibility();
   }
 
   function savePlayerNotes() {
@@ -723,7 +788,8 @@ ${description}
           contents: [systemInstruction, ...validChatHistory],
       };
 
-      const responseText = await callGeminiApi(apiKey, apiPayload);
+      const modelName = getSelectedModel() || selectedModel;
+      const responseText = await callGeminiApi(apiKey, modelName, apiPayload);
 
       messagesCtn.removeChild(loadingIndicator);
       addMessage(responseText, "dm");
@@ -745,8 +811,8 @@ ${description}
     }
   }
 
-  async function callGeminiApi(key, payload) {
-    const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${key}`;
+  async function callGeminiApi(key, modelName, payload) {
+    const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${key}`;
     
     const response = await fetch(API_URL, {
         method: 'POST',
@@ -756,7 +822,11 @@ ${description}
 
     if (!response.ok) {
         const errorBody = await response.json();
-        throw new Error(errorBody.error?.message || `API request failed with status ${response.status}`);
+      const apiMessage = errorBody.error?.message || `API request failed with status ${response.status}`;
+      const accessHint = /permission|access|quota|not found|not supported/i.test(apiMessage)
+        ? ' This can happen when a free API key does not have access to the selected model.'
+        : '';
+      throw new Error(apiMessage + accessHint);
     }
 
     const data = await response.json();

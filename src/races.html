@@ -363,6 +363,11 @@
                             <li><a href="javascript:void(0);" onclick="navigateToRaceById('waddlehooves')">Waddlehooves</a></li>
                             <li><a href="javascript:void(0);" onclick="navigateToRaceById('scampersaurians')">Scampersaurians</a></li>
                             <li><a href="javascript:void(0);" onclick="navigateToRaceById('diaparachnid')">Diaparachnid</a></li>
+                            <li><a href="javascript:void(0);" onclick="navigateToRaceById('true_half_dragon')">True Half Dragon</a></li>
+                            <li><a href="javascript:void(0);" onclick="navigateToRaceById('crinkly_crawlies')">Crinkly Crawlies</a></li>
+                            <li><a href="javascript:void(0);" onclick="navigateToRaceById('confection_folk')">Confection Folk</a></li>
+                            <li><a href="javascript:void(0);" onclick="navigateToRaceById('diaper_fae')">Diaper Fae</a></li>
+                            <li><a href="javascript:void(0);" onclick="navigateToRaceById('voidtouched_races')">Voidtouched Races</a></li>
                         </ul>
                     </div>
                     <hr class="gold-divider-biggo">
@@ -2678,7 +2683,481 @@
                     </div>
                     <hr class="gold-divider-biggo">
                 `
-            }
+            },
+              {
+        type: "race",
+        name: "True Half Dragon",
+        id: "true_half_dragon",
+        contentHTML: `
+            <div id="true_half_dragon_content">
+                <h2 id="true_half_dragon">TRUE HALF DRAGON</h2>
+                <hr class="gold-divider">
+                <img src="assets/images/races/dragons groups.webp" alt="True Half Dragon" class="center-image" style="max-width: 700px;" onerror="this.src='https://placehold.co/700x500/3e2e1e/f0e68c?text=Image+Not+Found'; this.alt='Image not found';">
+                <p>Standing as regal powerhouses among the skies and battlefields of the Scholia Diaspros, the True Half Dragons are descendants of the ancient draconic Warwings and the legendary dragon flights. Carrying the boiling blood of mighty drakes, these scions embody physical superiority, elemental mastery, and a storied academic heritage. Whether tracing their lineage to the raging flames of Monacalath's host or the serene depths of aquatic sovereign drakes, True Half Dragons possess the innate ability to shift between their humanoid guise and their majestic ancestral dragon form.</p>
+                <p>Their dragon heritage grants them devastating natural armaments, formidable breath weapons, and an authoritative presence. While their vast power brings immense respect across the Academy, their bloodline also carries the heavy history of ancient cosmic conflicts and ancient pacts.</p>
+                <hr class="gold-divider">
+                <h3>True Half Dragon Traits</h3>
+                <p>Your True Half Dragon character has the following racial traits:</p>
+                <p><strong>Creature Type:</strong> You are a Dragon (and count as Humanoid in mortal guise).</p>
+                <p><strong>Ability Score Increase:</strong> Your ability scores are determined by your chosen Draconic Clan subrace.</p>
+                <p><strong>Level Adjustment:</strong> Due to your immense draconic power and physiological superiority, you have a Level Adjustment of +1.</p>
+                <p><strong>Age:</strong> True Half Dragons mature at the rate of their mortal ancestry but can live for several centuries, retaining their formidable strength throughout their extended lifespan.</p>
+                <p><strong>Alignment:</strong> Leaning strongly toward pride, honor, or fierce independence, True Half Dragons span all alignments depending on their clan heritage and personal code.</p>
+                <p><strong>Size:</strong> In your mortal guise, you stand between 6 and 8 feet tall with a powerful frame. Your size is Medium.</p>
+                <p><strong>Speed:</strong> Your base walking speed is 35 feet. Additional movement modes (flying, swimming, or burrowing) are granted by your clan subrace.</p>
+                <p><strong>Natural Armor:</strong> Your scales provide natural protection. When you aren't wearing armor, your AC is equal to 13 + your Dexterity modifier.</p>
+                <p><strong>Draconic Senses:</strong> You have Darkvision out to 60 feet and Blindsight out to 10 feet.</p>
+                <p><strong>Academic Heritage:</strong> You naturally speak Common, Draconic, and 2 extra languages of your choice. Your long-lived academic capacity allows you to master 1 additional language at levels 4, 8, 12, 16, and 20.</p>
+                <p><strong>Natural Armaments:</strong> In your Mortal Guise, you can make unarmed strikes using your Bite (1d6 piercing) and Claws (1d4 slashing). When assuming your Dragon Form, your Bite deals 2d6 and your Claws deal 2d4 damage. The damage of these natural weapons increases at levels 4, 8, 12, 16, and 20. <em>(Note: The Aurum Regna Brood relies exclusively on their Claws).</em></p>
+                <p><strong>Draconic Transformation:</strong> As an action, you can fully unleash your bloodline, transforming entirely into an Ancestral Dragon (minimum size: juvenile) for 1 hour. You can use this feature a number of times per week equal to your proficiency bonus.</p>
+                <p><strong>Languages:</strong> You can speak, read, and write Common, Draconic, and two extra languages of your choice.</p>
+                <hr class="gold-divider">
+                <h3>True Half Dragon Subraces</h3>
+                <p>The True Half Dragons are divided into ancient clans based on their draconic lineage and elemental attunement.</p>
+                <hr class="gold-divider">
+                <h4><strong>Ancestry of Flame</strong></h4>
+                <hr class="gold-divider">
+                <p class="subrace-description">Carrying the boiling blood of the ancient fire-drakes, scions of Flame embody destructive fire magic and unyielding martial strength.</p>
+                <ul>
+                    <li><strong>Ability Score Increase:</strong> Your Strength score increases by 4, your Constitution score increases by 3, and your Charisma score increases by 2.</li>
+                    <li><strong>Draconic Flight:</strong> You possess a winged flying speed of 30 feet.</li>
+                    <li><strong>The Golden Crucible:</strong> You have innate Resistance to Fire damage. Furthermore, you can invoke complete Immunity to Fire damage a number of times per day equal to your proficiency bonus.</li>
+                    <li><strong>Firebreath Weapon:</strong> You unleash a devastating exhalation of flame dealing 2d6 Fire damage in your Mortal Guise, which multiplies to 6d6 Fire damage in your Dragon Form.</li>
+                </ul>
+                <hr class="gold-divider">
+                <h4><strong>Heraldry of Waves</strong></h4>
+                <hr class="gold-divider">
+                <p class="subrace-description">Tracing their lineage to the ancient sea drakes, scions of Waves possess supersonic flight and absolute dominion over water.</p>
+                <ul>
+                    <li><strong>Ability Score Increase:</strong> Your Dexterity score increases by 4, your Constitution score increases by 3, and your Strength score increases by 2.</li>
+                    <li><strong>Aquatic Sovereignty:</strong> You have a winged flying speed of 30 feet and a swimming speed of 40 feet.</li>
+                    <li><strong>Tide's Ward:</strong> You have innate Resistance to Water and Cold damage. You can invoke complete Immunity to Water damage a number of times per day equal to your proficiency bonus.</li>
+                    <li><strong>Waterjet Breath Weapon:</strong> You unleash a high-pressure stream of aquatic force dealing 3d4 damage in your Mortal Guise, multiplying to 8d4 damage in your Dragon Form.</li>
+                </ul>
+                <hr class="gold-divider">
+                <h4><strong>Stoneclan Lineage</strong></h4>
+                <hr class="gold-divider">
+                <p class="subrace-description">Grounded in the stoic bedrock of earth drakes, the Stoneclan are pragmatic guardians with unmatched physical resilience.</p>
+                <ul>
+                    <li><strong>Ability Score Increase:</strong> Your Strength score increases by 4, your Constitution score increases by 3, and your Wisdom score increases by 2.</li>
+                    <li><strong>Subterranean Master:</strong> You possess a specialized burrowing speed of 30 feet through dirt and non-magical stone.</li>
+                    <li><strong>Earthen Resilience:</strong> You have Resistance to Bludgeoning damage and can invoke complete Immunity to Bludgeoning damage a number of times per day equal to your proficiency bonus.</li>
+                    <li><strong>Stone Shard Breath Weapon:</strong> You exhale jagged magical rock dealing 3d4 damage in your Mortal Guise, multiplying to 8d4 damage in your Dragon Form.</li>
+                    <li><strong>Stone's Endurance:</strong> Once per short or long rest, when you take damage, you can use your reaction to reduce that damage by 1d12 + your Constitution modifier (minimum of 1).</li>
+                </ul>
+                <hr class="gold-divider">
+                <h4><strong>Greensea Scaleclan</strong></h4>
+                <hr class="gold-divider">
+                <p class="subrace-description">Inhabitants of hyper-lethal jungle canopies, the Scaleclan are cunning ambush predators adapted to corrosive environments.</p>
+                <ul>
+                    <li><strong>Ability Score Increase:</strong> Your Constitution score increases by 4, your Dexterity score increases by 3, and your Intelligence score increases by 2.</li>
+                    <li><strong>Jungle Predator:</strong> You possess a climbing speed of 30 feet and a swimming speed of 40 feet.</li>
+                    <li><strong>Toxic Ward:</strong> You possess Resistance to Acid and Poison damage and can invoke complete Immunity to Acid and Poison damage a number of times per day equal to your proficiency bonus.</li>
+                    <li><strong>Acid Spray Breath Weapon:</strong> You exhale a corrosive cone dealing 3d4 Acid damage in your Mortal Guise, multiplying to 8d4 Acid damage in your Dragon Form.</li>
+                    <li><strong>Swamp Stride:</strong> Moving through nonmagical difficult terrain caused by water, mud, or foliage costs no extra movement. You also have advantage on Stealth checks when submerged or obscured by heavy foliage.</li>
+                </ul>
+                <hr class="gold-divider">
+                <h4><strong>Glacial Line of Colra</strong></h4>
+                <hr class="gold-divider">
+                <p class="subrace-description">Descendants of the Glimmergale, the Glacial Line are stoic masters of sub-zero temperatures and cryonic stasis.</p>
+                <ul>
+                    <li><strong>Ability Score Increase:</strong> Your Constitution score increases by 4, your Wisdom score increases by 3, and your Strength score increases by 2.</li>
+                    <li><strong>Cryonic Fortitude:</strong> You have a climbing speed of 30 feet, innate Resistance to Cold damage, and complete Immunity to Cold damage a number of times per day equal to your proficiency bonus.</li>
+                    <li><strong>Frost Breath Weapon:</strong> You unleash a sub-zero blast dealing 3d4 Cold damage in your Mortal Guise, multiplying to 8d4 Cold damage in your Dragon Form.</li>
+                    <li><strong>Ice Walk:</strong> Moving across difficult terrain caused by ice or snow costs no extra movement, and you have advantage on saving throws to avoid falling prone on icy surfaces.</li>
+                </ul>
+                <hr class="gold-divider">
+                <h4><strong>House of Gales</strong></h4>
+                <hr class="gold-divider">
+                <p class="subrace-description">Masters of atmospheric topology and violent storms, the House of Gales commands staggering aerial speed and lightning magic.</p>
+                <ul>
+                    <li><strong>Ability Score Increase:</strong> Your Dexterity score increases by 4, your Charisma score increases by 3, and your Constitution score increases by 2.</li>
+                    <li><strong>Stratospheric Flight:</strong> You possess a staggering winged flying speed of 60 feet.</li>
+                    <li><strong>Storm's Embrace:</strong> You have Resistance to Lightning and Thunder damage and can invoke complete Immunity to Lightning and Thunder damage a number of times per day equal to your proficiency bonus.</li>
+                    <li><strong>Galewind Breath Weapon:</strong> You exhale concussive atmospheric pressure dealing 3d4 damage in your Mortal Guise, multiplying to 8d4 damage in your Dragon Form.</li>
+                    <li><strong>Wind's Rebuke:</strong> As a bonus action, you can move up to half your fly speed without provoking opportunity attacks. Additionally, you can expend a use of your breath weapon defensively to deflect incoming ranged projectile attacks.</li>
+                </ul>
+                <hr class="gold-divider">
+                <h4><strong>Creche of Many Colors</strong></h4>
+                <hr class="gold-divider">
+                <p class="subrace-description">Scions of the unified chromatic flights, the Creche possesses prismatic versatility, shifting their elemental attunement at will.</p>
+                <ul>
+                    <li><strong>Ability Score Increase:</strong> Choose one ability score to receive a +4 bonus, your Charisma score increases by 3, and your Intelligence score increases by 2.</li>
+                    <li><strong>Prismatic Flight:</strong> You possess a winged flying speed of 60 feet.</li>
+                    <li><strong>Prismatic Resistance:</strong> Upon completing a long rest, choose one damage type from Fire, Cold, Lightning, Thunder, or Acid. You gain Resistance to that damage type and can invoke complete Immunity to it a number of times per day equal to your proficiency bonus.</li>
+                    <li><strong>Prismatic Breath Weapon:</strong> You exhale shifting elemental energy of your chosen element, dealing 3d4 damage in your Mortal Guise, multiplying to 8d4 damage in your Dragon Form.</li>
+                    <li><strong>Royal Presence:</strong> You naturally command awe and respect, granting you advantage on Charisma (Persuasion) checks.</li>
+                </ul>
+                <hr class="gold-divider">
+                <h4><strong>Aurum Regna Brood</strong></h4>
+                <hr class="gold-divider">
+                <p class="subrace-description">Descending from gleaming gold dragons, the Aurum Regna are righteous saviors and radiant combatants.</p>
+                <ul>
+                    <li><strong>Ability Score Increase:</strong> Your Strength score increases by 4, your Charisma score increases by 3, and your Wisdom score increases by 2.</li>
+                    <li><strong>Radiant Flight:</strong> You possess a winged flying speed of 30 feet.</li>
+                    <li><strong>The Golden Crucible:</strong> You possess innate Resistance to Fire damage and can invoke complete Immunity to Fire damage a number of times per day equal to your proficiency bonus.</li>
+                    <li><strong>Golden Armaments:</strong> You do not use a bite attack; instead, you strike exclusively with metallic Claws dealing 1d6 damage in Mortal Guise and 2d6 in Dragon Form. In Dragon Form, your strikes deal an extra 1d4 Radiant damage.</li>
+                    <li><strong>Breath of Life and Light:</strong> You possess two breath options (sharing a pool of uses equal to your proficiency bonus per long rest): <em>Radiant Breath</em> deals 3d4 (8d4 in Dragon Form) Radiant damage, while <em>Healing Breath</em> restores 3d4 (8d4 in Dragon Form) hit points to allies (cannot target self).</li>
+                </ul>
+            </div>
+            <hr class="gold-divider-biggo">
+        `
+    },
+    {
+        type: "race",
+        name: "Crinkly Crawlies",
+        id: "crinkly_crawlies",
+        contentHTML: `
+            <div id="crinkly_crawlies_content">
+                <h2 id="crinkly_crawlies">CRINKLY CRAWLIES</h2>
+                <hr class="gold-divider">
+                <img src="assets/images/races/crinkly-crawlies group.webp" alt="Crinkly Crawlies" class="center-image" style="max-width: 700px;" onerror="this.src='https://placehold.co/700x500/3e2e1e/f0e68c?text=Image+Not+Found'; this.alt='Image not found';">
+                <p>A diverse and industrious people, the Crinkly Crawlies are insectoid humanoids sharing a common chitinous heritage and specialized physiological adaptations. From disciplined ant colonies to swift mantis stalkers and honey-weaving bees, the Crinkly Crawlies were among the earliest inhabitants encountered during the founding of the Scholia Diaspros, serving as primary architects and subterranean builders.</p>
+                <p>A universal trait among all subraces is their unique digestive metabolic system ("Insecontinence"), making heavy absorbent padding an integral part of their culture, technology, and fashion. Whether clad in woven silk covers or chitinous padding, they move through the realm with remarkable efficiency.</p>
+                <hr class="gold-divider">
+                <h3>Crinkly Crawlies Traits</h3>
+                <p>Your Crinkly Crawlies character has the following racial traits:</p>
+                <p><strong>Creature Type:</strong> You are a Monstrosity.</p>
+                <p><strong>Ability Score Increase:</strong> Your Constitution score increases by 2.</p>
+                <p><strong>Age:</strong> Crinkly Crawlies mature rapidly, reaching adulthood within a decade. They live between 50 and 100 years.</p>
+                <p><strong>Alignment:</strong> Spanning all alignments, subraces range from rigidly lawful colony societies to fiercely independent solitary wanderers.</p>
+                <p><strong>Size:</strong> You are Small or Medium (your choice when creating this character).</p>
+                <p><strong>Speed:</strong> Your base walking speed is 30 feet.</p>
+                <p><strong>Chitinous Plating:</strong> Your exoskeleton provides natural defense. When you aren't wearing armor, your AC is 13 + your Dexterity modifier. You can use a shield and still gain this benefit.</p>
+                <p><strong>Extra Appendages:</strong> You have a secondary pair of smaller arms. They can perform simple object interactions (such as opening doors or drinking potions) free on your turn, but cannot wield weapons, shields, or cast spells with somatic components.</p>
+                <p><strong>Superior Darkvision:</strong> Your multifaceted eyes see clearly in dim light and complete darkness up to 120 feet, perceiving UV and heat spectra as chromatic distortions. Magical darkness does not obscure your vision unless specifically designed to disrupt non-standard spectra.</p>
+                <p><strong>Insectoid Senses:</strong> You have advantage on Wisdom (Perception) checks.</p>
+                <p><strong>Insecontinence:</strong> You are naturally incontinent. You qualify for the Diaper Mastery feat at character creation and begin play with the Diaper-Trained trait.</p>
+                <p><strong>Languages:</strong> You can speak, read, and write Common and one additional language of your choice.</p>
+                <hr class="gold-divider">
+                <h3>Crinkly Crawlies Subraces</h3>
+                <p>Select one of the following distinct insectoid subraces:</p>
+                <hr class="gold-divider">
+                <h4><strong>Ant</strong></h4>
+                <hr class="gold-divider">
+                <p class="subrace-description">Disciplined and immensely strong, Ant kindred excel at subterranean excavation and coordinated colony tactics.</p>
+                <ul>
+                    <li><strong>Ability Score Increase:</strong> Your Strength score increases by 2.</li>
+                    <li><strong>Burrowing Mandibles:</strong> You have a burrowing speed of 15 feet through dirt and loose stone.</li>
+                    <li><strong>Colony Tactics:</strong> As a reaction when an ally hits a target within 30 feet, you gain advantage on your next attack roll against that target before the end of your next turn.</li>
+                    <li><strong>Powerful Build:</strong> You count as one size larger when determining carrying capacity and the weight you can push, drag, or lift.</li>
+                    <li><strong>Formic Resilience:</strong> You have Resistance to Poison damage and advantage on saving throws against being poisoned.</li>
+                </ul>
+                <hr class="gold-divider">
+                <h4><strong>Beetle</strong></h4>
+                <hr class="gold-divider">
+                <p class="subrace-description">Encased in thick carapaces, Beetle folk are resilient defenders built to withstand heavy punishment.</p>
+                <ul>
+                    <li><strong>Ability Score Increase:</strong> Your Strength score increases by 2.</li>
+                    <li><strong>Hardened Carapace:</strong> When unarmored, your base AC increases to 14 + your Dexterity modifier (shields allowed).</li>
+                    <li><strong>Powerful Wings:</strong> You possess a flying speed of 30 feet. You cannot hover and must land at the end of your turn or fall.</li>
+                    <li><strong>Beetle's Might:</strong> You have advantage on Strength checks and Strength saving throws.</li>
+                    <li><strong>Shell Up:</strong> As a reaction when hit by an attack, you gain a +2 bonus to AC until the start of your next turn (usable PB times per long rest).</li>
+                </ul>
+                <hr class="gold-divider">
+                <h4><strong>Mantis</strong></h4>
+                <hr class="gold-divider">
+                <p class="subrace-description">Lithe and predatory, Mantis kindred are swift stalkers equipped with razor-sharp scythe appendages.</p>
+                <ul>
+                    <li><strong>Ability Score Increase:</strong> Your Dexterity score increases by 2.</li>
+                    <li><strong>Hand-Scythes:</strong> Your natural unarmed strikes deal 1d6 slashing damage with the Light and Finesse properties.</li>
+                    <li><strong>Paralyzing Strike:</strong> When hitting a creature with your Hand-Scythes, the target must succeed on a Constitution save (DC 8 + PB + DEX) or be paralyzed until the end of its next turn (usable PB times per long rest).</li>
+                    <li><strong>Predator's Wings:</strong> You possess a flying speed of 30 feet while not wearing medium or heavy armor.</li>
+                    <li><strong>Stalker's Speed:</strong> Your base walking speed increases to 35 feet.</li>
+                </ul>
+                <hr class="gold-divider">
+                <h4><strong>Bee</strong></h4>
+                <hr class="gold-divider">
+                <p class="subrace-description">Artisanal scholars and communal caretakers, Bee folk harvest magical nectar and coordinate flawlessly with allies.</p>
+                <ul>
+                    <li><strong>Ability Score Increase:</strong> Your Intelligence score increases by 2.</li>
+                    <li><strong>Superior Flight:</strong> You possess a flying speed of 35 feet while not wearing medium or heavy armor.</li>
+                    <li><strong>Hive Mind:</strong> You can communicate telepathically with willing creatures within 30 feet of you.</li>
+                    <li><strong>Hive-Mind Coordination:</strong> You can take the Help action as a bonus action at a range of 30 feet if the target can see or hear you.</li>
+                    <li><strong>Artisan Honey:</strong> With 1 hour of work, you produce 10 servings of specialized magical honey (providing effects such as Goodberry healing, temporary hit points, or movement speed buffs).</li>
+                </ul>
+                <hr class="gold-divider">
+                <h4><strong>Wasp</strong></h4>
+                <hr class="gold-divider">
+                <p class="subrace-description">Aggressive aerial skirmishers, Wasps strike with venomous force before darting safely out of reach.</p>
+                <ul>
+                    <li><strong>Ability Score Increase:</strong> Your Dexterity score increases by 2.</li>
+                    <li><strong>Superior Flight:</strong> You possess a flying speed of 35 feet while not wearing medium or heavy armor.</li>
+                    <li><strong>Aerial Fury:</strong> After taking the Attack action on your turn, you can use a bonus action to Disengage and fly up to half your fly speed.</li>
+                    <li><strong>Venomous Sting:</strong> Your unarmed strike deals 1d6 piercing damage + target makes a Constitution save (DC 8 + CON + PB) or takes 2d8 poison damage (usable PB times per long rest).</li>
+                </ul>
+                <hr class="gold-divider">
+                <h4><strong>Firefly</strong></h4>
+                <hr class="gold-divider">
+                <p class="subrace-description">Radiant and charismatic, Firefly kindred illuminate dark depths and emit blinding flashes of natural light.</p>
+                <ul>
+                    <li><strong>Ability Score Increase:</strong> Your Charisma score increases by 2.</li>
+                    <li><strong>Superior Wings:</strong> You possess a flying speed of 35 feet while not wearing medium or heavy armor.</li>
+                    <li><strong>Bioluminescence & Innate Magic:</strong> You know the <em>Light</em> cantrip. At 3rd level, you can cast <em>Faerie Fire</em> once per day. As a bonus action, you can emit bright light in a 15-foot radius.</li>
+                    <li><strong>Dazzling Flash:</strong> As an action, you emit a blinding burst. Creatures within 10 feet must succeed on a Constitution save (DC 8 + PB + CHA) or be blinded until the end of their next turn (usable PB times per long rest).</li>
+                </ul>
+                <hr class="gold-divider">
+                <h4><strong>Moth</strong></h4>
+                <hr class="gold-divider">
+                <p class="subrace-description">Mystical weavers of organic silk, Moth folk create protective barriers and tactical silk lines.</p>
+                <ul>
+                    <li><strong>Ability Score Increase:</strong> Your Wisdom score increases by 2.</li>
+                    <li><strong>Slow Flight:</strong> You possess a flying speed of 25 feet while not wearing medium or heavy armor.</li>
+                    <li><strong>Master Weaver:</strong> You gain proficiency with Weaver's Tools.</li>
+                    <li><strong>Silk Weaving:</strong> You possess Silk Points equal to your proficiency bonus per long rest. You can expend points to launch <em>Sticky Thread</em> (restraining targets), weave 60 feet of <em>Silk Line</em> rope, or form a <em>Woven Shield</em> (+2 AC for 1 hour).</li>
+                </ul>
+            </div>
+            <hr class="gold-divider-biggo">
+        `
+    },
+    {
+        type: "race",
+        name: "Confection Folk",
+        id: "confection_folk",
+        contentHTML: `
+            <div id="confection_folk_content">
+                <h2 id="confection_folk">CONFECTION FOLK</h2>
+                <hr class="gold-divider">
+                <img src="assets/images/races/candy group.webp" alt="Confection Folk" class="center-image" style="max-width: 700px;" onerror="this.src='https://placehold.co/700x500/3e2e1e/f0e68c?text=Image+Not+Found'; this.alt='Image not found';">
+                <p>Walking, talking amalgamations of sweets, sugars, and magical baking, the Confection Folk range from 3 to 6 feet tall depending on how they were baked or molded. Inherently cheerful and energetic, they smell intoxicatingly sweet and frequent the culinary and alchemy departments of the Scholia Diaspros.</p>
+                <p>Because their delicate bodies are vulnerable to moisture and heat, Confections rely heavily on thick waterproof Academy diapers to keep from dissolving in humid environments. They embrace padding as a natural part of their sweet existence.</p>
+                <hr class="gold-divider">
+                <h3>Confection Folk Traits</h3>
+                <p>Your Confection Folk character has the following racial traits:</p>
+                <p><strong>Creature Type:</strong> You are a Humanoid, but also count as a Construct for spells and effects that detect creature types.</p>
+                <p><strong>Ability Score Increase:</strong> Your Constitution score increases by 2, and your Charisma score increases by 1.</p>
+                <p><strong>Age:</strong> Confection Folk are created fully formed through magical baking. They do not age naturally, though environmental hazards can affect their physical integrity.</p>
+                <p><strong>Alignment:</strong> Bright, cheerful, and social, Confections lean strongly toward good and chaotic alignments.</p>
+                <p><strong>Size:</strong> You are Small or Medium (your choice when creating this character).</p>
+                <p><strong>Speed:</strong> Your base walking speed is 30 feet.</p>
+                <p><strong>Sugar Rush:</strong> As a bonus action, you tap into your caloric core. For 1 minute, your speed increases by 10 feet, and you have advantage on Dexterity saving throws (usable PB times per long rest).</p>
+                <p><strong>Sweet Fortitude:</strong> You have advantage on saves against being poisoned, resistance to Poison damage, and immunity to non-magical diseases.</p>
+                <p><strong>Munchable Morphology:</strong> A number of times per day equal to your proficiency bonus, you can break off a superficial portion of your sugary form to share with allies. Anyone consuming this confection during a short rest doubles their highest healing die roll and gains 1d6 Temporary HP (up to 10 max).</p>
+                <p><strong>Candincontinence:</strong> All Confection kindred begin incontinent as per regulation guidelines, starting as Diaper Trained and qualifying for Diaper Mastery.</p>
+                <p><strong>Soluble and Meltable (Vulnerability):</strong> While unarmored, you have vulnerability to Fire damage. Additionally, ending your turn submerged in water or heavy rain unarmored deals 1d6 acid damage from dissolving (thick waterproof Academy diapers halve this water damage).</p>
+                <p><strong>Languages:</strong> You can speak, read, and write Common and Sylvan.</p>
+                <hr class="gold-divider">
+                <h3>Confection Folk Subraces</h3>
+                <p>Select one of the following baked or molded subraces:</p>
+                <hr class="gold-divider">
+                <h4><strong>Cookie Confection</strong></h4>
+                <hr class="gold-divider">
+                <p class="subrace-description">Crumbly, warm, and sturdy, Cookie Confections have doughy skin decorated with chips or sprinkles. They are the most physically robust of the confection kindred.</p>
+                <ul>
+                    <li><strong>Ability Score Increase:</strong> Your Strength score increases by 1.</li>
+                    <li><strong>Baked Toughness:</strong> Your baked exterior acts as natural armor. When unarmored, your AC is 13 + your Constitution modifier.</li>
+                    <li><strong>Crumbly Defense:</strong> As a reaction when taking bludgeoning, piercing, or slashing damage, you crumble to absorb the impact, reducing damage by 1d12 + your Constitution modifier (1/short or long rest).</li>
+                    <li><strong>Fresh Out the Oven:</strong> You have innate Resistance to Cold damage as your core stays warm.</li>
+                </ul>
+                <hr class="gold-divider">
+                <h4><strong>Chocolate Confection</strong></h4>
+                <hr class="gold-divider">
+                <p class="subrace-description">Rich, smooth, and elegant, Chocolate Confections can temper their shells into hard dark chocolate or melt into viscous puddles.</p>
+                <ul>
+                    <li><strong>Ability Score Increase:</strong> Your Charisma score increases by an additional 1 (total +2).</li>
+                    <li><strong>Rich Aroma:</strong> You gain proficiency in Persuasion and add 1d4 to Charisma (Persuasion) checks against creatures that can smell your sweet aroma.</li>
+                    <li><strong>Temper and Melt:</strong> You can cast <em>Armor of Agathys</em> (hardened shell) and <em>Grease</em> (melted chocolate puddle) at 1st level once per long rest using Charisma.</li>
+                </ul>
+                <hr class="gold-divider">
+                <h4><strong>Gummi Confection</strong></h4>
+                <hr class="gold-divider">
+                <p class="subrace-description">Translucent, squishy, and hyper-bouncy, Gummi Confections possess flexible limbs and elastic candy bodies.</p>
+                <ul>
+                    <li><strong>Ability Score Increase:</strong> Your Dexterity score increases by 1.</li>
+                    <li><strong>Squishy Bounciness:</strong> You possess Resistance to Bludgeoning damage and immunity to fall damage up to 60 feet.</li>
+                    <li><strong>Stretchy Limbs:</strong> On your turn, your melee weapon attacks have +5 feet reach.</li>
+                    <li><strong>Gummy Trap:</strong> As a reaction when hit by a melee attack, you cause the attacker's weapon or limb to stick to your gummy body (DC 8 + PB + DEX Strength save or grappled/disarmed until end of next turn).</li>
+                </ul>
+            </div>
+            <hr class="gold-divider-biggo">
+        `
+    },
+    {
+        type: "race",
+        name: "Diaper Fae",
+        id: "diaper_fae",
+        contentHTML: `
+            <div id="diaper_fae_content">
+                <h2 id="diaper_fae">DIAPER FAE</h2>
+                <hr class="gold-divider">
+                <img src="assets/images/races/Void and Diaper Fae Races.webp" alt="Diaper Fae" class="center-image" style="max-width: 700px;" onerror="this.src='https://placehold.co/700x500/3e2e1e/f0e68c?text=Image+Not+Found'; this.alt='Image not found';">
+                <p>The Diaper Fae encompass the indigenous, fae-mutated caretakers, sprites, and subterranean scavengers of the Scholia Diaspros. Originating from the Faermeadows, canopy nurseries, and deep industrial sumps, these creatures mutated through ancient altruistic devotion to protecting and caring for the Academy's youngest denizens during the Founding Era.</p>
+                <p>Whether utilizing heavy swaddling as shock absorbers against canopy falls or depending on diapers due to ancient fae curses, the Diaper Fae operate at peak performance while heavily padded.</p>
+                <hr class="gold-divider">
+                <h3>Diaper Fae Traits</h3>
+                <p>Your Diaper Fae character has the following racial traits:</p>
+                <p><strong>Creature Type:</strong> You are a Fae (or Fae/Humanoid depending on subrace).</p>
+                <p><strong>Ability Score Increase:</strong> Your ability scores are determined by your specific fae kindred subrace.</p>
+                <p><strong>Age:</strong> Diaper Fae live extended lifespans ranging from several centuries to over a millennium, retaining a youthful, nurturing spirit throughout life.</p>
+                <p><strong>Alignment:</strong> Most Diaper Fae lean toward good or chaotic alignments, driven by strong altruistic, protective, or playful instincts.</p>
+                <p><strong>Size:</strong> You are Small or Medium (your choice when creating this character).</p>
+                <p><strong>Speed:</strong> Your base walking speed is 30 feet (or 35/45 feet depending on subrace).</p>
+                <p><strong>Languages:</strong> You can speak, read, and write Common, Sylvan (or Fae/Elven/Goblin depending on subrace).</p>
+                <hr class="gold-divider">
+                <h3>Diaper Fae Subraces</h3>
+                <p>Select one of the following specialized fae kindred subraces:</p>
+                <hr class="gold-divider">
+                <h4><strong>Diaper Goblin</strong></h4>
+                <hr class="gold-divider">
+                <p class="subrace-description">Subterranean scavengers from industrial sumps who utilize thick padding as shock absorbers and sound-dampeners for stealth.</p>
+                <ul>
+                    <li><strong>Ability Score Increase:</strong> Your Dexterity score increases by 3 and Constitution score increases by 2, while your Strength score decreases by 2.</li>
+                    <li><strong>Speed:</strong> Your base walking speed is 45 feet.</li>
+                    <li><strong>Resistances:</strong> You have Resistance to Poison, Disease, and Necrotic damage.</li>
+                    <li><strong>Proficiencies:</strong> You gain proficiency with Light Armor, Daggers, Shortswords, Shields, Stealth, Survival, and Tinker's Tools.</li>
+                    <li><strong>Natural Diaper Mastery:</strong> You start with the Diaper Mastery feat and Padded Sneaking (immunity to noise/odors while sneaking padded).</li>
+                    <li><strong>Diaper Efficiency:</strong> Your padding gains +1 use charge (+2 at lvl 7, +3 at lvl 14, +4 at lvl 20).</li>
+                </ul>
+                <hr class="gold-divider">
+                <h4><strong>Diapey Harpy</strong></h4>
+                <hr class="gold-divider">
+                <p class="subrace-description">Avian-humanoid aerialists from high mountain peaks who rely on heavy padding to withstand freezing updrafts.</p>
+                <ul>
+                    <li><strong>Ability Score Increase:</strong> Your Dexterity score increases by 3, Wisdom by 2, Constitution by 1, and Strength decreases by 2.</li>
+                    <li><strong>Flight & Gliding:</strong> You possess a flying speed of 30 feet (clumsy if diaper is full without Diaper Mastery) and treat falling as gliding.</li>
+                    <li><strong>Resistances:</strong> You have Resistance to Petrification, Disease, and Magical Sleep.</li>
+                    <li><strong>Talon Kick:</strong> Your unarmed strike deals 1d6 slashing damage with Light and Finesse properties.</li>
+                    <li><strong>Predatory Sight:</strong> You possess low-light vision out to 120 feet.</li>
+                </ul>
+                <hr class="gold-divider">
+                <h4><strong>Pailkin Halfling</strong></h4>
+                <hr class="gold-divider">
+                <p class="subrace-description">Altruistic caretakers of County Majicka with an innate, magical connection to nursery domains and healing arts.</p>
+                <ul>
+                    <li><strong>Ability Score Increase:</strong> Your Dexterity, Constitution, and Charisma scores each increase by 2.</li>
+                    <li><strong>Resistances & Immunities:</strong> Resistance to Disease and Immunity to Magical Sleep.</li>
+                    <li><strong>Innate Magic:</strong> You know two cantrips and one 1st-level spell from the Nursery/Diaper School spell list.</li>
+                    <li><strong>Padded Napping:</strong> You can meditate for 3 hours instead of 4 for a long rest (diaper is full upon waking).</li>
+                    <li><strong>Diaper Efficiency:</strong> Your padding gains +1 charge (+2 at lvl 7, +3 at lvl 14, +4 at lvl 20).</li>
+                </ul>
+                <hr class="gold-divider">
+                <h4><strong>Pailkin Elf</strong></h4>
+                <hr class="gold-divider">
+                <p class="subrace-description">Canopy-dwelling pediatric healers and sanctuary guardians of the Greensea Expanse.</p>
+                <ul>
+                    <li><strong>Ability Score Increase:</strong> Your Dexterity, Constitution, and Charisma scores each increase by 2.</li>
+                    <li><strong>Speed:</strong> Your base walking speed is 35 feet.</li>
+                    <li><strong>Immunities:</strong> Immunity to non-magical disease and Magical sleep.</li>
+                    <li><strong>Innate Magic:</strong> You know two cantrips and one 1st-level spell from the Nursery/Diaper School spell list.</li>
+                    <li><strong>Darkvision:</strong> You can see in dim light and darkness out to 60 feet.</li>
+                </ul>
+                <hr class="gold-divider">
+                <h4><strong>Pailkin Dark Elf</strong></h4>
+                <hr class="gold-divider">
+                <p class="subrace-description">Underground weavers bound by ancient tradition to permanent diaper wear, navigating artificial tunnels with ease.</p>
+                <ul>
+                    <li><strong>Ability Score Increase:</strong> Your Dexterity, Constitution, and Charisma scores each increase by 2.</li>
+                    <li><strong>Speed:</strong> Your base walking speed is 35 feet.</li>
+                    <li><strong>Vision:</strong> You have perfect low-light vision out to 120 feet (with Sunlight Sensitivity in direct light unless protected).</li>
+                    <li><strong>Sense of the Under-Ways:</strong> You never get lost in artificial underground passages.</li>
+                    <li><strong>Innate Magic:</strong> You know one cantrip and one 1st-level Wizard spell.</li>
+                </ul>
+                <hr class="gold-divider">
+                <h4><strong>Diaper Fairy</strong></h4>
+                <hr class="gold-divider">
+                <p class="subrace-description">Fragile, hyper-agile sprites of the Faermeadows who utilize absorbent padding as shock-absorbers during aerial flight.</p>
+                <ul>
+                    <li><strong>Ability Score Increase:</strong> Dexterity +4, Intelligence +2, Wisdom +2, Charisma +2, Strength -2, Constitution -2.</li>
+                    <li><strong>Flight & Safety Teleport:</strong> You have a flying speed of 35 feet and always treat falling as gliding. Twice per day, if incapacitated while falling, you automatically trigger a 120-foot Safety Teleport to solid ground.</li>
+                    <li><strong>Perfect Darkvision:</strong> You see in complete darkness out to 60 feet, discerning full colors via UV filtering.</li>
+                    <li><strong>Spellcasting:</strong> You know two cantrips and one 1st-level spell from the Druid or Wizard spell lists.</li>
+                </ul>
+            </div>
+            <hr class="gold-divider-biggo">
+        `
+    },
+    {
+        type: "race",
+        name: "Voidtouched Races",
+        id: "voidtouched_races",
+        contentHTML: `
+            <div id="voidtouched_races_content">
+                <h2 id="voidtouched_races">VOIDTOUCHED RACES</h2>
+                <hr class="gold-divider">
+                <img src="assets/images/races/Void and Diaper Fae Races.webp" alt="Voidtouched Races" class="center-image" style="max-width: 700px;" onerror="this.src='https://placehold.co/700x500/3e2e1e/f0e68c?text=Image+Not+Found'; this.alt='Image not found';">
+                <p>Adapted to the freezing vacuum, raw cosmic energy, and dimensional friction of the Deep Ways, the Voidtouched Races are entities whose mortal biology has been reshaped by the void. Whether hailing from bunbunkin dragoons, avian voidkin, or riftborn darklings, these wanderers possess unmatched resilience against psychic strain and spatial distortions.</p>
+                <p>As a direct consequence of enduring dimensional friction, all Voidtouched require heavy-duty survival padding to anchor their physical forms in material space, turning padded gear into essential cosmic survival equipment.</p>
+                <hr class="gold-divider">
+                <h3>Voidtouched Races Traits</h3>
+                <p>Your Voidtouched character has the following racial traits:</p>
+                <p><strong>Creature Type:</strong> You are a Humanoid (Voidkin).</p>
+                <p><strong>Ability Score Increase:</strong> Your ability scores are determined by your specific voidkin lineage subrace.</p>
+                <p><strong>Age:</strong> Voidtouched maturity mirrors their original mortal ancestry, though cosmic adaptation grants extended resistance to natural aging.</p>
+                <p><strong>Alignment:</strong> Often pragmatic, resilient, or chaotic, Voidtouched wanderers span all alignments as they chart the unknown ways.</p>
+                <p><strong>Size:</strong> You are Small or Medium (your choice when creating this character).</p>
+                <p><strong>Speed:</strong> Your base walking speed is 35 feet (or 30 feet for aerial/subterranean subraces).</p>
+                <p><strong>Voidborne Diaper Dependence:</strong> You are naturally diaper-dependent as a physiological anchor against dimensional friction, requiring heavy survival diapers.</p>
+                <p><strong>Languages:</strong> You can speak, read, and write Common and Voidslang, plus one language of your origin ancestry.</p>
+                <hr class="gold-divider">
+                <h3>Voidtouched Subraces</h3>
+                <p>Select one of the following void-adapted lineages:</p>
+                <hr class="gold-divider">
+                <h4><strong>Lagroonah (Bunbunkin Voidkin)</strong></h4>
+                <hr class="gold-divider">
+                <p class="subrace-description">High-leaping void dragoons equipped with formidable kick attacks and shield-glaive combat mastery.</p>
+                <ul>
+                    <li><strong>Ability Score Increase:</strong> Your Strength score increases by 2 and Dexterity score increases by 3.</li>
+                    <li><strong>Dragon Kick:</strong> Unarmed strike dealing 1d6 + Str/Dex bludgeoning damage with Light and Finesse properties.</li>
+                    <li><strong>Double Leap & Expert Fall:</strong> Your leap distance and height are doubled without a running start. You take half falling damage up to 100 feet and possess a natural Slowfall of 20 feet.</li>
+                    <li><strong>Void Dragoon:</strong> You can wield a shield and a Glaive simultaneously (do not add Strength modifier to damage).</li>
+                    <li><strong>Void Senses:</strong> Perfect Darkvision out to 60 feet. You cannot get lost in the Deep Ways and always know the direction of the nearest safe space.</li>
+                </ul>
+                <hr class="gold-divider">
+                <h4><strong>Strigisnoctuan (Avian Voidkin)</strong></h4>
+                <hr class="gold-divider">
+                <p class="subrace-description">Silent avian voidkin who dominate unlit environments with stealth, talon strikes, and firearms proficiency.</p>
+                <ul>
+                    <li><strong>Ability Score Increase:</strong> Dexterity +3, Constitution +2, Intelligence +1, Wisdom +1.</li>
+                    <li><strong>Speed & Flight:</strong> Walking speed 30 feet, flying speed 35 feet (no heavy armor/load).</li>
+                    <li><strong>Talon Strike:</strong> Unarmed strike dealing 1d6 + Str/Dex slashing damage (Light, Finesse). Deals +1d6 damage on Sneak Attacks.</li>
+                    <li><strong>Shadow Stealth:</strong> Proficiency in Stealth with advantage in pitch dark settings.</li>
+                    <li><strong>Vision:</strong> Perfect Darkvision 120 feet in natural darkness and Magical Darkvision up to 10 feet.</li>
+                </ul>
+                <hr class="gold-divider">
+                <h4><strong>Voidwalker Human (Voidkin)</strong></h4>
+                <hr class="gold-divider">
+                <p class="subrace-description">Adaptable human wanderers whose versatile minds channel cosmic resilience and raw potential.</p>
+                <ul>
+                    <li><strong>Ability Score Increase:</strong> Strength +2, Dexterity +2, Constitution +2, Intelligence +1, Wisdom +1, Charisma +1.</li>
+                    <li><strong>Cosmic Resilience:</strong> You possess Resistance to Psychic damage and advantage against Magical Compulsion.</li>
+                    <li><strong>Ingenuity of Humanity:</strong> You gain proficiency in two skills of your choice.</li>
+                    <li><strong>Voidspark of Brilliance:</strong> You gain one origin feat or a feat for which you qualify at character creation.</li>
+                </ul>
+                <hr class="gold-divider">
+                <h4><strong>Elbrasset (Goatfolk Voidkin)</strong></h4>
+                <hr class="gold-divider">
+                <p class="subrace-description">Sturdy mountain voidkin possessing devastating headbutt attacks and surefooted mountain movement.</p>
+                <ul>
+                    <li><strong>Ability Score Increase:</strong> Strength +3, Dexterity +3, Constitution +3, Intelligence -2, Wisdom -2.</li>
+                    <li><strong>Mountainous Resilience:</strong> Resistance to Cold damage and movement-impairing effects.</li>
+                    <li><strong>Horny Headbutt:</strong> Unarmed strike dealing 1d8 + STR bludgeoning damage. During a full attack action, you can make a second headbutt dealing full damage to both your target and yourself.</li>
+                    <li><strong>Way-Footed & Way-Finder:</strong> Ignore snowy, icy, and mountainous difficult terrain, and never become lost in mountain ranges or dimensional ways.</li>
+                </ul>
+                <hr class="gold-divider">
+                <h4><strong>Noxwing Mothfolk (Voidkin)</strong></h4>
+                <hr class="gold-divider">
+                <p class="subrace-description">Ethereal mothfolk of the void who scatter blinding dust clouds and weave cosmic silk lines.</p>
+                <ul>
+                    <li><strong>Ability Score Increase:</strong> Dexterity +3, Wisdom +2, Intelligence +1, Constitution -1.</li>
+                    <li><strong>Lunar Flight:</strong> Flying speed of 35 feet while not wearing heavy armor or carrying a heavy load.</li>
+                    <li><strong>Void Dusting:</strong> As an action, release void dust in a 10-foot radius; creatures must succeed on a Constitution save or be blinded until the end of their next turn (usable PB times per long rest).</li>
+                    <li><strong>Ethereal Silk & Darkvision:</strong> Produce silk rope or sticky web bindings using Silk Points equal to PB. Perfect Darkvision out to 120 feet.</li>
+                </ul>
+                <hr class="gold-divider">
+                <h4><strong>Riftkin Darkling (Darkling Voidborn)</strong></h4>
+                <hr class="gold-divider">
+                <p class="subrace-description">Umbral voidborn darklings who harness shadow regeneration, umbral jaunts, and shadowmeld teleports.</p>
+                <ul>
+                    <li><strong>Ability Score Increase:</strong> Strength +2, Dexterity +2, Constitution +2.</li>
+                    <li><strong>Natural Defense & Speed:</strong> Unarmored AC equal to 13 + Dexterity modifier. Base speed 30 feet, fly speed 30 feet.</li>
+                    <li><strong>Immunities & Vulnerabilities:</strong> Immunity to Necrotic damage, Disease, and Magical Sleep; Vulnerability to Radiant damage.</li>
+                    <li><strong>Shadowmeld Reflex:</strong> As a reaction or bonus action, teleport up to 60 feet between shadows twice per day.</li>
+                    <li><strong>Umbraphagy & Shadow Regeneration:</strong> Regenerate hit points while standing in unlit pitch darkness. Perfect Darkvision out to 120 feet.</li>
+                </ul>
+            </div>
+            <hr class="gold-divider-biggo">
+        `
+    }
         ];
         // --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
         // END OF RACE DATA
@@ -2698,8 +3177,25 @@
             }
             const raceEntry = racesData[pageIndex];
             raceContentDiv.innerHTML = raceEntry.contentHTML;
+
+            // Remove any previously injected back button so we don't duplicate it
+            const oldBack = document.getElementById('backToRacesBtn');
+            if (oldBack) oldBack.remove();
+
+            // Inject a shared "Back to race list" button for non-navigation pages
+            if (raceEntry.type !== 'navigation') {
+                const backBtn = document.createElement('button');
+                backBtn.id = 'backToRacesBtn';
+                backBtn.className = 'nav-button';
+                backBtn.textContent = 'Back to race list';
+                backBtn.style.marginBottom = '0.75rem';
+                backBtn.addEventListener('click', showRaceList);
+                // Place the button at the top of the content area
+                raceContentDiv.insertBefore(backBtn, raceContentDiv.firstChild);
+            }
+
             // Scroll to top of content area on page change
-            raceContentDiv.scrollTop = 0; 
+            raceContentDiv.scrollTop = 0;
             updateNavigation();
         }
 
@@ -2719,6 +3215,18 @@
             } else {
                 console.warn("Could not find race with ID:", raceId);
             }
+        }
+
+        // Show the main race list / quick navigation page
+        function showRaceList() {
+            const navIndex = racesData.findIndex(r => (r.id && r.id === 'quicknav') || r.type === 'navigation');
+            if (navIndex !== -1) {
+                currentPage = navIndex;
+            } else {
+                // fallback to first page
+                currentPage = 0;
+            }
+            displayRace(currentPage);
         }
 
         function scrollToFirstMatchInPage(query) {
