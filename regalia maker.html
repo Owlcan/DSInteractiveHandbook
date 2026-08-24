@@ -292,6 +292,20 @@
               <button id="enhance5" class="enhanceBtn" style="background: linear-gradient(to bottom, #d4b78c, #a88665); color: #4a3b2a; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-family: 'Cinzel', serif;">+5 (150,000 GP)</button>
             </div>
             <div id="enhancementDisplay" style="text-align: center; margin-top: 15px; font-weight: bold; color: #8c693a;">No Enhancement Selected</div>
+
+            <div style="margin-top: 20px;">
+              <label for="regaliaMaterialSelect" style="display: block; margin-bottom: 5px; color: #8c693a;">Base Material:</label>
+              <select id="regaliaMaterialSelect" style="width: 100%; padding: 12px; background-color: #e0c8a0; color: #4a3b2a; border: 1px solid #b08d57; border-radius: 4px; font-family: 'Cinzel', serif; cursor: pointer;">
+                <option value="Standard" selected>Standard Steel / Iron</option>
+                <option value="Orichalchite">Orichalchite (50 Ore Required)</option>
+                <option value="Star-Iron">Star-Iron (50 Ore Required)</option>
+                <option value="Chromatic Platinum">Chromatic Platinum (40 Ore Required)</option>
+                <option value="Glimmelectrum">Glimmelectrum (30 Ore Required)</option>
+                <option value="Glimmergold">Glimmergold (30 Ore Required)</option>
+                <option value="Fractal Copper">Fractal Copper (20 Ore Required)</option>
+                <option value="Hemimetrichite">Hemimetrichite (20 Ore Required)</option>
+              </select>
+            </div>
           </div>
           
           <p style="text-align: center; margin-bottom: 20px;">How many additional upgrade slots for your regalia?</p>
@@ -430,6 +444,7 @@ const regaliaTypes = [
     { name: "Battle-Knit Tutu", ac: 13, notes: "Grants +1 to AC against melee attacks due to agility", value: 1400 }, // AC 13 + conditional +1 AC
     { name: "Darkenveil Latex Victorian Dress", ac: 12, notes: "Resistance to poison effects and sensory afflictions, disadvantage on stealth based sound checks against targets with hearing.", value: 2200 }, // AC 12 + multiple resistances
     { name: "Arcane Scholar's Layered Dress", ac: 12, notes: "Grants advantage on Intelligence saves", value: 1400 }, // AC 12 + advantage on a key save
+    { name: "Prototype Scholia Stealth Gear", ac: 13, notes: "No Dexterity cap. While your diaper has fewer than 6 charges, gain a 1d4 bonus to Stealth and Deception checks related to being diapered.", value: 50 },
 
     // **Themed Gear**
     { name: "Armored Nun’s Habit", ac: 13, notes: "Light armor; allows wearer to cast divine spells with +1 save DC", value: 2200 }, // AC 13 + potent spellcasting bonus
@@ -563,12 +578,11 @@ const clothingArmorCategories = [
   "Starlight Dreamer Sleepsuit", "Moonlight Serenade Frilled Dress", 
   "Cloudweave Hooded Onesie", "Battle-Knit Tutu", "Darkenveil Latex Victorian Dress", 
   "Arcane Scholar's Layered Dress", "Armored Nun's Habit", "Restrictive Heavy Armored Nun's Habit", 
+  "Prototype Scholia Stealth Gear",
   "Sanctified Cleric Vestments", "Oracle's Blessed Mantle", "Traditional Witch's Outfit", 
   "Widdle Witch Waddle Dress", "Padded Armor", "Leather Armor", "Studded Leather Armor", 
   "Hide Armor", "Chain Shirt", "Scale Mail", "Breastplate", "Half Plate Armor", 
-  "Ring Mail", "Chain Mail", "Splint Armor", "Plate Armor", "Mystic Cloak",
-  "Ceremonial Cloak of the Gilded", "Gilded Ceremonial Cloak", "Runed Battlemage Cloak",
-  "Spectacles of Insight", "Mystic Monocle", "Tech-Enhanced Visor", "Dashing Musketeer Hat",
+  "Ring Mail", "Chain Mail", "Splint Armor", "Plate Armor",
   // Mithril Armors
   "Mithril Chain Shirt", "Mithril Scale Mail", "Mithril Breastplate", 
   "Mithril Half Plate Armor", "Mithril Chain Mail", "Mithril Splint Armor", "Mithril Plate Armor",
@@ -589,6 +603,42 @@ const clothingArmorCategorySet = new Set(
 
 function isClothingArmorBase(name) {
   return clothingArmorCategorySet.has(normalizeRegaliaCategoryName(name));
+}
+
+const REGALIA_METALLURGY_MATRICES = {
+  Standard: { name: "Standard Steel / Iron", oreRequired: 0, oreName: "Iron Ore", effectText: "No special modifiers." },
+  Orichalchite: { name: "Orichalchite", oreRequired: 50, oreName: "Orichalchite Ore", effectText: "Halves the regalia's weight, ignores Strength requirements, removes Stealth disadvantage, and grants +2 to Stealth checks in quiet corridors." },
+  "Star-Iron": { name: "Star-Iron", oreRequired: 50, oreName: "Star-Iron Ore", effectText: "Heavy armor gains +1 AC and advantage on saves against forced movement; bludgeoning and falling damage are reduced by 1d10." },
+  "Chromatic Platinum": { name: "Chromatic Platinum", oreRequired: 40, oreName: "Chromatic Platinum Ore", effectText: "Grants resistance to Cold, Fire, and Lightning damage. Once per long rest, dropping to 0 HP instead leaves the wearer at 1 HP." },
+  Glimmelectrum: { name: "Glimmelectrum", oreRequired: 30, oreName: "Glimmelectrum Ore", effectText: "Grants resistance to Radiant and Fire damage. Once per short rest, a melee hit can trigger a blinding Solar Flare." },
+  Glimmergold: { name: "Glimmergold", oreRequired: 30, oreName: "Glimmergold Ore", effectText: "Grants +2 to Performance and Persuasion checks; hostile creatures have disadvantage on their first attack against you each encounter." },
+  "Fractal Copper": { name: "Fractal Copper", oreRequired: 20, oreName: "Fractal Copper Ore", effectText: "Grants resistance to Lightning damage and can restore 1 charge to an equipped magical item or Regalia slot when struck by Lightning." },
+  Hemimetrichite: { name: "Hemimetrichite", oreRequired: 20, oreName: "Hemimetrichite Ore", effectText: "Grants resistance to Psychic damage and advantage on saves against being Charmed or Frightened." }
+};
+
+function isHeavyArmorBase(name) {
+  return ["Ring Mail", "Chain Mail", "Splint Armor", "Plate Armor", "Restrictive Heavy Armored Nun's Habit"].includes(normalizeRegaliaCategoryName(name));
+}
+
+function getMaterialSlotBonus(baseName, material = "Standard") {
+  return material === "Orichalchite" && normalizeRegaliaCategoryName(baseName) === "Prototype Scholia Stealth Gear" ? 1 : 0;
+}
+
+function getRegaliaMaterialEffects(baseName, material = "Standard") {
+  const matrix = REGALIA_METALLURGY_MATRICES[material] || REGALIA_METALLURGY_MATRICES.Standard;
+  const starIronApplies = material === "Star-Iron" && isHeavyArmorBase(baseName);
+  const slotBonus = getMaterialSlotBonus(baseName, material);
+  const baseEffectText = material === "Star-Iron" && !starIronApplies
+    ? "Star-Iron reinforces this clothing or light/medium armor without its heavy-armor AC and kinetic benefits."
+    : matrix.effectText;
+  return {
+    ...matrix,
+    acBonus: starIronApplies ? 1 : 0,
+    slotBonus,
+    effectText: slotBonus
+      ? `${baseEffectText} Prototype Scholia Stealth Gear gains 1 additional upgrade slot from Orichalchite's lighter weight.`
+      : baseEffectText
+  };
 }
 
 const regaliaUpgrades = [
@@ -954,6 +1004,7 @@ const regaliaUpgrades = [
   let state = {
     currentStage: 1, // 1: Base, 2: Slots, 3: Upgrades, 4: Summary
     selectedRegaliaBase: null, // Will store the full object
+    baseMaterial: "Standard",
     totalSlots: 1,
     remainingSlots: 1,
     selectedUpgrades: [],
@@ -994,6 +1045,7 @@ const regaliaUpgrades = [
   const slotIndicatorsCtn = document.getElementById("slotIndicatorsCtn");
   const loadSavedRegaliaBtn = document.getElementById("loadSavedRegaliaBtn");
   const savedRegaliaFileInput = document.getElementById("savedRegaliaFileInput");
+  const regaliaMaterialSelect = document.getElementById("regaliaMaterialSelect");
 
 
   // Initialize
@@ -1021,6 +1073,14 @@ const regaliaUpgrades = [
     document.getElementById("enhance3").addEventListener("click", () => selectEnhancement("+3"));
     document.getElementById("enhance4").addEventListener("click", () => selectEnhancement("+4"));
     document.getElementById("enhance5").addEventListener("click", () => selectEnhancement("+5"));
+    if (regaliaMaterialSelect) {
+      regaliaMaterialSelect.addEventListener("change", () => {
+        const previousMaterial = state.baseMaterial;
+        state.baseMaterial = regaliaMaterialSelect.value;
+        syncMaterialSlotAvailability(previousMaterial);
+        updateSelectedUpgradesList();
+      });
+    }
     
     if (regaliaImageInput) {
       regaliaImageInput.addEventListener("input", updateImagePreview);
@@ -1059,6 +1119,7 @@ const regaliaUpgrades = [
       data: {
         currentTier: 1,
         selectedBase,
+        baseMaterial: String(state.baseMaterial || 'Standard'),
         selectedEnhancement: String(selectedEnhancement || ''),
         totalSlots: Math.max(1, Number(state.totalSlots) || 1),
         selectedUpgrades: Array.isArray(state.selectedUpgrades) ? state.selectedUpgrades.map(u => String(u?.name || '')).filter(Boolean) : [],
@@ -1110,6 +1171,7 @@ const regaliaUpgrades = [
     if (!baseDetails) throw new Error(`Saved regalia base not found in this version: ${selectedBase}`);
 
     const totalSlots = Math.max(1, Math.min(10, Number(data.totalSlots) || 1));
+    const savedMaterial = String(data.baseMaterial || 'Standard');
     const desiredEnhancement = String(data.selectedEnhancement || '').trim();
     const isArmorClothing = isClothingArmorBase(selectedBase);
     const enhancementToApply = (isArmorClothing && (desiredEnhancement === '' || Object.prototype.hasOwnProperty.call(enhancementPricing, desiredEnhancement)))
@@ -1142,6 +1204,9 @@ const regaliaUpgrades = [
       onRegaliaSelected({ target: accessoriesSelect });
     }
 
+    state.baseMaterial = isArmorClothing && REGALIA_METALLURGY_MATRICES[savedMaterial] ? savedMaterial : "Standard";
+    if (regaliaMaterialSelect) regaliaMaterialSelect.value = state.baseMaterial;
+
     // Apply enhancement + slot count
     selectEnhancement(enhancementToApply);
     state.totalSlots = totalSlots;
@@ -1154,7 +1219,7 @@ const regaliaUpgrades = [
     // Apply upgrades using the normal selection logic (keeps usedSlots/remainingSlots consistent)
     state.selectedUpgrades = [];
     state.usedSlots = [];
-    state.remainingSlots = state.totalSlots + (selectedEnhancement ? enhancementPricing[selectedEnhancement].slots : 0);
+    state.remainingSlots = getAvailableSlotCount();
     remainingSlotsDisplay.textContent = state.remainingSlots;
 
     const slotsNeeded = upgradeObjects.reduce((sum, u) => sum + Math.max(0, Number(u?.cost) || 0), 0);
@@ -1297,6 +1362,10 @@ const regaliaUpgrades = [
     if (enhancementDiv) {
       enhancementDiv.style.display = armorClothingCheck ? 'block' : 'none';
     }
+    if (!armorClothingCheck) {
+      state.baseMaterial = "Standard";
+      if (regaliaMaterialSelect) regaliaMaterialSelect.value = "Standard";
+    }
     
     // Show slot selection container
     slotSelectionCtn.style.display = "block";
@@ -1328,8 +1397,32 @@ const regaliaUpgrades = [
     state.remainingSlots = state.totalSlots; 
   }
 
+  function getAvailableSlotCount() {
+    const enhancementSlots = selectedEnhancement ? enhancementPricing[selectedEnhancement].slots : 0;
+    const materialSlots = getMaterialSlotBonus(state.selectedRegaliaBase?.name, state.baseMaterial);
+    return state.totalSlots + enhancementSlots + materialSlots;
+  }
+
+  function syncMaterialSlotAvailability(previousMaterial) {
+    const usedSlotCount = state.selectedUpgrades.reduce((total, upgrade) => total + (Number(upgrade.cost) || 0), 0);
+    const availableSlots = getAvailableSlotCount();
+    if (usedSlotCount > availableSlots) {
+      state.baseMaterial = previousMaterial;
+      if (regaliaMaterialSelect) regaliaMaterialSelect.value = previousMaterial;
+      alert("This material change would remove an occupied upgrade slot. Remove an upgrade first.");
+      return;
+    }
+
+    state.remainingSlots = availableSlots - usedSlotCount;
+    remainingSlotsDisplay.textContent = state.remainingSlots;
+    if (state.currentStage >= 3) {
+      renderSlotIndicators();
+      renderUpgradeOptions();
+    }
+  }
+
   function confirmSlots() {
-    state.remainingSlots = state.totalSlots + (selectedEnhancement ? enhancementPricing[selectedEnhancement].slots : 0);
+    state.remainingSlots = getAvailableSlotCount();
     remainingSlotsDisplay.textContent = state.remainingSlots;
     slotSelectionCtn.style.display = "none";
     upgradeSelectionCtn.style.display = "block";
@@ -1372,16 +1465,17 @@ const regaliaUpgrades = [
 
  function renderSlotIndicators() {
     slotIndicatorsCtn.innerHTML = "";
-    const totalGroups = Math.ceil(state.totalSlots / 5);
+   const availableSlots = getAvailableSlotCount();
+   const totalGroups = Math.ceil(availableSlots / 5);
     
     for (let i = 0; i < totalGroups; i++) {
       const groupContainer = document.createElement("div");
       groupContainer.className = "slot-group";
-      const slotsInGroup = (i === totalGroups - 1) ? (state.totalSlots % 5 || 5) : 5;
+      const slotsInGroup = (i === totalGroups - 1) ? (availableSlots % 5 || 5) : 5;
       
       for (let j = 0; j < slotsInGroup; j++) {
         const slotIndex = i * 5 + j;
-        if (slotIndex >= state.totalSlots) break; 
+        if (slotIndex >= availableSlots) break; 
 
         const slotCircle = document.createElement("div");
         slotCircle.className = "slot-circle";
@@ -1483,7 +1577,7 @@ const regaliaUpgrades = [
       state.remainingSlots -= upgrade.cost;
       
       const availableSlotIndices = [];
-      for (let i = 0; i < state.totalSlots; i++) {
+      for (let i = 0; i < getAvailableSlotCount(); i++) {
         if (!state.usedSlots.some(slot => slot.index === i)) {
           availableSlotIndices.push(i);
         }
@@ -1520,6 +1614,7 @@ const regaliaUpgrades = [
     selectedUpgradesList.innerHTML = "";
 
     if (state.selectedRegaliaBase) {
+      const material = getRegaliaMaterialEffects(state.selectedRegaliaBase.name, state.baseMaterial);
         const li = document.createElement("li");
         li.style.cssText = "padding: 10px; background-color: #e0c8a0; margin-bottom: 8px; border-left: 3px solid #8c693a;";
         let baseText = `<strong style="color: #8c693a;">Base: ${state.selectedRegaliaBase.name} (AC ${state.selectedRegaliaBase.ac})</strong>`;
@@ -1530,6 +1625,8 @@ const regaliaUpgrades = [
           <div style="display: flex; justify-content: space-between; align-items: center;">
             <span>${baseText}</span>
           </div>
+          <div style="font-size: 0.8em; color: #5c4d3e; margin-top: 5px;"><strong>Material:</strong> ${material.name}</div>
+          ${state.baseMaterial !== "Standard" ? `<div style="font-size: 0.8em; color: #5c4d3e; margin-top: 3px;">${material.effectText}</div>` : ''}
         `;
         selectedUpgradesList.appendChild(li);
     }
@@ -1738,12 +1835,14 @@ const regaliaUpgrades = [
 
     const regaliaDisplayName = selectedEnhancement ? `${selectedEnhancement} ${state.regaliaName}` : state.regaliaName;
     let finalAC = state.selectedRegaliaBase ? state.selectedRegaliaBase.ac : 10; // Start with base AC
+    const material = getRegaliaMaterialEffects(state.selectedRegaliaBase?.name, state.baseMaterial);
     
     // Add enhancement bonus to AC
     if (selectedEnhancement) {
       const enhancementBonus = parseInt(selectedEnhancement.replace('+', ''));
       finalAC += enhancementBonus;
     }
+    finalAC += material.acBonus;
     
     let finalNotes = state.selectedRegaliaBase ? state.selectedRegaliaBase.notes : "";
 
@@ -1756,6 +1855,10 @@ const regaliaUpgrades = [
         finalNotes = finalNotes.replace(/Stealth Disadvantage/g, '').replace(/Str \d+ req\./g, '').replace(/,/g, '').trim();
         if (finalNotes === "") finalNotes = "Penalties Removed";
         else finalNotes += " (Some Penalties Removed)";
+    }
+    if (state.baseMaterial === "Orichalchite") {
+      finalNotes = finalNotes.replace(/Stealth Disadvantage/g, '').replace(/Str \d+ req\./g, '').replace(/,/g, '').trim();
+      finalNotes = finalNotes ? `${finalNotes} (Orichalchite removes armor penalties)` : "Armor penalties removed by Orichalchite";
     }
     
     // Calculate total cost
@@ -1777,13 +1880,15 @@ const regaliaUpgrades = [
         <h3 style="color: #8c693a; margin-top: 0; font-size: 1.5em; text-align: center;">${regaliaDisplayName}</h3>
         <div style="display: flex; justify-content: space-between; flex-wrap: wrap; margin-bottom: 10px; color: #5c4d3e;">
           <p><strong>Base Type:</strong> ${state.selectedRegaliaBase ? state.selectedRegaliaBase.name : 'N/A'}</p>
+          <p><strong>Material:</strong> ${material.name}</p>
           <p><strong>Final AC:</strong> ${finalAC}</p>
           <p><strong>Total Value:</strong> ${totalCost.toLocaleString()} GP</p>
         </div>
         ${selectedEnhancement ? `<div style="margin-bottom: 10px; color: #5c4d3e;"><p><strong>Enhancement:</strong> ${selectedEnhancement} (+${selectedEnhancement.replace('+', '')} AC, ${applyRegaliaPremium(enhancementPricing[selectedEnhancement].cost).toLocaleString()} GP)</p></div>` : ''}
+        ${state.baseMaterial !== "Standard" ? `<div style="margin-bottom: 10px; padding: 10px; border-left: 4px solid #b08d57; background-color: rgba(176, 141, 87, 0.1); color: #5c4d3e;"><strong>${material.name} Modification:</strong> ${material.effectText}<div style="font-size: 0.85em; margin-top: 5px; color: #8c693a; font-style: italic;">Requires: ${material.oreRequired} ${material.oreName} for smelting.</div></div>` : ''}
         <div style="margin-bottom: 20px; color: #5c4d3e;">
             <p><strong>Notes:</strong> ${finalNotes || "None"}</p>
-            <p><strong>Total Slots Used:</strong> ${state.totalSlots - state.remainingSlots} / ${state.totalSlots + (selectedEnhancement ? enhancementPricing[selectedEnhancement].slots : 0)}</p>
+            <p><strong>Total Slots Used:</strong> ${getAvailableSlotCount() - state.remainingSlots} / ${getAvailableSlotCount()}</p>
         </div>
         <h4 style="color: #8c693a; border-bottom: 1px solid #b08d57; padding-bottom: 5px;">Chosen Upgrades</h4>
         <ul style="list-style-type: none; padding: 0;">
@@ -1825,14 +1930,19 @@ const regaliaUpgrades = [
           
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
             <span style="color: #5c4d3e; font-size: 1.0em;">Enhancement Cost:</span>
-            <span style="color: #8c693a; font-weight: bold;">${state.totalCost.toLocaleString()} GP</span>
+            <span style="color: #8c693a; font-weight: bold;">${state.enhancementCost.toLocaleString()} GP</span>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span style="color: #5c4d3e; font-size: 1.0em;">Material Smelting:</span>
+            <span style="color: #8c693a; font-weight: bold;">${material.oreRequired > 0 ? `${material.oreRequired} ${material.oreName}` : 'Standard (No Ore)'}</span>
           </div>
 
           <hr style="border: none; border-top: 2px solid #b08d57; margin: 12px 0;">
           
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
             <span style="color: #5c4d3e; font-size: 1.1em;">Total Slots:</span>
-            <span style="color: #8c693a; font-weight: bold;">${state.totalSlots}</span>
+            <span style="color: #8c693a; font-weight: bold;">${getAvailableSlotCount()}</span>
           </div>
           
           <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px;">

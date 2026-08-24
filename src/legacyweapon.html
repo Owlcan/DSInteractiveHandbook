@@ -406,6 +406,20 @@
             <label for="weaponImageInput" style="display: block; margin-bottom: 5px; color: #ffd700;">Weapon Image URL (optional):</label>
             <input type="text" id="weaponImageInput" placeholder="Enter an image URL..." style="width: 100%; padding: 12px; background-color: #2a2a2a; color: #e0d2b4; border: 1px solid #c0a060; border-radius: 4px; font-family: 'Cinzel', serif;">
           </div>
+          
+          <div>
+            <label for="weaponMaterialSelect" style="display: block; margin-bottom: 5px; color: #ffd700;">Base Material:</label>
+            <select id="weaponMaterialSelect" style="width: 100%; padding: 12px; background-color: #2a2a2a; color: #e0d2b4; border: 1px solid #c0a060; border-radius: 4px; font-family: 'Cinzel', serif; cursor: pointer;">
+              <option value="Standard" selected>Standard Steel / Iron</option>
+              <option value="Orichalchite">Orichalchite (50 Ore Required)</option>
+              <option value="Star-Iron">Star-Iron (50 Ore Required)</option>
+              <option value="Chromatic Platinum">Chromatic Platinum (40 Ore Required)</option>
+              <option value="Glimmelectrum">Glimmelectrum (30 Ore Required)</option>
+              <option value="Glimmergold">Glimmergold (30 Ore Required)</option>
+              <option value="Fractal Copper">Fractal Copper (20 Ore Required)</option>
+              <option value="Hemimetrichite">Hemimetrichite (20 Ore Required)</option>
+            </select>
+          </div>
 
           <div>
             <label for="weaponImageFileInput" style="display: block; margin-bottom: 5px; color: #ffd700;">Or upload an image (stays in your browser):</label>
@@ -1315,7 +1329,7 @@
         "damage_type": "radiant",
         "light": false,
         "finesse": false,
-        "special": "Siege, heavy, two-handed, energy. While you are braced to fire this weapon, your speed is reduced to 15 feet. Without special ammunition it fires a single radiant bolt (range 200/800) that behaves as a phase shot, able to pass through solid cover to strike a creature whose location you know; if it passes through cover before hitting, it also deals the usual bonus force damage for a phase weapon. As an alternate fire mode, it can expend a psicrystal bolt-canister worth 10 gp as ammunition to fire an explosive canister shot. On a hit, the canister detonates even if it does not directly strike a creature, creating a blast: all enemies within 5 feet of the target point (10 feet if the attack roll was made with advantage) must make a Dexterity saving throw contested against the attack roll. On a failure they take 3d12 radiant damage; on a success they take half. If a creature of CR 4 or lower is critically hit by the canister shot, it must succeed on a DC 20 Constitution saving throw or be instantly slain by the blast; even on a success, it still suffers the critical hit damage as normal.",
+        "special": "Ammunition (range 100/150), Siege, heavy, two-handed, energy. While you are braced to fire this weapon, your speed is reduced to 15 feet. Without special ammunition it fires a single radiant bolt that behaves as a phase shot, able to pass through solid cover to strike a creature whose location you know; if it passes through cover before hitting, it also deals the usual bonus force damage for a phase weapon. As an alternate fire mode, it can expend a psicrystal bolt-canister worth 10 gp as ammunition to fire an explosive canister shot. On a hit, the canister detonates even if it does not directly strike a creature, creating a blast: all enemies within 5 feet of the target point (10 feet if the attack roll was made with advantage) must make a Dexterity saving throw contested against the attack roll. On a failure they take 3d12 radiant damage; on a success they take half. If a creature of CR 4 or lower is critically hit by the canister shot, it must succeed on a DC 20 Constitution saving throw or be instantly slain by the blast; even on a success, it still suffers the critical hit damage as normal.",
         "category": "futuristic ranged",
         "base_cost": 18000
       },
@@ -1461,7 +1475,7 @@
       },
       {
         name: "Eldritch Weapon Fusion",
-        description: "Learn to channel your eldritch blast energy directly through your weapon. A number of times per encounter equal to your charisma bonus plus proficiency, when you hit with a melee weapon attack, you can fuse the raw force of eldritch magic into that strike. This fusion adds extra force damage equal to 1d10 (or your eldritch blast damage die) to the attack. This additional damage does not count as casting a spell, letting you chain this power with other magical strikes and class abilities.",
+        description: "Learn to channel your eldritch blast energy directly through your weapon. A number of times per encounter equal to your charisma bonus plus proficiency, when you hit with a melee weapon attack, you can fuse the raw force of eldritch magic into that strike. This fusion adds an extra 2d10 force damage to the attack. This additional damage does not count as casting a spell, letting you chain this power with other magical strikes and class abilities.",
         cost: 2,
         type: "Class Skill Expansion"
       },
@@ -1574,10 +1588,63 @@
     }
   };
   
+  // Metallurgy customization matrices
+  const METALLURGY_MATRICES = {
+    "Standard": {
+      name: "Standard Steel / Iron",
+      oreRequired: 0,
+      oreName: "Iron Ore",
+      effectText: "No special modifiers."
+    },
+    "Orichalchite": {
+      name: "Orichalchite",
+      oreRequired: 50,
+      oreName: "Orichalchite Ore",
+      effectText: "Halved weight. Non-Heavy, non-Two-Handed. Versatile weapons gain Finesse."
+    },
+    "Star-Iron": {
+      name: "Star-Iron",
+      oreRequired: 50,
+      oreName: "Star-Iron Ore",
+      effectText: "+25% weight. Damage dice increased by one step. Critical hit threshold expanded to 19-20 (+1d8 Force damage on confirmed crit)."
+    },
+    "Chromatic Platinum": {
+      name: "Chromatic Platinum",
+      oreRequired: 40,
+      oreName: "Chromatic Platinum Ore",
+      effectText: "Bonus action shift element (Cold/Fire/Lightning/Radiant) to deal +1d8 extra damage."
+    },
+    "Glimmelectrum": {
+      name: "Glimmelectrum",
+      oreRequired: 30,
+      oreName: "Glimmelectrum Ore",
+      effectText: "Once/turn hit deals +1d6 Radiant damage (+1d10 vs Darkling/Undead, DC 13 Con save or lose reaction)."
+    },
+    "Glimmergold": {
+      name: "Glimmergold",
+      oreRequired: 30,
+      oreName: "Glimmergold Ore",
+      effectText: "Once/short rest bonus action cast Color Spray or Friends (using Charisma)."
+    },
+    "Fractal Copper": {
+      name: "Fractal Copper",
+      oreRequired: 20,
+      oreName: "Fractal Copper Ore",
+      effectText: "Once/turn casting a Lightning spell deals +1d8 Lightning damage on next strike."
+    },
+    "Hemimetrichite": {
+      name: "Hemimetrichite",
+      oreRequired: 20,
+      oreName: "Hemimetrichite Ore",
+      effectText: "Once/short rest reroll a missed attack with +2 bonus."
+    }
+  };
+  
   // Global state
   let state = {
     currentTier: 1,
     selectedWeapon: "",
+    baseMaterial: "Standard", // Added base material selection
     totalSlots: 1,
     remainingSlots: 1,
     selectedUpgrades: [],
@@ -1679,6 +1746,16 @@
       weaponNameInput.addEventListener("input", updateWeaponName);
     }
 
+    const weaponMaterialSelect = document.getElementById("weaponMaterialSelect");
+    if (weaponMaterialSelect) {
+      weaponMaterialSelect.addEventListener("change", () => {
+        state.baseMaterial = weaponMaterialSelect.value;
+        if (state.selectedWeapon) {
+          updateSelectedUpgradesList();
+        }
+      });
+    }
+
     // Load saved weapon (Tier 1) from a local JSON file
     const loadSavedWeaponBtn = document.getElementById("loadSavedWeaponBtn");
     const savedWeaponFileInput = document.getElementById("savedWeaponFileInput");
@@ -1705,6 +1782,9 @@
     const weaponName = String(state.weaponName || state.selectedWeapon || '').trim();
     const selectedWeapon = String(state.selectedWeapon || '').trim();
 
+    const rawDetails = getWeaponDetails(selectedWeapon);
+    const modifiedDetails = getModifiedWeaponDetails(rawDetails, state.baseMaterial);
+
     return {
       type: 'legacy-weapon',
       version: 1,
@@ -1712,6 +1792,9 @@
       data: {
         currentTier: Number(state.currentTier) || 1,
         selectedWeapon,
+        baseMaterial: String(state.baseMaterial || 'Standard'),
+        modifiedDamageDice: modifiedDetails ? String(modifiedDetails.damageDice || '') : '',
+        modifiedProperties: modifiedDetails ? String(modifiedDetails.specialPropertiesFormatted || '') : '',
         totalSlots: Number(state.totalSlots) || 1,
         weaponName,
         weaponImageUrl: String(state.weaponImageUrl || '').trim(),
@@ -1780,6 +1863,7 @@
 
     state.currentTier = Math.max(1, Number(data.currentTier) || 1);
     state.selectedWeapon = selectedWeapon;
+    state.baseMaterial = String(data.baseMaterial || 'Standard');
     state.totalSlots = Math.max(1, Number(data.totalSlots) || 1);
     state.weaponName = String(data.weaponName || '').trim();
     state.weaponImageUrl = String(data.weaponImageUrl || '').trim();
@@ -1823,6 +1907,11 @@
 
     if (weaponNameInput) weaponNameInput.value = state.weaponName || "";
     if (weaponImageInput) weaponImageInput.value = state.weaponImageUrl && !state.weaponImageUrl.startsWith('data:') ? state.weaponImageUrl : "";
+    
+    const weaponMaterialSelect = document.getElementById("weaponMaterialSelect");
+    if (weaponMaterialSelect) {
+      weaponMaterialSelect.value = state.baseMaterial || "Standard";
+    }
 
     if (state.weaponImageUrl) {
       imagePreviewEl.src = state.weaponImageUrl;
@@ -2354,32 +2443,84 @@
     if (enchantCostEl) enchantCostEl.textContent = `${state.totalCost.toLocaleString()} GP`;
   }
   
+  function increaseDiceStep(diceStr) {
+    const match = String(diceStr || '').trim().match(/^(\d+)d(\d+)$/i);
+    if (!match) return diceStr;
+    const count = parseInt(match[1], 10);
+    const sides = parseInt(match[2], 10);
+    if (count === 1) {
+      if (sides === 4) return "1d6";
+      if (sides === 6) return "1d8";
+      if (sides === 8) return "1d10";
+      if (sides === 10) return "1d12";
+      if (sides === 12) return "2d6";
+    } else if (count === 2) {
+      if (sides === 4) return "2d6";
+      if (sides === 6) return "2d8";
+    }
+    return diceStr;
+  }
+
+  function getModifiedWeaponDetails(weaponDetails, baseMaterial = "Standard") {
+    if (!weaponDetails) return null;
+    const details = { ...weaponDetails };
+    details.damageDice = details.damage_dice;
+    details.light = !!details.light;
+    details.finesse = !!details.finesse;
+    details.special = details.special || "";
+    
+    if (baseMaterial && baseMaterial !== "Standard") {
+      if (baseMaterial === "Orichalchite") {
+        details.special = details.special.replace(/\bHeavy\b/gi, "").replace(/\bTwo-handed\b/gi, "").replace(/,\s*,/g, ",").replace(/^,\s*/, "").replace(/,\s*$/, "").trim();
+        if (details.light || /Versatile/i.test(details.special)) {
+          details.finesse = true;
+        }
+      } else if (baseMaterial === "Star-Iron") {
+        details.damageDice = increaseDiceStep(details.damageDice);
+        details.special = (details.special ? details.special + ", " : "") + "Star-Iron Momentum";
+      } else if (baseMaterial === "Glimmelectrum") {
+        details.special = (details.special ? details.special + ", " : "") + "Radiant Conduit";
+      } else if (baseMaterial === "Fractal Copper") {
+        details.special = (details.special ? details.special + ", " : "") + "Conductive";
+      } else if (baseMaterial === "Glimmergold") {
+        details.special = (details.special ? details.special + ", " : "") + "Resplendent";
+      } else if (baseMaterial === "Chromatic Platinum") {
+        details.special = (details.special ? details.special + ", " : "") + "Prismatic";
+      } else if (baseMaterial === "Hemimetrichite") {
+        details.special = (details.special ? details.special + ", " : "") + "Temporal";
+      }
+    }
+    
+    let specialProperties = "";
+    if (details.light) specialProperties += "Light, ";
+    if (details.finesse) specialProperties += "Finesse, ";
+    if (details.special) specialProperties += details.special;
+    specialProperties = specialProperties.replace(/,\s*$/, "").replace(/,\s*,/g, ",").trim();
+    
+    details.specialPropertiesFormatted = specialProperties || "None";
+    return details;
+  }
+
   function updateSelectedUpgradesList() {
     selectedUpgradesList.innerHTML = "";
     
     // First, add the weapon info if a weapon is selected
     if (state.selectedWeapon) {
-      const weaponDetails = getWeaponDetails(state.selectedWeapon);
-      if (weaponDetails) {
+      const rawDetails = getWeaponDetails(state.selectedWeapon);
+      if (rawDetails) {
+        const weaponDetails = getModifiedWeaponDetails(rawDetails, state.baseMaterial);
         const li = document.createElement("li");
         li.style.cssText = "padding: 10px; background-color: #2a2a2a; margin-bottom: 8px; border-left: 3px solid #ffd700;";
-        
-        // Format special properties
-        let specialProperties = "";
-        if (weaponDetails.light) specialProperties += "Light, ";
-        if (weaponDetails.finesse) specialProperties += "Finesse, ";
-        if (weaponDetails.special) specialProperties += weaponDetails.special;
-        // Remove trailing comma if exists
-        specialProperties = specialProperties.replace(/,\s*$/, "");
         
         li.innerHTML = `
           <div style="display: flex; justify-content: space-between; align-items: center;">
             <span><strong style="color: #ffd700;">${weaponDetails.name}</strong></span>
           </div>
           <div style="font-size: 0.875em; color: #e0d2b4; margin-top: 5px;">
-            <div><strong>Damage:</strong> ${weaponDetails.damage_dice} ${weaponDetails.damage_type}</div>
+            <div><strong>Material:</strong> ${state.baseMaterial || "Standard"}</div>
+            <div><strong>Damage:</strong> ${weaponDetails.damageDice} ${weaponDetails.damage_type}</div>
             <div><strong>Category:</strong> ${weaponDetails.category}</div>
-            <div><strong>Properties:</strong> ${specialProperties || "None"}</div>
+            <div><strong>Properties:</strong> ${weaponDetails.specialPropertiesFormatted}</div>
           </div>
         `;
         selectedUpgradesList.appendChild(li);
@@ -2453,7 +2594,7 @@
     weaponSummaryCtn.style.display = "block";
     
     // Get weapon details
-    const weaponDetails = getWeaponDetails(state.selectedWeapon);
+    const rawDetails = getWeaponDetails(state.selectedWeapon);
     const weaponName = state.weaponName || state.selectedWeapon;
     
     let summaryHTML = `
@@ -2473,28 +2614,37 @@
         <h3 style="color: #ffd700; margin-top: 0; font-size: 1.5em; text-align: center;">${weaponName}</h3>
         <div style="display: flex; justify-content: space-between; flex-wrap: wrap; margin-bottom: 20px;">
           <p><strong>Tier:</strong> ${state.currentTier} - ${tiers[state.currentTier].name}</p>
+          <p><strong>Material:</strong> ${state.baseMaterial || "Standard"}</p>
           <p><strong>Total Slots:</strong> ${state.totalSlots}</p>
         </div>
     `;
     
-    if (weaponDetails) {
-      // Format special properties
-      let specialProperties = "";
-      if (weaponDetails.light) specialProperties += "Light, ";
-      if (weaponDetails.finesse) specialProperties += "Finesse, ";
-      if (weaponDetails.special) specialProperties += weaponDetails.special;
-      // Remove trailing comma if exists
-      specialProperties = specialProperties.replace(/,\s*$/, "");
+    if (rawDetails) {
+      const weaponDetails = getModifiedWeaponDetails(rawDetails, state.baseMaterial);
+      
+      let materialEffectsHTML = "";
+      if (state.baseMaterial && state.baseMaterial !== "Standard") {
+        const mat = METALLURGY_MATRICES[state.baseMaterial];
+        materialEffectsHTML = `
+          <div style="margin-top: 10px; padding: 10px; background-color: rgba(196,154,40,0.1); border-left: 4px solid #c0a060; border-radius: 4px; font-size: 0.9em; color: #e0d2b4;">
+            <strong>${mat.name} Modification:</strong> ${mat.effectText}
+            <div style="font-size: 0.85em; margin-top: 5px; color: #ffd700; font-style: italic;">
+              Requires: ${mat.oreRequired} ${mat.oreName} for smelting.
+            </div>
+          </div>
+        `;
+      }
       
       summaryHTML += `
         <div style="background-color: rgba(192, 160, 96, 0.1); padding: 15px; border-radius: 5px; margin-bottom: 20px;">
           <h4 style="color: #ffd700; margin-top: 0;">Weapon Details</h4>
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
             <p><strong>Base Type:</strong> ${weaponDetails.name}</p>
-            <p><strong>Damage:</strong> ${weaponDetails.damage_dice} ${weaponDetails.damage_type}</p>
+            <p><strong>Damage:</strong> ${weaponDetails.damageDice} ${weaponDetails.damage_type}</p>
             <p><strong>Category:</strong> ${weaponDetails.category}</p>
-            <p><strong>Properties:</strong> ${specialProperties || "None"}</p>
+            <p><strong>Properties:</strong> ${weaponDetails.specialPropertiesFormatted}</p>
           </div>
+          ${materialEffectsHTML}
         </div>
       `;
     }
@@ -2555,6 +2705,11 @@
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
             <span style="color: #e0d2b4; font-size: 1.0em;">Enchantment Cost:</span>
             <span style="color: #ffd700; font-weight: bold;">${state.totalCost.toLocaleString()} GP</span>
+          </div>
+          
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span style="color: #e0d2b4; font-size: 1.0em;">Material Smelting:</span>
+            <span style="color: #ffd700; font-weight: bold;">${METALLURGY_MATRICES[state.baseMaterial].oreRequired > 0 ? `${METALLURGY_MATRICES[state.baseMaterial].oreRequired} ${METALLURGY_MATRICES[state.baseMaterial].oreName}` : 'Standard (No Ore)'}</span>
           </div>
           
           <hr style="border: none; border-top: 2px solid #c0a060; margin: 12px 0;">

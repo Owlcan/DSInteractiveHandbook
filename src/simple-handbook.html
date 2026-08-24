@@ -793,6 +793,53 @@
         margin-top: 8px;
       }
 
+      .glossary-status {
+        min-height: 1.5em;
+        margin: 4px 2px 8px;
+        color: var(--ink);
+        font-size: 1rem;
+      }
+
+      .glossary-filters {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin: 8px 0;
+      }
+
+      .glossary-filter {
+        margin: 0;
+        padding: 5px 9px;
+        border: 1px solid var(--gold-dark);
+        border-radius: 5px;
+        background: rgba(218, 165, 32, 0.1);
+        color: var(--ink);
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 1rem;
+        line-height: 1.2;
+      }
+
+      .glossary-filter[aria-pressed="true"] {
+        background: var(--gold);
+        color: #2c2614;
+        border-color: var(--gold-light);
+      }
+
+      .glossary-filter:focus-visible,
+      .glossary-show-more:focus-visible {
+        outline: 2px solid var(--gold-light);
+        outline-offset: 2px;
+      }
+
+      .glossary-group {
+        margin: 10px 0 2px;
+        padding-bottom: 3px;
+        border-bottom: 1px solid rgba(218, 172, 23, 0.55);
+        color: var(--gold-light);
+        font-family: 'MedievalSharp', cursive;
+        font-size: 1.05rem;
+      }
+
       .glossary-result {
         text-align: left;
         width: 100%;
@@ -818,6 +865,25 @@
         font-size: 1.05rem;
         color: var(--ink);
         opacity: 0.95;
+      }
+
+      .glossary-match {
+        color: var(--gold-light);
+        font-weight: 600;
+      }
+
+      .glossary-empty {
+        padding: 12px;
+        border: 1px dashed rgba(218, 172, 23, 0.7);
+        border-radius: 6px;
+        color: var(--ink);
+      }
+
+      .glossary-show-more {
+        align-self: center;
+        margin: 8px 0 0;
+        padding: 8px 14px;
+        font-size: 1rem;
       }
 
       .glossary-hint {
@@ -887,6 +953,8 @@
           <input id="glossary-search" type="search" placeholder="Search tabs, monsters, items, spells…" autocomplete="off" />
           <button id="glossary-clear" type="button">Clear</button>
         </div>
+        <div id="glossary-filters" class="glossary-filters" role="group" aria-label="Filter search results"></div>
+        <div id="glossary-status" class="glossary-status" role="status" aria-live="polite"></div>
         <div id="glossary-results" class="glossary-results" role="listbox" aria-label="Search results"></div>
         <div class="glossary-hint">Try: “owlbear”, “adhesive”, “radiant lance”, “code of conduct”.</div>
       </aside>
@@ -3156,8 +3224,10 @@
       const closeBtn = document.getElementById('glossary-close');
       const clearBtn = document.getElementById('glossary-clear');
       const searchInput = document.getElementById('glossary-search');
+      const filtersEl = document.getElementById('glossary-filters');
+      const statusEl = document.getElementById('glossary-status');
       const resultsEl = document.getElementById('glossary-results');
-      if (!toggleBtn || !backdrop || !closeBtn || !clearBtn || !searchInput || !resultsEl) return;
+      if (!toggleBtn || !backdrop || !closeBtn || !clearBtn || !searchInput || !filtersEl || !statusEl || !resultsEl) return;
 
       // Centralized tool targets: safe deep-search via ?q= by reusing createOrRefreshIframe.
       const TOOL_TARGETS = {
@@ -3239,11 +3309,29 @@
         tool: (toolKey, query = null) => ({ kind: 'tool', toolKey, query })
       };
 
+      const CATEGORY_ORDER = ['Handbook', 'Bestiary', 'Items', 'Spells', 'Character Options', 'Library'];
+      const CATEGORY_LABELS = ['All', ...CATEGORY_ORDER];
+
+      function categoryForDestination(dest) {
+        if (!dest || dest.kind !== 'tool') return 'Handbook';
+        const categoryByTool = {
+          bestiary: 'Bestiary',
+          items: 'Items',
+          spellbook: 'Spells',
+          races: 'Character Options',
+          backgrounds: 'Character Options',
+          originfeats: 'Character Options',
+          library: 'Library'
+        };
+        return categoryByTool[dest.toolKey] || 'Handbook';
+      }
+
       function entry(term, dest, opts = {}) {
         const e = {
           term,
           aliases: Array.isArray(opts.aliases) ? opts.aliases : [],
           description: typeof opts.description === 'string' ? opts.description : '',
+          category: opts.category || categoryForDestination(dest),
           dest
         };
         prepareEntryForSearch(e);
@@ -3573,6 +3661,13 @@
       // - tool names async (bestiary/items/spellbook)
       const pageContent = buildPageContentEntries();
       let index = [...curated, ...autoTabs, ...pageContent];
+      let selectedCategory = 'All';
+      let visibleLimit = 20;
+      let focusedResultIndex = -1;
+      const indexState = {
+        pending: new Set(['bestiary', 'items', 'spells', 'backgrounds', 'races', 'feats', 'library']),
+        failed: new Set()
+      };
 
       // Lightweight buckets for faster searching once index is large.
       let buckets = null;
@@ -3653,10 +3748,14 @@
         return found;
       }
 
+      function finishIndexSource(source, loaded) {
+        indexState.pending.delete(source);
+        if (!loaded) indexState.failed.add(source);
+        if (backdrop.classList.contains('open')) renderResults(searchInput.value);
+      }
+
       async function loadToolNameIndex() {
         // This is optional; search still works without it.
-        resultsEl.innerHTML = '<div class="glossary-result"><div class="glossary-result-title">Loading index…</div><div class="glossary-result-meta">Building monster/item/spell search (one-time).</div></div>';
-
         // Bestiary (root): JSON-like data with quoted keys.
         const bestiaryText = await tryFetchText('../bestiary.html');
         if (bestiaryText) {
@@ -3668,6 +3767,7 @@
             .map(n => entry(n, Dest.tool('bestiary', n), { description: 'Monster (Bestiary)' }));
           addToIndex(monsterEntries);
         }
+        finishIndexSource('bestiary', !!bestiaryText);
 
         // Items (same folder): JS object literal with unquoted keys.
         const itemsText = await tryFetchText('items.html');
@@ -3678,6 +3778,7 @@
             .map(n => entry(n, Dest.tool('items', n), { description: 'Item (Items)' }));
           addToIndex(itemEntries);
         }
+        finishIndexSource('items', !!itemsText);
 
         // Spellbook (root): JSON-like with quoted keys.
         const spellText = await tryFetchText('../spellbook.html');
@@ -3688,6 +3789,7 @@
             .map(n => entry(n, Dest.tool('spellbook', n), { description: 'Spell (Spellbook)' }));
           addToIndex(spellEntries);
         }
+        finishIndexSource('spells', !!spellText);
 
         // Backgrounds (root): JS data array with unquoted keys.
         const backgroundsText = await tryFetchText('../backgrounds.html');
@@ -3699,6 +3801,7 @@
             .map(n => entry(n, Dest.tool('backgrounds', n), { description: 'Background (Backgrounds)' }));
           addToIndex(bgEntries);
         }
+        finishIndexSource('backgrounds', !!backgroundsText);
 
         // Races (src): JS data array with unquoted keys. Includes navigation + many race pages.
         const racesText = await tryFetchText('races.html');
@@ -3718,6 +3821,7 @@
             .map(n => entry(n, Dest.tool('races', n), { description: 'Subrace (Races)' }));
           addToIndex(subraceEntries);
         }
+        finishIndexSource('races', !!racesText);
 
         // Origin Feats (root): static-ish cards with <h3> names.
         const featsText = await tryFetchText('../originfeats.html');
@@ -3728,6 +3832,7 @@
             .map(n => entry(n, Dest.tool('originfeats', n), { description: 'Feat (Origin Feats)' }));
           addToIndex(featEntries);
         }
+        finishIndexSource('feats', !!featsText);
 
         // Library (src): BookReader select options. Index the visible titles.
         const bookReaderText = await tryFetchText('BookReader.html');
@@ -3763,6 +3868,7 @@
             }));
           addToIndex(libEntries);
         }
+        finishIndexSource('library', !!bookReaderText);
 
         // Re-render if drawer is open.
         renderResults(searchInput.value);
@@ -3813,14 +3919,56 @@
         return Math.min(95, score);
       }
 
+      function editDistance(a, b) {
+        const left = String(a || '');
+        const right = String(b || '');
+        if (Math.abs(left.length - right.length) > 2) return 3;
+        const previous = Array.from({ length: right.length + 1 }, (_, index) => index);
+        for (let leftIndex = 1; leftIndex <= left.length; leftIndex++) {
+          let diagonal = previous[0];
+          previous[0] = leftIndex;
+          for (let rightIndex = 1; rightIndex <= right.length; rightIndex++) {
+            const saved = previous[rightIndex];
+            previous[rightIndex] = Math.min(
+              previous[rightIndex] + 1,
+              previous[rightIndex - 1] + 1,
+              diagonal + (left[leftIndex - 1] === right[rightIndex - 1] ? 0 : 1)
+            );
+            diagonal = saved;
+          }
+        }
+        return previous[right.length];
+      }
+
+      function getTypoSuggestions(q) {
+        const queryTokens = tokenize(q);
+        if (queryTokens.length !== 1) return [];
+        const queryToken = queryTokens[0];
+        if (queryToken.length < 4) return [];
+        const maximumDistance = queryToken.length >= 7 ? 2 : 1;
+        const suggestions = [];
+        const seen = new Set();
+        for (const candidate of index) {
+          prepareEntryForSearch(candidate);
+          const titleTokens = tokenize(candidate.term);
+          const distance = titleTokens.reduce((best, token) => Math.min(best, editDistance(queryToken, token)), Infinity);
+          if (distance > maximumDistance) continue;
+          const key = `${candidate.category}|${normalize(candidate.term)}`;
+          if (seen.has(key)) continue;
+          seen.add(key);
+          suggestions.push({ e: candidate, score: 10 - distance, suggestion: true });
+          if (suggestions.length >= 40) break;
+        }
+        return suggestions.sort((a, b) => b.score - a.score || a.e.term.localeCompare(b.e.term));
+      }
+
       function getResults(q) {
         const nq = normalizeLoose(q);
         if (!nq) {
-          // When empty, show a small curated set instead of everything.
-          return curated.slice(0, 10);
+          return { results: curated.slice(0, 10).map(e => ({ e, score: 0 })), suggestions: false };
         }
 
-        const actions = toolSearchActions(q);
+        const actions = toolSearchActions(q).map(e => ({ e, score: 99 }));
 
         // For big indices, search a pool built from token buckets.
         // This avoids missing entries like "Can I buy magical weapons..." when searching "magical".
@@ -3843,39 +3991,117 @@
           .map(e => ({ e, s: scoreEntry(e, nq) }))
           .filter(x => x.s > 0)
           .sort((a, b) => b.s - a.s)
-          .slice(0, 30)
-          .map(x => x.e);
+          .map(x => ({ e: x.e, score: x.s }));
 
-        // Put the generic actions first so users can always jump.
-        return [...actions, ...scored].slice(0, 30);
+        if (scored.length > 0) return { results: [...actions, ...scored], suggestions: false };
+        return { results: [...actions, ...getTypoSuggestions(nq)], suggestions: true };
+      }
+
+      function appendHighlightedText(parent, text, query) {
+        const value = String(text || '');
+        const rawQuery = String(query || '').trim();
+        if (!rawQuery) {
+          parent.textContent = value;
+          return;
+        }
+        const escaped = rawQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const match = new RegExp(escaped, 'ig');
+        let cursor = 0;
+        let found;
+        while ((found = match.exec(value)) !== null) {
+          parent.appendChild(document.createTextNode(value.slice(cursor, found.index)));
+          const highlight = document.createElement('span');
+          highlight.className = 'glossary-match';
+          highlight.textContent = found[0];
+          parent.appendChild(highlight);
+          cursor = found.index + found[0].length;
+        }
+        parent.appendChild(document.createTextNode(value.slice(cursor)));
+      }
+
+      function renderFilters() {
+        filtersEl.innerHTML = '';
+        CATEGORY_LABELS.forEach(category => {
+          const chip = document.createElement('button');
+          chip.type = 'button';
+          chip.className = 'glossary-filter';
+          chip.textContent = category;
+          chip.setAttribute('aria-pressed', String(category === selectedCategory));
+          chip.addEventListener('click', () => {
+            selectedCategory = category;
+            visibleLimit = 20;
+            focusedResultIndex = -1;
+            renderResults(searchInput.value);
+          });
+          filtersEl.appendChild(chip);
+        });
       }
 
       function renderResults(q) {
-        const results = getResults(q);
+        const search = getResults(q);
+        const filtered = search.results.filter(result => selectedCategory === 'All' || result.e.category === selectedCategory);
+        const groups = new Map();
+        const groupOrder = selectedCategory === 'All' ? CATEGORY_ORDER : [selectedCategory];
+        for (const groupName of groupOrder) groups.set(groupName, []);
+        filtered.forEach(result => {
+          if (!groups.has(result.e.category)) groups.set(result.e.category, []);
+          groups.get(result.e.category).push(result);
+        });
+        const ordered = groupOrder.flatMap(groupName => groups.get(groupName) || []);
+        const visible = ordered.slice(0, visibleLimit);
+
+        if (focusedResultIndex >= visible.length) focusedResultIndex = -1;
+
+        renderFilters();
         resultsEl.innerHTML = '';
-        if (results.length === 0) {
+        const loadingMessage = indexState.pending.size > 0
+          ? `Indexing ${indexState.pending.size} source${indexState.pending.size === 1 ? '' : 's'}; results will update automatically.`
+          : '';
+        const failedMessage = indexState.failed.size > 0
+          ? ` ${indexState.failed.size} source${indexState.failed.size === 1 ? '' : 's'} could not be indexed.`
+          : '';
+        const resultMessage = search.suggestions
+          ? `No exact matches. Showing ${ordered.length} close suggestion${ordered.length === 1 ? '' : 's'}.`
+          : `${ordered.length} result${ordered.length === 1 ? '' : 's'}${selectedCategory === 'All' ? '' : ` in ${selectedCategory}`}.`;
+        statusEl.textContent = `${resultMessage} ${loadingMessage}${failedMessage}`.trim();
+
+        if (ordered.length === 0) {
           const empty = document.createElement('div');
-          empty.className = 'glossary-result';
-          empty.innerHTML = `<div class="glossary-result-title">No matches</div><div class="glossary-result-meta">Try a shorter term or a tab name.</div>`;
+          empty.className = 'glossary-empty';
+          empty.textContent = 'No matches in this category. Try a shorter term or choose All.';
           resultsEl.appendChild(empty);
           return;
         }
 
-        results.forEach((r, idx) => {
+        let currentGroup = null;
+        visible.forEach((result, idx) => {
+          const r = result.e;
+          if (r.category !== currentGroup) {
+            currentGroup = r.category;
+            const group = document.createElement('div');
+            group.className = 'glossary-group';
+            group.textContent = currentGroup;
+            resultsEl.appendChild(group);
+          }
           const btn = document.createElement('button');
           btn.type = 'button';
           btn.className = 'glossary-result';
           btn.dataset.index = String(idx);
+          btn.setAttribute('role', 'option');
+          btn.setAttribute('aria-selected', String(idx === focusedResultIndex));
 
           const where = r.dest.kind === 'tool'
             ? (TOOL_TARGETS[r.dest.toolKey]?.title || 'Tool')
             : 'Handbook';
-          const meta = r.description ? `${where} • ${r.description}` : where;
+          const meta = `${r.category} • ${r.description || where}${result.suggestion ? ' • Close match' : ''}`;
 
-          btn.innerHTML = `
-            <div class="glossary-result-title">${r.term}</div>
-            <div class="glossary-result-meta">${meta}</div>
-          `;
+          const title = document.createElement('div');
+          title.className = 'glossary-result-title';
+          appendHighlightedText(title, r.term, q);
+          const metaEl = document.createElement('div');
+          metaEl.className = 'glossary-result-meta';
+          appendHighlightedText(metaEl, meta, q);
+          btn.append(title, metaEl);
 
           btn.addEventListener('click', () => {
             if (r.dest.kind === 'tool') {
@@ -3888,6 +4114,32 @@
 
           resultsEl.appendChild(btn);
         });
+
+        if (ordered.length > visible.length) {
+          const showMore = document.createElement('button');
+          showMore.type = 'button';
+          showMore.className = 'glossary-show-more';
+          showMore.textContent = `Show 20 more (${ordered.length - visible.length} remaining)`;
+          showMore.addEventListener('click', () => {
+            visibleLimit += 20;
+            renderResults(searchInput.value);
+          });
+          resultsEl.appendChild(showMore);
+        }
+      }
+
+      function visibleResultButtons() {
+        return Array.from(resultsEl.querySelectorAll('button.glossary-result'));
+      }
+
+      function focusResult(index) {
+        const buttons = visibleResultButtons();
+        if (buttons.length === 0) return;
+        focusedResultIndex = ((index % buttons.length) + buttons.length) % buttons.length;
+        buttons.forEach((button, buttonIndex) => {
+          button.setAttribute('aria-selected', String(buttonIndex === focusedResultIndex));
+        });
+        buttons[focusedResultIndex].focus();
       }
 
       // Events
@@ -3899,6 +4151,8 @@
       closeBtn.addEventListener('click', closeDrawer);
       clearBtn.addEventListener('click', () => {
         searchInput.value = '';
+        visibleLimit = 20;
+        focusedResultIndex = -1;
         searchInput.focus();
         renderResults('');
       });
@@ -3907,7 +4161,11 @@
         if (e.target === backdrop) closeDrawer();
       });
 
-      searchInput.addEventListener('input', () => renderResults(searchInput.value));
+      searchInput.addEventListener('input', () => {
+        visibleLimit = 20;
+        focusedResultIndex = -1;
+        renderResults(searchInput.value);
+      });
 
       document.addEventListener('keydown', (e) => {
         if (!backdrop.classList.contains('open')) return;
@@ -3916,11 +4174,34 @@
           closeDrawer();
           return;
         }
-        if (e.key === 'Enter') {
-          const first = resultsEl.querySelector('.glossary-result');
-          if (first) {
+        const resultButtons = visibleResultButtons();
+        const activeResult = e.target instanceof Element ? e.target.closest('button.glossary-result') : null;
+        const activeIndex = activeResult ? resultButtons.indexOf(activeResult) : focusedResultIndex;
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          focusResult(activeIndex < 0 ? 0 : activeIndex + 1);
+          return;
+        }
+        if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          focusResult(activeIndex < 0 ? resultButtons.length - 1 : activeIndex - 1);
+          return;
+        }
+        if (e.key === 'Home' && (e.target === searchInput || activeResult)) {
+          e.preventDefault();
+          focusResult(0);
+          return;
+        }
+        if (e.key === 'End' && (e.target === searchInput || activeResult)) {
+          e.preventDefault();
+          focusResult(resultButtons.length - 1);
+          return;
+        }
+        if (e.key === 'Enter' && e.target === searchInput) {
+          const result = resultButtons[focusedResultIndex] || resultButtons[0];
+          if (result) {
             e.preventDefault();
-            first.click();
+            result.click();
           }
         }
       });

@@ -180,6 +180,124 @@
             font-family: 'Cormorant Garamond', serif;
         }
 
+        .tab-bar {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin: 20px 0 0;
+        }
+
+        .tab-button[aria-selected="true"] {
+            background: linear-gradient(to bottom, var(--gold), var(--gold-dark));
+            color: var(--parchment);
+        }
+
+        .tab-panel[hidden] {
+            display: none;
+        }
+
+        .event-resolution {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--gold-dark);
+        }
+
+        .resolution-controls {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: end;
+            gap: 12px;
+        }
+
+        .resolution-controls label {
+            display: flex;
+            flex-direction: column;
+            color: var(--gold-light);
+            font-family: 'MedievalSharp', cursive;
+            font-size: 14px;
+        }
+
+        .resolution-controls input {
+            width: 72px;
+            margin-top: 4px;
+            padding: 7px;
+            border: 1px solid var(--gold-dark);
+            border-radius: 4px;
+            background: var(--parchment-dark);
+            color: var(--gold-light);
+            font: inherit;
+        }
+
+        .resolution-outcome {
+            margin: 12px 0 0;
+            color: var(--gold-light);
+        }
+
+        .resolution-result {
+            margin: 12px 0 0;
+            padding: 12px;
+            border-left: 3px solid var(--gold);
+            background: rgba(218, 172, 23, 0.1);
+        }
+
+        .resolution-status {
+            display: block;
+            color: var(--gold-light);
+            font-family: 'MedievalSharp', cursive;
+            font-size: 1.2rem;
+        }
+
+        .resolution-result ul {
+            margin: 8px 0 0;
+            padding-left: 22px;
+        }
+
+        .resolution-reward {
+            color: var(--gold-light);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .event-log {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .event-log li {
+            padding: 12px 0;
+            border-bottom: 1px solid var(--gold-dark);
+        }
+
+        .event-log li:last-child {
+            border-bottom: none;
+        }
+
+        .log-meta {
+            color: var(--ink2);
+            font-size: 14px;
+        }
+
+        .check-reference details {
+            padding: 10px 0;
+            border-bottom: 1px solid var(--gold-dark);
+        }
+
+        .check-reference summary {
+            cursor: pointer;
+            color: var(--gold-light);
+            font-family: 'MedievalSharp', cursive;
+        }
+
+        .check-reference ul {
+            margin: 10px 0 0;
+            padding-left: 22px;
+        }
+
+        .check-reference li {
+            margin: 8px 0;
+        }
+
     </style>
 </head>
 <body>    <div id="appContainerEl">
@@ -204,6 +322,13 @@
 
         <h1>Diaper School Campus Events Generator</h1>
 
+        <div class="tab-bar" role="tablist" aria-label="School event views">
+            <button class="tab-button" id="generatorTab" role="tab" aria-selected="true" aria-controls="generatorPanel">Generator</button>
+            <button class="tab-button" id="logTab" role="tab" aria-selected="false" aria-controls="logPanel">Event Log</button>
+            <button class="tab-button" id="checksTab" role="tab" aria-selected="false" aria-controls="checksPanel">Checks Reference</button>
+        </div>
+
+        <div id="generatorPanel" class="tab-panel" role="tabpanel" aria-labelledby="generatorTab">
         <div id="locationSelectorEl" class="section-container">
             <h2>Select a Location</h2>            <div id="locationButtonsEl">
                 <button class="locationBtn" data-location="dormitory">Dormitory Common Areas</button>
@@ -225,7 +350,41 @@
             <div id="eventResultEl">
                 <h3 id="eventTitleEl"></h3>
                 <p id="eventDescriptionEl"></p>
+                <div id="eventResolutionEl" class="event-resolution" hidden>
+                    <div class="resolution-controls">
+                        <label for="bonusInputEl">Bonus
+                            <input id="bonusInputEl" type="number" value="0" step="1" inputmode="numeric">
+                        </label>
+                        <button id="resolveBtn" type="button">Roll Resolution</button>
+                    </div>
+                    <div id="ghostOfferControlsEl" class="resolution-controls" hidden>
+                        <label for="ghostOfferEl">Offer to the Ghost
+                            <select id="ghostOfferEl">
+                                <option value="none">Do not offer a diaper</option>
+                                <option value="cheap">Offer a cheap diaper or pullup</option>
+                                <option value="uncommon">Offer an Uncommon diaper</option>
+                                <option value="better">Offer a Rare or better diaper</option>
+                            </select>
+                        </label>
+                        <button id="resolveGhostOfferBtn" type="button">Offer Diaper</button>
+                    </div>
+                    <p id="resolutionPromptEl" class="resolution-outcome"></p>
+                    <div id="resolutionOutcomeEl" class="resolution-outcome" aria-live="polite"></div>
+                </div>
             </div>        </div>
+        </div>
+
+        <div id="logPanel" class="tab-panel section-container" role="tabpanel" aria-labelledby="logTab" hidden>
+            <h2>Event Log</h2>
+            <p id="emptyLogEl">No events resolved or skipped yet.</p>
+            <ol id="eventLogEl" class="event-log"></ol>
+        </div>
+
+        <div id="checksPanel" class="tab-panel section-container check-reference" role="tabpanel" aria-labelledby="checksTab" hidden>
+            <h2>Checks Reference</h2>
+            <p>Critical Failure: natural 1. Failure: below DC. Pass: meet DC. Strong: DC +5. Exceptional: DC +10 or natural 20.</p>
+            <div id="checksReferenceEl"></div>
+        </div>
     </div>
 
     <script>
@@ -237,6 +396,23 @@
         const eventResultEl = document.getElementById('eventResultEl');
         const eventTitleEl = document.getElementById('eventTitleEl');
         const eventDescriptionEl = document.getElementById('eventDescriptionEl');
+        const eventResolutionEl = document.getElementById('eventResolutionEl');
+        const bonusInputEl = document.getElementById('bonusInputEl');
+        const resolveBtn = document.getElementById('resolveBtn');
+        const resolutionPromptEl = document.getElementById('resolutionPromptEl');
+        const resolutionOutcomeEl = document.getElementById('resolutionOutcomeEl');
+        const ghostOfferControlsEl = document.getElementById('ghostOfferControlsEl');
+        const ghostOfferEl = document.getElementById('ghostOfferEl');
+        const resolveGhostOfferBtn = document.getElementById('resolveGhostOfferBtn');
+        const generatorTab = document.getElementById('generatorTab');
+        const logTab = document.getElementById('logTab');
+        const checksTab = document.getElementById('checksTab');
+        const generatorPanel = document.getElementById('generatorPanel');
+        const logPanel = document.getElementById('logPanel');
+        const checksPanel = document.getElementById('checksPanel');
+        const eventLogEl = document.getElementById('eventLogEl');
+        const emptyLogEl = document.getElementById('emptyLogEl');
+        const checksReferenceEl = document.getElementById('checksReferenceEl');
 
         // Event database organized by location
         const eventDatabase = {
@@ -270,7 +446,13 @@
                 { "title": "Therapy Animal Visit", "description": "Emotional support 'Comfort Bears' are visiting the dorm, but their magical aura of relaxation is so strong that it's causing students to lose voluntary muscle control. Multiple changing stations have been set up to handle the effects. All students within 30 feet of a Comfort Bear must make a DC 10 Wisdom save or lose bladder/bowel control for 1d4 hours." },
                 { "title": "Cursed Board Game", "description": "Someone brought a cursed board game to the common room. Players who land on certain spaces experience temporary incontinence curses, and the game can't be stopped until someone wins - which could take hours. Game effects include: 'Spontaneous Accident' spell (spaces 1-5), 'Sudden Urgency' (spaces 6-10), temporary curse effects (spaces 11-15), and one space forces the player to don 'Diaper Cover of Irresistible Itchiness' until the game ends.<br><br><details><summary><strong>📋 Click to view: The Diaper School Academic Race - Complete Rules & Board</strong></summary><div style='margin: 10px 0; padding: 10px; background: rgba(218, 172, 23, 0.1); border-left: 3px solid var(--gold);'><h4>Game Setup:</h4><ul><li><strong>Board:</strong> 60 spaces in a linear track</li><li><strong>Players:</strong> 2-6 players, each with a unique token</li><li><strong>Movement:</strong> Roll 1d20 to advance</li><li><strong>Objective:</strong> First to reach space 60 wins</li></ul><h4>Special Rules:</h4><ul><li><strong>Fluff Counters:</strong> Landing on odd spaces gives +1 Fluff Counter</li><li><strong>Movement Penalty:</strong> Each Fluff Counter = -1 to movement rolls</li><li><strong>Even Spaces:</strong> No special effect (safe spaces)</li><li><strong>Range Effects:</strong> Every 5-space range has themed events</li></ul><table style='width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 12px;'><tr style='background: var(--gold-dark); color: white;'><th style='border: 1px solid var(--gold); padding: 4px;'>Spaces</th><th style='border: 1px solid var(--gold); padding: 4px;'>Theme</th><th style='border: 1px solid var(--gold); padding: 4px;'>Effect</th><th style='border: 1px solid var(--gold); padding: 4px;'>Spell/Consequence</th></tr><tr><td style='border: 1px solid var(--gold); padding: 4px;'>1-5</td><td style='border: 1px solid var(--gold); padding: 4px;'>Freshman Orientation</td><td style='border: 1px solid var(--gold); padding: 4px;'>Learning the Ropes</td><td style='border: 1px solid var(--gold); padding: 4px;'>'Spontaneous Accident' spell - Make Wisdom save or experience embarrassing effects</td></tr><tr style='background: rgba(218, 172, 23, 0.1);'><td style='border: 1px solid var(--gold); padding: 4px;'>6-10</td><td style='border: 1px solid var(--gold); padding: 4px;'>Study Habits</td><td style='border: 1px solid var(--gold); padding: 4px;'>Academic Excellence</td><td style='border: 1px solid var(--gold); padding: 4px;'>'Sudden Urgency' spell - Constitution save or immediate potty check needed</td></tr><tr><td style='border: 1px solid var(--gold); padding: 4px;'>11-15</td><td style='border: 1px solid var(--gold); padding: 4px;'>First Infraction</td><td style='border: 1px solid var(--gold); padding: 4px;'>Minor Rule Breaking</td><td style='border: 1px solid var(--gold); padding: 4px;'>Temporary curse effects - Various magical mishaps for 1d4 turns</td></tr><tr style='background: rgba(218, 172, 23, 0.1);'><td style='border: 1px solid var(--gold); padding: 4px;'>16-20</td><td style='border: 1px solid var(--gold); padding: 4px;'>Dormitory Life</td><td style='border: 1px solid var(--gold); padding: 4px;'>Social Adjustment</td><td style='border: 1px solid var(--gold); padding: 4px;'>POSITIVE: Advance 1d6 extra spaces - 'Little Miracle' effect grants comfort</td></tr><tr><td style='border: 1px solid var(--gold); padding: 4px;'>21-25</td><td style='border: 1px solid var(--gold); padding: 4px;'>Magical Mishap</td><td style='border: 1px solid var(--gold); padding: 4px;'>Experimental Accident</td><td style='border: 1px solid var(--gold); padding: 4px;'>Don 'Diaper Cover of Irresistible Itchiness' - Disadvantage on concentration until game ends</td></tr><tr style='background: rgba(218, 172, 23, 0.1);'><td style='border: 1px solid var(--gold); padding: 4px;'>26-30</td><td style='border: 1px solid var(--gold); padding: 4px;'>Academic Recognition</td><td style='border: 1px solid var(--gold); padding: 4px;'>Honor Roll Achievement</td><td style='border: 1px solid var(--gold); padding: 4px;'>POSITIVE: Remove 2 Fluff Counters and advance 5 spaces - Teacher's pet status</td></tr><tr><td style='border: 1px solid var(--gold); padding: 4px;'>31-35</td><td style='border: 1px solid var(--gold); padding: 4px;'>Contraband Discovery</td><td style='border: 1px solid var(--gold); padding: 4px;'>Forbidden Items Found</td><td style='border: 1px solid var(--gold); padding: 4px;'>Forced to wear 'The Leaky Sieve' cursed diaper - Constant care needed</td></tr><tr style='background: rgba(218, 172, 23, 0.1);'><td style='border: 1px solid var(--gold); padding: 4px;'>36-40</td><td style='border: 1px solid var(--gold); padding: 4px;'>Extracurricular Excellence</td><td style='border: 1px solid var(--gold); padding: 4px;'>Club Leadership</td><td style='border: 1px solid var(--gold); padding: 4px;'>POSITIVE: Choose another player to gain 1 Fluff Counter while you advance 1d10 spaces</td></tr><tr><td style='border: 1px solid var(--gold); padding: 4px;'>41-45</td><td style='border: 1px solid var(--gold); padding: 4px;'>Public Embarrassment</td><td style='border: 1px solid var(--gold); padding: 4px;'>Demonstration Gone Wrong</td><td style='border: 1px solid var(--gold); padding: 4px;'>All players cast 'Spank!' on you - Move back 1d6 spaces and gain 2 Fluff Counters</td></tr><tr style='background: rgba(218, 172, 23, 0.1);'><td style='border: 1px solid var(--gold); padding: 4px;'>46-50</td><td style='border: 1px solid var(--gold); padding: 4px;'>Mentorship Role</td><td style='border: 1px solid var(--gold); padding: 4px;'>Helping Underclassmen</td><td style='border: 1px solid var(--gold); padding: 4px;'>POSITIVE: All players remove 1 Fluff Counter, you advance 8 spaces - Inspiring leadership</td></tr><tr><td style='border: 1px solid var(--gold); padding: 4px;'>51-55</td><td style='border: 1px solid var(--gold); padding: 4px;'>Final Examination Crisis</td><td style='border: 1px solid var(--gold); padding: 4px;'>Academic Pressure</td><td style='border: 1px solid var(--gold); padding: 4px;'>Stress-induced 'Spontaneous Accident' - All players roll saves or lose turns</td></tr><tr style='background: rgba(218, 172, 23, 0.1);'><td style='border: 1px solid var(--gold); padding: 4px;'>56-60</td><td style='border: 1px solid var(--gold); padding: 4px;'>Graduation Preparation</td><td style='border: 1px solid var(--gold); padding: 4px;'>Academy Completion</td><td style='border: 1px solid var(--gold); padding: 4px;'>POSITIVE: Immune to all negative effects - 'Academy Graduate' status protects you</td></tr></table><h4>Victory Conditions:</h4><p><strong>Winner:</strong> First player to reach exactly space 60<br><strong>Curse Breaking:</strong> Game ends when someone wins, releasing all players from magical effects<br><strong>Overtime Rule:</strong> If you roll past space 60, move backwards by the excess amount</p></div></details>" },
                 { "title": "Dorm Competition", "description": "Your dorm is competing against others in a 'Preparedness Challenge.' Points are awarded for cleanliness, organization, and proper adherence to diaper protocols. Surprise inspections and public demonstrations are part of the scoring. Roll 1d20: On a 1-3, inspectors discover cursed items being used to cheat, resulting in automatic disqualification and punishment details." },
-                { "title": "Study Abroad Preparation", "description": "Students selected for study abroad programs must demonstrate they can maintain Academy standards anywhere. This includes public diaper changes and care routines to prove they won't embarrass the school while abroad. Roll 1d8: On a 1-2, the stress of evaluation triggers 'Spontaneous Accident' effects during the demonstration, requiring students to prove they can handle unexpected situations gracefully." }
+                { "title": "Study Abroad Preparation", "description": "Students selected for study abroad programs must demonstrate they can maintain Academy standards anywhere. This includes public diaper changes and care routines to prove they won't embarrass the school while abroad. Roll 1d8: On a 1-2, the stress of evaluation triggers 'Spontaneous Accident' effects during the demonstration, requiring students to prove they can handle unexpected situations gracefully." },
+                { "title": "Borrowed Blanket", "description": "A comfort blanket wraps around you and refuses to recognize its owner. Make a DC 11 Wisdom check to release it; on a failure, you gain Naptime Hex for 1d4 hours: speed reduced by 5 feet and disadvantage on your next Continence check.", "resolution": { "label": "Check", "difficulty": 11 } },
+                { "title": "Lullaby Leak", "description": "A dormitory music box begins playing a magical lullaby. Make a DC 11 Wisdom check; on a failure, make an immediate Continence check at disadvantage.", "resolution": { "label": "Check", "difficulty": 11 } },
+                { "title": "Cursed Laundry Tag", "description": "A mislabeled enchanted laundry tag clings to your clothing. Make a DC 13 Arcana or Sleight of Hand check to remove it; on a failure, you suffer Crinkling Cloak for 1d4 hours and have disadvantage on Stealth checks.", "resolution": { "label": "Check", "difficulty": 13 } }
+                ,{ "title": "Resident Helper Achievement", "description": "The Resident Assistant needs a volunteer to organize the common areas and document the work. Complete the checklist and turn it in for a campus service reward.", "resolution": { "label": "Turn-In", "difficulty": 12 }, "rewardTier": "common" }
+                ,{ "title": "Comfort Care Mentor", "description": "A new student asks for help learning the Academy's daily care routines. Offer patient guidance and demonstrate the basics to earn a mentor commendation.", "resolution": { "label": "Check", "difficulty": 11 }, "rewardTier": "uncommon" }
+                ,{ "title": "Lost & Found Finder", "description": "An RA has misplaced a small case of teaching materials. Search the dormitory and return it intact to receive a finder reward.", "resolution": { "label": "Check", "difficulty": 13 }, "rewardTier": "uncommon" }
             ],
             library: [
                 { "title": "Quiet Change", "description": "The librarian notices your diaper rustling too loudly while you study. You're taken to a special changing area within the library and given a thicker, quieter diaper with explicit instructions to remain silent." },
@@ -303,10 +485,16 @@
                 { "title": "Research Ethics Seminar", "description": "A mandatory seminar on research ethics includes a practical component where students must demonstrate informed consent procedures, including consenting to diaper checks as an example of bodily autonomy in academic settings." },
                 { "title": "Library Card Renewal", "description": "Annual library card renewal requires students to demonstrate they can properly care for library materials. This includes proving they won't damage books through leaks by submitting to a thorough diaper inspection and potential change." },
                 { "title": "Manuscript Illumination Class", "description": "Students learning manuscript illumination must maintain perfect steadiness while painting. Any signs of fidgeting or discomfort result in immediate diaper checks, as wet or messy diapers are considered incompatible with fine art work." },
-                { "title": "Whispering Gallery Effect", "description": "The library's architecture is amplifying even the slightest sounds, including the soft squishing of wet diapers. Students are being called for discretionary changes to prevent their movements from disturbing others' concentration." }
+                { "title": "Whispering Gallery Effect", "description": "The library's architecture is amplifying even the slightest sounds, including the soft squishing of wet diapers. Students are being called for discretionary changes to prevent their movements from disturbing others' concentration." },
+                { "title": "Margin Note of Doubt", "description": "A moving annotation in an old text keeps second-guessing every thought. Make a DC 14 Wisdom check; on a failure, gain Second-Guessing Hex for 1 hour and have disadvantage on your next Intelligence check.", "resolution": { "label": "Check", "difficulty": 14 } },
+                { "title": "Overdue Ledger", "description": "A spectral ledger accuses you of an unpaid fine. Make a DC 12 Charisma check to settle the dispute; on a failure, gain Library Quietus for 1d4 hours: your whisper carries oddly far, giving disadvantage on Stealth checks.", "resolution": { "label": "Check", "difficulty": 12 } }
+                ,{ "title": "Rare Book Cataloging", "description": "The librarian offers a paid shift sorting a cart of displaced rare volumes. Return the completed catalog for a service reward.", "resolution": { "label": "Turn-In", "difficulty": 13 }, "rewardTier": "common" }
+                ,{ "title": "Knowledge Keeper's Gift", "description": "A helpful tome offers a three-part riddle and promises a keepsake to anyone who solves it.", "resolution": { "label": "Check", "difficulty": 12 }, "rewardTier": "uncommon" }
+                ,{ "title": "Research Assistant Bonus", "description": "A professor needs a student to finish a short archive-data collection task. Turn in clean notes for an assistant's bonus.", "resolution": { "label": "Turn-In", "difficulty": 12 }, "rewardTier": "uncommon" }
             ],
             hallways: [
                 { "title": "Diaper Check Station", "description": "A temporary diaper check station has been set up in the hallway. All passing students must stop to have their diapers checked by staff members. Those needing changes are handled on the spot, holding up hallway traffic." },
+                 { "title": "Ghost in Need", "description": "A friendly ghost is wandering the hallways, looking for someone to help them with a diaper change. Students are encouraged to assist, but must offer the ghost a diaper of proper value or risk being cursed with temporary incontinence for 1d4 days." },
                 { "title": "Crawling Practice", "description": "A section of the hallway has been designated as a 'crawling only' zone. Students must get down on all fours, with their diapered bottoms on display, to cross this section under the watchful eyes of hall monitors." },
                 { "title": "Diaper Fashion Show", "description": "The fashion design class is holding an impromptu diaper fashion show in the main hallway. Students passing by are randomly selected to model the latest in protective garments while others rate their waddle and the aesthetic appeal of their diapers." },
                 { "title": "Hall Monitor Rounds", "description": "The strict hall monitor stops you for a random diaper check. Finding you slightly damp, they decide to change you right there in the hallway as other students pass by, using it as an opportunity to demonstrate proper diapering technique." },
@@ -335,7 +523,10 @@
                 { "title": "Guest Parent Shadow Day", "description": "Parents are shadowing their children for a day to understand Academy life. Students must demonstrate their daily routines, including diaper checks and changes, while their parents observe and ask questions about the process." },
                 { "title": "Emergency Response Drill", "description": "A surprise emergency drill is testing the school's crisis response. Students are being evaluated on their ability to quickly and efficiently undergo emergency diaper changes as part of potential lockdown procedures." },
                 { "title": "Hall Monitor Training", "description": "New hall monitors are being trained in proper student assessment techniques. Current students are serving as practice subjects for learning how to identify and respond to various diaper-related situations." },
-                { "title": "Time Capsule Ceremony", "description": "Students are contributing to a time capsule by demonstrating current Academy practices. This includes modeling today's diaper technology and care routines for future students to compare with whatever innovations await them." }
+                { "title": "Time Capsule Ceremony", "description": "Students are contributing to a time capsule by demonstrating current Academy practices. This includes modeling today's diaper technology and care routines for future students to compare with whatever innovations await them." },
+                { "title": "Static Shock Ward", "description": "A faulty corridor ward discharges through your equipment. Make a DC 12 Dexterity check; on a failure, make an immediate Continence check at disadvantage.", "resolution": { "label": "Check", "difficulty": 12 } }
+                ,{ "title": "Inter-Hall Relay", "description": "Students are holding a friendly timed relay between hallways. Join a team and make a quick run for a participation prize.", "resolution": { "label": "Check", "difficulty": 12 }, "rewardTier": "common", "neutralFailure": "You receive a cheerful participation ribbon and the next team takes the lead." }
+                ,{ "title": "Bulletin Board Opportunity", "description": "A new notice has just appeared on the student bulletin board. Spot the useful opportunity and be first to answer it for a small finder reward.", "resolution": { "label": "Check", "difficulty": 11 }, "rewardTier": "standard", "neutralFailure": "Someone else claims the posting first, but points you toward the next notice." }
             ],
             yard: [
                 { "title": "Outdoor Change Time", "description": "The nice weather has prompted staff to conduct diaper changes outdoors today. Changing stations are set up on the lawn, and students are being called by dorm groups to have their diapers changed in the fresh air and sunshine." },
@@ -367,7 +558,11 @@
                 { "title": "Cultural Exchange", "description": "Students from sister academies in other countries are visiting. Cultural exchange activities include comparing different national approaches to student care, with demonstrations of various international diaper traditions and techniques." },
                 { "title": "Memorial Service", "description": "The Academy is holding a solemn memorial service for alumni lost in the Old War. The emotional ceremony is affecting many students deeply, requiring counselors and care staff to be on hand for those overcome by grief." },
                 { "title": "Innovation Showcase", "description": "Student inventors are demonstrating their latest creations in comfort and care technology. Volunteers are needed to test new diaper designs, magical enhancements, and automated changing systems." },
-                { "title": "Environmental Study", "description": "Ecology students are studying the environmental impact of Academy operations, including diaper disposal and recycling programs. Their research requires documenting current usage patterns, leading to detailed monitoring of student needs." }
+                { "title": "Environmental Study", "description": "Ecology students are studying the environmental impact of Academy operations, including diaper disposal and recycling programs. Their research requires documenting current usage patterns, leading to detailed monitoring of student needs." },
+                { "title": "Pollen Puffball", "description": "A disturbed bloom releases sparkling pollen. Make a DC 11 Constitution check; on a failure, gain Sneezebloom Hex for 1d4 hours and have disadvantage on your next Continence check.", "resolution": { "label": "Check", "difficulty": 11 } }
+                ,{ "title": "Garden Plot Tender", "description": "The groundskeepers offer a reward for tending an assigned garden bed and returning a healthy harvest record.", "resolution": { "label": "Turn-In", "difficulty": 12 }, "rewardTier": "common" }
+                ,{ "title": "Outdoor Sports Scholarship Try-Out", "description": "Coaches are offering a friendly try-out for the campus sports scholarship program. Demonstrate your best form for a reward.", "resolution": { "label": "Check", "difficulty": 13 }, "rewardTier": "uncommon", "neutralFailure": "The coaches give you an encouragement certificate and invite you to the next try-out." }
+                ,{ "title": "Campus Grounds Beautification", "description": "Submit a completed decorative improvement for a campus path, bench, or garden corner. The best work earns a groundskeeping reward.", "resolution": { "label": "Turn-In", "difficulty": 14 }, "rewardTier": "uncommon" }
     ],
             entrance: [
         { "title": "Welcome Committee", "description": "New students are arriving, and you've been selected for the welcome committee. Your job is to demonstrate proper diaper protocol for newcomers, including submitting to a diaper check and change to show them what to expect." },
@@ -394,7 +589,14 @@
         { "title": "Safety Audit", "description": "Government safety inspectors are conducting a surprise audit of Academy facilities and procedures. Students are being asked to participate in demonstrations of emergency protocols, including rapid diaper changes during crisis scenarios." },
         { "title": "Cultural Celebration", "description": "The Academy is celebrating its multicultural heritage with representatives from different magical communities. Students are demonstrating various cultural approaches to personal care, showing how different traditions have been integrated into Academy life." },
         { "title": "Technology Beta Test", "description": "A magical technology company is beta testing new automated care systems at the Academy. Students entering are being recruited as test subjects for prototype diaper-checking and changing devices." },
-        { "title": "Historical Reenactment", "description": "History students are conducting a living history demonstration at the entrance, showing how Academy life has changed over the decades. Visitors can experience different eras of student care, including trying on historical diaper styles and experiencing period-appropriate changing procedures." }
+        { "title": "Historical Reenactment", "description": "History students are conducting a living history demonstration at the entrance, showing how Academy life has changed over the decades. Visitors can experience different eras of student care, including trying on historical diaper styles and experiencing period-appropriate changing procedures." },
+        { "title": "Misdirected Welcome Charm", "description": "An entry charm mistakes you for a first-year. Make a DC 13 Persuasion check to correct it; on a failure, gain First-Year Mark for 1 day and have disadvantage on your first Charisma check with Academy staff.", "resolution": { "label": "Check", "difficulty": 13 } },
+        { "title": "Gatehouse Mirror", "description": "The security mirror reflects an embarrassing secret instead of your face. Make a DC 14 Charisma check; on a failure, gain Blushing Reflection for 1d4 hours and have disadvantage on Deception checks.", "resolution": { "label": "Check", "difficulty": 14 } },
+        { "title": "Parcel of Unknown Provenance", "description": "An unattended delivery requests your signature. Make a DC 13 Investigation check before accepting it; on a failure, gain Sticky Fingers for 1 hour and have disadvantage on Sleight of Hand checks.", "resolution": { "label": "Check", "difficulty": 13 } },
+        { "title": "Waystone Hiccup", "description": "A travel ward misfires as you cross the threshold. Make a DC 12 Constitution check; on a failure, make an immediate Continence check at disadvantage.", "resolution": { "label": "Check", "difficulty": 12 } }
+        ,{ "title": "Welcomer's Duties", "description": "Help new students find the correct offices and dorm routes during orientation. Turn in the completed welcome shift for a service reward.", "resolution": { "label": "Turn-In", "difficulty": 12 }, "rewardTier": "common" }
+        ,{ "title": "Gate Keeper's Challenge", "description": "The sentient gate ward is bored and offers a small prize to anyone who solves its riddle before it opens.", "resolution": { "label": "Check", "difficulty": 12 }, "rewardTier": "standard", "neutralFailure": "The gate offers gentle teasing, then opens normally." }
+        ,{ "title": "Security Monitor Apprentice", "description": "An entrance monitor offers an optional supervised shift. Turn in a clear report of the activity you observed for a reward.", "resolution": { "label": "Turn-In", "difficulty": 13 }, "rewardTier": "uncommon" }
     ],
     classroom: [
         { "title": "Pop Quiz Pressure", "description": "A surprise quiz has several students so nervous they've had accidents. The professor pauses class to arrange changes for affected students, turning it into an impromptu lesson on stress management and the importance of proper preparation." },
@@ -425,7 +627,12 @@
         { "title": "Field Trip Preparation", "description": "The class is preparing for an educational field trip to ancient magical ruins. Safety protocols require all students to wear exploration-grade protective diapers and demonstrate they can handle extended periods away from facilities." },
         { "title": "Academic Honesty Seminar", "description": "A mandatory workshop on academic integrity includes discussions about vulnerability and trust. Students share personal experiences and challenges, including how Academy life has taught them about honesty and mutual support." },
         { "title": "Professor Evaluation Day", "description": "Students are evaluating their professor's teaching effectiveness, but the professor is also assessing how well they've learned to care for themselves and each other. Mutual evaluation includes discussions about classroom comfort and support." },
-        { "title": "Emergency Lockdown Drill", "description": "A surprise lockdown drill tests the class's ability to remain calm and quiet for extended periods. Students must be properly prepared for potential long waits, with emergency supplies and care protocols ready if needed." }
+        { "title": "Emergency Lockdown Drill", "description": "A surprise lockdown drill tests the class's ability to remain calm and quiet for extended periods. Students must be properly prepared for potential long waits, with emergency supplies and care protocols ready if needed." },
+        { "title": "Pop-Up Review Spell", "description": "A review charm calls on you with no warning. Make a DC 13 Intelligence check; on a failure, gain Detention Doodle for 1 hour and have disadvantage on your next Charisma check.", "resolution": { "label": "Check", "difficulty": 13 } },
+        { "title": "Misfiled Spell Component", "description": "A component case bursts open at your desk. Make a DC 14 Arcana check to identify the safe vial; on a failure, become Sparkle-Soaked for 1d4 hours and have disadvantage on Stealth checks.", "resolution": { "label": "Check", "difficulty": 14 } },
+        { "title": "Partnered Practice Mishap", "description": "A partner's practice spell rebounds toward you. Make a DC 12 Dexterity check; on a failure, make an immediate Continence check at disadvantage.", "resolution": { "label": "Check", "difficulty": 12 } }
+        ,{ "title": "Peer Tutor Recognition", "description": "Help a classmate understand a difficult unit, then have the instructor verify the tutoring session for a recognition reward.", "resolution": { "label": "Turn-In", "difficulty": 12 }, "rewardTier": "common" }
+        ,{ "title": "Group Project Excellence", "description": "Submit a polished collaborative project that demonstrates preparation, teamwork, and practical Academy knowledge.", "resolution": { "label": "Turn-In", "difficulty": 14 }, "rewardTier": "uncommon" }
     ],
     cafeteria: [
         { "title": "Lunch Line Accident", "description": "The excitement of seeing a favorite meal has caused a student to have an accident while waiting in line. Cafeteria staff quickly set up a changing station near the entrance to handle the situation without disrupting lunch service." },
@@ -460,7 +667,12 @@
         { "title": "Magical Metabolism Boost", "description": "Someone added 'Quicken Digestion' potion to the salad dressing, thinking it would help with post-meal sluggishness. Instead, it's accelerating everyone's digestive processes to an uncomfortable degree." },
         { "title": "Heritage Recipe Day", "description": "Students are sharing family recipes from their ancestral homelands. Some traditional ingredients have magical properties that modern students aren't accustomed to, leading to surprising digestive adventures." },
         { "title": "Study Fuel Special", "description": "The cafeteria is offering special 'brain food' designed to enhance mental performance during finals. The cognitive enhancers are working, but they're also affecting other neural functions, including bladder control." },
-        { "title": "Cleansing Tea Ceremony", "description": "The meditation club is hosting a tea ceremony featuring traditional cleansing teas. The spiritual purification is accompanied by very physical purification that's more intense than participants expected." }
+        { "title": "Cleansing Tea Ceremony", "description": "The meditation club is hosting a tea ceremony featuring traditional cleansing teas. The spiritual purification is accompanied by very physical purification that's more intense than participants expected." },
+        { "title": "Fizzy Fizzfruit", "description": "A dispenser overcharges a glass of fizzfruit juice. Make a DC 12 Arcana check to stabilize it; on a failure, gain Bubble Belly for 1d4 hours and have disadvantage on Continence checks.", "resolution": { "label": "Check", "difficulty": 12 } },
+        { "title": "Dessert Plate Switch", "description": "A prank dessert plate reaches your table. Make a DC 13 Perception check to notice the switch; on a failure, gain Sugar Rush for 1 hour and have disadvantage on Wisdom checks and your next Continence check.", "resolution": { "label": "Check", "difficulty": 13 } },
+        { "title": "Enchanted Apron", "description": "A kitchen helper apron tries to enlist you in a cleanup shift. Make a DC 11 Charisma check to negotiate; on a failure, gain Saucy Smudge for 1d4 hours and have disadvantage on Persuasion checks.", "resolution": { "label": "Check", "difficulty": 11 } }
+        ,{ "title": "Recipe Creation Contest", "description": "The kitchen staff is accepting new recipe ideas. Present a practical and tasty entry for a chance at a culinary reward.", "resolution": { "label": "Check", "difficulty": 12 }, "rewardTier": "common", "neutralFailure": "Your recipe earns a participant tasting token from the kitchen staff." }
+        ,{ "title": "Dietary Accommodation Helper", "description": "The cafeteria needs help preparing an approved accommodation for a student with dietary restrictions. Turn in the completed request for a service reward.", "resolution": { "label": "Turn-In", "difficulty": 11 }, "rewardTier": "standard" }
     ],
     dormhall: [
         { "title": "Floor Meeting", "description": "The monthly floor meeting includes a discussion of communal living standards. Part of the agenda involves demonstrating proper hallway etiquette, including how to discretely request help and respond when others need assistance." },
@@ -472,12 +684,367 @@
         { "title": "Visiting Hours Policy", "description": "New visiting hours policies are being implemented, including guidelines for visitors who might not be familiar with Academy norms. Current residents must help educate guests about respectful behavior and appropriate responses." },
         { "title": "Floor Decoration Contest", "description": "Students are decorating their floor for a campus-wide competition. The theme is 'comfort and care,' leading to creative displays that celebrate the Academy's approach to student wellness and support." },
         { "title": "Mediator Visit", "description": "A conflict mediator is helping resolve disputes between roommates and floor-mates. Many issues relate to personal space and care routines, requiring open discussion and compromise from all parties involved." },
-        { "title": "Floor Fundraiser", "description": "The floor is raising money for upgraded common area furniture. Students are demonstrating the need for comfortable, durable seating that can accommodate all students regardless of their protection needs." }
+        { "title": "Floor Fundraiser", "description": "The floor is raising money for upgraded common area furniture. Students are demonstrating the need for comfortable, durable seating that can accommodate all students regardless of their protection needs." },
+        { "title": "Whispering Door", "description": "A dormitory door repeats your private thoughts into the hall. Make a DC 14 Wisdom check; on a failure, gain Echoing Thoughts for 1 hour and have disadvantage on Stealth and your next Charisma check.", "resolution": { "label": "Check", "difficulty": 14 } },
+        { "title": "Hallway Nightlight", "description": "A protective nightlight detects fear and begins following you. Make a DC 12 Arcana check to suppress it; on a failure, gain Glowbug Aura for 1d4 hours and cannot benefit from being lightly obscured.", "resolution": { "label": "Check", "difficulty": 12 } },
+        { "title": "Lost Laundry Basket", "description": "A living laundry basket trails you, dropping clothes in your path. Make a DC 12 Animal Handling or Persuasion check to guide it home; on a failure, gain Snagged Hem for 1d4 hours and your speed is reduced by 5 feet.", "resolution": { "label": "Check", "difficulty": 12 } }
+        ,{ "title": "Floor Harmony Coordinator", "description": "The RA offers a reward to any student who can help two neighbors reach a fair agreement. Turn in a short mediation summary when the matter is settled.", "resolution": { "label": "Turn-In", "difficulty": 13 }, "rewardTier": "uncommon" }
+        ,{ "title": "Maintenance Brigade Captain", "description": "Lead a friendly timed cleanup of the hall and common area. The organized team earns a captain's reward.", "resolution": { "label": "Check", "difficulty": 12 }, "rewardTier": "common", "neutralFailure": "Your team earns a recognition badge for pitching in." }
     ]
         };
 
         // State variable to track the selected location
         let selectedLocation = null;
+        let currentEvent = null;
+        let eventLog = loadEventLog();
+
+        function loadEventLog() {
+            try {
+                return JSON.parse(localStorage.getItem('schoolEventsLog')) || [];
+            } catch (error) {
+                return [];
+            }
+        }
+
+        function saveEventLog() {
+            localStorage.setItem('schoolEventsLog', JSON.stringify(eventLog));
+        }
+
+        function getResolutionType(event) {
+            if (event.resolution) return event.resolution;
+            return eventResolutions[event.title] || null;
+        }
+
+        // Only events with a deliberate player challenge belong in this registry.
+        const eventResolutions = {
+            'Sleepwalking Incident': { label: 'Check', difficulty: 12 },
+            "Prankster's Revenge": { label: 'Check', difficulty: 13 },
+            'Seasonal Allergies': { label: 'Check', difficulty: 12 },
+            'Therapy Animal Visit': { label: 'Check', difficulty: 10 },
+            'Haunted History': { label: 'Check', difficulty: 15 },
+            'Barrier Scour': { label: 'Check', difficulty: 14 },
+            'Aftermath of a Duel': { label: 'Check', difficulty: 12 },
+            'Mourning of the Ghostly Host': { label: 'Check', difficulty: 12 },
+            'Echo Bloom Incident': { label: 'Check', difficulty: 13 },
+            'Practical Demonstration': { label: 'Check', difficulty: 12 },
+            'Research Presentation Day': { label: 'Turn-In', difficulty: 14 },
+            'Practical Spell Workshop': { label: 'Check', difficulty: 13 },
+            'Science Fair Setup': { label: 'Turn-In', difficulty: 14 },
+            'Innovation Showcase': { label: 'Turn-In', difficulty: 14 },
+            'Study Space Competition': { label: 'Check', difficulty: 12 },
+            'Floor Decoration Contest': { label: 'Turn-In', difficulty: 14 },
+            'Floor Fundraiser': { label: 'Turn-In', difficulty: 14 },
+            'Scholarship Interview': { label: 'Check', difficulty: 14 },
+            'Ghost in Need': { label: 'Offer', difficulty: null }
+        };
+
+        const commonDiaperRewards = [
+            'BunbunSkipz',
+            'SoftSplice Comfort',
+            'CloudNine Cozy White',
+            'CozyCuddle Solo'
+        ];
+        const uncommonDiaperRewards = [
+            'SecuriCare Level 4s',
+            'TactiTush Elite',
+            'ComfortGuardian Plus',
+            'SwiftShield XD',
+            'StabiliSlip Unify',
+            'NanoNurse QuickFix'
+        ];
+        const commonItemRewards = [
+            'Health Potion (5 VRP)',
+            'Lovely Diaper (7 VRP)',
+            'Berrimaters (5 VRP)',
+            'Lashvine (1 VRP)'
+        ];
+        const uncommonItemRewards = [
+            'Bitter Balm (20 VRP)',
+            'Jadicine (12 VRP)',
+            'Matrix Malachite (35 VRP)',
+            'Secondthought Sprout (30 VRP)',
+            'Vitalium (35 VRP)'
+        ];
+        const trinketRewards = [
+            "Tarnished Scholian Force Button",
+            "First-Year's Lost Plushie Bear",
+            'Note from Lian'
+        ];
+
+        function randomEntry(entries) {
+            return entries[Math.floor(Math.random() * entries.length)];
+        }
+
+        function isRewardEligible(event) {
+            return Boolean(event.rewardTier) || getResolutionType(event)?.label === 'Turn-In' || [
+                'Scholarship Interview',
+                'Practical Demonstration',
+                'Practical Spell Workshop',
+                'Study Space Competition'
+            ].includes(event.title);
+        }
+
+        function rollDice(count, sides) {
+            return Array.from({ length: count }, () => Math.floor(Math.random() * sides) + 1)
+                .reduce((total, roll) => total + roll, 0);
+        }
+
+        function getFailureEffect(event, isCritical) {
+            const eventSpecificEffects = {
+                'Borrowed Blanket': 'Naptime Hex for 1d4 hours: speed reduced by 5 feet and disadvantage on the next Continence check.',
+                'Lullaby Leak': 'Make an immediate Continence check at disadvantage.',
+                'Cursed Laundry Tag': 'Crinkling Cloak for 1d4 hours: disadvantage on Stealth checks.',
+                'Margin Note of Doubt': 'Second-Guessing Hex for 1 hour: disadvantage on the next Intelligence check.',
+                'Overdue Ledger': 'Library Quietus for 1d4 hours: your whisper carries oddly far, giving disadvantage on Stealth checks.',
+                'Static Shock Ward': 'Make an immediate Continence check at disadvantage.',
+                'Pollen Puffball': 'Sneezebloom Hex for 1d4 hours: disadvantage on the next Continence check.',
+                'Misdirected Welcome Charm': 'First-Year Mark for 1 day: disadvantage on the first Charisma check with Academy staff.',
+                'Gatehouse Mirror': 'Blushing Reflection for 1d4 hours: disadvantage on Deception checks.',
+                'Parcel of Unknown Provenance': 'Sticky Fingers for 1 hour: disadvantage on Sleight of Hand checks.',
+                'Waystone Hiccup': 'Make an immediate Continence check at disadvantage.',
+                'Pop-Up Review Spell': 'Detention Doodle for 1 hour: disadvantage on the next Charisma check.',
+                'Misfiled Spell Component': 'Sparkle-Soaked for 1d4 hours: disadvantage on Stealth checks.',
+                'Partnered Practice Mishap': 'Make an immediate Continence check at disadvantage.',
+                'Fizzy Fizzfruit': 'Bubble Belly for 1d4 hours: disadvantage on Continence checks.',
+                'Dessert Plate Switch': 'Sugar Rush for 1 hour: disadvantage on Wisdom checks and the next Continence check.',
+                'Enchanted Apron': 'Saucy Smudge for 1d4 hours: disadvantage on Persuasion checks.',
+                'Whispering Door': 'Echoing Thoughts for 1 hour: disadvantage on Stealth and the next Charisma check.',
+                'Hallway Nightlight': 'Glowbug Aura for 1d4 hours: cannot benefit from being lightly obscured.',
+                'Lost Laundry Basket': 'Snagged Hem for 1d4 hours: speed reduced by 5 feet.'
+            };
+            if (eventSpecificEffects[event.title]) return eventSpecificEffects[event.title];
+            const duration = Math.floor(Math.random() * 4) + 1;
+            const continenceRisk = /\b(accident|continence|bladder|urgency|wet|messy|leak)\b/i.test(`${event.title} ${event.description}`);
+            if (continenceRisk) {
+                return `${isCritical ? 'Continence Curse' : 'Continence Hex'}: Bladder Jitters for ${duration} hour${duration === 1 ? '' : 's'}; disadvantage on the next continence check.`;
+            }
+            return `${isCritical ? 'Embarrassing Hex' : 'Cute Hex'}: Audible Crinkles for ${duration} hour${duration === 1 ? '' : 's'}; attempts at stealth make a soft rustle.`;
+        }
+
+        function getResolutionResult(event, status) {
+            const isCritical = status === 'Critical Failure';
+            if (status === 'Failure' || isCritical) {
+                if (event.rewardTier) {
+                    return {
+                        entries: [{
+                            text: event.neutralFailure || 'The opportunity closes for now, but your effort is appreciated and no penalty applies.',
+                            emphasis: false
+                        }]
+                    };
+                }
+                return { entries: [{ text: getFailureEffect(event, isCritical), emphasis: false }] };
+            }
+            if (!isRewardEligible(event)) {
+                return { entries: [{ text: 'The challenge is resolved, but it carries no quest reward.', emphasis: false }] };
+            }
+            const gold = rollDice(10, 20);
+            const entries = [{ text: `${gold} gp (10d20)`, emphasis: true }];
+            if (!event.rewardTier) {
+                if (status.startsWith('Exceptional')) {
+                    const rewardType = Math.random();
+                    const item = rewardType < 0.45
+                        ? `Uncommon Pamperlogue diaper: ${randomEntry(uncommonDiaperRewards)}`
+                        : rewardType < 0.8
+                            ? `Uncommon Item Compendium item: ${randomEntry(uncommonItemRewards)}`
+                            : `Trinket: ${randomEntry(trinketRewards)}`;
+                    entries.push({ text: item, emphasis: true });
+                } else if (status.startsWith('Strong')) {
+                    const item = Math.random() < 0.5
+                        ? `Common Pamperlogue diaper: ${randomEntry(commonDiaperRewards)}`
+                        : `Common Item Compendium item: ${randomEntry(commonItemRewards)}`;
+                    entries.push({ text: item, emphasis: true });
+                }
+                return { entries };
+            }
+            const rewardTier = event.rewardTier;
+            if (rewardTier === 'uncommon') {
+                const rewardType = Math.random();
+                const item = rewardType < 0.45
+                    ? `Uncommon Pamperlogue diaper: ${randomEntry(uncommonDiaperRewards)}`
+                    : rewardType < 0.8
+                        ? `Uncommon Item Compendium item: ${randomEntry(uncommonItemRewards)}`
+                        : `Trinket: ${randomEntry(trinketRewards)}`;
+                entries.push({ text: item, emphasis: true });
+                return { entries };
+            }
+            if (rewardTier === 'common') {
+                const item = Math.random() < 0.5
+                    ? `Common Pamperlogue diaper: ${randomEntry(commonDiaperRewards)}`
+                    : `Common Item Compendium item: ${randomEntry(commonItemRewards)}`;
+                entries.push({ text: item, emphasis: true });
+            }
+            if (rewardTier === 'standard' && status.startsWith('Exceptional')) {
+                entries.push({ text: `Trinket: ${randomEntry(trinketRewards)}`, emphasis: true });
+            }
+            return { entries };
+        }
+
+        function renderResolutionOutcome(status, detail, result) {
+            resolutionOutcomeEl.replaceChildren();
+            const container = document.createElement('div');
+            container.className = 'resolution-result';
+            const statusText = document.createElement('strong');
+            statusText.className = 'resolution-status';
+            statusText.textContent = `${status}. ${detail}.`;
+            const list = document.createElement('ul');
+            result.entries.forEach(entry => {
+                const item = document.createElement('li');
+                if (entry.emphasis) {
+                    const reward = document.createElement('strong');
+                    reward.className = 'resolution-reward';
+                    reward.textContent = entry.text;
+                    item.appendChild(reward);
+                } else {
+                    item.textContent = entry.text;
+                }
+                list.appendChild(item);
+            });
+            container.append(statusText, list);
+            resolutionOutcomeEl.appendChild(container);
+        }
+
+        function addLogEntry(status, detail) {
+            if (!currentEvent || currentEvent.logged) return;
+            eventLog.unshift({
+                title: currentEvent.title,
+                location: currentEvent.locationName,
+                status,
+                detail,
+                timestamp: new Date().toISOString()
+            });
+            currentEvent.logged = true;
+            saveEventLog();
+            renderEventLog();
+        }
+
+        function renderEventLog() {
+            eventLogEl.innerHTML = '';
+            emptyLogEl.hidden = eventLog.length > 0;
+            eventLog.forEach(entry => {
+                const item = document.createElement('li');
+                const heading = document.createElement('strong');
+                heading.textContent = `${entry.title}: ${entry.status}`;
+                const meta = document.createElement('div');
+                meta.className = 'log-meta';
+                meta.textContent = `${entry.location} | ${new Date(entry.timestamp).toLocaleString()} | ${entry.detail}`;
+                item.append(heading, meta);
+                eventLogEl.appendChild(item);
+            });
+        }
+
+        function getEventReward(event) {
+            if (!isRewardEligible(event)) return 'No standard quest reward.';
+            if (event.rewardTier === 'common') return 'Reward: 10d20 gp and a Common Pamperlogue diaper or Item Compendium item.';
+            if (event.rewardTier === 'uncommon') return 'Reward: 10d20 gp and an Uncommon Pamperlogue diaper, Item Compendium item, or lore trinket.';
+            if (event.rewardTier === 'standard') return 'Reward: 10d20 gp. Exceptional success also grants a lore trinket.';
+            return 'Pass: 10d20 gp. Strong: 10d20 gp and a Common Pamperlogue diaper or Item Compendium item. Exceptional: 10d20 gp and an Uncommon Pamperlogue diaper, Item Compendium item, or lore trinket.';
+        }
+
+        function renderChecksReference() {
+            Object.entries(eventDatabase).forEach(([locationKey, events]) => {
+                const eligibleEvents = events.filter(event => getResolutionType(event));
+                if (!eligibleEvents.length) return;
+                const locationButton = document.querySelector(`[data-location="${locationKey}"]`);
+                const section = document.createElement('details');
+                const summary = document.createElement('summary');
+                summary.textContent = `${locationButton ? locationButton.textContent : locationKey} (${eligibleEvents.length})`;
+                const list = document.createElement('ul');
+                eligibleEvents.forEach(event => {
+                    const resolution = getResolutionType(event);
+                    const item = document.createElement('li');
+                    const title = document.createElement('strong');
+                    title.textContent = event.title;
+                    item.append(title, document.createTextNode(` - ${resolution.label} DC ${resolution.difficulty}. Reward: ${getEventReward(event)}`));
+                    list.appendChild(item);
+                });
+                section.append(summary, list);
+                checksReferenceEl.appendChild(section);
+            });
+        }
+
+        function setActiveTab(tabName) {
+            const showGenerator = tabName === 'generator';
+            const showLog = tabName === 'log';
+            generatorTab.setAttribute('aria-selected', String(showGenerator));
+            logTab.setAttribute('aria-selected', String(showLog));
+            checksTab.setAttribute('aria-selected', String(tabName === 'checks'));
+            generatorPanel.hidden = !showGenerator;
+            logPanel.hidden = !showLog;
+            checksPanel.hidden = tabName !== 'checks';
+        }
+
+        function prepareResolution() {
+            const resolution = currentEvent && getResolutionType(currentEvent);
+            eventResolutionEl.hidden = !resolution;
+            resolutionOutcomeEl.textContent = '';
+            bonusInputEl.value = '0';
+            if (resolution) {
+                const isGhostOffer = currentEvent.title === 'Ghost in Need';
+                ghostOfferControlsEl.hidden = !isGhostOffer;
+                bonusInputEl.closest('.resolution-controls').hidden = isGhostOffer;
+                if (isGhostOffer) {
+                    resolutionPromptEl.textContent = 'The ghost needs a diaper. Choose what you offer.';
+                    return;
+                }
+                resolutionPromptEl.textContent = `${resolution.label} DC ${resolution.difficulty}. Roll 1d20 and add your bonus.`;
+            }
+        }
+
+        function resolveGhostOffer() {
+            if (!currentEvent || currentEvent.title !== 'Ghost in Need' || currentEvent.logged) return;
+            const offer = ghostOfferEl.value;
+            const outcomes = {
+                none: {
+                    status: 'Refused',
+                    detail: 'You offered the ghost no diaper.',
+                    entries: [{ text: `Continence Curse: temporary incontinence for ${rollDice(1, 4) + 1} days.`, emphasis: false }]
+                },
+                cheap: {
+                    status: 'Offended, but Thanked',
+                    detail: 'You offered a cheap diaper or pullup.',
+                    entries: [{ text: 'The ghost thanks you before disappearing, but leaves a Continence Curse: temporary incontinence for 1 day.', emphasis: false }]
+                },
+                uncommon: {
+                    status: 'Happy',
+                    detail: 'You offered an Uncommon diaper.',
+                    entries: [
+                        { text: `${rollDice(10, 20)} gp (10d20)`, emphasis: true },
+                        { text: `Ghostly reward: ${randomEntry(trinketRewards)}`, emphasis: true }
+                    ]
+                },
+                better: {
+                    status: 'Delighted',
+                    detail: 'You offered a Rare or better diaper.',
+                    entries: [
+                        { text: `${rollDice(10, 20)} gp (10d20)`, emphasis: true },
+                        { text: `Ghostly reward: ${randomEntry(trinketRewards)}`, emphasis: true },
+                        { text: `Bonus reward: Uncommon Item Compendium item: ${randomEntry(uncommonItemRewards)}`, emphasis: true }
+                    ]
+                }
+            };
+            const outcome = outcomes[offer];
+            renderResolutionOutcome(outcome.status, outcome.detail, outcome);
+            addLogEntry(outcome.status, `${outcome.detail} ${outcome.entries.map(entry => entry.text).join(' | ')}`);
+        }
+
+        function resolveEvent() {
+            if (!currentEvent || currentEvent.logged) return;
+            const resolution = getResolutionType(currentEvent);
+            if (!resolution) return;
+            const roll = Math.floor(Math.random() * 20) + 1;
+            const bonus = Number.parseInt(bonusInputEl.value, 10) || 0;
+            const total = roll + bonus;
+            let status;
+            if (roll === 1) status = 'Critical Failure';
+            else if (roll === 20 || total >= resolution.difficulty + 10) status = `Exceptional ${resolution.label}`;
+            else if (total >= resolution.difficulty + 5) status = `Strong ${resolution.label}`;
+            else if (total >= resolution.difficulty) status = `Pass`;
+            else status = 'Failure';
+            const detail = `Rolled ${roll} + ${bonus} = ${total} against DC ${resolution.difficulty}`;
+            const result = getResolutionResult(currentEvent, status);
+            renderResolutionOutcome(status, detail, result);
+            addLogEntry(status, `${detail}. ${result.entries.map(entry => entry.text).join(' | ')}`);
+        }
 
         // Function to handle location selection
         function selectLocation(locationKey, locationName) {
@@ -506,6 +1073,7 @@
                 return;
             }
 
+            addLogEntry('Skipped', 'A new event was generated before it was resolved.');
             const events = eventDatabase[selectedLocation];
             const randomIndex = Math.floor(Math.random() * events.length);
             const randomEvent = events[randomIndex];
@@ -513,6 +1081,8 @@
             // Display the new event
             eventTitleEl.textContent = randomEvent.title;
             eventDescriptionEl.textContent = randomEvent.description;
+            currentEvent = { ...randomEvent, locationName: selectedLocationTitleEl.textContent.replace('Location: ', ''), logged: false };
+            prepareResolution();
             eventResultEl.style.display = 'block';
 
             // Smoothly scroll the event into view
@@ -526,11 +1096,20 @@
                 const locationName = this.textContent;
                 selectLocation(locationKey, locationName);
             });
-        });        // Add click event listener to the generate button
+        });
+        generatorTab.addEventListener('click', () => setActiveTab('generator'));
+        logTab.addEventListener('click', () => setActiveTab('log'));
+        checksTab.addEventListener('click', () => setActiveTab('checks'));
+        resolveBtn.addEventListener('click', resolveEvent);
+        resolveGhostOfferBtn.addEventListener('click', resolveGhostOffer);
+        renderEventLog();
+        renderChecksReference();
+        // Add click event listener to the generate button
         generateBtn.addEventListener('click', generateEvent);
 
         // Function to directly show the board game rules (secret button feature)
         function showBoardGameRules() {
+            addLogEntry('Skipped', 'A new event was selected before it was resolved.');
             // Create the board game event display
             eventTitleEl.textContent = "Cursed Board Game";
             eventDescriptionEl.innerHTML = "Someone brought a cursed board game to the common room. Players who land on certain spaces experience temporary incontinence curses, and the game can't be stopped until someone wins - which could take hours. Game effects include: 'Spontaneous Accident' spell (spaces 1-5), 'Sudden Urgency' (spaces 6-10), temporary curse effects (spaces 11-15), and one space forces the player to don 'Diaper Cover of Irresistible Itchiness' until the game ends.<br><br><details open><summary><strong>📋 The Diaper School Academic Race - Complete Rules & Board</strong></summary><div style='margin: 10px 0; padding: 10px; background: rgba(218, 172, 23, 0.1); border-left: 3px solid var(--gold);'><h4>Game Setup:</h4><ul><li><strong>Board:</strong> 60 spaces in a linear track</li><li><strong>Players:</strong> 2-6 players, each with a unique token</li><li><strong>Movement:</strong> Roll 1d20 to advance</li><li><strong>Objective:</strong> First to reach space 60 wins</li></ul><h4>Special Rules:</h4><ul><li><strong>Fluff Counters:</strong> Landing on odd spaces gives +1 Fluff Counter</li><li><strong>Movement Penalty:</strong> Each Fluff Counter = -1 to movement rolls</li><li><strong>Even Spaces:</strong> No special effect (safe spaces)</li><li><strong>Range Effects:</strong> Every 5-space range has themed events</li></ul><table style='width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 12px;'><tr style='background: var(--gold-dark); color: white;'><th style='border: 1px solid var(--gold); padding: 4px;'>Spaces</th><th style='border: 1px solid var(--gold); padding: 4px;'>Theme</th><th style='border: 1px solid var(--gold); padding: 4px;'>Effect</th><th style='border: 1px solid var(--gold); padding: 4px;'>Spell/Consequence</th></tr><tr><td style='border: 1px solid var(--gold); padding: 4px;'>1-5</td><td style='border: 1px solid var(--gold); padding: 4px;'>Freshman Orientation</td><td style='border: 1px solid var(--gold); padding: 4px;'>Learning the Ropes</td><td style='border: 1px solid var(--gold); padding: 4px;'>'Spontaneous Accident' spell - Make Wisdom save or experience embarrassing effects</td></tr><tr style='background: rgba(218, 172, 23, 0.1);'><td style='border: 1px solid var(--gold); padding: 4px;'>6-10</td><td style='border: 1px solid var(--gold); padding: 4px;'>Study Habits</td><td style='border: 1px solid var(--gold); padding: 4px;'>Academic Excellence</td><td style='border: 1px solid var(--gold); padding: 4px;'>'Sudden Urgency' spell - Constitution save or immediate potty check needed</td></tr><tr><td style='border: 1px solid var(--gold); padding: 4px;'>11-15</td><td style='border: 1px solid var(--gold); padding: 4px;'>First Infraction</td><td style='border: 1px solid var(--gold); padding: 4px;'>Minor Rule Breaking</td><td style='border: 1px solid var(--gold); padding: 4px;'>Temporary curse effects - Various magical mishaps for 1d4 turns</td></tr><tr style='background: rgba(218, 172, 23, 0.1);'><td style='border: 1px solid var(--gold); padding: 4px;'>16-20</td><td style='border: 1px solid var(--gold); padding: 4px;'>Dormitory Life</td><td style='border: 1px solid var(--gold); padding: 4px;'>Social Adjustment</td><td style='border: 1px solid var(--gold); padding: 4px;'>POSITIVE: Advance 1d6 extra spaces - 'Little Miracle' effect grants comfort</td></tr><tr><td style='border: 1px solid var(--gold); padding: 4px;'>21-25</td><td style='border: 1px solid var(--gold); padding: 4px;'>Magical Mishap</td><td style='border: 1px solid var(--gold); padding: 4px;'>Experimental Accident</td><td style='border: 1px solid var(--gold); padding: 4px;'>Don 'Diaper Cover of Irresistible Itchiness' - Disadvantage on concentration until game ends</td></tr><tr style='background: rgba(218, 172, 23, 0.1);'><td style='border: 1px solid var(--gold); padding: 4px;'>26-30</td><td style='border: 1px solid var(--gold); padding: 4px;'>Academic Recognition</td><td style='border: 1px solid var(--gold); padding: 4px;'>Honor Roll Achievement</td><td style='border: 1px solid var(--gold); padding: 4px;'>POSITIVE: Remove 2 Fluff Counters and advance 5 spaces - Teacher's pet status</td></tr><tr><td style='border: 1px solid var(--gold); padding: 4px;'>31-35</td><td style='border: 1px solid var(--gold); padding: 4px;'>Contraband Discovery</td><td style='border: 1px solid var(--gold); padding: 4px;'>Forbidden Items Found</td><td style='border: 1px solid var(--gold); padding: 4px;'>Forced to wear 'The Leaky Sieve' cursed diaper - Constant care needed</td></tr><tr style='background: rgba(218, 172, 23, 0.1);'><td style='border: 1px solid var(--gold); padding: 4px;'>36-40</td><td style='border: 1px solid var(--gold); padding: 4px;'>Extracurricular Excellence</td><td style='border: 1px solid var(--gold); padding: 4px;'>Club Leadership</td><td style='border: 1px solid var(--gold); padding: 4px;'>POSITIVE: Choose another player to gain 1 Fluff Counter while you advance 1d10 spaces</td></tr><tr><td style='border: 1px solid var(--gold); padding: 4px;'>41-45</td><td style='border: 1px solid var(--gold); padding: 4px;'>Public Embarrassment</td><td style='border: 1px solid var(--gold); padding: 4px;'>Demonstration Gone Wrong</td><td style='border: 1px solid var(--gold); padding: 4px;'>All players cast 'Spank!' on you - Move back 1d6 spaces and gain 2 Fluff Counters</td></tr><tr style='background: rgba(218, 172, 23, 0.1);'><td style='border: 1px solid var(--gold); padding: 4px;'>46-50</td><td style='border: 1px solid var(--gold); padding: 4px;'>Mentorship Role</td><td style='border: 1px solid var(--gold); padding: 4px;'>Helping Underclassmen</td><td style='border: 1px solid var(--gold); padding: 4px;'>POSITIVE: All players remove 1 Fluff Counter, you advance 8 spaces - Inspiring leadership</td></tr><tr><td style='border: 1px solid var(--gold); padding: 4px;'>51-55</td><td style='border: 1px solid var(--gold); padding: 4px;'>Final Examination Crisis</td><td style='border: 1px solid var(--gold); padding: 4px;'>Academic Pressure</td><td style='border: 1px solid var(--gold); padding: 4px;'>Stress-induced 'Spontaneous Accident' - All players roll saves or lose turns</td></tr><tr style='background: rgba(218, 172, 23, 0.1);'><td style='border: 1px solid var(--gold); padding: 4px;'>56-60</td><td style='border: 1px solid var(--gold); padding: 4px;'>Graduation Preparation</td><td style='border: 1px solid var(--gold); padding: 4px;'>Academy Completion</td><td style='border: 1px solid var(--gold); padding: 4px;'>POSITIVE: Immune to all negative effects - 'Academy Graduate' status protects you</td></tr></table><h4>Victory Conditions:</h4><p><strong>Winner:</strong> First player to reach exactly space 60<br><strong>Curse Breaking:</strong> Game ends when someone wins, releasing all players from magical effects<br><strong>Overtime Rule:</strong> If you roll past space 60, move backwards by the excess amount</p></div></details>";
@@ -540,6 +1119,14 @@
             // Set the location to dormitory since that's where the board game event appears
             selectedLocation = 'dormitory';
             selectedLocationTitleEl.textContent = 'Location: Dormitory Common Areas';
+            currentEvent = {
+                title: 'Cursed Board Game',
+                description: 'An ongoing cursed board game requires an effort to overcome its effects.',
+                locationName: 'Dormitory Common Areas',
+                resolution: { label: 'Check', difficulty: 13 },
+                logged: false
+            };
+            prepareResolution();
             
             // Highlight the dormitory button
             locationButtons.forEach(btn => btn.classList.remove('selected'));

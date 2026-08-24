@@ -172,6 +172,8 @@
   /* Styles for the fishing minigame elements, using CSS variables */
   #fishing-section {
     font-family: 'Cormorant Garamond', serif; /* Ensure font consistency */
+    box-sizing: border-box;
+    min-width: 0;
   }
 
   #fishing-section * {
@@ -540,6 +542,16 @@
     padding: 1rem;
   }
 
+  @media (max-width: 520px) {
+    #fishing-section .tab-button {
+      flex: 1 1 0;
+      min-width: 0;
+      margin-left: 0 !important;
+      padding-left: 0.4rem !important;
+      padding-right: 0.4rem !important;
+    }
+  }
+
 </style>
 
   <!-- Timing mini-game styles -->
@@ -589,10 +601,16 @@
       position: absolute;
       top: 6px;
       height: 78px;
-      background: #2d2415;
-      border: 2px solid var(--gold);
-      border-radius: 6px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      filter: drop-shadow(0 3px 4px rgba(0,0,0,0.75));
+    }
+    #timing-lure-image {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      pointer-events: none;
     }
     #timing-instructions { margin-top: 10px; font-size: 0.95rem; color: var(--ink2); }
     #timing-controls { margin-top: 12px; display:flex; gap: 8px; justify-content: flex-end; }
@@ -669,7 +687,7 @@
     #mash-meta { display:flex; align-items:center; justify-content: space-between; margin-bottom: 8px; font-weight: 600; }
     #mash-track {
       position: relative;
-      height: 28px;
+      height: 48px;
       background: var(--parchment-dark);
       border: 2px solid var(--gold-dark);
       border-radius: 8px;
@@ -681,6 +699,18 @@
       top: 0; left: 0; height: 100%; width: 0%;
       background: linear-gradient(90deg, var(--gold-dark), var(--gold), var(--gold-dark));
       transition: width 80ms linear;
+    }
+    #mash-fish {
+      position: absolute;
+      top: 2px;
+      left: 0;
+      width: 52px;
+      height: 40px;
+      object-fit: contain;
+      transform: translateX(-10%);
+      filter: drop-shadow(0 2px 3px rgba(0,0,0,0.8));
+      transition: left 80ms linear;
+      pointer-events: none;
     }
     #mash-instructions { margin-top: 10px; font-size: 0.95rem; color: var(--ink2); }
   </style>
@@ -730,7 +760,7 @@
                  <span class="text-gray-600">Session Value</span>
                  <span id="session-stats-value" class="font-bold text-yellow-500">0 gp (0 fish)</span>
                </div>
-               <div id="fishing-log" class="mt-4 p-3 bg-white rounded-md border border-gray-200 h-48 overflow-y-auto text-sm space-y-1"> <p class="text-gray-500">Fishing log will appear here...</p> </div>
+               <div id="fishing-log" aria-live="polite" class="mt-4 p-3 bg-white rounded-md border border-gray-200 h-48 overflow-y-auto text-sm space-y-1"> <p class="text-gray-500">Fishing log will appear here...</p> </div>
         	 </div>
     	 </div>
 
@@ -786,11 +816,11 @@
         <span id="timing-tries">Tries: 0</span>
         <span id="timing-bonus">Bonus: +0</span>
       </div>
-      <div id="timing-track">
+      <div id="timing-track" role="button" tabindex="0" aria-label="Stop the moving lure">
         <div class="timing-sweet" id="timing-sweet"></div>
-        <div class="timing-marker" id="timing-marker"></div>
+        <div class="timing-marker" id="timing-marker"><img id="timing-lure-image" src="assets/images/items/Standard_Lure.webp" alt=""></div>
       </div>
-      <div id="timing-feedback"></div>
+      <div id="timing-feedback" aria-live="polite"></div>
       <div id="timing-instructions">Press Space or click to stop the bar. Land inside gold for +1; bullseye center grants +2.</div>
       <div id="timing-controls">
         <button id="timing-skip">Skip</button>
@@ -803,8 +833,8 @@
         <span id="mash-timer">Time: 0.0s</span>
         <span id="mash-progress-label">0%</span>
       </div>
-      <div id="mash-track"><div id="mash-fill"></div></div>
-      <div id="mash-instructions">Press Space repeatedly to fill the bar before time runs out.</div>
+      <div id="mash-track" role="button" tabindex="0" aria-label="Pull the fishing line"><div id="mash-fill"></div><img id="mash-fish" src="" alt=""></div>
+      <div id="mash-instructions">Press Space or tap repeatedly to fill the bar before time runs out.</div>
     </div>
   </div>
   
@@ -891,11 +921,12 @@ function isExtremeRare(fish) {
 }
 
 // Timing mini-game: returns a Promise resolving to numeric bonus for this attempt
-function playTimingMinigame(dc, totalBonuses, isMagiJig) {
+function playTimingMinigame(dc, totalBonuses, lure) {
   return new Promise(resolve => {
     const overlay = document.getElementById('timing-overlay');
     const sweet = document.getElementById('timing-sweet');
     const marker = document.getElementById('timing-marker');
+    const lureImage = document.getElementById('timing-lure-image');
     const track = document.getElementById('timing-track');
     const triesEl = document.getElementById('timing-tries');
     const bonusEl = document.getElementById('timing-bonus');
@@ -910,7 +941,15 @@ function playTimingMinigame(dc, totalBonuses, isMagiJig) {
 
     // Sweet spot fraction based on DC and bonuses
     const sweetFrac = Math.min(0.32, Math.max(0.06, 0.14 + (totalBonuses * 0.01) - ((dc - 10) * 0.008)));
+    const isMagiJig = lure && lure.name === 'Magi-Jig Lure';
     const markerFrac = isMagiJig ? 0.09 : 0.06; // Magi-Jig is larger
+
+    lureImage.src = lure?.image || 'assets/images/items/Standard_Lure.webp';
+    lureImage.alt = lure?.name || 'Fishing lure';
+    lureImage.onerror = () => {
+      lureImage.onerror = null;
+      lureImage.src = 'assets/images/items/Standard_Lure.webp';
+    };
 
     // Layout sizes
     const trackWidth = track.clientWidth || 600;
@@ -927,6 +966,9 @@ function playTimingMinigame(dc, totalBonuses, isMagiJig) {
     let dir = 1;
     let running = true;
     let awaitingStop = true;
+    let frameId = 0;
+    let resumeTimeout = 0;
+    let settled = false;
 
     function updateHUD() {
       triesEl.textContent = `Tries: ${triesLeft}/${triesTotal}`;
@@ -942,7 +984,7 @@ function playTimingMinigame(dc, totalBonuses, isMagiJig) {
         if (pos >= 1) { pos = 1; dir = -1; }
         const leftPx = Math.round(pos * (trackWidth - markerWidth));
         marker.style.left = leftPx + 'px';
-        requestAnimationFrame(frame);
+        frameId = requestAnimationFrame(frame);
       }
     }
 
@@ -977,10 +1019,10 @@ function playTimingMinigame(dc, totalBonuses, isMagiJig) {
 
       if (triesLeft > 0) {
         // Resume for next try after short delay
-        setTimeout(() => {
+        resumeTimeout = setTimeout(() => {
           feedback.textContent = '';
           awaitingStop = true;
-          requestAnimationFrame(frame);
+          frameId = requestAnimationFrame(frame);
         }, 450);
       } else {
         // Done
@@ -989,10 +1031,16 @@ function playTimingMinigame(dc, totalBonuses, isMagiJig) {
     }
 
     function cleanup(res) {
+      if (settled) return;
+      settled = true;
       running = false;
+      cancelAnimationFrame(frameId);
+      clearTimeout(resumeTimeout);
       document.removeEventListener('keydown', onKey);
       btnSkip.removeEventListener('click', onSkip);
       btnClose.removeEventListener('click', onClose);
+      track.removeEventListener('pointerdown', onPointerDown);
+      overlay.removeEventListener('pointerdown', onOverlayPointerDown);
       overlay.style.display = 'none';
       resolve(res);
     }
@@ -1000,6 +1048,7 @@ function playTimingMinigame(dc, totalBonuses, isMagiJig) {
     function onKey(e) {
       if (e.code === 'Space') {
         e.preventDefault();
+        if (e.repeat) return;
         if (triesLeft > 0) {
           stopAttempt();
         } else {
@@ -1012,6 +1061,13 @@ function playTimingMinigame(dc, totalBonuses, isMagiJig) {
     }
     function onSkip() { cleanup(0); }
     function onClose() { cleanup(bonus); }
+    function onPointerDown(e) {
+      e.preventDefault();
+      stopAttempt();
+    }
+    function onOverlayPointerDown(e) {
+      if (e.target === overlay) stopAttempt();
+    }
 
     // Start
     overlay.style.display = 'flex';
@@ -1022,38 +1078,47 @@ function playTimingMinigame(dc, totalBonuses, isMagiJig) {
     document.addEventListener('keydown', onKey);
     btnSkip.addEventListener('click', onSkip);
     btnClose.addEventListener('click', onClose);
-    requestAnimationFrame(frame);
-    // Click anywhere on track/panel to stop
-    track.onclick = stopAttempt;
-    overlay.onclick = (ev) => { if (ev.target === overlay) stopAttempt(); };
+    track.addEventListener('pointerdown', onPointerDown);
+    overlay.addEventListener('pointerdown', onOverlayPointerDown);
+    frameId = requestAnimationFrame(frame);
+    track.focus();
   });
 }
 
 // Mash mini-game: rapidly hit Space to keep fish on line; returns Promise<boolean>
-function playMashMinigame(dc) {
+function playMashMinigame(fish) {
   return new Promise(resolve => {
     const overlay = document.getElementById('timing-overlay');
     const timingPanel = document.getElementById('timing-panel');
     const mashPanel = document.getElementById('mash-panel');
+    const mashTrack = document.getElementById('mash-track');
     const mashFill = document.getElementById('mash-fill');
+    const mashFish = document.getElementById('mash-fish');
     const mashTimer = document.getElementById('mash-timer');
     const mashProgressLabel = document.getElementById('mash-progress-label');
 
-  // Difficulty scaling by DC
-  const targetPresses = 10 + Math.floor(Math.max(0, dc - 18) / 2); // 10..14+ presses
-  // Timing: Gentle for low-DC; global minimum start time of 4.5s
-  const timeLimit = (dc < 17)
-    ? 5000 // 5.0s for low-DC fish
-    : Math.max(4500, 3000 - Math.max(0, dc - 17) * 130);
+    const dc = Number(fish?.dc) || 10;
+    const timeLimit = 5000;
+    const boundedDc = Math.min(25, Math.max(10, dc));
+    const pressesPerSecond = 1.5 + ((boundedDc - 10) / 15) * 1.5;
+    const targetPresses = Math.ceil(pressesPerSecond * (timeLimit / 1000));
+
+    mashFish.src = fish?.image || '';
+    mashFish.alt = fish?.name ? `${fish.name} on the line` : 'Fish on the line';
+    mashFish.hidden = !fish?.image;
+    mashFish.onerror = () => { mashFish.hidden = true; };
 
     let presses = 0;
     let running = true;
+    let frameId = 0;
+    let settled = false;
     const start = performance.now();
 
     function updateUI(now) {
       const elapsed = now - start;
       const pct = Math.min(100, Math.round((presses / targetPresses) * 100));
       mashFill.style.width = pct + '%';
+      mashFish.style.left = `clamp(0px, ${pct}%, calc(100% - 46px))`;
       mashProgressLabel.textContent = pct + '%';
       mashTimer.textContent = 'Time: ' + ((timeLimit - elapsed) / 1000).toFixed(1) + 's';
     }
@@ -1061,6 +1126,7 @@ function playMashMinigame(dc) {
     function onKey(e) {
       if (e.code === 'Space') {
         e.preventDefault();
+        if (e.repeat) return;
         presses += 1;
       }
       if (e.code === 'Escape') {
@@ -1084,12 +1150,21 @@ function playMashMinigame(dc) {
         cleanup(false);
         return;
       }
-      requestAnimationFrame(frame);
+      frameId = requestAnimationFrame(frame);
+    }
+
+    function onPointerDown(e) {
+      e.preventDefault();
+      presses += 1;
     }
 
     function cleanup(result) {
+      if (settled) return;
+      settled = true;
       running = false;
+      cancelAnimationFrame(frameId);
       document.removeEventListener('keydown', onKey);
+      mashTrack.removeEventListener('pointerdown', onPointerDown);
       overlay.style.display = 'none';
       timingPanel.style.display = '';
       mashPanel.style.display = 'none';
@@ -1098,18 +1173,22 @@ function playMashMinigame(dc) {
 
     // Start
     mashFill.style.width = '0%';
+    mashFish.style.left = '0px';
     mashProgressLabel.textContent = '0%';
     timingPanel.style.display = 'none';
     mashPanel.style.display = 'block';
     overlay.style.display = 'flex';
     document.addEventListener('keydown', onKey);
-    requestAnimationFrame(frame);
+    mashTrack.addEventListener('pointerdown', onPointerDown);
+    frameId = requestAnimationFrame(frame);
+    mashTrack.focus();
   });
 }
 
 function initializeFishingMinigame() {
    // Replaced Firebase with localStorage for simplified integration
-   let userId = 'local-user-' + Math.random().toString(36).substring(2, 9); // Generate a random local ID
+  const userId = 'local-user';
+  const catalogueStorageKey = 'fishingCatalogue_' + userId;
    let dbInitialized = true; // Always initialized since we're using localStorage
 
    // User ID display
@@ -1146,6 +1225,7 @@ function initializeFishingMinigame() {
   const catalogueList = document.getElementById('catalogue-list');
    const playerBonusTooltip = document.getElementById('player-bonus-tooltip');
    const playerBonusLabel = document.getElementById('player-bonus-label');
+    let catalogueReturnFocus = null;
 
    const applySelectByLabelPrefix = (selectEl, label) => {
      const wanted = String(label || '').trim().toLowerCase();
@@ -1187,256 +1267,256 @@ function initializeFishingMinigame() {
         	 name: "Lake & River",
         	 description: "Freshwater fishing in the academy's peaceful lakes and winding rivers.",
         	 fish: [
-            	 { name: "Lake Carp", dc: 10, value: 5, properties: "A tasty fish. If prepared over a fire during a short rest, provides 4HP.", image: "assets/images/fish/lake_carp.png" },
-            	 { name: "Rainbow Carp", dc: 11, value: 5, properties: "A tasty fish. If prepared over a fire during a short rest, provides 4HP.", image: "assets/images/fish/rainbow_carp.png" },
-            	 { name: "Lake Trout", dc: 10, value: 5, properties: "A tasty fish. If prepared over a fire during a short rest, provides 4HP.", image: "assets/images/fish/lake_trout.png" },
-            	 { name: "Black Trout", dc: 12, value: 6, properties: "A tasty fish. If prepared over a fire during a short rest, provides 6HP.", image: "assets/images/fish/black_trout.png" },
-            	 { name: "Softback Turtle", dc: 12, value: 6, properties: "A tasty fish. If prepared over a fire during a short rest, provides 6HP.", image: "assets/images/fish/softback_turtle.png" },
-            	 { name: "Armorshell Turtle", dc: 12, value: 10, properties: "If prepared over a fire during a short rest, provides 4HP & +1 AC for 1d4 hrs.", image: "assets/images/fish/armorshell_turtle.png" },
-            	 { name: "Swordclaw Crab", dc: 14, value: 10, properties: "If prepared over a fire during a short rest, provides 4HP & +1 ATT for 1d4 hrs.", image: "assets/images/fish/swordclaw_crab.png" },
-            	 { name: "Blueclaw Crab", dc: 12, value: 5, properties: "A tasty crustacean. If boiled over a fire during a short rest, provides 4HP.", image: "assets/images/fish/blueclaw_crab.png" },
-            	 { name: "Darkling Trout", dc: 16, value: 5, properties: "Inedible except for Darklings, abominations, and omniphages, provides 2HP.", image: "assets/images/fish/darkling_trout.png" },
-            	 { name: "Lake Mini-Shark", dc: 14, value: 6, properties: "A tasty fish. If prepared over a fire during a short rest, provides 6HP.", image: "assets/images/fish/lake_mini_shark.png" },            	 
-               { name: "Lakeopus", dc: 14, value: 5, properties: "When consumed, grants a +1 bonus to Wisdom ability checks for 1 hour.", image: "assets/images/fish/lakeopus.png" },            	 
-               { name: "Tarheel Eel", dc: 12, value: 5, properties: "Consuming this eel grants a temporary +1 to Dexterity saving throws for 1 hour.", image: "assets/images/fish/tarheel_eel.png" },
-            	 { name: "Unisturgeon", dc: 12, value: 5, properties: "When prepared during a short rest, grants 3HP and +1 to Intelligence checks for 1 hour.", image: "assets/images/fish/unisturgeon.png" },
-            	 { name: "Cavern Cod", dc: 12, value: 5, properties: "A tasty fish. If prepared over a fire during a short rest, provides 6HP.", image: "assets/images/fish/cavern_cod.png" },            	 
-               { name: "Deep Swimmer Guppy", dc: 13, value: 5, properties: "When consumed raw, grants water breathing for 10 minutes.", image: "assets/images/fish/deep_swimmer_guppy.png" },
-            	 { name: "Deep Swimmer Gulpy", dc: 14, value: 5, properties: "When prepared during a short rest, provides 3HP and +1 to Initiative for 1 hour.", image: "assets/images/fish/deep_swimmer_gulpy.png" },
-            	 { name: "Deep Swimmer Gulper", dc: 15, value: 5, properties: "When consumed, grants 5 temporary hit points that last for 1 hour.", image: "assets/images/fish/deep_swimmer_gulper.png" },
-            	 { name: "Deep Lurker Dark Gulper", dc: 16, value: 5, properties: "Consuming this fish grants darkvision for 30 minutes if you don't already have it.", image: "assets/images/fish/deep_lurker_dark_gulper.png" },
-            	 { name: "Boot", dc: 11, value: 5, properties: "A useless boot, always feels like a fish on the line…", image: "assets/images/fish/old_boot.png" },
-            	 { name: "Fancy Boot", dc: 15, value: 6, properties: "How it remained so nice for so long is anyone's guess…", image: "assets/images/fish/fancy_boot.png" },
-            	 { name: "Magic Boot", dc: 20, value: 1500, properties: "Get two to complete a set and they become a magic item.", image: "assets/images/fish/magic_boot.png" },
-            	 { name: "Empty Can", dc: 10, value: 5, properties: "Damn litterers! Someone needs a spanking!", image: "assets/images/fish/tin_can.png" },
-            	 { name: "Full Can", dc: 10, value: 5, properties: "DM discretion.", image: "assets/images/fish/full_can.png" },
-            	 { name: "Can of Whoopass", dc: 15, value: 100, properties: "+1 ATT and DMG for 1d4 hours, instant potty check.", image: "assets/images/fish/can_of_whoopass.png" },            	 
-               { name: "A Whole Trashcan", dc: 14, value: 5, properties: "Surprisingly clean inside. May contain a useful trinket (25% chance) or fish bait.", image: "assets/images/fish/whole_trashcan.png" },
-            	 { name: "Deactivated Warforged", dc: 25, value: 5, properties: "A waterlogged construct. With proper tools, may be reactivated as a temporary ally.", image: "assets/images/fish/deactivated_warforged.png" },
-            	 { name: "Broken Good-Rod", dc: 14, value: 5, properties: "A broken magical fishing rod, maybe it can be repaired?", image: "assets/images/fish/broken_good_rod.png" },
-            	 { name: "Functional Good-Rod", dc: 16, value: 5, properties: "A magical fishing rod. Gives +1 to Fishing Checks.", image: "assets/images/fish/functional_good_rod.png" },
-            	 { name: "Merbab (Angy)", dc: 15, value: 0, properties: "Will cast Incontinence on you and flee. DC14 resist.", image: "assets/images/fish/merbab_angy.png" },
-            	 { name: "Merbab (Curious)", dc: 15, value: 0, properties: "Will cast Incontinence on you if you don't have a snack; if fed, +1 to fishing for 1 day.", image: "assets/images/fish/merbab_curious.png" },            	 
-               { name: "Jaguar Gar", dc: 13, value: 5, properties: "When consumed, grants +1 to attack rolls for 1 hour due to its fierce spirit.", image: "assets/images/fish/jaguargar.png" },
-            	 { name: "Trope Eel", dc: 12, value: 5, properties: "Consuming this eel grants a +1 to Performance checks for 1 hour.", image: "assets/images/fish/tropeeel.png" },
-            	 { name: "River Kaleido", dc: 13, value: 5, properties: "Its kaleidoscopic patterns grant +1 to Perception checks for 1 hour when consumed.", image: "assets/images/fish/kaleido.png" },
-            	 { name: "Skyflapper", dc: 14, value: 6, properties: "A tasty fish. If prepared over a fire during a short rest, provides 6HP.", image: "assets/images/fish/skyflapper.png" },            	 
-               { name: "Drought Trout", dc: 12, value: 5, properties: "When prepared properly, grants resistance to fire damage for 10 minutes.", image: "assets/images/fish/drouttrout.png" },
-            	 { name: "Creeken-Rivar Trout", dc: 12, value: 5, properties: "Consuming this fish during a short rest provides 5HP and +1 to Constitution saves for 1 hour.", image: "assets/images/fish/creekenrivartrout.png" },
-            	 { name: "Long Swimmer", dc: 13, value: 5, properties: "Grants a swimming speed equal to your walking speed for 30 minutes when consumed.", image: "assets/images/fish/longswimmer.png" },            	 
-               { name: "Brown Frog", dc: 12, value: 5, properties: "When consumed, grants a +2 bonus to jump distance for 1 hour.", image: "assets/images/fish/brownfrog.png" },
-            	 { name: "Round Frog", dc: 13, value: 5, properties: "Consuming this frog provides 3 temporary hit points that last for 1 hour.", image: "assets/images/fish/roundfrog.png" },
-            	 { name: "Black-Spot Frog", dc: 14, value: 5, properties: "When consumed, grants advantage on poison saving throws for 1 hour.", image: "assets/images/fish/blackspotfrog.png" },
-            	 { name: "Aquatic Toad", dc: 15, value: 5, properties: "Grants the ability to hold your breath twice as long for 1 hour when consumed.", image: "assets/images/fish/aquatictoad.png" },            	 
-               { name: "Darkling Rill-Skitter", dc: 14, value: 10, properties: "A stealthy darkling lurking in shallows, using murky waters to ambush prey.", image: "assets/images/fish/rillskitter.png" },
-            	 { name: "Darkling Blood-Gorger", dc: 16, value: 15, properties: "A parasitic darkling that drains its victim's vitality with a chilling bite.", image: "assets/images/fish/bloodgorger.png" },
-            	 { name: "Darkforme Pike-Maw", dc: 18, value: 20, properties: "A monstrous gar-like predator, attacking with shocking speed.", image: "assets/images/fish/pikemaw.png" },
-            	 { name: "Darkforme Current-Snapper", dc: 19, value: 20, properties: "A turtle-like darkling with iron jaws capable of trapping prey.", image: "assets/images/fish/currentsnapper.png" },
-            	 { name: "Darkling River-Lurk", dc: 15, value: 10, properties: "A slippery shadow-form serpent, striking like a constricting vine.", image: "assets/images/fish/riverlurk.png" },
-            	 { name: "Darkforme Mire-Croaker", dc: 17, value: 20, properties: "A bloated, croaking horror that leaps and snares victims with its tongue.", image: "assets/images/fish/mirecroaker.png" },
-            	 { name: "Darkforme Mud-Gnasher", dc: 18, value: 20, properties: "A territorial ambusher that erupts from muddy riverbeds to attack.", image: "assets/images/fish/mudgnasher.png" },
-            	 { name: "Darkling Pond-Skulker", dc: 14, value: 10, properties: "A mischievous thief that steals bait and causes frustration.", image: "assets/images/fish/pondskulker.png" },
-            	 { name: "Darkling Weed-Tangler", dc: 16, value: 30, properties: "A tangle of dark, grasping river weeds with ensnaring tendrils.", image: "assets/images/fish/darkling_weed_tangler.png" },
-            	 { name: "Darkling Gloom-Newt", dc: 15, value: 30, properties: "A slippery, shadow-coated amphibian that exudes disorienting slime.", image: "assets/images/fish/gloomnewt.png" },
-            	 { name: "Darkforme Current-Drifter", dc: 20, value: 40, properties: "An amorphous darkling, generating electrical bursts in murky waters.", image: "assets/images/fish/currentdrifter.png" },
-            	 { name: "Darkforme Titan-Snapper", dc: 24, value: 500, properties: "A colossal snapping turtle-shaped darkforme that shatters boats. **Creatures over 50 HP may yield treasure—contact the DM or Assistant Game Masters.**", image: "assets/images/fish/titansnapper.png" },
-            	 { name: "Darkforme River Tyrant", dc: 25, value: 750, properties: "An ancient crocodilian terror dominating entire river stretches. **Creatures over 50 HP may yield treasure—contact the DM or Assistant Game Masters.**", image: "assets/images/fish/rivertyrant.png" },
-            	 { name: "Darkforme Abyssal Leviathan", dc: 26, value: 1500, properties: "The deepwater nightmare that consumes everything in its path. **Creatures over 50 HP may yield treasure—contact the DM or Assistant Game Masters.**", image: "assets/images/fish/abyssalleviathan.png" },
-            	 { name: "Lakeopus Rex", dc: 25, value: 80, properties: "The king of all Lakopuses. Catching and releasing the Lakeopus Rex allows for the King of the Lake VR boss battle to be unlocked.", image: "assets/images/fish/lakeopus_rex.png" },
-                 { name: "Prismatic Carp", dc: 18, value: 40, properties: "A shimmering fish with scales that cycle through all colors. Grants resistance to a random damage type for 1 hour when consumed.", image: "assets/images/fish/prismatic_carp.png" },
-                 { name: "Thunder Catfish", dc: 19, value: 45, properties: "Generates small electrical charges. Consuming it grants the ability to cast Shocking Grasp once within the next 8 hours.", image: "assets/images/fish/thunder_catfish.png" },
-                 { name: "Arcane Bass", dc: 16, value: 30, properties: "Shows faint magical runes on its scales. When consumed, grants the ability to detect magic for 10 minutes.", image: "assets/images/fish/arcane_bass.png" },
-                 { name: "Silver Perch", dc: 11, value: 7, properties: "Its reflective scales shimmer in the light. When prepared during a short rest, provides 5HP and +1 to Charisma (Performance) checks for 1 hour.", image: "assets/images/fish/silver_perch.png" },
-                 { name: "Golden Minnow", dc: 12, value: 8, properties: "A small but valuable fish. When consumed, grants the ability to hold your breath for twice as long for 1 hour.", image: "assets/images/fish/golden_minnow.png" },
-                 { name: "Spotted River Bass", dc: 13, value: 9, properties: "A common game fish. When prepared during a short rest, provides 6HP and advantage on Athletics checks for swimming for 1 hour.", image: "assets/images/fish/spotted_river_bass.png" },
-                 { name: "Mossy Catfish", dc: 14, value: 10, properties: "Covered in a harmless moss that has mild healing properties. When consumed, provides 5HP and advantage on saving throws against disease for 2 hours.", image: "assets/images/fish/mossy_catfish.png" },
-                 { name: "River Pike", dc: 11, value: 8, properties: "A predatory freshwater fish. When prepared properly, grants +1 to Wisdom (Survival) checks for 2 hours.", image: "assets/images/fish/river_pike.png" },
-                 { name: "Whiskered Sturgeon", dc: 13, value: 10, properties: "Its sensitive barbels detect minute vibrations. When consumed, grants advantage on Wisdom (Perception) checks that rely on hearing for 1 hour.", image: "assets/images/fish/whiskered_sturgeon.png" },
+            	 { name: "Lake Carp", dc: 10, value: 5, properties: "A tasty fish. If prepared over a fire during a short rest, provides 4HP.", image: "assets/images/fish/lake_carp.webp" },
+            	 { name: "Rainbow Carp", dc: 11, value: 5, properties: "A tasty fish. If prepared over a fire during a short rest, provides 4HP.", image: "assets/images/fish/rainbow_carp.webp" },
+            	 { name: "Lake Trout", dc: 10, value: 5, properties: "A tasty fish. If prepared over a fire during a short rest, provides 4HP.", image: "assets/images/fish/lake_trout.webp" },
+            	 { name: "Black Trout", dc: 12, value: 6, properties: "A tasty fish. If prepared over a fire during a short rest, provides 6HP.", image: "assets/images/fish/black_trout.webp" },
+            	 { name: "Softback Turtle", dc: 12, value: 6, properties: "A tasty fish. If prepared over a fire during a short rest, provides 6HP.", image: "assets/images/fish/softback_turtle.webp" },
+            	 { name: "Armorshell Turtle", dc: 12, value: 10, properties: "If prepared over a fire during a short rest, provides 4HP & +1 AC for 1d4 hrs.", image: "assets/images/fish/armorshell_turtle.webp" },
+            	 { name: "Swordclaw Crab", dc: 14, value: 10, properties: "If prepared over a fire during a short rest, provides 4HP & +1 ATT for 1d4 hrs.", image: "assets/images/fish/swordclaw_crab.webp" },
+            	 { name: "Blueclaw Crab", dc: 12, value: 5, properties: "A tasty crustacean. If boiled over a fire during a short rest, provides 4HP.", image: "assets/images/fish/blueclaw_crab.webp" },
+            	 { name: "Darkling Trout", dc: 16, value: 5, properties: "Inedible except for Darklings, abominations, and omniphages, provides 2HP.", image: "assets/images/fish/darkling_trout.webp" },
+            	 { name: "Lake Mini-Shark", dc: 14, value: 6, properties: "A tasty fish. If prepared over a fire during a short rest, provides 6HP.", image: "assets/images/fish/lake_mini_shark.webp" },            	 
+               { name: "Lakeopus", dc: 14, value: 5, properties: "When consumed, grants a +1 bonus to Wisdom ability checks for 1 hour.", image: "assets/images/fish/lakeopus.webp" },            	 
+               { name: "Tarheel Eel", dc: 12, value: 5, properties: "Consuming this eel grants a temporary +1 to Dexterity saving throws for 1 hour.", image: "assets/images/fish/tarheel_eel.webp" },
+            	 { name: "Unisturgeon", dc: 12, value: 5, properties: "When prepared during a short rest, grants 3HP and +1 to Intelligence checks for 1 hour.", image: "assets/images/fish/unisturgeon.webp" },
+            	 { name: "Cavern Cod", dc: 12, value: 5, properties: "A tasty fish. If prepared over a fire during a short rest, provides 6HP.", image: "assets/images/fish/cavern_cod.webp" },            	 
+               { name: "Deep Swimmer Guppy", dc: 13, value: 5, properties: "When consumed raw, grants water breathing for 10 minutes.", image: "assets/images/fish/deep_swimmer_guppy.webp" },
+            	 { name: "Deep Swimmer Gulpy", dc: 14, value: 5, properties: "When prepared during a short rest, provides 3HP and +1 to Initiative for 1 hour.", image: "assets/images/fish/deep_swimmer_gulpy.webp" },
+            	 { name: "Deep Swimmer Gulper", dc: 15, value: 5, properties: "When consumed, grants 5 temporary hit points that last for 1 hour.", image: "assets/images/fish/deep_swimmer_gulper.webp" },
+            	 { name: "Deep Lurker Dark Gulper", dc: 16, value: 5, properties: "Consuming this fish grants darkvision for 30 minutes if you don't already have it.", image: "assets/images/fish/deep_lurker_dark_gulper.webp" },
+            	 { name: "Boot", dc: 11, value: 5, properties: "A useless boot, always feels like a fish on the line…", image: "assets/images/fish/old_boot.webp" },
+            	 { name: "Fancy Boot", dc: 15, value: 6, properties: "How it remained so nice for so long is anyone's guess…", image: "assets/images/fish/fancy_boot.webp" },
+            	 { name: "Magic Boot", dc: 20, value: 1500, properties: "Get two to complete a set and they become a magic item.", image: "assets/images/fish/Magic_Boot.webp" },
+            	 { name: "Empty Can", dc: 10, value: 5, properties: "Damn litterers! Someone needs a spanking!", image: "assets/images/fish/tin_can.webp" },
+            	 { name: "Full Can", dc: 10, value: 5, properties: "DM discretion.", image: "assets/images/fish/full_can.webp" },
+            	 { name: "Can of Whoopass", dc: 15, value: 100, properties: "+1 ATT and DMG for 1d4 hours, instant potty check.", image: "assets/images/fish/can_of_whoopass.webp" },            	 
+               { name: "A Whole Trashcan", dc: 14, value: 5, properties: "Surprisingly clean inside. May contain a useful trinket (25% chance) or fish bait.", image: "assets/images/fish/whole_trashcan.webp" },
+            	 { name: "Deactivated Warforged", dc: 25, value: 5, properties: "A waterlogged construct. With proper tools, may be reactivated as a temporary ally.", image: "assets/images/fish/deactivated_warforged.webp" },
+            	 { name: "Broken Good-Rod", dc: 14, value: 5, properties: "A broken magical fishing rod, maybe it can be repaired?", image: "assets/images/fish/broken_good_rod.webp" },
+            	 { name: "Functional Good-Rod", dc: 16, value: 5, properties: "A magical fishing rod. Gives +1 to Fishing Checks.", image: "assets/images/fish/functional_good_rod.webp" },
+            	 { name: "Merbab (Angy)", dc: 15, value: 0, properties: "Will cast Incontinence on you and flee. DC14 resist.", image: "assets/images/fish/merbab_angy.webp" },
+            	 { name: "Merbab (Curious)", dc: 15, value: 0, properties: "Will cast Incontinence on you if you don't have a snack; if fed, +1 to fishing for 1 day.", image: "assets/images/fish/merbab_curious.webp" },            	 
+               { name: "Jaguar Gar", dc: 13, value: 5, properties: "When consumed, grants +1 to attack rolls for 1 hour due to its fierce spirit.", image: "assets/images/fish/jaguargar.webp" },
+            	 { name: "Trope Eel", dc: 12, value: 5, properties: "Consuming this eel grants a +1 to Performance checks for 1 hour.", image: "assets/images/fish/tropeeel.webp" },
+            	 { name: "River Kaleido", dc: 13, value: 5, properties: "Its kaleidoscopic patterns grant +1 to Perception checks for 1 hour when consumed.", image: "assets/images/fish/kaleido.webp" },
+            	 { name: "Skyflapper", dc: 14, value: 6, properties: "A tasty fish. If prepared over a fire during a short rest, provides 6HP.", image: "assets/images/fish/skyflapper.webp" },            	 
+               { name: "Drought Trout", dc: 12, value: 5, properties: "When prepared properly, grants resistance to fire damage for 10 minutes.", image: "assets/images/fish/drouttrout.webp" },
+            	 { name: "Creeken-Rivar Trout", dc: 12, value: 5, properties: "Consuming this fish during a short rest provides 5HP and +1 to Constitution saves for 1 hour.", image: "assets/images/fish/creekenrivartrout.webp" },
+            	 { name: "Long Swimmer", dc: 13, value: 5, properties: "Grants a swimming speed equal to your walking speed for 30 minutes when consumed.", image: "assets/images/fish/longswimmer.webp" },            	 
+               { name: "Brown Frog", dc: 12, value: 5, properties: "When consumed, grants a +2 bonus to jump distance for 1 hour.", image: "assets/images/fish/brownfrog.webp" },
+            	 { name: "Round Frog", dc: 13, value: 5, properties: "Consuming this frog provides 3 temporary hit points that last for 1 hour.", image: "assets/images/fish/roundfrog.webp" },
+            	 { name: "Black-Spot Frog", dc: 14, value: 5, properties: "When consumed, grants advantage on poison saving throws for 1 hour.", image: "assets/images/fish/blackspotfrog.webp" },
+            	 { name: "Aquatic Toad", dc: 15, value: 5, properties: "Grants the ability to hold your breath twice as long for 1 hour when consumed.", image: "assets/images/fish/aquatictoad.webp" },            	 
+               { name: "Darkling Rill-Skitter", dc: 14, value: 10, properties: "A stealthy darkling lurking in shallows, using murky waters to ambush prey.", image: "assets/images/fish/rillskitter.webp" },
+            	 { name: "Darkling Blood-Gorger", dc: 16, value: 15, properties: "A parasitic darkling that drains its victim's vitality with a chilling bite.", image: "assets/images/fish/bloodgorger.webp" },
+            	 { name: "Darkforme Pike-Maw", dc: 18, value: 20, properties: "A monstrous gar-like predator, attacking with shocking speed.", image: "assets/images/fish/pikemaw.webp" },
+            	 { name: "Darkforme Current-Snapper", dc: 19, value: 20, properties: "A turtle-like darkling with iron jaws capable of trapping prey.", image: "assets/images/fish/feesh.webp" },
+            	 { name: "Darkling River-Lurk", dc: 15, value: 10, properties: "A slippery shadow-form serpent, striking like a constricting vine.", image: "assets/images/fish/riverlurk.webp" },
+            	 { name: "Darkforme Mire-Croaker", dc: 17, value: 20, properties: "A bloated, croaking horror that leaps and snares victims with its tongue.", image: "assets/images/fish/mirecroaker.webp" },
+            	 { name: "Darkforme Mud-Gnasher", dc: 18, value: 20, properties: "A territorial ambusher that erupts from muddy riverbeds to attack.", image: "assets/images/fish/mudgnasher.webp" },
+            	 { name: "Darkling Pond-Skulker", dc: 14, value: 10, properties: "A mischievous thief that steals bait and causes frustration.", image: "assets/images/fish/pondskulker.webp" },
+            	 { name: "Darkling Weed-Tangler", dc: 16, value: 30, properties: "A tangle of dark, grasping river weeds with ensnaring tendrils.", image: "assets/images/fish/feesh.webp" },
+            	 { name: "Darkling Gloom-Newt", dc: 15, value: 30, properties: "A slippery, shadow-coated amphibian that exudes disorienting slime.", image: "assets/images/fish/gloomnewt.webp" },
+            	 { name: "Darkforme Current-Drifter", dc: 20, value: 40, properties: "An amorphous darkling, generating electrical bursts in murky waters.", image: "assets/images/fish/feesh.webp" },
+            	 { name: "Darkforme Titan-Snapper", dc: 24, value: 500, properties: "A colossal snapping turtle-shaped darkforme that shatters boats. **Creatures over 50 HP may yield treasure—contact the DM or Assistant Game Masters.**", image: "assets/images/fish/titansnapper.webp" },
+            	 { name: "Darkforme River Tyrant", dc: 25, value: 750, properties: "An ancient crocodilian terror dominating entire river stretches. **Creatures over 50 HP may yield treasure—contact the DM or Assistant Game Masters.**", image: "assets/images/fish/rivertyrant.webp" },
+            	 { name: "Darkforme Abyssal Leviathan", dc: 26, value: 1500, properties: "The deepwater nightmare that consumes everything in its path. **Creatures over 50 HP may yield treasure—contact the DM or Assistant Game Masters.**", image: "assets/images/fish/abyssalleviathan.webp" },
+            	 { name: "Lakeopus Rex", dc: 25, value: 80, properties: "The king of all Lakopuses. Catching and releasing the Lakeopus Rex allows for the King of the Lake VR boss battle to be unlocked.", image: "assets/images/fish/lakeopus_rex.webp" },
+                 { name: "Prismatic Carp", dc: 18, value: 40, properties: "A shimmering fish with scales that cycle through all colors. Grants resistance to a random damage type for 1 hour when consumed.", image: "assets/images/fish/prismatic_carp.webp" },
+                 { name: "Thunder Catfish", dc: 19, value: 45, properties: "Generates small electrical charges. Consuming it grants the ability to cast Shocking Grasp once within the next 8 hours.", image: "assets/images/fish/thunder_catfish.webp" },
+                 { name: "Arcane Bass", dc: 16, value: 30, properties: "Shows faint magical runes on its scales. When consumed, grants the ability to detect magic for 10 minutes.", image: "assets/images/fish/arcane_bass.webp" },
+                 { name: "Silver Perch", dc: 11, value: 7, properties: "Its reflective scales shimmer in the light. When prepared during a short rest, provides 5HP and +1 to Charisma (Performance) checks for 1 hour.", image: "assets/images/fish/silver_perch.webp" },
+                 { name: "Golden Minnow", dc: 12, value: 8, properties: "A small but valuable fish. When consumed, grants the ability to hold your breath for twice as long for 1 hour.", image: "assets/images/fish/golden_minnow.webp" },
+                 { name: "Spotted River Bass", dc: 13, value: 9, properties: "A common game fish. When prepared during a short rest, provides 6HP and advantage on Athletics checks for swimming for 1 hour.", image: "assets/images/fish/spotted_river_bass.webp" },
+                 { name: "Mossy Catfish", dc: 14, value: 10, properties: "Covered in a harmless moss that has mild healing properties. When consumed, provides 5HP and advantage on saving throws against disease for 2 hours.", image: "assets/images/fish/mossy_catfish.webp" },
+                 { name: "River Pike", dc: 11, value: 8, properties: "A predatory freshwater fish. When prepared properly, grants +1 to Wisdom (Survival) checks for 2 hours.", image: "assets/images/fish/river_pike.webp" },
+                 { name: "Whiskered Sturgeon", dc: 13, value: 10, properties: "Its sensitive barbels detect minute vibrations. When consumed, grants advantage on Wisdom (Perception) checks that rely on hearing for 1 hour.", image: "assets/images/fish/whiskered_sturgeon.webp" },
                  // Additional DC 10-13 fish
-                 { name: "Copper Minnow", dc: 10, value: 5, properties: "Has a distinctive metallic sheen. When consumed, grants resistance to lightning damage for 10 minutes.", image: "assets/images/fish/copper_minnow.png" },
-                 { name: "Dappled Sunfish", dc: 10, value: 7, properties: "Covered in colorful spots that change with the light. When consumed, grants advantage on saving throws against being blinded for 2 hours.", image: "assets/images/fish/dappled_sunfish.png" },
-                 { name: "Pebble Sucker", dc: 11, value: 6, properties: "Collects small stones in its mouth. When prepared properly, provides 4HP and +1 to Athletics checks for 1 hour.", image: "assets/images/fish/pebble_sucker.png" },
-                 { name: "River Pincer", dc: 11, value: 8, properties: "Has specialized fins that can grip objects. When consumed, grants advantage on checks to avoid being disarmed for 2 hours.", image: "assets/images/fish/river_pincer.png" },
-                 { name: "Meadow Brook Trout", dc: 11, value: 7, properties: "Smells faintly of wildflowers. When prepared during a short rest, provides 5HP and advantage on Nature checks for 1 hour.", image: "assets/images/fish/meadow_brook_trout.png" },
-                 { name: "Echo Minnow", dc: 12, value: 7, properties: "Makes distinctive clicking sounds to navigate murky waters. When consumed, grants +2 to Perception checks in darkness for 1 hour.", image: "assets/images/fish/echo_minnow.png" },
-                 { name: "Lazuli Swimmer", dc: 12, value: 8, properties: "Has brilliant blue scales. When prepared properly, provides 5HP and +1 to Charisma checks for 1 hour.", image: "assets/images/fish/lazuli_swimmer.png" },
-                 { name: "Featherscale", dc: 12, value: 7, properties: "Extremely light with wispy fins. When consumed, grants reduced falling damage (half damage) for 1 hour.", image: "assets/images/fish/featherscale.png" },
-                 { name: "Mud Dreamer", dc: 13, value: 8, properties: "Found half-buried in riverbed mud. When prepared during a short rest, provides 6HP and advantage on saving throws against exhaustion for 2 hours.", image: "assets/images/fish/mud_dreamer.png" },
-                 { name: "Whitewater Bass", dc: 13, value: 9, properties: "Strong fish with powerful muscles. When consumed, grants +1 to Strength checks and jumping distance for 2 hours.", image: "assets/images/fish/whitewater_bass.png" },
-                 { name: "Spotted Gar", dc: 13, value: 8, properties: "Has armored scales and a long snout. When prepared properly, provides 5HP and +1 AC against piercing damage for 1 hour.", image: "assets/images/fish/spotted_gar.png" },
-                 { name: "River Goby", dc: 14, value: 9, properties: "A small fish that can camouflage itself. When consumed, grants advantage on Stealth checks in natural environments for 1 hour.", image: "assets/images/fish/river_goby.png" },
-                 { name: "Silverfin Darter", dc: 14, value: 10, properties: "Its silver fins shimmer in the light. When prepared during a short rest, provides 6HP and +1 to Dexterity saves against traps for 2 hours.", image: "assets/images/fish/silverfin_darter.png" },
-                 { name: "Golden Shiner", dc: 15, value: 11, properties: "A small, golden fish. When consumed, grants a +1 bonus to Charisma checks for 1 hour.", image: "assets/images/fish/golden_shiner.png" },
-                 { name: "Bluegill Sunfish", dc: 15, value: 12, properties: "A common freshwater fish. When prepared properly, provides 7HP and +1 to Wisdom saves against illusions for 2 hours.", image: "assets/images/fish/bluegill_sunfish.png" },
-                 { name: "Redfin Pickerel", dc: 16, value: 13, properties: "A predatory fish with sharp teeth. When consumed, grants advantage on attack rolls against aquatic creatures for 1 hour.", image: "assets/images/fish/redfin_pickerel.png" },
-                 { name: "Mottled Catfish", dc: 16, value: 14, properties: "Its mottled skin provides excellent camouflage. When prepared during a short rest, provides 8HP and +1 to Stealth checks in water for 2 hours.", image: "assets/images/fish/mottled_catfish.png" },
-                 { name: "Stream Darter", dc: 10, value: 6, properties: "A small, quick fish. When consumed, grants +1 to Dexterity checks for 1 hour.", image: "assets/images/fish/stream_darter.png" },
-                 { name: "Muddy Sucker", dc: 10, value: 5, properties: "Not the prettiest fish, but provides 4HP when cooked properly.", image: "assets/images/fish/muddy_sucker.png" },
-                 { name: "Creek Chub", dc: 11, value: 6, properties: "A hardy little fish. When prepared, grants 3HP and +1 to Constitution saves against cold for 2 hours.", image: "assets/images/fish/creek_chub.png" },
-                 { name: "Willow Minnow", dc: 12, value: 6, properties: "Small but nutritious. When prepared during a short rest, provides 3HP and +1 to Wisdom checks for 1 hour.", image: "assets/images/fish/willow_minnow.png" },
-                 { name: "Lake Bluegill", dc: 13, value: 7, properties: "A popular angling fish. When prepared properly, provides 4HP and +1 to Animal Handling checks for 2 hours.", image: "assets/images/fish/lake_bluegill.png" },
-                 { name: "Yellow Perch", dc: 13, value: 8, properties: "Its yellow stripes are distinctive. When consumed, grants the ability to see clearly underwater for 30 minutes.", image: "assets/images/fish/yellow_perch.png" },
-                 { name: "Northern Pike", dc: 14, value: 12, properties: "A voracious predator. When prepared during a short rest, provides 6HP and +1 to attack rolls for 1 hour.", image: "assets/images/fish/northern_pike.png" },
-                 { name: "Channel Catfish", dc: 15, value: 11, properties: "A bottom feeder with keen senses. When prepared, grants darkvision for 1 hour if you don't already have it.", image: "assets/images/fish/channel_catfish.png" },
-                 { name: "Muskellunge", dc: 16, value: 15, properties: "The fish of a thousand casts. When prepared properly, grants 8HP and advantage on Constitution saves for 2 hours.", image: "assets/images/fish/muskellunge.png" },
-                 { name: "Lake Sturgeon", dc: 16, value: 18, properties: "An ancient fish species. When consumed, grants 5 temporary hit points and resistance to one damage type of your choice for 1 hour.", image: "assets/images/fish/lake_sturgeon.png" },
-                 { name: "River Snapper", dc: 17, value: 15, properties: "A snapping turtle-like fish. When consumed, grants resistance to bludgeoning damage for 1 hour.", image: "assets/images/fish/river_snapper.png" },
-                 { name: "Giant River Shrimp", dc: 18, value: 20, properties: "A large shrimp that can be eaten raw or cooked. Provides a +2 bonus to Dexterity saving throws for 1 hour when consumed.", image: "assets/images/fish/giant_river_shrimp.png" },
-                 { name: "Crystal Trout", dc: 19, value: 25, properties: "Its scales refract light like a prism. When prepared properly, provides 10HP and advantage on Intelligence checks for 2 hours.", image: "assets/images/fish/crystal_trout.png" },
-                 { name: "Ethereal Catfish", dc: 20, value: 30, properties: "A ghostly fish that can phase through solid objects. When consumed, grants the ability to move through solid objects as if they were difficult terrain for 10 minutes.", image: "assets/images/fish/ethereal_catfish.png" },
-                 { name: "Spectral Pike", dc: 21, value: 35, properties: "A spectral fish that can become invisible at will. When consumed, grants the ability to turn invisible for 1 minute.", image: "assets/images/fish/spectral_pike.png" },
-                 { name: "Void Eel", dc: 22, value: 40, properties: "A dark eel that seems to absorb light. When consumed, grants resistance to necrotic damage for 1 hour.", image: "assets/images/fish/void_eel.png" },
-                 { name: "Celestial Salmon", dc: 23, value: 50, properties: "A shimmering fish that glows faintly. When prepared properly, provides 12HP and advantage on saving throws against being charmed for 2 hours.", image: "assets/images/fish/celestial_salmon.png" },
-                 { name: "Astral Sturgeon", dc: 24, value: 60, properties: "A massive fish with star-like patterns on its scales. When consumed, grants the ability to cast Astral Projection once within the next 8 hours.", image: "assets/images/fish/astral_sturgeon.png" },
-                 { name: "Giant River Eel", dc: 17, value: 20, properties: "A massive eel that can constrict its prey. When consumed, grants a +2 bonus to Dexterity saving throws for 1 hour.", image: "assets/images/fish/giant_river_eel.png" },
-                 { name: "Silver Salmon", dc: 18, value: 25, properties: "A shimmering fish that grants a +1 bonus to Dexterity checks for 1 hour when consumed.", image: "assets/images/fish/silver_salmon.png" },
-                 { name: "Golden Catfish", dc: 19, value: 30, properties: "Its golden scales are said to bring good luck. When consumed, grants advantage on the next attack roll made within 1 hour.", image: "assets/images/fish/golden_catfish.png" },
-                 { name: "Ethereal Pike", dc: 20, value: 35, properties: "A ghostly fish that can phase through solid objects. When consumed, grants the ability to move through solid objects as if they were difficult terrain for 10 minutes.", image: "assets/images/fish/ethereal_pike.png" },
-                 { name: "Spectral Sturgeon", dc: 21, value: 40, properties: "A rare fish that glows faintly in the dark. When consumed, grants darkvision for 1 hour if you don't already have it.", image: "assets/images/fish/spectral_sturgeon.png" },
-                 { name: "Titanic Catfish", dc: 22, value: 50, properties: "A colossal catfish that can swallow whole boats. When consumed, grants the ability to breathe underwater for 1 hour.", image: "assets/images/fish/titanic_catfish.png" },
-                 { name: "Frostfin Trout", dc: 18, value: 30, properties: "A trout that thrives in icy waters. When consumed, grants resistance to cold damage for 1 hour.", image: "assets/images/fish/frostfin_trout.png" },
-                 { name: "Emberfish", dc: 19, value: 35, properties: "A fiery fish that glows with internal heat. When consumed, grants resistance to fire damage for 1 hour.", image: "assets/images/fish/emberfish.png" },
-                 { name: "Stormscale Eel", dc: 20, value: 40, properties: "An eel that crackles with electrical energy. When consumed, grants the ability to cast Thunderwave once within the next 8 hours.", image: "assets/images/fish/stormscale_eel.png" },
-                 { name: "Voidfin Shark", dc: 21, value: 45, properties: "A shark that seems to exist partially in another dimension. When consumed, grants the ability to cast Misty Step once within the next 8 hours.", image: "assets/images/fish/voidfin_shark.png" },
-                 { name: "Celestial Ray", dc: 22, value: 50, properties: "A ray that glows with celestial light. When prepared properly, provides 15HP and advantage on saving throws against being blinded for 2 hours.", image: "assets/images/fish/celestial_ray.png" },
-                 { name: "Astral Leviathan", dc: 23, value: 60, properties: "A massive leviathan that swims through the astral plane. When consumed, grants the ability to cast Astral Projection once within the next 8 hours.", image: "assets/images/fish/astral_leviathan.png" },
-                 { name: "Crystal Trout", dc: 18, value: 30, properties: "Its translucent flesh seems to glow with inner light. When consumed, grants the ability to cast Light at will for 8 hours.", image: "assets/images/fish/crystal_trout.png" },
-                 { name: "Moonbeam Gar", dc: 19, value: 35, properties: "Only surfaces during certain lunar phases. When prepared under moonlight, grants resistance to necrotic damage for 24 hours.", image: "assets/images/fish/moonbeam_gar.png" },
-                 { name: "Elder Lake Turtle", dc: 20, value: 40, properties: "Said to be over 200 years old. When its meat is consumed, grants +1 to Wisdom and advantage on Wisdom saves for 24 hours.", image: "assets/images/fish/elder_lake_turtle.png" },
-                 { name: "Depths Walker", dc: 21, value: 45, properties: "A fish that seems to walk along the lake bottom. When consumed, grants water walking for 1 hour.", image: "assets/images/fish/depths_walker.png" }
+                 { name: "Copper Minnow", dc: 10, value: 5, properties: "Has a distinctive metallic sheen. When consumed, grants resistance to lightning damage for 10 minutes.", image: "assets/images/fish/copper_minnow.webp" },
+                 { name: "Dappled Sunfish", dc: 10, value: 7, properties: "Covered in colorful spots that change with the light. When consumed, grants advantage on saving throws against being blinded for 2 hours.", image: "assets/images/fish/dappled_sunfish.webp" },
+                 { name: "Pebble Sucker", dc: 11, value: 6, properties: "Collects small stones in its mouth. When prepared properly, provides 4HP and +1 to Athletics checks for 1 hour.", image: "assets/images/fish/pebble_sucker.webp" },
+                 { name: "River Pincer", dc: 11, value: 8, properties: "Has specialized fins that can grip objects. When consumed, grants advantage on checks to avoid being disarmed for 2 hours.", image: "assets/images/fish/river_pincer.webp" },
+                 { name: "Meadow Brook Trout", dc: 11, value: 7, properties: "Smells faintly of wildflowers. When prepared during a short rest, provides 5HP and advantage on Nature checks for 1 hour.", image: "assets/images/fish/meadow_brook_trout.webp" },
+                 { name: "Echo Minnow", dc: 12, value: 7, properties: "Makes distinctive clicking sounds to navigate murky waters. When consumed, grants +2 to Perception checks in darkness for 1 hour.", image: "assets/images/fish/Echo_Minnow.webp" },
+                 { name: "Lazuli Swimmer", dc: 12, value: 8, properties: "Has brilliant blue scales. When prepared properly, provides 5HP and +1 to Charisma checks for 1 hour.", image: "assets/images/fish/lazuli_swimmer.webp" },
+                 { name: "Featherscale", dc: 12, value: 7, properties: "Extremely light with wispy fins. When consumed, grants reduced falling damage (half damage) for 1 hour.", image: "assets/images/fish/featherscale.webp" },
+                 { name: "Mud Dreamer", dc: 13, value: 8, properties: "Found half-buried in riverbed mud. When prepared during a short rest, provides 6HP and advantage on saving throws against exhaustion for 2 hours.", image: "assets/images/fish/mud_dreamer.webp" },
+                 { name: "Whitewater Bass", dc: 13, value: 9, properties: "Strong fish with powerful muscles. When consumed, grants +1 to Strength checks and jumping distance for 2 hours.", image: "assets/images/fish/whitewater_bass.webp" },
+                 { name: "Spotted Gar", dc: 13, value: 8, properties: "Has armored scales and a long snout. When prepared properly, provides 5HP and +1 AC against piercing damage for 1 hour.", image: "assets/images/fish/spotted_gar.webp" },
+                 { name: "River Goby", dc: 14, value: 9, properties: "A small fish that can camouflage itself. When consumed, grants advantage on Stealth checks in natural environments for 1 hour.", image: "assets/images/fish/river_goby.webp" },
+                 { name: "Silverfin Darter", dc: 14, value: 10, properties: "Its silver fins shimmer in the light. When prepared during a short rest, provides 6HP and +1 to Dexterity saves against traps for 2 hours.", image: "assets/images/fish/silverfin_darter.webp" },
+                 { name: "Golden Shiner", dc: 15, value: 11, properties: "A small, golden fish. When consumed, grants a +1 bonus to Charisma checks for 1 hour.", image: "assets/images/fish/golden_shiner.webp" },
+                 { name: "Bluegill Sunfish", dc: 15, value: 12, properties: "A common freshwater fish. When prepared properly, provides 7HP and +1 to Wisdom saves against illusions for 2 hours.", image: "assets/images/fish/bluegill_sunfish.webp" },
+                 { name: "Redfin Pickerel", dc: 16, value: 13, properties: "A predatory fish with sharp teeth. When consumed, grants advantage on attack rolls against aquatic creatures for 1 hour.", image: "assets/images/fish/redfin_pickerel.webp" },
+                 { name: "Mottled Catfish", dc: 16, value: 14, properties: "Its mottled skin provides excellent camouflage. When prepared during a short rest, provides 8HP and +1 to Stealth checks in water for 2 hours.", image: "assets/images/fish/mottled_catfish.webp" },
+                 { name: "Stream Darter", dc: 10, value: 6, properties: "A small, quick fish. When consumed, grants +1 to Dexterity checks for 1 hour.", image: "assets/images/fish/stream_darter.webp" },
+                 { name: "Muddy Sucker", dc: 10, value: 5, properties: "Not the prettiest fish, but provides 4HP when cooked properly.", image: "assets/images/fish/muddy_sucker.webp" },
+                 { name: "Creek Chub", dc: 11, value: 6, properties: "A hardy little fish. When prepared, grants 3HP and +1 to Constitution saves against cold for 2 hours.", image: "assets/images/fish/creek_chub.webp" },
+                 { name: "Willow Minnow", dc: 12, value: 6, properties: "Small but nutritious. When prepared during a short rest, provides 3HP and +1 to Wisdom checks for 1 hour.", image: "assets/images/fish/willow_minnow.webp" },
+                 { name: "Lake Bluegill", dc: 13, value: 7, properties: "A popular angling fish. When prepared properly, provides 4HP and +1 to Animal Handling checks for 2 hours.", image: "assets/images/fish/lake_bluegill.webp" },
+                 { name: "Yellow Perch", dc: 13, value: 8, properties: "Its yellow stripes are distinctive. When consumed, grants the ability to see clearly underwater for 30 minutes.", image: "assets/images/fish/yellow_perch.webp" },
+                 { name: "Northern Pike", dc: 14, value: 12, properties: "A voracious predator. When prepared during a short rest, provides 6HP and +1 to attack rolls for 1 hour.", image: "assets/images/fish/northern_pike.webp" },
+                 { name: "Channel Catfish", dc: 15, value: 11, properties: "A bottom feeder with keen senses. When prepared, grants darkvision for 1 hour if you don't already have it.", image: "assets/images/fish/channel_catfish.webp" },
+                 { name: "Muskellunge", dc: 16, value: 15, properties: "The fish of a thousand casts. When prepared properly, grants 8HP and advantage on Constitution saves for 2 hours.", image: "assets/images/fish/muskellunge.webp" },
+                 { name: "Lake Sturgeon", dc: 16, value: 18, properties: "An ancient fish species. When consumed, grants 5 temporary hit points and resistance to one damage type of your choice for 1 hour.", image: "assets/images/fish/lake_sturgeon.webp" },
+                 { name: "River Snapper", dc: 17, value: 15, properties: "A snapping turtle-like fish. When consumed, grants resistance to bludgeoning damage for 1 hour.", image: "assets/images/fish/river_snapper.webp" },
+                 { name: "Giant River Shrimp", dc: 18, value: 20, properties: "A large shrimp that can be eaten raw or cooked. Provides a +2 bonus to Dexterity saving throws for 1 hour when consumed.", image: "assets/images/fish/giant_river_shrimp.webp" },
+                 { name: "Crystal Trout", dc: 19, value: 25, properties: "Its scales refract light like a prism. When prepared properly, provides 10HP and advantage on Intelligence checks for 2 hours.", image: "assets/images/fish/crystal_trout.webp" },
+                 { name: "Ethereal Catfish", dc: 20, value: 30, properties: "A ghostly fish that can phase through solid objects. When consumed, grants the ability to move through solid objects as if they were difficult terrain for 10 minutes.", image: "assets/images/fish/ethereal_catfish.webp" },
+                 { name: "Spectral Pike", dc: 21, value: 35, properties: "A spectral fish that can become invisible at will. When consumed, grants the ability to turn invisible for 1 minute.", image: "assets/images/fish/spectral_pike.webp" },
+                 { name: "Void Eel", dc: 22, value: 40, properties: "A dark eel that seems to absorb light. When consumed, grants resistance to necrotic damage for 1 hour.", image: "assets/images/fish/Void_Eel.webp" },
+                 { name: "Celestial Salmon", dc: 23, value: 50, properties: "A shimmering fish that glows faintly. When prepared properly, provides 12HP and advantage on saving throws against being charmed for 2 hours.", image: "assets/images/fish/celestial_salmon.webp" },
+                 { name: "Astral Sturgeon", dc: 24, value: 60, properties: "A massive fish with star-like patterns on its scales. When consumed, grants the ability to cast Astral Projection once within the next 8 hours.", image: "assets/images/fish/astral_sturgeon.webp" },
+                 { name: "Giant River Eel", dc: 17, value: 20, properties: "A massive eel that can constrict its prey. When consumed, grants a +2 bonus to Dexterity saving throws for 1 hour.", image: "assets/images/fish/Giant_River_Eel.webp" },
+                 { name: "Silver Salmon", dc: 18, value: 25, properties: "A shimmering fish that grants a +1 bonus to Dexterity checks for 1 hour when consumed.", image: "assets/images/fish/Silver_Salmon.webp" },
+                 { name: "Golden Catfish", dc: 19, value: 30, properties: "Its golden scales are said to bring good luck. When consumed, grants advantage on the next attack roll made within 1 hour.", image: "assets/images/fish/Golden_Catfish.webp" },
+                 { name: "Ethereal Pike", dc: 20, value: 35, properties: "A ghostly fish that can phase through solid objects. When consumed, grants the ability to move through solid objects as if they were difficult terrain for 10 minutes.", image: "assets/images/fish/Ethereal_Pike.webp" },
+                 { name: "Spectral Sturgeon", dc: 21, value: 40, properties: "A rare fish that glows faintly in the dark. When consumed, grants darkvision for 1 hour if you don't already have it.", image: "assets/images/fish/Spectral_Sturgeon.webp" },
+                 { name: "Titanic Catfish", dc: 22, value: 50, properties: "A colossal catfish that can swallow whole boats. When consumed, grants the ability to breathe underwater for 1 hour.", image: "assets/images/fish/titanic_catfish.webp" },
+                 { name: "Frostfin Trout", dc: 18, value: 30, properties: "A trout that thrives in icy waters. When consumed, grants resistance to cold damage for 1 hour.", image: "assets/images/fish/frostfin_trout.webp" },
+                 { name: "Emberfish", dc: 19, value: 35, properties: "A fiery fish that glows with internal heat. When consumed, grants resistance to fire damage for 1 hour.", image: "assets/images/fish/emberfish.webp" },
+                 { name: "Stormscale Eel", dc: 20, value: 40, properties: "An eel that crackles with electrical energy. When consumed, grants the ability to cast Thunderwave once within the next 8 hours.", image: "assets/images/fish/Stormscale_Eel.webp" },
+                 { name: "Voidfin Shark", dc: 21, value: 45, properties: "A shark that seems to exist partially in another dimension. When consumed, grants the ability to cast Misty Step once within the next 8 hours.", image: "assets/images/fish/voidfin_shark.webp" },
+                 { name: "Celestial Ray", dc: 22, value: 50, properties: "A ray that glows with celestial light. When prepared properly, provides 15HP and advantage on saving throws against being blinded for 2 hours.", image: "assets/images/fish/celestial_ray.webp" },
+                 { name: "Astral Leviathan", dc: 23, value: 60, properties: "A massive leviathan that swims through the astral plane. When consumed, grants the ability to cast Astral Projection once within the next 8 hours.", image: "assets/images/fish/astral_leviathan.webp" },
+                 { name: "Crystal Trout", dc: 18, value: 30, properties: "Its translucent flesh seems to glow with inner light. When consumed, grants the ability to cast Light at will for 8 hours.", image: "assets/images/fish/crystal_trout.webp" },
+                 { name: "Moonbeam Gar", dc: 19, value: 35, properties: "Only surfaces during certain lunar phases. When prepared under moonlight, grants resistance to necrotic damage for 24 hours.", image: "assets/images/fish/moonbeam_gar.webp" },
+                 { name: "Elder Lake Turtle", dc: 20, value: 40, properties: "Said to be over 200 years old. When its meat is consumed, grants +1 to Wisdom and advantage on Wisdom saves for 24 hours.", image: "assets/images/fish/elder_lake_turtle.webp" },
+                 { name: "Depths Walker", dc: 21, value: 45, properties: "A fish that seems to walk along the lake bottom. When consumed, grants water walking for 1 hour.", image: "assets/images/fish/depths_walker.webp" }
         	 ]
     	 },
     	 {
         	 name: "Coastal Waters",
+       	 available: false,
         	 description: "Salty shores where the academy's lands meet the ocean.",
         	 fish: [
-               { name: "Rainbow Carp", dc: 11, value: 5, properties: "A tasty fish. If prepared over a fire during a short rest, provides 4HP.", image: "assets/images/fish/rainbow_carp.png" },
-                { name: "Silverfin Snapper", dc: 13, value: 8, properties: "A common coastal fish. If prepared over a fire during a short rest, provides 5HP.", image: "assets/images/fish/silverfin_snapper.png" },
-                { name: "Golden Mackerel", dc: 15, value: 10, properties: "A prized catch. If prepared over a fire during a short rest, provides 6HP and +1 to Dexterity saves for 1 hour.", image: "assets/images/fish/golden_mackerel.png" },
-                { name: "Azure Grouper", dc: 14, value: 12, properties: "A large fish with vibrant blue scales. If prepared over a fire during a short rest, provides 7HP and +1 to Charisma checks for 1 hour.", image: "assets/images/fish/azure_grouper.png" },
-                { name: "Coral Snapper", dc: 16, value: 15, properties: "A rare fish found near coral reefs. If prepared over a fire during a short rest, provides 8HP and +1 to Wisdom saves for 1 hour.", image: "assets/images/fish/coral_snapper.png" },
-                { name: "Tidal Flounder", dc: 12, value: 6, properties: "A flatfish that blends with the ocean floor. If prepared over a fire during a short rest, provides 5HP.", image: "assets/images/fish/tidal_flounder.png" },
-                { name: "Stormy Sea Bass", dc: 18, value: 20, properties: "A powerful fish that can summon storms. If consumed raw, grants advantage on saving throws against lightning damage for 1 hour.", image: "assets/images/fish/stormy_sea_bass.png" },
-                { name: "Giant Clam", dc: 20, value: 25, properties: "Contains valuable pearls (worth 50-200 gold). If opened with proper tools, may yield treasure.", image: "assets/images/fish/giant_clam.png" },
-                { name: "Crimson Lobster", dc: 17, value: 18, properties: "A large lobster with a fiery red shell. If prepared over a fire during a short rest, provides 9HP and +1 to Strength checks for 1 hour.", image: "assets/images/fish/crimson_lobster.png" },
-                { name: "Silver Sea Urchin", dc: 15, value: 10, properties: "Its spines are sharp but its flesh is nutritious. If consumed, grants resistance to poison damage for 1 hour.", image: "assets/images/fish/silver_sea_urchin.png" },
-                { name: "Pearl Oyster", dc: 16, value: 30, properties: "May contain a pearl worth 10-100 gold (25% chance). If opened with proper tools, may yield treasure.", image: "assets/images/fish/pearl_oyster.png" },
-                { name: "Barnacle-Encrusted Boot", dc: 11, value: 3, properties: "Just a waterlogged boot... or is it? (25% chance to contain a small trinket)", image: "assets/images/fish/barnacle_boot.png" },
-                { name: "Coastal Jellyfish", dc: 15, value: 12, properties: "Can be processed into a potion of water breathing (requires alchemist tools).", image: "assets/images/fish/coastal_jellyfish.png" }, 
-               { name: "Black Trout", dc: 12, value: 6, properties: "A tasty fish. If prepared over a fire during a short rest, provides 6HP.", image: "assets/images/fish/black_trout.png" },
-               { name: "Armorshell Turtle", dc: 12, value: 10, properties: "If prepared over a fire during a short rest, provides 4HP & +1 AC for 1d4 hrs.", image: "assets/images/fish/armorshell_turtle.png" },
-               { name: "Armorshell Turtle", dc: 12, value: 10, properties: "If prepared over a fire during a short rest, provides 4HP & +1 AC for 1d4 hrs.", image: "assets/images/fish/armorshell_turtle.png" },
-               { name: "Swordclaw Crab", dc: 14, value: 10, properties: "If prepared over a fire during a short rest, provides 4HP & +1 ATT for 1d4 hrs.", image: "assets/images/fish/swordclaw_crab.png" },
-               { name: "Blueclaw Crab", dc: 12, value: 5, properties: "A tasty crustacean. If boiled over a fire during a short rest, provides 4HP.", image: "assets/images/fish/blueclaw_crab.png" },
-               { name: "Darkling Trout", dc: 16, value: 5, properties: "Inedible except for Darklings, abominations, and omniphages, provides 2HP.", image: "assets/images/fish/darkling_trout.png" },
-            	 { name: "Striped Bass", dc: 13, value: 8, properties: "A meaty, flavorful fish. If prepared over a fire during a short rest, provides 5HP.", image: "assets/images/fish/striped_bass.png" },
-            	 { name: "Rockfish", dc: 14, value: 9, properties: "When prepared with herbs, grants +1 to Perception checks for 1 hour.", image: "assets/images/fish/rockfish.png" },
-            	 { name: "Salt Crab", dc: 12, value: 7, properties: "Its meat provides 4HP and +1 to Constitution saves for 1 hour when prepared.", image: "assets/images/fish/salt_crab.png" },
-            	 { name: "Pearl Oyster", dc: 16, value: 25, properties: "May contain a pearl worth 10-100 gold (25% chance).", image: "assets/images/fish/pearl_oyster.png" },
-            	 { name: "Anchovy School", dc: 10, value: 4, properties: "A cluster of tiny fish. Good for soup that grants 2HP.", image: "assets/images/fish/anchovy_school.png" },
-            	 { name: "Coastal Jellyfish", dc: 15, value: 12, properties: "Can be processed into a potion of water breathing (requires alchemist tools).", image: "assets/images/fish/coastal_jellyfish.png" },            	 
-               { name: "Golden Ray", dc: 17, value: 20, properties: "Its scales shimmer with magic. Grants temporary +2 to Charisma for 1 hour when consumed.", image: "assets/images/fish/golden_ray.png" },
-            	 { name: "Barnacled Chest", dc: 22, value: 50, properties: "A small, waterlogged chest. May contain treasure or just wet sand.", image: "assets/images/fish/barnacled_chest.png" },
-            	 { name: "Darkforme Tide-Lurker", dc: 18, value: 20, properties: "An aquatic darkling that ambushes from tidal pools. Its essence can be used in shadow magic.", image: "assets/images/fish/darkforme_tide_lurker.png" },
-            	 { name: "Saltwater Boot", dc: 11, value: 3, properties: "Just a waterlogged boot... or is it? (25% chance to contain a small trinket)", image: "assets/images/fish/saltwater_boot.png" },
-               { name: "Coastal Trout", dc: 12, value: 6, properties: "A saltwater variant of trout. When cooked during a short rest, provides 5HP and +1 to Strength checks for 1 hour.", image: "assets/images/fish/lake_trout.png" },
-               { name: "Sea Turtle", dc: 16, value: 12, properties: "Its meat provides 6HP when consumed, and its shell can be crafted into a small shield.", image: "assets/images/fish/softback_turtle.png" },
-               { name: "Tidal Crab", dc: 14, value: 8, properties: "When prepared during a short rest, grants 4HP and +1 to Athletics checks for 1 hour.", image: "assets/images/fish/blueclaw_crab.png" },
-               { name: "Sunfish", dc: 15, value: 10, properties: "Its radiant scales grant fire resistance for 10 minutes when consumed.", image: "assets/images/fish/kaleido.png" },
-               { name: "Spotted Eel", dc: 13, value: 7, properties: "Consuming this eel grants electricity resistance for 10 minutes.", image: "assets/images/fish/tarheel_eel.png" },
-               { name: "Coastal Pike", dc: 14, value: 8, properties: "A tasty predator. When prepared during a short rest, provides 5HP and +1 to initiative for 1 hour.", image: "assets/images/fish/lake_mini_shark.png" },
-               { name: "Sand Flounder", dc: 11, value: 6, properties: "Camouflages in sandy bottoms. When consumed, grants +2 to Stealth checks for 1 hour.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Starfish", dc: 13, value: 9, properties: "Not actually a fish. Grants 3 temporary hit points and +1 to Charisma checks for 1 hour when prepared.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Coastal Shark", dc: 17, value: 15, properties: "When prepared properly, grants +1 to damage rolls for 1 hour.", image: "assets/images/fish/fish_placeholder.png" },               
-               { name: "Rainbow Mackerel", dc: 14, value: 8, properties: "Its colorful flesh provides 5HP and advantage on saving throws against being charmed for 1 hour when consumed.", image: "assets/images/fish/rainbow_carp.png" },
-               { name: "Blue Snapper", dc: 12, value: 8, properties: "A delicious saltwater fish. When prepared during a short rest, provides 6HP and +1 to Constitution checks for 1 hour.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Coastal Flatfish", dc: 11, value: 7, properties: "Masters of camouflage. When consumed, grants +2 to Stealth checks for 1 hour.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Sea Bream", dc: 13, value: 9, properties: "A prized fish with delicate flavor. When prepared during a short rest, provides 5HP and +1 to Dexterity checks for 1 hour.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Shimmering Herring", dc: 14, value: 10, properties: "Schools of these fish create beautiful patterns in the water. When consumed, grants advantage on Charisma (Persuasion) checks for 1 hour.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Spiny Pufferfish", dc: 13, value: 11, properties: "Can inflate when threatened. When prepared correctly (DC 15 Survival check), grants resistance to piercing damage for 30 minutes. If prepared incorrectly, causes 1d6 poison damage.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Coastal Darkforme Lurker", dc: 19, value: 25, properties: "A shadowy predator that melts into dark waters. Its essence can boost necromancy spells.", image: "assets/images/fish/darkling_trout.png" },
-               { name: "Saltwater Treasure Chest", dc: 23, value: 75, properties: "An ornate chest with golden fittings. Contains valuables or magical items (DM's discretion).", image: "assets/images/fish/subterranean_treasure_chest.png" }
+               { name: "Rainbow Carp", dc: 11, value: 5, properties: "A tasty fish. If prepared over a fire during a short rest, provides 4HP.", image: "assets/images/fish/rainbow_carp.webp" },
+                { name: "Silverfin Snapper", dc: 13, value: 8, properties: "A common coastal fish. If prepared over a fire during a short rest, provides 5HP.", image: "assets/images/fish/silverfin_snapper.webp" },
+                { name: "Golden Mackerel", dc: 15, value: 10, properties: "A prized catch. If prepared over a fire during a short rest, provides 6HP and +1 to Dexterity saves for 1 hour.", image: "assets/images/fish/golden_mackerel.webp" },
+                { name: "Azure Grouper", dc: 14, value: 12, properties: "A large fish with vibrant blue scales. If prepared over a fire during a short rest, provides 7HP and +1 to Charisma checks for 1 hour.", image: "assets/images/fish/azure_grouper.webp" },
+                { name: "Coral Snapper", dc: 16, value: 15, properties: "A rare fish found near coral reefs. If prepared over a fire during a short rest, provides 8HP and +1 to Wisdom saves for 1 hour.", image: "assets/images/fish/coral_snapper.webp" },
+                { name: "Tidal Flounder", dc: 12, value: 6, properties: "A flatfish that blends with the ocean floor. If prepared over a fire during a short rest, provides 5HP.", image: "assets/images/fish/tidal_flounder.webp" },
+                { name: "Stormy Sea Bass", dc: 18, value: 20, properties: "A powerful fish that can summon storms. If consumed raw, grants advantage on saving throws against lightning damage for 1 hour.", image: "assets/images/fish/stormy_sea_bass.webp" },
+                { name: "Giant Clam", dc: 20, value: 25, properties: "Contains valuable pearls (worth 50-200 gold). If opened with proper tools, may yield treasure.", image: "assets/images/fish/giant_clam.webp" },
+                { name: "Crimson Lobster", dc: 17, value: 18, properties: "A large lobster with a fiery red shell. If prepared over a fire during a short rest, provides 9HP and +1 to Strength checks for 1 hour.", image: "assets/images/fish/crimson_lobster.webp" },
+                { name: "Silver Sea Urchin", dc: 15, value: 10, properties: "Its spines are sharp but its flesh is nutritious. If consumed, grants resistance to poison damage for 1 hour.", image: "assets/images/fish/silver_sea_urchin.webp" },
+                { name: "Pearl Oyster", dc: 16, value: 30, properties: "May contain a pearl worth 10-100 gold (25% chance). If opened with proper tools, may yield treasure.", image: "assets/images/fish/pearl_oyster.webp" },
+                { name: "Barnacle-Encrusted Boot", dc: 11, value: 3, properties: "Just a waterlogged boot... or is it? (25% chance to contain a small trinket)", image: "assets/images/fish/barnacle_boot.webp" },
+                { name: "Coastal Jellyfish", dc: 15, value: 12, properties: "Can be processed into a potion of water breathing (requires alchemist tools).", image: "assets/images/fish/coastal_jellyfish.webp" }, 
+               { name: "Black Trout", dc: 12, value: 6, properties: "A tasty fish. If prepared over a fire during a short rest, provides 6HP.", image: "assets/images/fish/black_trout.webp" },
+               { name: "Armorshell Turtle", dc: 12, value: 10, properties: "If prepared over a fire during a short rest, provides 4HP & +1 AC for 1d4 hrs.", image: "assets/images/fish/armorshell_turtle.webp" },
+               { name: "Swordclaw Crab", dc: 14, value: 10, properties: "If prepared over a fire during a short rest, provides 4HP & +1 ATT for 1d4 hrs.", image: "assets/images/fish/swordclaw_crab.webp" },
+               { name: "Blueclaw Crab", dc: 12, value: 5, properties: "A tasty crustacean. If boiled over a fire during a short rest, provides 4HP.", image: "assets/images/fish/blueclaw_crab.webp" },
+               { name: "Darkling Trout", dc: 16, value: 5, properties: "Inedible except for Darklings, abominations, and omniphages, provides 2HP.", image: "assets/images/fish/darkling_trout.webp" },
+            	 { name: "Striped Bass", dc: 13, value: 8, properties: "A meaty, flavorful fish. If prepared over a fire during a short rest, provides 5HP.", image: "assets/images/fish/striped_bass.webp" },
+            	 { name: "Rockfish", dc: 14, value: 9, properties: "When prepared with herbs, grants +1 to Perception checks for 1 hour.", image: "assets/images/fish/rockfish.webp" },
+            	 { name: "Salt Crab", dc: 12, value: 7, properties: "Its meat provides 4HP and +1 to Constitution saves for 1 hour when prepared.", image: "assets/images/fish/salt_crab.webp" },
+            	 { name: "Pearl Oyster", dc: 16, value: 25, properties: "May contain a pearl worth 10-100 gold (25% chance).", image: "assets/images/fish/pearl_oyster.webp" },
+            	 { name: "Anchovy School", dc: 10, value: 4, properties: "A cluster of tiny fish. Good for soup that grants 2HP.", image: "assets/images/fish/anchovy_school.webp" },
+            	 { name: "Coastal Jellyfish", dc: 15, value: 12, properties: "Can be processed into a potion of water breathing (requires alchemist tools).", image: "assets/images/fish/coastal_jellyfish.webp" },            	 
+               { name: "Golden Ray", dc: 17, value: 20, properties: "Its scales shimmer with magic. Grants temporary +2 to Charisma for 1 hour when consumed.", image: "assets/images/fish/golden_ray.webp" },
+            	 { name: "Barnacled Chest", dc: 22, value: 50, properties: "A small, waterlogged chest. May contain treasure or just wet sand.", image: "assets/images/fish/barnacled_chest.webp" },
+            	 { name: "Darkforme Tide-Lurker", dc: 18, value: 20, properties: "An aquatic darkling that ambushes from tidal pools. Its essence can be used in shadow magic.", image: "assets/images/fish/darkforme_tide_lurker.webp" },
+            	 { name: "Saltwater Boot", dc: 11, value: 3, properties: "Just a waterlogged boot... or is it? (25% chance to contain a small trinket)", image: "assets/images/fish/saltwater_boot.webp" },
+               { name: "Coastal Trout", dc: 12, value: 6, properties: "A saltwater variant of trout. When cooked during a short rest, provides 5HP and +1 to Strength checks for 1 hour.", image: "assets/images/fish/lake_trout.webp" },
+               { name: "Sea Turtle", dc: 16, value: 12, properties: "Its meat provides 6HP when consumed, and its shell can be crafted into a small shield.", image: "assets/images/fish/softback_turtle.webp" },
+               { name: "Tidal Crab", dc: 14, value: 8, properties: "When prepared during a short rest, grants 4HP and +1 to Athletics checks for 1 hour.", image: "assets/images/fish/blueclaw_crab.webp" },
+               { name: "Sunfish", dc: 15, value: 10, properties: "Its radiant scales grant fire resistance for 10 minutes when consumed.", image: "assets/images/fish/kaleido.webp" },
+               { name: "Spotted Eel", dc: 13, value: 7, properties: "Consuming this eel grants electricity resistance for 10 minutes.", image: "assets/images/fish/tarheel_eel.webp" },
+               { name: "Coastal Pike", dc: 14, value: 8, properties: "A tasty predator. When prepared during a short rest, provides 5HP and +1 to initiative for 1 hour.", image: "assets/images/fish/lake_mini_shark.webp" },
+               { name: "Sand Flounder", dc: 11, value: 6, properties: "Camouflages in sandy bottoms. When consumed, grants +2 to Stealth checks for 1 hour.", image: "assets/images/fish/fish_placeholder.webp" },
+               { name: "Starfish", dc: 13, value: 9, properties: "Not actually a fish. Grants 3 temporary hit points and +1 to Charisma checks for 1 hour when prepared.", image: "assets/images/fish/fish_placeholder.webp" },
+               { name: "Coastal Shark", dc: 17, value: 15, properties: "When prepared properly, grants +1 to damage rolls for 1 hour.", image: "assets/images/fish/fish_placeholder.webp" },               
+               { name: "Rainbow Mackerel", dc: 14, value: 8, properties: "Its colorful flesh provides 5HP and advantage on saving throws against being charmed for 1 hour when consumed.", image: "assets/images/fish/rainbow_carp.webp" },
+               { name: "Blue Snapper", dc: 12, value: 8, properties: "A delicious saltwater fish. When prepared during a short rest, provides 6HP and +1 to Constitution checks for 1 hour.", image: "assets/images/fish/fish_placeholder.webp" },
+               { name: "Coastal Flatfish", dc: 11, value: 7, properties: "Masters of camouflage. When consumed, grants +2 to Stealth checks for 1 hour.", image: "assets/images/fish/fish_placeholder.webp" },
+               { name: "Sea Bream", dc: 13, value: 9, properties: "A prized fish with delicate flavor. When prepared during a short rest, provides 5HP and +1 to Dexterity checks for 1 hour.", image: "assets/images/fish/fish_placeholder.webp" },
+               { name: "Shimmering Herring", dc: 14, value: 10, properties: "Schools of these fish create beautiful patterns in the water. When consumed, grants advantage on Charisma (Persuasion) checks for 1 hour.", image: "assets/images/fish/fish_placeholder.webp" },
+               { name: "Spiny Pufferfish", dc: 13, value: 11, properties: "Can inflate when threatened. When prepared correctly (DC 15 Survival check), grants resistance to piercing damage for 30 minutes. If prepared incorrectly, causes 1d6 poison damage.", image: "assets/images/fish/fish_placeholder.webp" },
+               { name: "Coastal Darkforme Lurker", dc: 19, value: 25, properties: "A shadowy predator that melts into dark waters. Its essence can boost necromancy spells.", image: "assets/images/fish/darkling_trout.webp" },
+               { name: "Saltwater Treasure Chest", dc: 23, value: 75, properties: "An ornate chest with golden fittings. Contains valuables or magical items (DM's discretion).", image: "assets/images/fish/feesh.webp" }
         	 ]
     	 },
     	 {
         	 name: "Deep Caverns",
         	 description: "Mysterious underground lakes and rivers beneath the academy.",
-        	 fish: [            	 { name: "Blind Cavefish", dc: 14, value: 10, properties: "Grants darkvision for 1 hour when consumed raw.", image: "assets/images/fish/blind_cavefish.png" },
-               { name: "Pale Crawler", dc: 11, value: 8, properties: "A bottom-feeding fish adapted to darkness. When consumed, grants +2 to saving throws against being blinded for 2 hours.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Echo Minnow", dc: 12, value: 9, properties: "This fish navigates using sound. When consumed, grants advantage on Wisdom (Perception) checks that rely on hearing for 1 hour.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Crystal Fins", dc: 13, value: 11, properties: "Its translucent fins refract light beautifully. When prepared during a short rest, provides 4HP and allows you to produce dim light from your hand for 1 hour.", image: "assets/images/fish/fish_placeholder.png" },
-            	 { name: "Glowfin", dc: 15, value: 12, properties: "Emits light equivalent to a candle for 24 hours after being caught.", image: "assets/images/fish/glowfin.png" },
-            	 { name: "Crystal Eel", dc: 17, value: 18, properties: "Its scales can be ground into magic-enhancing dust worth 20gp to alchemists.", image: "assets/images/fish/crystal_eel.png" },
-            	 { name: "Stone Lobster", dc: 16, value: 15, properties: "Grants +2 to AC for 1 hour when prepared properly.", image: "assets/images/fish/stone_lobster.png" },
-            	 { name: "Deepdweller", dc: 18, value: 25, properties: "A rare fish that grants advantage on Constitution saves for 2 hours when consumed.", image: "assets/images/fish/deepdweller.png" },
-            	 { name: "Cave Leech", dc: 12, value: 8, properties: "Can be used to draw poison from wounds, granting +2 to saving throws against poison for 24 hours.", image: "assets/images/fish/cave_leech.png" },
-            	 { name: "Echofish", dc: 16, value: 15, properties: "When consumed, grants the ability to use echolocation in darkness for 1 hour.", image: "assets/images/fish/echofish.png" },
-            	 { name: "Mineral Turtle", dc: 19, value: 30, properties: "Its shell contains rare minerals that can be processed into a potion of stone skin.", image: "assets/images/fish/mineral_turtle.png" },            	 
-               { name: "Darkforme Deep-Hunter", dc: 22, value: 40, properties: "A particularly dangerous aquatic darkling. Its essence can power necrotic spells.", image: "assets/images/fish/darkforme_deep_hunter.png" },
-            	 { name: "Subterranean Treasure Chest", dc: 24, value: 100, properties: "An ancient locked chest. Requires a DC 15 Dexterity check to open. Contents vary.", image: "assets/images/fish/subterranean_treasure_chest.png" }
+        	 fish: [            	 { name: "Blind Cavefish", dc: 14, value: 10, properties: "Grants darkvision for 1 hour when consumed raw.", image: "assets/images/fish/feesh.webp" },
+               { name: "Pale Crawler", dc: 11, value: 8, properties: "A bottom-feeding fish adapted to darkness. When consumed, grants +2 to saving throws against being blinded for 2 hours.", image: "assets/images/fish/feesh.webp" },
+               { name: "Echo Minnow", dc: 12, value: 9, properties: "This fish navigates using sound. When consumed, grants advantage on Wisdom (Perception) checks that rely on hearing for 1 hour.", image: "assets/images/fish/Echo_Minnow.webp" },
+               { name: "Crystal Fins", dc: 13, value: 11, properties: "Its translucent fins refract light beautifully. When prepared during a short rest, provides 4HP and allows you to produce dim light from your hand for 1 hour.", image: "assets/images/fish/feesh.webp" },
+            	 { name: "Glowfin", dc: 15, value: 12, properties: "Emits light equivalent to a candle for 24 hours after being caught.", image: "assets/images/fish/feesh.webp" },
+            	 { name: "Crystal Eel", dc: 17, value: 18, properties: "Its scales can be ground into magic-enhancing dust worth 20gp to alchemists.", image: "assets/images/fish/feesh.webp" },
+            	 { name: "Stone Lobster", dc: 16, value: 15, properties: "Grants +2 to AC for 1 hour when prepared properly.", image: "assets/images/fish/feesh.webp" },
+            	 { name: "Deepdweller", dc: 18, value: 25, properties: "A rare fish that grants advantage on Constitution saves for 2 hours when consumed.", image: "assets/images/fish/feesh.webp" },
+            	 { name: "Cave Leech", dc: 12, value: 8, properties: "Can be used to draw poison from wounds, granting +2 to saving throws against poison for 24 hours.", image: "assets/images/fish/feesh.webp" },
+            	 { name: "Echofish", dc: 16, value: 15, properties: "When consumed, grants the ability to use echolocation in darkness for 1 hour.", image: "assets/images/fish/feesh.webp" },
+            	 { name: "Mineral Turtle", dc: 19, value: 30, properties: "Its shell contains rare minerals that can be processed into a potion of stone skin.", image: "assets/images/fish/feesh.webp" },            	 
+               { name: "Darkforme Deep-Hunter", dc: 22, value: 40, properties: "A particularly dangerous aquatic darkling. Its essence can power necrotic spells.", image: "assets/images/fish/feesh.webp" },
+            	 { name: "Subterranean Treasure Chest", dc: 24, value: 100, properties: "An ancient locked chest. Requires a DC 15 Dexterity check to open. Contents vary.", image: "assets/images/fish/feesh.webp" }
         	 ]
     	 },
     	 {
         	 name: "Enchanted Pond",
         	 description: "Magical waters where arcane energies infuse the aquatic life.",
         	 fish: [
-            	 { name: "Spellscale", dc: 16, value: 20, properties: "Scales shimmer with arcane energy. Grants +1 to spell attack rolls for 1 hour when consumed.", image: "assets/images/fish/spellscale.png" },            	 
-               { name: "Mana Minnow", dc: 12, value: 15, properties: "Restores one 1st-level spell slot when consumed (once per day only).", image: "assets/images/fish/mana_minnow.png" },
-               { name: "Cantrip Carp", dc: 11, value: 12, properties: "Tiny runes shimmer across its scales. When consumed, grants +1 to damage with cantrips for 1 hour.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Abjuration Anchovy", dc: 13, value: 14, properties: "A small fish with potent defensive magic. When consumed, grants +1 to AC for 1 hour.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Evocation Eel", dc: 14, value: 16, properties: "Crackles with elemental energy. When consumed, your next evocation spell deals maximum damage for one damage die.", image: "assets/images/fish/fish_placeholder.png" },
-               { name: "Divination Darter", dc: 13, value: 15, properties: "Its eyes seem to see beyond the physical realm. When consumed, grants advantage on one Wisdom (Insight) check within the next hour.", image: "assets/images/fish/fish_placeholder.png" },
-            	 { name: "Phantasmal Carp", dc: 17, value: 25, properties: "Changes color based on nearby magic. Grants advantage on Arcana checks for 1 hour.", image: "assets/images/fish/phantasmal_carp.png" },
-            	 { name: "Wizardwhisker Catfish", dc: 15, value: 18, properties: "Its whiskers can be used as components for divination spells.", image: "assets/images/fish/wizardwhisker_catfish.png" },
-            	 { name: "Arcane Toad", dc: 14, value: 20, properties: "When kissed (ew!), grants the ability to cast Detect Magic once within 24 hours.", image: "assets/images/fish/arcane_toad.png" },
-            	 { name: "Rune Turtle", dc: 18, value: 30, properties: "Its shell is inscribed with magical runes. Can be studied to learn a random cantrip.", image: "assets/images/fish/rune_turtle.png" },
-            	 { name: "Illusory Salmon", dc: 16, value: 22, properties: "Sometimes appears as other fish. Grants a +2 bonus to Illusion spells for 1 hour.", image: "assets/images/fish/illusory_salmon.png" },
-            	 { name: "Familiar Fish", dc: 19, value: 35, properties: "Can be temporarily bound as a water-breathing familiar for 24 hours.", image: "assets/images/fish/familiar_fish.png" },
-            	 { name: "Arcane Anomaly", dc: 22, value: 50, properties: "Not actually a fish, but a concentration of wild magic. Unpredictable effects when caught.", image: "assets/images/fish/arcane_anomaly.png" },
-            	 { name: "Apprentice's Lost Spellbook", dc: 20, value: 45, properties: "A waterproof spellbook containing 1d4 random 1st-level spells.", image: "assets/images/fish/apprentice_lost_spellbook.png" }
+            	 { name: "Spellscale", dc: 16, value: 20, properties: "Scales shimmer with arcane energy. Grants +1 to spell attack rolls for 1 hour when consumed.", image: "assets/images/fish/feesh.webp" },            	 
+               { name: "Mana Minnow", dc: 12, value: 15, properties: "Restores one 1st-level spell slot when consumed (once per day only).", image: "assets/images/fish/feesh.webp" },
+               { name: "Cantrip Carp", dc: 11, value: 12, properties: "Tiny runes shimmer across its scales. When consumed, grants +1 to damage with cantrips for 1 hour.", image: "assets/images/fish/feesh.webp" },
+               { name: "Abjuration Anchovy", dc: 13, value: 14, properties: "A small fish with potent defensive magic. When consumed, grants +1 to AC for 1 hour.", image: "assets/images/fish/feesh.webp" },
+               { name: "Evocation Eel", dc: 14, value: 16, properties: "Crackles with elemental energy. When consumed, your next evocation spell deals maximum damage for one damage die.", image: "assets/images/fish/feesh.webp" },
+               { name: "Divination Darter", dc: 13, value: 15, properties: "Its eyes seem to see beyond the physical realm. When consumed, grants advantage on one Wisdom (Insight) check within the next hour.", image: "assets/images/fish/feesh.webp" },
+            	 { name: "Phantasmal Carp", dc: 17, value: 25, properties: "Changes color based on nearby magic. Grants advantage on Arcana checks for 1 hour.", image: "assets/images/fish/feesh.webp" },
+            	 { name: "Wizardwhisker Catfish", dc: 15, value: 18, properties: "Its whiskers can be used as components for divination spells.", image: "assets/images/fish/feesh.webp" },
+            	 { name: "Arcane Toad", dc: 14, value: 20, properties: "When kissed (ew!), grants the ability to cast Detect Magic once within 24 hours.", image: "assets/images/fish/feesh.webp" },
+            	 { name: "Rune Turtle", dc: 18, value: 30, properties: "Its shell is inscribed with magical runes. Can be studied to learn a random cantrip.", image: "assets/images/fish/feesh.webp" },
+            	 { name: "Illusory Salmon", dc: 16, value: 22, properties: "Sometimes appears as other fish. Grants a +2 bonus to Illusion spells for 1 hour.", image: "assets/images/fish/feesh.webp" },
+            	 { name: "Familiar Fish", dc: 19, value: 35, properties: "Can be temporarily bound as a water-breathing familiar for 24 hours.", image: "assets/images/fish/feesh.webp" },
+            	 { name: "Arcane Anomaly", dc: 22, value: 50, properties: "Not actually a fish, but a concentration of wild magic. Unpredictable effects when caught.", image: "assets/images/fish/feesh.webp" },
+            	 { name: "Apprentice's Lost Spellbook", dc: 20, value: 45, properties: "A waterproof spellbook containing 1d4 random 1st-level spells.", image: "assets/images/fish/feesh.webp" }
         	 ]
     	 }
    ];
 
      // Define special fish that can only be caught with the Magi-Jig Lure in Lake & River region
      const magiJigLakeFish = [
-         { name: "Arcane Trout", dc: 14, value: 200, properties: "A fish infused with magical energy. Grants +1 to spell attack rolls for 1 hour when consumed.", image: "assets/images/fish/arcane_trout.png" },
-         { name: "Mana Carp", dc: 15, value: 250, properties: "Shimmering with arcane energy. Restores one 1st-level spell slot when consumed (once per day only).", image: "assets/images/fish/mana_carp.png" },
-         { name: "Spellscale Bass", dc: 16, value: 300, properties: "Scales shimmer with magical patterns. Grants +1 to spell save DCs for 1 hour when prepared properly.", image: "assets/images/fish/spellscale_bass.png" },
-         { name: "Runic Catfish", dc: 17, value: 350, properties: "Mystical runes appear on its skin. Can be used as a component for enhancing enchantment spells.", image: "assets/images/fish/runic_catfish.png" },
-         { name: "Ethereal Eel", dc: 18, value: 400, properties: "Partially phases in and out of reality. Grants the ability to cast Misty Step once when consumed.", image: "assets/images/fish/ethereal_eel.png" },
-         { name: "Wizard's Whiskerfish", dc: 19, value: 450, properties: "Its whiskers can be used as wand components. Increases wand spell damage by 1d4 for one casting.", image: "assets/images/fish/wizards_whiskerfish.png" },
-         { name: "Familiar Fry", dc: 16, value: 300, properties: "A school of tiny, intelligent fish. Can serve as a temporary water-breathing familiar for 24 hours.", image: "assets/images/fish/familiar_fry.png" },
-         { name: "Elemental Sturgeon", dc: 20, value: 500, properties: "Contains essence of elemental magic. Grants resistance to one damage type for 1 hour when consumed.", image: "assets/images/fish/elemental_sturgeon.png" },         
-         { name: "Divination Sunfish", dc: 18, value: 400, properties: "Its reflective scales show glimpses of possible futures. Grants advantage on one Wisdom check when consumed.", image: "assets/images/fish/divination_sunfish.png" },
-         { name: "Conjurer's Crab", dc: 17, value: 350, properties: "Can temporarily conjure small objects with its claws. Useful for magical demonstrations.", image: "assets/images/fish/conjurers_crab.png" },
+         { name: "Arcane Trout", dc: 14, value: 200, properties: "A fish infused with magical energy. Grants +1 to spell attack rolls for 1 hour when consumed.", image: "assets/images/fish/Arcane_Trout.webp" },
+         { name: "Mana Carp", dc: 15, value: 250, properties: "Shimmering with arcane energy. Restores one 1st-level spell slot when consumed (once per day only).", image: "assets/images/fish/Mana_Carp.webp" },
+         { name: "Spellscale Bass", dc: 16, value: 300, properties: "Scales shimmer with magical patterns. Grants +1 to spell save DCs for 1 hour when prepared properly.", image: "assets/images/fish/Spellscale_Bass.webp" },
+         { name: "Runic Catfish", dc: 17, value: 350, properties: "Mystical runes appear on its skin. Can be used as a component for enhancing enchantment spells.", image: "assets/images/fish/Runic_Catfish.webp" },
+         { name: "Ethereal Eel", dc: 18, value: 400, properties: "Partially phases in and out of reality. Grants the ability to cast Misty Step once when consumed.", image: "assets/images/fish/Ethereal_Eel.webp" },
+         { name: "Wizard's Whiskerfish", dc: 19, value: 450, properties: "Its whiskers can be used as wand components. Increases wand spell damage by 1d4 for one casting.", image: "assets/images/fish/Wizard_Whiskerfish.webp" },
+         { name: "Familiar Fry", dc: 16, value: 300, properties: "A school of tiny, intelligent fish. Can serve as a temporary water-breathing familiar for 24 hours.", image: "assets/images/fish/Familiar_Fry.webp" },
+         { name: "Elemental Sturgeon", dc: 20, value: 500, properties: "Contains essence of elemental magic. Grants resistance to one damage type for 1 hour when consumed.", image: "assets/images/fish/Elemental_Sturgeon.webp" },         
+         { name: "Divination Sunfish", dc: 18, value: 400, properties: "Its reflective scales show glimpses of possible futures. Grants advantage on one Wisdom check when consumed.", image: "assets/images/fish/Divination_Sunfish.webp" },
+         { name: "Conjurer's Crab", dc: 17, value: 350, properties: "Can temporarily conjure small objects with its claws. Useful for magical demonstrations.", image: "assets/images/fish/Conjurers_Crab.webp" },
          
          // Enhanced versions of mundane fish with magical properties
-         { name: "Enchanted Lake Carp", dc: 12, value: 150, properties: "Magically enhanced carp. When prepared over a fire during a short rest, provides 8HP and +1 to Constitution checks for 1 hour.", image: "assets/images/fish/lake_carp.png" },
-         { name: "Mystic Rainbow Carp", dc: 13, value: 175, properties: "Shimmers with rainbow magic. When prepared during a short rest, provides 8HP and advantage on Charisma checks for 2 hours.", image: "assets/images/fish/rainbow_carp.png" },
-         { name: "Blessed Lake Trout", dc: 12, value: 160, properties: "Touched by divine magic. When prepared during a short rest, provides 8HP and advantage on Wisdom saving throws for 1 hour.", image: "assets/images/fish/lake_trout.png" },
-         { name: "Spellbound Black Trout", dc: 14, value: 200, properties: "Infused with shadow magic. When consumed, provides 10HP and darkvision for 2 hours.", image: "assets/images/fish/black_trout.png" },
-         { name: "Wardshell Turtle", dc: 14, value: 250, properties: "Its shell pulses with protective magic. When prepared during a short rest, provides 8HP and +2 AC for 2 hours.", image: "assets/images/fish/armorshell_turtle.png" },
-         { name: "Bladeclaw Crab", dc: 16, value: 275, properties: "Its claws gleam with magical sharpness. When prepared during a short rest, provides 8HP and +2 to attack and damage rolls for 2 hours.", image: "assets/images/fish/swordclaw_crab.png" },
-         { name: "Sapphire Crab", dc: 14, value: 200, properties: "Its shell sparkles like a gemstone. When boiled during a short rest, provides 8HP and resistance to cold damage for 2 hours.", image: "assets/images/fish/blueclaw_crab.png" },
-         { name: "Enchanted Lakeopus", dc: 16, value: 300, properties: "A magically enhanced octopus. When consumed, grants +2 to Wisdom checks and advantage on Investigation checks for 2 hours.", image: "assets/images/fish/lakeopus.png" },
-         { name: "Lightning Eel", dc: 15, value: 225, properties: "Crackles with electrical energy. When consumed, grants +2 to Dexterity saves and the ability to cast Shocking Grasp once.", image: "assets/images/fish/tarheel_eel.png" },
-         { name: "Sage Sturgeon", dc: 15, value: 250, properties: "Contains ancient wisdom. When prepared during a short rest, grants 8HP, +2 to Intelligence checks, and the ability to understand one additional language for 4 hours.", image: "assets/images/fish/unisturgeon.png" },
-         { name: "Phase Swimmer", dc: 17, value: 350, properties: "Can slip between dimensions. When consumed, grants the ability to cast Misty Step twice and water breathing for 1 hour.", image: "assets/images/fish/deep_swimmer_guppy.png" },
-         { name: "Chrono Bass", dc: 16, value: 300, properties: "Time magic flows through its scales. When consumed, grants advantage on Initiative rolls and +10 feet to movement speed for 2 hours.", image: "assets/images/fish/deep_swimmer_gulpy.png" },
-         { name: "Voidscale Gulper", dc: 18, value: 400, properties: "Its dark scales absorb light. When consumed, grants 10 temporary hit points, resistance to necrotic damage, and advantage on Stealth checks for 2 hours.", image: "assets/images/fish/deep_swimmer_gulper.png" },
+         { name: "Enchanted Lake Carp", dc: 12, value: 150, properties: "Magically enhanced carp. When prepared over a fire during a short rest, provides 8HP and +1 to Constitution checks for 1 hour.", image: "assets/images/fish/lake_carp.webp" },
+         { name: "Mystic Rainbow Carp", dc: 13, value: 175, properties: "Shimmers with rainbow magic. When prepared during a short rest, provides 8HP and advantage on Charisma checks for 2 hours.", image: "assets/images/fish/rainbow_carp.webp" },
+         { name: "Blessed Lake Trout", dc: 12, value: 160, properties: "Touched by divine magic. When prepared during a short rest, provides 8HP and advantage on Wisdom saving throws for 1 hour.", image: "assets/images/fish/lake_trout.webp" },
+         { name: "Spellbound Black Trout", dc: 14, value: 200, properties: "Infused with shadow magic. When consumed, provides 10HP and darkvision for 2 hours.", image: "assets/images/fish/black_trout.webp" },
+         { name: "Wardshell Turtle", dc: 14, value: 250, properties: "Its shell pulses with protective magic. When prepared during a short rest, provides 8HP and +2 AC for 2 hours.", image: "assets/images/fish/armorshell_turtle.webp" },
+         { name: "Bladeclaw Crab", dc: 16, value: 275, properties: "Its claws gleam with magical sharpness. When prepared during a short rest, provides 8HP and +2 to attack and damage rolls for 2 hours.", image: "assets/images/fish/swordclaw_crab.webp" },
+         { name: "Sapphire Crab", dc: 14, value: 200, properties: "Its shell sparkles like a gemstone. When boiled during a short rest, provides 8HP and resistance to cold damage for 2 hours.", image: "assets/images/fish/blueclaw_crab.webp" },
+         { name: "Enchanted Lakeopus", dc: 16, value: 300, properties: "A magically enhanced octopus. When consumed, grants +2 to Wisdom checks and advantage on Investigation checks for 2 hours.", image: "assets/images/fish/lakeopus.webp" },
+         { name: "Lightning Eel", dc: 15, value: 225, properties: "Crackles with electrical energy. When consumed, grants +2 to Dexterity saves and the ability to cast Shocking Grasp once.", image: "assets/images/fish/tarheel_eel.webp" },
+         { name: "Sage Sturgeon", dc: 15, value: 250, properties: "Contains ancient wisdom. When prepared during a short rest, grants 8HP, +2 to Intelligence checks, and the ability to understand one additional language for 4 hours.", image: "assets/images/fish/unisturgeon.webp" },
+         { name: "Phase Swimmer", dc: 17, value: 350, properties: "Can slip between dimensions. When consumed, grants the ability to cast Misty Step twice and water breathing for 1 hour.", image: "assets/images/fish/deep_swimmer_guppy.webp" },
+         { name: "Chrono Bass", dc: 16, value: 300, properties: "Time magic flows through its scales. When consumed, grants advantage on Initiative rolls and +10 feet to movement speed for 2 hours.", image: "assets/images/fish/deep_swimmer_gulpy.webp" },
+         { name: "Voidscale Gulper", dc: 18, value: 400, properties: "Its dark scales absorb light. When consumed, grants 10 temporary hit points, resistance to necrotic damage, and advantage on Stealth checks for 2 hours.", image: "assets/images/fish/deep_swimmer_gulper.webp" },
          
          // Magical variants of the newer fish
-         { name: "Astral Pike", dc: 16, value: 300, properties: "Swims through the astral sea. When prepared properly, grants +2 to Wisdom (Survival) checks and the ability to sense magic within 30 feet for 4 hours.", image: "assets/images/fish/fish_placeholder.png" },
-         { name: "Harmonic Sturgeon", dc: 18, value: 375, properties: "Its barbels detect magical vibrations. When consumed, grants advantage on all Wisdom (Perception) checks and the ability to detect lies for 2 hours.", image: "assets/images/fish/fish_placeholder.png" },
-         { name: "Celestial Perch", dc: 15, value: 275, properties: "Blessed by celestial forces. When prepared during a short rest, provides 10HP, +2 to Charisma (Performance) checks, and the ability to cast Light at will for 4 hours.", image: "assets/images/fish/fish_placeholder.png" },
-         { name: "Transmutation Minnow", dc: 14, value: 225, properties: "Can temporarily alter its form. When consumed, grants the ability to hold breath for 4 times as long and advantage on Constitution saves for 2 hours.", image: "assets/images/fish/fish_placeholder.png" },
-         { name: "Wardskin Catfish", dc: 17, value: 325, properties: "Protected by magical barriers. When consumed, grants 8HP, resistance to force damage, and advantage on saving throws against spells for 2 hours.", image: "assets/images/fish/fish_placeholder.png" },
-         { name: "Prismatic Paddlefish", dc: 19, value: 450, properties: "Its snout refracts magical energy. When prepared by an expert chef, grants +3 to all ability checks and resistance to one damage type of choice for 2 hours.", image: "assets/images/fish/fish_placeholder.png" },
-         { name: "Moonlight Trout", dc: 20, value: 500, properties: "Glows with lunar magic. When consumed under moonlight, grants the ability to cast Moonbeam once and advantage on all saves for 4 hours.", image: "assets/images/fish/fish_placeholder.png" },
-         { name: "Planar Gar", dc: 21, value: 550, properties: "Exists partially in multiple planes. When prepared under specific lunar conditions, grants resistance to all damage types for 1 hour and the ability to cast Plane Shift once.", image: "assets/images/fish/fish_placeholder.png" },
-         { name: "Timeless Turtle", dc: 22, value: 600, properties: "Unaffected by the passage of time. When consumed, grants +2 to Wisdom, immunity to aging effects, and the ability to cast Slow once for 8 hours.", image: "assets/images/fish/fish_placeholder.png" },
-         { name: "Reality Swimmer", dc: 23, value: 700, properties: "Swims through the fabric of reality itself. When consumed, grants water walking, the ability to cast Dimension Door twice, and +3 to all saves for 4 hours.", image: "assets/images/fish/fish_placeholder.png" }
+         { name: "Astral Pike", dc: 16, value: 300, properties: "Swims through the astral sea. When prepared properly, grants +2 to Wisdom (Survival) checks and the ability to sense magic within 30 feet for 4 hours.", image: "assets/images/fish/Astral_Pike.webp" },
+         { name: "Harmonic Sturgeon", dc: 18, value: 375, properties: "Its barbels detect magical vibrations. When consumed, grants advantage on all Wisdom (Perception) checks and the ability to detect lies for 2 hours.", image: "assets/images/fish/Harmonic_Sturgeon.webp" },
+         { name: "Celestial Perch", dc: 15, value: 275, properties: "Blessed by celestial forces. When prepared during a short rest, provides 10HP, +2 to Charisma (Performance) checks, and the ability to cast Light at will for 4 hours.", image: "assets/images/fish/Celestial_Perch.webp" },
+         { name: "Transmutation Minnow", dc: 14, value: 225, properties: "Can temporarily alter its form. When consumed, grants the ability to hold breath for 4 times as long and advantage on Constitution saves for 2 hours.", image: "assets/images/fish/Transmutation_Minnow.webp" },
+         { name: "Wardskin Catfish", dc: 17, value: 325, properties: "Protected by magical barriers. When consumed, grants 8HP, resistance to force damage, and advantage on saving throws against spells for 2 hours.", image: "assets/images/fish/Wardskin_Catfish.webp" },
+         { name: "Prismatic Paddlefish", dc: 19, value: 450, properties: "Its snout refracts magical energy. When prepared by an expert chef, grants +3 to all ability checks and resistance to one damage type of choice for 2 hours.", image: "assets/images/fish/Prismatic_Paddlefish.webp" },
+         { name: "Moonlight Trout", dc: 20, value: 500, properties: "Glows with lunar magic. When consumed under moonlight, grants the ability to cast Moonbeam once and advantage on all saves for 4 hours.", image: "assets/images/fish/Moonlight_Trout.webp" },
+         { name: "Planar Gar", dc: 21, value: 550, properties: "Exists partially in multiple planes. When prepared under specific lunar conditions, grants resistance to all damage types for 1 hour and the ability to cast Plane Shift once.", image: "assets/images/fish/Planar_Gar.webp" },
+         { name: "Timeless Turtle", dc: 22, value: 600, properties: "Unaffected by the passage of time. When consumed, grants +2 to Wisdom, immunity to aging effects, and the ability to cast Slow once for 8 hours.", image: "assets/images/fish/Timeless_Turtle.webp" },
+         { name: "Reality Swimmer", dc: 23, value: 700, properties: "Swims through the fabric of reality itself. When consumed, grants water walking, the ability to cast Dimension Door twice, and +3 to all saves for 4 hours.", image: "assets/images/fish/Reality_Swimmer.webp" }
      ];
 
    // --- Rods and Lures Data ---
@@ -1450,9 +1530,9 @@ function initializeFishingMinigame() {
    ];
 
    const lures = [
-    	 { name: "Standard Lure", bonus: 0 },
-    	 { name: "+1 Lure", bonus: 1 },
-  { name: "Magi-Jig Lure", bonus: 1 }
+   	 { name: "Standard Lure", bonus: 0, image: "assets/images/items/Standard_Lure.webp" },
+   	 { name: "+1 Lure", bonus: 1, image: "assets/images/items/Standard_Lure.webp" },
+  { name: "Magi-Jig Lure", bonus: 1, image: "assets/images/items/Magijig_Lure.webp" }
     	 // Add more lures here
    ];
 
@@ -1463,6 +1543,7 @@ function initializeFishingMinigame() {
    // Session tracker (resets on page refresh)
    let sessionTotalValue = 0;
    let sessionCatchCount = 0;
+  let castInProgress = false;
    // Roll history tracker (session-only)
    let sessionCastCounter = 0;
    const sessionHistory = [];
@@ -1541,8 +1622,9 @@ function initializeFishingMinigame() {
     	 lureSelect.innerHTML = ''; // Clear existing options
     	 regionSelect.innerHTML = ''; // Clear existing options
 
-    	 // Populate regions dropdown
-    	 fishingRegions.forEach((region, index) => {
+       // Populate currently available regions while preserving source indices.
+       fishingRegions.forEach((region, index) => {
+       	 if (region.available === false) return;
         	 const option = document.createElement('option');
         	 option.value = index;
         	 option.textContent = region.name;
@@ -1770,14 +1852,14 @@ function selectRandomFish() {
     	 for (let i = 1; i <= 3; i++) {
         	 attempts++;
            // Timing mini-game before each attempt
-           const isMagiJigSelected = lureSelect.options[lureSelect.selectedIndex].text.includes("Magi-Jig");
+           const selectedLure = lures[lureSelect.selectedIndex] || lures[0];
            let baseBonus = selectedRodBonus + playerBonus;
            if (i === 1) baseBonus += selectedLureBonus;
-           const timingBonus = await playTimingMinigame(targetFish.dc, baseBonus, isMagiJigSelected);
+           const timingBonus = await playTimingMinigame(targetFish.dc, baseBonus, selectedLure);
 
            // For high-DC fish, require line-tension mash QTE before rolling
            if (targetFish.dc >= 17) {
-             const kept = await playMashMinigame(targetFish.dc);
+             const kept = await playMashMinigame(targetFish);
              if (!kept) {
                let failLog = `Attempt ${i}: The line went slack! <span class="text-red-500 font-bold">Failed to keep tension.</span>`;
                fishingLog.innerHTML += `<p>${failLog}</p>`;
@@ -1940,7 +2022,7 @@ function selectRandomFish() {
      	 if (successfulRolls >= 2) {
         	 // End-of-catch tension minigame for all fish (easier for low DC by design)
         	 fishingLog.innerHTML += `<p class="text-yellow-500 font-semibold mt-2">Reel it in!</p>`;
-        	 const reeledIn = await playMashMinigame(targetFish.dc);
+         	 const reeledIn = await playMashMinigame(targetFish);
         	 if (!reeledIn) {
         	 	 fishingLog.innerHTML += `<p class="text-red-600 font-bold mt-1">The hook slipped at the last moment! The ${targetFish.name} got away...</p>`;
        pushHistory({
@@ -2085,11 +2167,29 @@ function selectRandomFish() {
         	 const listItem = document.createElement('li');
         	 const imgSrc = fish.image ? fish.image : `https://placehold.co/80x60/B47018/FAE791?text=${encodeURIComponent(fish.name)}`; // Themed placeholder
 
-        	 listItem.innerHTML = `
-            	 <div>
-                	 <h4 class="font-semibold text-lg text-blue-700">${fish.name}</h4> <p class="text-sm text-gray-600">Value: ${fish.value}gp</p> ${fish.properties ? `<p class="text-xs text-gray-500 italic mt-1">Properties: ${fish.properties}</p>` : ''} </div>
-            	 <img src="${imgSrc}" alt="${fish.name}" onerror="this.src='https://placehold.co/80x60/1E1C12/C7A81D?text=N/A'; this.alt='Image Error';">
-        	 `;
+       	 const details = document.createElement('div');
+       	 const name = document.createElement('h4');
+       	 name.className = 'font-semibold text-lg text-blue-700';
+       	 name.textContent = fish.name;
+       	 const value = document.createElement('p');
+       	 value.className = 'text-sm text-gray-600';
+       	 value.textContent = `Value: ${fish.value}gp`;
+       	 details.append(name, value);
+       	 if (fish.properties) {
+       	 	 const properties = document.createElement('p');
+       	 	 properties.className = 'text-xs text-gray-500 italic mt-1';
+       	 	 properties.textContent = `Properties: ${fish.properties}`;
+       	 	 details.appendChild(properties);
+       	 }
+
+       	 const image = document.createElement('img');
+       	 image.src = imgSrc;
+       	 image.alt = fish.name;
+       	 image.addEventListener('error', () => {
+       	 	 image.src = 'https://placehold.co/80x60/1E1C12/C7A81D?text=N/A';
+       	 	 image.alt = 'Image unavailable';
+       	 }, { once: true });
+       	 listItem.append(details, image);
         	 catalogueList.appendChild(listItem);
     	 });
    }
@@ -2097,7 +2197,7 @@ function selectRandomFish() {
    // Save catalogue to localStorage
    async function saveCatalogue() {
     	 try {
-        	 localStorage.setItem('fishingCatalogue_' + userId, JSON.stringify(caughtFishCatalogue));
+   	 	 localStorage.setItem(catalogueStorageKey, JSON.stringify(caughtFishCatalogue));
         	 console.log("Catalogue saved to localStorage.");
         	 return Promise.resolve();
     	 } catch (error) {
@@ -2110,28 +2210,30 @@ function selectRandomFish() {
    // Load catalogue from localStorage
    async function loadCatalogue() {
     	 try {
-        	 const savedCatalogue = localStorage.getItem('fishingCatalogue_' + userId);
-        	 if (savedCatalogue) {
-            	 caughtFishCatalogue = JSON.parse(savedCatalogue);
+   	 	 const catalogueByName = new Map();
+   	 	 const legacyKeys = Object.keys(localStorage).filter(key => key.startsWith('fishingCatalogue_local-user-'));
+   	 	 const keysToMerge = [catalogueStorageKey, ...legacyKeys];
+   	 	 keysToMerge.forEach(key => {
+   	 	 	 const savedCatalogue = localStorage.getItem(key);
+   	 	 	 if (!savedCatalogue) return;
+   	 	 	 const entries = JSON.parse(savedCatalogue);
+   	 	 	 if (!Array.isArray(entries)) return;
+   	 	 	 entries.forEach(fish => {
+   	 	 	 	 if (fish && fish.name) catalogueByName.set(fish.name, fish);
+   	 	 	 });
+   	 	 });
+
+   	 	 if (catalogueByName.size > 0) {
+   	 	 	 caughtFishCatalogue = Array.from(catalogueByName.values());
+   	 	 	 const canonicalFish = [...fishingRegions.flatMap(region => region.fish), ...magiJigLakeFish];
+   	 	 	 const fishByName = new Map(canonicalFish.map(fish => [fish.name, fish]));
             	 caughtFishCatalogue.forEach(fish => {
                 	 if (fish.properties === undefined) fish.properties = "";
-                	 if (fish.image === undefined) {
-                    	 for (const region of fishingRegions) {
-                        	 const matchingFish = region.fish.find(f => f.name === fish.name);
-                        	 if (matchingFish && matchingFish.image) {
-                            	 fish.image = matchingFish.image;
-                            	 break;
-                        	 }
-                    	 }
-                    	 // Also check Magi-Jig specific fish
-                    	 if (!fish.image) {
-                        	 const magiJigFish = magiJigLakeFish.find(f => f.name === fish.name);
-                        	 if (magiJigFish && magiJigFish.image) {
-                            	 fish.image = magiJigFish.image;
-                        	 }
-                    	 }
-                	 }
+   	 	 	 	 const canonical = fishByName.get(fish.name);
+   	 	 	 	 if (canonical?.image) fish.image = canonical.image;
             	 });
+   	 	 	 caughtFishCatalogue.sort((a, b) => a.name.localeCompare(b.name));
+   	 	 	 localStorage.setItem(catalogueStorageKey, JSON.stringify(caughtFishCatalogue));
             	 console.log("Catalogue loaded from localStorage:", caughtFishCatalogue);
         	 } else {
             	 console.log("No catalogue found in localStorage. Starting fresh.");
@@ -2179,22 +2281,53 @@ function selectRandomFish() {
   function showCatalogueOverlay() {
     if (!catalogueOverlay) return;
     renderCatalogue();
+    catalogueReturnFocus = document.activeElement;
     catalogueOverlay.style.display = 'flex';
     catalogueTabButton.classList.add('active');
-    // Close on ESC or outside click
-    function onKey(e){ if(e.code==='Escape'){ hideCatalogueOverlay(); } }
-    function onClick(e){ if(e.target===catalogueOverlay){ hideCatalogueOverlay(); } }
-    document.addEventListener('keydown', onKey, { once: true });
-    catalogueOverlay.addEventListener('click', onClick, { once: true });
+    document.addEventListener('keydown', onCatalogueKeyDown);
+    catalogueOverlay.addEventListener('pointerdown', onCataloguePointerDown);
+    catalogueCloseBtn?.focus();
   }
 
   function hideCatalogueOverlay() {
     if (!catalogueOverlay) return;
     catalogueOverlay.style.display = 'none';
     catalogueTabButton.classList.remove('active');
+    document.removeEventListener('keydown', onCatalogueKeyDown);
+    catalogueOverlay.removeEventListener('pointerdown', onCataloguePointerDown);
+    catalogueReturnFocus?.focus?.();
+    catalogueReturnFocus = null;
+  }
+
+  function onCatalogueKeyDown(e) {
+    if (e.code === 'Escape') hideCatalogueOverlay();
+  }
+
+  function onCataloguePointerDown(e) {
+    if (e.target === catalogueOverlay) hideCatalogueOverlay();
   }
 
    // --- Event Listeners ---
+   async function handleCastClick() {
+     if (castInProgress) return;
+     castInProgress = true;
+     const controls = [castButton, regionSelect, rodSelect, lureSelect, playerBonusInput].filter(Boolean);
+     const priorDisabledStates = controls.map(control => control.disabled);
+     controls.forEach(control => { control.disabled = true; });
+     castButton.textContent = 'Fishing...';
+
+     try {
+       await castLine();
+     } catch (error) {
+       console.error('Fishing cast failed:', error);
+       if (fishingLog) fishingLog.innerHTML += `<p class="text-red-500">The cast could not be completed. Please try again.</p>`;
+     } finally {
+       controls.forEach((control, index) => { control.disabled = priorDisabledStates[index]; });
+       castButton.textContent = 'Cast Line';
+       castInProgress = false;
+     }
+   }
+
      if (regionSelect) {
         regionSelect.addEventListener('change', () => {
             updateRegionDescription();
@@ -2206,7 +2339,7 @@ function selectRandomFish() {
         });
     }
 
-    if (castButton) castButton.addEventListener('click', castLine);
+    if (castButton) castButton.addEventListener('click', handleCastClick);
 
   if (fishingTabButton) fishingTabButton.addEventListener('click', () => switchTab('fishing'));
   if (catalogueTabButton) catalogueTabButton.addEventListener('click', () => showCatalogueOverlay());
